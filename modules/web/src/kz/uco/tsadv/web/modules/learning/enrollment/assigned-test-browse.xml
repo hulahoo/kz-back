@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://assigned.test.caption"
+        class="kz.uco.tsadv.web.modules.learning.enrollment.AssignedTestBrowse"
+        messagesPack="kz.uco.tsadv.web.modules.learning.enrollment">
+    <dsContext>
+        <groupDatasource id="assignedTestDs"
+                         class="kz.uco.tsadv.modules.learning.model.AssignedTestPojo"
+                         datasourceClass="kz.uco.tsadv.web.modules.learning.enrollment.AssignedTestDatasource"
+                         maxResults="20"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assignedTestTable"
+            height="100%"
+            spacing="true"
+            width="100%">
+        <groupBox id="groupBox"
+                  caption="msg://CustomFilter"
+                  collapsable="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="assignedTestTable"
+                    width="100%">
+            <actions>
+                <action id="excel"/>
+                <action id="startTesting"
+                        caption="msg://assigned.test.btn.passTest"
+                        invoke="passTest"
+                        trackSelection="true"/>
+            </actions>
+            <columns>
+                <group>
+                    <column id="organization"/>
+                </group>
+                <column id="personFullName"/>
+                <column id="position"/>
+                <column id="testName"/>
+                <column id="courseSectionName"/>
+                <column id="success"/>
+                <column id="score"/>
+                <column id="enrollmentStatus"/>
+                <column id="createdByLogin"/>
+            </columns>
+            <rows datasource="assignedTestDs"/>
+            <rowsCount/>
+            <buttonsPanel>
+                <button id="passTest"
+                        action="assignedTestTable.startTesting"/>
+                <button id="attempts"
+                        caption="msg://assigned.test.btn.attempts"
+                        enable="false"
+                        invoke="attempts"/>
+                <button id="addEnrollment"
+                        caption="msg://assigned.test.btn.addEnrollment"
+                        invoke="addEnrollment"/>
+                <button id="removeEnrollment"
+                        caption="msg://assigned.test.btn.removeEnrollment"
+                        enable="false"
+                        invoke="removeEnrollment"/>
+                <button id="excel"
+                        action="assignedTestTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

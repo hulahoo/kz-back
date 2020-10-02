@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RcQuestionnaire.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.rcquestionnaire.RcQuestionnaireEdit"
+        datasource="rcQuestionnaireDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.rcquestionnaire">
+    <dsContext>
+        <datasource id="rcQuestionnaireDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RcQuestionnaire"
+                    view="rcQuestionnaire.view"/>
+        <collectionDatasource id="questionsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.RcQuestionnaireQuestion"
+                              view="rcQuestionnaireQuestion.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$RcQuestionnaireQuestion e
+                          where e.questionnaire.id = :ds$rcQuestionnaireDs
+                       order by e.order]]>
+            </query>
+            <collectionDatasource id="answersDs"
+                                  property="answers"/>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabs"
+            spacing="true">
+        <tabSheet id="tabs">
+            <tab id="mainInfo"
+                 caption="msg://mainInfo"
+                 expand="instruction"
+                 margin="true,true,true,false"
+                 spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="rcQuestionnaireDs">
+                    <column width="250px">
+                        <field property="name"/>
+                        <field property="name2"/>
+                        <field property="name3"/>
+                        <field property="name4"/>
+                        <field property="name5"/>
+                        <field property="status"/>
+                        <field property="category"/>
+                        <field property="passingScore"/>
+                        <!--<field property="langName"/>-->
+                    </column>
+                </fieldGroup>
+                <richTextArea id="instruction"
+                              caption="msg://RcQuestionnaire.instruction"
+                              datasource="rcQuestionnaireDs"
+                              property="instruction"
+                              width="800px"/>
+            </tab>
+            <tab id="questions"
+                 caption="msg://RcQuestionnaire.questions"
+                 margin="true,true,true,false">
+                <split height="100%"
+                       orientation="horizontal"
+                       width="100%">
+                    <groupBox caption="msg://RcQuestionnaire.questions"
+                              height="100%">
+                        <table id="questionsTable"
+                               editable="true"
+                               height="100%"
+                               multiselect="true"
+                               width="100%">
+                            <actions>
+                                <action id="add"
+                                        description="mainMsg://table.btn.add"
+                                        icon="font-icon:SEARCH_PLUS"
+                                        invoke="addQuestions"/>
+                                <action id="remove"
+                                        caption="msg://table.btn.remove"
+                                        description="mainMsg://table.btn.remove"
+                                        icon="icons/remove.png"
+                                        invoke="removeQuestions"/>
+                            </actions>
+                            <columns>
+                                <column id="order"
+                                        editable="true"/>
+                                <column id="question"
+                                        captionProperty="question.questionText"/>
+                            </columns>
+                            <rows datasource="questionsDs"/>
+                            <buttonsPanel>
+                                <button action="questionsTable.add"/>
+                                <button action="questionsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
+                    <groupBox caption="msg://RcQuestionnaireQuestion.answers"
+                              height="100%">
+                        <table id="answersTable"
+                               editable="true"
+                               height="100%"
+                               width="100%">
+                            <columns>
+                                <column id="order"/>
+                                <column id="answer"
+                                        captionProperty="answer.answerText"/>
+                                <column id="weight"
+                                        editable="true"
+                                        required="true"/>
+                            </columns>
+                            <rows datasource="answersDs"/>
+                        </table>
+                    </groupBox>
+                </split>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

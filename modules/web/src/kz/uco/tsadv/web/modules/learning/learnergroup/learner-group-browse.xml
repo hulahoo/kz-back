@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.learnergroup.LearnerGroupBrowse"
+        focusComponent="learnerGroupsTable"
+        lookupComponent="learnerGroupsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.learnergroup">
+    <dsContext>
+        <groupDatasource id="learnerGroupsDs"
+                         class="kz.uco.tsadv.modules.learning.model.LearnerGroup"
+                         view="learnerGroup-browse">
+            <query>
+                <![CDATA[select e from tsadv$LearnerGroup e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="800"
+                width="1100"/>
+    <layout expand="learnerGroupsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learnerGroupsTable"
+                datasource="learnerGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learnerGroupsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="active"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="learnerGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="learnerGroupsTable.create"/>
+                <button id="editBtn"
+                        action="learnerGroupsTable.edit"/>
+                <button id="removeBtn"
+                        action="learnerGroupsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

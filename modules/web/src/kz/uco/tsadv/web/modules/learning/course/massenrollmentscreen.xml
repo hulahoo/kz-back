@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption.for.mass.enrollment"
+        class="kz.uco.tsadv.web.modules.learning.course.MassEnrollment"
+        datasource="forMassEnrollmentDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.course">
+    <dsContext>
+        <datasource id="forMassEnrollmentDs"
+                    class="kz.uco.tsadv.modules.learning.model.ForMassEnrollment"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <vbox id="vbox"
+              spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="forMassEnrollmentDs">
+                <field id="course"
+                       captionProperty="name"
+                       editable="false"
+                       property="course"
+                       width="900px"/>
+                <field id="organization"
+                       captionProperty="organizationName"
+                       property="organization"
+                       width="750px"/>
+                <field id="check"
+                       property="check"/>
+                <field id="position"
+                       captionProperty="positionName"
+                       property="position"
+                       width="600px"/>
+                <field id="job"
+                       captionProperty="jobName"
+                       property="job"
+                       width="600px"/>
+            </fieldGroup>
+            <buttonsPanel id="buttonsPanel">
+                <button id="okBtn"
+                        caption="msg://okBtn"
+                        invoke="onOkBtnClick"/>
+                <button id="cancelBtn"
+                        caption="msg://cancelBtn"
+                        invoke="onCancelBtnClick"/>
+            </buttonsPanel>
+        </vbox>
+    </layout>
+</window>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://interview.questionnaire.start"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewAaQuestionnaire">
+    <dsContext>
+        <datasource id="personDs"
+                    allowCommit="false"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person.candidate"/>
+        <collectionDatasource id="questionnairesDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.InterviewQuestionnaire"
+                              view="interviewQuestionnaire.view">
+            <query>
+                <![CDATA[select e from tsadv$InterviewQuestionnaire e]]>
+            </query>
+            <collectionDatasource id="questionsDs"
+                                  property="questions">
+                <collectionDatasource id="answersDs"
+                                      property="answers"/>
+            </collectionDatasource>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            margin="false,false,true,false">
+        <vbox id="vBox"
+              expand="scrollBox"
+              height="100%"
+              margin="true"
+              spacing="true" width="100%">
+            <hbox stylename="interview-q-candidate"
+                  width="100%" expand="controlButtons">
+                <hbox id="userInfoSlot"
+                      align="MIDDLE_LEFT">
+                    <embedded id="userImage"
+                              stylename="course-card-image"/>
+                    <linkButton id="userFullName"
+                                align="MIDDLE_LEFT"
+                                stylename="interview-q-candidate-fn"/>
+                </hbox>
+                <hbox id="controlButtons"
+                      align="BOTTOM_LEFT"
+                      margin="true"
+                      spacing="true"
+                      stylename="interview-q-footer">
+                    <hbox align="MIDDLE_RIGHT"
+                          spacing="true">
+                        <button id="previousBtn"
+                                caption="mainMsg://table.btn.empty"
+                                icon="font-icon:ANGLE_LEFT"
+                                invoke="previousQuestion"/>
+                        <label id="questionnaireName"
+                               align="MIDDLE_CENTER"
+                               stylename="interview-q-questionnaire"/>
+                        <button id="nextBtn"
+                                caption="mainMsg://table.btn.empty"
+                                icon="font-icon:ANGLE_RIGHT"
+                                invoke="nextQuestion"/>
+                    </hbox>
+                    <button align="MIDDLE_RIGHT"
+                            caption="msg://Interview.candidate.ques.complete"
+                            icon="font-icon:FLAG_O"
+                            invoke="finishInterview"/>
+                </hbox>
+            </hbox>
+            <table id="questionnaireResult"
+                   width="100%">
+                <columns>
+                    <column id="questionnaire.name"/>
+                    <column id="questionnaire.category.langValue"
+                            caption="msg://Interview.candidate.ques.category"/>
+                    <column id="totalScore"
+                            caption="msg://Interview.candidate.ques.total"
+                            generator="generateTotalScore"/>
+                </columns>
+                <rows datasource="questionnairesDs"/>
+            </table>
+            <hbox id="startInterviewBlock">
+                <button id="startInterview"
+                        caption="msg://Interview.candidate.ques.start"
+                        icon="font-icon:PLAY_CIRCLE_O"
+                        invoke="startInterview"/>
+            </hbox>
+            <scrollBox id="scrollBox" stylename="bt-scroll">
+                <vbox id="questionBlock"
+                      stylename="" expand="questionBuilder" height="100%">
+                    <vbox id="questionBuilder" width="100%"/>
+                </vbox>
+            </scrollBox>
+        </vbox>
+    </layout>
+</window>

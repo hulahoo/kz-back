@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Assignment.browseCaption"
+        class="kz.uco.tsadv.web.modules.selfservice.employeelist.EmployeeListBrowse"
+        focusComponent="assignmentGroupsTable"
+        lookupComponent="assignmentGroupsTable">
+    <dsContext>
+        <groupDatasource id="assignmentGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.AssignmentGroupExt"
+                         maxResults="20"
+                         view="assignmentGroup.view">
+            <query>
+                <![CDATA[select e
+                           from base$AssignmentGroupExt e
+                           join e.list a
+                           join a.personGroup.list p
+                          where :session$systemDate between a.startDate and a.endDate
+                            and :session$systemDate between p.startDate and p.endDate]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="1100"/>
+    <layout expand="assignmentGroupsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="assignmentGroupsTable"
+                datasource="assignmentGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="assignmentGroupsTable"
+                    width="100%">
+            <columns>
+                <column id="assignment.personGroup"
+                        captionProperty="assignment.personGroup.personFioWithEmployeeNumber"
+                        link="true"/>
+                <column id="assignment.positionGroup"
+                        captionProperty="assignment.positionGroup.position.positionName"/>
+                <column id="assignment.organizationGroup"
+                        captionProperty="assignment.organizationGroup.organization.organizationName"/>
+                <column id="assignment.jobGroup"
+                        caption="msg://jobGroup"
+                        captionProperty="assignment.jobGroup.job.jobName"/>
+                <column id="assignment.gradeGroup"
+                        caption="msg://gradeGroup"
+                        captionProperty="assignment.gradeGroup.grade.gradeName"/>
+                <column id="assignment.assignmentStatus"/>
+            </columns>
+            <rows datasource="assignmentGroupsDs"/>
+        </groupTable>
+    </layout>
+</window>

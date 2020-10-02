@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.rcgquestion.RcgQuestionBrowse"
+        focusComponent="rcgQuestionsTable"
+        lookupComponent="rcgQuestionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.rcgquestion">
+    <dsContext>
+        <groupDatasource id="rcgQuestionsDs"
+                         class="kz.uco.tsadv.modules.recognition.RcgQuestion"
+                         view="rcgQuestion.browse">
+            <query>
+                <![CDATA[select e from tsadv$RcgQuestion e order by e.active desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="rcgQuestionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="rcgQuestionsTable"
+                datasource="rcgQuestionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="rcgQuestionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="text"/>
+                <column id="active"/>
+                <column id="answerType"/>
+                <column id="coins"/>
+            </columns>
+            <rows datasource="rcgQuestionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="rcgQuestionsTable.create"/>
+                <button id="editBtn"
+                        action="rcgQuestionsTable.edit"/>
+                <button id="removeBtn"
+                        action="rcgQuestionsTable.remove"/>
+                <button id="activateBtn"
+                        invoke="activate"
+                        enable="false"
+                        caption="msg://activate.btn"/>
+                <button id="deactivateBtn"
+                        invoke="deactivate"
+                        enable="false"
+                        caption="msg://deactivate.btn"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

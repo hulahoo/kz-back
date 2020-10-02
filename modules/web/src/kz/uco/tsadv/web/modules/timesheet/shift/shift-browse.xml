@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Shift.browseCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.shift.ShiftBrowse"
+        focusComponent="shiftsTable"
+        lookupComponent="shiftsTable">
+    <dsContext>
+        <groupDatasource id="shiftsDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.Shift"
+                         view="shift.view">
+            <query>
+                <![CDATA[select e from tsadv$Shift e]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="detailsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.ShiftDetail"
+                              view="shiftDetail.view">
+            <query>
+                <![CDATA[select e from tsadv$ShiftDetail e where e.shift.id = :ds$shiftsDs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <filter id="filter"
+                applyTo="shiftsTable"
+                datasource="shiftsDs">
+            <properties include=".*"/>
+        </filter>
+        <split id="split"
+               orientation="vertical"
+               width="100%">
+            <table id="shiftsTable"
+                   height="100%"
+                   width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/edit.png"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/item-remove.png"/>
+                </actions>
+                <columns>
+                    <column id="name"/>
+                    <column id="code"/>
+                    <column id="description"/>
+                    <column id="dateFrom"/>
+                    <column id="dateTo"/>
+                </columns>
+                <rows datasource="shiftsDs"/>
+                <buttonsPanel id ="shiftsTableButtonsPanel">
+                    <button id="shiftsTableCreateButton"
+                            action="shiftsTable.create"/>
+                    <button id="shiftsTableEditButton"
+                            action="shiftsTable.edit"/>
+                    <button id="shiftsTableRemoveButton"
+                            action="shiftsTable.remove"/>
+                </buttonsPanel>
+            </table>
+            <groupBox id="groupBox"
+                      caption="msg://ShiftDetails"
+                      height="100%"
+                      orientation="horizontal"
+                      spacing="true"
+                      width="100%">
+                <table id="detailsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/item-remove.png"/>
+                    </actions>
+                    <columns>
+                        <column id="shift.code"/>
+                        <column id="elementType"/>
+                        <column id="dayFrom"/>
+                        <column id="timeFrom"
+                                dateFormat="HH:mm"/>
+                        <column id="dayTo"/>
+                        <column id="timeTo"
+                                dateFormat="HH:mm"/>
+                    </columns>
+                    <rows datasource="detailsDs"/>
+                    <buttonsPanel id = "detailsTableButtonsPanel">
+                        <button id="detailsTableCreateButton"
+                                action="detailsTable.create"/>
+                        <button id="detailsTableEditButton"
+                                action="detailsTable.edit"/>
+                        <button id="detailsTableRemoveButton"
+                                action="detailsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

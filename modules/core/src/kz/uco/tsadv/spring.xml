@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context">
+
+    <!-- Annotation-based beans -->
+    <context:component-scan base-package="kz.uco.tsadv"/>
+
+    <bean id="cuba_UserSessionManager" class="kz.uco.tsadv.beans.UserSessionManager"/>
+
+    <bean id="bpm_ProcessRuntimeManager" class="kz.uco.tsadv.service.ProcessRuntimeManagerBeanExt"/>
+
+    <bean id="tsadv_IntegrationService" class="kz.uco.tsadv.service.IntegrationServiceBean"/>
+
+    <bean id="base_OrganizationService" class="kz.uco.tsadv.service.OrganizationServiceBean"/>
+
+    <bean id="uactivity_ActivityListener" class="kz.uco.tsadv.listener.ExtActivityListener"/>
+
+    <bean id="base_HierarchyElementEntityListener" class="kz.uco.tsadv.beans.ExtHierarchyElementEntityListener"/>
+
+    <bean id="base_SendingNotificationListener" class="kz.uco.tsadv.listener.ExtSendingNotificationListener"/>
+
+    <bean id="tsadv_CalendarService" class="kz.uco.tsadv.service.CalendarServiceBean">
+        <property name="organizationService">
+            <ref bean="tsadv_OrganizationService" />
+        </property>
+    </bean>
+
+    <bean id="cuba_Persistence" class="kz.uco.tsadv.beans.PersistenceImpl"/>
+
+</beans>

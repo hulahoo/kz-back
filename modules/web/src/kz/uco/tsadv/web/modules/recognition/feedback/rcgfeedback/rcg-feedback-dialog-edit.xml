@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://rf.send.caption"
+        class="kz.uco.tsadv.web.modules.recognition.feedback.rcgfeedback.RcgFeedbackDialogEdit"
+        datasource="rcgFeedbackDs"
+        focusComponent="suggestionPickerField"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.feedback.rcgfeedback">
+    <dsContext>
+        <datasource id="rcgFeedbackDs"
+                    class="kz.uco.tsadv.modules.recognition.feedback.RcgFeedback"
+                    view="rcgFeedback.edit">
+            <collectionDatasource id="attachmentsDs"
+                                  property="attachments"/>
+        </datasource>
+    </dsContext>
+
+    <dialogMode height="600px"
+                width="40%"/>
+
+    <layout expand="scrollBox" stylename="rcg-window-layout rcg-gt-wrapper">
+        <scrollBox id="scrollBox" width="100%" stylename="rcg-dialog-scroll b-scroll">
+            <vbox id="receiverBlock" stylename="rcg-gt-block" spacing="true">
+                <label value="msg://rf.receiver" stylename="rcg-gt-title"/>
+                <suggestionPickerField id="suggestionPickerField"
+                                       asyncSearchDelayMs="1"
+                                       datasource="rcgFeedbackDs"
+                                       minSearchStringLength="3"
+                                       captionProperty="firstLastName"
+                                       property="receiver"
+                                       width="100%">
+                    <query entityClass="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                           escapeValueForLike="true"
+                           searchStringFormat="%$searchString%"
+                           view="personGroup.search">
+                        <![CDATA[select pg from base$PersonGroupExt pg
+                    join pg.list p
+                    join pg.assignments a
+                    join a.assignmentStatus d on (d.code = 'ACTIVE' or d.code = 'SUSPENDED')
+                    where current_date between p.startDate and p.endDate
+                    and current_date between a.startDate and a.endDate and a.primaryFlag = True
+                    and ((lower(p.firstName) like lower(:searchString) or lower(p.lastName) like lower(:searchString) or lower(concat(p.firstName, concat(' ', p.lastName))) like lower(:searchString))
+                    or (lower(p.firstNameLatin) like lower(:searchString) or lower(p.lastNameLatin) like lower(:searchString)  or lower(concat(p.firstNameLatin,concat(' ', p.lastNameLatin))) like lower(:searchString)))]]>
+                    </query>
+                </suggestionPickerField>
+
+                <hbox id="organization" spacing="true" width="100%">
+                    <vbox spacing="true" margin="false,true,false,false">
+                        <label value="msg://rf.organization" stylename="rcg-gt-title"/>
+                        <textField id="organizationField" editable="false" width="100%"/>
+                    </vbox>
+                    <vbox spacing="true">
+                        <label value="msg://rf.position" stylename="rcg-gt-title"/>
+                        <textField id="positionField" editable="false" width="100%"/>
+                    </vbox>
+                </hbox>
+            </vbox>
+
+            <vbox spacing="true" margin="false,true,false,false" stylename="rcg-gt-block">
+                <label value="msg://rf.theme" stylename="rcg-gt-title"/>
+                <textField id="themeField" width="100%"
+                           datasource="rcgFeedbackDs"
+                           property="theme"/>
+            </vbox>
+
+            <vbox id="rfTypeBlock" stylename="rcg-gt-block" spacing="true" width="100%" visible="false">
+                <label id="rcgTypeLabel" value="msg://rf.type"
+                       stylename="rcg-gt-title"/>
+
+                <vbox id="typeBlock" spacing="true" margin="false,true,false,false" width="AUTO"/>
+            </vbox>
+
+            <vbox stylename="rcg-gt-block" spacing="true" width="100%">
+                <hbox width="100%" spacing="true">
+                    <label align="MIDDLE_LEFT"
+                           value="msg://rf.comment" stylename="rcg-gt-title"/>
+                    <label id="commentMinLengthLabel"
+                           align="MIDDLE_RIGHT"
+                           stylename="rcg-gt-title rcg-gt-length-info"/>
+                </hbox>
+                <textArea id="comment"
+                          datasource="rcgFeedbackDs"
+                          property="comment"
+                          width="100%"
+                          height="150px"/>
+            </vbox>
+            <vbox id="attachmentsBox" stylename="rcg-gt-block" spacing="true" width="100%"
+                  visible="false">
+                <hbox width="100%" spacing="true">
+                    <label align="MIDDLE_LEFT"
+                           value="msg://rf.attachments" stylename="rcg-gt-title"/>
+                </hbox>
+                <flowBox id="attachmentsFlowBox" spacing="true" width="100%" stylename="rf-attachment-fb">
+                    <linkButton id="addFile"
+                                caption="mainMsg://table.btn.empty"
+                                icon="font-icon:PLUS"
+                                invoke="addFile"
+                                width="50px"
+                                height="50px"
+                                align="MIDDLE_CENTER"
+                                stylename="rf-attachment-add"/>
+                </flowBox>
+            </vbox>
+        </scrollBox>
+
+        <hbox id="windowActions" width="100%" height="64px" stylename="rcg-window-footer rcg-gt-footer">
+            <linkButton id="windowCommit" action="windowCommit" caption="msg://rf.send.btn"
+                        stylename="rcg-btn rcg-blue-btn rcg-btn-md" align="MIDDLE_RIGHT"/>
+        </hbox>
+    </layout>
+</window>

@@ -1,0 +1,1 @@
+alter table TSADV_RCG_FEEDBACK_COMMENT add column PARENT_COMMENT_ID uuid ;

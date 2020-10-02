@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        extends="/kz/uco/tsadv/web/modules/personal/timecard/employeelistfortimecard/employee-list-for-timecard.xml"
+        caption="msg://PaidInterns"
+        class="kz.uco.tsadv.web.modules.personal.timecard.employeelistfortimecard.InternListForTimecardBrowse">
+    <dsContext>
+        <groupDatasource id="personsDs">
+            <query>
+                <![CDATA[
+                 select e
+                   from base$PersonExt e
+                   join e.group.assignments a
+                  where :param$date between e.startDate and e.endDate
+                    and :param$date between a.startDate and a.endDate
+                    and e.type.code in ('PAIDINTERN', 'EXEMPLOYEE')
+                    and (   a.assignmentStatus.code = 'ACTIVE'
+                         or a.assignmentStatus.code = 'SUSPENDED'
+                         or (    a.assignmentStatus.code = 'TERMINATED'
+                             and a.startDate >= :param$monthBegin
+                            )
+                        )
+                    and (   coalesce(
+                              (select max(ep.type.code)
+                                 from base$PersonExt ep
+                                where ep.group.id = e.group.id
+                                  and ep.endDate = cast((e.startDate - 1) date)),
+                              'PAIDINTERN') = 'PAIDINTERN'
+                          or e.type.code = 'PAIDINTERN'
+                        )
+                    and a.primaryFlag = true ]]>
+                <!-- Только стажёры (текущий статус или предыдущий статус должен быть Стажёр) -->
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <layout>
+        <groupTable id="personsTable">
+            <columns>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.positionGroup"
+                        visible="false"/>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.jobGroup"
+                        visible="false"/>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.gradeGroup"
+                        visible="false"/>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.location.langValue"
+                        visible="false"/>
+            </columns>
+        </groupTable>
+    </layout>
+</window>

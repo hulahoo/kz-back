@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.gui.userext.ExtUserEditor"
+        extends="/kz/uco/base/gui/userext/ext-user-edit.xml"
+        messagesPack="kz.uco.tsadv.gui.userext"
+        xmlns:ext="http://schemas.haulmont.com/cuba/window-ext.xsd">
+    <layout expand="vSplit">
+        <groupBox id="propertiesBox">
+            <grid id="propertiesGrid"
+                  width="AUTO">
+                <columns>
+                    <column flex="4.0"/>
+                </columns>
+                <rows>
+                    <row id="propertiesRow">
+                        <fieldGroup id="fieldGroupRight"
+                                    width="100%">
+                            <column width="100%">
+                                <field id="personGroupField"
+                                       caption="msg://kz.uco.tsadv.modules.personal.model/Person.personGroup">
+                                    <pickerField id="pickerPersonGroup" metaClass="base$PersonGroupExt"
+                                                 captionProperty="person"/>
+                                </field>
+                                <field property="changePasswordAtNextLogon"
+                                       ext:index="6"/>
+                            </column>
+                        </fieldGroup>
+                    </row>
+                </rows>
+            </grid>
+        </groupBox>
+        <split id="split" height="100%"/>
+        <split id="vSplit" ext:index="0" width="100%" orientation="vertical">
+        </split>
+     </layout>
+</window>

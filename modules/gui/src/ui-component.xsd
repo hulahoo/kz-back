@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema xmlns="http://schemas.uco.kz/hr/0.1/ui-component.xsd"
+           attributeFormDefault="unqualified"
+           elementFormDefault="qualified"
+           targetNamespace="http://schemas.uco.kz/hr/0.1/ui-component.xsd"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="chart">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="rateStars">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="matrix">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="scrumBoard">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="fontRateStarts">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="syoTimer">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="rcgwal">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="rcgTeam">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="rcgShop">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="rcgHeartAward">
+        <xs:complexType>
+            <xs:attribute name="id"
+                          type="xs:string"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

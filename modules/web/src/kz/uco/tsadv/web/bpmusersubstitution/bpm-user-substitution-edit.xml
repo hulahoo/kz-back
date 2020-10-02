@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.bpmusersubstitution.BpmUserSubstitutionEdit"
+        datasource="bpmUserSubstitutionDs"
+        messagesPack="kz.uco.tsadv.web.bpmusersubstitution">
+    <dsContext>
+        <datasource id="bpmUserSubstitutionDs"
+                    class="kz.uco.tsadv.entity.tb.BpmUserSubstitution"
+                    view="bpmUserSubstitution-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <hbox id="user" spacing="true" width="700px">
+            <label value="mainMsg://user"/>
+            <pickerField id="userPickerField"
+                         required="true"
+                         width="100%"
+                         requiredMessage="msg://requiredUser"
+                         captionProperty="fullName"
+                         metaClass="tsadv$UserExtPersonGroup"/>
+        </hbox>
+        <hbox id="substitutedUser" spacing="true" width="700px">
+            <label value="mainMsg://substitutedUser"/>
+            <pickerField id="substitutedUserPickerField"
+                         captionProperty="fullName"
+                         required="true"
+                         width="100%"
+                         requiredMessage="msg://requiredSubstitutedUser"
+                         metaClass="tsadv$UserExtPersonGroup"/>
+        </hbox>
+        <hbox spacing="true" id="sDate" width="700px">
+            <label value="msg://startDate"/>
+            <dateField id="startDate" property="startDate" datasource="bpmUserSubstitutionDs"/>
+        </hbox>
+        <hbox spacing="true" id="eDate" width="700px">
+            <label value="msg://endDate"/>
+            <dateField id="endDate" property="endDate" datasource="bpmUserSubstitutionDs"/>
+        </hbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Enrollment.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.enrollment.EnrollmentEdit"
+        datasource="enrollmentDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="enrollmentDs"
+                    class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                    view="enrollment-view"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true" width="100%">
+        <fieldGroup id="fieldGroup"
+                    datasource="enrollmentDs">
+            <column width="350px">
+                <field id="course"
+                       property="course" captionProperty="name"/>
+                <field property="personGroup" captionProperty="personFioWithEmployeeNumber"/>
+                <field property="date"/>
+                <field property="status"/>
+                <field property="reasonForLearning"/>
+                <field id="reason" property="reason">
+                    <textArea id="reasonTextArea" datasource="enrollmentDs" property="reason" maxLength="1000"/>
+                </field>
+            </column>
+        </fieldGroup>
+        <groupBox id="sessionGroupBox" caption="msg://CourseCard.course.sections" width="100%">
+
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

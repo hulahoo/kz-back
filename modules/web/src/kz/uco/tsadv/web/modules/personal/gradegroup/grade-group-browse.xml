@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://GradeGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.gradegroup.GradeGroupBrowse"
+        focusComponent="gradeGroupsTable"
+        lookupComponent="gradeGroupsTable">
+    <dsContext>
+        <groupDatasource id="gradeGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.GradeGroup"
+                         view="gradeGroup.browse">
+            <query>
+                <![CDATA[select e
+                           from tsadv$GradeGroup e
+                           join e.list g
+                          where :session$systemDate between g.startDate and g.endDate]]>
+            </query>
+            <collectionDatasource id="listDs"
+                                  property="list"/>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <groupBox caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <split id="split"
+               orientation="vertical"
+               width="100%">
+            <groupTable id="gradeGroupsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="edit"
+                            caption="msg://table.btn.edit"
+                            icon="icons/edit.png"
+                            invoke="edit"
+                            shortcut="${TABLE_EDIT_SHORTCUT}"/>
+                    <action id="excel"/>
+                </actions>
+                <columns>
+                    <column id="grade.gradeName"/>
+                </columns>
+                <rows datasource="gradeGroupsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            caption="msg://table.btn.create"
+                            icon="icons/add.png"
+                            invoke="openGrade"/>
+                    <button id="editBtn"
+                            action="gradeGroupsTable.edit"/>
+                    <button id="excelBtn"
+                            action="gradeGroupsTable.excel"
+                            caption="msg://table.btn.excel"/>
+                </buttonsPanel>
+            </groupTable>
+            <groupBox id="historyGroupBox"
+                      caption="msg://historyBox"
+                      height="100%"
+                      width="100%">
+                <table id="historyTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="edit"
+                                caption="msg://table.btn.edit"
+                                invoke="editHistory"/>
+                        <action id="remove"
+                                caption="msg://table.btn.remove"
+                                invoke="removeHistory"/>
+                        <action id="removeLate"
+                                caption="msg://table.btn.remove.late"
+                                invoke="removeHistories"/>
+                    </actions>
+                    <columns>
+                        <column id="gradeName"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="updatedBy"/>
+                        <column id="recognitionNominate"/>
+                    </columns>
+                    <rows datasource="listDs"/>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

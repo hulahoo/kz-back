@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.businessrule.BusinessRuleEdit"
+        datasource="businessRuleDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.businessrule">
+    <dsContext>
+        <datasource id="businessRuleDs"
+                    class="kz.uco.tsadv.modules.administration.BusinessRule"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <hbox spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="businessRuleDs">
+                    <column width="250px">
+                        <field caption="msg://ruleCode"
+                               property="ruleCode"/>
+                        <field id="ruleName"
+                               caption="msg://ruleName"
+                               property="ruleName"/>
+                        <field caption="msg://ruleStatus"
+                               property="ruleStatus"/>
+                    </column>
+                </fieldGroup>
+                <fieldGroup datasource="businessRuleDs">
+                    <column width="250px">
+                        <field caption="msg://description"
+                               property="description"
+                               rows="4"/>
+                    </column>
+                </fieldGroup>
+            </hbox>
+            <fieldGroup id="fieldGroupError"
+                        border="visible"
+                        caption="Error text"
+                        datasource="businessRuleDs">
+                <column width="530px">
+                    <field property="errorTextLang1"
+                           rows="5"/>
+                    <field property="errorTextLang2"
+                           rows="5"/>
+                    <field property="errorTextLang3"
+                           rows="5"/>
+                    <field property="errorTextLang4"
+                           rows="5"/>
+                    <field property="errorTextLang5"
+                           rows="5"/>
+                </column>
+            </fieldGroup>
+            <fieldGroup id="fieldGroupWarning"
+                        border="visible"
+                        caption="Warning text"
+                        datasource="businessRuleDs"
+                        visible="false">
+                <column width="530px">
+                    <field property="warningTextLang1"
+                           rows="3"/>
+                    <field property="warningTextLang2"
+                           rows="5"/>
+                    <field property="warningTextLang3"
+                           rows="5"/>
+                    <field property="warningTextLang4"
+                           rows="5"/>
+                    <field property="warningTextLang5"
+                           rows="5"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

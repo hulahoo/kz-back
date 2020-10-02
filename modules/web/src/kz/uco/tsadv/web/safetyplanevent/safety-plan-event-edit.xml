@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.safetyplanevent.SafetyPlanEventEdit"
+        datasource="safetyPlanEventDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.safetyplanevent">
+    <dsContext>
+        <datasource id="safetyPlanEventDs"
+                    class="kz.uco.tsadv.entity.tb.SafetyPlanEvent"
+                    view="safetyPlanEvent-view">
+            <collectionDatasource id="assignedEventDs"
+                                  property="assignedEvent"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%">
+            <vbox spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="safetyPlanEventDs">
+                    <column width="250px">
+                        <field property="planName"/>
+                        <field property="description"
+                               rows="5"/>
+                        <field property="dateFrom"/>
+                        <field property="dateTo"/>
+                        <field property="active"/>
+                        <field captionProperty="organization"
+                               property="organization"/>
+                    </column>
+                </fieldGroup>
+                <frame id="windowActions"
+                       height="100%"
+                       screen="editWindowActions"/>
+            </vbox>
+            <vbox spacing="true">
+                <tabSheet>
+                    <tab id="tab"
+                         caption="msg://tab"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="assignedEventTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                            </actions>
+                            <columns>
+                                <column id="fact"/>
+                                <column id="deadline"/>
+                                <column id="investmentPlan"/>
+                                <column id="budgetPlan"/>
+                                <column id="investmentFact"/>
+                                <column id="budgetFact"/>
+                                <column id="status"/>
+                                <column id="assignment.person.fullName" caption="msg://kz.uco.tsadv.entity.tb/AssignedEvent.assignment"/>
+                                <column id="assigned.person.fullName" caption="msg://kz.uco.tsadv.entity.tb/AssignedEvent.assigned"/>
+                            </columns>
+                            <rows datasource="assignedEventDs"/>
+                            <buttonsPanel>
+                                <button action="assignedEventTable.create"/>
+                                <button action="assignedEventTable.edit"/>
+                                <button action="assignedEventTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

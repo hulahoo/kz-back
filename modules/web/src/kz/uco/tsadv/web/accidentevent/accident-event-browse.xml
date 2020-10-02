@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.accidentevent.AccidentEventBrowse"
+        focusComponent="accidentEventsTable"
+        lookupComponent="accidentEventsTable"
+        messagesPack="kz.uco.tsadv.web.accidentevent">
+    <dsContext>
+        <groupDatasource id="accidentEventsDs"
+                         class="kz.uco.tsadv.entity.tb.AccidentEvent"
+                         view="accidentEvent-view">
+            <query>
+                <![CDATA[select e from tsadv$AccidentEvent e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="accidentEventsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="accidentEventsTable"
+                datasource="accidentEventsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="accidentEventsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="person.fioWithEmployeeNumber"/>
+                <column id="violations"/>
+                <column id="accidentReasonRemoval"/>
+                <column id="executionPeriod"/>
+                <column id="attachment"/>
+            </columns>
+            <rows datasource="accidentEventsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="accidentEventsTable.create"/>
+                <button id="editBtn"
+                        action="accidentEventsTable.edit"/>
+                <button id="removeBtn"
+                        action="accidentEventsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

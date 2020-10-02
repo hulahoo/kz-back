@@ -1,0 +1,1 @@
+alter table tsadv_recognition_qualities rename to tsadv_recognition_qualities__u67190 ;

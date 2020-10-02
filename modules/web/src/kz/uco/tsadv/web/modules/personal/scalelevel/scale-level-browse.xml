@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.scalelevel.ScaleLevelBrowse"
+        focusComponent="scaleLevelsTable"
+        lookupComponent="scaleLevelsTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.scalelevel">
+    <dsContext>
+        <groupDatasource id="scaleLevelsDs"
+                         class="kz.uco.tsadv.modules.personal.model.ScaleLevel"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$ScaleLevel e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scaleLevelsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="scaleLevelsTable"
+                datasource="scaleLevelsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="scaleLevelsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="levelNumber"/>
+                <column id="levelName"/>
+                <column id="levelDescriptionLang2"/>
+                <column id="levelDescriptionLang3"/>
+                <column id="levelDescriptionLang4"/>
+                <column id="levelDescriptionLang5"/>
+                <column id="levelDescriptionLang1"/>
+            </columns>
+            <rows datasource="scaleLevelsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="scaleLevelsTable.create"/>
+                <button id="editBtn"
+                        action="scaleLevelsTable.edit"/>
+                <button id="removeBtn"
+                        action="scaleLevelsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

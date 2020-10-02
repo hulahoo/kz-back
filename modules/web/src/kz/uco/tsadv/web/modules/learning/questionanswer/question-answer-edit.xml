@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://QuestionAnswer.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.questionanswer.QuestionAnswerEdit"
+        datasource="questionAnswerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.questionanswer">
+    <dsContext>
+        <datasource id="questionAnswerDs"
+                    class="kz.uco.tsadv.modules.performance.model.QuestionAnswer"
+                    view="questionAnswer.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="questionAnswerTabSheet"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="questionAnswerDs">
+            <column width="250px">
+                <field property="score"/>
+                <field property="icon"/>
+                <field property="order"/>
+            </column>
+        </fieldGroup>
+        <tabSheet id="questionAnswerTabSheet">
+            <tab id="answerLang1Tab"
+                 caption="msg://answerLang1Tab"
+                 margin="true,false,false,false">
+                <textArea id="answerLang1TextArea"
+                          datasource="questionAnswerDs"
+                          height="100%"
+                          property="answerLang1"
+                          required="true"
+                          width="100%"/>
+            </tab>
+            <tab id="answerLang2Tab"
+                 caption="msg://answerLang2Tab"
+                 margin="true,false,false,false">
+                <textArea id="answerLang2TextArea"
+                          datasource="questionAnswerDs"
+                          height="100%"
+                          property="answerLang2"
+                          width="100%"/>
+            </tab>
+            <tab id="answerLang3Tab"
+                 caption="msg://answerLang3Tab"
+                 margin="true,false,false,false">
+                <textArea id="answerLang3TextArea"
+                          datasource="questionAnswerDs"
+                          height="100%"
+                          property="answerLang3"
+                          width="100%"/>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.timecard.allowablescheduleforposition.AllowableScheduleForPositionEdit"
+        datasource="allowableScheduleForPositionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.timecard.allowablescheduleforposition">
+    <dsContext>
+        <datasource id="allowableScheduleForPositionDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.AllowableScheduleForPosition"
+                    view="allowableScheduleForPosition-view"/>
+    </dsContext>
+    <dialogMode height="auto"
+                width="auto"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="allowableScheduleForPositionDs">
+            <column width="250px">
+                <field property="schedule" captionProperty="scheduleName"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

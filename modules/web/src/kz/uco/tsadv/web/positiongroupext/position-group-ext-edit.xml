@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.positiongroupext.PositionGroupExtEdit"
+        datasource="positionGroupExtDs"
+        messagesPack="kz.uco.tsadv.web.positiongroupext">
+    <dsContext>
+        <datasource id="positionGroupExtDs"
+                    class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                    view="_minimal"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="800"/>
+    <layout spacing="true"
+            expand="buttons"
+            width="100%">
+        <label id="warning"
+               stylename="bold"
+               width="100%"/>
+        <pickerField id="positionPicker"
+                     metaClass="base$PositionGroupExt"
+                     captionProperty="fullName"
+                     required="true"
+                     width="100%"
+                     requiredMessage="msg://position.closed"/>
+        <hbox id="buttons"
+              spacing="true">
+            <button id="ok"
+                    invoke="okBtn"
+                    caption="mainMsg://table.btn.save"/>
+            <button id="cancel"
+                    invoke="cancelBtn"
+                    caption="mainMsg://table.btn.cancel"/>
+        </hbox>
+    </layout>
+</window>

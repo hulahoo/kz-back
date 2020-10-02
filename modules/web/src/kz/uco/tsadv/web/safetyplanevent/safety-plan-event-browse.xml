@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.safetyplanevent.SafetyPlanEventBrowse"
+        focusComponent="safetyPlanEventsTable"
+        lookupComponent="safetyPlanEventsTable"
+        messagesPack="kz.uco.tsadv.web.safetyplanevent">
+    <dsContext>
+        <groupDatasource id="safetyPlanEventsDs"
+                         class="kz.uco.tsadv.entity.tb.SafetyPlanEvent"
+                         view="safetyPlanEvent-view">
+            <query>
+                <![CDATA[select e from tsadv$SafetyPlanEvent e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="safetyPlanEventsTable" height="100%"
+            spacing="true">
+        <filter id="filter"
+                applyTo="safetyPlanEventsTable"
+                datasource="safetyPlanEventsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="safetyPlanEventsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="planName"/>
+                <column id="description"/>
+                <column id="dateFrom"/>
+                <column id="dateTo"/>
+                <column id="active"/>
+                <column id="organization"
+                        captionProperty="organization.organization.organizationName"/>
+            </columns>
+            <rows datasource="safetyPlanEventsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="safetyPlanEventsTable.create"/>
+                <button id="editBtn"
+                        action="safetyPlanEventsTable.edit"/>
+                <button id="removeBtn"
+                        action="safetyPlanEventsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

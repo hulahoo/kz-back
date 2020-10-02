@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.internship.InternshipEdit"
+        datasource="internshipDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.internship">
+    <dsContext>
+        <datasource id="internshipDs"
+                    class="kz.uco.tsadv.modules.learning.model.Internship"
+                    view="internship.edit">
+            <collectionDatasource id="internshipExpensesDs"
+                                  property="internshipExpenses"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="internshipDs">
+                <column width="250px">
+                    <field property="internshipType"/>
+                    <!--<field property="school"/>-->
+                    <!--<field property="specialization"/>-->
+                    <!--<field property="reason"/>-->
+                    <!--<field property="agreementNumber"/>-->
+                    <!--<field property="agreementDate"/>-->
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field property="internshipReason"/>
+                    <field property="orderDate"/>
+                    <field property="payable"/>
+                    <field captionProperty="personFioWithEmployeeNumber"
+                           property="mainMentor"/>
+                    <field property="mainMentorReason"/>
+                    <field property="mentorOrderDate"/>
+                    <field captionProperty="organizationName"
+                           property="organizationGroup"/>
+                    <field property="internshipRating"/>
+                    <field id="comment" property="comment" generator="commentTextArea"/>
+                </column>
+            </fieldGroup>
+            <tabSheet id="tabSheet">
+                <tab id="internshipExpensesTab"
+                     caption="msg://internshipExpenses"
+                     margin="true, false, false, false">
+                    <table id="internshipExpensesTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </actions>
+                        <columns>
+                            <column id="expenseType"/>
+                            <column id="amount"/>
+                            <column id="currency"/>
+                        </columns>
+                        <rows datasource="internshipExpensesDs"/>
+                        <buttonsPanel>
+                            <button action="internshipExpensesTable.create"/>
+                            <button action="internshipExpensesTable.edit"/>
+                            <button action="internshipExpensesTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

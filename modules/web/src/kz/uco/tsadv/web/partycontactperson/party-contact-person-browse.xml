@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.partycontactperson.PartyContactPersonBrowse"
+        focusComponent="partyContactPersonsTable"
+        lookupComponent="partyContactPersonsTable"
+        messagesPack="kz.uco.tsadv.web.partycontactperson">
+    <dsContext>
+        <groupDatasource id="partyContactPersonsDs"
+                         class="kz.uco.tsadv.modules.learning.model.PartyContactPerson"
+                         view="partyContactPerson.browse">
+            <query>
+                <![CDATA[select e from tsadv$PartyContactPerson e 
+                    where e.partyExt.id = :param$partyExt
+                    and e.deleteTs is null]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="partyContactPersonsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="partyContactPersonsTable"
+                datasource="partyContactPersonsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="partyContactPersonsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="partyExt"/>
+                <column id="fullName"/>
+                <column id="contactPersonType"/>
+            </columns>
+            <rows datasource="partyContactPersonsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="partyContactPersonsTable.create"/>
+                <button id="editBtn"
+                        action="partyContactPersonsTable.edit"/>
+                <button id="removeBtn"
+                        action="partyContactPersonsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

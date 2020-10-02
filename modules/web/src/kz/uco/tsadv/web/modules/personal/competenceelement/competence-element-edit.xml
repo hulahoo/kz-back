@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CompetenceElement.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.competenceelement.CompetenceElementEdit"
+        datasource="competenceElementDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="competenceElementDs"
+                    class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
+                    view="competenceElement-view"/>
+        <collectionDatasource id="scaleLevelsDs"
+                              class="kz.uco.tsadv.modules.personal.model.ScaleLevel"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$ScaleLevel e
+                 where e.scale.id = :ds$competenceElementDs.competenceGroup.competence.scale.id order by e.levelNumber asc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="competenceElementDs">
+            <column width="250px">
+                <field captionProperty="competence"
+                       property="competenceGroup"/>
+                <field optionsDatasource="scaleLevelsDs"
+                       property="scaleLevel"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

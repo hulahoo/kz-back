@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BudgetRequest.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.budgetrequest.BudgetRequestBrowse"
+        focusComponent="budgetRequestsTable"
+        lookupComponent="budgetRequestsTable">
+    <dsContext>
+        <groupDatasource id="budgetRequestsDs"
+                         class="kz.uco.tsadv.modules.learning.model.BudgetRequest"
+                         view="budgetRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$BudgetRequest e where e.budgetHeader.id =:param$budgetHeaderId]]>
+            </query>
+
+        </groupDatasource>
+        <collectionDatasource id="budgetRequestItemsDs"
+                              class="kz.uco.tsadv.modules.learning.model.BudgetRequestItem">
+            <query>
+                <![CDATA[select e from tsadv$BudgetRequestItem e where e.budgetRequest.id =:ds$budgetRequestsDs.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicCostTypeDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicCostType"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicCostType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="budgetCustomDs"
+                              class="kz.uco.tsadv.modules.learning.model.dto.BudgetRequestItemsRowDto"
+                              datasourceClass="kz.uco.tsadv.datasource.BudgetDatasource"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="splitPanel"
+            spacing="true">
+        <filter id="filter"
+                applyTo="budgetRequestsTable"
+                datasource="budgetRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <split id="splitPanel"
+               orientation="vertical"
+               width="100%">
+            <table id="budgetRequestsTable"
+                   width="100%" height="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                    <action id="copy"
+                            invoke="copy"/>
+                </actions>
+                <columns>
+                    <column id="providerCompany"/>
+                    <column id="employeeCategory.langValue"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.employeeCategory"/>
+                    <column id="budgetItem.langValue"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.budgetItem"/>
+                    <column id="requiredEducation.langValue"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.requiredEducation"/>
+                    <column id="learningType.langValue"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.learningType"/>
+                    <column id="course.name"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.course"/>
+                    <column id="courseName"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.courseName"/>
+                    <column id="reason"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.reason"/>
+                    <column id="city.langValue"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.city"/>
+                    <column id="day"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.day"/>
+                    <column id="hour"
+                            caption="msg://kz.uco.tsadv.modules.learning.model/BudgetRequest.hour"/>
+                </columns>
+                <rows datasource="budgetRequestsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="budgetRequestsTable.create"/>
+                    <button id="editBtn"
+                            action="budgetRequestsTable.edit"/>
+                    <button id="removeBtn"
+                            action="budgetRequestsTable.remove"/>
+                    <button id="copyBtn"
+                            action="budgetRequestsTable.copy"
+                            caption="msg://copy"
+                            icon="icons/copy.png"/>
+                </buttonsPanel>
+            </table>
+            <table id="itemsTable" width="100%" height="100%">
+                <actions>
+                    <action id="updateDs" invoke="updateDs" caption="msg://calculate"/>
+                    <action id="fillYear" invoke="fillYear" caption="msg://fillYear"/>
+                </actions>
+                <buttonsPanel>
+                    <button id="save" action="itemsTable.updateDs"/>
+                    <button id="fillYear" action="itemsTable.fillYear"/>
+                </buttonsPanel>
+                <columns>
+                    <column id="name" caption="msg://name"/>
+                </columns>
+                <rows datasource="budgetCustomDs"/>
+            </table>
+        </split>
+    </layout>
+</window>

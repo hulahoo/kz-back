@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.medicalinspectionresult.MedicalInspectionResultBrowse"
+        focusComponent="medicalInspectionResultsTable"
+        lookupComponent="medicalInspectionResultsTable"
+        messagesPack="kz.uco.tsadv.web.medicalinspectionresult">
+    <dsContext>
+        <groupDatasource id="medicalInspectionResultsDs"
+                         class="kz.uco.tsadv.entity.tb.MedicalInspectionResult"
+                         view="medicalInspectionResult-view">
+            <query>
+                <![CDATA[select e from tsadv$MedicalInspectionResult e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%">
+            <filter id="filter"
+                    applyTo="medicalInspectionResultsTable"
+                    datasource="medicalInspectionResultsDs">
+                <properties include=".*"/>
+            </filter>
+            <groupTable id="medicalInspectionResultsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/edit.png"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/remove.png"/>
+                </actions>
+                <columns>
+                    <column id="withDiseases"/>
+                    <column id="riskGroup"/>
+                    <column id="tradeunionCenterSent"/>
+                    <column id="temporaryUnfit"/>
+                    <column id="constantlyUnfit"/>
+                </columns>
+                <rows datasource="medicalInspectionResultsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="medicalInspectionResultsTable.create"/>
+                    <button id="editBtn"
+                            action="medicalInspectionResultsTable.edit"/>
+                    <button id="removeBtn"
+                            action="medicalInspectionResultsTable.remove"/>
+                </buttonsPanel>
+            </groupTable>
+        </scrollBox>
+    </layout>
+</window>

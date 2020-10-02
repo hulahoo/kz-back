@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Position.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.position.PositionBrowse"
+        focusComponent="positionsTable"
+        lookupComponent="positionsTable">
+    <dsContext>
+        <groupDatasource id="positionsDs"
+                         class="kz.uco.tsadv.modules.personal.model.PositionExt"
+                         view="position-view">
+            <query>
+                <![CDATA[select e from base$PositionExt e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="positionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="positionsTable"
+                datasource="positionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="positionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="positionName"/>
+                <column id="location"/>
+                <column id="managerFlag"/>
+                <column id="fte"/>
+                <column id="maxPersons"/>
+                <column id="jobGroup"/>
+                <column id="gradeGroup"/>
+                <column id="gradeRule"/>
+                <column id="payroll"/>
+                <column id="positionStatus"/>
+                <column id="gradeRule"/>
+                <column id="legacyID"/>
+            </columns>
+            <rows datasource="positionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="positionsTable.create"/>
+                <button id="editBtn"
+                        action="positionsTable.edit"/>
+                <button id="removeBtn"
+                        action="positionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

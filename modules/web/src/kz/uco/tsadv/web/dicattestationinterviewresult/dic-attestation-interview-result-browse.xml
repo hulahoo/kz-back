@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicattestationinterviewresult.DicAttestationInterviewResultBrowse"
+        focusComponent="dicAttestationInterviewResultsTable"
+        lookupComponent="dicAttestationInterviewResultsTable"
+        messagesPack="kz.uco.tsadv.web.dicattestationinterviewresult">
+    <dsContext>
+        <groupDatasource id="dicAttestationInterviewResultsDs"
+                         class="kz.uco.tsadv.modules.learning.dictionary.DicAttestationInterviewResult"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAttestationInterviewResult e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAttestationInterviewResultsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAttestationInterviewResultsTable"
+                datasource="dicAttestationInterviewResultsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAttestationInterviewResultsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="legacyID"/>
+                <column id="isSystemRecord"/>
+            </columns>
+            <rows datasource="dicAttestationInterviewResultsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAttestationInterviewResultsTable.create"/>
+                <button id="editBtn"
+                        action="dicAttestationInterviewResultsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAttestationInterviewResultsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicRcQuestionCategory.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.dictionary.dicrcquestioncategory.DicRcQuestionCategoryBrowse"
+        focusComponent="dicRcQuestionCategoriesTable"
+        lookupComponent="dicRcQuestionCategoriesTable">
+    <dsContext>
+        <groupDatasource id="dicRcQuestionCategoriesDs"
+                         class="kz.uco.tsadv.modules.recruitment.dictionary.DicRcQuestionCategory"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicRcQuestionCategory e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicRcQuestionCategoriesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicRcQuestionCategoriesTable"
+                datasource="dicRcQuestionCategoriesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicRcQuestionCategoriesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicRcQuestionCategoriesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicRcQuestionCategoriesTable.create"/>
+                <button id="editBtn"
+                        action="dicRcQuestionCategoriesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicRcQuestionCategoriesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

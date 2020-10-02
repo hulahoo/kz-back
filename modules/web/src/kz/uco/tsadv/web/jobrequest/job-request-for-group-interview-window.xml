@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.jobrequest.JobRequestForGroupInterviewWindow"
+        messagesPack="kz.uco.tsadv.web.jobrequest">
+    <dsContext>
+        <groupDatasource id="jobRequestsDs"
+                         allowCommit="false"
+                         class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                         view="requisition-browsefor-groupinterview">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e
+where e.candidatePersonGroup.id=:param$personGroupId]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%" width="100%" expand="jobRequestsDataGrid">
+        <groupTable id="jobRequestsDataGrid"
+                    settingsEnabled="false"
+                    width="100%">
+            <columns>
+                <column id="requisition.code"/>
+                <column caption="msg://jobRequest.job"
+                        id="requisition.jobGroup.jobName"/>
+                <column id="requestDate"/>
+                <column id="requestStatus"/>
+                <column id="lastcomment"
+                        caption="msg://lastcomment"
+                        generator="generateLastComment"/>
+            </columns>
+            <rows datasource="jobRequestsDs"/>
+        </groupTable>
+    </layout>
+</window>

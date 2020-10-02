@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.accidents.AccidentsBrowse"
+        focusComponent="accidentsesTable"
+        lookupComponent="accidentsesTable"
+        messagesPack="kz.uco.tsadv.web.accidents">
+    <dsContext>
+        <groupDatasource id="accidentsesDs"
+                         class="kz.uco.tsadv.entity.tb.Accidents"
+                         view="accidents-view">
+            <query>
+                <![CDATA[select e from tsadv$Accidents e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="accidentsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="accidentsesTable"
+                datasource="accidentsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="accidentsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="accidentActNumber"
+                        generator="generateNameCell"
+                        link="true"/>
+                <column id="accidentTime"/>
+                <column id="organization"
+                        captionProperty="organization.organization.organizationName"/>
+                <column id="investigationConducted"/>
+                <column id="directReason"/>
+                <column id="excavation"/>
+                <column id="accidentType"/>
+                <column id="accidentActDate"/>
+                <column id="accidentConditions"/>
+                <column id="accidentDate"/>
+                <column id="workPlace.name" caption="msg://workPlace"/>
+            </columns>
+            <rows datasource="accidentsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="accidentsesTable.create"/>
+                <button id="editBtn"
+                        action="accidentsesTable.edit"/>
+                <button id="removeBtn"
+                        action="accidentsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

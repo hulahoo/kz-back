@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.agreementdocument.AgreementDocumentEdit"
+        datasource="agreementDocumentDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.agreementdocument">
+    <dsContext>
+        <datasource id="agreementDocumentDs"
+                    class="kz.uco.tsadv.modules.personal.model.AgreementDocument"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="320px"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="agreementDocumentDs">
+            <field id="file"/>
+            <field property="description"/>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

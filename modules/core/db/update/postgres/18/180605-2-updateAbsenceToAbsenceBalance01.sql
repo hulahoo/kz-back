@@ -1,0 +1,2 @@
+alter table TSADV_ABSENCE_TO_ABSENCE_BALANCE rename column addtional_absence_days to addtional_absence_days__u00621 ;
+alter table TSADV_ABSENCE_TO_ABSENCE_BALANCE add column ADDITIONAL_ABSENCE_DAYS integer ;

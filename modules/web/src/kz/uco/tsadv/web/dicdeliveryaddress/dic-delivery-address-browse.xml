@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicdeliveryaddress.DicDeliveryAddressBrowse"
+        focusComponent="dicDeliveryAddressesTable"
+        lookupComponent="dicDeliveryAddressesTable"
+        messagesPack="kz.uco.tsadv.web.dicdeliveryaddress">
+    <dsContext>
+        <groupDatasource id="dicDeliveryAddressesDs"
+                         class="kz.uco.tsadv.modules.recognition.dictionary.DicDeliveryAddress"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicDeliveryAddress e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicDeliveryAddressesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicDeliveryAddressesTable"
+                datasource="dicDeliveryAddressesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicDeliveryAddressesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicDeliveryAddressesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicDeliveryAddressesTable.create"/>
+                <button id="editBtn"
+                        action="dicDeliveryAddressesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicDeliveryAddressesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

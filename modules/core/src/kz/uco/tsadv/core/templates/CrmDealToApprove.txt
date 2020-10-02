@@ -1,0 +1,10 @@
+<html>
+Сделка "{crmDealEntity.name}" отправлена на утверждение.
+<br/>
+Комментариий:
+Просмотр доступен по ссылке
+<a href="http://localhost:8085/tal/open?screen=tsadv$CrmDeal.edit&item=tsadv$CrmDeal-${crmDealEntity.id}">
+${crmDealEntity.id}
+</a>
+
+</html>

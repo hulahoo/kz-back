@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.attestationparticipant.AttestationParticipantBrowse"
+        focusComponent="attestationParticipantsTable"
+        lookupComponent="attestationParticipantsTable"
+        messagesPack="kz.uco.tsadv.web.attestationparticipant">
+    <dsContext>
+        <groupDatasource id="attestationParticipantsDs"
+                         class="kz.uco.tsadv.modules.learning.model.AttestationParticipant"
+                         view="attestationParticipant.employees">
+            <query>
+                <![CDATA[select e from tsadv$AttestationParticipant e
+                 where :param$attestation = e.attestation.id]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="attestationParticipantsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="attestationParticipantsTable"
+                datasource="attestationParticipantsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="attestationParticipantsTable"
+                    width="100%">
+            <actions>
+                <action id="create" enable="false"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="personGroup.fullName"/>
+                <column id="personGroup.person.type"/>
+                <column id="personGroup.currentAssignment.positionGroup.positionName"/>
+                <column id="personGroup.currentAssignment.organizationGroup.organizationName"
+                        caption="msg://organizationName"/>
+                <column id="attestationDate"/>
+                <column id="result.langValue" caption="msg://result"/>
+                <column id="interviewResult.langValue" caption="msg://interviewResult"/>
+                <column id="commissionRecomendation"/>
+                <column id="event.langValue" caption="msg://event"/>
+                <column id="notAppeared"/>
+                <column id="notAppearedReason"/>
+                <column id="protocol"/>
+            </columns>
+            <rows datasource="attestationParticipantsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="attestationParticipantsTable.create"/>
+                <button id="editButton"
+                        action="attestationParticipantsTable.edit"/>
+                <button id="removeBtn"
+                        action="attestationParticipantsTable.remove"/>
+                <button id="fillBtn"
+                        caption="msg://fill"
+                        invoke="onFillBtnClick"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

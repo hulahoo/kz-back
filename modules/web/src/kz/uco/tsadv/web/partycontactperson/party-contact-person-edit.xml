@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.partycontactperson.PartyContactPersonEdit"
+        datasource="partyContactPersonDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.partycontactperson">
+    <dsContext>
+        <datasource id="partyContactPersonDs"
+                    class="kz.uco.tsadv.modules.learning.model.PartyContactPerson"
+                    view="partyContactPerson.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="partyContactPersonDs">
+            <column width="250px">
+                <field id="partyExt"
+                       property="partyExt"
+                       required="true"/>
+                <field id="fullName"
+                       property="fullName"/>
+                <field id="contactPersonType"
+                       property="contactPersonType"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

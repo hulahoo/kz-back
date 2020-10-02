@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicaccommodationclass.DicAccommodationClassBrowse"
+        focusComponent="dicAccommodationClassesTable"
+        lookupComponent="dicAccommodationClassesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicaccommodationclass">
+    <dsContext>
+        <groupDatasource id="dicAccommodationClassesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicAccommodationClass"
+                         view="dicAccommodationClass.all">
+            <query>
+                <![CDATA[select e from tsadv$DicAccommodationClass e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAccommodationClassesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAccommodationClassesTable"
+                datasource="dicAccommodationClassesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAccommodationClassesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="dicAccommodationType"
+                        caption="msg://accommodationType"/>
+            </columns>
+            <rows datasource="dicAccommodationClassesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAccommodationClassesTable.create"/>
+                <button id="editBtn"
+                        action="dicAccommodationClassesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAccommodationClassesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

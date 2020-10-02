@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.enrollment.EnrollmentPersonLookup"
+        lookupComponent="enrollmentDataGrid"
+        messagesPack="kz.uco.tsadv.web.modules.learning.enrollment">
+    <dsContext>
+        <collectionDatasource id="enrollmentsDs"
+                              class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                              view="enrollment.person.lookup">
+            <query>
+                <![CDATA[select e from tsadv$Enrollment e
+                          where e.course.id = :param$courseId
+                            and e.id not in :param$enrollmentIds]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="enrollmentDataGrid"
+            spacing="true">
+        <filter id="filter"
+                applyTo="enrollmentDataGrid"
+                datasource="enrollmentsDs">
+            <properties include=".*"/>
+        </filter>
+        <dataGrid id="enrollmentDataGrid"
+                  datasource="enrollmentsDs"
+                  selectionMode="MULTI_CHECK"
+                  width="100%">
+            <columns>
+                <column property="personGroup.fullName"/>
+                <column property="personGroup.currentAssignment.positionGroup.positionName"/>
+                <column property="personGroup.currentAssignment.organizationGroup.organizationName"/>
+                <column property="status"/>
+                <column property="date"/>
+            </columns>
+        </dataGrid>
+        <hbox id="actionsHBox"
+              spacing="true">
+            <button id="selectBtn" caption="mainMsg://actions.Select"
+                    action="lookupSelectAction"/>
+            <button id="canselBtn" caption="mainMsg://actions.Cancel"
+                    action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

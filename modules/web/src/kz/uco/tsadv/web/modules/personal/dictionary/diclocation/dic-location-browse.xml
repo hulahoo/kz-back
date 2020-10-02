@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.diclocation.DicLocationBrowse"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.diclocation"
+        lookupComponent="dicLocationsTable">
+    <dsContext>
+        <collectionDatasource id="dicLocationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation"
+                              view="dicLocation.edit">
+            <query>
+                <![CDATA[select e from base$DicLocation e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicLocationsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicLocationsTable"
+                datasource="dicLocationsDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="dicLocationsTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="city"/>
+                <column id="addressLang1"/>
+                <column id="addressLang2"/>
+                <column id="addressLang3"/>
+                <column id="addressLang4"/>
+                <column id="addressLang5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicLocationsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicLocationsTable.create"/>
+                <button id="editBtn"
+                        action="dicLocationsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicLocationsTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Course.register"
+        class="kz.uco.tsadv.web.modules.learning.course.RegisterCourse">
+
+    <dialogMode height="AUTO"
+                width="800"/>
+    <layout>
+        <vbox id="confirmBlock" spacing="true">
+
+        </vbox>
+        <hbox align="BOTTOM_RIGHT"
+              spacing="true"
+              stylename="c-edit-window-actions">
+            <button id="windowCommit"
+                    caption="msg://button.yes"
+                    action="yes"/>
+
+            <button id="windowClose"
+                    caption="msg://button.no"
+                    action="no"/>
+        </hbox>
+    </layout>
+</window>

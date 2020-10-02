@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personaward.PersonAwardEdit"
+        datasource="personAwardDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personaward">
+    <dsContext>
+        <datasource id="personAwardDs"
+                    class="kz.uco.tsadv.modules.recognition.PersonAward"
+                    view="personAward.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personAwardDs">
+            <column width="250px">
+                <field property="type"/>
+                <field property="date"/>
+                <field property="author" captionProperty="fullName"/>
+                <field property="receiver" captionProperty="fullName"/>
+                <field property="history" rows="6" width="600px"/>
+                <field property="why" rows="3" width="600px"/>
+                <field property="status"/>
+                <field property="awardProgram"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

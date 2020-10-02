@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dictalentprogramrequeststatus.DicTalentProgramRequestStatusBrowse"
+        focusComponent="dicTalentProgramRequestStatusesTable"
+        lookupComponent="dicTalentProgramRequestStatusesTable"
+        messagesPack="kz.uco.tsadv.web.dictalentprogramrequeststatus">
+    <dsContext>
+        <groupDatasource id="dicTalentProgramRequestStatusesDs"
+                         class="kz.uco.tsadv.entity.DicTalentProgramRequestStatus"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicTalentProgramRequestStatus e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicTalentProgramRequestStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicTalentProgramRequestStatusesTable"
+                datasource="dicTalentProgramRequestStatusesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicTalentProgramRequestStatusesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="legacyID"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="order"/>
+            </columns>
+            <rows datasource="dicTalentProgramRequestStatusesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicTalentProgramRequestStatusesTable.create"/>
+                <button id="editBtn"
+                        action="dicTalentProgramRequestStatusesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicTalentProgramRequestStatusesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonDocument.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.persondocument.PersonDocumentBrowse"
+        focusComponent="personDocumentsTable"
+        lookupComponent="personDocumentsTable">
+    <dsContext>
+        <groupDatasource id="personDocumentsDs"
+                         class="kz.uco.tsadv.modules.personal.model.PersonDocument"
+                         view="personDocument.full"
+                         maxResults="50">
+            <query>
+                <![CDATA[select e from tsadv$PersonDocument e where e.personGroup.id = :session$userPersonGroupId]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personDocumentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personDocumentsTable"
+                datasource="personDocumentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personDocumentsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="documentType"/>
+                <column id="issueDate"/>
+                <column id="expiredDate"/>
+                <column id="issuedBy"/>
+                <column id="description"/>
+                <column id="status"/>
+            </columns>
+            <rows datasource="personDocumentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personDocumentsTable.create"/>
+                <button id="editBtn"
+                        action="personDocumentsTable.edit"/>
+                <button id="removeBtn"
+                        action="personDocumentsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

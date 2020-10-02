@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.learningfeedbackquestion.LearningFeedbackQuestionEdit"
+        datasource="learningFeedbackQuestionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.learningfeedbackquestion">
+    <dsContext>
+        <datasource id="learningFeedbackQuestionDs"
+                    class="kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackQuestion"
+                    view="learningFeedbackQuestion.edit">
+            <collectionDatasource id="answersDs"
+                                  property="answers"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true" height="100%">
+        <scrollBox id="scrollBox" width="100%" spacing="true">
+            <fieldGroup id="fieldGroup"
+                        border="visible"
+                        datasource="learningFeedbackQuestionDs"
+                        fieldCaptionWidth="120px">
+                <column width="250px">
+                    <field property="questionType"/>
+                </column>
+            </fieldGroup>
+
+            <fieldGroup datasource="learningFeedbackQuestionDs"
+                        fieldCaptionWidth="120px"
+                        border="visible">
+                <column width="450px">
+                    <field property="questionLangValue1" rows="3"/>
+                    <field property="questionLangValue2" rows="3"/>
+                    <field property="questionLangValue3" rows="3"/>
+                </column>
+            </fieldGroup>
+
+            <groupBox id="answersBox"
+                      caption="msg://kz.uco.tsadv.modules.learning.model.feedback/LearningFeedbackQuestion.answers">
+                <table id="answersTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="order"/>
+                        <column id="answerLangValue"/>
+                        <column id="score"/>
+                    </columns>
+                    <rows datasource="answersDs"/>
+                    <buttonsPanel>
+                        <button action="answersTable.create"/>
+                        <button action="answersTable.edit"/>
+                        <button action="answersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

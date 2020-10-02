@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewerLookup"
+        focusComponent="personGroupsTable"
+        lookupComponent="personGroupsTable">
+    <dsContext>
+        <groupDatasource id="personGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         view="personGroup.browse"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <groupTable id="personGroupsTable"
+                    height="100%"
+                    width="100%">
+            <columns>
+                <column id="userImage"
+                        caption="msg://Photo"
+                        generator="generateUserImageCell"
+                        sortable="false"/>
+                <column id="person.fioWithEmployeeNumber"/>
+                <column id="person.nationalIdentifier"/>
+                <column id="person.dateOfBirth"/>
+                <column id="person.sex.langValue"/>
+                <column id="person.hireDate"/>
+                <column id="currentAssignment.organizationGroup"
+                        captionProperty="currentAssignment.organizationGroup.organization.organizationName"/>
+                <column id="currentAssignment.positionGroup"
+                        captionProperty="currentAssignment.positionGroup.position.positionName"/>
+                <column id="currentAssignment.jobGroup"
+                        captionProperty="currentAssignment.jobGroup.job.jobName"/>
+                <column id="currentAssignment.gradeGroup"
+                        captionProperty="currentAssignment.gradeGroup.grade.gradeName"/>
+                <column id="currentAssignment.location.langValue"/>
+                <column id="person.type"/>
+            </columns>
+            <rows datasource="personGroupsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.goodsreceipt.GoodsReceiptBrowse"
+        focusComponent="goodsReceiptsTable"
+        lookupComponent="goodsReceiptsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.goodsreceipt">
+    <dsContext>
+        <groupDatasource id="goodsReceiptsDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.GoodsReceipt"
+                         view="goodsReceipt.edit">
+            <query>
+                <![CDATA[select e from tsadv$GoodsReceipt e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goodsReceiptsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="goodsReceiptsTable"
+                datasource="goodsReceiptsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="goodsReceiptsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="goods.name"/>
+                <column id="quantity"/>
+            </columns>
+            <rows datasource="goodsReceiptsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="goodsReceiptsTable.create"/>
+                <button id="editBtn"
+                        action="goodsReceiptsTable.edit"/>
+                <button id="removeBtn"
+                        action="goodsReceiptsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

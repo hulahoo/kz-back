@@ -1,0 +1,1 @@
+alter table TSADV_TEMPORARY_TRANSLATION_REQUEST drop column REQUEST_NUMBER__U99974 cascade ;

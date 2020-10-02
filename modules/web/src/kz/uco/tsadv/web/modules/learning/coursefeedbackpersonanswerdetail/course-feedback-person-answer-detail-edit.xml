@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswerdetail.CourseFeedbackPersonAnswerDetailEdit"
+        datasource="courseFeedbackPersonAnswerDetailDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswerdetail">
+    <dsContext>
+        <datasource id="courseFeedbackPersonAnswerDetailDs"
+                    class="kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswerDetail"
+                    view="courseFeedbackPersonAnswerDetail.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="courseFeedbackPersonAnswerDetailDs">
+            <column width="250px">
+                <field property="course"/>
+                <field property="courseSectionSession" captionProperty="name"/>
+                <field property="feedbackTemplate"/>
+                <field property="personGroup" captionProperty="fullName"/>
+                <field property="question" captionProperty="questionLangValue"/>
+                <field property="answer" captionProperty="answerLangValue"/>
+                <field property="textAnswer" rows="3"/>
+                <field property="score"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

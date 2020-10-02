@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://QuestionBank.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.questionbank.QuestionBankBrowse"
+        focusComponent="questionBanksTable"
+        lookupComponent="questionBanksTable">
+    <dsContext>
+        <collectionDatasource id="questionBanksDs"
+                              class="kz.uco.tsadv.modules.learning.model.QuestionBank"
+                              view="questionBank.browse">
+            <query>
+                <![CDATA[select e from tsadv$QuestionBank e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="questionBanksTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="questionBanksTable"
+                datasource="questionBanksDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="questionBanksTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="bankName"/>
+                <column id="description"
+                        maxTextLength="60"/>
+            </columns>
+            <rows datasource="questionBanksDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="questionBanksTable.create"/>
+                <button id="editBtn"
+                        action="questionBanksTable.edit"/>
+                <button id="removeBtn"
+                        action="questionBanksTable.remove"/>
+                <button id="excel"
+                        action="questionBanksTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

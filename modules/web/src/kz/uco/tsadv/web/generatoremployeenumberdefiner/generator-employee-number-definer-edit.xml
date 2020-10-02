@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.generatoremployeenumberdefiner.GeneratorEmployeeNumberDefinerEdit"
+        datasource="generatorEmployeeNumberDefinerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.generatoremployeenumberdefiner">
+    <dsContext>
+        <datasource id="generatorEmployeeNumberDefinerDs"
+                    class="kz.uco.tsadv.entity.generator.GeneratorEmployeeNumberDefiner"
+                    view="generatorEmployeeNumberDefiner-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="generatorEmployeeNumberDefinerDs">
+            <column width="250px">
+                <field property="generatorEmployeeNumber"
+                       captionProperty="name"
+                       required="true"/>
+                <field property="personType"
+                       required="true"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

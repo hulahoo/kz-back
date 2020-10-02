@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.workplace.WorkPlaceEdit"
+        datasource="workPlaceDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.workplace">
+    <dsContext>
+        <datasource id="workPlaceDs"
+                    class="kz.uco.tsadv.entity.tb.WorkPlace"
+                    view="workPlace-view">
+            <collectionDatasource id="msdsDs"
+                                  property="msds"/>
+            <collectionDatasource id="monitoringDs"
+                                  property="monitoring"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout margin="false,false,false,true"
+            spacing="true"
+            expand="box1">
+
+        <vbox id="box1"
+              spacing="true" expand="tabSheet">
+            <fieldGroup id="fieldGroup"
+                        datasource="workPlaceDs">
+                <column width="250px">
+                    <field id="name"
+                           property="name"/>
+                    <field id="organization"
+                           captionProperty="organization"
+                           property="organization"/>
+                    <field id="job"
+                           captionProperty="job"
+                           property="job"/>
+                </column>
+            </fieldGroup>
+            <tabSheet id="tabSheet" width="100%">
+                <tab id="tab"
+                     caption="msg://tab"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="workPlaceMSDSTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/remove.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/edit.png"/>
+                        </actions>
+                        <columns>
+                            <column id="developPlanDate"/>
+                            <column id="developFactDate"/>
+                            <column id="donePlanDate"/>
+                            <column id="doneFactDate"/>
+                            <column id="msds"/>
+                            <column id="document"/>
+                            <column id="status"/>
+                        </columns>
+                        <rows datasource="msdsDs"/>
+                        <buttonsPanel>
+                            <button action="workPlaceMSDSTable.create"/>
+                            <button action="workPlaceMSDSTable.remove"/>
+                            <button action="workPlaceMSDSTable.edit"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="Tab"
+                     caption="msg://Tab"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="workPlaceMonitoringTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/remove.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/edit.png"/>
+                        </actions>
+                        <columns>
+                            <column id="monitoringDate"/>
+                            <column id="inspectorFullName"/>
+                            <column id="controlStage"/>
+                        </columns>
+                        <rows datasource="monitoringDs"/>
+                        <buttonsPanel>
+                            <button action="workPlaceMonitoringTable.create"/>
+                            <button action="workPlaceMonitoringTable.remove"/>
+                            <button action="workPlaceMonitoringTable.edit"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

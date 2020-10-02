@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.buildingcost.BuildingCostBrowse"
+        focusComponent="buildingCostsTable"
+        lookupComponent="buildingCostsTable"
+        messagesPack="kz.uco.tsadv.web.buildingcost">
+    <dsContext>
+        <groupDatasource id="buildingCostsDs"
+                         class="kz.uco.tsadv.entity.tb.BuildingCost"
+                         view="buildingCost-view">
+            <query>
+                <![CDATA[select e from tsadv$BuildingCost e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="buildingCostsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="buildingCostsTable"
+                datasource="buildingCostsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="buildingCostsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="costDate"/>
+                <column id="balanceCost"/>
+                <column id="residualValue"/>
+            </columns>
+            <rows datasource="buildingCostsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="buildingCostsTable.create"/>
+                <button id="editBtn"
+                        action="buildingCostsTable.edit"/>
+                <button id="removeBtn"
+                        action="buildingCostsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

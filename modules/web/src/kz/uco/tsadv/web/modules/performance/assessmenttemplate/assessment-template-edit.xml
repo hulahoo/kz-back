@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://assessmentTemplate.edit"
+        class="kz.uco.tsadv.web.modules.performance.assessmenttemplate.AssessmentTemplateEdit"
+        datasource="assessmentTemplateDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assessmenttemplate">
+    <dsContext>
+        <datasource id="assessmentTemplateDs"
+                    class="kz.uco.tsadv.modules.performance.model.AssessmentTemplate"
+                    view="assessmentTemplate.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="assessmentTemplateDs">
+            <column width="250px">
+                <field property="performancePlan"/>
+                <field property="selfAssessment"/>
+                <field property="managerAssessment"/>
+                <field property="participantAssessment"/>
+                <field property="assessmentTemplateName"/>
+                <field property="competenceTemplate"/>
+                <field caption="msg://goalWeight"
+                       property="goalWeight"/>
+                <field caption="msg://CompetenceWeight"
+                       property="competenceWeight"/>
+                <field captionProperty="name"
+                       property="managerTest"/>
+                <field captionProperty="name"
+                       property="workerTest"/>
+                <field captionProperty="name"
+                       property="participantTest"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

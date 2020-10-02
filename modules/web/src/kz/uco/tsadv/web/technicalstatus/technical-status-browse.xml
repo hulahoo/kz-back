@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.technicalstatus.TechnicalStatusBrowse"
+        focusComponent="technicalStatusesTable"
+        lookupComponent="technicalStatusesTable"
+        messagesPack="kz.uco.tsadv.web.technicalstatus">
+    <dsContext>
+        <groupDatasource id="technicalStatusesDs"
+                         class="kz.uco.tsadv.entity.tb.TechnicalStatus"
+                         view="technicalStatus-view">
+            <query>
+                <![CDATA[select e from tsadv$TechnicalStatus e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="technicalStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="technicalStatusesTable"
+                datasource="technicalStatusesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="technicalStatusesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="buildTechnicalStatus"/>
+                <column id="technicalStatusDate"/>
+                <column id="technicalStatusBuildstructures"/>
+            </columns>
+            <rows datasource="technicalStatusesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="technicalStatusesTable.create"/>
+                <button id="editBtn"
+                        action="technicalStatusesTable.edit"/>
+                <button id="removeBtn"
+                        action="technicalStatusesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

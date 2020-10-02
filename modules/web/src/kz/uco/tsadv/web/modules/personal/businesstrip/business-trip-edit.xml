@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BusinessTrip.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.businesstrip.BusinessTripEdit"
+        datasource="businessTripDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="businessTripDs"
+                    class="kz.uco.tsadv.modules.personal.model.BusinessTrip"
+                    view="businessTrip-view"/>
+        <collectionDatasource id="businessTripLinesDs"
+                              class="kz.uco.tsadv.modules.personal.model.BusinessTripLines"
+                              view="businessTripLines-view">
+            <query>
+                <![CDATA[select e from tsadv$BusinessTripLines e where e.businessTrip.id = :ds$businessTripDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="businessTripCostDs"
+                              allowCommit="true"
+                              class="kz.uco.tsadv.modules.personal.model.BusinessTripCost"
+                              view="businessTripCost-view">
+            <query>
+                <![CDATA[select e from tsadv$BusinessTripCost e where e.businessTripLines.id = :ds$businessTripLinesDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="parentBusinessTripsDs"
+                              allowCommit="true"
+                              class="kz.uco.tsadv.modules.personal.model.BusinessTrip"
+                              view="businessTrip-view">
+            <query>
+                <![CDATA[select e from tsadv$BusinessTrip e
+where e.personGroup.id=:ds$businessTripDs.personGroup.id]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="600"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <hbox id="hbox" spacing="true">
+                <fieldGroup id="fieldGroup1"
+                            datasource="businessTripDs">
+                    <column id="column1" width="250px">
+                        <field id="type"
+                               property="type"/>
+                        <field id="purpose" property="purpose"/>
+                        <field id="dateFrom" property="dateFrom"/>
+                        <field id="dateTo" property="dateTo"/>
+                        <field id="orderDate" property="orderDate"/>
+                        <field id="orderNum" property="orderNum"/>
+                        <field id="reason" property="reason"/>
+                    </column>
+                </fieldGroup>
+                <vbox id="vbox">
+                    <fieldGroup id="fieldGroup2"
+                                datasource="businessTripDs">
+                        <column id="column2">
+                            <field id="typeTrip" editable="false"
+                                   property="typeTrip"/>
+                            <field id="cancelOrderDate" editable="false"
+                                   property="cancelOrderDate"/>
+                            <field id="cancelOrderNumber" editable="false"
+                                   property="cancelOrderNumber"/>
+                            <field id="parentBusinessTrip"
+                                   editable="false"
+                                   optionsDatasource="parentBusinessTripsDs"
+                                   property="parentBusinessTripCaption"
+                                   caption="msg://parentOrder"/>
+                            <field id="status" editable="false"
+                                   property="status"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </hbox>
+            <groupBox id="businessTripLinesGroupBox"
+                      caption="msg://detailTrip"
+                      collapsable="true"
+                      collapsed="true"
+                      height="100%"
+                      responsive="true"
+                      spacing="true">
+                <table id="businessTripLinesTable"
+                       height="250px"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="number"/>
+                        <column id="cityFrom"
+                                xml:id="cityFrom"/>
+                        <column id="cityTo"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                    </columns>
+                    <rows datasource="businessTripLinesDs"/>
+                    <buttonsPanel id="buttonsPanelBusinessTripLines">
+                        <button action="businessTripLinesTable.create"/>
+                        <button action="businessTripLinesTable.edit"/>
+                        <button action="businessTripLinesTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+            <groupBox id="businessTripCostGroupBox" caption="msg://cost"
+                      collapsable="true"
+                      collapsed="true"
+                      spacing="true">
+                <table id="businessTripCostTable"
+                       height="250px"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="amount"/>
+                        <column id="currency"/>
+                        <column id="costType"/>
+                    </columns>
+                    <rows datasource="businessTripCostDs"/>
+                    <buttonsPanel id="buttonsPanelBusinessTripCost">
+                        <button action="businessTripCostTable.create"/>
+                        <button action="businessTripCostTable.edit"/>
+                        <button action="businessTripCostTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

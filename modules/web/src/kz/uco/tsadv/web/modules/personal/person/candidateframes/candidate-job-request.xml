@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.person.candidateframes.CandidateJobRequest"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.candidateframes">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <split id="splitter"
+               height="100%"
+               orientation="vertical"
+               width="100%">
+            <table id="jobRequestsTable"
+                   height="100%"
+                   width="100%">
+                <actions>
+                    <action id="create"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                    <action id="excel"
+                            icon="icons/excel.png"/>
+                </actions>
+                <columns>
+                    <column id="requestDate"/>
+                    <column id="requestStatus"/>
+                    <column id="isReserved"/>
+                    <column id="requisition.code"/>
+                    <column id="requisition.organizationGroup"
+                            captionProperty="requisition.organizationGroup.organization.organizationName"/>
+                    <column id="requisition.positionGroup"
+                            captionProperty="requisition.positionGroup.position.positionName"/>
+                    <column id="requisition.jobGroup"
+                            captionProperty="requisition.jobGroup.job.jobName"/>
+                    <column id="interview"
+                            caption="msg://jobRequestsTable.createInterview"
+                            captionProperty="interview.requisitionHiringStep.hiringStep.stepName"
+                            generator="generateInterview"/>
+                    <column id="passedInterviews"
+                            generator="generatePassedInterviews"/>
+                    <column id="competenceMatchPercent">
+                        <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                                   format="###.##&apos;%&apos;"/>
+                    </column>
+                    <column id="questionnaireMatchPercent">
+                        <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                                   format="###.##&apos;%&apos;"/>
+                    </column>
+                    <column id="jobRequestReason"/>
+                    <column id="reason"
+                            maxTextLength="30"/>
+                </columns>
+                <rows datasource="jobRequestsDs"/>
+                <rowsCount/>
+                <buttonsPanel alwaysVisible="true">
+                    <button id="createBtn"
+                            action="jobRequestsTable.create"/>
+                    <button id="editBtn"
+                            action="jobRequestsTable.edit"/>
+                    <button id="removeBtn"
+                            action="jobRequestsTable.remove"/>
+                    <button action="jobRequestsTable.excel"/>
+                </buttonsPanel>
+            </table>
+            <groupBox caption="msg://Interview"
+                      height="100%">
+                <frame screen="job-request-interview"/>
+            </groupBox>
+        </split>
+    </layout>
+</window>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.rcgquestionanswer.RcgQuestionAnswerEdit"
+        datasource="rcgQuestionAnswerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.rcgquestionanswer">
+    <dsContext>
+        <datasource id="rcgQuestionAnswerDs"
+                    class="kz.uco.tsadv.modules.recognition.RcgQuestionAnswer"
+                    view="rcgQuestionAnswer.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="rcgQuestionAnswerDs"
+                    fieldCaptionWidth="100px">
+            <column width="250px">
+                <field property="code" required="true"/>
+                <field property="score"/>
+                <field id="iconField"
+                       property="icon"
+                       visible="false"
+                       width="AUTO">
+                    <hbox align="MIDDLE_LEFT"
+                          spacing="true"
+                          width="AUTO">
+                        <image id="iconImage"
+                               datasource="rcgQuestionAnswerDs"
+                               height="60px"
+                               property="icon"
+                               scaleMode="FILL"
+                               stylename="image-dotted-border"
+                               width="60px"/>
+                        <upload id="iconUploader"
+                                align="MIDDLE_LEFT"
+                                clearButtonCaption="mainMsg://table.btn.empty"
+                                clearButtonIcon="icons/item-remove.png"
+                                datasource="rcgQuestionAnswerDs"
+                                property="icon"
+                                showClearButton="true"
+                                uploadButtonCaption="mainMsg://table.btn.empty"
+                                uploadButtonIcon="icons/reports-template-upload.png"/>
+                    </hbox>
+                </field>
+            </column>
+        </fieldGroup>
+        <fieldGroup id="textAnswers" datasource="rcgQuestionAnswerDs"
+                    fieldCaptionWidth="100px" width="100%">
+            <column width="300">
+                <field property="textLang1">
+                    <textArea property="textLang1"
+                              datasource="rcgQuestionAnswerDs" rows="2"/>
+                </field>
+                <field property="textLang2">
+                    <textArea property="textLang2"
+                              datasource="rcgQuestionAnswerDs" rows="2"/>
+                </field>
+                <field property="textLang3">
+                    <textArea property="textLang3"
+                              datasource="rcgQuestionAnswerDs" rows="2"/>
+                </field>
+                <field property="textLang4">
+                    <textArea property="textLang4"
+                              datasource="rcgQuestionAnswerDs" rows="2"/>
+                </field>
+                <field property="textLang5">
+                    <textArea property="textLang5"
+                              datasource="rcgQuestionAnswerDs" rows="2"/>
+                </field>
+            </column>
+        </fieldGroup>
+
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

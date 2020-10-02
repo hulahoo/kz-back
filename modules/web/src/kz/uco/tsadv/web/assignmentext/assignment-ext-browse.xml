@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.assignmentext.AssignmentExtBrowse"
+        focusComponent="historyTable"
+        lookupComponent="historyTable"
+        messagesPack="kz.uco.tsadv.web.assignmentext">
+    <dsContext>
+        <collectionDatasource id="assignmentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                              view="assignment.view">
+            <query>
+                <![CDATA[select e from base$AssignmentExt e 
+where e.personGroup.id = :param$personGroupId]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <table id="historyTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="edit"
+                        caption="msg://table.btn.edit"
+                        invoke="editHistory"/>
+                <action id="remove"
+                        caption="msg://table.btn.remove"
+                        invoke="removeHistory"/>
+                <action id="removeLate"
+                        caption="msg://table.btn.remove.late"
+                        invoke="removeHistories"/>
+            </actions>
+            <columns>
+                <column id = "group.assignmentNumber"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="personGroup"
+                        captionProperty="personGroup.personFioWithEmployeeNumber"/>
+                <column id="positionGroup"
+                        captionProperty="positionGroup.position.positionFullName"/>
+                <column id="organizationGroup"
+                        captionProperty="organizationGroup.organization.organizationName"/>
+                <column id="jobGroup"
+                        caption="msg://jobGroup"
+                        captionProperty="jobGroup.job.jobName"/>
+                <column id="gradeGroup.grade.gradeName"
+                        caption="msg://gradeGroup"
+                        />
+                <column id="location" visible="false"/>
+                <column id="fte"/>
+                <column id="assignmentStatus"/>
+                <column id="reHire"
+                        generator="generateReHireColumn"
+                        caption="msg://historyTable.reHire"/>
+                <column id="primaryFlag"/>
+                <column id="updatedBy"/>
+            </columns>
+            <rows datasource="assignmentsDs"/>
+            <buttonsPanel>
+                <button id="edit"
+                        action="historyTable.edit"/>
+                <button id="remove"
+                        action="historyTable.remove"/>
+                <button id="removeLate"
+                        action="historyTable.removeLate"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

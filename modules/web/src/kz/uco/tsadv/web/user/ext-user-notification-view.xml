@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        extends="kz/uco/base/web/user/user-notification-view.xml"
+        class="kz.uco.tsadv.web.user.ExtUserNotificationView"
+        messagesPack="kz.uco.tsadv.web.user">
+    <dialogMode height="AUTO"
+                width="800"/>
+    <layout/>
+</window>

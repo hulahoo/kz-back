@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.jobprotectionequipment.JobProtectionEquipmentSizBrowse"
+        focusComponent="jobProtectionEquipmentsTable"
+        lookupComponent="jobProtectionEquipmentsTable"
+        messagesPack="kz.uco.tsadv.web.jobprotectionequipment">
+    <dsContext>
+        <groupDatasource id="jobProtectionEquipmentsDs"
+                         class="kz.uco.tsadv.modules.personprotection.JobProtectionEquipment"
+                         view="jobProtectionEquipment.edit">
+            <query>
+                <![CDATA[select e from tsadv$JobProtectionEquipment e where e.jobGroup.id = :param$jobGroup.id]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobProtectionEquipmentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="jobProtectionEquipmentsTable"
+                datasource="jobProtectionEquipmentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="jobProtectionEquipmentsTable"
+                    width="100%">
+            <columns>
+                <column id="normPerYear"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="personalProtectionEquipment"/>
+            </columns>
+            <rows datasource="jobProtectionEquipmentsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

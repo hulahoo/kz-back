@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfReviews">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="likeDislikeTableId">
+        <table id="likeDislikeTableId"
+               columnControlVisible="false"
+               columnHeaderVisible="false"
+               height="200px"
+               width="100%">
+            <columns>
+                <column id="generated"
+                        generator="generateGeneratedCell"/>
+            </columns>
+            <rows datasource="personReviewsDs"/>
+        </table>
+        <groupBox id="reviewForm">
+            <hbox expand="body"
+                  spacing="true"
+                  width="100%">
+                <label id="authorImage"
+                       htmlEnabled="true"/>
+                <vbox id="body"
+                      spacing="true">
+                    <richTextArea id="richText"
+                                  height="200px"
+                                  width="100%"/>
+                    <buttonsPanel>
+                        <button id="addDislike"
+                                caption="msg://PersonReview.btn.add"
+                                icon="font-icon:THUMBS_UP"
+                                invoke="addLikeReview"
+                                stylename="font-color-green"/>
+                        <button id="addLike"
+                                caption="msg://PersonReview.btn.add"
+                                icon="font-icon:THUMBS_DOWN"
+                                invoke="addDislikeReview"
+                                stylename="font-color-red"/>
+                        <button id="save"
+                                caption="msg://PersonReview.btn.save"
+                                icon="icons/save.png"
+                                invoke="saveReview"
+                                visible="false"/>
+                        <button id="cancel"
+                                caption="msg://PersonReview.btn.cancel"
+                                icon="font-icon:REMOVE"
+                                invoke="reset"/>
+                    </buttonsPanel>
+                </vbox>
+            </hbox>
+        </groupBox>
+    </layout>
+</window>

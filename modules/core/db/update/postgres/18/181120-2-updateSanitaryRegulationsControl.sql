@@ -1,0 +1,1 @@
+alter table TSADV_SANITARY_REGULATIONS_CONTROL add column LEGACY_ID varchar(255) ;

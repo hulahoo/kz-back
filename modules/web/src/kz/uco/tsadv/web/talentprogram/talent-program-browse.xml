@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Talent Program"
+        class="kz.uco.tsadv.web.talentprogram.TalentProgramBrowse"
+        focusComponent="talentProgramsTable"
+        lookupComponent="talentProgramsTable"
+        messagesPack="kz.uco.tsadv.web.talentprogram">
+    <dsContext>
+        <groupDatasource id="talentProgramsDs"
+                         class="kz.uco.tsadv.entity.TalentProgram"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgram e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="talentProgramsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="talentProgramsTable"
+                datasource="talentProgramsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="talentProgramsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="programNameLang"
+                        caption="msg://TalentProgram"/>
+                <column id="isActive"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="talentProgramsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="talentProgramsTable.create"/>
+                <button id="editBtn"
+                        action="talentProgramsTable.edit"/>
+                <button id="removeBtn"
+                        action="talentProgramsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

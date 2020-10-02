@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.microtraumainjured.MicrotraumaInjuredBrowse"
+        focusComponent="microtraumaInjuredsTable"
+        lookupComponent="microtraumaInjuredsTable"
+        messagesPack="kz.uco.tsadv.web.microtraumainjured">
+    <dsContext>
+        <groupDatasource id="microtraumaInjuredsDs"
+                         class="kz.uco.tsadv.entity.tb.MicrotraumaInjured"
+                         view="microtraumaInjured-view">
+            <query>
+                <![CDATA[select e from tsadv$MicrotraumaInjured e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <groupTable id="microtraumaInjuredsTable"
+                    height="100%"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="person"/>
+                <column id="correctiveActions"/>
+                <column id="noteMicrotraumaToAccident"/>
+            </columns>
+            <rows datasource="microtraumaInjuredsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="microtraumaInjuredsTable.create"/>
+                <button id="editBtn"
+                        action="microtraumaInjuredsTable.edit"/>
+                <button id="removeBtn"
+                        action="microtraumaInjuredsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

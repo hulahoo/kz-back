@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.person.TeamMemberFrame"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person">
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <hbox id="assignmaentsHBox" spacing="true" width="100%">
+            <vbox id="assignmentsVBox1" width="100%">
+                <textField id="employee"
+                           datasource="personDs"
+                           property="fioWithEmployeeNumber"
+                           caption="msg://employee"
+                           editable="false"
+                           width="100%"/>
+                <textField id="assignmentField"
+                           datasource="assignmentDs"
+                           property="positionGroup.position"
+                           caption="msg://position"
+                           editable="false"
+                           width="100%"/>
+                <textField id="assignmentStartDate"
+                           datasource="assignmentDs"
+                           property="startDate"
+                           caption="msg://assignmentDate"
+                           editable="false"
+                           width="100%"/>
+            </vbox>
+            <vbox id="assignmentsVBox2" width="100%">
+                <textField id="organization"
+                           datasource="assignmentDs"
+                           property="organizationGroup.organization"
+                           caption="msg://department"
+                           editable="false"
+                           width="100%"/>
+                <textField id="grade"
+                           datasource="assignmentDs"
+                           property="positionGroup.position.gradeGroup.grade"
+                           caption="msg://grade"
+                           editable="false"
+                           width="100%"/>
+                <textField id="assignmentStatus"
+                           datasource="assignmentDs"
+                           property="assignmentStatus"
+                           caption="msg://assignmentStatus"
+                           editable="false"
+                           width="100%"/>
+            </vbox>
+        </hbox>
+    </layout>
+</window>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.banner.BannerEdit"
+        datasource="bannerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.banner">
+    <dsContext>
+        <datasource id="bannerDs"
+                    class="kz.uco.tsadv.modules.recognition.Banner"
+                    view="banner.edit"/>
+    </dsContext>
+    <dialogMode modal="true"
+                forceDialog="true"
+                height="AUTO"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="bannerDs">
+            <column width="250px">
+                <field property="page">
+                    <lookupField id="pageLookup" datasource="bannerDs" property="page"/>
+                </field>
+                <field property="imageLang1"/>
+                <field property="imageLang2"/>
+                <field property="imageLang3"/>
+                <field property="active"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

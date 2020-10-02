@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://StandardOffset.editorCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.standardoffset.StandardOffsetEdit"
+        datasource="standardOffsetDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="standardOffsetDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"
+                    view="standardOffset.view"/>
+        <collectionDatasource id="shiftsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.Shift"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$Shift e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="standardOffsetDs">
+            <column width="250px">
+                <field property="offsetDisplay"/>
+                <field property="offsetDisplayDays"/>
+                <field property="startDate" editable="false"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

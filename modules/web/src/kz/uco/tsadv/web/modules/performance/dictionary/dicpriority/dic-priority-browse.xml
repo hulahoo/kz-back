@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://priority.browse"
+        class="kz.uco.tsadv.web.modules.performance.dictionary.dicpriority.DicPriorityBrowse"
+        focusComponent="dicPrioritiesTable"
+        lookupComponent="dicPrioritiesTable"
+        messagesPack="kz.uco.tsadv.web.modules.performance.dictionary.dicpriority">
+    <dsContext>
+        <groupDatasource id="dicPrioritiesDs"
+                         class="kz.uco.tsadv.modules.performance.dictionary.DicPriority"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPriority e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicPrioritiesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicPrioritiesTable"
+                datasource="dicPrioritiesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicPrioritiesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicPrioritiesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicPrioritiesTable.create"/>
+                <button id="editBtn"
+                        action="dicPrioritiesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicPrioritiesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,1 @@
+alter table TSADV_JOB drop column LEGACY_ID__U69803 cascade ;

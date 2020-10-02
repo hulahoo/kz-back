@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.buildingtechnicalinspections.BuildingTechnicalInspectionsBrowse"
+        focusComponent="buildingTechnicalInspectionsesTable"
+        lookupComponent="buildingTechnicalInspectionsesTable"
+        messagesPack="kz.uco.tsadv.web.buildingtechnicalinspections">
+    <dsContext>
+        <groupDatasource id="buildingTechnicalInspectionsesDs"
+                         class="kz.uco.tsadv.entity.tb.BuildingTechnicalInspections"
+                         view="buildingTechnicalInspections-view">
+            <query>
+                <![CDATA[select e from tsadv$BuildingTechnicalInspections e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="buildingTechnicalInspectionsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="buildingTechnicalInspectionsesTable"
+                datasource="buildingTechnicalInspectionsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="buildingTechnicalInspectionsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="inspectionCategory"/>
+                <column id="inspectionType"/>
+                <column id="inspectingFullName.personFioWithEmployeeNumber"/>
+                <column id="buildTechnicalStatus"/>
+                <column id="technicalStatusBuildstructures"/>
+                <column id="inspectionDate"/>
+                <column id="prescriptionNumber"/>
+                <column id="damageDescription"/>
+                <column id="recommendations"/>
+                <column id="technicalJournalRecord"/>
+                <column id="preparationDeadline"/>
+                <column id="eliminateEvent"/>
+                <column id="eliminationDeadline"/>
+                <column id="eliminationOrPostponementNotification"/>
+                <column id="repairProgram"/>
+            </columns>
+            <rows datasource="buildingTechnicalInspectionsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="buildingTechnicalInspectionsesTable.create"/>
+                <button id="editBtn"
+                        action="buildingTechnicalInspectionsesTable.edit"/>
+                <button id="removeBtn"
+                        action="buildingTechnicalInspectionsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

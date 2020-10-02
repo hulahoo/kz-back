@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OrganizationGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.organizationgroup.OrganizationGroupLookup"
+        focusComponent="organizationGroupsTable"
+        lookupComponent="organizationGroupsTable">
+    <dsContext>
+        <groupDatasource id="organizationGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                         view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                           from base$OrganizationGroupExt e
+                           join e.list o
+                          where :session$systemDate between o.startDate and o.endDate]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="costCentersDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicCostCenter">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicCostCenter e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="payrollsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPayroll">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicPayroll e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="locationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation">
+            <query>
+                <![CDATA[select e
+                         from base$DicLocation e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="organizationTypesDs"
+                              class="kz.uco.base.entity.dictionary.DicOrgType">
+            <query>
+                <![CDATA[select e
+                         from base$DicOrgType e
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="organizationGroupsTable"
+            spacing="true">
+        <filter id="organizationGroupsFilter"
+                applyTo="organizationGroupsTable"
+                datasource="organizationGroupsDs"/>
+        <groupBox id="groupBox"
+                  caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="organizationGroupsTable"
+                    width="100%">
+            <columns>
+                <column id="organization"
+                        caption="msg://kz.uco.tsadv.modules.personal.group/OrganizationGroup.organization"/>
+                <column id="organization.payroll"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.payroll"/>
+                <column id="organization.location"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/Address"/>
+                <column id="organization.type"
+                        caption="msg://kz.uco.tsadv.modules.personal.group/PersonContact.type"/>
+                <column id="organization.costCenter"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.costCenter"/>
+            </columns>
+            <rows datasource="organizationGroupsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

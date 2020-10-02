@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.jobtest.JobTestBrowse"
+        focusComponent="jobTestsTable"
+        lookupComponent="jobTestsTable"
+        messagesPack="kz.uco.tsadv.web.jobtest">
+    <dsContext>
+        <groupDatasource id="jobTestsDs"
+                         class="kz.uco.tsadv.modules.learning.model.JobTest"
+                         view="jobTest.edit">
+            <query>
+                <![CDATA[select e from tsadv$JobTest e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobTestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="jobTestsTable"
+                datasource="jobTestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="jobTestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="jobGroup"/>
+                <column id="purpose"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="jobTestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="jobTestsTable.create"/>
+                <button id="editBtn"
+                        action="jobTestsTable.edit"/>
+                <button id="removeBtn"
+                        action="jobTestsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

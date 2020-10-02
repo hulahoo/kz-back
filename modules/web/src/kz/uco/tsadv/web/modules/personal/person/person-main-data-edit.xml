@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonMainDataEdit"
+        datasource="personDs">
+    <dsContext>
+        <datasource id="personDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person-edit"/>
+        <collectionDatasource id="dicSexDs"
+                              class="kz.uco.base.entity.dictionary.DicSex"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from base$DicSex e]]>
+            </query>
+        </collectionDatasource>
+        <runtimePropsDatasource id="runtimePropsDs"
+                                mainDs="personDs"/>
+        <collectionDatasource id="categoriesDs"
+                              class="com.haulmont.cuba.core.entity.Category"
+                              view="_local">
+            <query>
+                <![CDATA[select c from sys$Category c where c.entityType='base$PersonExt']]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <scrollBox id="scrollBox"
+                   height="100%"
+                   spacing="true">
+            <groupBox id="mainDataBox"
+                      caption="msg://mainData">
+                <vbox id="userInfo">
+                    <fieldGroup id="fieldGroup"
+                                datasource="personDs"
+                                width="100%">
+                        <column width="250px">
+                            <field datasource="personDs"
+                                   property="firstName"/>
+                            <field datasource="personDs"
+                                   property="lastName"/>
+                            <field datasource="personDs"
+                                   property="middleName"/>
+                            <field datasource="personDs"
+                                   property="firstNameLatin"/>
+                            <field datasource="personDs"
+                                   property="lastNameLatin"/>
+                            <field datasource="personDs"
+                                   property="middleNameLatin"/>
+                            <field caption="msg://Person.maritalStatus"
+                                   datasource="personDs"
+                                   property="maritalStatus"/>
+                            <field caption="msg://Person.type"
+                                   datasource="personDs"
+                                   property="type"
+                                    editable="false"/>
+                        </column>
+                        <column width="250px">
+                            <field caption="msg://Person.nationality"
+                                   datasource="personDs"
+                                   property="nationality"/>
+                            <field caption="msg://Person.citizenship"
+                                   datasource="personDs"
+                                   property="citizenship"/>
+                            <field datasource="personDs"
+                                   property="employeeNumber"/>
+                            <field datasource="personDs"
+                                   editable="false"
+                                   property="hireDate"/>
+                            <field datasource="personDs"
+                                   property="nonresidentType"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <groupBox id="identification"
+                      caption="msg://candidateIdentification">
+                <fieldGroup id="fieldGroupIdentification"
+                            datasource="personDs"
+                            width="100%">
+                    <column id="nationalColumn1"
+                            width="250px">
+                        <field datasource="personDs"
+                               maxLength="12"
+                               property="nationalIdentifier"/>
+                        <field datasource="personDs"
+                               property="dateOfBirth"/>
+                    </column>
+                    <column id="nationalColumn2"
+                            width="250px">
+                        <field datasource="personDs"
+                               property="sex"
+                               required="true">
+                            <lookupField id="sex" optionsDatasource="dicSexDs" datasource="personDs" property="sex"/>
+                        </field>
+                        <field id="dateOfDeath"
+                                datasource="personDs"
+                               property="dateOfDeath"/>
+                    </column>
+                </fieldGroup>
+            </groupBox>
+            <groupBox id="groupBox"
+                      caption="msg://AdditionalFields">
+                <runtimeProperties id="runtimeProperties"
+                                   categoriesDs="categoriesDs"
+                                   runtimeDs="runtimePropsDs"/>
+            </groupBox>
+            <frame id="windowActions"
+                   screen="editExtWindowActions"/>
+        </scrollBox>
+    </layout>
+</window>

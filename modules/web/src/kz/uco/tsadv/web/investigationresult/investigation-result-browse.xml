@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.investigationresult.InvestigationResultBrowse"
+        focusComponent="investigationResultsTable"
+        lookupComponent="investigationResultsTable"
+        messagesPack="kz.uco.tsadv.web.investigationresult">
+    <dsContext>
+        <groupDatasource id="investigationResultsDs"
+                         class="kz.uco.tsadv.entity.tb.InvestigationResult"
+                         view="investigationResult-view">
+            <query>
+                <![CDATA[select e from tsadv$InvestigationResult e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="investigationResultsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="investigationResultsTable"
+                datasource="investigationResultsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="investigationResultsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="investigationDate"/>
+                <column id="investigationType"/>
+                <column id="productionConnection"/>
+                <column id="employeeGuilt"/>
+                <column id="employerguilt"/>
+            </columns>
+            <rows datasource="investigationResultsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="investigationResultsTable.create"/>
+                <button id="editBtn"
+                        action="investigationResultsTable.edit"/>
+                <button id="removeBtn"
+                        action="investigationResultsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

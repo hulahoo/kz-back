@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.beneficiary.BeneficiaryEdit"
+        datasource="beneficiaryDs"
+        focusComponent="fieldGroupPerson"
+        messagesPack="kz.uco.tsadv.web.modules.personal.beneficiary">
+    <dsContext>
+        <datasource id="beneficiaryDs"
+                    class="kz.uco.tsadv.modules.personal.model.Beneficiary"
+                    view="beneficiaryView">
+            <datasource id="personGroupChildDs"
+                        property="personGroupChild">
+                <datasource id="personDs"
+                            property="person"/>
+            </datasource>
+            <datasource id="relationshipTypeDs"
+                        property="relationshipType"/>
+        </datasource>
+        <collectionDatasource id="relationshipTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType"
+                              view="dicRelationshipType-view">
+            <query>
+                <![CDATA[select e from tsadv$DicRelationshipType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                resizable="true"
+                width="AUTO"/>
+    <layout spacing="true"
+            expand="windowActions">
+        <hbox spacing="true">
+            <vbox spacing="true">
+                <hbox id="personHbox" spacing="true" width="100%">
+                    <label value="msg://employee"/>
+                    <pickerField id="personGroupPickerField"
+                                 captionProperty="personFioWithEmployeeNumber"
+                                 metaClass="base$PersonGroupExt">
+                    </pickerField>
+                </hbox>
+                <hbox id="hbox1"
+                      spacing="true">
+                    <label id="label"
+                           value="msg://Photo"
+                           width="100px"/>
+                    <image id="userImage"
+                           align="MIDDLE_CENTER"
+                           height="100px"
+                           scaleMode="FILL"
+                           stylename="circle-image"
+                           width="100px"/>
+                    <upload id="imageUpload"
+                            accept="*.jpg,*.png"
+                            align="MIDDLE_CENTER"
+                            clearButtonIcon="icons/item-remove.png"
+                            fileSizeLimit="1024000"
+                            showClearButton="true"
+                            uploadButtonIcon="icons/reports-template-upload.png"/>
+                </hbox>
+            </vbox>
+            <fieldGroup id="fieldGroupPersonName" datasource="personDs">
+                <column>
+                    <field property="lastName"/>
+                    <field property="firstName"/>
+                    <field property="middleName"/>
+                </column>
+                <column>
+                    <field property="lastNameLatin" required="true"/>
+                    <field property="firstNameLatin" required="true"/>
+                    <field property="middleNameLatin"/>
+                </column>
+            </fieldGroup>
+        </hbox>
+        <hbox id="hbox2"
+              spacing="true">
+            <fieldGroup id="fieldGroupPerson"
+                        datasource="beneficiaryDs">
+                <column id="column1"
+                        width="250px">
+                    <field id="maritalStatus"
+                           datasource="personDs"
+                           property="maritalStatus"/>
+                    <field datasource="personDs"
+                           property="nationality"/>
+                    <field id="dateOfBirth"
+                           datasource="personDs"
+                           property="dateOfBirth"/>
+                    <field id="sex"
+                           datasource="personDs"
+                           property="sex"/>
+                    <field id="personType"
+                           datasource="personDs"
+                           property="type"/>
+                </column>
+                <column id="column2">
+                    <field id="employeeNumber"
+                           datasource="personDs"
+                           property="employeeNumber"
+                           editable="false"/>
+                    <field id="citizenship"
+                           datasource="personDs"
+                           property="citizenship"/>
+                    <field id="hireDate"
+                           datasource="personDs"
+                           property="hireDate"/>
+                    <field id="nationalIdentifier"
+                           required="true"
+                           datasource="personDs"
+                           maxLength="12"
+                           property="nationalIdentifier"/>
+                </column>
+            </fieldGroup>
+            <fieldGroup id="beneficiaryFieldGroup"
+                        datasource="beneficiaryDs">
+                <column id="column1"
+                        width="250px">
+                    <field id="relationshipType"
+                           caption="msg://relationshipTypeBeneficiary"
+                           captionProperty="langValue"
+                           optionsDatasource="relationshipTypesDs"
+                           property="relationshipType"
+                           required="true"/>
+                    <field id="dateFrom"
+                           caption="msg://dateFrom"
+                           property="dateFrom"
+                           required="true"/>
+                    <field id="dateTo"
+                           caption="msg://dateTo"
+                           property="dateTo"/>
+                    <field id="getAlimony"
+                           caption="msg://getAlimony"
+                           property="getAlimony"/>
+                </column>
+            </fieldGroup>
+        </hbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

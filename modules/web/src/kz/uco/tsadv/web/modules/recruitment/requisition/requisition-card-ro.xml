@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://requisition.card.browse"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionCardRo"
+        datasource="requisitionDs">
+    <dsContext>
+        <datasource id="requisitionDs"
+                    allowCommit="false"
+                    class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                    view="requisition.open.widget">
+            <groupDatasource id="competencesDs"
+                             property="competences"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="mainInfo"
+                 caption="mainMsg://mainInfo"
+                 margin="true">
+                <hbox spacing="true"
+                      width="100%">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="requisitionDs">
+                        <field property="code"/>
+                        <field property="startDate"/>
+                        <field property="endDate"/>
+                        <field property="finalCollectDate"/>
+                        <field property="employmentType"/>
+                        <field captionProperty="personFioWithEmployeeNumber"
+                               property="recruiterPersonGroup"/>
+                    </fieldGroup>
+                    <fieldGroup id="fieldGroup2"
+                                datasource="requisitionDs"
+                                editable="false">
+                        <field property="location.settlementLangValue"/>
+                        <field captionProperty="position"
+                               property="positionGroup"/>
+                        <field captionProperty="organization"
+                               property="organizationGroup"/>
+                        <field captionProperty="job"
+                               property="jobGroup"/>
+                        <field property="openedPositionsCount"/>
+                        <field property="withoutOffer"/>
+                    </fieldGroup>
+                </hbox>
+            </tab>
+            <tab id="competences"
+                 caption="msg://kz.uco.tsadv.recruitment/Requisition.competences"
+                 lazy="true"
+                 margin="true">
+                <groupTable id="competencesTable"
+                            height="100%"
+                            width="100%">
+                    <columns>
+                        <column id="competenceGroup.competence"/>
+                        <column id="scaleLevel"/>
+                        <column id="criticalness"/>
+                    </columns>
+                    <rows datasource="competencesDs"/>
+                </groupTable>
+            </tab>
+            <tab id="orgDescription"
+                 caption="msg://kz.uco.tsadv.recruitment/Requisition.organizationDescriptionLang"
+                 lazy="true"
+                 margin="true">
+                <scrollBox height="100%">
+                    <label datasource="requisitionDs"
+                           height="100%"
+                           htmlEnabled="true"
+                           property="organizationDescriptionLang"
+                           width="100%"/>
+                </scrollBox>
+            </tab>
+            <tab id="jobDescription"
+                 caption="msg://kz.uco.tsadv.recruitment/Requisition.jobDescriptionLang"
+                 lazy="true"
+                 margin="true">
+                <scrollBox height="100%">
+                    <label datasource="requisitionDs"
+                           height="100%"
+                           htmlEnabled="true"
+                           property="jobDescriptionLang"
+                           width="100%"/>
+                </scrollBox>
+            </tab>
+            <tab id="candidateRequirements"
+                 caption="msg://kz.uco.tsadv.recruitment/Requisition.candidateRequirementsLang"
+                 lazy="true"
+                 margin="true">
+                <scrollBox height="100%">
+                    <label datasource="requisitionDs"
+                           height="100%"
+                           htmlEnabled="true"
+                           property="candidateRequirementsLang"
+                           width="100%"/>
+                </scrollBox>
+            </tab>
+        </tabSheet>
+        <hbox spacing="true"
+              stylename="c-edit-window-actions">
+            <button id="respondButton"
+                    caption="msg://widget.respond.btn"
+                    icon="font-icon:MAIL_REPLY"
+                    invoke="respond"/>
+            <button id="windowClose"
+                    action="windowClose"
+                    caption="msg://Requisition.btn.close"
+                    icon="icons/close.png"/>
+        </hbox>
+    </layout>
+</window>

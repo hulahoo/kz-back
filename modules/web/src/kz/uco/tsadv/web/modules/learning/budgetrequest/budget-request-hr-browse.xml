@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BudgetRequest.hrBrowseCaption"
+        class="kz.uco.tsadv.web.modules.learning.budgetrequest.BudgetRequestHrBrowse"
+        focusComponent="budgetRequestsTable"
+        lookupComponent="budgetRequestsTable">
+    <dsContext>
+        <groupDatasource id="budgetRequestsDs"
+                         class="kz.uco.tsadv.modules.learning.model.BudgetRequest"
+                         view="budgetRequest.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$BudgetRequest e
+                      left join e.course c
+                      left join e.initiatorPersonGroup pg
+                      left join pg.list p
+                           join tsadv$PositionStructure ps
+                          where ps.organizationGroup.id = e.organizationGroup.id
+                            and :session$systemDate between ps.startDate and ps.endDate
+                            and ps.elementType = 1
+                            and :session$systemDate between p.startDate and p.endDate
+                            and ps.organizationGroupPath like concat('%', concat(:component$hiddenOrganizationGroupIdStr, '%'))]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="learningTypesDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicLearningType"
+                              view="_local">
+            <query>
+                <![CDATA[select e
+                           from tsadv$DicLearningType e ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="budgetStatusesDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicBudgetStatus"
+                              view="_local">
+            <query>
+                <![CDATA[select e
+                           from tsadv$DicBudgetStatus e ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="budgetsDs"
+                              class="kz.uco.tsadv.modules.learning.model.Budget"
+                              view="budget.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$Budget e ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <layout expand="budgetRequestsTable"
+            spacing="true">
+        <groupBox caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="budgetRequestsTable"
+                    aggregatable="true"
+                    aggregationStyle="BOTTOM"
+                    showTotalAggregation="true"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"/>
+                <action id="history"/>
+            </actions>
+            <columns>
+                <column id="budget">
+                    <aggregation strategyClass="kz.uco.tsadv.aggregation.StringAggregation"/>
+                </column>
+                <column id="calcCourseName"/>
+                <column id="learningType"/>
+                <column id="employeesCount">
+                    <aggregation type="SUM"/>
+                </column>
+                <column id="month">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                               format="MM.yyyy"/>
+                </column>
+                <column id="learningCosts">
+                    <aggregation type="SUM"/>
+                </column>
+                <column id="tripCosts">
+                    <aggregation type="SUM"/>
+                </column>
+                <column id="providerCompany"/>
+                <column id="comment"
+                        maxTextLength="40"/>
+                <column id="initiatorPersonGroup"
+                        captionProperty="initiatorPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="organizationGroup"
+                        captionProperty="organizationGroup.organization.organizationName"/>
+                <column id="status"/>
+            </columns>
+            <rows datasource="budgetRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="budgetRequestsTable.create"/>
+                <button id="editBtn"
+                        action="budgetRequestsTable.edit"/>
+                <button id="removeBtn"
+                        action="budgetRequestsTable.remove"/>
+                <button id="excelBtn"
+                        action="budgetRequestsTable.excel"/>
+                <button id="historyButton"
+                        action="budgetRequestsTable.history"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ScaleLevel.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.scalelevel.ScaleLevelEdit"
+        datasource="scaleLevelDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="scaleLevelDs"
+                    class="kz.uco.tsadv.modules.personal.model.ScaleLevel"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="auto"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="scaleLevelDs">
+            <column width="250px">
+                <field property="levelNameLang1"/>
+                <field property="levelNameLang2"/>
+                <field property="levelNameLang3"/>
+                <field property="levelNameLang4"/>
+                <field property="levelNameLang5"/>
+                <field property="levelDescriptionLang1"/>
+                <field property="levelDescriptionLang2"/>
+                <field property="levelDescriptionLang3"/>
+                <field property="levelDescriptionLang4"/>
+                <field property="levelDescriptionLang5"/>
+                <field property="levelNumber"/>
+                <field property="levelName"
+                       visible="false"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

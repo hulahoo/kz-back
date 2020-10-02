@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.userextpersongroup.UserExtPersonGroupBrowse"
+        focusComponent="userExtPersonGroupsTable"
+        lookupComponent="userExtPersonGroupsTable"
+        messagesPack="kz.uco.tsadv.web.userextpersongroup">
+    <dsContext>
+        <groupDatasource id="userExtPersonGroupsDs"
+                         class="kz.uco.tsadv.global.entity.UserExtPersonGroup"
+                         view="userExtPersonGroup.edit">
+            <query>
+                <![CDATA[select distinct e from tsadv$UserExtPersonGroup e
+                    join e.personGroup.list p
+                     on :session$systemDate between p.startDate and p.endDate
+                   where e.personGroup is not null
+                        and e.userExt is not null]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="userExtPersonGroupsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="userExtPersonGroupsTable"
+                datasource="userExtPersonGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="userExtPersonGroupsTable"
+                    width="100%">
+            <columns>
+                <column id="userExt"
+                        caption="msg://userName"
+                        generator="login"/>
+                <column id="personGroup"
+                        caption="msg://employee"
+                        captionProperty="personGroup.fullName"/>
+            </columns>
+            <rows datasource="userExtPersonGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </groupTable>
+    </layout>
+</window>

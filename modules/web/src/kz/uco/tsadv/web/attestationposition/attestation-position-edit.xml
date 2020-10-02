@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.attestationposition.AttestationPositionEdit"
+        datasource="attestationPositionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.attestationposition">
+    <dsContext>
+        <datasource id="attestationPositionDs"
+                    class="kz.uco.tsadv.modules.learning.model.AttestationPosition"
+                    view="attestationPosition-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="attestationPositionDs">
+            <field id="attestation"
+                   editable="false"
+                   property="attestation" captionProperty="attestationName"/>
+            <field id="positionGroup"
+                   property="positionGroup" captionProperty="positionName"/>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

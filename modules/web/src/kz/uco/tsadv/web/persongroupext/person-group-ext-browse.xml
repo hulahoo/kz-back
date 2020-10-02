@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.persongroupext.PersonGroupExtBrowse"
+        focusComponent="personGroupExtsTable"
+        lookupComponent="personGroupExtsTable"
+        messagesPack="kz.uco.tsadv.web.persongroupext">
+    <dsContext>
+        <groupDatasource id="personGroupExtsDs"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         view="personGroupExt.lookup.for.attestation">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e]]>
+                <filter>
+                    <c>
+                        e.id in (
+                            select distinct pga.personGroupExt.id
+                              from tsadv$PersonGroupAttestation pga
+                             where pga.attestation.id = :param$attestation
+                        )
+                    </c>
+                </filter>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personGroupExtsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personGroupExtsTable"
+                datasource="personGroupExtsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personGroupExtsTable"
+                    width="100%">
+            <columns>
+                <column id="fullName"/>
+                <column id="currentAssignment.positionGroup.positionName"/>
+                <column id="currentAssignment.organizationGroup.organizationName"
+                        caption="msg://organizationName"/>
+            </columns>
+            <rows datasource="personGroupExtsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.feedback.rcgfeedback.RcgFeedbackBrowse"
+        focusComponent="rcgFeedbacksTable"
+        lookupComponent="rcgFeedbacksTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.feedback.rcgfeedback">
+    <dsContext>
+        <groupDatasource id="rcgFeedbacksDs"
+                         class="kz.uco.tsadv.modules.recognition.feedback.RcgFeedback"
+                         view="rcgFeedback.with.comments"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$RcgFeedback e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="rcgFeedbacksTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="rcgFeedbacksTable"
+                datasource="rcgFeedbacksDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="rcgFeedbacksTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="type"/>
+                <column id="direction"/>
+                <column id="author.fullName"/>
+                <column id="receiver.fullName"/>
+                <column id="comment" maxTextLength="60"/>
+                <column id="commentEn" maxTextLength="60"/>
+                <column id="commentRu" maxTextLength="60"/>
+                <column id="feedbackDate"/>
+                <column id="theme" maxTextLength="60"/>
+                <column id="themeRu" maxTextLength="60"/>
+                <column id="themeEn" maxTextLength="60"/>
+            </columns>
+            <rows datasource="rcgFeedbacksDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="rcgFeedbacksTable.create"/>
+                <button id="editBtn"
+                        action="rcgFeedbacksTable.edit"/>
+                <button id="removeBtn"
+                        action="rcgFeedbacksTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

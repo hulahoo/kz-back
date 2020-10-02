@@ -1,0 +1,1 @@
+alter table TSADV_PERSONAL_PROTECTION add column REPLACEMENT_DATE date ;

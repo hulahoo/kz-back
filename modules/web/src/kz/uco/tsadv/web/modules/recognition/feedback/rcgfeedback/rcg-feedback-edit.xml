@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.feedback.rcgfeedback.RcgFeedbackEdit"
+        datasource="rcgFeedbackDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.feedback.rcgfeedback">
+    <dsContext>
+        <datasource id="rcgFeedbackDs"
+                    class="kz.uco.tsadv.modules.recognition.feedback.RcgFeedback"
+                    view="rcgFeedback.with.comments">
+            <collectionDatasource id="attachmentsDs"
+                                  property="attachments"/>
+            <collectionDatasource id="commentsDs" property="comments"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <hbox spacing="true" width="100%" expand="themeFg">
+                <fieldGroup id="fieldGroup"
+                            datasource="rcgFeedbackDs"
+                            fieldCaptionWidth="130px"
+                            border="visible">
+                    <column width="300px">
+                        <field property="type"/>
+                        <field property="direction"/>
+                        <field property="author" captionProperty="fullName"/>
+                        <field property="receiver" captionProperty="fullName"/>
+                        <field property="feedbackDate"/>
+                    </column>
+                </fieldGroup>
+                <fieldGroup id="themeFg" datasource="rcgFeedbackDs" border="visible">
+                    <column width="100%" fieldCaptionWidth="120px">
+                        <field property="theme" rows="2"/>
+                        <field property="themeRu" rows="2"/>
+                        <field property="themeEn" rows="2"/>
+                    </column>
+                </fieldGroup>
+            </hbox>
+
+            <fieldGroup datasource="rcgFeedbackDs" border="visible" width="100%">
+                <column width="100%" fieldCaptionWidth="120px">
+                    <field property="comment" rows="2"/>
+                    <field property="commentEn" rows="2"/>
+                    <field property="commentRu" rows="2"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="attachmentsBox"
+                      caption="msg://kz.uco.tsadv.modules.recognition.feedback/RcgFeedback.attachments">
+                <table id="attachmentsTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="file"/>
+                    </columns>
+                    <rows datasource="attachmentsDs"/>
+                    <buttonsPanel>
+                        <button action="attachmentsTable.create"/>
+                        <button action="attachmentsTable.edit"/>
+                        <button action="attachmentsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+            <groupBox id="commentsBox"
+                      caption="msg://kz.uco.tsadv.modules.recognition.feedback/RcgFeedback.comments">
+                <table id="commentsTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="author.fullName"/>
+                        <column id="text" maxTextLength="60"/>
+                        <column id="textEn" maxTextLength="60"/>
+                        <column id="textRu" maxTextLength="60"/>
+                    </columns>
+                    <rows datasource="commentsDs"/>
+                    <buttonsPanel>
+                        <button action="commentsTable.create"/>
+                        <button action="commentsTable.edit"/>
+                        <button action="commentsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

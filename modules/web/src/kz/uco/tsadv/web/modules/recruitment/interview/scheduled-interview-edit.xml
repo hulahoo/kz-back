@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ScheduledInterview.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.ScheduledInterviewEdit"
+        datasource="interviewDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.interview">
+    <dsContext>
+        <datasource id="interviewDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                    view="scheduledInterview.view">
+            <collectionDatasource id="interviewDetailsDs"
+                                  property="interviewDetails"/>
+        </datasource>
+        <collectionDatasource id="questionnairesDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.InterviewQuestionnaire"
+                              view="interviewQuestionnaire.view">
+            <query>
+                <![CDATA[select e from tsadv$InterviewQuestionnaire e where e.interview.id = :ds$interviewDs]]>
+            </query>
+            <collectionDatasource id="questionsDs"
+                                  property="questions"/>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabs"
+            spacing="true">
+        <tabSheet id="tabs">
+            <tab id="mainInfo"
+                 caption="msg://mainInfo"
+                 margin="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="interviewDs">
+                    <column width="250px">
+                        <field captionProperty="code"
+                               property="requisition"
+                               required="true"/>
+                        <field captionProperty="hiringStep"
+                               property="requisitionHiringStep"
+                               required="true"/>
+                        <field property="interviewDate"
+                               required="true"/>
+                        <field captionProperty="personFioWithEmployeeNumber"
+                               property="mainInterviewerPersonGroup"
+                               required="true"/>
+                        <field property="timeFrom"
+                               required="true"/>
+                        <field property="timeTo"
+                               required="true"/>
+                        <field captionProperty="addressLangValue"
+                               property="place"
+                               required="true"/>
+                        <field property="maxCandidatesCount"
+                               required="true"/>
+                    </column>
+                </fieldGroup>
+            </tab>
+            <tab id="interviewDetails"
+                 caption="msg://kz.uco.tsadv.recruitment/Interview.interviewDetails"
+                 lazy="true"
+                 margin="true">
+                <table id="interviewDetailsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="interviewerPersonGroup"
+                                captionProperty="interviewerPersonGroup.person.fullName"/>
+                    </columns>
+                    <rows datasource="interviewDetailsDs"/>
+                    <buttonsPanel>
+                        <button action="interviewDetailsTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="interviewDetailsTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="interviewDetailsTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="questionnaires"
+                 caption="msg://Interview.questionnaires"
+                 lazy="true"
+                 margin="true">
+                <table id="questionnairesTable"
+                       height="100%"
+                       multiselect="true"
+                       width="100%">
+                    <actions>
+                        <action id="add"
+                                caption="msg://table.btn.add"
+                                description="msg://table.btn.add"
+                                icon="font-icon:SEARCH_PLUS"
+                                invoke="addQuestionnaires"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.remove"
+                                icon="icons/remove.png"
+                                invoke="removeQuestionnaires"/>
+                    </actions>
+                    <columns>
+                        <column id="questionnaire"
+                                captionProperty="questionnaire.name"/>
+                        <column id="questionnaire.category"
+                                captionProperty="questionnaire.category.langValue"/>
+                    </columns>
+                    <rows datasource="questionnairesDs"/>
+                    <rowsCount/>
+                    <buttonsPanel alwaysVisible="true">
+                        <button action="questionnairesTable.add"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="questionnairesTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

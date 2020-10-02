@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.dicprotectionequipment.DicProtectionEquipmentEdit"
+        datasource="dicProtectionEquipmentDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.dicprotectionequipment">
+    <dsContext>
+        <datasource id="dicProtectionEquipmentDs"
+                    class="kz.uco.tsadv.modules.personprotection.dictionary.DicProtectionEquipment"
+                    view="dicProtectionEquipment.edit">
+            <collectionDatasource id="dicProtectionEquipmentPhotoDs"
+                                  property="dicProtectionEquipmentPhoto"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   width="100%">
+            <groupBox id="groupBox"
+                      orientation="horizontal"
+                      outerMargin="true, false, false, false">
+                <fieldGroup id="fieldGroup"
+                            datasource="dicProtectionEquipmentDs"
+                            captionAlignment="TOP"
+                            width="44%"
+                            height="100%">
+                    <column width="250px">
+                        <field property="code"/>
+                        <field property="langValue1"/>
+                        <field property="langValue2"/>
+                        <field property="langValue3"/>
+                        <field property="langValue4"/>
+                        <field property="langValue5"/>
+                        <field property="startDate"/>
+                        <field property="replacementDuration"/>
+                        <field property="replacementUom"/>
+                        <field property="gost"/>
+                        <field property="isSystemRecord"/>
+                    </column>
+                    <column width="250px">
+                        <field property="legacyID"
+                               caption="mainMsg://legacyId"/>
+                        <field property="description1"/>
+                        <field property="description2"/>
+                        <field property="description3"/>
+                        <field property="description4"/>
+                        <field property="description5"/>
+                        <field property="endDate"/>
+                        <field property="isSingle"/>
+                        <field property="type"/>
+                        <field property="unitOfMeasure"/>
+                        <field property="active"/>
+                    </column>
+                </fieldGroup>
+            </groupBox>
+            <tabSheet>
+                <tab id="dicProtectionEquipmentPhotoBox"
+                     caption="msg://widget.requisition.photo"
+                     spacing="true"
+                     margin="true, false, false, false">
+                    <table id="dicProtectionEquipmentPhotoTable"
+                           height="200px"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </actions>
+                        <columns>
+                            <column id="name"
+                                    caption="msg://com.haulmont.cuba.core.entity/FileDescriptor.name"/>
+                            <column id="description"/>
+                            <column id="updateTs"
+                                    caption="msg://dateUpdate"/>
+                        </columns>
+                        <rows datasource="dicProtectionEquipmentPhotoDs"/>
+                        <buttonsPanel>
+                            <button action="dicProtectionEquipmentPhotoTable.create"/>
+                            <button action="dicProtectionEquipmentPhotoTable.edit"/>
+                            <button action="dicProtectionEquipmentPhotoTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

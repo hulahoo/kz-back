@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.workplacemsds.WorkplaceMSDSBrowse"
+        focusComponent="workplaceMSDsesTable"
+        lookupComponent="workplaceMSDsesTable"
+        messagesPack="kz.uco.tsadv.web.workplacemsds">
+    <dsContext>
+        <groupDatasource id="workplaceMSDsesDs"
+                         class="kz.uco.tsadv.entity.tb.WorkplaceMSDS"
+                         view="workplaceMSDS-view">
+            <query>
+                <![CDATA[select e from tsadv$WorkplaceMSDS e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="workplaceMSDsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="workplaceMSDsesTable"
+                datasource="workplaceMSDsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="workplaceMSDsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="developPlanDate"/>
+                <column id="developFactDate"/>
+                <column id="msds"/>
+                <column id="document"/>
+                <column id="status"/>
+                <column id="donePlanDate"/>
+                <column id="doneFactDate"/>
+            </columns>
+            <rows datasource="workplaceMSDsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="workplaceMSDsesTable.create"/>
+                <button id="editBtn"
+                        action="workplaceMSDsesTable.edit"/>
+                <button id="removeBtn"
+                        action="workplaceMSDsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

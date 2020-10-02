@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicHrRole.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dichrrole.DicHrRoleBrowse"
+        focusComponent="dicHrRolesTable"
+        lookupComponent="dicHrRolesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dichrrole">
+    <dsContext>
+        <groupDatasource id="dicHrRolesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicHrRole"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicHrRole e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicHrRolesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicHrRolesTable"
+                datasource="dicHrRolesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicHrRolesTable"
+                    width="100%">
+            <actions>
+                <action id="create" icon="icons/plus-btn.png"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicHrRolesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="dicHrRolesTable.create"/>
+                <button id="editBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="dicHrRolesTable.edit"/>
+                <button id="removeBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="dicHrRolesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

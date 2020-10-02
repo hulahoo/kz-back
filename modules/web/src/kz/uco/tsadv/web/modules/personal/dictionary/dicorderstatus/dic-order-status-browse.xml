@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicOrderStatus.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicorderstatus.DicOrderStatusBrowse"
+        focusComponent="dicOrderStatusesTable"
+        lookupComponent="dicOrderStatusesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicorderstatus">
+    <dsContext>
+        <groupDatasource id="dicOrderStatusesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicOrderStatus"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicOrderStatus e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicOrderStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicOrderStatusesTable"
+                datasource="dicOrderStatusesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicOrderStatusesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicOrderStatusesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicOrderStatusesTable.create"/>
+                <button id="editBtn"
+                        action="dicOrderStatusesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicOrderStatusesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

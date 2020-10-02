@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>User</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+    <!--<link rel="stylesheet" type="text/css" href="bootstrap.min.css">-->
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en">en</input>
+                <input type="radio" name="lang" value="ru" checked>ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Регистрация пользователя. Авторизация не требуется.
+    </div>
+    <table>
+        <tr>
+            <td> * Login:</td>
+            <td>
+                <input type="text" id="regLogin" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Password:</td>
+            <td>
+                <input type="password" id="regPassword" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Email:</td>
+            <td>
+                <input type="text" id="regEmail" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Phone number:</td>
+            <td>
+                <input type="text" id="regPhoneNumber" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * First name:</td>
+            <td>
+                <input type="text" id="firstName" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Last name:</td>
+            <td>
+                <input type="text" id="lastName" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Middle name:</td>
+            <td>
+                <input type="text" id="middleName">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Birth date:</td>
+            <td>
+                <input type="date" id="birthDate" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>National identifier:</td>
+            <td>
+                <input type="text" id="nationalIdentifier">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Sex:</td>
+            <td>
+                <select id="sex" required>
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Nationality:</td>
+            <td>
+                <select id="nationality">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Citizenship:</td>
+            <td>
+                <select id="citizenship">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Marital status:</td>
+            <td>
+                <select id="maritalStatus">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="registerUser()"
+                       value="registerUser"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="registerResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Вход в учетную запись.
+    </div>
+    <table>
+        <tr>
+            <td> * Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Выход из учетной записи.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="logout()"
+                       value="LOGOUT"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="revoke"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Получение данных учетной записи.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="getUser()"
+                       value="getUser"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="user"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Обновление данных учетной записи.
+    </div>
+    <table>
+        <tr>
+            <td> * Email:</td>
+            <td>
+                <input type="text" id="updateEmail">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Phone number:</td>
+            <td>
+                <input type="text" id="updatePhoneNumber">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="updateUser()"
+                       value="updateUser"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="updateResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Восстановление пароля:
+        <ul>
+            <li>проверка существования пользователя с указанным логином либо email</li>
+            <li>отправка ссылки с токеном для смены пароля на email пользователя</li>
+        </ul>
+
+        Авторизация не требуется. Отправляемая ссылка, содержащая значение токена, в настоящий момент указывает на точку
+        входа в Talent Suite. В дальнейшем будет настроена на страницу смены пароля во фронт-енде.
+    </div>
+    <table>
+        <tr>
+            <td> * Login or Email:</td>
+            <td>
+                <input type="text" id="loginOrEmail">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="checkUserExist()"
+                       value="checkUserExist"/>
+                <input type="button"
+                       onclick="sendResetPasswordLinkWithLocale()"
+                       value="sendResetPasswordLinkWithLocale"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="checkUserExist"/>
+                <label id="sendResetPasswordLink"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Проверка валидности полученного по email токена. Авторизация не требуется.
+    </div>
+    <table>
+        <tr>
+            <td> * Reset password token:</td>
+            <td>
+                <input type="text" id="resetPasswordToken">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="checkResetPasswordToken()"
+                       value="checkResetPasswordToken"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="checkResetPasswordToken"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Смена пароля с полученным по email токеном. Авторизация не требуется.
+    </div>
+    <table>
+        <tr>
+            <td> * Reset password token:</td>
+            <td>
+                <input type="text" id="changePasswordToken">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * New password:</td>
+            <td>
+                <input type="password" id="newPassword">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="changePasswordWithToken()"
+                       value="changePasswordWithToken"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="changePasswordWithToken"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Стандартная смена пароля.
+    </div>
+    <table>
+        <tr>
+            <td> * Old password:</td>
+            <td>
+                <input type="password" id="oldPass">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * New password:</td>
+            <td>
+                <input type="password" id="newPass">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="changePassword()"
+                       value="changePassword"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="changePassword"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var access_token;
+
+    $().ready(function () {
+        fillSelectsAnonymous();
+    });
+
+    function fillSelectsAnonymous() {
+        var lang = $("input[name=lang]:checked").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/getSex?lang=" + lang,
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                var sexes = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                sexes.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("sex").innerHTML = inner;
+            });
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getNationalities?lang=" + lang,
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                var nationalities = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                nationalities.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("nationality").innerHTML = inner;
+            });
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getCitizenship?lang=" + lang,
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                var citizenships = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                citizenships.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("citizenship").innerHTML = inner;
+            });
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getMaritalStatuses?lang=" + lang,
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                var maritalStatuses = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                maritalStatuses.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("maritalStatus").innerHTML = inner;
+            });
+    }
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+            })
+            .error(function (res) {
+                $('#token').text(JSON.stringify(res));
+            });
+    }
+
+    function logout() {
+        $.ajax(config.logoutUrl + "?" + "token=" + access_token + "&token_type=access_token",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                $('#revoke').text("Status: 200");
+                access_token = null;
+            })
+            .error(function (res) {
+                $('#revoke').text(JSON.stringify(res));
+            });
+    }
+
+    function getUser() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUser?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $('#user').text(res);
+            })
+            .error(function (res) {
+                $('#user').text(JSON.stringify(res));
+            });
+    }
+
+    function updateUser() {
+        var data = {};
+        jQuery.extend(data, userModel);
+        data.user.email = $("#updateEmail").val();
+        data.user.phoneNumber = $("#updatePhoneNumber").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/updateUser",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#updateResult").text(JSON.stringify(res));
+            })
+            .error(function (res) {
+                $('#updateResult').text(JSON.stringify(res));
+            });
+    }
+
+    function registerUser() {
+        var data = {};
+        jQuery.extend(data, registerModel);
+        data.user.login = $("#regLogin").val();
+        data.user.password = $("#regPassword").val();
+        data.user.email = $("#regEmail").val();
+        data.user.phoneNumber = $("#regPhoneNumber").val();
+        data.user.person.firstName = $("#firstName").val();
+        data.user.person.lastName = $("#lastName").val();
+        data.user.person.middleName = $("#middleName").val();
+        data.user.person.birthDate = $("#birthDate").val();
+        data.user.person.nationalIdentifier = $("#nationalIdentifier").val();
+        data.user.person.sex = $("#sex").val();
+        data.user.person.nationality = $("#nationality").val();
+        data.user.person.citizenship = $("#citizenship").val();
+        data.user.person.maritalStatus = $("#maritalStatus").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/registerUser?user=",
+            {
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#registerResult").text(JSON.stringify(res));
+            })
+            .error(function (res) {
+                $('#registerResult').text(JSON.stringify(res));
+            });
+
+    }
+
+    function checkUserExist() {
+        $.ajax(config.appUrl + config.userManagementUrl + "/checkUserExist?loginOrEmail=" + $("#loginOrEmail").val(),
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                $("#checkUserExist").text(JSON.stringify(res));
+            })
+            .error(function (res) {
+                $('#checkUserExist').text(JSON.stringify(res));
+            });
+    }
+
+    function sendResetPasswordLinkWithLocale() {
+        var lang = $("input[name=lang]:checked").val();
+        $.ajax(config.appUrl + config.userManagementUrl + "/sendResetPasswordLinkWithLocale?loginOrEmail=" + $("#loginOrEmail").val() + "&locale=" + lang,
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                $("#sendResetPasswordLink").text(JSON.stringify(res));
+            })
+            .error(function (res) {
+                $('#sendResetPasswordLink').text(JSON.stringify(res));
+            });
+    }
+
+    function checkResetPasswordToken() {
+        $.ajax(config.appUrl + config.userManagementUrl + "/checkResetPasswordToken?token=" + $("#resetPasswordToken").val(),
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                $("#checkResetPasswordToken").text(JSON.stringify(res));
+            })
+            .error(function (res) {
+                $('#checkResetPasswordToken').text(JSON.stringify(res));
+            });
+    }
+
+    function changePasswordWithToken() {
+        $.ajax(config.appUrl + config.userManagementUrl + "/changePasswordWithToken?token=" + $('#changePasswordToken').val() + "&password=" + $('#newPassword').val(),
+            {
+                type: "GET"
+            })
+            .success(function (res) {
+                $("#changePasswordWithToken").text(res);
+            })
+            .error(function (res) {
+                $('#changePasswordWithToken').text(res);
+            })
+        ;
+    }
+
+    function changePassword() {
+        var data = {
+            oldPassword: $('#oldPass').val(),
+            newPassword: $('#newPass').val()
+        };
+
+        $.ajax(config.appUrl + config.serviceUrl + "/changePassword",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#changePassword").text(JSON.stringify(res));
+            })
+            .error(function (res) {
+                $('#changePassword').text(JSON.stringify(res));
+            })
+        ;
+    }
+
+    /*]>*/
+
+</script>
+</body>
+</html>

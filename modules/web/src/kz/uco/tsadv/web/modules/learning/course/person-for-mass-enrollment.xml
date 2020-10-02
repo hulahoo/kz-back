@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption.for.mass.persons"
+        class="kz.uco.tsadv.web.modules.learning.course.PersonForMassEnrollment"
+        messagesPack="kz.uco.tsadv.web.modules.learning.course">
+    <dsContext>
+        <groupDatasource id="personGroupExtsDs"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         view="personGroupExt.lookup.for.attestation">
+            <query>
+                <![CDATA[select ae.personGroup from base$AssignmentExt ae  join base$OrganizationExt oe
+                     on  ae.organizationGroup.id = oe.group.id
+                     join base$PositionExt pe on ae.positionGroup.id = pe.group.id
+                     join tsadv$Job j on ae.jobGroup.id = j.group.id
+                     where :session$systemDate between pe.startDate and pe.endDate
+                     and :session$systemDate between j.startDate and j.endDate
+                      and ae.personGroup.id not in (select en.personGroup.id from
+                     tsadv$Enrollment en where en.course.id = :param$courseId ) ]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personGroupExtsDataGrid">
+        <filter id="personGroupExtsFilter"
+                datasource="personGroupExtsDs"/>
+        <dataGrid id="personGroupExtsDataGrid"
+                  datasource="personGroupExtsDs"
+                  selectionMode="MULTI_CHECK"
+                  width="100%">
+            <columns>
+                <column id="fullName"
+                        property="fullName"/>
+                <column id="positionName"
+                        editable="false"
+                        property="currentAssignment.positionGroup.positionName"/>
+                <column id="organizationName"
+                        caption="msg://Course.organizationName"
+                        property="currentAssignment.organizationGroup.organizationName"/>
+                <column id="attempDate"
+                        caption="msg://attemptDate"/>
+            </columns>
+            <rowsCount/>
+        </dataGrid>
+        <buttonsPanel id="buttonsPanel">
+            <button id="chooseBtn"
+                    caption="msg://chooseBtn"
+                    enable="false"
+                    invoke="onChooseBtnClick"/>
+            <button id="cancelBtn"
+                    caption="msg://cancelBtn"
+                    invoke="onCancelBtnClick"/>
+        </buttonsPanel>
+    </layout>
+</window>

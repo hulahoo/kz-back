@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.coursefeedbackpersonanswerdetail.CourseFeedbackPersonAnswerDetailBrowse"
+        focusComponent="courseFeedbackPersonAnswerDetailsTable"
+        lookupComponent="courseFeedbackPersonAnswerDetailsTable"
+        messagesPack="kz.uco.tsadv.web.coursefeedbackpersonanswerdetail">
+    <dsContext>
+        <groupDatasource id="courseFeedbackPersonAnswerDetailsDs"
+                         class="kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswerDetail"
+                         view="courseFeedbackPersonAnswerDetail.edit"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$CourseFeedbackPersonAnswerDetail e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseFeedbackPersonAnswerDetailsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="courseFeedbackPersonAnswerDetailsTable"
+                datasource="courseFeedbackPersonAnswerDetailsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="courseFeedbackPersonAnswerDetailsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="course"/>
+                <column id="courseSectionSession"/>
+                <column id="personGroup"/>
+                <column id="question"/>
+                <column id="answer"/>
+                <column id="textAnswer"/>
+                <column id="score"/>
+            </columns>
+            <rows datasource="courseFeedbackPersonAnswerDetailsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="courseFeedbackPersonAnswerDetailsTable.create"/>
+                <button id="editBtn"
+                        action="courseFeedbackPersonAnswerDetailsTable.edit"/>
+                <button id="removeBtn"
+                        action="courseFeedbackPersonAnswerDetailsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

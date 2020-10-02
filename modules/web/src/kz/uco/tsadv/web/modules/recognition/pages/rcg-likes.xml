@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://rcg.likes.caption"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgLikes"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+
+    <dsContext>
+        <collectionDatasource id="likesDs"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                              view="personGroupExt.rcg.like"
+                              maxResults="20">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e where e.id
+                in (select rl.personGroup.id from tsadv$RecognitionLike rl
+                where rl.recognition.id = :custom$recognitionId)]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="500"
+                width="500"/>
+    <layout width="100%" height="100%" expand="likesTable" margin="true">
+        <table id="likesTable" width="100%" columnHeaderVisible="false" showSelection="false">
+            <columns>
+                <column id="image" generator="generateImage" width="70px" align="CENTER"/>
+                <column id="firstLastName" linkInvoke="openProfile" link="true"/>
+            </columns>
+            <rows datasource="likesDs"/>
+            <rowsCount/>
+        </table>
+    </layout>
+</window>

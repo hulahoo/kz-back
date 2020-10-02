@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Course.start"
+        class="kz.uco.tsadv.web.modules.learning.course.StartCourse">
+    <dsContext>
+        <collectionDatasource id="personAnswerDs"
+                              class="kz.uco.tsadv.modules.learning.model.PersonAnswer"
+                              view="personAnswer-view">
+            <!--<datasource id="quDs" property="question"/>-->
+        </collectionDatasource>
+    </dsContext>
+
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vBox">
+        <vbox id="vBox" expand="grid" spacing="true">
+            <grid id="grid"
+                  spacing="true"
+                  width="100%">
+                <columns>
+                    <column/>
+                    <column flex="3.0"/>
+                </columns>
+                <rows>
+                    <row>
+                        <vbox id="testCard" spacing="true"
+                              height="100%"
+                              expand="sectionScrollBox"
+                              width="300px">
+                            <vbox stylename="start-course-card-wrap">
+                                <vbox stylename="start-course-card-header">
+                                    <cssLayout id="courseLogoWrapper" stylename="start-course-card-image-wrap">
+                                        <embedded id="courseLogo"
+                                                  stylename="course-card-image"/>
+                                    </cssLayout>
+                                    <label id="courseName"
+                                           stylename="start-course-name"
+                                           width="100%"/>
+                                    <label id="courseSectionLabel"
+                                           stylename="start-course-section-name"
+                                           width="100%"/>
+                                </vbox>
+                            </vbox>
+                            <scrollBox id="sectionScrollBox">
+                                <groupBox id="sectionGroupBox" caption="msg://course.card.sections">
+
+                                        <vbox id="courseSections">
+
+                                        </vbox>
+                                </groupBox>
+
+                                <groupBox id="feedbackTemplateGroupBox" caption="Анкеты обратной связи">
+                                        <vbox id="feedbackTemplatesVBox">
+
+                                        </vbox>
+                                </groupBox>
+                            </scrollBox>
+                        </vbox>
+                        <vbox id="allWrapper" expand="scrollBox" height="100%" stylename="start-course-section-wrap">
+                            <hbox id="wrapper" width="100%"/>
+
+                            <scrollBox id="scrollBox" stylename="bt-scroll">
+                                <vbox id="testData">
+                                </vbox>
+                                <vbox id="additionalInfo"/>
+                            </scrollBox>
+                        </vbox>
+                    </row>
+                </rows>
+            </grid>
+            <hbox id="navigationButtonsPanel" align="BOTTOM_RIGHT"
+                  spacing="true" stylename="start-course-section-np">
+                <button caption="msg://Course.start.run"
+                        id="startSection"
+                        icon="font-icon:ANGLE_DOUBLE_RIGHT"
+                        invoke="startSection"
+                        visible="false"/>
+                <button caption="msg://Course.start.previous"
+                        id="previousBtn"
+                        icon="font-icon:ANGLE_DOUBLE_LEFT"
+                        visible="false"/>
+                <button caption="msg://Course.start.next"
+                        id="nextBtn"
+                        icon="font-icon:ANGLE_DOUBLE_RIGHT"
+                        visible="false"/>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

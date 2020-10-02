@@ -1,0 +1,3 @@
+alter table tsadv_dic_personal_protection_equipment rename to tsadv_dic_personal_protection_equipment__u72080 ;
+--alter table tsadv_job_protection_equipment drop constraint FK_TSADV_JOBPROTECTIEQUIPMEN_PERSONAL_PROTECTION_EQUIPMENT ;
+--alter table tsadv_personal_protection drop constraint FK_TSADV_PERSONAL_PROTECTION_PROTECTION_EQUIPMENT ;

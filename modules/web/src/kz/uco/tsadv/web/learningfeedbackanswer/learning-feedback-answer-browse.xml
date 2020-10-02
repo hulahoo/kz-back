@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.learningfeedbackanswer.LearningFeedbackAnswerBrowse"
+        focusComponent="learningFeedbackAnswersTable"
+        lookupComponent="learningFeedbackAnswersTable"
+        messagesPack="kz.uco.tsadv.web.learningfeedbackanswer">
+    <dsContext>
+        <groupDatasource id="learningFeedbackAnswersDs"
+                         class="kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackAnswer"
+                         view="learningFeedbackAnswer.edit">
+            <query>
+                <![CDATA[select e from tsadv$LearningFeedbackAnswer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="learningFeedbackAnswersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learningFeedbackAnswersTable"
+                datasource="learningFeedbackAnswersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learningFeedbackAnswersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="order"/>
+                <column id="score"/>
+                <column id="answerLangValue1"/>
+                <column id="answerLangValue2"/>
+                <column id="answerLangValue3"/>
+                <column id="answerLangValue4"/>
+                <column id="answerLangValue5"/>
+            </columns>
+            <rows datasource="learningFeedbackAnswersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="learningFeedbackAnswersTable.create"/>
+                <button id="editBtn"
+                        action="learningFeedbackAnswersTable.edit"/>
+                <button id="removeBtn"
+                        action="learningFeedbackAnswersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

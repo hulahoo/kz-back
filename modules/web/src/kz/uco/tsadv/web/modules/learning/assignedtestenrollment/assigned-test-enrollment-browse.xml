@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.assignedtestenrollment.AssignedTestEnrollmentBrowse"
+        focusComponent="assignedTestEnrollmentsTable"
+        lookupComponent="assignedTestEnrollmentsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.assignedtestenrollment">
+    <dsContext>
+        <groupDatasource id="assignedTestEnrollmentsDs"
+                         allowCommit="false"
+                         class="kz.uco.tsadv.entity.dbview.AssignedTestEnrollment"
+                         view="assignedTestEnrollment.browse">
+            <query>
+                <![CDATA[select e from tsadv$AssignedTestEnrollment e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assignedTestEnrollmentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="assignedTestEnrollmentsTable"
+                datasource="assignedTestEnrollmentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="assignedTestEnrollmentsTable"
+                    width="100%">
+            <actions>
+                <action id="passTest"
+                        caption="msg://assigned.test.btn.passTest"
+                        invoke="startTesting"
+                        trackSelection="true"/>
+                <action id="attempts"
+                        trackSelection="true"
+                        invoke="attempts"
+                        caption="msg://assigned.test.btn.attempts"/>
+                <action id="addEnrollment"
+                        caption="msg://assigned.test.btn.addEnrollment"
+                        invoke="addEnrollment"/>
+                <action id="removeEnrollment"
+                        caption="msg://assigned.test.btn.removeEnrollment"
+                        invoke="removeEnrollment"
+                        trackSelection="true"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <group>
+                    <column id="organizationNameLang1"/>
+                </group>
+                <column id="fullName"/>
+                <column id="positionNameLang1"/>
+                <column id="testName"/>
+                <column id="sectionName"/>
+                <column id="success"/>
+                <column id="testResult"/>
+                <column id="enrollmentStatus"/>
+                <column id="createdBy"/>
+            </columns>
+            <rows datasource="assignedTestEnrollmentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="passTest"
+                        action="assignedTestEnrollmentsTable.passTest"/>
+                <button id="attempts"
+                        action="assignedTestEnrollmentsTable.attempts"/>
+                <button id="addEnrollment"
+                        action="assignedTestEnrollmentsTable.addEnrollment"/>
+                <button id="removeEnrollment"
+                        action="assignedTestEnrollmentsTable.removeEnrollment"/>
+                <button id="excelBtn"
+                        action="assignedTestEnrollmentsTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

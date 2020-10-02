@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.assignedeventedit.Screen"
+        messagesPack="kz.uco.tsadv.web.assignedeventedit">
+    <dsContext>
+        <datasource id="assignedEventDs"
+                    class="kz.uco.tsadv.entity.tb.AssignedEvent"
+                    view="assignedEvent-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="assignedEventDs"
+                    width="100%">
+            <column>
+                <field captionProperty="person"
+                       property="assigned"/>
+                <field property="status"/>
+                <field property="deadline"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

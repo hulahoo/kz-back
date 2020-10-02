@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.dictionary.diccity.DicCityBrowseExt"
+        extends="/kz/uco/base/web/dictionary/diccity/dic-city-browse.xml"
+        messagesPack="kz.uco.tsadv.web.dictionary.diccity">
+    <layout>
+        <hbox id="hBox">
+            <vbox id="mainDataVBox">
+                <groupTable id="dicCitiesTable"
+                            height="100%"/>
+            </vbox>
+        </hbox>
+    </layout>
+</window>

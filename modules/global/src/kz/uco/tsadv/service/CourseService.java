@@ -1,0 +1,51 @@
+package kz.uco.tsadv.service;
+
+
+import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.learning.model.*;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+public interface CourseService {
+    String NAME = "tsadv_CourseService";
+
+    void updateCourseSectionAttempt(CourseSectionAttempt courseSectionAttempt);
+
+    void addCourseReview(CourseReview courseReview);
+
+    void addLearningPathReview(LearningPathReview learningPathReview);
+
+    List getCategoryHierarchy(String categoryId);
+
+    int addFavorite(UUID learningPathId, UUID personGroupId);
+
+    int deleteFavorite(UUID learningPathId, UUID personGroupId);
+
+    void deleteAllAttempt(Enrollment enrollment);
+
+    void sendParametrizedNotification(String notificationCode, UserExt user, Map<String, Object> params);
+
+    void updateEnrollmentStatus(CourseSectionAttempt courseSectionAttempt);
+
+    void insertPersonAnswers(List<PersonAnswer> personAnswers);
+
+    float completedSectionsPercent(UUID enrollmentId);
+
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy);
+
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy, List<Map<String, String>> filter,String lang);
+
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount);
+
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy,Map<String,Object> param);
+
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy, List<Map<String, String>> filter,String lang,Map<String,Object> param);
+
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount,Map<String,Object> param);
+
+    void addEnrollment(AssignedTestPojo assignedTestPojo);
+
+    void removeEnrollment(UUID enrollmentId);
+}

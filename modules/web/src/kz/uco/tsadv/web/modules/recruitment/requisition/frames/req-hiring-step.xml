@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.frames.ReqHiringStep">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true">
+        <groupTable id="hiringStepsTable"
+                    height="100%"
+                    width="100%">
+            <actions>
+                <!--<action id="create"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"/>-->
+                <action id="add"
+                        caption="mainMsg://table.btn.empty"
+                        description="mainMsg://table.btn.empty"
+                        icon="font-icon:SEARCH_PLUS"
+                        invoke="addHiringSteps"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="hiringStep" sortable="false"/>
+                <column id="hiringStep.stepDescription" sortable="false"/>
+                <column id="order" sortable="false"/>
+            </columns>
+            <rows datasource="hiringStepsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="hiringStepsButtonsPanel"
+                          alwaysVisible="true">
+                <!--<button id="hiringStepsCreateBtn"-->
+                <!--caption="mainMsg://table.btn.empty"-->
+                <!--action="hiringStepsTable.create"/>-->
+                <!--<button id="hiringStepsEditBtn"-->
+                <!--caption="mainMsg://table.btn.empty"-->
+                <!--action="hiringStepsTable.edit"/>-->
+                <button action="hiringStepsTable.add" caption="mainMsg://table.btn.empty"/>
+                <button id="hiringStepsRemoveBtn"
+                        action="hiringStepsTable.remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

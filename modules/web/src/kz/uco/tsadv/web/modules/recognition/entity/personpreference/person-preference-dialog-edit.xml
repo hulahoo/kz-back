@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personpreference.PersonPreferenceDialogEdit"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personpreference">
+    <dialogMode height="510px"
+                width="600"/>
+    <layout height="100%" expand="scrollBox" spacing="true" stylename="rcg-window-layout rcg-ch-preference-wrapper">
+        <scrollBox id="scrollBox" width="100%" spacing="true" stylename="rcg-dialog-scroll b-scroll">
+
+        </scrollBox>
+        <hbox spacing="true" align="MIDDLE_RIGHT" stylename="rcg-window-footer" height="64px">
+            <linkButton invoke="cancel" stylename="rcg-btn rcg-white-btn rcg-btn-md" caption="msg://btn.cancel"
+                        align="MIDDLE_RIGHT"/>
+            <linkButton invoke="save" stylename="rcg-btn rcg-blue-btn rcg-btn-md" caption="msg://btn.save"
+                        align="MIDDLE_RIGHT"/>
+        </hbox>
+    </layout>
+</window>

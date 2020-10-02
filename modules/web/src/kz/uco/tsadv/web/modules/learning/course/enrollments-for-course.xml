@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.learning.course.EnrollmentsForCourse"
+        messagesPack="kz.uco.tsadv.web.modules.learning.course">
+    <dsContext>
+        <collectionDatasource id="enrollmentsDs"
+                              class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                              maxResults="14"
+                              view="enrollment.for.course">
+            <query>
+                <![CDATA[select e from tsadv$Enrollment e
+                    where e.course.id=:param$courseId
+                    and e.deleteTs is null]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="enrollmentsDataGrid"
+            spacing="true">
+        <label id="courseNameLabel"
+               stylename="h3 bold"
+               visible="false"/>
+        <filter applyTo="enrollmentsDataGrid"
+                datasource="enrollmentsDs"/>
+        <dataGrid id="enrollmentsDataGrid"
+                  datasource="enrollmentsDs"
+                  selectionMode="MULTI_CHECK"
+                  width="100%">
+            <actions>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="fullName"
+                        editable="false"
+                        property="personGroup.fullName"/>
+                <column id="positionFullName"
+                        caption="msg://Course.positionFullName"
+                        editable="false"
+                        property="personGroup.currentAssignment.positionGroup.fullName"/>
+                <column id="organizationName"
+                        caption="msg://Course.organizationName"
+                        editable="false"
+                        property="personGroup.currentAssignment.organizationGroup.organizationName"/>
+                <column id="status"
+                        property="status"/>
+                <column id="reasonForLearning"
+                        property="reasonForLearning"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createButton"
+                        caption="msg://createButton"
+                        icon="CHILD"
+                        invoke="onCreateButtonClick"/>
+                <button id="massEnrollBtn"
+                        caption="msg://massEnrollBtn"
+                        icon="GROUP"
+                        invoke="onMassEnrollBtnClick"/>
+                <button id="editButton"
+                        caption="msg://editButton"
+                        icon="EDIT"
+                        invoke="onEditButtonClick"/>
+                <button id="removeButton"
+                        action="enrollmentsDataGrid.remove"/>
+            </buttonsPanel>
+        </dataGrid>
+    </layout>
+</window>

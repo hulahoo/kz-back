@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Address.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.address.AddressEdit"
+        datasource="addressDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="addressDs"
+                    class="kz.uco.tsadv.modules.personal.model.Address"
+                    view="address.view"/>
+        <collectionDatasource id="addressTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAddressType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="550"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="addressDs">
+            <column  width="350px" fieldCaptionWidth="163px">
+                <field optionsDatasource="addressTypesDs"
+                       property="addressType"/>
+                <field property="address"
+                       rows="3"/>
+                <field property="country"/>
+                <field property="postalCode"/>
+                <field property="city"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

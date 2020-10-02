@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.talentprogramstep.TalentProgramStepBrowse"
+        focusComponent="talentProgramStepsTable"
+        lookupComponent="talentProgramStepsTable"
+        messagesPack="kz.uco.tsadv.web.talentprogramstep">
+    <dsContext>
+        <groupDatasource id="talentProgramStepsDs"
+                         class="kz.uco.tsadv.entity.TalentProgramStep"
+                         view="talentProgramStep-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramStep e
+where e.deleteTs is null]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="talentProgramStepsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="talentProgramStepsTable"
+                datasource="talentProgramStepsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="talentProgramStepsTable"
+                    multiselect="true"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="orderNum"
+                        caption="msg://orderNum"/>
+                <column id="step"
+                        caption="msg://step"/>
+                <column id="notification"
+                        caption="msg://notification"/>
+            </columns>
+            <rows datasource="talentProgramStepsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="talentProgramStepsTable.create"/>
+                <button id="editBtn"
+                        action="talentProgramStepsTable.edit"/>
+                <button id="removeBtn"
+                        action="talentProgramStepsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.jobrequest.JobRequestGroupinterview"
+        focusComponent="jobRequestsTable"
+        lookupComponent="jobRequestsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.jobrequest">
+    <dsContext>
+        <groupDatasource id="jobRequestsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                         view="jobRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="jobRequestsTable"
+                datasource="jobRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="jobRequestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="candidatePersonGroup.person.fullName"/>
+            </columns>
+            <rows datasource="jobRequestsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

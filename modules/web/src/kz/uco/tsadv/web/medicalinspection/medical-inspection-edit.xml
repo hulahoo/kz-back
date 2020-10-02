@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.medicalinspection.MedicalInspectionEdit"
+        datasource="medicalInspectionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.medicalinspection">
+    <dsContext>
+        <datasource id="medicalInspectionDs"
+                    class="kz.uco.tsadv.entity.tb.MedicalInspection"
+                    view="medicalInspection-view">
+            <collectionDatasource id="serviceDs"
+                                  property="service"/>
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+            <collectionDatasource id="resultDs"
+                                  property="result"/>
+        </datasource>
+        <groupDatasource id="medicalServicesDs"
+                         class="kz.uco.tsadv.entity.tb.MedicalService"
+                         view="medicalService-view">
+            <query>
+                <![CDATA[select e from tsadv$MedicalService e]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="attachmentsDs"
+                         class="kz.uco.tsadv.entity.tb.Attachment"
+                         view="attachment-view">
+            <query>
+                <![CDATA[select e from tsadv$Attachment e]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="medicalInspectionResultsDs"
+                         class="kz.uco.tsadv.entity.tb.MedicalInspectionResult"
+                         view="medicalInspectionResult-view">
+            <query>
+                <![CDATA[select e from tsadv$MedicalInspectionResult e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <vbox id="vbox"
+              spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="medicalInspectionDs">
+                <column width="250px">
+                    <field property="entryDate"/>
+                    <field property="organization" captionProperty="organization"/>
+                    <field property="factEmpNumber"/>
+                    <field property="subjectInspection"/>
+                    <field property="subjectInspectionWoman"/>
+                    <field property="passedInspection"/>
+                </column>
+            </fieldGroup>
+            <frame id="windowActions"
+                   height="100%"
+                   screen="editWindowActions"/>
+        </vbox>
+        <tabSheet id="tabSheet">
+            <tab id="tab"
+                 caption="msg://tab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="medicalServicesTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="agreementDate"/>
+                        <column id="agreementNumber"/>
+                        <column id="medicalCenter"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                        <column id="cost"/>
+                    </columns>
+                    <rows datasource="serviceDs"/>
+                    <buttonsPanel>
+                        <button action="medicalServicesTable.create"/>
+                        <button action="medicalServicesTable.edit"/>
+                        <button action="medicalServicesTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tab_1"
+                 caption="msg://tab1"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="attachmentsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="attachmentType"/>
+                        <column id="attachment"/>
+                    </columns>
+                    <rows datasource="attachmentDs"/>
+                    <buttonsPanel>
+                        <button action="attachmentsTable.create"/>
+                        <button action="attachmentsTable.edit"/>
+                        <button action="attachmentsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tab_2"
+                 caption="msg://tab2"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="medicalInspectionResultsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="withDiseases"/>
+                        <column id="riskGroup"/>
+                        <column id="tradeunionCenterSent"/>
+                        <column id="temporaryUnfit"/>
+                        <column id="constantlyUnfit"/>
+                    </columns>
+                    <rows datasource="resultDs"/>
+                    <buttonsPanel>
+                        <button action="medicalInspectionResultsTable.create"/>
+                        <button action="medicalInspectionResultsTable.edit"/>
+                        <button action="medicalInspectionResultsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

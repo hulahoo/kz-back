@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.telegramanswer.TelegramAnswerEdit"
+        datasource="telegramAnswerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.telegramanswer">
+    <dsContext>
+        <datasource id="telegramAnswerDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.TelegramAnswer"
+                    view="telegramAnswer-view">
+            <collectionDatasource id="variableDs"
+                                  property="variable"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="telegramAnswerDs">
+            <column width="250px">
+                <field caption="msg://commandName"
+                       property="comandName"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="variableBox"
+                  caption="msg://variableBox">
+            <table id="variableTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="nameVariable"
+                            caption="msg://nameVariable"/>
+                </columns>
+                <rows datasource="variableDs"/>
+                <buttonsPanel>
+                    <button action="variableTable.create"/>
+                    <button action="variableTable.edit"/>
+                    <button action="variableTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.persongroupext.SubstitutedEmployeeBrowse"
+        focusComponent="personGroupExtsTable"
+        lookupComponent="personGroupExtsTable"
+        messagesPack="kz.uco.tsadv.web.persongroupext">
+    <dsContext>
+        <groupDatasource id="personGroupExtsDs"
+                         maxResults="20"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         view="personGroup.browse">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e
+                      join e.list p
+                      join e.assignments a
+                     where COALESCE(cast(:param$date date), :session$systemDate) between p.startDate and p.endDate
+                       and p.type.code = 'EMPLOYEE'
+                       and a.assignmentStatus.code <> 'TERMINATED'
+                       and e.id <> :param$personGroupId
+                       and COALESCE(cast(:param$date date), :session$systemDate) between a.startDate and a.endDate ]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personGroupExtsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personGroupExtsTable"
+                datasource="personGroupExtsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personGroupExtsTable"
+                    width="100%">
+            <columns>
+                <column id="person.fullNameLatin"
+                        caption="msg://fullNameLatin"
+                        link="true"
+                        linkInvoke="redirectCard"/>
+                <column id="primaryAssignment.positionGroup"
+                        captionProperty="primaryAssignment.positionGroup.fullName"/>
+                <column id="primaryAssignment.organizationGroup"
+                        captionProperty="primaryAssignment.organizationGroup.organization.organizationName"/>
+                <column id="primaryAssignment.assignmentStatus"/>
+                <column id="primaryAssignment.gradeGroup"
+                        captionProperty="primaryAssignment.gradeGroup.grade.gradeName"/>
+            </columns>
+            <rows datasource="personGroupExtsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.personalprotectioninspector.PersonalProtectionInspectorBrowse"
+        focusComponent="personalProtectionInspectorsTable"
+        lookupComponent="personalProtectionInspectorsTable"
+        messagesPack="kz.uco.tsadv.web.personalprotectioninspector">
+    <dsContext>
+        <groupDatasource id="personalProtectionInspectorsDs"
+                         class="kz.uco.tsadv.modules.personprotection.PersonalProtectionInspector"
+                         view="personalProtectionInspector.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonalProtectionInspector e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personalProtectionInspectorsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personalProtectionInspectorsTable"
+                datasource="personalProtectionInspectorsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personalProtectionInspectorsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="employee.personFioWithEmployeeNumber"/>
+                <column id="organizationGroup.organizationName"/>
+                <column id="assignmentDate"/>
+                <column id="assignmentOrder"/>
+            </columns>
+            <rows datasource="personalProtectionInspectorsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personalProtectionInspectorsTable.create"/>
+                <button id="editBtn"
+                        action="personalProtectionInspectorsTable.edit"/>
+                <button id="removeBtn"
+                        action="personalProtectionInspectorsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

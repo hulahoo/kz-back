@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personActionLike.PersonActionLikeBrowse"
+        focusComponent="personActionLikesTable"
+        lookupComponent="personActionLikesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personActionLike">
+    <dsContext>
+        <groupDatasource id="personActionLikesDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonActionLike"
+                         view="personActionLike-view">
+            <query>
+                <![CDATA[select e from tsadv$PersonActionLike e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personActionLikesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personActionLikesTable"
+                datasource="personActionLikesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personActionLikesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="action"/>
+                <column id="likeType"/>
+                <column id="personGroup"/>
+            </columns>
+            <rows datasource="personActionLikesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personActionLikesTable.create"/>
+                <button id="editBtn"
+                        action="personActionLikesTable.edit"/>
+                <button id="removeBtn"
+                        action="personActionLikesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

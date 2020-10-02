@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.personLearningContract.PersonLearningContractEdit"
+        datasource="personLearningContractDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.personLearningContract">
+    <dsContext>
+        <datasource id="personLearningContractDs"
+                    class="kz.uco.tsadv.modules.learning.model.PersonLearningContract"
+                    view="personLearningContract.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="personLearningContractDs">
+                <column id="columnId" width="250px">
+                    <field captionProperty="personFioWithEmployeeNumber"
+                           property="personGroup"/>
+                    <field id="contractNumber" property="contractNumber"/>
+                    <field id="contractDate" property="contractDate"/>
+                    <field id="termOfService" property="termOfService"/>
+                    <field id="other" property="other"
+                           rows="5"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

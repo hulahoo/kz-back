@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.coursesectionsession.MyCourseSectionSessionBrowse"
+        focusComponent="courseSectionSessionsTable"
+        lookupComponent="courseSectionSessionsTable"
+        messagesPack="kz.uco.tsadv.web.coursesectionsession">
+    <dsContext>
+        <groupDatasource id="courseSectionSessionsDs"
+                         class="kz.uco.tsadv.modules.learning.model.CourseSectionSession"
+                         view="myCourseSectionSession.browse">
+            <query>
+                <![CDATA[select e from tsadv$CourseSectionSession e
+                          where e.trainer.employee.id = :session$userPersonGroupId]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseSectionSessionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="courseSectionSessionsTable"
+                datasource="courseSectionSessionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="courseSectionSessionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="courseSection.course"/>
+                <column id="maxPerson"/>
+                <column id="recordCount"
+                        generator="generateRecordCountCell"/>
+            </columns>
+            <rows datasource="courseSectionSessionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="courseSectionSessionsTable.create"/>
+                <button id="editBtn"
+                        action="courseSectionSessionsTable.edit"/>
+                <popupButton id="popupButton"
+                             caption="msg://courseSectionSessionsTable.buttonsPanel.popupButton">
+                    <actions>
+                        <action id="notEnrolled"
+                                caption="msg://courseSectionSessionsTable.buttonsPanel.popupButton.notEnrolled"
+                                invoke="onNotEnrolled"/>
+                        <action id="copy"
+                                caption="msg://courseSectionSessionsTable.buttonsPanel.popupButton.copy"
+                                invoke="onCopy"/>
+                    </actions>
+                </popupButton>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

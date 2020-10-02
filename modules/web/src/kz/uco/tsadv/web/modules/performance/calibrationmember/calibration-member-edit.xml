@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CalibrationMember.editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.calibrationmember.CalibrationMemberEdit"
+        datasource="calibrationMemberDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="calibrationMemberDs"
+                    class="kz.uco.tsadv.modules.performance.model.CalibrationMember"
+                    view="calibrationMember.browse"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="calibrationMemberDs">
+            <column width="250px">
+                <field property="person" captionProperty="person"/>
+                <field property="potencial"/>
+                <field property="performance"/>
+                <field property="riskOfLoss"/>
+                <field property="impactOfLoss"/>
+                <field property="competenceOverall"/>
+                <field property="goalOverall"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

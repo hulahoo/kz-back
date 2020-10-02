@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.idpdetail.IdpDetailEdit"
+        datasource="idpDetailDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.idpdetail">
+    <dsContext>
+        <datasource id="idpDetailDs"
+                    class="kz.uco.tsadv.modules.learning.model.IdpDetail"
+                    view="idpDetail.edit"/>
+        <collectionDatasource id="educationTypeDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicEducationType"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicEducationType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="idpDetailDs">
+            <column width="250px">
+                <field id="competence" property="competence"
+                       captionProperty="competence"/>
+                <field id="scaleLevel" property="scaleLevel"/>
+                <field id="course" property="course"
+                       captionProperty="name"/>
+                <field id="educationType" property="educationType"
+                       optionsDatasource="educationTypeDs"/>
+                <field id="description" property="description"
+                       rows="5"/>
+                <field id="targetDate" property="targetDate"/>
+                <field id="done" property="done"/>
+                <field id="comment" property="comment"
+                       rows="5"/>
+                <field id="reason" property="reason"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

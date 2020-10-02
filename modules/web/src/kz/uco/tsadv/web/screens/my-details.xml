@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.screens.MyDetails"
+        messagesPack="kz.uco.tsadv.web.screens">
+    <dsContext>
+        <datasource id="personDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person.teamMember">
+            <datasource id="personGroupDs"
+                        property="group"/>
+        </datasource>
+        <collectionDatasource id="assignmentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                              view="assignment.view">
+            <query>
+                <![CDATA[select e from base$AssignmentExt e
+                where e.personGroup.id = :session$userPersonGroupId
+                order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="assignmentDs"
+                    class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                    view="assignment.view"/>
+        <collectionDatasource id="addressesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Address"
+                              view="address.view">
+            <query>
+                <![CDATA[select e from tsadv$Address e
+                where e.personGroup.id = :session$userPersonGroupId
+                order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personContactsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonContact"
+                              view="personContact.card">
+            <query>
+                <![CDATA[select e from tsadv$PersonContact e
+                          where e.personGroup.id = :session$userPersonGroupId
+                          order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="salaryDs"
+                              class="kz.uco.tsadv.modules.personal.model.Salary"
+                              view="salary.view">
+            <query>
+                <![CDATA[select e from tsadv$Salary e
+                where e.assignmentGroup.id = :ds$assignmentDs.group.id
+                order by e.startDate DESC]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="absencesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence.view">
+            <query>
+                <![CDATA[select e from tsadv$Absence e where e.personGroup.id = :session$userPersonGroupId
+order by e.dateFrom desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobRequestsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                              datasourceClass="kz.uco.tsadv.datasource.CandidateJobRequestDatasource"
+                              view="jobRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e where e.candidatePersonGroup.id = :session$userPersonGroupId
+order by e.requestDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true">
+        <tabSheet id="tabSheet"
+                  height="100%">
+            <tab id="assignmentTab"
+                 caption="msg://Assignments"
+                 margin="true">
+                <vbox id="vBox1"
+                      expand="historyTable"
+                      height="100%"
+                      spacing="true">
+                    <frame src="kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
+                    <label value="msg://Assignments"/>
+                    <table id="historyTable"
+                           sortable="false"
+                           width="100%">
+                        <columns>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="organizationGroup.organization.organizationName"/>
+                            <column id="positionGroup.position.positionFullName"/>
+                            <column id="substituteEmployee.person.fullName"
+                                    caption="msg://kz.uco.tsadv.modules.personal.model/AssignmentExt.substituteEmployee"/>
+                            <column id="gradeGroup.grade.gradeName"/>
+                            <column id="orderNumber"/>
+                            <column id="orderDate"/>
+                        </columns>
+                        <rows datasource="assignmentsDs"/>
+                    </table>
+                    <button id="close1"
+                            caption="msg://table.btn.close"
+                            invoke="close"/>
+                </vbox>
+            </tab>
+            <tab id="salaryTab"
+                 caption="msg://kz.uco.tsadv.web/Salaries"
+                 margin="true">
+                <vbox id="vBox2"
+                      expand="personSalaryTable"
+                      height="100%"
+                      spacing="true">
+                    <frame src="kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
+                    <label value="msg://kz.uco.tsadv.web/Salaries"/>
+                    <table id="personSalaryTable"
+                           sortable="false"
+                           width="100%">
+                        <columns>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="amount"/>
+                            <column id="currency"/>
+                            <column id="type"/>
+                            <column id="netGross"/>
+                            <column id="reason"/>
+                            <column id="changePercent"
+                                    caption="msg://kz.uco.tsadv.modules.personal.model/SalaryRequest.changePercent"
+                                    generator="generateChangePercentValue"/>
+                        </columns>
+                        <rows datasource="salaryDs"/>
+                    </table>
+                    <button id="close2"
+                            caption="msg://table.btn.close"
+                            invoke="close"/>
+                </vbox>
+            </tab>
+            <tab id="absenceTab"
+                 caption="msg://Absences"
+                 margin="true">
+                <vbox id="vBox3"
+                      expand="absencesTable"
+                      height="100%"
+                      spacing="true">
+                    <frame src="kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
+                    <label value="msg://Absences"/>
+                    <table id="absencesTable"
+                           sortable="false"
+                           width="100%">
+                        <columns>
+                            <column id="type"/>
+                            <column id="dateFrom"/>
+                            <column id="dateTo"/>
+                            <column id="absenceDays"
+                                    caption="msg://kz.uco.tsadv.web.modules.personal.absence/AbsenceBrowse.absenceDays"/>
+                        </columns>
+                        <rows datasource="absencesDs"/>
+                    </table>
+                    <button id="close3"
+                            caption="msg://table.btn.close"
+                            invoke="close"/>
+                </vbox>
+            </tab>
+            <tab id="jobRequestTab"
+                 caption="msg://PersonGroup.jobRequests"
+                 margin="true">
+                <vbox id="vBox4"
+                      expand="jobRequestsTable"
+                      height="100%"
+                      spacing="true">
+                    <frame src="kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
+                    <label value="msg://PersonGroup.jobRequests"/>
+                    <table id="jobRequestsTable"
+                           sortable="false"
+                           width="100%">
+                        <columns>
+                            <column id="requestDate"/>
+                            <column id="requisition.code"/>
+                            <column id="requisition.jobGroup.jobName"
+                                    caption="msg://kz.uco.tsadv.modules.personal.model/Job"/>
+                            <column id="requisition.requisitionStatus"/>
+                            <column id="requisition.recruiterPersonGroup.fullName"
+                                    caption="msg://TeamMember.recruiter"/>
+                        </columns>
+                        <rows datasource="jobRequestsDs"/>
+                    </table>
+                    <button id="close4"
+                            caption="msg://table.btn.close"
+                            invoke="close"/>
+                </vbox>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

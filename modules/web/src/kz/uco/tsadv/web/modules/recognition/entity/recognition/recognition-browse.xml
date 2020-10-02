@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.recognition.RecognitionBrowse"
+        focusComponent="recognitionsTable"
+        lookupComponent="recognitionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.recognition">
+    <dsContext>
+        <groupDatasource id="recognitionsDs"
+                         class="kz.uco.tsadv.modules.recognition.Recognition"
+                         maxResults="20"
+                         view="recognition.edit">
+            <query>
+                <![CDATA[select e from tsadv$Recognition e order by e.recognitionDate desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="recognitionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="recognitionsTable"
+                datasource="recognitionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="recognitionsTable"
+                    settingsEnabled="false"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="recognitionType"/>
+                <column id="recognitionDate"/>
+                <column id="coins"/>
+                <column id="author.fullName"
+                        caption="msg://kz.uco.tsadv.modules.recognition/Recognition.author"/>
+                <column id="receiver.fullName"
+                        caption="msg://kz.uco.tsadv.modules.recognition/Recognition.receiver"/>
+                <column id="comment"
+                        maxTextLength="60"/>
+                <column id="commentEn"
+                        maxTextLength="60"/>
+                <column id="commentRu"
+                        maxTextLength="60"/>
+                <column id="notifyManager"/>
+            </columns>
+            <rows datasource="recognitionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="recognitionsTable.create"/>
+                <button id="editBtn"
+                        action="recognitionsTable.edit"/>
+                <button id="removeBtn"
+                        enable="false"
+                        icon="icons/remove.png"
+                        invoke="removeRecognition"
+                        caption="mainMsg://table.btn.empty"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

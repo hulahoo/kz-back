@@ -1,0 +1,2 @@
+alter table TSADV_MEDICAL_INSPECTION add column INTEGRATION_USER_LOGIN varchar(255) ;
+alter table TSADV_MEDICAL_INSPECTION add column ORGANIZATION_BIN varchar(255) ;

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.bpmrequestmessage.BpmRequestMessageEdit"
+        datasource="bpmRequestMessageDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.bpmrequestmessage">
+    <dsContext>
+        <datasource id="bpmRequestMessageDs"
+                    class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
+                    view="bpmRequestMessage-view"/>
+    </dsContext>
+    <dialogMode height="280"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="bpmRequestMessageDs">
+            <column width="600px">
+                <field id="lookup" width="100%">
+                    <lookupField id="lookupField" width="100%" required="true" caption="msg://userType"/>
+                </field>
+                <field id="assignedUser"
+                       captionProperty="fullName"
+                       property="assignedUser"
+                       required="true"/>
+                <field id="message"
+                       property="message"
+                       required="true"
+                       rows="5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

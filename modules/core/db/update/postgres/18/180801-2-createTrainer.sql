@@ -1,0 +1,4 @@
+alter table TSADV_TRAINER add constraint FK_TSADV_TRAINER_EMPLOYEE foreign key (EMPLOYEE_ID) references BASE_PERSON_GROUP(ID);
+alter table TSADV_TRAINER add constraint FK_TSADV_TRAINER_PARTY foreign key (PARTY_ID) references BASE_PARTY(ID);
+create index IDX_TSADV_TRAINER_EMPLOYEE on TSADV_TRAINER (EMPLOYEE_ID);
+create index IDX_TSADV_TRAINER_PARTY on TSADV_TRAINER (PARTY_ID);

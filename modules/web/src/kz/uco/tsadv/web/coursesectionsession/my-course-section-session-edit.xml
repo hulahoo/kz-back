@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.coursesectionsession.MyCourseSectionSessionEdit"
+        datasource="courseSectionSessionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.coursesectionsession">
+    <dsContext>
+        <datasource id="courseSectionSessionDs"
+                    class="kz.uco.tsadv.modules.learning.model.CourseSectionSession"
+                    view="myCourseSectionSession.edit">
+            <groupDatasource id="courseSessionEnrollmentListDs"
+                             property="courseSessionEnrollmentList"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseSectionSessionTable"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="courseSectionSessionDs">
+            <column width="250px">
+                <field property="name"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="maxPerson"/>
+                <field property="trainer"
+                       captionProperty="trainerFullName"/>
+                <field property="courseSection"/>
+            </column>
+        </fieldGroup>
+        <groupTable id="courseSectionSessionTable"
+                    width="100%" settingsEnabled="false">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="enrollment.personGroup.fullName"/>
+                <column id="enrollmentDate"/>
+                <column id="status"/>
+                <column id="comment"/>
+            </columns>
+            <rows datasource="courseSessionEnrollmentListDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="courseSectionSessionTable.create"/>
+                <button id="editBtn"
+                        action="courseSectionSessionTable.edit"/>
+                <button id="removeBtn"
+                        action="courseSectionSessionTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

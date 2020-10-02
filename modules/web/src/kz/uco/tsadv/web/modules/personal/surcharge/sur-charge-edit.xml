@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://SurCharge.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.surcharge.SurChargeEdit"
+        datasource="surChargeDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="surChargeDs"
+                    class="kz.uco.tsadv.modules.personal.model.SurCharge"
+                    view="surCharge.browse"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="surChargeDs" fieldCaptionWidth="140px">
+            <column width="250px">
+                <field id="name" property="name"/>
+                <field id="period" custom="true"
+                       property="period"/>
+                <field id="type" custom="true"
+                       property="type"/>
+                <field id="grossNet" custom="true"
+                       property="grossNet"/>
+                <field id="value" property="value"/>
+                <field id="calculate" property="calculate" editable="false" visible="false"/>
+                <field id="currency" property="currency"/>
+                <field id="dateFrom" property="dateFrom"/>
+                <field id="dateTo" property="dateTo"/>
+                <field id="reason" property="reason"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

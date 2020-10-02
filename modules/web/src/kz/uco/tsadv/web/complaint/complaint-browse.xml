@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.complaint.ComplaintBrowse"
+        focusComponent="complaintsTable"
+        lookupComponent="complaintsTable"
+        messagesPack="kz.uco.tsadv.web.complaint">
+    <dsContext>
+        <groupDatasource id="complaintsDs"
+                         class="kz.uco.tsadv.entity.tb.Complaint"
+                         view="complaint-view">
+            <query>
+                <![CDATA[select e from tsadv$Complaint e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="complaintsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="complaintsTable"
+                datasource="complaintsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="complaintsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="complaints"/>
+                <column id="index"/>
+            </columns>
+            <rows datasource="complaintsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="complaintsTable.create"/>
+                <button id="editBtn"
+                        action="complaintsTable.edit"/>
+                <button id="removeBtn"
+                        action="complaintsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

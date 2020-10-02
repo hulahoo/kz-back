@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://person.settings"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonSettings">
+    <dsContext/>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <frame id="settingsFrame"
+               height="100%"
+               screen="standart-settings"/>
+    </layout>
+</window>

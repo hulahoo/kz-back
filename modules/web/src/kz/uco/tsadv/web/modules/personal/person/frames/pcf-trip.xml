@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfTrip"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dsContext>
+        <collectionDatasource id="ordersDs"
+                              class="kz.uco.tsadv.modules.personal.model.Order"
+                              view="order-view">
+            <query>
+                <![CDATA[select e from tsadv$Order e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <scrollBox id="scrollBox"
+                   height="100%"
+                   spacing="true">
+            <groupBox caption="msg://BusinessTrip"
+                      spacing="true">
+                <table id="businessTripTable"
+                       height="500px"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="orderNum"/>
+                        <column id="orderDate"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                        <column id="type"/>
+                        <column id="purpose"/>
+                        <column id="route"
+                                caption="Маршрут"
+                                width="250"/>
+                        <column id="status"/>
+                        <column id="typeTrip"/>
+                        <column id="parentBusinessTripCaption"
+                                caption="msg://kz.uco.tsadv.web.modules.personal.businesstrip/parentOrder"
+                        />
+                    </columns>
+                    <rows datasource="businessTripDs"/>
+                    <buttonsPanel id="buttonsPanelTrip">
+                        <button id="createBusinessTrip"
+                                action="businessTripTable.create"/>
+                        <button id="updateBusinessTrip"
+                                action="businessTripTable.edit"/>
+                        <button id="deleteBusinessTrip"
+                                action="businessTripTable.remove"/>
+                        <button id="excelBusinessTrip"
+                                action="businessTripTable.excel"/>
+                        <popupButton id="popupButton"
+                                     icon="ALIGN_JUSTIFY">
+                            <actions>
+                                <action id="cancel"
+                                        caption="msg://cancel"
+                                        invoke="cancel"/>
+                                <action id="comment"
+                                        caption="msg://comment"
+                                        invoke="comment"/>
+                                <action id="transferring"
+                                        caption="msg://transferring"
+                                        invoke="transferring"/>
+                                <action id="extension"
+                                        caption="msg://extension"
+                                        invoke="extension"/>
+                                <action id="additionalchange"
+                                        caption="msg://additionalchange"
+                                        invoke="additionalchange"/>
+                            </actions>
+                        </popupButton>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </scrollBox>
+    </layout>
+</window>

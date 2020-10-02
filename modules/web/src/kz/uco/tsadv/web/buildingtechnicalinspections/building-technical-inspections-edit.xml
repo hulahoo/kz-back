@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.buildingtechnicalinspections.BuildingTechnicalInspectionsEdit"
+        datasource="buildingTechnicalInspectionsDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.buildingtechnicalinspections">
+    <dsContext>
+        <datasource id="buildingTechnicalInspectionsDs"
+                    class="kz.uco.tsadv.entity.tb.BuildingTechnicalInspections"
+                    view="buildingTechnicalInspections-view">
+            <collectionDatasource id="buildingFireSafetyDs"
+                                  property="buildingFireSafety">
+                <collectionDatasource id="fireWaterSupply" property="fireWaterSupply"/>
+            </collectionDatasource>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox id="scrollBox"
+                   height="100%"
+                   spacing="true">
+            <vbox id="vbox_1"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="buildingTechnicalInspectionsDs">
+                    <column width="250px">
+                        <field property="inspectionCategory"/>
+                        <field property="inspectionType"/>
+                        <field captionProperty="person"
+                               property="inspectingFullName"/>
+                        <field property="buildTechnicalStatus"/>
+                        <field property="technicalStatusBuildstructures"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <groupBox caption="msg://detail"
+                      collapsable="true"
+                      collapsed="true">
+                <vbox id="vbox"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="buildingTechnicalInspectionsDs">
+                        <column>
+                            <field property="inspectionDate"/>
+                            <field property="prescriptionNumber"/>
+                            <field property="damageDescription"/>
+                            <field property="recommendations"/>
+                            <field property="technicalJournalRecord"/>
+                            <field property="preparationDeadline"/>
+                            <field property="eliminateEvent"/>
+                            <field property="eliminationDeadline"/>
+                            <field property="eliminationOrPostponementNotification"/>
+                            <field property="repairProgram"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <frame id="windowActions"
+                   screen="editWindowActions"/>
+            <tabSheet>
+                <tab id="tab"
+                     caption="msg://tab"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="buildingFireSafetyTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/remove.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/edit.png"/>
+                        </actions>
+                        <columns>
+                            <column id="fireAutomationRequired"/>
+                            <column id="fsOutdoorCategory"/>
+                            <column id="fsBuildingCategory"/>
+                            <column id="fireResistance"/>
+                            <column id="agreement"/>
+                        </columns>
+                        <rows datasource="buildingFireSafetyDs"/>
+                        <buttonsPanel>
+                            <button action="buildingFireSafetyTable.create"/>
+                            <button action="buildingFireSafetyTable.remove"/>
+                            <button action="buildingFireSafetyTable.edit"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+    </layout>
+</window>

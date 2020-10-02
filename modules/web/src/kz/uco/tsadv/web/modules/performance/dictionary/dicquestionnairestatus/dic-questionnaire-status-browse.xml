@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicQuestionnaireStatus.browseCaption"
+        class="kz.uco.tsadv.web.modules.performance.dictionary.dicquestionnairestatus.DicQuestionnaireStatusBrowse"
+        focusComponent="dicQuestionnaireStatusesTable"
+        lookupComponent="dicQuestionnaireStatusesTable">
+    <dsContext>
+        <groupDatasource id="dicQuestionnaireStatusesDs"
+                         class="kz.uco.tsadv.modules.performance.dictionary.DicQuestionnaireStatus"
+                         view="dicQuestionnaireStatus.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicQuestionnaireStatus e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicQuestionnaireStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicQuestionnaireStatusesTable"
+                datasource="dicQuestionnaireStatusesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicQuestionnaireStatusesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+            </columns>
+            <rows datasource="dicQuestionnaireStatusesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicQuestionnaireStatusesTable.create"/>
+                <button id="editBtn"
+                        action="dicQuestionnaireStatusesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicQuestionnaireStatusesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

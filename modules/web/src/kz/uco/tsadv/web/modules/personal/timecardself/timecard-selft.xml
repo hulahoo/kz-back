@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Timecard-self"
+        class="kz.uco.tsadv.web.modules.personal.timecardself.TimecardSelf"
+        messagesPack="kz.uco.tsadv.web.modules.personal.timecardself">
+    <dialogMode height="150"
+                width="300"/>
+    <layout spacing="true">
+        <vbox id="vbox" spacing="true">
+            <datePicker id="datepicker" resolution="MONTH"/>
+            <button id="button" caption="msg://report" invoke="report" align="MIDDLE_CENTER"/>
+        </vbox>
+    </layout>
+</window>

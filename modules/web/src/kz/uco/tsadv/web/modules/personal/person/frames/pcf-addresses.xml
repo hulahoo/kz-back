@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfAddress">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <table id="addressesTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="addressType"/>
+                <column id="country"/>
+                <column id="postalCode"/>
+                <column id="city"/>
+                <column id="address"
+                        caption="msg://addressLine"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="addressesDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createBtn"
+                        action="addressesTable.create"/>
+                <button id="editBtn"
+                        action="addressesTable.edit"/>
+                <button id="removeBtn"
+                        action="addressesTable.remove"/>
+                <button id="excelBtn"
+                        action="addressesTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

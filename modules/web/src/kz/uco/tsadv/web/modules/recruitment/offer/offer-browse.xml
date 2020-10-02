@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OfferBrowse.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.offer.OfferBrowse"
+        focusComponent="offersTable"
+        lookupComponent="offersTable">
+    <dsContext>
+        <collectionDatasource id="offersDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.Offer"
+                              view="offer.browse">
+            <query>
+                <![CDATA[select e from tsadv$Offer e]]>
+            </query>
+            <datasource id="fileDs"
+                        property="file"/>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <vbox id="vbox"
+              expand="offersTable"
+              height="100%"
+              spacing="true">
+            <filter id="filter"
+                    applyTo="offersTable"
+                    datasource="offersDs">
+                <properties include=".*"/>
+            </filter>
+            <table id="offersTable"
+                   width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"
+                            description="mainMsg://createOrder"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/edit.png"
+                            description="mainMsg://editOrder"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/close.png"
+                            description="mainMsg://deleteOrder"/>
+                </actions>
+                <columns>
+                    <column id="jobRequest.candidatePersonGroup.personFioWithEmployeeNumber"/>
+                    <column id="jobRequest.requisition"/>
+                    <column id="proposedSalary"/>
+                    <column id="proposedStartDate"/>
+                    <column id="expireDate"/>
+                    <column id="status"/>
+                    <column id="candidateCommentary"/>
+                    <column id="offerTemplate"/>
+                    <column id="file"/>
+                </columns>
+                <rows datasource="offersDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="offersTable.create"/>
+                    <button id="editBtn"
+                            action="offersTable.edit"/>
+                    <button id="removeBtn"
+                            action="offersTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </vbox>
+    </layout>
+</window>

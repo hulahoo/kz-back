@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicAbsenceType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicabsencetype.DicAbsenceTypeBrowse"
+        focusComponent="dicAbsenceTypesTable"
+        lookupComponent="dicAbsenceTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicabsencetype">
+    <dsContext>
+        <groupDatasource id="dicAbsenceTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
+                         view="dicAbsenceType.view">
+            <query>
+                <![CDATA[select e from tsadv$DicAbsenceType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAbsenceTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAbsenceTypesTable"
+                datasource="dicAbsenceTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAbsenceTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue"/>
+                <column id="useInSelfService"/>
+                <column id="absenceCategory"/>
+                <column id="timesheetCode"/>
+                <column id="isOnlyWorkingDay"/>
+                <column id="isWorkingDay"/>
+                <column id="useOnlyAbsenceType"/>
+                <column id="displayAbsence"/>
+                <column id="cancelParentAbsence"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="useInBalance"/>
+                <column id="availableForTimecard"/>
+                <column id="vacationDurationType"/>
+                <column id="order"/>
+                <column id="isRequiredOrderNumber"/>
+            </columns>
+            <rows datasource="dicAbsenceTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAbsenceTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicAbsenceTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAbsenceTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

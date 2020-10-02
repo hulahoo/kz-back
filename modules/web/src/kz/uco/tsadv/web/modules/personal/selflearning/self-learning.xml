@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Self.learning.cources"
+        class="kz.uco.tsadv.web.modules.personal.selflearning.SelfLearning">
+    <dsContext>
+        <collectionDatasource id="certEnrollmentDs"
+                              class="kz.uco.tsadv.modules.learning.model.CertificationEnrollment"
+                              maxResults="20"
+                              view="certificationEnrollment.ss.browse">
+            <query>
+                <![CDATA[select e from tsadv$CertificationEnrollment e where e.personGroup.id = :session$userPersonGroupId]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <tabSheet id="tabSheet"
+                  height="100%">
+            <tab id="active"
+                 caption="msg://self.learning.active.course"
+                 margin="true,true,true,false">
+                <scrollBox id="activeScrollBox"
+                           height="100%"
+                           stylename="bt-scroll">
+                    <flowBox id="activeCourses"
+                             stylename="sl-flow-box"
+                             width="100%"/>
+                </scrollBox>
+            </tab>
+            <tab id="completed"
+                 caption="msg://self.learning.complete.course"
+                 margin="true,true,true,false">
+                <scrollBox height="100%"
+                           stylename="bt-scroll">
+                    <flowBox id="completedCourses"
+                             stylename="sl-flow-box"
+                             width="100%"/>
+                </scrollBox>
+            </tab>
+            <tab id="learningPath"
+                 caption="msg://self.learning.path"
+                 margin="true,true,true,false">
+                <scrollBox height="100%"
+                           stylename="bt-scroll">
+                    <vbox id="learningPaths"/>
+                </scrollBox>
+            </tab>
+            <tab id="certification"
+                 caption="msg://self.certification"
+                 margin="true,true,true,false">
+                <table id="certificationTable"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="certification.name"/>
+                        <column id="certification.lifeDay"/>
+                        <column id="certification.course.name"/>
+                        <column id="status"/>
+                        <column id="startDate"/>
+                        <column id="nextDate"/>
+                    </columns>
+                    <rows datasource="certEnrollmentDs"/>
+                    <rowsCount/>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

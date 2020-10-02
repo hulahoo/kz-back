@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Person.notification.caption"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonNotification">
+    <dsContext>
+        <groupDatasource id="notificationsDs"
+                         class="kz.uco.base.entity.core.notification.SendingNotification"
+                         view="sendingNotification.view">
+            <query>
+                <![CDATA[select e
+                           from base$SendingNotification e
+                          where e.user.id = :session$user and e.sendDate is null
+                            and (:component$filterRead = 'ALL'
+                              or :component$filterRead = 'READ' and e.readed = TRUE
+                              or :component$filterRead = 'NOT_READ' and e.readed = FALSE)]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="notificationsTable">
+        <filter datasource="notificationsDs" margin="false,false,true,false">
+            <properties include=".*"/>
+        </filter>
+        <table id="notificationsTable"
+               multiselect="true"
+               width="100%">
+            <actions>
+                <action id="remove"/>
+                <action id="refresh"/>
+                <action id="view"
+                        icon="icons/eye-plus.png"
+                        description="mainMsg://table.btn.view"
+                        caption="mainMsg://table.btn.view"
+                        shortcut="${TABLE_EDIT_SHORTCUT}"
+                        invoke="viewNotification"/>
+                <action id="markAsRead"
+                        caption="mainMsg://table.btn.markAsRead"
+                        description="mainMsg://table.btn.markAsRead"
+                        invoke="markAsRead"
+                        icon="font-icon:CHECK_SQUARE_O"/>
+            </actions>
+            <columns>
+                <column id="createTs"/>
+                <column id="template"
+                        captionProperty="template.name"/>
+                <column id="user"
+                        captionProperty="user.login"/>
+                <column id="user.personGroup.personFioWithEmployeeNumber"/>
+                <column id="sendingSms"
+                        captionProperty="sendingSms.id"
+                        link="true"
+                        linkScreen="base$SendingSms.view"/>
+                <column id="sendingMessage"
+                        captionProperty="sendingMessage.id"
+                        link="true"
+                        linkScreen="sys$SendingMessage.view"/>
+            </columns>
+            <rows datasource="notificationsDs"/>
+            <rowsCount/>
+            <buttonsPanel>
+                <button action="notificationsTable.refresh" caption="mainMsg://table.btn.empty"/>
+                <button action="notificationsTable.remove" caption="mainMsg://table.btn.empty"/>
+                <button action="notificationsTable.view" caption="mainMsg://table.btn.empty"/>
+                <button action="notificationsTable.markAsRead" caption="mainMsg://table.btn.empty"/>
+                <hbox width="20px"/>
+                <label value="msg://filterRead.caption" stylename="bold-label" align="MIDDLE_CENTER"/>
+                <optionsGroup id="filterRead" orientation="horizontal"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

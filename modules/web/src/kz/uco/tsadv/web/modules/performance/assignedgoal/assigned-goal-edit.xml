@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.assignedgoal.AssignedGoalEdit"
+        datasource="assignedGoalDs"
+        focusComponent="assignedGoalFieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assignedgoal">
+    <dsContext>
+        <datasource id="assignedGoalDs"
+                    class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
+                    view="assignedGoal.edit"/>
+        <collectionDatasource id="prioritiesDs"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              class="kz.uco.tsadv.modules.performance.dictionary.DicPriority"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicPriority e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="performancePlansDs"
+                              class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$PerformancePlan e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="650"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="assignedGoalFieldGroup"
+                        datasource="assignedGoalDs"
+                        width="100%">
+                <column id="column" width="550px">
+                    <field property="goal" id="goal"/>
+                    <field property="parentGoal" id="parentGoal"/>
+                    <field property="targetValue" id="targetValue"/>
+                    <field property="actualValue" id="actualValue"/>
+                    <field custom="true" id="successCritetia"
+                           property="successCritetia"/>
+                    <field property="startDate" id="startDate"/>
+                    <field property="endDate" id="endDate"/>
+                    <field property="weight" id="weight"/>
+                    <field optionsDatasource="prioritiesDs" id="priority"
+                           property="priority"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

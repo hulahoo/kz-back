@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Competence.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.competence.CompetenceEdit"
+        datasource="competenceDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.competence">
+    <dsContext>
+        <datasource id="competenceDs"
+                    class="kz.uco.tsadv.modules.personal.model.Competence"
+                    view="competence.edit"/>
+        <collectionDatasource id="competeceTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicCompetenceType"
+                              view="_minimal"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="competenceDs">
+            <column width="250px">
+                <field property="competenceNameLang1"/>
+                <field property="competenceNameLang2"/>
+                <field property="competenceNameLang3"/>
+                <field property="competenceNameLang4"/>
+                <field property="competenceNameLang5"/>
+                <field optionsDatasource="competeceTypesDs"
+                       property="competeceType"/>
+                <field property="competenceName"
+                       visible="false"/>
+                <field property="scale"/>
+                <field property="attachment"/>
+                <field property="isRcAvailable"/>
+                <field editable="false"
+                       property="startDate"/>
+                <field editable="false"
+                       property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

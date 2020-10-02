@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.sanitaryhygieneevent.SanitaryHygieneEventEdit"
+        datasource="sanitaryHygieneEventDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.sanitaryhygieneevent">
+    <dsContext>
+        <datasource id="sanitaryHygieneEventDs"
+                    class="kz.uco.tsadv.entity.tb.SanitaryHygieneEvent"
+                    view="sanitaryHygieneEvent-view">
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <vbox id="vbox"
+              spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="sanitaryHygieneEventDs">
+                <column width="250px">
+                    <field property="developedEvents"/>
+                    <field property="doneEvents"/>
+                </column>
+            </fieldGroup>
+            <frame id="windowActions"
+                   height="100%"
+                   screen="editWindowActions"/>
+        </vbox>
+        <tabSheet id="tabSheet">
+            <tab id="tab"
+                 caption="msg://tab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="attachmentTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="attachment"/>
+                        <column id="attachmentType"/>
+                    </columns>
+                    <rows datasource="attachmentDs"/>
+                    <buttonsPanel>
+                        <button action="attachmentTable.create"/>
+                        <button action="attachmentTable.remove"/>
+                        <button action="attachmentTable.edit"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

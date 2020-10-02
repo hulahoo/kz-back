@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://assigned.test.attempts"
+        class="kz.uco.tsadv.web.modules.learning.enrollment.AssignedTestAttempts"
+        messagesPack="kz.uco.tsadv.web.modules.learning.enrollment">
+
+    <dsContext>
+        <collectionDatasource id="courseSectionAttemptsDs"
+                              class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
+                              view="courseSectionAttempt.browse">
+            <query>
+                <![CDATA[select e from tsadv$CourseSectionAttempt e
+                join e.courseSection cs
+                join cs.sectionObject cso
+                where e.enrollment.id = :param$enrollmentId and cso.test is not null]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout width="100%" height="100%" expand="courseSectionAttemptsTable">
+        <table id="courseSectionAttemptsTable" width="100%">
+            <columns>
+                <column id="attemptDate"/>
+                <column id="success"/>
+                <column id="testResult"/>
+                <column id="timeSpent"/>
+            </columns>
+            <rows datasource="courseSectionAttemptsDs"/>
+            <rowsCount/>
+            <buttonsPanel>
+                <button id="showAnswers"
+                        caption="msg://assigned.test.attempts.btn.answers"
+                        invoke="showAnswers"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

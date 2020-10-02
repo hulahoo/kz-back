@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.medicalinspection.MedicalInspectionBrowse"
+        focusComponent="medicalInspectionsTable"
+        lookupComponent="medicalInspectionsTable"
+        messagesPack="kz.uco.tsadv.web.medicalinspection">
+    <dsContext>
+        <groupDatasource id="medicalInspectionsDs"
+                         class="kz.uco.tsadv.entity.tb.MedicalInspection"
+                         view="medicalInspection-view">
+            <query>
+                <![CDATA[select e from tsadv$MedicalInspection e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="medicalInspectionsTable">
+        <filter id="filter"
+                applyTo="medicalInspectionsTable"
+                datasource="medicalInspectionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="medicalInspectionsTable"
+                    height="100%"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="entryDate"/>
+                <column id="organization" captionProperty="organization.organization.organizationName"/>
+                <column id="factEmpNumber"/>
+                <column id="subjectInspection"/>
+                <column id="subjectInspectionWoman"/>
+                <column id="passedInspection"/>
+            </columns>
+            <rows datasource="medicalInspectionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="medicalInspectionsTable.create"/>
+                <button id="editBtn"
+                        action="medicalInspectionsTable.edit"/>
+                <button id="removeBtn"
+                        action="medicalInspectionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

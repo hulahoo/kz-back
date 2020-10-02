@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.competencetemplate.CompetenceTemplateEdit"
+        datasource="competenceTemplateDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.competencetemplate">
+    <dsContext>
+        <datasource id="competenceTemplateDs"
+                    class="kz.uco.tsadv.modules.performance.model.CompetenceTemplate"
+                    view="competenceTemplate-view">
+            <collectionDatasource id="competenceTemplateDetailDs"
+                                  property="competenceTemplateDetail"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="competenceTemplateDs">
+            <column width="250px">
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field caption="msg://UsePosCompetence"
+                       property="usePositionCompetence"/>
+                <field property="positionCompetenceWeight"/>
+                <field caption="msg://CompetenceTemplateName"
+                       property="competenceTemplateName"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="competenceTemplateDetailBox"
+                  caption="msg://Competence Template Detail">
+            <table id="competenceTemplateDetailTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="weight"
+                            caption="msg://weight"/>
+                    <column id="competenceGroup.competence"/>
+                </columns>
+                <rows datasource="competenceTemplateDetailDs"/>
+                <buttonsPanel>
+                    <button action="competenceTemplateDetailTable.create"/>
+                    <button action="competenceTemplateDetailTable.edit"/>
+                    <button action="competenceTemplateDetailTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.flighttimerate.FlightTimeRateBrowse"
+        focusComponent="flightTimeRatesTable"
+        lookupComponent="flightTimeRatesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.flighttimerate">
+    <dsContext>
+        <groupDatasource id="flightTimeRatesDs"
+                         class="kz.uco.tsadv.modules.personal.model.FlightTimeRate"
+                         view="flightTimeRate-view">
+            <query>
+                <![CDATA[select e from tsadv$FlightTimeRate e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="flightTimeRatesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="flightTimeRatesTable"
+                datasource="flightTimeRatesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="flightTimeRatesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="value"/>
+                <column id="dicRateType"/>
+                <column id="dateFrom"/>
+                <column id="dateTo"/>
+                <column id="hoursFrom"/>
+                <column id="hoursTo"/>
+            </columns>
+            <rows datasource="flightTimeRatesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="flightTimeRatesTable.create"/>
+                <button id="editBtn"
+                        action="flightTimeRatesTable.edit"/>
+                <button id="removeBtn"
+                        action="flightTimeRatesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

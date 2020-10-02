@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RecognitionWindow"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages"
+        xmlns:main="http://schemas.haulmont.com/cuba/mainwindow.xsd">
+    <dialogMode height="600"
+                width="800"/>
+    <layout responsive="false" width="100%" height="100%" expand="mainWrapper" stylename="rcg-window-wrapper">
+        <hbox id="mainWrapper"
+              expand="centerVBox"
+              stylename="rcg-main-container"
+              width="100%">
+            <vbox id="sideMenuBox"
+                  expand="sidebarWrapper"
+                  stylename="rcg-sidebar-wrapper"
+                  width="200px">
+
+                <vbox height="60px" width="100%" align="MIDDLE_CENTER">
+                    <image id="rcgLogo" scaleMode="FILL" height="30px" align="MIDDLE_CENTER">
+                        <theme path="images/recognition/rcg-logo.png"/>
+                    </image>
+                </vbox>
+
+                <vbox id="sidebarWrapper" expand="sideMenu" stylename="rcg-sidemenu-wrapper">
+                    <label value="msg://rcg.menu" stylename="rcg-sidemenu-label"/>
+                    <main:sideMenu id="sideMenu"
+                                   stylename="rcg-sidemenu sb-scroll"
+                                   width="100%"
+                                   loadMenuConfig="false"/>
+                </vbox>
+            </vbox>
+
+            <!--expand="contentWrapper"-->
+            <vbox id="centerVBox" height="100%" expand="contentWrapper">
+                <cssLayout height="60px"
+                           stylename="rcg-window-header"
+                           width="100%">
+                    <hbox height="100%"
+                          spacing="true"
+                          stylename="brand-block">
+                        <linkButton id="sidebarToggle"
+                                    align="MIDDLE_CENTER"
+                                    caption="mainMsg://table.btn.empty"
+                                    height="100%"
+                                    icon="font-icon:BARS"
+                                    stylename="rcg-sidebar-toggle"
+                                    width="45px"/>
+                        <label id="brandName"
+                               align="MIDDLE_LEFT"
+                               htmlEnabled="true"
+                               stylename="brand-name"/>
+                    </hbox>
+                    <cssLayout align="MIDDLE_RIGHT"
+                               height="60px"
+                               stylename="rcg-right-block">
+                        <htmlBox id="rightBlockHtml"
+                                 align="MIDDLE_RIGHT"
+                                 template="recognition-header-right">
+
+                            <linkButton id="helpLink"
+                                        icon="font-icon:QUESTION_CIRCLE"
+                                        stylename="rcg-help-link"/>
+
+                            <linkButton id="toggleProfile"
+                                        icon="font-icon:ANGLE_DOWN"
+                                        stylename="rcg-toggle-profile"/>
+
+                            <linkButton id="toProfile"
+                                        caption="mainMsg://header.right.dd.profile"
+                                        icon="font-icon:HOME"/>
+
+                            <linkButton id="toSettings"
+                                        caption="mainMsg://header.right.dd.settings"
+                                        icon="font-icon:COGS"/>
+
+                            <linkButton id="toLogout"
+                                        caption="mainMsg://header.right.dd.logout"
+                                        icon="font-icon:SIGN_OUT"/>
+
+                            <image id="userImage"/>
+                        </htmlBox>
+                    </cssLayout>
+                </cssLayout>
+                <cssLayout id="contentWrapper" stylename="container-fluid rcg-content-wrapper" width="100%">
+
+                </cssLayout>
+            </vbox>
+        </hbox>
+    </layout>
+</window>

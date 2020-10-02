@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicCategory.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.dictionary.diccategory.DicCategoryBrowse"
+        focusComponent="dicCategoriesTable"
+        lookupComponent="dicCategoriesTable">
+    <dsContext>
+        <hierarchicalDatasource id="dicCategoriesDs"
+                                class="kz.uco.tsadv.modules.learning.dictionary.DicCategory"
+                                hierarchyProperty="parentCategory"
+                                view="dicCategory.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicCategory e]]>
+            </query>
+        </hierarchicalDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicCategoriesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicCategoriesTable"
+                datasource="dicCategoriesDs">
+            <properties include=".*"/>
+        </filter>
+        <treeTable id="dicCategoriesTable"
+                   width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="image"
+                        caption="msg://Image"
+                        generator="generateCategoryImageCell"
+                        sortable="false"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="parentCategory"/>
+            </columns>
+            <rows datasource="dicCategoriesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicCategoriesTable.create"/>
+                <button id="editBtn"
+                        action="dicCategoriesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicCategoriesTable.remove"/>
+            </buttonsPanel>
+        </treeTable>
+    </layout>
+</window>

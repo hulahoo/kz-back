@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.assignmentschedule.frames.AssignmentScheduleFrame">
+    <dialogMode height="800"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <scrollBox height="100%" width="100%" orientation="vertical">
+            <hbox spacing="false" expand="tableRight" width="100%">
+                <table id="tableLeft" width="380" height="560" stylename="timecard-table">
+                    <actions>
+                        <action id="setSchedule"/>
+                    </actions>
+                    <columns>
+                        <column id="name" caption="msg://Person"/>
+                        <column id="setSchedule" caption="" width="39px"/>
+                    </columns>
+                    <rows datasource="timesheetDs"/>
+                    <buttonsPanel>
+                        <button id="setScheduleButton" invoke="setScheduleForAll" caption="msg://setSchedule"/>
+                        <checkBox id="enableInclusions" caption="msg://enableInclusions" align="BOTTOM_LEFT"/>
+                    </buttonsPanel>
+                </table>
+                <table id="tableRight" align="TOP_LEFT" height="560px" stylename="timecard-table">
+                    <columns>
+                        <column id="s1"/>
+                    </columns>
+                    <rows datasource="timesheetDs"/>
+                    <rowsCount/>
+                </table>
+            </hbox>
+        </scrollBox>
+    </layout>
+</window>

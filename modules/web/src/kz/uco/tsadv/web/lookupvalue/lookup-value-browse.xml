@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.lookupvalue.LookupValueBrowse"
+        focusComponent="lookupValuesTable"
+        lookupComponent="lookupValuesTable"
+        messagesPack="kz.uco.tsadv.web.lookupvalue">
+    <dsContext>
+        <groupDatasource id="lookupValuesDs"
+                         class="kz.uco.tsadv.modules.administration.LookupValue"
+                         view="lookupValue.edit">
+            <query>
+                <![CDATA[select e from tsadv$LookupValue e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="lookupValuesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="lookupValuesTable"
+                datasource="lookupValuesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="lookupValuesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="legacyID"/>
+                <column id="lookupType.id"/>
+                <column id="lookupTypeCode"/>
+                <column id="meaningLang1"/>
+                <column id="meaningLang2"/>
+                <column id="meaningLang3"/>
+                <column id="descriptionLang1"/>
+                <column id="descriptionLang2"/>
+                <column id="descriptionLang3"/>
+                <column id="enabledFlag"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="tag"/>
+            </columns>
+            <rows datasource="lookupValuesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="lookupValuesTable.create"/>
+                <button id="editBtn"
+                        action="lookupValuesTable.edit"/>
+                <button id="removeBtn"
+                        action="lookupValuesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

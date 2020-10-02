@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://DicRegisterGroupBrowse"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicregistergroup.DicRegisterGroupBrowse"
+        focusComponent="dicRegisterGroupsTable"
+        lookupComponent="dicRegisterGroupsTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicregistergroup">
+    <dsContext>
+        <groupDatasource id="dicRegisterGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicRegisterGroup"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicRegisterGroup e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicRegisterGroupsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicRegisterGroupsTable"
+                datasource="dicRegisterGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicRegisterGroupsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"
+                        caption="msg://DicRegisterGroupBrowseColumn"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicRegisterGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicRegisterGroupsTable.create"/>
+                <button id="editBtn"
+                        action="dicRegisterGroupsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicRegisterGroupsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

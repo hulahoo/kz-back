@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.screens.login.ExtAppLoginWindow"
+        extends="/kz/uco/base/web/template/base-login-window-old.xml">
+    <dialogMode height="600"
+                width="800"/>
+
+    <layout>
+        <vbox id="loginWrapper">
+            <vbox id="loginMainBox">
+                <hbox id="resetControls"/>
+            </vbox>
+        </vbox>
+    </layout>
+</window>

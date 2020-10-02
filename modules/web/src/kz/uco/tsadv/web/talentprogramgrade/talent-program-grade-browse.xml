@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.talentprogramgrade.TalentProgramGradeBrowse"
+        focusComponent="talentProgramGradesTable"
+        lookupComponent="talentProgramGradesTable"
+        messagesPack="kz.uco.tsadv.web.talentprogramgrade">
+    <dsContext>
+        <groupDatasource id="talentProgramGradesDs"
+                         class="kz.uco.tsadv.entity.TalentProgramGrade"
+                         view="talentProgramGrade-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramGrade e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="talentProgramGradesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="talentProgramGradesTable"
+                datasource="talentProgramGradesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="talentProgramGradesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="gradeGroup.grade.gradeName"/>
+            </columns>
+            <rows datasource="talentProgramGradesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="talentProgramGradesTable.create"/>
+                <button id="editBtn"
+                        action="talentProgramGradesTable.edit"/>
+                <button id="removeBtn"
+                        action="talentProgramGradesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

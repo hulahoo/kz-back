@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://GradeRuleValue.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.graderulevalue.GradeRuleValueEdit"
+        datasource="gradeRuleValueDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="gradeRuleValueDs"
+                    class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"
+                    view="gradeRuleValue.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+
+        <grid spacing="true">
+            <columns>
+                <column/>
+            </columns>
+            <rows>
+                <row>
+                    <groupBox caption="msg://GradeRuleValue.mode" width="100%">
+                        <optionsGroup align="MIDDLE_CENTER" orientation="horizontal" id="mode"/>
+                    </groupBox>
+                </row>
+                <row>
+                    <fieldGroup id="fieldGroup"
+                                datasource="gradeRuleValueDs">
+                        <column width="300px">
+                            <field property="gradeRule" editable="false"/>
+                            <field property="value"/>
+                            <field property="min"/>
+                            <field property="mid"/>
+                            <field property="max"/>
+                            <field captionProperty="grade"
+                                   property="gradeGroup"/>
+                            <field editable="false"
+                                   property="startDate"/>
+                            <field editable="false"
+                                   property="endDate"/>
+                        </column>
+                    </fieldGroup>
+                </row>
+            </rows>
+        </grid>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.workplace.WorkPlaceBrowse"
+        focusComponent="workPlacesTable"
+        lookupComponent="workPlacesTable"
+        messagesPack="kz.uco.tsadv.web.workplace">
+    <dsContext>
+        <groupDatasource id="workPlacesDs"
+                         class="kz.uco.tsadv.entity.tb.WorkPlace"
+                         view="workPlace-view">
+            <query>
+                <![CDATA[select e from tsadv$WorkPlace e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="workPlacesTable">
+        <filter id="filter"
+                applyTo="workPlacesTable"
+                datasource="workPlacesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="workPlacesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="name"
+                        generator="generateNameCell"
+                        link="true"/>
+                <column id="organization.organization.organizationName"/>
+                <column id="job.job.jobName"/>
+            </columns>
+            <rows datasource="workPlacesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="workPlacesTable.create"/>
+                <button id="editBtn"
+                        action="workPlacesTable.edit"/>
+                <button id="removeBtn"
+                        action="workPlacesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,2 @@
+alter table TSADV_GOODS_ISSUE add constraint FK_TSADV_GOODS_ISSUE_GOODS foreign key (GOODS_ID) references TSADV_GOODS(ID);
+create index IDX_TSADV_GOODS_ISSUE_GOODS on TSADV_GOODS_ISSUE (GOODS_ID);

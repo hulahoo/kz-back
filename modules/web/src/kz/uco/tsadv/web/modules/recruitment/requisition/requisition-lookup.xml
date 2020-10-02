@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Requisition.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionLookup"
+        focusComponent="requisitionsTable"
+        lookupComponent="requisitionsTable">
+    <dsContext>
+        <groupDatasource id="requisitionsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                         view="requisition.view">
+            <query>
+                <![CDATA[select e
+  from tsadv$Requisition e
+ where e.requisitionType = :param$requisitionType
+   and e.id not in (select j.requisition.id 
+                      from tsadv$JobRequest j
+                     where j.candidatePersonGroup.id = :param$candidatePersonGroupId)]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="requisitionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="requisitionsTable"
+                datasource="requisitionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="requisitionsTable"
+                    width="100%">
+            <columns>
+                <column id="code"/>
+                <column id="requisitionType"/>
+                <column id="employmentType"/>
+                <column id="location"/>
+                <column id="organizationGroup"
+                        captionProperty="organizationGroup.organization.organizationName"/>
+                <column id="positionGroup"
+                        captionProperty="positionGroup.position.positionName"/>
+                <column id="jobGroup"
+                        captionProperty="jobGroup.job.jobName"/>
+                <column id="openedPositionsCount"/>
+                <column id="recruiterPersonGroup"
+                        captionProperty="recruiterPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="requisitionStatus"/>
+            </columns>
+            <rows datasource="requisitionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </groupTable>
+    </layout>
+</window>

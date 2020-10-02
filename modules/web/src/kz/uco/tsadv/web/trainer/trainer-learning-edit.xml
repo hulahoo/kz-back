@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.trainer.TrainerLearningEdit"
+        datasource="trainerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.trainer">
+    <dsContext>
+        <datasource id="trainerDs"
+                    class="kz.uco.tsadv.modules.performance.model.Trainer"
+                    view="trainer.edit">
+            <collectionDatasource id="courseTrainerDs"
+                                  property="courseTrainer"/>
+            <collectionDatasource id="courseTrainerAssessmentDs"
+                                  property="courseTrainerAssessment"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="trainerDs">
+            <column width="250px">
+                <field captionProperty="fullName"
+                       property="employee"/>
+                <field property="addPaymentAmount"/>
+                <field property="orderNumber"/>
+                <field property="orderDate"/>
+                <field captionProperty="name"
+                       property="party"/>
+            </column>
+        </fieldGroup>
+        <tabSheet id="tabSheet">
+            <tab id="personalInfoTab"
+                 caption="msg://tabSheet.personalInfoTab"
+                 margin="true,false,false,false"
+                 spacing="true"/>
+            <tab id="contactsTab"
+                 caption="msg://tabSheet.contactsTab"
+                 margin="true,false,false,false"
+                 spacing="true"/>
+            <tab id="coursesTab"
+                 caption="msg://tabSheet.coursesTab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="courseTrainerTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                        <column id="course"/>
+                    </columns>
+                    <rows datasource="courseTrainerDs"/>
+                    <buttonsPanel>
+                        <button action="courseTrainerTable.create"/>
+                        <button action="courseTrainerTable.edit"/>
+                        <button action="courseTrainerTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="assessmentsTab"
+                 caption="msg://tabSheet.assessmentsTab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="courseTrainerAssessmentTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="assessmentDate"/>
+                        <column id="score"/>
+                        <column id="course"/>
+                        <column id="assessor.fullName"/>
+                    </columns>
+                    <rows datasource="courseTrainerAssessmentDs"/>
+                    <buttonsPanel>
+                        <button action="courseTrainerAssessmentTable.create"/>
+                        <button action="courseTrainerAssessmentTable.edit"/>
+                        <button action="courseTrainerAssessmentTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

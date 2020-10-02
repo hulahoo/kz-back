@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Successor.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.successor.SuccessorpersonCard"
+        datasource="successorDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="successorDs"
+                    class="kz.uco.tsadv.modules.personal.model.Successor"
+                    view="successor-viewPersonCard"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="successorDs">
+            <column width="250px">
+                <field captionProperty="positionName"
+                       property="succession"
+                       caption="msg://positionName"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="readinessLevel"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

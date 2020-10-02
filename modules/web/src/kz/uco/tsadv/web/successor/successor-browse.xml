@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.successor.SuccessorBrowse"
+        focusComponent="successorsTable"
+        lookupComponent="successorsTable"
+        messagesPack="kz.uco.tsadv.web.successor">
+    <dsContext>
+        <groupDatasource id="successorsDs"
+                         class="kz.uco.tsadv.modules.personal.model.Successor"
+                         view="successor.browse">
+            <query>
+                <![CDATA[select e from tsadv$Successor e where :session$systemDate between e.startDate and e.endDate]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="successorsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="successorsTable"
+                datasource="successorsDs">
+            <properties include=".*"
+            exclude="succession"/>
+            <property name="succession" paramView="successionPlanning.browse"/>
+        </filter>
+        <groupTable id="successorsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="history"
+                        caption="msg://history"
+                        invoke="openHistory"
+                        trackSelection="true"/>
+                <action id="move"
+                        caption="msg://move"
+                        invoke="move"
+                        trackSelection="true"/>
+                <action id="IPR"
+                        caption="msg://ipr"
+                        invoke="ipr"
+                        trackSelection="true"/>
+            </actions>
+            <columns>
+                <column id="succession.positionGroup.fullName"
+                        caption="msg://succession"/>
+                <column id="personGroup.fullName"/>
+                <column id="readinessLevel"/>
+                <column id="startDate"/>
+                <column id="note"/>
+            </columns>
+            <rows datasource="successorsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="successorsTable.create"/>
+                <button id="historyBtn"
+                        action="successorsTable.history"/>
+                <button id="moveBtn"
+                        action="successorsTable.move"/>
+                <button id="iprBtn"
+                        action="successorsTable.IPR"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

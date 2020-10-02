@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.generatoremployeenumberdefiner.GeneratorEmployeeNumberDefinerBrowse"
+        focusComponent="generatorEmployeeNumberDefinersTable"
+        lookupComponent="generatorEmployeeNumberDefinersTable"
+        messagesPack="kz.uco.tsadv.web.generatoremployeenumberdefiner">
+    <dsContext>
+        <groupDatasource id="generatorEmployeeNumberDefinersDs"
+                         class="kz.uco.tsadv.entity.generator.GeneratorEmployeeNumberDefiner"
+                         view="generatorEmployeeNumberDefiner-view">
+            <query>
+                <![CDATA[select e from tsadv$GeneratorEmployeeNumberDefiner e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="generatorEmployeeNumberDefinersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="generatorEmployeeNumberDefinersTable"
+                datasource="generatorEmployeeNumberDefinersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="generatorEmployeeNumberDefinersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="generatorEmployeeNumber.name"/>
+                <column id="personType"/>
+            </columns>
+            <rows datasource="generatorEmployeeNumberDefinersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="generatorEmployeeNumberDefinersTable.create"/>
+                <button id="editBtn"
+                        action="generatorEmployeeNumberDefinersTable.edit"/>
+                <button id="removeBtn"
+                        action="generatorEmployeeNumberDefinersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

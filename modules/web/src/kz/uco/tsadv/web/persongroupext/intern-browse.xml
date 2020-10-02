@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://internBrowse"
+        class="kz.uco.tsadv.web.persongroupext.InternBrowse"
+        focusComponent="personGroupExtsTable"
+        lookupComponent="personGroupExtsTable"
+        messagesPack="kz.uco.tsadv.web.persongroupext">
+    <dsContext>
+        <collectionDatasource id="personExtsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                              view="personExt.for.intern.browse">
+            <query>
+                <![CDATA[select e from base$PersonExt e 
+where :session$systemDate between e.startDate and e.endDate 
+and e.type.code = 'INTERNSHIP']]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personGroupExtsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personGroupExtsTable"
+                datasource="personExtsDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="personGroupExtsTable"
+               width="100%">
+            <actions>
+                <action id="remove"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="fioWithEmployeeNumberWithSortSupported"
+                        generator="generatePersonFioWithEmployeeNumberCell"/>
+                <column id="nationalIdentifier"/>
+                <column id="organization"
+                        caption="msg://organization"/>
+                <column id="mentorField"
+                        caption="msg://mentor"/>
+            </columns>
+            <rows datasource="personExtsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createButtonId"
+                        caption="msg://create"
+                        invoke="createIntern"/>
+                <button id="editButtonId"
+                        caption="msg://edit"
+                        enable="false"
+                        invoke="EditIntern"/>
+                <button id="removeButtonId"
+                        caption="msg://remove"
+                        enable="false"
+                        invoke="deleteIntern"/>
+                <button id="goToInternship"
+                        caption="msg://practice"
+                        enable="false"
+                        invoke="goToInternship"/>
+                <button id="excel"
+                        action="personGroupExtsTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

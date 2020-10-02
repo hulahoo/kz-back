@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Person</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en">en</input>
+                <input type="radio" name="lang" value="ru" checked>ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Информация о пользователе.
+    </div>
+    <table>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getPersonInfo()" value="getUserPerson : person">
+            </td>
+        </tr>
+        <tr>
+            <td>Photo:</td>
+            <td>
+                <img id="photoImg" width="100px" height="auto"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="person"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Проверить заполненность профиля пользователя.
+    </div>
+    <table>
+        <tr>
+            <td>User id:</td>
+            <td>
+                <input id="checkFullProfileId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="checkFullProfile()" value="checkFullProfile">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="checkFullProfile"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<div class="method">
+    <div class="description">
+        Обновление информации о пользователе.
+    </div>
+    <table>
+        <tr>
+            <td>First name:</td>
+            <td>
+                <input type="text" id="firstName" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Last name:</td>
+            <td>
+                <input type="text" id="lastName" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Middle name:</td>
+            <td>
+                <input type="text" id="middleName">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Birth date:</td>
+            <td>
+                <input type="date" id="birthDate" required>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>National identifier:</td>
+            <td>
+                <input type="text" id="nationalIdentifier">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Sex:</td>
+            <td>
+                <select id="sex" required>
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Nationality:</td>
+            <td>
+                <select id="nationality">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Citizenship:</td>
+            <td>
+                <select id="citizenship">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Marital status:</td>
+            <td>
+                <select id="maritalStatus">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="updatePerson()" value="updatePerson">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="updateResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Загрузка фото.
+    </div>
+    <table>
+        <tr>
+            <td>Photo:</td>
+            <td>
+                <input type="file" id="photo" accept="image/*"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="uploadUserPhoto()" value="uploadUserPhoto">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="photo_upload"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var access_token;
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+
+                fillSelects();
+            });
+    }
+
+    function checkFullProfile() {
+        var data = {};
+        jQuery.extend(data, requestRequisitionModel);
+        var user = $('#checkFullProfileId').val();
+        $.ajax(config.appUrl + config.serviceUrl + "/checkFullProfile?user=" + user,
+            {
+                type: "GET"
+            })
+            .success(function (res) {
+                $("#checkFullProfile").text(res);
+            });
+    }
+
+    function fillSelects() {
+        var lang = $("input[name=lang]:checked").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/getSex?lang=" + lang,
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var sexes = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                sexes.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("sex").innerHTML = inner;
+            });
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getNationalities?lang=" + lang,
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var nationalities = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                nationalities.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("nationality").innerHTML = inner;
+            });
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getCitizenship?lang=" + lang,
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var citizenships = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                citizenships.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("citizenship").innerHTML = inner;
+            });
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getMaritalStatuses?lang=" + lang,
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var maritalStatuses = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                maritalStatuses.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("maritalStatus").innerHTML = inner;
+            });
+    }
+
+    function getPersonInfo() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUserPerson?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var personInfo = JSON.parse(res);
+
+                var photo = JSON.parse(res).photo;
+                $('#photoImg').attr('src', "data:image/;base64," + photo);
+
+                delete personInfo["photo"];
+                delete personInfo["attachments"];
+                delete personInfo["competences"];
+                delete personInfo["experience"];
+                delete personInfo["contacts"];
+                delete personInfo["education"];
+
+                $('#person').text(JSON.stringify(personInfo));
+            });
+    }
+
+    function updatePerson() {
+        var data = {};
+        jQuery.extend(data, personModel);
+        data.person.firstName = $("#firstName").val();
+        data.person.lastName = $("#lastName").val();
+        data.person.middleName = $("#middleName").val();
+        data.person.birthDate = $("#birthDate").val();
+        data.person.nationalIdentifier = $("#nationalIdentifier").val();
+        data.person.sex = $("#sex").val();
+        data.person.nationality = $("#nationality").val();
+        data.person.citizenship = $("#citizenship").val();
+        data.person.maritalStatus = $("#maritalStatus").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/updatePerson",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#updateResult").text(JSON.stringify(res));
+            });
+    }
+
+    function uploadUserPhoto() {
+        var data = {};
+        jQuery.extend(data, personPhotoModel);
+
+        var file = $("#photo").get(0).files[0];
+        var reader = new FileReader();
+        reader.readAsBinaryString(file);
+
+        reader.onload = function (e) {
+            data.person.photo = btoa(e.target.result);
+
+            $.ajax(config.appUrl + config.serviceUrl + "/uploadUserPhoto",
+                {
+                    type: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + access_token,
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify(data)
+                })
+                .success(function (res) {
+                    $("#photo_upload").text(JSON.stringify(res));
+                });
+        };
+    }
+
+    /*]>*/
+
+</script>
+</body>
+</html>

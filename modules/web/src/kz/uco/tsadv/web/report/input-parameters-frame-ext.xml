@@ -1,0 +1,5 @@
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.report.InputParametersFrameExt"
+        extends="com/haulmont/reports/gui/report/run/input-parameters-frame.xml">
+    <layout/>
+</window>

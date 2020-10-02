@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.trainingrequest.TrainingRequestBrowse"
+        focusComponent="trainingRequestsTable"
+        lookupComponent="trainingRequestsTable"
+        messagesPack="kz.uco.tsadv.web.trainingrequest">
+    <dsContext>
+        <groupDatasource id="trainingRequestsDs"
+                         class="kz.uco.tsadv.modules.learning.model.TrainingRequest"
+                         view="trainingRequest-view">
+            <query>
+                <![CDATA[select e from tsadv$TrainingRequest e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="trainingRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="trainingRequestsTable"
+                datasource="trainingRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="trainingRequestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="history"
+                        caption="msg://history"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="requestNumber"
+                        caption="msg://requestNumber"/>
+                <column id="budget"
+                        caption="msg://budget"/>
+                <column id="learningType"
+                        caption="msg://learningType"/>
+                <column id="course"
+                        caption="msg://course"/>
+                <column id="startDate"
+                        caption="msg://startDate"/>
+                <column id="endDate"
+                        caption="msg://endDate"/>
+                <column id="status"
+                        caption="msg://status"/>
+            </columns>
+            <rows datasource="trainingRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="trainingRequestsTable.create"/>
+                <button id="editBtn"
+                        action="trainingRequestsTable.edit"/>
+                <button id="removeBtn"
+                        action="trainingRequestsTable.remove"/>
+                <button id="historyButton"
+                        action="trainingRequestsTable.history"
+                        caption="msg://history"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

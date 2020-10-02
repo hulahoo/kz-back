@@ -1,0 +1,3 @@
+alter table TSADV_TIMECARD_DEVIATION add column CHANGES_WEEKENDS boolean ^
+update TSADV_TIMECARD_DEVIATION set CHANGES_WEEKENDS = false where CHANGES_WEEKENDS is null ;
+alter table TSADV_TIMECARD_DEVIATION alter column CHANGES_WEEKENDS set not null ;

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.buildings.BuildingsBrowse"
+        focusComponent="buildingsesTable"
+        lookupComponent="buildingsesTable"
+        messagesPack="kz.uco.tsadv.web.buildings">
+    <dsContext>
+        <groupDatasource id="buildingsesDs"
+                         class="kz.uco.tsadv.entity.tb.Buildings"
+                         view="buildings-view">
+            <query>
+                <![CDATA[select e from tsadv$Buildings e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="buildingsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="buildingsesTable"
+                datasource="buildingsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="buildingsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="name"
+                        generator="generateNameCell"
+                        link="true"/>
+                <column id="commissioning"/>
+                <column id="buildingVolume"/>
+                <column id="buildingArea"/>
+                <column id="totalArea"/>
+                <column id="technicalPassport"/>
+                <column id="buildingPassport"/>
+                <column id="technicalJournal"/>
+                <column id="inventoryNumber"/>
+                <column id="oldInventoryNumber"/>
+                <column id="organization"
+                        captionProperty="organization.organization.organizationName"/>
+            </columns>
+            <rows datasource="buildingsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="buildingsesTable.create"/>
+                <button id="editBtn"
+                        action="buildingsesTable.edit"/>
+                <button id="removeBtn"
+                        action="buildingsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

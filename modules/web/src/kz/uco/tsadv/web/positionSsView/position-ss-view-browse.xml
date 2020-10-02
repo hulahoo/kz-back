@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.positionSsView.PositionSsViewBrowse"
+        focusComponent="positionSsViewsTable"
+        lookupComponent="positionSsViewsTable"
+        messagesPack="kz.uco.tsadv.web.positionSsView">
+    <dsContext>
+        <groupDatasource id="positionSsViewsDs"
+                         class="kz.uco.tsadv.entity.dbview.PositionSsView"
+                         maxResults="20"
+                         view="positionSsView-view">
+            <query>
+                <![CDATA[select e from tsadv$PositionSsView e
+                where :param$date between e.startDate and e.endDate
+order by e.id]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="positionSsViewsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="positionSsViewsTable"
+                datasource="positionSsViewsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="positionSsViewsTable"
+                    width="100%">
+            <columns>
+                <column id="positionName"/>
+                <column id="organization" caption="mainMsg://Organization"
+                        generator="generateOrganizationCell"/>
+                <column id="grade" caption="mainMsg://Grade"
+                        generator="generateGradeCell"/>
+                <column id="fte"/>
+                <column id="costCenter"/>
+            </columns>
+            <rows datasource="positionSsViewsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

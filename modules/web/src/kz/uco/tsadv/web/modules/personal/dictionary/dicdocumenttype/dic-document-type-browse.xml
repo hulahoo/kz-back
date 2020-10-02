@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicDocumentType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicdocumenttype.DicDocumentTypeBrowse"
+        focusComponent="dicDocumentTypesTable"
+        lookupComponent="dicDocumentTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicdocumenttype">
+    <dsContext>
+        <groupDatasource id="dicDocumentTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicDocumentType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicDocumentType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicDocumentTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicDocumentTypesTable"
+                datasource="dicDocumentTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicDocumentTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicDocumentTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicDocumentTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicDocumentTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicDocumentTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

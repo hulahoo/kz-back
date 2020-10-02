@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CalibrationComission.editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.calibrationcomission.CalibrationComissionEdit"
+        datasource="calibrationComissionDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="calibrationComissionDs"
+                    class="kz.uco.tsadv.modules.performance.model.CalibrationComission"
+                    view="calibrationComission.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="calibrationComissionDs">
+            <column width="250px">
+                <field property="person"/>
+                <field property="calibrationSession"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

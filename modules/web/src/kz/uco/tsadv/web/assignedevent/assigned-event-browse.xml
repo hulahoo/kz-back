@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.assignedevent.AssignedEventBrowse"
+        focusComponent="assignedEventsTable"
+        lookupComponent="assignedEventsTable"
+        messagesPack="kz.uco.tsadv.web.assignedevent">
+    <dsContext>
+        <groupDatasource id="assignedEventsIgnoringSafetyDs"
+                         class="kz.uco.tsadv.entity.tb.AssignedEvent"
+                         view="assignedEvent-view">
+            <query>
+                <![CDATA[select e from tsadv$AssignedEvent e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assignedEventsTable"
+            height="100%"
+            spacing="true">
+        <filter id="filter"
+                applyTo="assignedEventsTable"
+                datasource="assignedEventsIgnoringSafetyDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="assignedEventsTable"
+                    multiselect="true"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="safetyEvent"/>
+                <column id="deadline"/>
+                <column id="assignment.personFioWithEmployeeNumber"
+                        caption="msg://assignment"/>
+                <column id="assigned.personFioWithEmployeeNumber"
+                        caption="msg://assigned"/>
+                <column id="status"/>
+                <column id="safetyPlanEvent.planName"/>
+                <column id="fact"/>
+                <column id="investmentPlan"/>
+                <column id="investmentFact"/>
+                <column id="budgetPlan"/>
+                <column id="budgetFact"/>
+                <column id="parentEvent.safetyEvent"
+                        caption="msg://parentEvent"/>
+                <column id="organization"
+                        captionProperty="organization.organization.organizationName"/>
+            </columns>
+            <rows datasource="assignedEventsIgnoringSafetyDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="assignedEventsTable.create"/>
+                <button id="editBtn"
+                        action="assignedEventsTable.edit"/>
+                <button id="removeBtn"
+                        action="assignedEventsTable.remove"/>
+                <popupButton id="duplicate"
+                             caption="msg://duplicate.by">
+                    <actions>
+                        <action id="month"
+                                caption="msg://month"
+                                invoke="duplicateByMonth"/>
+                        <action id="quarter"
+                                caption="msg://quarter"
+                                invoke="duplicateByQuarter"/>
+                        <action id="halfYear"
+                                caption="msg://halfYear"
+                                invoke="duplicateByHalfYear"/>
+                    </actions>
+                </popupButton>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

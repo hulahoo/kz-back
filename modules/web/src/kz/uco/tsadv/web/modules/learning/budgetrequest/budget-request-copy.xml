@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BudgetRequest.copyCaption"
+        class="kz.uco.tsadv.web.modules.learning.budgetrequest.BudgetRequestCopy"
+        datasource="budgetRequestsDs">
+    <dsContext>
+        <collectionDatasource id="budgetRequestsDs"
+                              allowCommit="true"
+                              class="kz.uco.tsadv.modules.learning.model.BudgetRequest"
+                              refreshMode="NEVER"
+                              view="budgetRequest.view"/>
+    </dsContext>
+    <layout expand="split"
+            spacing="true">
+        <split id="split"
+               width="100%">
+            <flowBox height="100%"
+                     spacing="true"
+                     width="100%">
+                <label align="TOP_LEFT"
+                       value="msg://BudgetRequest.selectBudget"
+                       width="AUTO"/>
+                <pickerField id="budget"
+                             metaClass="tsadv$Budget"
+                             width="250px">
+                    <actions>
+                        <action id="lookup"/>
+                    </actions>
+                </pickerField>
+                <button id="copy"
+                        caption="msg://BudgetRequest.copyPreviousBudget"
+                        icon="icons/copy.png"
+                        invoke="copy"/>
+            </flowBox>
+            <groupBox caption="msg://BudgetRequest.browseCaption"
+                      height="100%"
+                      width="100%">
+                <table id="budgetRequestsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="budget"/>
+                        <column id="calcCourseName"/>
+                        <column id="learningType"/>
+                        <column id="employeesCount"/>
+                        <column id="month">
+                            <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                                       format="MM.yyyy"/>
+                        </column>
+                        <column id="learningCosts"/>
+                        <column id="tripCosts"/>
+                        <column id="providerCompany"/>
+                        <column id="comment"
+                                maxTextLength="40"/>
+                        <column id="initiatorPersonGroup"
+                                captionProperty="initiatorPersonGroup.personFioWithEmployeeNumber"/>
+                        <column id="status"/>
+                        <column id="organizationGroup"/>
+                    </columns>
+                    <rows datasource="budgetRequestsDs"/>
+                    <buttonsPanel>
+                        <button action="budgetRequestsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </split>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

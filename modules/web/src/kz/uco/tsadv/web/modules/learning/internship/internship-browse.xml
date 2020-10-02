@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.internship.InternshipBrowse"
+        focusComponent="internshipsTable"
+        lookupComponent="internshipsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.internship">
+    <dsContext>
+        <groupDatasource id="internshipsDs"
+                         class="kz.uco.tsadv.modules.learning.model.Internship"
+                         view="internship.edit">
+            <query>
+                <![CDATA[select e from tsadv$Internship e where e.personGroup.id=:param$personGroupExt]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="internshipsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="internshipsTable"
+                datasource="internshipsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="internshipsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="internshipType"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="mainMentor.personFioWithEmployeeNumber"/>
+                <column id="payable"/>
+            </columns>
+            <rows datasource="internshipsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="internshipsTable.create"/>
+                <button id="editBtn"
+                        action="internshipsTable.edit"/>
+                <button id="removeButtonId"
+                        action="internshipsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

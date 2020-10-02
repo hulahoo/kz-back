@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personmedal.PersonMedalEdit"
+        datasource="personMedalDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personmedal">
+    <dsContext>
+        <datasource id="personMedalDs"
+                    class="kz.uco.tsadv.modules.recognition.PersonMedal"
+                    view="personMedal.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personMedalDs">
+            <column width="250px">
+                <field property="personGroup" captionProperty="fullName"/>
+                <field property="medal" captionProperty="langName"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

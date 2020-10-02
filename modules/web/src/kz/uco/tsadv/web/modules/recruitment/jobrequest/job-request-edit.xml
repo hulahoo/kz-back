@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://JobRequest.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.jobrequest.JobRequestEdit"
+        datasource="jobRequestDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="jobRequestDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                    view="jobRequest.view"/>
+        <collectionDatasource id="jobRequestHistoryDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequestHistory"
+                              view="jobRequestHistory.view">
+            <query>
+                <![CDATA[select e from tsadv$JobRequestHistory e where e.jobRequest.id = :ds$jobRequestDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="sourcesDs"
+                              class="kz.uco.tsadv.modules.recruitment.dictionary.DicSource"
+                              view="source-view">
+            <query>
+                <![CDATA[select e from tsadv$DicSource e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="400"
+                width="600"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="mainInfo" caption="msg://mainInfo">
+                <vbox height="100%" margin="true,false,false,false">
+                    <fieldGroup id="fieldGroup"
+                                datasource="jobRequestDs">
+                        <column width="250px">
+                            <field id="requisition"
+                                   captionProperty="code"
+                                   property="requisition"/>
+                            <field id="candidatePersonGroup"
+                                   captionProperty="person"
+                                   property="candidatePersonGroup"/>
+                            <field id="requestDate"
+                                   property="requestDate"/>
+                            <field id="requestStatus"
+                                   editable="false"
+                                   property="requestStatus"/>
+                            <field id="jobRequestReason" property="jobRequestReason"/>
+                            <field id="reason"
+                                   property="reason"
+                                   rows="3"/>
+                            <field id="videoFile"
+                                   property="videoFile"/>
+                            <field id="source"
+                                   optionsDatasource="sourcesDs"
+                                   property="source"/>
+                            <field id="otherSource"
+                                   property="otherSource"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </tab>
+            <tab id="history" caption="msg://JobRequest.history">
+                <vbox height="100%" margin="true,false,false,false">
+                    <table id="historyTable"
+                           height="100%"
+                           width="100%">
+                        <columns>
+                            <column id="jobRequestStatus"
+                                    caption="msg://JobRequest.requestStatus"/>
+                            <column id="createTs"/>
+                            <column id="createdBy"
+                                    caption="msg://JobRequest.history.changeBy"/>
+                        </columns>
+                        <rows datasource="jobRequestHistoryDs"/>
+                    </table>
+                </vbox>
+            </tab>
+        </tabSheet>
+
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

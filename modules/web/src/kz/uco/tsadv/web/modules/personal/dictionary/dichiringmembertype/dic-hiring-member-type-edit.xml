@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicHiringMemberType.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dichiringmembertype.DicHiringMemberTypeEdit"
+        datasource="dicHiringMemberTypeDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="dicHiringMemberTypeDs"
+                    class="kz.uco.tsadv.modules.recruitment.dictionary.DicHiringMemberType"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="dicHiringMemberTypeDs">
+            <column width="250px">
+                <field property="langValue1"/>
+                <field property="langValue2"/>
+                <field property="langValue3"/>
+                <field property="langValue4"/>
+                <field property="langValue5"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="code"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonExperience.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.personexperience.PersonExperienceEdit"
+        datasource="personExperienceDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="personExperienceDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.PersonExperience"
+                    view="personExperience.view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personExperienceDs">
+            <column width="250px">
+                <field property="company"/>
+                <field property="job"/>
+                <field property="startMonth"/>
+                <field id="untilNow" property="untilNow"/>
+                <field id="endMonth"
+                       property="endMonth"/>
+                <field property="description"
+                       rows="3"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

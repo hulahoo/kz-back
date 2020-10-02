@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Interview.browse.tablet"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewBrowseTablet">
+    <dsContext>
+        <groupDatasource id="interviewsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                         view="interview.view">
+            <query>
+                <![CDATA[select e
+                                from tsadv$Interview e
+                                join e.jobRequest jr
+                                join jr.candidatePersonGroup pg
+                                join pg.list p
+                                join jr.requisition r
+                                join e.requisitionHiringStep rhs
+                                left join e.mainInterviewerPersonGroup ipg
+                                left join ipg.list ip
+                                where e.isScheduled = false
+                                and :session$systemDate between p.startDate and p.endDate
+                                and e.mainInterviewerPersonGroup.id = :session$userPersonGroupId
+                                and e.interviewStatus = 30]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="questionnairesDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.InterviewQuestionnaire"
+                              view="interviewQuestionnaire.view">
+            <query>
+                <![CDATA[select e from tsadv$InterviewQuestionnaire e where e.interview.id = :ds$interviewsDs]]>
+            </query>
+            <collectionDatasource id="questionsDs"
+                                  property="questions">
+                <collectionDatasource id="answersDs"
+                                      property="answers"/>
+            </collectionDatasource>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="interviewsTable"
+            responsive="true"
+            spacing="true">
+        <groupBox caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+
+        <groupTable id="interviewsTable"
+                    width="100%">
+            <columns>
+                <column id="jobRequest.requisition"
+                        captionProperty="jobRequest.requisition.code"/>
+                <column id="jobRequest.candidatePersonGroup"
+                        captionProperty="jobRequest.candidatePersonGroup.person.fullName"/>
+                <column id="requisitionHiringStep"
+                        captionProperty="requisitionHiringStep.hiringStep.stepName"/>
+                <column id="interviewDate"/>
+                <column id="timeFrom"/>
+                <column id="timeTo"/>
+                <column id="place" captionProperty="place.addressLangValue"
+                        maxTextLength="30"/>
+                <column id="interviewReason"/>
+                <column id="reason"
+                        maxTextLength="30"/>
+            </columns>
+            <rows datasource="interviewsDs"/>
+            <rowsCount/>
+            <buttonsPanel>
+                <button id="personCardBtn" invoke="personCard" caption="msg://Interview.candidate.card"/>
+                <button id="startInterviewBtn" invoke="startInterview" caption="msg://Interview.browse.btn.start"/>
+                <button id="completeInterviewBtn" invoke="completeInterview"
+                        caption="msg://Interview.browse.complete"/>
+                <button id="failInterviewBtn" invoke="failInterview"
+                        caption="msg://Interview.browse.complete.n"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

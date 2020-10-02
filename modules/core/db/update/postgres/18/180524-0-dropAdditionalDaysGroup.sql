@@ -1,0 +1,1 @@
+alter table tsadv_additional_days_group rename to tsadv_additional_days_group__u58612 ;

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionBrowseSelf"
+        extends="/kz/uco/tsadv/web/modules/recruitment/requisition/requisition-browse.xml">
+    <layout/>
+</window>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.personquestionnaire.PersonQuestionnaireEstimate"
+        datasource="personQuestionnaireDs"
+        messagesPack="kz.uco.tsadv.web.personquestionnaire">
+    <dsContext>
+        <datasource id="personQuestionnaireDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonQuestionnaire"
+                    view="personQuestionnaire.estimate">
+            <groupDatasource id="personQuestionnaireAnswerDs"
+                                  property="personQuestionnaireAnswer"/>
+            <datasource id="questionnaireDs"
+                        property="questionnaire">
+                <collectionDatasource id="questionDs"
+                                      allowCommit="false"
+                                      property="question">
+                    <collectionDatasource id="answerDs"
+                                          allowCommit="false"
+                                          property="answer"/>
+                </collectionDatasource>
+            </datasource>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personQuestionnaireAnswerTable"
+            spacing="true">
+        <textArea width="100%" rows="3" datasource="questionnaireDs" property="description"/>
+        <groupTable id="personQuestionnaireAnswerTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <group>
+                    <column id="question.section"/>
+                </group>
+                <column id="question.order"/>
+                <column id="question.questionText"/>
+                <column id="generatedAnswer"
+                        caption="msg://answer"
+                        generator="generateAnswer"/>
+            </columns>
+            <rows datasource="personQuestionnaireAnswerDs"/>
+        </groupTable>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

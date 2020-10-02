@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Person address CRUD</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en">en</input>
+                <input type="radio" name="lang" value="ru" checked>ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="ppetrov">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        Заполнение города
+    </div>
+    <table>
+        <tr>
+            <td>
+                ID города
+            </td>
+            <td>
+                <input type="text" id="city" value="">
+            </td>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="addAddress()" value="addAdress">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="createResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список адресов
+    </div>
+    <table>
+        <!--   <tr>
+               <td>Address ID</td>
+               <td>
+                   <input type="text" id="addressId" value="46229e8e-5b40-8491-d525-ce2f685365c3">
+               </td>
+           </tr>-->
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="reqs_lang" value="en" checked>en</input>
+                <input type="radio" name="reqs_lang" value="ru">ru</input>
+                <input type="radio" name="reqs_lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getAddress()" value="getCities">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="cityies"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Тип адресов
+    </div>
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en" checked>en</input>
+                <input type="radio" name="lang" value="ru">ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="getAddressType()" value="getTypeAddresses">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="typeAddress"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        Удалить адресс
+    </div>
+    <table>
+        <tr>
+            <td>
+                Aдрес  ID
+            </td>
+            <td>
+                <input type="text" id="addressId" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="deleteAddress()" value="deleteAddress">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="deleteAddress"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Обновить город
+    </div>
+    <table>
+        <tr>
+            <td>
+                ID города
+            </td>
+            <td>
+                <input type="text" id="updateCityId" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                адрес ID
+            </td>
+            <td>
+                <input type="text" id="updateAddressId" value="">
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <input type="button" onclick="updateAddress()" value="updateCityName">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="updateLabel"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<script type="text/javascript">
+    var access_token;
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+
+            });
+    }
+
+
+    function addAddress() {
+        $.ajax(config.appUrl + config.serviceUrl + "/addAddress?addressInt=" + $('#city').val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+//                contentType: "application/json",
+//                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#createResult").text(res);
+            });
+    }
+
+    function getAddress() {
+        /* var city = $('input[name=reqs_city]:checked').map(function () {
+         return this.value;
+         }).get().join(",");*/
+//        addressId=" + $('#addressId').val() + "&
+        $.ajax(config.appUrl + config.serviceUrl + "/getAddress?lang=" + $('#reqs_lang').val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#cityies").text(res);
+            });
+    }
+
+    function getAddressType() {
+        var lang = $("input[name=lang]:checked").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/getAddressType?lang=" + lang,
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#typeAddress").text(res);
+            });
+    }
+    function deleteAddress() {
+        var data =  {};
+        jQuery.extend(data, updateDeleteModel);
+
+        data.id = $("#addressId").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/deleteAddress",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#deleteAddress").text(JSON.stringify(res));
+            });
+    }
+    function updateAddress() {
+        var data = {};
+        jQuery.extend(data, personAddressModel);
+
+        data.addressInt.city = $("#updateCityId").val();
+        data.addressInt.id = $("#updateAddressId").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/updateAddress",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#updateLabel").text(JSON.stringify(res));
+            });
+    }
+</script>
+</body>
+</html>

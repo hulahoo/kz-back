@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.feedback.rcgfeedbackcomment.RcgFeedbackCommentEdit"
+        datasource="rcgFeedbackCommentDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.feedback.rcgfeedbackcomment">
+    <dsContext>
+        <datasource id="rcgFeedbackCommentDs"
+                    class="kz.uco.tsadv.modules.recognition.feedback.RcgFeedbackComment"
+                    view="rcgFeedbackComment.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="rcgFeedbackCommentDs"
+                    width="100%">
+            <column width="100%" fieldCaptionWidth="160px">
+                <field property="author" captionProperty="fullName"/>
+            </column>
+        </fieldGroup>
+
+        <fieldGroup datasource="rcgFeedbackCommentDs" border="visible"
+                    width="100%">
+            <column width="100%" fieldCaptionWidth="150px">
+                <field property="text" rows="2"/>
+                <field property="textEn" rows="2"/>
+                <field property="textRu" rows="2"/>
+            </column>
+        </fieldGroup>
+
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

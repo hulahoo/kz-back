@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CourseSectionSession.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursesectionsession.CourseSectionSessionEdit"
+        datasource="courseSectionSessionDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="courseSectionSessionDs"
+                    class="kz.uco.tsadv.modules.learning.model.CourseSectionSession"
+                    view="courseSectionSession.browse"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="courseSectionSessionDs">
+            <column width="250px">
+                <field property="name"/>
+                <field property="learningCenter"/>
+                <field property="maxPerson"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="trainer"/>
+                <field property="courseSection"
+                       visible="false"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

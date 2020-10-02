@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Course.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.course.CourseEdit"
+        datasource="courseDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="courseDs"
+                    class="kz.uco.tsadv.modules.learning.model.Course"
+                    view="course.edit.new">
+            <collectionDatasource id="sectionsDs"
+                                  property="sections">
+                <collectionDatasource id="sessionsDs"
+                                      property="session"/>
+            </collectionDatasource>
+            <collectionDatasource id="competencesDs"
+                                  property="competences"/>
+            <collectionDatasource id="preRequisitionDs"
+                                  property="preRequisition"/>
+            <collectionDatasource id="feedbackTemplatesDs"
+                                  property="feedbackTemplates"/>
+        </datasource>
+        <collectionDatasource id="dicLearningTypesDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicLearningType"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicLearningType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="mainInfo"
+                 caption="msg://mainInfo"
+                 margin="true,true,true,false">
+                <scrollBox id="scrollBox"
+                           height="100%"
+                           spacing="true">
+                    <hbox margin="false,false,true,false">
+                        <label value="mainMsg://Logo"
+                               width="100px"/>
+                        <embedded id="courseImage"
+                                  align="MIDDLE_CENTER"
+                                  height="100px"
+                                  stylename="b-user-image-edit"
+                                  width="100px"/>
+                        <upload id="imageUpload"
+                                accept="*.jpg,*.png"
+                                align="MIDDLE_CENTER"
+                                clearButtonIcon="icons/item-remove.png"
+                                fileSizeLimit="1024000"
+                                showClearButton="true"
+                                uploadButtonIcon="icons/reports-template-upload.png"/>
+                    </hbox>
+                    <fieldGroup id="fieldGroup"
+                                datasource="courseDs">
+                        <column width="250px">
+                            <field id="name" property="name"/>
+                            <field property="party"/>
+                            <field property="category"/>
+                            <field property="targetAudience"/>
+                            <field caption="msg://learningType"
+                                   optionsDatasource="dicLearningTypesDs"
+                                   property="learningType"/>
+                            <field property="activeFlag"/>
+                            <field property="selfEnrollment"
+                                   required="true"/>
+                            <field id="shortDescription" property="shortDescription"
+                                   rows="5"/>
+                        </column>
+                    </fieldGroup>
+                </scrollBox>
+            </tab>
+            <tab id="sections"
+                 caption="msg://Course.sections"
+                 margin="true,true,true,false">
+                <table id="sectionsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="excel"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="sectionName"/>
+                        <column id="format.langValue"
+                                caption="msg://CourseSection.format"/>
+                        <column id="order"/>
+                        <column id="mandatory"/>
+                    </columns>
+                    <rows datasource="sectionsDs"/>
+                    <buttonsPanel id="sectionButtonsPanel"
+                                  alwaysVisible="true">
+                        <button action="sectionsTable.create"/>
+                        <button action="sectionsTable.edit"/>
+                        <button action="sectionsTable.remove"/>
+                        <button action="sectionsTable.excel"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="preRequisitions"
+                 caption="msg://Course.preRequisition"
+                 margin="true,true,true,false">
+                <table id="preRequisitionTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="selectPreRequisition"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="excel"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="requisitionCourse.name"/>
+                        <column id="requisitionCourse.category.langValue"/>
+                    </columns>
+                    <rows datasource="preRequisitionDs"/>
+                    <buttonsPanel id="preRequisitionButtonsPanel">
+                        <button action="preRequisitionTable.selectPreRequisition"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <button action="preRequisitionTable.remove"/>
+                        <button action="preRequisitionTable.excel"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="competences"
+                 caption="msg://Course.competences"
+                 margin="true,true,true,false">
+                <table id="competencesTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="excel"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="competenceGroup.competence.competenceName"/>
+                        <column id="scaleLevel"/>
+                    </columns>
+                    <rows datasource="competencesDs"/>
+                    <buttonsPanel id="competenceButtonsPanel">
+                        <button action="competencesTable.create"/>
+                        <button action="competencesTable.edit"/>
+                        <button action="competencesTable.remove"/>
+                        <button action="competencesTable.excel"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="description"
+                 caption="msg://Course.description"
+                 margin="true,true,true,false">
+                <richTextArea id="richTextArea"
+                              datasource="courseDs"
+                              height="100%"
+                              property="description"
+                              width="100%"/>
+            </tab>
+            <tab id="templates"
+                 caption="msg://kz.uco.tsadv.modules.learning.model/Course.feedbackTemplates"
+                 expand="feedbackTemplatesTable"
+                 margin="true,true,true,false">
+                <table id="feedbackTemplatesTable"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="feedbackTemplate.name"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="feedbackTemplatesDs"/>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button action="feedbackTemplatesTable.create"/>
+                        <button action="feedbackTemplatesTable.edit"/>
+                        <button action="feedbackTemplatesTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

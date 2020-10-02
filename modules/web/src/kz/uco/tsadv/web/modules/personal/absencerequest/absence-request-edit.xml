@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://AbsenceRequest.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.absencerequest.AbsenceRequestEdit"
+        datasource="absenceRequestDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="absenceRequestDs"
+                    class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
+                    view="absenceRequest.view"/>
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e
+                          where e.procInstance.entity.entityId = :ds$absenceRequestDs
+                       order by e.startDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicAbsenceTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
+                              view="dicAbsenceType.view">
+            <query>
+                <![CDATA[select e from tsadv$DicAbsenceType e
+where e.useInSelfService = 'TRUE'
+order by e.order desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="bpmRequestMessagesDs"
+                              class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
+                              view="bpmRequestMessage-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmRequestMessage e
+                    where e.entityId = :ds$absenceRequestDs
+                           and ( e.assignedUser.userExt.id = :session$user or e.assignedBy.userExt.id = :session$user )
+                    order by e.sendDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   scrollBars="both"
+                   spacing="true">
+            <groupBox id="fieldGroupGroupBox"
+                      spacing="true"
+                      width="1000px">
+                <fieldGroup id="fieldGroup"
+                            datasource="absenceRequestDs"
+                            fieldCaptionWidth="200px">
+                    <column width="750px">
+                        <field editable="false"
+                               property="requestNumber"/>
+                        <field editable="false"
+                               property="status"/>
+                        <field optionsDatasource="dicAbsenceTypesDs"
+                               property="type"
+                               required="true"/>
+                        <field property="dateFrom"
+                               required="true"/>
+                        <field property="dateTo"
+                               required="true"/>
+                        <field editable="false"
+                               property="absenceDays"/>
+                        <field id="vacationDurationType"
+                               caption="msg://vacationDurationType">
+                            <textField id="vacationDurationTypeLbl"
+                                       editable="false"/>
+                        </field>
+                        <field editable="false"
+                               property="requestDate"/>
+                        <field caption="msg://attachment"
+                               property="attachment"/>
+                    </column>
+                </fieldGroup>
+                <fieldGroup id="fieldGroup2"
+                            datasource="absenceRequestDs"
+                            fieldCaptionWidth="200px"
+                            width="100%">
+                    <column width="100%">
+                        <field id="comment"
+                               property="comment"
+                               rows="5"/>
+                    </column>
+                </fieldGroup>
+                <hbox id="distanceWorkingConfirmBox"
+                      expand="distanceWorkingConfirmLabel"
+                      height="100%"
+                      width="100%">
+                    <checkBox id="distanceWorkingConfirm"
+                              datasource="absenceRequestDs"
+                              property="distanceWorkingConfirm"/>
+                    <label id="distanceWorkingConfirmLabel"
+                           stylename="label-color-red"
+                           value="msg://kz.uco.tsadv.modules.personal.model/AbsenceRequest.distanceWorkingConfirm"/>
+                </hbox>
+            </groupBox>
+
+            <vbox id="bpmActorsVBox"
+                  width="1000px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           width="100%">
+                        <columns>
+                            <column id="locName"
+                                    caption="msg://ProcActor.role"/>
+                            <column id="procActor.user"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="locOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                            <column id="comment"
+                                    maxTextLength="50"/>
+                        </columns>
+                        <rows datasource="procTasksDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+            <groupBox id="askQuestion"
+                      caption="Вопросы и ответы"
+                      spacing="true"/>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button id="buttonCancelId"
+                    caption="msg://cancel"
+                    invoke="closeButton"/>
+            <button id="askQuestionBtn"
+                    caption="mainMsg://askQuestion"
+                    invoke="onAskQuestion"/>
+            <frame id="procActionsFrame"
+                   screen="procActionsFrame"
+                   width="AUTO"/>
+        </hbox>
+    </layout>
+</window>

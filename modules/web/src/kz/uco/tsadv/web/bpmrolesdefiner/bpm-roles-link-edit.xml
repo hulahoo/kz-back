@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.bpmrolesdefiner.BpmRolesLinkEdit"
+        datasource="bpmRolesLinkDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.bpmroleslink">
+    <dsContext>
+        <datasource id="bpmRolesLinkDs"
+                    class="kz.uco.tsadv.modules.bpm.BpmRolesLink"
+                    view="bpmRolesLink-view"/>
+        <collectionDatasource id="bpmRolesDs"
+                              class="com.haulmont.bpm.entity.ProcRole"
+                              view="procRole-with-definition">
+            <query>
+                <![CDATA[select e from bpm$ProcRole e 
+where e.procDefinition.model.id = coalesce(:ds$bpmRolesLinkDs.bpmRolesDefiner.procModel.id, :ds$bpmRolesLinkDs.positionBpmRole.procModel.id)
+      and e.procDefinition.active = 'TRUE'
+      and e.procDefinition.createTs = ( select max(pd.createTs) from bpm$ProcDefinition pd
+                                               where pd.model.id =
+                                               coalesce(:ds$bpmRolesLinkDs.bpmRolesDefiner.procModel.id, :ds$bpmRolesLinkDs.positionBpmRole.procModel.id)
+                                               and pd.active = 'TRUE')
+ order by e.order]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="bpmRolesLinkDs">
+            <column width="250px">
+                <field captionProperty="locName"
+                       optionsDatasource="bpmRolesDs"
+                       property="bpmRole"/>
+                <field property="hrRole"/>
+                <field property="required"/>
+                <field property="findByCounter"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

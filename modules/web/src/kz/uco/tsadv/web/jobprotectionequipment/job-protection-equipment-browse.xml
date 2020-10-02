@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.jobprotectionequipment.JobProtectionEquipmentBrowse"
+        focusComponent="jobGroupGroupTable"
+        lookupComponent="jobGroupGroupTable"
+        messagesPack="kz.uco.tsadv.web.jobprotectionequipment">
+    <dsContext>
+        <groupDatasource id="jobGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                         view="jobGroup.browse">
+            <query>
+                <![CDATA[select distinct e.jobGroup from tsadv$JobProtectionEquipment e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobGroupGroupTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="jobGroupGroupTable"
+                datasource="jobGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="jobGroupGroupTable"
+                    width="100%">
+            <columns>
+                <column id="jobName" caption="mainMsg://menu-config.hrJobs"
+                        captionProperty="jobName"/>
+            </columns>
+            <rows datasource="jobGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        caption="mainMsg://table.btn.create"
+                        invoke="customCreate"/>
+                <button id="removeBtn"
+                        caption="msg://table.btn.remove"/>
+                <button id="siz"
+                        caption="msg://siz"
+                        invoke="goToSiz"
+                        enable="false"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

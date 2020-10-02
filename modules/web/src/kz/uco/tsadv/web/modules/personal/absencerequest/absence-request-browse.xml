@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://AbsenceRequest.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.absencerequest.AbsenceRequestBrowse"
+        focusComponent="absenceRequestsTable"
+        lookupComponent="absenceRequestsTable">
+    <dsContext>
+        <groupDatasource id="absenceRequestsDs"
+                         class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
+                         view="absenceRequest.view">
+            <query>
+                <![CDATA[select e
+                    from tsadv$AbsenceRequest e
+                    join base$AssignmentExt s
+                        on s.group.id = e.assignmentGroup.id
+                    where s.personGroup.id = :session$userPersonGroupId
+                        and :session$systemDate between s.startDate and s.endDate
+                    order by e.dateFrom]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="absenceRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="absenceRequestsTable"
+                datasource="absenceRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="absenceRequestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="type"/>
+                <column id="requestDate"/>
+                <column id="dateFrom"/>
+                <column id="dateTo"/>
+                <column id="absenceDays"/>
+                <column id="status"/>
+                <column id="attachment"
+                        caption="msg://attachment"/>
+            </columns>
+            <rows datasource="absenceRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="absenceRequestsTable.create"/>
+                <button id="editBtn"
+                        action="absenceRequestsTable.edit"/>
+                <button id="removeBtn"
+                        action="absenceRequestsTable.remove"/>
+                <button id="balanceAbsenceBtn"
+                        caption="msg://balanceAbsenceBtn"
+                        invoke="onBalanceAbsenceBtnClick"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

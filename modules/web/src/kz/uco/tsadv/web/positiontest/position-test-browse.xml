@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.positiontest.PositionTestBrowse"
+        focusComponent="positionTestsTable"
+        lookupComponent="positionTestsTable"
+        messagesPack="kz.uco.tsadv.web.positiontest">
+    <dsContext>
+        <groupDatasource id="positionTestsDs"
+                         class="kz.uco.tsadv.modules.learning.model.PositionTest"
+                         view="positionTest.edit">
+            <query>
+                <![CDATA[select e from tsadv$PositionTest e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="positionTestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="positionTestsTable"
+                datasource="positionTestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="positionTestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="positionGroup"/>
+                <column id="purpose"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="positionTestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="positionTestsTable.create"/>
+                <button id="editBtn"
+                        action="positionTestsTable.edit"/>
+                <button id="removeBtn"
+                        action="positionTestsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

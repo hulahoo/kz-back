@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicattestationtype.DicAttestationTypeBrowse"
+        focusComponent="dicAttestationTypesTable"
+        lookupComponent="dicAttestationTypesTable"
+        messagesPack="kz.uco.tsadv.web.dicattestationtype">
+    <dsContext>
+        <groupDatasource id="dicAttestationTypesDs"
+                         class="kz.uco.tsadv.modules.learning.dictionary.DicAttestationType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAttestationType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAttestationTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAttestationTypesTable"
+                datasource="dicAttestationTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAttestationTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="legacyID"/>
+                <column id="isSystemRecord"/>
+            </columns>
+            <rows datasource="dicAttestationTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAttestationTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicAttestationTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAttestationTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

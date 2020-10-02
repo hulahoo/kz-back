@@ -1,0 +1,4 @@
+alter table TSADV_GOODS_IMAGE add constraint FK_TSADV_GOODS_IMAGE_GOOD foreign key (GOOD_ID) references TSADV_GOODS(ID);
+alter table TSADV_GOODS_IMAGE add constraint FK_TSADV_GOODS_IMAGE_IMAGE foreign key (IMAGE_ID) references SYS_FILE(ID);
+create index IDX_TSADV_GOODS_IMAGE_GOOD on TSADV_GOODS_IMAGE (GOOD_ID);
+create index IDX_TSADV_GOODS_IMAGE_IMAGE on TSADV_GOODS_IMAGE (IMAGE_ID);

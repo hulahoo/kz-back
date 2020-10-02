@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.attestation.OrganizationGroupExtBrowse"
+        focusComponent="organizationGroupExtsTable"
+        lookupComponent="organizationGroupExtsTable"
+        messagesPack="kz.uco.tsadv.web.attestation">
+    <dsContext>
+        <groupDatasource id="organizationGroupExtsDs"
+                         class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                         view="organizationGroupExt.for.attestation.lookup">
+            <query>
+                <![CDATA[select e from base$OrganizationGroupExt e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="organizationGroupExtsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="organizationGroupExtsTable"
+                datasource="organizationGroupExtsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="organizationGroupExtsTable"
+                    width="100%" settingsEnabled="false">
+            <columns>
+                <column id="organizationName"/>
+            </columns>
+            <rows datasource="organizationGroupExtsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </groupTable>
+    </layout>
+</window>

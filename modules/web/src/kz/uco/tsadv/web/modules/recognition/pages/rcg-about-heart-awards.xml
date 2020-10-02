@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgAboutHeartAwards"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+
+    <dialogMode height="600px"
+                width="50%"/>
+
+    <layout width="100%" height="100%"
+            expand="vBox" spacing="true"
+            stylename="rcg-about-heart-awards-window">
+        <vbox id="vBox" expand="content" width="100%">
+            <image align="MIDDLE_CENTER" width="80px" height="AUTO" scaleMode="CONTAIN"
+                   stylename="rcg-about-heart-awards-key">
+                <theme path="images/recognition/about-ha.png"/>
+            </image>
+            <label id="content" width="100%" htmlEnabled="true"/>
+        </vbox>
+    </layout>
+</window>

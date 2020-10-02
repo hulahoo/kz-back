@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfAssessment"
+        xmlns:chart="http://schemas.haulmont.com/charts/charts.xsd"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <table id="assessmentTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/excel.png"/>
+            </actions>
+            <columns>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="performance"/>
+                <column id="potential"/>
+                <column id="riskOfLoss"/>
+                <column id="impactOfLoss"/>
+                <column id="assessmentName"/>
+                <column id="formattedOveralRating"
+                        caption="msg://AssessmentPersons.overallRating"/>
+                <column id="formattedCompetenceRating"
+                        caption="msg://AssessmentPersons.competenceRating"/>
+                <column id="formattedGoalRating"
+                        caption="msg://AssessmentPersons.goalRating"/>
+            </columns>
+            <rows datasource="assessmentsDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button action="assessmentTable.create"/>
+                <button action="assessmentTable.edit"/>
+                <button action="assessmentTable.assess"
+                        caption="mainMsg://table.btn.empty"
+                        icon="font-icon:STAR"/>
+                <button action="assessmentTable.excel"/>
+            </buttonsPanel>
+        </table>
+        <chart:serialChart id="serialChart"
+                           caption="msg://Assessments"
+                           categoryField="template"
+                           datasource="assessmentsDs"
+                           height="100%"
+                           startDuration="1"
+                           width="100%">
+            <chart:graphs>
+                <chart:graph alphaField="competenceRating"
+                             balloonText="&lt;span style=&apos;font-size:12px;&apos;&gt;[[title]]&lt;br&gt;                              &lt;span style=&apos;font-size:14px;&apos;&gt;[[description]]"
+                             descriptionField="formattedCompetenceRating"
+                             title="msg://AssessmentPersons.competenceRating"
+                             type="COLUMN"
+                             valueField="competenceRating"/>
+                <chart:graph alphaField="goalRating"
+                             balloonText="&lt;span style=&apos;font-size:12px;&apos;&gt;[[title]]&lt;br&gt;                              &lt;span style=&apos;font-size:14px;&apos;&gt;[[description]]"
+                             descriptionField="formattedGoalRating"
+                             title="msg://AssessmentPersons.goalRating"
+                             type="COLUMN"
+                             valueField="goalRating"/>
+                <chart:graph alphaField="overalRating"
+                             balloonText="&lt;span style=&apos;font-size:12px;&apos;&gt;[[title]]&lt;br&gt;                              &lt;span style=&apos;font-size:14px;&apos;&gt;[[description]]"
+                             descriptionField="formattedOveralRating"
+                             title="msg://AssessmentPersons.overallRating"
+                             type="COLUMN"
+                             valueField="overalRating"/>
+            </chart:graphs>
+            <chart:legend autoMargins="false"
+                          marginRight="80"
+                          markerType="CIRCLE"
+                          position="BOTTOM"/>
+            <chart:balloon fixedPosition="true"/>
+            <chart:export/>
+        </chart:serialChart>
+    </layout>
+</window>

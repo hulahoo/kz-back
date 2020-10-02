@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicJobRequestReason.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.dictionary.dicjobrequestreason.DicJobRequestReasonBrowse"
+        focusComponent="dicJobRequestReasonsTable"
+        lookupComponent="dicJobRequestReasonsTable">
+    <dsContext>
+        <groupDatasource id="dicJobRequestReasonsDs"
+                         class="kz.uco.tsadv.modules.recruitment.dictionary.DicJobRequestReason"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicJobRequestReason e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicJobRequestReasonsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicJobRequestReasonsTable"
+                datasource="dicJobRequestReasonsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicJobRequestReasonsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicJobRequestReasonsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicJobRequestReasonsTable.create"/>
+                <button id="editBtn"
+                        action="dicJobRequestReasonsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicJobRequestReasonsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

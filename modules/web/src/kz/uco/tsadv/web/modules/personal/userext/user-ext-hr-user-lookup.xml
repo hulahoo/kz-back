@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://UserExt.hrUserLookupCaption"
+        class="kz.uco.tsadv.web.modules.personal.userext.UserExtHrUserLookup"
+        focusComponent="userExtsTable"
+        lookupComponent="userExtsTable">
+    <dsContext>
+        <groupDatasource id="userExtsDs"
+                         class="kz.uco.base.entity.extend.UserExt"
+                         view="user.browse"
+                         cacheable="false">
+
+            <query>
+                <![CDATA[select e from tsadv$HrUserRole ur
+                        join base$UserExt e on e = ur.user
+                        where e not in :param$excludedUsers
+                        and :session$systemDate between ur.dateFrom and ur.dateTo
+                         ]]>
+            </query>
+
+            <!--<query>
+                <![CDATA[select e
+                           from base$UserExt e, tsadv$HrUserRole ur
+                          where e.id = ur.user.id
+                            and e not in :param$excludedUsers
+                         ]]>
+            </query>-->
+            <!--and :session$systemDate between ur.dateFrom and ur.dateTo-->
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="userExtsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="userExtsTable"
+                datasource="userExtsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="userExtsTable"
+                    width="100%"
+                    sortable="false">
+            <columns>
+                <column id="login"/>
+                <column id="role"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/HrUserRole.role"
+                        generator="generateRolesList"/>
+                <column id="name"/>
+                <column id="firstName"/>
+                <column id="lastName"/>
+                <column id="middleName"/>
+                <column id="email"/>
+                <column id="mobilePhone"/>
+                <!-- <column id="personGroup" captionProperty="personGroup.personFioWithEmployeeNumber"/>-->
+            </columns>
+            <rows datasource="userExtsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

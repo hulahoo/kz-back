@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Interview.confirm.title"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewFailConfirm">
+
+    <dsContext>
+        <collectionDatasource id="interviewReasonsDs"
+                              class="kz.uco.tsadv.modules.recruitment.dictionary.DicInterviewReason"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicInterviewReason e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="600"/>
+
+    <layout spacing="true">
+        <fieldGroup id="fieldGroup" captionAlignment="TOP" width="100%">
+            <field id="id1" caption="msg://Interview.interviewReason" width="100%">
+                <lookupField textInputAllowed="false" id="interviewReason" optionsDatasource="interviewReasonsDs" required="true" requiredMessage="mainMsg://Interview.confirm.error.ir"/>
+            </field>
+            <field id="id2" caption="msg://Interview.reason" width="100%">
+                <textArea id="reason" rows="4" maxLength="2000" requiredMessage="mainMsg://Interview.confirm.error.r"/>
+            </field>
+        </fieldGroup>
+
+        <hbox spacing="true" stylename="c-edit-window-actions">
+            <button id="yesBtn" action="yes" icon="theme://actions.Editor.Ok.icon"
+                    caption="msg://Interview.confirm.btn.yes"/>
+            <button id="noBtn" action="no" icon="theme://actions.Editor.Cancel.icon"
+                    caption="msg://Interview.confirm.btn.no"/>
+        </hbox>
+    </layout>
+</window>

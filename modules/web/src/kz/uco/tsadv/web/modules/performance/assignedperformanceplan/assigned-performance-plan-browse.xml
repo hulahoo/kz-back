@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://AssignedPerformancePlan"
+        class="kz.uco.tsadv.web.modules.performance.assignedperformanceplan.AssignedPerformancePlanBrowse"
+        focusComponent="assignedPerformancePlansTable"
+        lookupComponent="assignedPerformancePlansTable"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assignedperformanceplan">
+    <dsContext>
+        <groupDatasource id="assignedPerformancePlansDs"
+                         class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
+                         view="assignedPerformancePlan.browse">
+            <query>
+                <![CDATA[select e from tsadv$AssignedPerformancePlan e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assignedPerformancePlansTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="assignedPerformancePlansTable"
+                datasource="assignedPerformancePlansDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="assignedPerformancePlansTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="performancePlan.performancePlanName"/>
+                <column id="assignedPerson.person"
+                        caption="msg://AssignedPerformancePlan.table.employeeColumnCaption"/>
+                <column id="assigned_by.person"
+                        caption="msg://AssignedPerformancePlan.table.assignedByColumnCaption"/>
+            </columns>
+            <rows datasource="assignedPerformancePlansDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="assignedPerformancePlansTable.create"/>
+                <button id="editBtn"
+                        action="assignedPerformancePlansTable.edit"/>
+                <button id="removeBtn"
+                        action="assignedPerformancePlansTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

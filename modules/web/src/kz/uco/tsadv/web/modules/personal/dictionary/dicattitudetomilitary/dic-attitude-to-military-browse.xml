@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://DicAttitudeToMilitaryBrowse"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicattitudetomilitary.DicAttitudeToMilitaryBrowse"
+        focusComponent="dicAttitudeToMilitariesTable"
+        lookupComponent="dicAttitudeToMilitariesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicattitudetomilitary">
+    <dsContext>
+        <groupDatasource id="dicAttitudeToMilitariesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicAttitudeToMilitary"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAttitudeToMilitary e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAttitudeToMilitariesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAttitudeToMilitariesTable"
+                datasource="dicAttitudeToMilitariesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAttitudeToMilitariesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicAttitudeToMilitariesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAttitudeToMilitariesTable.create"/>
+                <button id="editBtn"
+                        action="dicAttitudeToMilitariesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAttitudeToMilitariesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.microtraum.MicrotraumEdit"
+        datasource="microtraumDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.microtraum">
+    <dsContext>
+        <datasource id="microtraumDs"
+                    class="kz.uco.tsadv.entity.tb.Microtraum"
+                    view="microtraum-view">
+            <collectionDatasource id="witnessesDs"
+                                  property="witnesses"/>
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+            <collectionDatasource id="injuredDs"
+                                  property="injured">
+                    <collectionDatasource id="organDs" property="organ"/>
+            </collectionDatasource>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%" spacing="true">
+            <vbox id="vbox"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="microtraumDs">
+                    <column width="250px">
+                        <field property="managerPerson"/>
+                        <field property="reportedPerson"/>
+                        <field id="organization"
+                               captionProperty="organization"
+                               property="organization"/>
+                        <field property="microtraumaDate"/>
+                        <field property="microtraumaTime"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <groupBox caption="msg://detail"
+                      collapsable="true"
+                      collapsed="true">
+                <vbox id="vbox_2"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="microtraumDs">
+                        <column>
+                            <field property="microtraumaReason"/>
+                            <field property="micratraumaConditions"/>
+                            <field property="shiftStart"/>
+                            <field property="shiftEnd"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <frame id="windowActions"
+                   height="100%"
+                   screen="editWindowActions"/>
+            <vbox id="vbox_1"
+                  height="100%"
+                  spacing="true">
+                <tabSheet>
+                    <tab id="tab"
+                         caption="msg://tab"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="microtraumaWitnessesesTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="person"/>
+                            </columns>
+                            <rows datasource="witnessesDs"/>
+                            <buttonsPanel>
+                                <button action="microtraumaWitnessesesTable.create"/>
+                                <button action="microtraumaWitnessesesTable.edit"/>
+                                <button action="microtraumaWitnessesesTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_1"
+                         caption="msg://tab1"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="attachmentsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="attachmentType"/>
+                                <column id="attachment"/>
+                            </columns>
+                            <rows datasource="attachmentDs"/>
+                            <buttonsPanel>
+                                <button action="attachmentsTable.create"/>
+                                <button action="attachmentsTable.edit"/>
+                                <button action="attachmentsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_2"
+                         caption="msg://tab2"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="injuredTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="person"/>
+                                <column id="correctiveActions"/>
+                                <column id="noteMicrotraumaToAccident"/>
+                            </columns>
+                            <rows datasource="injuredDs"/>
+                            <buttonsPanel>
+                                <button action="injuredTable.create"/>
+                                <button action="injuredTable.edit"/>
+                                <button action="injuredTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

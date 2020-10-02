@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.harmfulfactorsdetail.HarmfulFactorsDetailEdit"
+        datasource="harmfulFactorsDetailDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.harmfulfactorsdetail">
+    <dsContext>
+        <datasource id="harmfulFactorsDetailDs"
+                    class="kz.uco.tsadv.entity.tb.HarmfulFactorsDetail"
+                    view="harmfulFactorsDetail-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="harmfulFactorsDetailDs">
+            <column width="250px">
+                <field property="harmfulFactorType"/>
+                <field property="totalSamples"/>
+                <field property="maxPermisConcentration"/>
+                <field property="maxSingleConcentration"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

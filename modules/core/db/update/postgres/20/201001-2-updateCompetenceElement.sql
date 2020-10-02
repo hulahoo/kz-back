@@ -1,0 +1,2 @@
+alter table TSADV_COMPETENCE_ELEMENT add column INTEGRATION_USER_LOGIN varchar(255) ;
+alter table TSADV_COMPETENCE_ELEMENT add column ORGANIZATION_BIN varchar(255) ;

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgNomineeDetail"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+    <dialogMode height="500"
+                width="40%"/>
+    <layout width="100%" height="100%" expand="descriptionLabel" stylename="rcg-nominee-detail-window">
+        <hbox width="100%" expand="htmlBoxLayout" spacing="true" margin="false,false,true,false"
+              stylename="rcg-nominee-detail-h">
+            <label id="imageLabel" htmlEnabled="true" width="70px"/>
+            <!--<label id="infoLabel" htmlEnabled="true"/>-->
+            <htmlBox id="htmlBoxLayout"/>
+        </hbox>
+        <label id="descriptionLabel" htmlEnabled="true" width="100%" stylename="rcg-nominee-detail-desc"/>
+    </layout>
+</window>

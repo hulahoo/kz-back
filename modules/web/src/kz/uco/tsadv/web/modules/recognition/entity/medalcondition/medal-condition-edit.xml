@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.medalcondition.MedalConditionEdit"
+        datasource="medalConditionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.medalcondition">
+    <dsContext>
+        <datasource id="medalConditionDs"
+                    class="kz.uco.tsadv.modules.recognition.MedalCondition"
+                    view="medalCondition.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="medalConditionDs">
+            <column width="250px">
+                <field id="medalPickerField" property="medal" captionProperty="langName" editable="false"/>
+                <field id="quality" property="quality"/>
+                <field id="qualityQuantity" property="qualityQuantity"/>
+                <field id="childMedal" property="childMedal"/>
+                <field property="medalQuantity"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Person education CRUD</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en">en</input>
+                <input type="radio" name="lang" value="ru" checked>ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список записей "Образование"
+    </div>
+    <table>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getEducation()" value="getUserPerson : education">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="education"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Создание записи "Образование"
+    </div>
+    <table>
+        <tr>
+            <td> * School:</td>
+            <td>
+                <input id="createSchool" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Start year:</td>
+            <td>
+                <input id="createStartYear" type="number" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * End year:</td>
+            <td>
+                <input id="createEndYear" type="number" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Specialization:</td>
+            <td>
+                <input id="createSpecialization" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Education level:</td>
+            <td>
+                <select id="createEducationLevel">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Education degree:</td>
+            <td>
+                <select id="createEducationDegree">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Location:</td>
+            <td>
+                <input id="createLocation" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="createEducation()" value="createEducation">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="createResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Обновление записи "Образование"
+    </div>
+    <table>
+        <tr>
+            <td> * Id:</td>
+            <td>
+                <input id="updateId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * School:</td>
+            <td>
+                <input id="updateSchool" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Start year:</td>
+            <td>
+                <input id="updateStartYear" type="number" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * End year:</td>
+            <td>
+                <input id="updateEndYear" type="number" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Specialization:</td>
+            <td>
+                <input id="updateSpecialization" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Education level:</td>
+            <td>
+                <select id="updateEducationLevel">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Education degree:</td>
+            <td>
+                <select id="updateEducationDegree">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Location:</td>
+            <td>
+                <input id="updateLocation" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="updateEducation()" value="updateEducation">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="updateResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Удаление записи "Образование"
+    </div>
+    <table>
+        <tr>
+            <td> * Id:</td>
+            <td>
+                <input id="deleteId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="deleteEducation()" value="deleteEducation">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="deleteResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var access_token;
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+
+                fillSelects();
+            });
+    }
+
+    function fillSelects() {
+        var lang = $("input[name=lang]:checked").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/getEducationLevels?lang=" + lang,
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var types = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                types.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("createEducationLevel").innerHTML = inner;
+                document.getElementById("updateEducationLevel").innerHTML = inner;
+            });
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getEducationDegrees?lang=" + lang,
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var types = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                types.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("createEducationDegree").innerHTML = inner;
+                document.getElementById("updateEducationDegree").innerHTML = inner;
+            });
+    }
+
+    function getEducation() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUserPerson?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var education = JSON.parse(res).education;
+                $('#education').text(JSON.stringify(education));
+            });
+    }
+
+    function createEducation() {
+        var data = {};
+        jQuery.extend(data, personEducationModel);
+        data.education.school = $("#createSchool").val();
+        data.education.startYear = $("#createStartYear").val();
+        data.education.endYear = $("#createEndYear").val();
+        data.education.specialization = $("#createSpecialization").val();
+        data.education.level = $("#createEducationLevel").val();
+        data.education.degree = $("#createEducationDegree").val();
+        data.education.location = $("#createLocation").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/createEducation",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#createResult").text(JSON.stringify(res));
+            });
+    }
+
+    function updateEducation() {
+        var data = {};
+        jQuery.extend(data, personEducationModel);
+        jQuery.extend(data, updateDeleteModel);
+
+        data.id = $("#updateId").val();
+        data.education.school = $("#updateSchool").val();
+        data.education.startYear = $("#updateStartYear").val();
+        data.education.endYear = $("#updateEndYear").val();
+        data.education.specialization = $("#updateSpecialization").val();
+        data.education.level = $("#updateEducationLevel").val();
+        data.education.degree = $("#updateEducationDegree").val();
+        data.education.location = $("#updateLocation").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/updateEducation",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#updateResult").text(JSON.stringify(res));
+            });
+    }
+
+    function deleteEducation() {
+        var data = {};
+        jQuery.extend(data, updateDeleteModel);
+
+        data.id = $("#deleteId").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/deleteEducation",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#deleteResult").text(JSON.stringify(res));
+            });
+    }
+    /*]>*/
+
+</script>
+</body>
+</html>

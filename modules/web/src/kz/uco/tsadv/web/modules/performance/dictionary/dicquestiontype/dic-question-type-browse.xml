@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicQuestionType.browseCaption"
+        class="kz.uco.tsadv.web.modules.performance.dictionary.dicquestiontype.DicQuestionTypeBrowse"
+        focusComponent="dicQuestionTypesTable"
+        lookupComponent="dicQuestionTypesTable">
+    <dsContext>
+        <groupDatasource id="dicQuestionTypesDs"
+                         class="kz.uco.tsadv.modules.performance.dictionary.DicQuestionType"
+                         view="dicQuestionType.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicQuestionType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicQuestionTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicQuestionTypesTable"
+                datasource="dicQuestionTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicQuestionTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicQuestionTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicQuestionTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicQuestionTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicQuestionTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

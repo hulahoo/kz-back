@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://DicMilitaryRankEdit"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicmilitaryrank.DicMilitaryRankEdit"
+        datasource="dicMilitaryRankDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="dicMilitaryRankDs"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicMilitaryRank"
+                    view="dicMilitaryRank-view"/>
+        <collectionDatasource id="categoryCompositionsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicTroopsStructure"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicTroopsStructure e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="troopTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicTroopType"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicTroopType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="dicMilitaryRankDs">
+                <column width="250px">
+                    <field property="code"/>
+                    <field caption="msg://dicMilitaryRankCategoryColumn"
+                           optionsDatasource="categoryCompositionsDs"
+                           property="categoryComposition"/>
+                    <field caption="msg://DicMilitaryRankTroopTypeColumn"
+                           optionsDatasource="troopTypesDs"
+                           property="troopType"/>
+                    <field caption="msg://MilitaryRankNameEdit"
+                           property="langValue1"/>
+                    <field property="langValue2"/>
+                    <field property="langValue3"/>
+                    <field property="langValue4"/>
+                    <field property="langValue5"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

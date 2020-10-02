@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Enrollment.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.enrollment.EnrollmentBrowse"
+        focusComponent="enrollmentsTable"
+        lookupComponent="enrollmentsTable">
+    <dsContext>
+        <collectionDatasource id="enrollmentsDs"
+                              class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                              view="enrollment-view">
+            <query>
+                <![CDATA[select e from tsadv$Enrollment e order by e.date desc]]>
+            </query>
+        </collectionDatasource>
+        <groupDatasource id="courseSectionAttemptDs"
+                         class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
+                         view="courseSectionAttempt.browse">
+            <query>
+                <![CDATA[
+                select e
+                from tsadv$CourseSectionAttempt e
+                where e.enrollment.id = :ds$enrollmentsDs.id order by e.attemptDate]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="certEnrollmentDs"
+                              class="kz.uco.tsadv.modules.learning.model.CertificationEnrollment"
+                              view="certificationEnrollment.browse">
+            <query>
+                <![CDATA[select e from tsadv$CertificationEnrollment e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <tabSheet id="tabSheet"
+                  height="100%">
+            <tab id="enrollment"
+                 caption="msg://enrollment.tab.enroll">
+                <split id="splitter"
+                       height="100%"
+                       orientation="vertical"
+                       width="100%">
+                    <vbox id="vbox"
+                          expand="enrollmentsTable"
+                          height="100%">
+                        <filter id="filter"
+                                applyTo="enrollmentsTable"
+                                datasource="enrollmentsDs"
+                                margin="false,false,true,false">
+                            <properties include=".*"/>
+                        </filter>
+                        <table id="enrollmentsTable"
+                               width="100%">
+                            <actions>
+                                <action id="create"/>
+                                <action id="edit"/>
+                                <action id="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="course.name"/>
+                                <column id="course.category.langValue"/>
+                                <column id="course.activeFlag"/>
+                                <column id="personGroup.person.fioWithEmployeeNumber"
+                                        link="true"
+                                        linkInvoke="redirectCard"/>
+                                <column id="date"/>
+                                <column id="status"/>
+                                <column id="isCertification"
+                                        align="CENTER"
+                                        caption="msg://enrollment.isCertification"
+                                        generator="checkIsCertification"/>
+                                <column id="reason"
+                                        maxTextLength="50"/>
+                            </columns>
+                            <rows datasource="enrollmentsDs"/>
+                            <rowsCount/>
+                            <buttonsPanel id="buttonsPanel"
+                                          alwaysVisible="true">
+                                <button id="createBtn"
+                                        action="enrollmentsTable.create"/>
+                                <button id="editBtn"
+                                        action="enrollmentsTable.edit"/>
+                                <button id="removeBtn"
+                                        action="enrollmentsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </vbox>
+                    <groupBox id="groupBox"
+                              caption="msg://CourseSectionAttempt"
+                              height="100%">
+                        <groupTable id="courseSectionAttemptTable"
+                                    fixedGrouping="true"
+                                    height="100%"
+                                    width="100%">
+                            <actions>
+                                <action id="edit"/>
+                            </actions>
+                            <columns>
+                                <group>
+                                    <column id="courseSection.sectionName"/>
+                                </group>
+                                <column id="courseSectionFormat"/>
+                                <column id="attemptDate"/>
+                                <column id="activeAttempt"/>
+                                <column id="success"/>
+                                <column id="test.name"/>
+                                <column id="testResult"/>
+                                <column id="testResultPercent"/>
+                                <column id="timeSpent"/>
+                            </columns>
+                            <rows datasource="courseSectionAttemptDs"/>
+                            <buttonsPanel id="buttonsPanel_1"
+                                          alwaysVisible="true">
+                                <button id="editButton"
+                                        action="courseSectionAttemptTable.edit"/>
+                            </buttonsPanel>
+                        </groupTable>
+                    </groupBox>
+                </split>
+            </tab>
+            <tab id="certification"
+                 caption="msg://enrollment.tab.certification"
+                 expand="certEnrollmentsTable">
+                <filter id="certEnrollmentFilter"
+                        applyTo="certEnrollmentsTable"
+                        datasource="certEnrollmentDs"
+                        margin="false,false,true,false">
+                    <properties include=".*"/>
+                </filter>
+                <table id="certEnrollmentsTable"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="personGroup.person.fullName"/>
+                        <column id="certification.course.name"/>
+                        <column id="startDate"/>
+                        <column id="nextDate"/>
+                        <column id="status"/>
+                    </columns>
+                    <rows datasource="certEnrollmentDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="certEnrollmentButtons"
+                                  alwaysVisible="true">
+                        <button id="ceCreateBtn"
+                                action="certEnrollmentsTable.create"/>
+                        <button id="ceEditBtn"
+                                action="certEnrollmentsTable.edit"/>
+                        <button id="ceRemoveBtn"
+                                action="certEnrollmentsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.enrollment.EnrollmentLookup"
+        lookupComponent="enrollmentGroupTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.enrollment">
+    <dsContext>
+        <groupDatasource id="enrollmentsDs"
+                         class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                         view="enrollment.lookup">
+            <query>
+                <![CDATA[select e from tsadv$Enrollment e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="enrollmentGroupTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="enrollmentGroupTable"
+                datasource="enrollmentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="enrollmentGroupTable"
+                    width="100%">
+            <columns>
+                <column id="status"/>
+                <column id="date"/>
+                <column id="reason"/>
+                <column id="moneyInBudget"/>
+            </columns>
+            <rows datasource="enrollmentsDs"/>
+        </groupTable>
+    </layout>
+</window>

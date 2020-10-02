@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicReadinessLevel.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicreadinesslevel.DicReadinessLevelBrowse"
+        focusComponent="dicReadinessLevelsTable"
+        lookupComponent="dicReadinessLevelsTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicreadinesslevel">
+    <dsContext>
+        <groupDatasource id="dicReadinessLevelsDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicReadinessLevel"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicReadinessLevel e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicReadinessLevelsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicReadinessLevelsTable"
+                datasource="dicReadinessLevelsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicReadinessLevelsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicReadinessLevelsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicReadinessLevelsTable.create"/>
+                <button id="editBtn"
+                        action="dicReadinessLevelsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicReadinessLevelsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

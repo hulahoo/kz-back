@@ -1,0 +1,1 @@
+alter table TSADV_QUESTIONNAIRE_QUESTION drop column QUESTION_TYPE_ID__U09680 cascade ;

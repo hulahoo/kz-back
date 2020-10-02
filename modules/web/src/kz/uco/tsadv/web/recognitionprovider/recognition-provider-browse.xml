@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.recognitionprovider.RecognitionProviderBrowse"
+        focusComponent="recognitionProvidersTable"
+        lookupComponent="recognitionProvidersTable"
+        messagesPack="kz.uco.tsadv.web.recognitionprovider">
+    <dsContext>
+        <groupDatasource id="recognitionProvidersDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.RecognitionProvider"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$RecognitionProvider e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="recognitionProvidersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="recognitionProvidersTable"
+                datasource="recognitionProvidersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="recognitionProvidersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="providerNameLang1"/>
+                <column id="providerNameLang2"/>
+                <column id="providerNameLang3"/>
+                <column id="contactInfo"/>
+                <column id="addressLang1"/>
+                <column id="addressLang2"/>
+                <column id="addressLang3"/>
+            </columns>
+            <rows datasource="recognitionProvidersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="recognitionProvidersTable.create"/>
+                <button id="editBtn"
+                        action="recognitionProvidersTable.edit"/>
+                <button id="removeBtn"
+                        action="recognitionProvidersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.positionchangerequest.PositionChangeRequestEdit"
+        datasource="positionChangeRequestDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.positionchangerequest">
+    <dsContext>
+        <datasource id="positionChangeRequestDs"
+                    class="kz.uco.tsadv.modules.personal.model.PositionChangeRequest"
+                    view="positionChangeRequest.edit"/>
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e
+where e.procInstance.entity.entityId = :ds$positionChangeRequestDs
+                       order by e.startDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="bpmRequestMessagesDs"
+                              class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
+                              view="bpmRequestMessage-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmRequestMessage e
+                    where e.entityId = :ds$positionChangeRequestDs
+                           and ( e.assignedUser.userExt.id = :session$user or e.assignedBy.userExt.id = :session$user )
+                    order by e.sendDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true"
+            expand="scrollBox">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <groupBox id="dataGroup">
+                <fieldGroup id="fieldGroup"
+                            datasource="positionChangeRequestDs">
+                    <column width="450px">
+                        <field editable="false"
+                               property="requestNumber"/>
+                        <field editable="false"
+                               property="requestDate"/>
+                        <field editable="false"
+                               property="requestType"/>
+                        <field property="positionGroup">
+                            <pickerField id="positionGroup"
+                                         captionProperty="fullName"
+                                         metaClass="base$PositionGroupExt"
+                                         required="true"
+                                         requiredMessage="msg://requiredPosition"/>
+                        </field>
+                        <field property="organizationGroup">
+                            <pickerField id="organizationGroupPicker"
+                                         captionProperty="organizationName"
+                                         metaClass="base$OrganizationGroupExt"
+                                         required="true"
+                                         requiredMessage="msg://requiredOrganization"/>
+                        </field>
+                        <field id="oldPositionNameLang1"
+                               caption="msg://position.name.ru"
+                               editable="false"
+                               property="positionGroup.position.positionNameLang1"
+                               visible="false"/>
+                        <field id="oldPositionNameLang2"
+                               caption="msg://position.name.kz"
+                               editable="false"
+                               property="positionGroup.position.positionNameLang2"
+                               visible="false"/>
+                        <field id="oldPositionNameLang3"
+                               caption="msg://position.name.en"
+                               editable="false"
+                               property="positionGroup.position.positionNameLang3"
+                               visible="false"/>
+                        <field id="oldBaza"
+                               editable="false"
+                               property="positionGroup.position.baza"
+                               visible="false"/>
+                        <field property="jobNameLang1"/>
+                        <field property="jobNameLang2"/>
+                        <field property="jobNameLang3"/>
+                        <field property="location"/>
+                        <field captionProperty="grade"
+                               property="gradeGroup"/>
+                        <field property="costCenter"/>
+                        <field property="fte"/>
+                        <field property="effectiveDate"/>
+                        <field property="comments"
+                               rows="6"/>
+                        <field captionProperty="fullName"
+                               property="parentPositionGroup"/>
+                        <field property="materialLiabilityAgreementRequired"/>
+                        <field property="mrgForm"/>
+                        <field property="jobInstruction"/>
+                        <field property="attachment"/>
+                        <field editable="false"
+                               property="status"/>
+                    </column>
+                </fieldGroup>
+            </groupBox>
+            <vbox id="bpmActorsVBox">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           width="100%">
+                        <columns>
+                            <column id="locName"
+                                    caption="msg://ProcActor.role"/>
+                            <column id="procActor.user"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="locOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                            <column id="comment"
+                                    maxTextLength="50"/>
+                        </columns>
+                        <rows datasource="procTasksDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+            <groupBox id="askQuestion"
+                      width="100%"
+                      caption="Вопросы и ответы"
+                      spacing="true"/>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button caption="msg://cancel"
+                    invoke="closeButton"/>
+            <button id="askQuestionBtn"
+                    caption="mainMsg://askQuestion"
+                    invoke="onAskQuestion"/>
+            <frame id="procActionsFrame"
+                   screen="procActionsFrame"
+                   width="AUTO"/>
+        </hbox>
+    </layout>
+</window>

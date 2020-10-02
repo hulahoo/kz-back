@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Position.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.positiongroup.PositionGroupBrowse"
+        focusComponent="positionGroupsTable"
+        lookupComponent="positionGroupsTable">
+    <dsContext>
+        <groupDatasource id="positionGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                         maxResults="50"
+                         view="positionGroup.list">
+            <query>
+                <![CDATA[select distinct e
+                           from base$PositionGroupExt e
+                           join e.list p
+                          where :session$systemDate between p.startDate and p.endDate
+                          order by e.updateTs, e.id desc]]>
+            </query>
+            <collectionDatasource id="listDs"
+                                  property="list"/>
+        </groupDatasource>
+        <collectionDatasource id="jobGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$JobGroup e join e.list j
+                         where :session$systemDate between j.startDate and j.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e join e.list o
+                         where :session$systemDate between o.startDate and o.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="gradeGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.GradeGroup"
+                              view="gradeGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$GradeGroup e join e.list g
+                         where :session$systemDate between g.startDate and g.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="locationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation">
+            <query>
+                <![CDATA[select e
+                         from base$DicLocation e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="payrollsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPayroll">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicPayroll e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="positionStatusesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPositionStatus">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicPositionStatus e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="gradeRulesDs"
+                              class="kz.uco.tsadv.modules.personal.model.GradeRule">
+            <query>
+                <![CDATA[select e
+                         from tsadv$GradeRule e
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <filter id="positionGroupsFilter"
+                applyTo="positionGroupsTable"
+                datasource="positionGroupsDs">
+            <custom name="closed" caption="msg://except.closed"/>
+        </filter>
+        <groupBox id="groupBox"
+                  caption="mainMsg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <split id="split"
+               orientation="vertical"
+               width="100%">
+            <groupTable id="positionGroupsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="excel"/>
+                    <action id="orgAnalytics"
+                            caption="msg://kz.uco.tsadv.web.modules.personal.position/analitycs.tab"
+                            invoke="analyticsEdit"
+                            trackSelection="true"/>
+                </actions>
+                <columns>
+                    <column id="fullName"
+                            caption="msg://kz.uco.tsadv.modules.personal.model/Position.positionFullName"
+                            captionProperty="fullName"/>
+                    <column id="position.fte"/>
+                    <column id="position.jobGroup.jobName"
+                            caption="msg://kz.uco.tsadv.modules.personal.group/JobGroup.job"/>
+                    <column id="position.organizationGroupExt.organizationName"
+                            caption="mainMsg://Organization"/>
+                    <column id="position.gradeGroup.grade.gradeName"/>
+                    <column id="position.positionStatus"/>
+                </columns>
+                <rows datasource="positionGroupsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createButton"
+                            caption="mainMsg://table.btn.create"
+                            icon="icons/add.png"
+                            invoke="create"/>
+                    <button id="editButton"
+                            caption="mainMsg://table.btn.edit"
+                            icon="icons/edit.png"
+                            invoke="edit"/>
+                    <button action="positionGroupsTable.orgAnalytics"/>
+                    <button action="positionGroupsTable.excel"
+                            caption="mainMsg://table.btn.excel"
+                            icon="icons/excel.png"/>
+                </buttonsPanel>
+            </groupTable>
+            <groupBox id="historyGroupBox"
+                      caption="mainMsg://historyBox"
+                      height="100%">
+                <table id="historyTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.edit"
+                                invoke="editHistory"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.remove"
+                                invoke="removeHistory"/>
+                        <action id="removeLate"
+                                caption="mainMsg://table.btn.remove.late"
+                                invoke="removeHistories"/>
+                    </actions>
+                    <columns>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="positionFullName"/>
+                        <column id="gradeGroup.grade.gradeName"/>
+                        <column id="fte"/>
+                        <column id="maxPersons"/>
+                        <column id="positionStatus.langValue"/>
+                        <column id="legacyID"/>
+                    </columns>
+                    <rows datasource="listDs"/>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

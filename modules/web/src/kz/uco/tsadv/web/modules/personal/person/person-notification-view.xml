@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Person.notification.view.caption"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonNotificationView">
+    <dsContext>
+        <datasource id="notificationDs" class="kz.uco.base.entity.core.notification.SendingNotification"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="800"/>
+    <layout expand="wrapperVBox" width="100%" height="100%">
+        <vbox id="wrapperVBox" width="100%" stylename="p-notify-view">
+            <vbox id="contentVBox" width="100%" margin="false,false,true,false">
+                <label value="msg://Person.notification.view.title" stylename="p-notify-label"/>
+                <label datasource="notificationDs" property="sendingMessage.caption" stylename="p-notify-value"/>
+                <label value="msg://Person.notification.view.body" stylename="p-notify-label"/>
+                <scrollBox>
+                    <label htmlEnabled="true" datasource="notificationDs" property="sendingMessage.contentText"
+                           stylename="p-notify-value"/>
+                </scrollBox>
+            </vbox>
+            <buttonsPanel>
+                <button caption="msg://actions.Ok" icon="theme://actions.Editor.Ok.icon" invoke="ok"/>
+                <button caption="msg://actions.Cancel" icon="theme://actions.Editor.Cancel.icon" invoke="close"/>
+            </buttonsPanel>
+        </vbox>
+    </layout>
+</window>

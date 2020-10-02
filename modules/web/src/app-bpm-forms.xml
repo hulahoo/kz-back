@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms xmlns="http://schemas.haulmont.com/cuba/bpm-forms.xsd">
+    <form name="ucoBpmStartProcForm" default="false"/>
+    <form name="ucoBpmReassignProcForm" default="false"/>
+    <form name="ucoBpmStandardProcForm" default="true"/>
+</forms>

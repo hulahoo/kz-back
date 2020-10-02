@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://AssignedGoal.myAssignedGoal.browse"
+        class="kz.uco.tsadv.web.modules.performance.assignedgoal.MyAssignedGoalBrowse">
+    <dsContext>
+        <groupDatasource id="assignedGoalsDs"
+                         class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
+                         view="assignedGoal.browse">
+            <query>
+                <![CDATA[select e from tsadv$AssignedGoal e
+                          where e.personGroup.id = :param$selectedPersonGroup.id
+                            and e.performancePlan.id = :param$selectedPerformacePlan.id]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="performancePlansDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.modules.performance.model.PerformancePlan">
+            <query>
+                <![CDATA[select e from tsadv$PerformancePlan e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assignedGoalsTable"
+            spacing="true">
+        <hbox id="hbox"
+              expand="vbox"
+              spacing="true"
+              width="100%">
+            <embedded id="embedded"/>
+            <vbox id="vbox"
+                  spacing="true">
+                <label id="label"
+                       stylename="h1 bold"
+                       width="100%"/>
+                <label id="label_1"/>
+                <hbox id="hbox_1"
+                      spacing="true">
+                    <label id="label_3"
+                           value="msg://AssignedGoal.myAssignedGoal.browse.commonWeight"/>
+                    <label id="label_2"/>
+                </hbox>
+            </vbox>
+        </hbox>
+        <table id="assignedGoalsTable"
+               columnControlVisible="false"
+               columnHeaderVisible="false"
+               reorderingAllowed="false"
+               textSelectionEnabled="true"
+               width="100%">
+            <columns>
+                <column id="goal"
+                        generator="generateColumn1"
+                        width="500px"/>
+                <column id="column2"
+                        generator="generateColumn2"/>
+                <column id="column3"
+                        generator="generateColumn3"/>
+                <column id="column4"
+                        generator="generateColumn4"/>
+                <column id="column5"
+                        generator="generateColumn5"/>
+            </columns>
+            <rows datasource="assignedGoalsDs"/>
+        </table>
+        <buttonsPanel id="buttonsPanel">
+            <button id="addButton"
+                    caption="msg://AssignedGoal.myAssignedGoal.browse.myGoalsTab.addGoalButton"
+                    invoke="onAddButtonClick"/>
+            <button id="saveButton"
+                    caption="msg://AssignedGoal.myAssignedGoal.browse.saveButtonCaption"
+                    invoke="onSaveButtonClick"/>
+        </buttonsPanel>
+    </layout>
+</window>

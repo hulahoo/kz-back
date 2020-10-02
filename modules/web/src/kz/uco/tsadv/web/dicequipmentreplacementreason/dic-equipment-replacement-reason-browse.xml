@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicequipmentreplacementreason.DicEquipmentReplacementReasonBrowse"
+        focusComponent="dicEquipmentReplacementReasonsTable"
+        lookupComponent="dicEquipmentReplacementReasonsTable"
+        messagesPack="kz.uco.tsadv.web.dicequipmentreplacementreason">
+    <dsContext>
+        <groupDatasource id="dicEquipmentReplacementReasonsDs"
+                         class="kz.uco.tsadv.modules.personprotection.dictionary.DicEquipmentReplacementReason"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicEquipmentReplacementReason e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicEquipmentReplacementReasonsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicEquipmentReplacementReasonsTable"
+                datasource="dicEquipmentReplacementReasonsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicEquipmentReplacementReasonsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue"/>
+                <column id="active"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="legacyID"
+                        caption="mainMsg://legacyId"/>
+            </columns>
+            <rows datasource="dicEquipmentReplacementReasonsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicEquipmentReplacementReasonsTable.create"/>
+                <button id="editBtn"
+                        action="dicEquipmentReplacementReasonsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicEquipmentReplacementReasonsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

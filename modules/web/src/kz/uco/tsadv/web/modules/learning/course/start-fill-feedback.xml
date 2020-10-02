@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://start.fill.feedback.caption"
+        class="kz.uco.tsadv.web.modules.learning.course.StartFillFeedback"
+        messagesPack="kz.uco.tsadv.web.modules.learning.course">
+    <dialogMode height="600"
+                width="800"/>
+    <layout width="100%" height="100%" expand="mainScrollBox" stylename="start-fill-feedback-w" spacing="true">
+        <label id="templateName" width="100%" stylename="start-fill-feedback-name"/>
+        <scrollBox id="mainScrollBox" width="100%" spacing="true">
+
+        </scrollBox>
+        <hbox width="100%" spacing="true">
+            <hbox spacing="true">
+                <button id="saveBtn" caption="msg://start.fill.feedback.save" icon="icons/ok.png" visible="false"/>
+                <button id="cancelBtn" caption="msg://start.fill.feedback.cancel" icon="icons/cancel.png"/>
+            </hbox>
+        </hbox>
+    </layout>
+</window>

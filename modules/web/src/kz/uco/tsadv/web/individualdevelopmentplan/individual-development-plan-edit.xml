@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.individualdevelopmentplan.IndividualDevelopmentPlanEdit"
+        datasource="individualDevelopmentPlanDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.individualdevelopmentplan">
+    <dsContext>
+        <datasource id="individualDevelopmentPlanDs"
+                    class="kz.uco.tsadv.modules.learning.model.IndividualDevelopmentPlan"
+                    view="individualDevelopmentPlan.edit">
+            <collectionDatasource id="idpDetailDs"
+                                  property="idpDetail"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="individualDevelopmentPlanDs">
+            <column width="250px">
+                <field property="personGroup"
+                       captionProperty="personFioWithEmployeeNumber"/>
+                <field id="planName"
+                       property="planName"/>
+                <field property="status"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <tabSheet>
+            <tab id="idpDetail"
+                 caption="msg://idpDetail"
+                 margin="true, false, false, false">
+                <table id="idpDetailTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="competence.competence"/>
+                        <column id="scaleLevel"/>
+                        <column id="course.name"/>
+                        <column id="educationType"/>
+                        <column id="description"/>
+                        <column id="targetDate"/>
+                        <column id="done"/>
+                        <column id="comment"/>
+                        <column id="reason"/>
+                    </columns>
+                    <rows datasource="idpDetailDs"/>
+                    <buttonsPanel>
+                        <button action="idpDetailTable.create"/>
+                        <button action="idpDetailTable.edit"/>
+                        <button action="idpDetailTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.goodsimage.GoodsImageBrowse"
+        focusComponent="goodsImagesTable"
+        lookupComponent="goodsImagesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.goodsimage">
+    <dsContext>
+        <groupDatasource id="goodsImagesDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.GoodsImage"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$GoodsImage e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goodsImagesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="goodsImagesTable"
+                datasource="goodsImagesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="goodsImagesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+            </columns>
+            <rows datasource="goodsImagesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="goodsImagesTable.create"/>
+                <button id="editBtn"
+                        action="goodsImagesTable.edit"/>
+                <button id="removeBtn"
+                        action="goodsImagesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

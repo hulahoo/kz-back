@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.frames.OrganizationFrame"
+        messagesPack="kz.uco.tsadv.web.modules.personal.frames">
+    <!--<actions>
+        <action id="saveAction"
+                caption="msg://table.btn.save"
+                invoke="save"/>
+        <action id="cancelAction"
+                caption="msg://table.btn.cancel"
+                invoke="cancel"/>
+    </actions>-->
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <vbox id="vboxOrg"
+              expand="split"
+              height="100%">
+            <split id="split"
+                   height="100%"
+                   orientation="vertical"
+                   width="100%">
+                <scrollBox id = "organiztionFrameScrollBox1" height="100%">
+                    <cssLayout id="cssLayout"
+                               height="auto">
+                        <fieldGroup id="fieldGroup"
+                                    datasource="organizationDs">
+                            <column width="240px">
+                                <field id="organizationNameLang1Reducted"
+                                        property="organizationNameLang1Reducted"
+                                       editable="false"
+                                       link="true"
+                                       linkScreen="base$Organization.edit"
+                                       />
+                                <field property="organizationNameLang2Reducted"
+                                       editable="false"
+                                        link="true"
+                                        linkScreen="base$Organization.edit"
+                                        />
+                                <field property="organizationNameLang3Reducted"
+                                       editable="false"
+                                       link="true"
+                                       linkScreen="base$Organization.edit"/>
+                                <field property="organizationNameLang4Reducted"
+                                       editable="false"
+                                       link="true"
+                                       linkScreen="base$Organization.edit"/>
+                                <field property="organizationNameLang5Reducted"
+                                       editable="false"
+                                       link="true"
+                                       linkScreen="base$Organization.edit"/>
+                                <field property="internal"
+                                       editable="false"/>
+                            </column>
+                            <column width="240px">
+                                <field property="location"
+                                       editable="false"/>
+                                <field property="type"
+                                       editable="false"/>
+                                <field property="costCenter"
+                                       editable="false"/>
+                                <field property="payroll"
+                                       editable="false"/>
+                                <field editable="false"
+                                       property="startDate"/>
+                                <field editable="false"
+                                       property="endDate"/>
+
+                            </column>
+                        </fieldGroup>
+                    </cssLayout>
+                </scrollBox>
+                <scrollBox id = "organiztionFrameScrollBox2">
+                    <groupBox id="historyGroupBox"
+                              caption="msg://historyBox"
+                              height="100%">
+                        <table id="historyTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="excel"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/excel.png"/>
+                            </actions>
+                            <columns>
+                                <column id="organizationName"/>
+                                <column id="location.langValue"/>
+                                <column id="type.langValue"/>
+                                <column id="costCenter.langValue"/>
+                                <column id="payroll.langValue"/>
+                                <column id="startDate"/>
+                                <column id="endDate"/>
+                            </columns>
+                            <rows datasource="organizationHistoryDs"/>
+                        </table>
+                    </groupBox>
+                </scrollBox>
+            </split>
+
+            <!--<hbox>
+                <button id="editBtn"
+                        caption="msg://table.btn.edit.2"
+                        invoke="edit"/>
+                <hbox id="actionsPane"
+                      align="BOTTOM_LEFT"
+                      margin="true,false,false,false"
+                      spacing="true">
+                    <button id="createEditButton"
+                            caption="msg://table.btn.save"
+                            invoke="save"/>
+                    <button caption="msg://table.btn.cancel"
+                            invoke="cancel"/>
+                </hbox>
+            </hbox>-->
+        </vbox>
+    </layout>
+</window>

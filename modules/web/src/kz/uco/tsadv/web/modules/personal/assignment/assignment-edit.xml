@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Assignment.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.assignment.AssignmentEdit"
+        datasource="assignmentDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="assignmentDs"
+                    class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                    view="assignment.edit">
+            <datasource id="personGroupDs"
+                        property="personGroup">
+                <collectionDatasource id="personContactsDs"
+                                      property="personContacts"/>
+                <collectionDatasource id="personDocumentsDs"
+                                      property="personDocuments"/>
+                <datasource id="personDs"
+                            property="person"/>
+            </datasource>
+        </datasource>
+        <collectionDatasource id="dicSexDs"
+                              class="kz.uco.base.entity.dictionary.DicSex"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from base$DicSex e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="90%"
+                resizable="true"
+                width="AUTO"/>
+    <layout expand="scrollBox"
+            height="100%"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <grid id="grid"
+                  spacing="true"
+                  width="100%">
+                <columns>
+                    <column flex="1.0"/>
+                    <column flex="2.0"/>
+                </columns>
+                <rows>
+                    <row>
+                        <vbox id="mainInfo">
+                            <groupBox id="mainData"
+                                      caption="msg://personalInfo">
+                                <vbox id="userInfo">
+                                    <hbox id="hbox" margin="false,false,true,false"
+                                          spacing="true">
+                                        <label id="photo" value="msg://Photo"
+                                               width="150px"/>
+                                        <image id="userImage"
+                                               align="MIDDLE_CENTER"
+                                               height="100px"
+                                               scaleMode="FILL"
+                                               stylename="circle-image"
+                                               width="100px"/>
+                                        <upload id="imageUpload"
+                                                accept="*.jpg,*.png"
+                                                align="MIDDLE_CENTER"
+                                                clearButtonIcon="icons/item-remove.png"
+                                                fileSizeLimit="1024000"
+                                                showClearButton="true"
+                                                uploadButtonIcon="icons/reports-template-upload.png"/>
+                                    </hbox>
+                                    <fieldGroup id="fieldGroup"
+                                                datasource="assignmentDs"
+                                                width="100%">
+                                        <column id="column1" width="250px">
+                                            <field id="firstName" datasource="personDs"
+                                                   property="firstName"/>
+                                            <field id="lastName" datasource="personDs"
+                                                   property="lastName"/>
+                                            <field id="middleName" datasource="personDs"
+                                                   property="middleName"/>
+                                            <field id="firstNameLatin" datasource="personDs"
+                                                   property="firstNameLatin"/>
+                                            <field id="lastNameLatin" datasource="personDs"
+                                                   property="lastNameLatin"/>
+                                            <field id="middleNameLatin" datasource="personDs"
+                                                   property="middleNameLatin"/>
+                                            <field id="maritalStatus" datasource="personDs"
+                                                   property="maritalStatus"/>
+                                            <field id="type" datasource="personDs"
+                                                   property="type"/>
+                                            <field id="nationality" datasource="personDs"
+                                                   property="nationality"/>
+                                            <field id="citizenship" datasource="personDs"
+                                                   property="citizenship"/>
+                                            <field id="employeeNumber" datasource="personDs"
+                                                   property="employeeNumber"/>
+                                            <field id="hireDate" datasource="personDs"
+                                                   editable="false"
+                                                   property="hireDate"/>
+                                            <field id="calendar"
+                                                   property="positionGroup.analytics.calendar"
+                                                   captionProperty="description"
+                                                   required="true"/>
+                                        </column>
+                                    </fieldGroup>
+                                </vbox>
+                            </groupBox>
+                            <groupBox id="identification"
+                                      caption="msg://personIdentification"
+                                      width="436px">
+                                <fieldGroup id="fieldGroupIdentification"
+                                            datasource="assignmentDs"
+                                            width="100%">
+                                    <column width="250px">
+                                        <field id="nationalIdentifier"
+                                               datasource="personDs"
+                                               maxLength="12"
+                                               property="nationalIdentifier"/>
+                                        <field id="dateOfBirth"
+                                               datasource="personDs"
+                                               property="dateOfBirth"
+                                               required="true"/>
+                                        <field id="sex"
+                                               datasource="personDs"
+                                               optionsDatasource="dicSexDs"
+                                               property="sex"
+                                        required="true"/>
+                                    </column>
+                                </fieldGroup>
+                            </groupBox>
+                            <groupBox id="assign"
+                                      caption="msg://Assignments"
+                                      visible="false"
+                                      width="427px">
+                                <fieldGroup id="fieldGroupAssignment"
+                                            datasource="assignmentDs">
+                                    <column width="250px">
+                                        <field property="assignDate"/>
+                                    </column>
+                                </fieldGroup>
+                            </groupBox>
+                        </vbox>
+                        <vbox id="additional"
+                              width="500px">
+                            <groupBox caption="msg://Contacts"
+                                      height="250px">
+                                <table id="personContactsTable"
+                                       width="100%">
+                                    <actions>
+                                        <action id="create"/>
+                                        <action id="edit"/>
+                                        <action id="remove"/>
+                                    </actions>
+                                    <columns>
+                                        <column id="type.langValue"/>
+                                        <column id="contactValue"/>
+                                    </columns>
+                                    <rows datasource="personContactsDs"/>
+                                    <rowsCount/>
+                                    <buttonsPanel id="buttonsPanel"
+                                                  alwaysVisible="true">
+                                        <button id="createBtn"
+                                                action="personContactsTable.create"/>
+                                        <button id="editBtn"
+                                                action="personContactsTable.edit"/>
+                                        <button id="removeBtn"
+                                                action="personContactsTable.remove"/>
+                                    </buttonsPanel>
+                                </table>
+                            </groupBox>
+                            <groupBox caption="msg://Documents"
+                                      height="203px">
+                                <table id="personDocumentsTable"
+                                       width="100%">
+                                    <actions>
+                                        <action id="create"/>
+                                        <action id="edit"/>
+                                        <action id="remove"/>
+                                    </actions>
+                                    <columns>
+                                        <column id="documentType.langValue"/>
+                                        <column id="issueDate"/>
+                                        <column id="expiredDate"/>
+                                        <column id="issuedBy"/>
+                                        <column id="documentNumber"/>
+                                        <column id="description"/>
+                                    </columns>
+                                    <rows datasource="personDocumentsDs"/>
+                                    <rowsCount/>
+                                    <buttonsPanel id="docButtonsPanel"
+                                                  alwaysVisible="true">
+                                        <button id="createDocBtn"
+                                                action="personDocumentsTable.create"/>
+                                        <button id="editDocBtn"
+                                                action="personDocumentsTable.edit"/>
+                                        <button id="removeDocBtn"
+                                                action="personDocumentsTable.remove"/>
+                                    </buttonsPanel>
+                                </table>
+                            </groupBox>
+                            <groupBox caption="msg://probation">
+                                <fieldGroup id="fieldGroup2"
+                                            datasource="assignmentDs"
+                                            width="250px">
+                                    <column width="250px">
+                                        <field id="durationProbationPeriod"/>
+                                        <field id="unit"/>
+                                        <field id="probationEndDate"/>
+                                    </column>
+                                </fieldGroup>
+                            </groupBox>
+                        </vbox>
+                    </row>
+                    <row/>
+                </rows>
+            </grid>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

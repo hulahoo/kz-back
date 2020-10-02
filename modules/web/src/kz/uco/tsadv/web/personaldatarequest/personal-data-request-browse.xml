@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.personaldatarequest.PersonalDataRequestBrowse"
+        focusComponent="personalDataRequestsTable"
+        lookupComponent="personalDataRequestsTable"
+        messagesPack="kz.uco.tsadv.web.personaldatarequest">
+    <dsContext>
+        <groupDatasource id="personalDataRequestsDs"
+                         class="kz.uco.tsadv.modules.personal.model.PersonalDataRequest"
+                         view="personalDataRequest-view">
+            <query>
+                <![CDATA[select e from tsadv$PersonalDataRequest e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personalDataRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personalDataRequestsTable"
+                datasource="personalDataRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personalDataRequestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="lastName"/>
+                <column id="firstName"/>
+                <column id="middleName"/>
+                <column id="lastNameLatin"/>
+                <column id="firstNameLatin"/>
+                <column id="middleNameLatin"/>
+                <column id="maritalStatus"/>
+                <column id="dateOfBirth"/>
+                <column id="attachment"/>
+                <column id="status"/>
+                <column id="personGroup"/>
+            </columns>
+            <rows datasource="personalDataRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personalDataRequestsTable.create"/>
+                <button id="editBtn"
+                        action="personalDataRequestsTable.edit"/>
+                <button id="removeBtn"
+                        action="personalDataRequestsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

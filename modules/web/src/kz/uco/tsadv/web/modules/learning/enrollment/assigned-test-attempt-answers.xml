@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://assigned.test.attempts.answers"
+        class="kz.uco.tsadv.web.modules.learning.enrollment.AssignedTestAttemptAnswers"
+        messagesPack="kz.uco.tsadv.web.modules.learning.enrollment">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" width="100%" height="100%">
+        <scrollBox id="scrollBox" width="100%" spacing="true"/>
+    </layout>
+</window>

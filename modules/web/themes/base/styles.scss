@@ -1,0 +1,42 @@
+@import "kz.uco.tsadv/base-ext-defaults";
+@import "kz.uco.tsadv/base-ext";
+@import "kz.uco.tsadv/aa-button-colors";
+@import "timeline";
+@import "uactivity";
+@import "tsadv";
+@import "recognition";
+@import "kz.uco.tsadv/bpm-message-style";
+
+.base {
+  @include kz_uco_tsadv-base-ext;
+  @include timeline;
+  @include uactivity;
+  @include tsadv;
+  @include recognition;
+  @include aa-button-colors;
+  @include bpm-message-style;
+
+  .start-course-question-name {
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 7px;
+  }
+
+  .award-program-filter {
+    font-family: Arial, sans-serif;
+    font-weight: normal;
+    margin-top: 7px;
+  }
+
+  .talent-program-submit-button{
+    background: yellow;
+    border-color: yellow;
+  }
+
+  .talent-program-reject-button{
+    background: #347a34/*#449d44*/;
+    border-color: #347a34;
+  }
+
+}
+

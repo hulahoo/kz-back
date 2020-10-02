@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ShiftDetail.browseCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.shiftdetail.ShiftDetailBrowse"
+        focusComponent="shiftDetailsTable"
+        lookupComponent="shiftDetailsTable">
+    <dsContext>
+        <groupDatasource id="shiftDetailsDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.ShiftDetail"
+                         view="shiftDetail.view">
+            <query>
+                <![CDATA[select e from tsadv$ShiftDetail e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="shiftDetailsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="shiftDetailsTable"
+                datasource="shiftDetailsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="shiftDetailsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="timeFrom"/>
+                <column id="timeTo"/>
+                <column id="shift"/>
+                <column id="elementType"/>
+                <column id="dayFrom"/>
+                <column id="dayTo"/>
+            </columns>
+            <rows datasource="shiftDetailsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="shiftDetailsTable.create"/>
+                <button id="editBtn"
+                        action="shiftDetailsTable.edit"/>
+                <button id="removeBtn"
+                        action="shiftDetailsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

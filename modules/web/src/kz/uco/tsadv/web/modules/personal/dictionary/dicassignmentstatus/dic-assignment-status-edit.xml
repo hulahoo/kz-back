@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicassignmentstatus.DicAssignmentStatusEdit"
+        datasource="dicAssignmentStatusDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicassignmentstatus">
+    <dsContext>
+        <datasource id="dicAssignmentStatusDs"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="dicAssignmentStatusDs">
+                <column width="250px">
+                    <field property="langValue1"/>
+                    <field property="langValue2"/>
+                    <field property="langValue3"/>
+                    <field property="langValue4"/>
+                    <field property="langValue5"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field property="code"/>
+                    <field property="legacyID"/>
+                    <field property="isSystemRecord"/>
+                </column>
+                <column width="250px">
+                    <field property="description1"/>
+                    <field property="description2"/>
+                    <field property="description3"/>
+                    <field property="description4"/>
+                    <field property="description5"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

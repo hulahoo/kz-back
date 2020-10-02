@@ -1,0 +1,1 @@
+alter table TSADV_REQUISITION add column SUBSTITUTABLE_DISCRIPTION varchar(500) ;

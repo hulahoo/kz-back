@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://LearningObject.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.learningobject.LearningObjectEdit"
+        datasource="learningObjectDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="learningObjectDs"
+                    class="kz.uco.tsadv.modules.learning.model.LearningObject"
+                    view="learningObject.browse"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+
+        <tabSheet id="tabSheet">
+            <tab id="mainInfo"
+                 caption="msg://mainInfo"
+                 margin="true,true,true,false">
+                <fieldGroup id="fieldGroup"
+                            datasource="learningObjectDs">
+                    <column width="1100px">
+                        <field id="objectName" width="500px"/>
+                        <field id="contentType" width="200px"/>
+                        <field id="file"
+                               width="500px"
+                               visible="false"/>
+                        <field id="url"
+                               visible="false"/>
+                        <field id="html"
+                               property="html">
+                            <textArea id="htmlText"
+                                      datasource="learningObjectDs"
+                                      property="html"
+                                      height="500px"
+                                      visible="false"/>
+                        </field>
+                        <field id="text"
+                               property="text">
+                            <richTextArea id="text"
+                                          height="500px"
+                                          datasource="learningObjectDs"
+                                          property="text"
+                                          visible="false"/>
+                        </field>
+                    </column>
+                </fieldGroup>
+                <vbox id="buttonBox"
+                      margin="true">
+                    <button id="playButton"
+                            caption="msg://play"
+                            invoke="play"/>
+                </vbox>
+            </tab>
+            <tab id="description"
+                 caption="msg://LearningObject.description"
+                 margin="true,true,true,false">
+                <richTextArea id="richTextArea"
+                              datasource="learningObjectDs"
+                              height="100%"
+                              property="description"
+                              width="100%"/>
+            </tab>
+        </tabSheet>
+
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

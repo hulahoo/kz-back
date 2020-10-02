@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursefeedbacktemplate.CourseFeedbackTemplateEdit"
+        datasource="courseFeedbackTemplateDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.coursefeedbacktemplate">
+    <dsContext>
+        <datasource id="courseFeedbackTemplateDs"
+                    class="kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate"
+                    view="courseFeedbackTemplate.edit"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                forceDialog="true"
+                modal="true"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="courseFeedbackTemplateDs">
+            <column width="250px">
+                <field property="course" editable="false"/>
+                <field property="feedbackTemplate"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

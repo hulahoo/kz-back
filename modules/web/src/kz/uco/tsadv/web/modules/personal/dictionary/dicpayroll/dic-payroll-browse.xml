@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicPayroll.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicpayroll.DicPayrollBrowse"
+        focusComponent="dicPayrollsTable"
+        lookupComponent="dicPayrollsTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicpayroll">
+    <dsContext>
+        <groupDatasource id="dicPayrollsDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicPayroll"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPayroll e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicPayrollsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicPayrollsTable"
+                datasource="dicPayrollsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicPayrollsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicPayrollsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicPayrollsTable.create"/>
+                <button id="editBtn"
+                        action="dicPayrollsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicPayrollsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

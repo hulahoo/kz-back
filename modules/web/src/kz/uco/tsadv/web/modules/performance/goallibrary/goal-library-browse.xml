@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.performance.goallibrary.GoalLibraryBrowse"
+        focusComponent="goalLibrariesTable"
+        lookupComponent="goalLibrariesTable">
+    <dsContext>
+        <groupDatasource id="goalLibrariesDs"
+                         class="kz.uco.tsadv.modules.performance.model.GoalLibrary"
+                         view="goalLibrary.browse">
+            <query>
+                <![CDATA[select e from tsadv$GoalLibrary e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goalLibrariesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="goalLibrariesTable"
+                datasource="goalLibrariesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="goalLibrariesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="libraryName"/>
+                <column id="category"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="goalLibrariesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="goalLibrariesTable.create"/>
+                <button id="editBtn"
+                        action="goalLibrariesTable.edit"/>
+                <button id="removeBtn"
+                        action="goalLibrariesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

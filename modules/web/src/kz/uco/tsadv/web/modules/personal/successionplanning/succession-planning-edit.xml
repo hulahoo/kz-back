@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://SuccessionPlanning.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.successionplanning.SuccessionPlanningEdit"
+        datasource="successionPlanningDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="successionPlanningDs"
+                    class="kz.uco.tsadv.modules.personal.model.SuccessionPlanning"
+                    view="successionPlanning.browse">
+            <groupDatasource id="successorsDs"
+                             property="successors"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="successorsBox"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="successionPlanningDs">
+            <column width="250px">
+                <field captionProperty="position"
+                       property="positionGroup"
+                       custom="true"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="description"
+                       rows="5"/>
+            </column>
+        </fieldGroup>
+        <groupBox caption="msg://Successor.browseCaption" width="100%" id="successorsBox">
+            <groupTable id="successorsDsTable" width="100%" height="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="personImage"
+                            caption="msg://Photo"
+                            generator="generatePersonImageCell"
+                            sortable="false"
+                            width="115"/>
+                    <column id="personGroup.personFioWithEmployeeNumber"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                    <column id="readinessLevel"/>
+                    <column id="personGroup.activeAssessment.overalRating"/>
+                    <column id="personGroup.activeAssessment.performance"/>
+                    <column id="personGroup.activeAssessment.potential"/>
+                    <column id="personGroup.activeAssessment.riskOfLoss"/>
+                    <column id="personGroup.activeAssessment.impactOfLoss"/>
+                </columns>
+                <rows datasource="successorsDs"/>
+                <buttonsPanel>
+                    <button id="create" action="successorsDsTable.create"/>
+                    <button id="edit" action="successorsDsTable.edit"/>
+                    <button id="remove" action="successorsDsTable.remove"/>
+                </buttonsPanel>
+                <rowsCount/>
+            </groupTable>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

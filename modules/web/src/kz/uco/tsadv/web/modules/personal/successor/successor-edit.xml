@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Successor.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.successor.SuccessorEdit"
+        datasource="successorDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.successor">
+    <dsContext>
+        <datasource id="successorDs"
+                    class="kz.uco.tsadv.modules.personal.model.Successor"
+                    view="successor.browse"/>
+        <collectionDatasource id="readinessLevelsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicReadinessLevel"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicReadinessLevel e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="successorDs">
+            <column id="column" width="250px">
+                <field id="succession"
+                       property="succession"/>
+                <field id="personFioWithEmployeeNumber"
+                       captionProperty="personFioWithEmployeeNumber"
+                       property="personGroup"/>
+                <field id="startDate"
+                       property="startDate"/>
+                <field id="endDate"
+                       property="endDate"/>
+                <field id="readinessLevel"
+                       optionsDatasource="readinessLevelsDs"
+                       property="readinessLevel"/>
+                <field id="note"
+                       property="note"
+                       rows="5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

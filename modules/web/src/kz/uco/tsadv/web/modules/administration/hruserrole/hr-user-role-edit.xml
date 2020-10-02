@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://HrUserRole.editorCaption"
+        class="kz.uco.tsadv.web.modules.administration.hruserrole.HrUserRoleEdit"
+        datasource="hrUserRoleDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="hrUserRoleDs"
+                    class="kz.uco.tsadv.modules.personal.model.HrUserRole"
+                    view="hrUserRole.view"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="600"
+                modal="true"
+                forceDialog="true"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="hrUserRoleDs">
+            <column width="250px">
+                <field property="user" required="true"/>
+                <field property="role" required="true"/>
+                <field property="dateFrom" required="true"/>
+                <field property="dateTo" required="true"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

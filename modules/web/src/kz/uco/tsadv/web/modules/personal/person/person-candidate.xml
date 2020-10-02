@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonCandidate.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonCandidate"
+        datasource="personDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person">
+    <dsContext>
+        <datasource id="personDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person.candidate">
+            <datasource id="personGroupDs"
+                        property="group">
+                <collectionDatasource id="personCompetencesDs"
+                                      property="competenceElements"/>
+                <collectionDatasource id="personContactsDs"
+                                      property="personContacts"/>
+                <collectionDatasource id="personEducationDs"
+                                      property="personEducation"/>
+                <collectionDatasource id="personExperienceDs"
+                                      property="personExperience"/>
+                <collectionDatasource id="personAttachmentDs"
+                                      property="personAttachment"/>
+                <collectionDatasource id="studentGrantsDs"
+                                      property="studentGrants"/>
+                <collectionDatasource id="expectedSalaryDs"
+                                      property="expectedSalary"/>
+            </datasource>
+        </datasource>
+        <collectionDatasource id="dicSexDs"
+                              class="kz.uco.base.entity.dictionary.DicSex"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from base$DicSex e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobRequestsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                              datasourceClass="kz.uco.tsadv.datasource.CandidateJobRequestDatasource"
+                              view="jobRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e where e.candidatePersonGroup.id = :ds$personDs.group.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobRequestHistoryDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequestHistory"
+                              view="jobRequestHistory.view">
+            <query>
+                <![CDATA[select e from tsadv$JobRequestHistory e where e.jobRequest.id = :ds$jobRequestsDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personReviewsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonReview"
+                              view="personReview.browse">
+            <query>
+                <![CDATA[select e from tsadv$PersonReview e
+where e.person.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="interviewsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                              datasourceClass="kz.uco.tsadv.datasource.InterviewDatasource"
+                              view="interview.view">
+            <query>
+                <![CDATA[select e from tsadv$Interview e
+                where e.jobRequest.id = :ds$jobRequestsDs.id
+                order by e.createTs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personDocumentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonDocument"
+                              view="personDocument.full">
+            <query>
+                <![CDATA[select e from tsadv$PersonDocument e where e.personGroup.id = :ds$personGroupDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="addressesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Address"
+                              view="address.view">
+            <query>
+                <![CDATA[select e from tsadv$Address e where e.personGroup.id = :ds$personGroupDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="competenceElementsDs"
+                              class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
+                              view="competenceElement-view">
+            <query>
+                <![CDATA[select e from tsadv$CompetenceElement e
+where e.personGroup.id = :ds$personGroupDs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="mainData"
+                 caption="msg://personalInfo"
+                 margin="true">
+                <scrollBox id="scrollBox"
+                           height="100%"
+                           spacing="true">
+                    <groupBox id="mainDataBox"
+                              caption="msg://mainData">
+                        <vbox id="userInfo">
+                            <hbox margin="false,false,true,false" spacing="true" id="hboxId">
+                                <label value="msg://Photo"
+                                       width="150px"/>
+                                <image id="userImage"
+                                       align="MIDDLE_CENTER"
+                                       height="100px"
+                                       scaleMode="FILL"
+                                       stylename="circle-image"
+                                       width="100px"/>
+                                <upload id="imageUpload"
+                                        accept="*.jpg,*.png"
+                                        align="MIDDLE_CENTER"
+                                        clearButtonIcon="icons/item-remove.png"
+                                        fileSizeLimit="1024000"
+                                        showClearButton="true"
+                                        uploadButtonIcon="icons/reports-template-upload.png"/>
+                            </hbox>
+                            <fieldGroup id="fieldGroup"
+                                        datasource="personDs"
+                                        width="100%">
+                                <column width="250px" id="colunmId1">
+                                    <field datasource="personDs"
+                                           property="firstName"/>
+                                    <field datasource="personDs"
+                                           property="lastName"/>
+                                    <field datasource="personDs"
+                                           property="middleName"/>
+                                    <field datasource="personDs"
+                                           editable="false"
+                                           property="type"
+                                           caption="msg://Person.type"/>
+                                </column>
+                                <column width="250px" id="colunmId2">
+                                    <field datasource="personDs" id="nationalityId"
+                                           property="nationality"
+                                           caption="msg://Person.nationality"/>
+                                    <field datasource="personDs" id="citizenshipId"
+                                           property="citizenship"
+                                           caption="msg://Person.citizenship"/>
+                                    <field datasource="personDs" id="maritalStatusId"
+                                           property="maritalStatus"
+                                           caption="msg://Person.maritalStatus"/>
+                                </column>
+                            </fieldGroup>
+                        </vbox>
+                    </groupBox>
+                    <groupBox id="identification"
+                              caption="msg://candidateIdentification">
+                        <fieldGroup id="fieldGroupIdentification"
+                                    datasource="personDs"
+                                    width="100%">
+                            <column id="column1"
+                                    width="250px">
+                                <field id="nationalIdentifier"
+                                       datasource="personDs"
+                                       maxLength="12"
+                                       property="nationalIdentifier"/>
+                                <field id="dateOfBirth"
+                                       datasource="personDs"
+                                       property="dateOfBirth"/>
+                            </column>
+                            <column id="column2"
+                                    width="250px">
+                                <field id="sex"
+                                       datasource="personDs"
+                                       optionsDatasource="dicSexDs"
+                                       property="sex"/>
+                            </column>
+                        </fieldGroup>
+                    </groupBox>
+                </scrollBox>
+            </tab>
+            <tab id="studentGrants"
+                 caption="msg://Student.grant.browseCaption"
+                 lazy="true"
+                 margin="true">
+                <table id="studentGrantsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="numberContract"/>
+                        <column id="dateContract"/>
+                        <column id="learningCenter"/>
+                        <column id="specialization"/>
+                        <column id="learningForm.langValue"
+                                caption="msg://kz.uco.tsadv.modules.personal.model/StudentGrant.learningForm"/>
+                        <column id="learnEndDate"/>
+                        <column id="reason"
+                                maxTextLength="100"/>
+                        <column id="orderRequisition"
+                                maxTextLength="100"/>
+                    </columns>
+                    <rows datasource="studentGrantsDs"/>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button action="studentGrantsTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="studentGrantsTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="studentGrantsTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="studentGrantsTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="education"
+                 caption="msg://PersonGroup.education"
+                 lazy="true"
+                 margin="true">
+                <table id="personEducationTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="school"/>
+                        <column id="startYear">
+                            <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                                       format="####"/>
+                        </column>
+                        <column id="endYear">
+                            <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                                       format="####"/>
+                        </column>
+                        <column id="specialization"/>
+                        <column id="degree"/>
+                        <column id="location"/>
+                    </columns>
+                    <rows datasource="personEducationDs"/>
+                    <rowsCount/>
+                    <buttonsPanel alwaysVisible="true">
+                        <button action="personEducationTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personEducationTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personEducationTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personEducationTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="experience"
+                 caption="msg://PersonGroup.experience"
+                 lazy="true"
+                 margin="true">
+                <table id="personExperienceTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="company"/>
+                        <column id="job"/>
+                        <column id="startMonth">
+                            <!--<formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"-->
+                            <!--format="MM.yyyy"/>-->
+                        </column>
+                        <column id="endMonth">
+                            <!--<formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"-->
+                            <!--format="MM.yyyy"/>-->
+                        </column>
+                        <column id="description"/>
+                    </columns>
+                    <rows datasource="personExperienceDs"/>
+                    <rowsCount/>
+                    <buttonsPanel alwaysVisible="true">
+                        <button action="personExperienceTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personExperienceTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personExperienceTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personExperienceTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="attachments"
+                 caption="msg://PersonGroup.attachments"
+                 lazy="true"
+                 margin="true">
+                <table id="personAttachmentsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="filename"/>
+                        <column id="description"/>
+                        <column id="category"/>
+                        <column id="downloadBtn"
+                                generator="getPersonAttachmentDownloadBtn"/>
+                    </columns>
+                    <rows datasource="personAttachmentDs"/>
+                    <rowsCount/>
+                    <buttonsPanel alwaysVisible="true">
+                        <button action="personAttachmentsTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personAttachmentsTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personAttachmentsTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personAttachmentsTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="addresses"
+                 caption="msg://PersonCard.adressess"
+                 lazy="true"
+                 margin="true">
+                <table id="addressesTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"/>
+                    </actions>
+                    <columns>
+                        <column id="addressType"/>
+                        <column id="country"/>
+                        <column id="postalCode"/>
+                        <column id="city"/>
+                        <column id="address"
+                                caption="msg://addressLine"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="addressesDs"/>
+                    <buttonsPanel id="addressesButtonsPanel">
+                        <button action="addressesTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="addressesTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="addressesTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="addressesTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="contacts"
+                 caption="msg://Contacts"
+                 lazy="true"
+                 margin="true">
+                <table id="personContactsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="type"/>
+                        <column id="contactValue"/>
+                    </columns>
+                    <rows datasource="personContactsDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button action="personContactsTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personContactsTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personContactsTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personContactsTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="documents"
+                 caption="msg://Documents"
+                 lazy="true"
+                 margin="true">
+                <table id="personDocumentsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="documentType"/>
+                        <column id="issueDate"/>
+                        <column id="expiredDate"/>
+                        <column id="issuedBy"/>
+                        <column id="description"/>
+                    </columns>
+                    <rows datasource="personDocumentsDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="docButtonsPanel"
+                                  alwaysVisible="true">
+                        <button action="personDocumentsTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personDocumentsTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personDocumentsTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personDocumentsTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="competences"
+                 caption="msg://Competences"
+                 lazy="true"
+                 margin="true">
+                <table id="personCompetencesTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="competenceGroup.competence.competenceName"/>
+                        <column id="scaleLevel"/>
+                    </columns>
+                    <rows datasource="personCompetencesDs"/>
+                    <rowsCount/>
+                    <buttonsPanel alwaysVisible="true">
+                        <button action="personCompetencesTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personCompetencesTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personCompetencesTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personCompetencesTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="jobRequests"
+                 caption="msg://PersonGroup.jobRequests"
+                 margin="true,false,false,false">
+                <frame id="jobRequestFrameId" screen="candidate-job-request"/>
+            </tab>
+            <tab id="reviewsTabId"
+                 caption="msg://reviewsTable"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <frame id="reviewsFrameId"
+                       height="100%"
+                       screen="pcf-reviews"/>
+            </tab>
+            <tab id="expectedSalary"
+                 caption="msg://ExpectedSalary"
+                 lazy="true"
+                 margin="true">
+                <table id="expectedSalaryTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="actualDate"/>
+                        <column id="amount"/>
+                        <column id="grossNet"/>
+                        <column id="currency"/>
+                    </columns>
+                    <rows datasource="expectedSalaryDs"/>
+                    <rowsCount/>
+                    <buttonsPanel alwaysVisible="true">
+                        <button action="expectedSalaryTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="expectedSalaryTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="expectedSalaryTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="expectedSalaryTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

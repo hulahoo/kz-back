@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Budget.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.budget.BudgetEdit"
+        datasource="budgetDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="budgetDs"
+                    class="kz.uco.tsadv.modules.learning.model.Budget"
+                    view="budget.view"/>
+        <collectionDatasource id="budgetStatusesDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicBudgetStatus"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[
+                        select e from tsadv$DicBudgetStatus e
+                        ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="budgetDs">
+            <column width="250px">
+                <field property="name"/>
+                <field property="description" rows="5"/>
+                <field property="budgetStartDate"/>
+                <field property="budgetEndDate"/>
+                <field property="requestStartDate"/>
+                <field property="requestEndDate"/>
+                <field property="status" optionsDatasource="budgetStatusesDs"/>
+                <field property="previousBudget"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

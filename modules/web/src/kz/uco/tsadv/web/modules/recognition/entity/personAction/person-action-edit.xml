@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personAction.PersonActionEdit"
+        datasource="personActionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personAction">
+    <dsContext>
+        <datasource id="personActionDs"
+                    class="kz.uco.tsadv.modules.recognition.PersonAction"
+                    view="personAction-view">
+            <collectionDatasource id="personActionObjectDs"
+                                  property="personActionObject"/>
+            <collectionDatasource id="personActionLikeDs"
+                                  property="personActionLike"/>
+            <collectionDatasource id="personActionCommentDs"
+                                  property="personActionComment"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="personActionDs">
+                <column width="250px">
+                    <field property="author"/>
+                    <field property="receiver"/>
+                    <field property="actionLang1"/>
+                    <field property="actionType"/>
+                    <field property="actionLang2"/>
+                    <field property="actionLang3"/>
+                    <field property="actionLang4"/>
+                    <field property="actionLang5"/>
+                </column>
+                <column>
+                    <field property="actorFullnameLang1"/>
+                    <field property="actorFullnameLang2"/>
+                    <field property="actorFullnameLang3"/>
+                    <field property="actorFullnameLang4"/>
+                    <field property="actorFullnameLang5"/>
+                    <field property="actionDate"/>
+                </column>
+                <column>
+                    <field property="toFullnameLang1"/>
+                    <field property="toFullnameLang2"/>
+                    <field property="toFullnameLang3"/>
+                    <field property="toFullnameLang4"/>
+                    <field property="toFullnameLang5"/>
+                    <field property="comment"/>
+                </column>
+            </fieldGroup>
+            <tabSheet>
+                <tab id="personActionObject"
+                     caption="msg://personActionObject"
+                     margin="true, false, false, false"
+                     spacing="false">
+                    <table id="personActionObjectTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </actions>
+                        <columns>
+                            <column id="object"/>
+                        </columns>
+                        <rows datasource="personActionObjectDs"/>
+                        <buttonsPanel>
+                            <button action="personActionObjectTable.create"/>
+                            <button action="personActionObjectTable.edit"/>
+                            <button action="personActionObjectTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="personActionLike"
+                     caption="msg://personActionLike"
+                     margin="true, false, false, false"
+                     spacing="false">
+                    <table id="personActionLikeTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </actions>
+                        <columns>
+                            <column id="personGroup"/>
+                        </columns>
+                        <rows datasource="personActionLikeDs"/>
+                        <buttonsPanel>
+                            <button action="personActionLikeTable.create"/>
+                            <button action="personActionLikeTable.edit"/>
+                            <button action="personActionLikeTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="personActionComment"
+                     caption="msg://personActionComment"
+                     margin="true, false, false, false"
+                     spacing="false">
+                    <table id="personActionCommentTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </actions>
+                        <columns>
+                            <column id="personGroup"/>
+                            <column id="parentComment"/>
+                        </columns>
+                        <rows datasource="personActionCommentDs"/>
+                        <buttonsPanel>
+                            <button action="personActionCommentTable.create"/>
+                            <button action="personActionCommentTable.edit"/>
+                            <button action="personActionCommentTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

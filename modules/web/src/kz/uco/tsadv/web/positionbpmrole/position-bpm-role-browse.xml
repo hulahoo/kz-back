@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.positionbpmrole.PositionBpmRoleBrowse"
+        focusComponent="positionBpmRolesTable"
+        lookupComponent="positionBpmRolesTable"
+        messagesPack="kz.uco.tsadv.web.positionbpmrole">
+    <dsContext>
+        <groupDatasource id="positionBpmRolesDs"
+                         class="kz.uco.tsadv.entity.tb.PositionBpmRole"
+                         view="positionBpmRole-view">
+            <query>
+                <![CDATA[select e from tsadv$PositionBpmRole e]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="bpmRolesLinkDs"
+                              class="kz.uco.tsadv.modules.bpm.BpmRolesLink"
+                              view="bpmRolesLink-view">
+            <query>
+                <![CDATA[ select e from tsadv$BpmRolesLink e where e.positionBpmRole.id = :ds$positionBpmRolesDs.id ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <filter id="filter"
+                applyTo="positionBpmRolesTable"
+                datasource="positionBpmRolesDs">
+            <properties include=".*"/>
+        </filter>
+        <split id="split"
+               orientation="vertical"
+               width="100%">
+            <table id="positionBpmRolesTable"
+                   height="100%"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="positionGroup"
+                            captionProperty="positionGroup.fullName"/>
+                    <column id="procModel"
+                            captionProperty="procModel.name"/>
+                </columns>
+                <rows datasource="positionBpmRolesDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="positionBpmRolesTable.create"/>
+                    <button id="removeBtn"
+                            action="positionBpmRolesTable.remove"/>
+                </buttonsPanel>
+            </table>
+            <groupBox id="historyGroupBox"
+                      caption="msg://bpmLink"
+                      height="100%">
+                <table id="bpmRolesLinkTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                enable="false"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="bpmRole"
+                                captionProperty="bpmRole.locName"/>
+                        <column id="hrRole"
+                                captionProperty="hrRole.langValue"/>
+                        <column id="required"/>
+                        <column id="findByCounter"/>
+                    </columns>
+                    <rows datasource="bpmRolesLinkDs"/>
+                    <buttonsPanel>
+                        <button id="createButton"
+                                action="bpmRolesLinkTable.create"/>
+                        <button id="editButton"
+                                action="bpmRolesLinkTable.edit"/>
+                        <button id="removeButton"
+                                action="bpmRolesLinkTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

@@ -1,0 +1,6 @@
+DELETE FROM sys_attr_value
+WHERE code = 'BUSINESSTRIPORDERDATE';
+DELETE FROM sys_attr_value
+WHERE code = 'BUSINESSTRIPOrderNum';
+DELETE FROM sys_attr_value
+WHERE code = 'BUSINESSTRIPREASON';

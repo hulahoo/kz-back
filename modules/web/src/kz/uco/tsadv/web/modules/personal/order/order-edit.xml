@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Order.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.order.OrderEdit"
+        datasource="orderDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="orderDs"
+                    class="kz.uco.tsadv.modules.personal.model.Order"
+                    view="order-view">
+            <collectionDatasource id="ordAssignmentDs"
+                                  property="ordAssignment">
+                <collectionDatasource id="absencesDs"
+                                      property="absences"/>
+                <collectionDatasource id="salaryDs"
+                                      property="salary"/>
+                <collectionDatasource id="businessTripDs"
+                                      property="businessTrip">
+                    <collectionDatasource id="businessTripLinesDs"
+                                          property="businessTripLines">
+                        <collectionDatasource id="businessTripCostDs"
+                                              property="businessTripCost"/>
+                    </collectionDatasource>
+                </collectionDatasource>
+                <collectionDatasource id="dismissalDs"
+                                      property="dismissal"/>
+            </collectionDatasource>
+        </datasource>
+        <groupDatasource id="assignmentsDs"
+                         class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                         view="assignmentBrowse.view">
+            <query>
+                <![CDATA[select e from base$AssignmentExt e where :ds$orderDs.orderDate between e.startDate and e.endDate]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="ordSalaryDs"
+                              class="kz.uco.tsadv.modules.personal.model.Salary"
+                              view="salary.order.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$Salary e
+                          where e.ordAssignment.order.id = :ds$orderDs.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="selectedAssignmentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                              refreshMode="NEVER"
+                              view="assignmentBrowse.view"/>
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e, bpm$ProcInstance pi
+                          where pi.entity.entityId = :ds$orderDs
+                            and e.procInstance.id = pi.id
+                       order by e.createTs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="requisites"
+                 caption="msg://Order.requisites"
+                 spacing="true">
+                <split height="100%"
+                       orientation="horizontal"
+                       width="100%">
+                    <scrollBox>
+                        <vbox margin="false,true,false,false"
+                              spacing="true">
+                            <groupBox id="mainInfoBox"
+                                      caption="msg://Order.mainInfo"
+                                      height="AUTO"
+                                      spacing="true"
+                                      width="100%">
+                                <fieldGroup id="fieldGroup"
+                                            datasource="orderDs"
+                                            width="100%">
+                                    <column width="100%">
+                                        <field property="orderType"/>
+                                        <field property="orderNumber"/>
+                                        <field property="orderDate"/>
+                                        <field captionProperty="personFioWithEmployeeNumber"
+                                               property="approverPersonGroup"
+                                               required="true"/>
+                                        <field editable="false"
+                                               property="orderStatus"/>
+                                        <field property="orderReason"/>
+                                    </column>
+                                </fieldGroup>
+                            </groupBox>
+                            <groupBox id="cancelBox"
+                                      caption="msg://Order.cancelOrder"
+                                      height="AUTO"
+                                      spacing="true">
+                                <fieldGroup id="fieldGroupCancel"
+                                            datasource="orderDs"
+                                            height="100%"
+                                            width="100%">
+                                    <column width="100%">
+                                        <field property="cancelOrderNumber"/>
+                                        <field property="cancelOrderDate"/>
+                                        <field property="cancelOrderReason"/>
+                                    </column>
+                                </fieldGroup>
+                            </groupBox>
+                        </vbox>
+                    </scrollBox>
+                    <vbox expand="bpmActorsBox"
+                          height="100%"
+                          margin="false,false,false,true"
+                          spacing="true"
+                          width="100%">
+                        <groupBox id="procActionsBox"
+                                  caption="msg://Order.approvalProcess"
+                                  height="AUTO"
+                                  orientation="vertical"
+                                  spacing="true"
+                                  width="100%">
+                            <frame id="procActionsFrame"
+                                   height="AUTO"
+                                   screen="procActionsFrame"
+                                   width="100%"/>
+                        </groupBox>
+                        <groupBox id="bpmActorsBox"
+                                  caption="msg://TransferRequest.approvalProcess.actors"
+                                  width="100%">
+                            <table id="procTasksTable"
+                                   height="100%"
+                                   width="100%">
+                                <columns>
+                                    <column id="locName"
+                                            caption="msg://ProcActor.role"/>
+                                    <column id="procActor.user"/>
+                                    <column id="startDate"/>
+                                    <column id="endDate"/>
+                                    <column id="locOutcome"
+                                            caption="msg://ProcActor.decision"/>
+                                    <column id="comment"
+                                            maxTextLength="50"/>
+                                </columns>
+                                <rows datasource="procTasksDs"/>
+                            </table>
+                        </groupBox>
+                    </vbox>
+                </split>
+            </tab>
+            <tab id="details"
+                 caption="msg://Order.details"
+                 expand="splitter">
+                <vbox id="salaryBox"
+                      expand="ordSalaryTable"
+                      height="100%"
+                      width="100%">
+                    <table id="ordSalaryTable"
+                           caption="msg://Order.salaries"
+                           editable="true"
+                           multiselect="true"
+                           width="100%">
+                        <columns>
+                            <column id="ordAssignment.assignmentPersonByOrderDate"
+                                    captionProperty="ordAssignment.assignmentPersonByOrderDate.fioWithEmployeeNumber"/>
+                            <column id="ordAssignment.assignmentPositionByOrderDate"
+                                    captionProperty="ordAssignment.assignmentPositionByOrderDate.positionName"/>
+                            <!--<column id="assignmentGroup.assignment.personGroup.personFioWithEmployeeNumber"/>-->
+                            <!--<column id="assignmentGroup.assignment.positionGroup.position.positionName"/>-->
+                            <column id="amount"
+                                    editable="true"/>
+                            <column id="currency"
+                                    editable="true"/>
+                            <column id="netGross"
+                                    editable="true"/>
+                            <column id="reason"
+                                    editable="true"/>
+                            <column id="startDate"
+                                    editable="true"/>
+                            <column id="endDate"
+                                    editable="true"/>
+                        </columns>
+                        <rows datasource="ordSalaryDs"/>
+                        <buttonsPanel>
+                            <hbox>
+                                <tokenList id="assignmentMultiLookup"
+                                           captionProperty="personGroup.personFioWithEmployeeNumber"
+                                           clearEnabled="false"
+                                           datasource="selectedAssignmentsDs"
+                                           simple="true"
+                                           width="AUTO">
+                                    <lookup lookup="true"
+                                            lookupScreen="base$AssignmentExt.browse"
+                                            multiselect="true"
+                                            openType="DIALOG"/>
+                                    <addButton caption="msg://table.btn.add"
+                                               icon="icons/plus-btn.png"/>
+                                </tokenList>
+                                <hbox spacing="true">
+                                    <button caption="msg://table.btn.remove"
+                                            icon="icons/remove.png"
+                                            invoke="deleteOrdAssignmentSalary"/>
+                                    <button caption="msg://table.btn.edit"
+                                            icon="icons/bulk-edit.png"
+                                            invoke="salaryEdit"/>
+                                </hbox>
+                            </hbox>
+                        </buttonsPanel>
+                    </table>
+                </vbox>
+                <split id="splitter"
+                       orientation="horizontal"
+                       width="100%">
+                    <vbox id="ordAssignmentBox"
+                          expand="ordAssignmentTable"
+                          height="100%"
+                          margin="true,true,false,true"
+                          spacing="true"
+                          width="100%">
+                        <groupBox caption="msg://Order.assignmentList"
+                                  expand="assignmentLookup"
+                                  orientation="horizontal"
+                                  spacing="true"
+                                  width="100%">
+                            <lookupPickerField id="assignmentLookup"
+                                               captionProperty="personGroup.person.fioWithEmployeeNumber"
+                                               optionsDatasource="assignmentsDs">
+                                <actions>
+                                    <action id="lookup"/>
+                                </actions>
+                            </lookupPickerField>
+                            <button caption="msg://table.btn.add"
+                                    icon="icons/plus-btn.png"
+                                    invoke="addOrdAssigment"/>
+                        </groupBox>
+                        <table id="ordAssignmentTable"
+                               multiselect="true"
+                               width="100%">
+                            <columns>
+                                <column id="assignmentPersonByOrderDate"
+                                        captionProperty="assignmentPersonByOrderDate.fioWithEmployeeNumber"/>
+                                <column id="assignmentPositionByOrderDate"
+                                        captionProperty="assignmentPositionByOrderDate.positionName"/>
+                                <!--<column id="assignmentGroup.assignment.personGroup.person.fioWithEmployeeNumber"/>-->
+                                <!--<column id="assignmentGroup.assignment.positionGroup.position"-->
+                                <!--captionProperty="assignmentGroup.assignment.positionGroup.position.positionName"/>-->
+                            </columns>
+                            <rows datasource="ordAssignmentDs"/>
+                            <buttonsPanel margin="true,false,false,false">
+                                <button caption="msg://table.btn.remove"
+                                        icon="icons/remove.png"
+                                        invoke="deleteOrdAssignment"/>
+                            </buttonsPanel>
+                        </table>
+                    </vbox>
+                    <vbox id="ordAssignmentDetailsBox"
+                          height="100%"
+                          margin="true,true,false,true"
+                          width="100%">
+                        <table id="absenceTable"
+                               caption="msg://Order.absences"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"/>
+                                <action id="remove"/>
+                                <action id="edit"/>
+                            </actions>
+                            <columns>
+                                <column id="type"/>
+                                <column id="notificationDate"/>
+                                <column id="dateFrom"/>
+                                <column id="dateTo"/>
+                                <column id="absenceDays"/>
+                            </columns>
+                            <rows datasource="absencesDs"/>
+                            <buttonsPanel id="absenceTableButtonsPanel">
+                                <button action="absenceTable.create"/>
+                                <button action="absenceTable.edit"/>
+                                <button action="absenceTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                        <vbox id="businessTripBox"
+                              expand="businessTripCostTable"
+                              height="100%"
+                              spacing="true"
+                              width="100%">
+                            <table id="businessTripTable"
+                                   caption="msg://Order.businessTrips"
+                                   height="150px"
+                                   width="100%">
+                                <actions>
+                                    <action id="create"/>
+                                    <action id="edit"/>
+                                    <action id="remove"/>
+                                </actions>
+                                <columns>
+                                    <column id="dateFrom"/>
+                                    <column id="dateTo"/>
+                                    <column id="type"/>
+                                    <column id="purpose"/>
+                                </columns>
+                                <rows datasource="businessTripDs"/>
+                                <buttonsPanel>
+                                    <button action="businessTripTable.create"/>
+                                    <button action="businessTripTable.edit"/>
+                                    <button action="businessTripTable.remove"/>
+                                </buttonsPanel>
+                            </table>
+                            <table id="businessTripLinesTable"
+                                   caption="msg://Order.businessTripLines"
+                                   height="150px"
+                                   width="100%">
+                                <actions>
+                                    <action id="create"/>
+                                    <action id="edit"/>
+                                    <action id="remove"/>
+                                </actions>
+                                <columns>
+                                    <column id="city"/>
+                                    <column id="dateFrom"/>
+                                    <column id="dateTo"/>
+                                </columns>
+                                <rows datasource="businessTripLinesDs"/>
+                                <buttonsPanel>
+                                    <button action="businessTripLinesTable.create"/>
+                                    <button action="businessTripLinesTable.edit"/>
+                                    <button action="businessTripLinesTable.remove"/>
+                                </buttonsPanel>
+                            </table>
+                            <table id="businessTripCostTable"
+                                   caption="msg://Order.businessTripCosts"
+                                   width="100%">
+                                <actions>
+                                    <action id="create"/>
+                                    <action id="edit"/>
+                                    <action id="remove"/>
+                                </actions>
+                                <columns>
+                                    <column id="amount"/>
+                                    <column id="currency"/>
+                                    <column id="costType"/>
+                                </columns>
+                                <rows datasource="businessTripCostDs"/>
+                                <buttonsPanel>
+                                    <button action="businessTripCostTable.create"/>
+                                    <button action="businessTripCostTable.edit"/>
+                                    <button action="businessTripCostTable.remove"/>
+                                </buttonsPanel>
+                            </table>
+                        </vbox>
+                        <table id="dismissalTable"
+                               caption="msg://Order.dismissal"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"/>
+                                <action id="remove"/>
+                                <action id="edit"/>
+                            </actions>
+                            <columns>
+                                <column id="requestDate"/>
+                                <column id="dismissalDate"/>
+                                <column id="lcArticle"/>
+                                <column id="dismissalReason"/>
+                                <column id="status"/>
+                            </columns>
+                            <rows datasource="dismissalDs"/>
+                            <buttonsPanel id="dismissalTableButtonsPanel">
+                                <button action="dismissalTable.create"/>
+                                <button action="dismissalTable.edit"/>
+                                <button action="dismissalTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </vbox>
+                </split>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

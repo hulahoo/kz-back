@@ -1,0 +1,17 @@
+.method {
+    border: 1px solid grey;
+    padding: 5px;
+    margin: 5px;
+    width: 900px;
+}
+
+.method table tr td {
+    width: 300px;
+}
+
+.method .description {
+    background-color: #b2dba1;
+    font-size: 16px;
+    padding: 5px;
+    margin-bottom: 5px;
+}

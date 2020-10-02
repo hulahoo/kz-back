@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.questionnaire.QuestionnaireEdit"
+        datasource="questionnaireDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.questionnaire">
+    <dsContext>
+        <datasource id="questionnaireDs"
+                    class="kz.uco.tsadv.modules.performance.model.Questionnaire"
+                    view="questionnaire.edit">
+            <collectionDatasource id="questionDs"
+                                  property="question">
+                <collectionDatasource id="answerDs"
+                                      property="answer"/>
+            </collectionDatasource>
+            <collectionDatasource id="scaleDs"
+                                  property="scale"/>
+        </datasource>
+        <collectionDatasource id="statusesDs"
+                              class="kz.uco.tsadv.modules.performance.dictionary.DicQuestionnaireStatus"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="dicQuestionnaireStatus.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicQuestionnaireStatus e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            height="100%">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <hbox id="headerHbox"
+                  expand="descriptionTabSheet"
+                  height="100%"
+                  spacing="true"
+                  width="100%">
+                <fieldGroup id="fieldGroup"
+                            datasource="questionnaireDs">
+                    <column width="250px">
+                        <field property="questionnaireNameLang1"/>
+                        <field property="questionnaireNameLang2"/>
+                        <field property="questionnaireNameLang3"/>
+                        <field optionsDatasource="statusesDs"
+                               property="status"/>
+                        <field property="startDate"/>
+                        <field property="endDate"/>
+                    </column>
+                </fieldGroup>
+                <tabSheet id="descriptionTabSheet"
+                          height="100%">
+                    <tab id="descriptionRuTab"
+                         caption="msg://descriptionRu"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <textArea id="descriptionTextAreaRu"
+                                  datasource="questionnaireDs"
+                                  height="100%"
+                                  property="descriptionLang1"
+                                  width="100%"/>
+                    </tab>
+                    <tab id="descriptionEnTab"
+                         caption="msg://descriptionEn"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <textArea id="descriptionTextAreaEn"
+                                  datasource="questionnaireDs"
+                                  height="100%"
+                                  property="descriptionLang2"
+                                  width="100%"/>
+                    </tab>
+                    <tab id="descriptionKzTab"
+                         caption="msg://descriptionKz"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <textArea id="descriptionTextAreaKz"
+                                  datasource="questionnaireDs"
+                                  height="100%"
+                                  property="descriptionLang3"
+                                  width="100%"/>
+                    </tab>
+                </tabSheet>
+            </hbox>
+            <tabSheet id="additionalSettingTabsheet">
+                <tab id="questionsAnswersTab"
+                     caption="msg://questionsAnswers"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <groupBox id="questionBox"
+                              caption="msg://Questionnaire.question">
+                        <table id="questionTable"
+                               editable="true"
+                               height="200px"
+                               width="100%">
+                            <actions>
+                                <action id="create"/>
+                                <action id="edit"/>
+                                <action id="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="order"/>
+                                <column id="questionText"/>
+                                <column id="questionType"/>
+                                <column id="answer"
+                                        caption="msg://answer"/>
+                                <column id="section"/>
+                            </columns>
+                            <rows datasource="questionDs"/>
+                            <buttonsPanel>
+                                <button action="questionTable.create"/>
+                                <button action="questionTable.edit"/>
+                                <button action="questionTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
+                    <groupBox id="answerBox">
+                        <table id="answerTable"
+                               height="200px"
+                               width="100%">
+                            <actions>
+                                <action id="create"/>
+                                <action id="edit"/>
+                                <action id="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="order"/>
+                                <column id="answer"
+                                        caption="msg://answer"/>
+                                <column id="score"/>
+                            </columns>
+                            <rows datasource="answerDs"/>
+                            <buttonsPanel>
+                                <button action="answerTable.create"/>
+                                <button action="answerTable.edit"/>
+                                <button action="answerTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
+                </tab>
+                <tab id="resultSettingTab"
+                     caption="msg://resultSetting"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="resultSettingTable"
+                           height="200px"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="resultLang1"/>
+                            <column id="resultLang2"/>
+                            <column id="resultLang3"/>
+                            <column id="resultLang4"/>
+                            <column id="resultLang5"/>
+                            <column id="min"/>
+                            <column id="max"/>
+                        </columns>
+                        <rows datasource="scaleDs"/>
+                        <buttonsPanel>
+                            <button action="resultSettingTable.create"/>
+                            <button action="resultSettingTable.edit"/>
+                            <button action="resultSettingTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

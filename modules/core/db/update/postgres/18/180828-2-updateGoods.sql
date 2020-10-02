@@ -1,0 +1,16 @@
+alter table TSADV_GOODS add column NAME_LANG1 varchar(500);
+alter table TSADV_GOODS add column NAME_LANG2 varchar(500) ;
+alter table TSADV_GOODS add column NAME_LANG3 varchar(500) ;
+alter table TSADV_GOODS add column NAME_LANG4 varchar(500) ;
+alter table TSADV_GOODS add column NAME_LANG5 varchar(500) ;
+update TSADV_GOODS set NAME_LANG1 = '' where NAME_LANG1 is null ;
+update TSADV_GOODS set NAME_LANG1 = good_name_lang1;
+update TSADV_GOODS set NAME_LANG2 = good_name_lang2;
+update TSADV_GOODS set NAME_LANG3 = good_name_lang3;
+alter table TSADV_GOODS alter column NAME_LANG1 set not null ;
+alter table TSADV_GOODS rename column good_name_lang5 to good_name_lang5__u53354 ;
+alter table TSADV_GOODS rename column good_name_lang4 to good_name_lang4__u19192 ;
+alter table TSADV_GOODS rename column good_name_lang3 to good_name_lang3__u92449 ;
+alter table TSADV_GOODS rename column good_name_lang2 to good_name_lang2__u02653 ;
+alter table TSADV_GOODS rename column good_name_lang1 to good_name_lang1__u00442 ;
+alter table TSADV_GOODS alter column good_name_lang1__u00442 drop not null ;

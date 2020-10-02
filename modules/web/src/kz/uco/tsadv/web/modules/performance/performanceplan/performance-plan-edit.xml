@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.performanceplan.PerformancePlanEdit"
+        datasource="performancePlanDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="performancePlanDs"
+                    class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
+                    view="performancePlan.edit">
+            <collectionDatasource id="organizationsDs"
+                                  property="organizations"/>
+            <collectionDatasource id="positionsDs"
+                                  property="positions"/>
+            <collectionDatasource id="jobsDs"
+                                  property="jobs"/>
+        </datasource>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.browse">
+            <query>
+                <![CDATA[select e from base$OrganizationGroupExt e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="positionGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                              view="positionGroup.browse">
+            <query>
+                <![CDATA[select e from base$PositionGroupExt e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="JobGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e from tsadv$JobGroup e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="mainInfo"
+                 caption="msg://mainInfo"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="performancePlanDs">
+                    <column width="250px">
+                        <field property="performancePlanName"/>
+                        <field property="previousPlan"/>
+                        <field property="description"/>
+                        <field captionProperty="personFioWithEmployeeNumber"
+                               property="administratorPersonGroup"/>
+                        <field property="startDate"/>
+                        <field property="endDate"/>
+                        <field property="accessibilityStartDate"/>
+                        <field property="accessibilityEndDate"/>
+                    </column>
+                </fieldGroup>
+            </tab>
+            <tab id="profileOfApplicability"
+                 caption="msg://profileOfApplicability"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <hbox height="100%"
+                      spacing="true"
+                      width="100%">
+                    <groupBox caption="msg://OrganizationGroup.browseCaption"
+                              height="100%"
+                              spacing="true">
+                        <tokenList id="tokenList"
+                                   captionProperty="organization.organizationName"
+                                   datasource="organizationsDs">
+                            <lookup captionProperty="organization.organizationName"
+                                    optionsDatasource="organizationGroupsDs"/>
+                        </tokenList>
+                    </groupBox>
+                    <groupBox caption="msg://Position.browseCaption"
+                              height="100%"
+                              spacing="true">
+                        <tokenList id="positionsTokenList"
+                                   captionProperty="position.positionName"
+                                   datasource="positionsDs">
+                            <lookup captionProperty="position.positionName"
+                                    optionsDatasource="positionGroupsDs"/>
+                        </tokenList>
+                    </groupBox>
+                    <groupBox caption="msg://Job.browseCaption"
+                              height="100%"
+                              spacing="true">
+                        <tokenList id="jobsTokenList"
+                                   captionProperty="job.jobName"
+                                   datasource="jobsDs">
+                            <lookup captionProperty="job.jobName"
+                                    optionsDatasource="JobGroupsDs"/>
+                        </tokenList>
+                    </groupBox>
+                </hbox>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

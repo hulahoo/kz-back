@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.lmsslider.LmsSliderEdit"
+        datasource="lmsSliderDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.lmsslider">
+    <dsContext>
+        <datasource id="lmsSliderDs"
+                    class="kz.uco.tsadv.lms.entity.LmsSlider"
+                    view="lmsSlider.with.images">
+            <collectionDatasource id="imagesDs"
+                                  property="images"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="lmsSliderDs">
+            <column width="250px">
+                <field property="position"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="imagesBox"
+                  caption="msg://kz.uco.tsadv.lms.entity/LmsSlider.images">
+            <table id="imagesTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="image"/>
+                    <column id="order"/>
+                </columns>
+                <rows datasource="imagesDs"/>
+                <buttonsPanel>
+                    <button action="imagesTable.create"/>
+                    <button action="imagesTable.edit"/>
+                    <button action="imagesTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

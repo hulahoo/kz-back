@@ -1,0 +1,1 @@
+alter table TSADV_GRADE rename column legacy_id to legacy_id__u67918 ;

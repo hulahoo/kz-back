@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Requisition.dialog.title"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionCancel">
+    <dialogMode height="AUTO" width="600"/>
+    <layout spacing="true">
+        <label value="msg://Requisition.dialog.reason"/>
+        <textArea id="reasonTextArea"
+                  required="true" width="100%"/>
+        <hbox spacing="true" stylename="c-edit-window-actions">
+            <button id="ok" action="ok"
+                    caption="msg://Requisition.btn.ok"
+                    icon="theme://actions.Editor.Ok.icon"/>
+
+            <button id="close" action="close"
+                    caption="msg://Requisition.btn.close"
+                    icon="theme://actions.Editor.Cancel.icon"/>
+        </hbox>
+    </layout>
+</window>

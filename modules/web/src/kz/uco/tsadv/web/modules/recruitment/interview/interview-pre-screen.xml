@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://interview.pre.screen.result"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewPreScreen">
+    <dialogMode height="600"
+                width="800"/>
+    <layout width="100%" height="100%" expand="scrollBox">
+        <scrollBox id="scrollBox" width="100%" spacing="true"/>
+    </layout>
+</window>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CertificationEnrollment.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.certificationenrollment.CertificationEnrollmentBrowse"
+        focusComponent="certificationEnrollmentsTable"
+        lookupComponent="certificationEnrollmentsTable">
+    <dsContext>
+        <groupDatasource id="certificationEnrollmentsDs"
+                         class="kz.uco.tsadv.modules.learning.model.CertificationEnrollment"
+                         view="certificationEnrollment.browse">
+            <query>
+                <![CDATA[select e from tsadv$CertificationEnrollment e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="certificationEnrollmentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="certificationEnrollmentsTable"
+                datasource="certificationEnrollmentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="certificationEnrollmentsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="personGroup"/>
+                <column id="startDate"/>
+                <column id="nextDate"/>
+                <column id="certification"/>
+                <column id="status"/>
+            </columns>
+            <rows datasource="certificationEnrollmentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="certificationEnrollmentsTable.create"/>
+                <button id="editBtn"
+                        action="certificationEnrollmentsTable.edit"/>
+                <button id="removeBtn"
+                        action="certificationEnrollmentsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

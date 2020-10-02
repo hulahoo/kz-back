@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.course.PersonGroupExtForEnrollment"
+        focusComponent="personGroupExtsTable"
+        lookupComponent="personGroupExtsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.course" >
+    <dsContext>
+        <groupDatasource id="personGroupExtsDs"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         view="personGroupExt.lookup.for.attestation">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e
+                    where e.deleteTs is null
+                    and e.id not in (select en.personGroup.id from tsadv$Enrollment en
+                    where en.course.id = :param$courseId )]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personGroupExtsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personGroupExtsTable"
+                datasource="personGroupExtsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personGroupExtsTable"
+                    width="100%">
+            <columns>
+                <column id="fullName"/>
+                <column id="currentAssignment.positionGroup.positionName"/>
+                <column id="currentAssignment.organizationGroup.organizationName"/>
+            </columns>
+            <rows datasource="personGroupExtsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

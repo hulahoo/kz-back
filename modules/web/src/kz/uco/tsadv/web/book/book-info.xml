@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.book.BookInfo"
+        messagesPack="kz.uco.tsadv.web.book">
+    <dsContext>
+        <datasource id="bookDs"
+                    class="kz.uco.tsadv.entity.Book"
+                    view="book-edit-view">
+            <datasource id="categoryDs"
+                        property="category"/>
+            <collectionDatasource id="reviewsDs"
+                                  property="reviews"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="800"
+                resizable="true"
+                width="1100"/>
+    <layout spacing="true">
+        <scrollBox id="scrollBox"
+                   height="100%"
+                   spacing="true">
+            <vbox id="vbox"
+                  responsive="true"
+                  spacing="true">
+                <hbox id="hbox_ext"
+                      height="400px"
+                      responsive="true"
+                      spacing="true"
+                      width="600px">
+                    <vbox id="imageVBox"
+                          height="400px"
+                          margin="true"
+                          responsive="true"
+                          spacing="true"
+                          width="300px">
+                        <image id="bookImage"
+                               align="TOP_CENTER"
+                               datasource="bookDs"
+                               height="350px"
+                               property="image"
+                               responsive="true"
+                               scaleMode="CONTAIN"
+                               width="250px"/>
+                    </vbox>
+                    <vbox id="vboxMain"
+                          height="375px"
+                          margin="true"
+                          responsive="true"
+                          spacing="true"
+                          width="300px">
+                        <vbox id="titleVBox"
+                              expand="rateStarsWrap"
+                              spacing="true">
+                            <label id="book_name"
+                                   datasource="bookDs"
+                                   property="bookNameLang1"
+                                   stylename="h2 bold"
+                                   width="100%"/>
+                            <label id="book_author"
+                                   datasource="bookDs"
+                                   property="authorLang1"
+                                   stylename="h3"
+                                   width="100%"/> <!--todo anuar 1 id не lowerCamelCase -->
+                            <hbox id="book_category"
+                                  align="MIDDLE_LEFT"
+                                  responsive="true"
+                                  spacing="true"
+                                  width="100%">
+                                <label id="category_caption"
+                                       stylename="bold"
+                                       value="msg://category.caption"/>
+                                <label id="category_label"
+                                       datasource="bookDs"
+                                       property="category"/>
+                            </hbox>
+                            <hbox id="book_isbn"
+                                  align="MIDDLE_LEFT"
+                                  responsive="true"
+                                  spacing="true"
+                                  width="100%">
+                                <label id="isbn_caption"
+                                       stylename="bold"
+                                       value="msg://isbn.caption"/> <!--todo anuar 1 лишний caption -->
+                                <label id="isbn_label"
+                                       datasource="bookDs"
+                                       property="isbn"/>
+                            </hbox>
+                            <hbox id="rateStarsWrap"
+                                  align="MIDDLE_LEFT"
+                                  spacing="true"
+                                  width="200px"/>
+                        </vbox>
+                        <vbox id="buttonsVBox"
+                              align="BOTTOM_LEFT"
+                              margin="false,true,true,false"
+                              responsive="true"
+                              spacing="true"
+                              width="200px">
+                            <buttonsPanel id="buttonsPanel"
+                                          width="100%">
+                                <popupButton id="download_book"
+                                             caption="mainMsg://DownloadBook"
+                                             icon="DOWNLOAD"
+                                             popupOpenDirection="BOTTOM_LEFT"
+                                             responsive="true"
+                                             stylename="friendly"
+                                             width="100%">
+                                    <actions>
+                                        <action id="pdf"
+                                                caption="msg://PDF"
+                                                invoke="onDownloadPdf"/>
+                                        <action id="djvu"
+                                                caption="msg://djvu"
+                                                invoke="onDownloadDjvu"/>
+                                        <action id="epub"
+                                                caption="msg://epub"
+                                                invoke="onDownloadEpub"/>
+                                        <action id="mobi"
+                                                caption="msg://mobi"
+                                                invoke="onDownloadMobi"/>
+                                        <action id="fb2"
+                                                caption="msg://fb2"
+                                                invoke="onDownloadFb2"/>
+                                        <action id="kf8"
+                                                caption="msg://kf8"
+                                                invoke="onDownloadKf8"/>
+                                    </actions>
+                                </popupButton>
+                            </buttonsPanel>
+                            <buttonsPanel id="buttonsPanel_1"
+                                          responsive="true"
+                                          visible="false"
+                                          width="100%">
+                                <button id="my_favorite"
+                                        caption="msg://my_shelf"
+                                        icon="STAR_O"
+                                        invoke="addToMyBooks"
+                                        responsive="true"
+                                        stylename="add_my_books"
+                                        width="100%"/>
+                            </buttonsPanel>
+                        </vbox>
+                    </vbox>
+                </hbox>
+                <hbox id="hbox_additional"
+                      margin="true"
+                      responsive="true"
+                      spacing="true"
+                      width="800px">
+                    <tabSheet id="tabSheet">
+                        <tab id="description_tab"
+                             caption="msg://Book.Description"
+                             margin="true,false,false,false"
+                             spacing="true">
+                            <textArea id="book_description"
+                                      datasource="bookDs"
+                                      editable="false"
+                                      height="580px"
+                                      maxLength="2000"
+                                      property="bookDescriptionLang1"
+                                      rows="0"
+                                      stylename="book-description"
+                                      trim="false"
+                                      width="100%"/>
+                        </tab>
+                        <tab id="reviews_tab"
+                             caption="msg://Reviews"
+                             expand="book_reviews"
+                             margin="true,false,false,false"
+                             spacing="true">
+                            <buttonsPanel id="buttonsPanel_2">
+                                <button id="new_review"
+                                        caption="msg://create"
+                                        invoke="addNewReview"
+                                        width="100%"/>
+                            </buttonsPanel>
+                            <vbox id="book_reviews"
+                                  margin="false,false,false,true"
+                                  spacing="true"/>
+                        </tab>
+                    </tabSheet>
+                </hbox>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

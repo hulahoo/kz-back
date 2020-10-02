@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.accidents.AccidentsEdit"
+        datasource="accidentsDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.accidents">
+    <dsContext>
+        <datasource id="accidentsDs"
+                    class="kz.uco.tsadv.entity.tb.Accidents"
+                    view="accidents-view">
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+            <collectionDatasource id="punishmentDs"
+                                  property="punishment"/>
+            <collectionDatasource id="witnessesDs"
+                                  property="witnesses"/>
+            <collectionDatasource id="eventDs"
+                                  property="event"/>
+            <collectionDatasource id="injuredDs"
+                                  property="injured">
+                <collectionDatasource id="attachmentDs1"
+                                      property="attachment"/>
+                <collectionDatasource id="resultDs"
+                                      property="result"/>
+            </collectionDatasource>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true">
+        <scrollBox height="100%">
+            <vbox id="vbox_1"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="accidentsDs">
+                    <column width="250px">
+                        <field property="accidentActNumber"/>
+                        <field property="accidentTime"/>
+                        <field id="organization"
+                               captionProperty="organization"
+                               property="organization"/>
+                        <field property="investigationConducted"/>
+                        <field property="directReason"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <groupBox caption="msg://detail"
+                      collapsable="true"
+                      collapsed="true">
+                <vbox id="vbox_3"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="accidentsDs">
+                        <column>
+                            <field property="excavation"/>
+                            <field property="accidentType"/>
+                            <field property="accidentActDate"/>
+                            <field property="accidentConditions"/>
+                            <field property="accidentDate"/>
+                            <field property="workPlace" captionProperty="name"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <hbox id="actionHboxId"
+                  margin="true,false,false,false"
+                  spacing="true"
+                  stylename="c-edit-window-actions">
+                <button id="windowCommitAndClose"
+                        action="windowCommitAndClose"
+                        caption="mainMsg://actions.Ok"
+                        icon="icons/ok.png"/>
+                <button id="windowClose"
+                        action="windowClose"
+                        icon="icons/cancel.png"/>
+            </hbox>
+            <vbox id="vbox2"
+                  height="100%"
+                  spacing="true">
+                <tabSheet id="tabSheet"
+                          height="100%">
+                    <tab id="tab"
+                         caption="msg://tab"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="attachmentsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="attachmentType"/>
+                                <column id="attachment"/>
+                            </columns>
+                            <rows datasource="attachmentDs"/>
+                            <buttonsPanel>
+                                <button action="attachmentsTable.create"/>
+                                <button action="attachmentsTable.edit"/>
+                                <button action="attachmentsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_2"
+                         caption="msg://tab2"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="punishmentsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="orderDate"/>
+                                <column id="orderNumber"/>
+                                <column id="punishmentDate"/>
+                                <column id="description"/>
+                                <column id="punishmentType"/>
+                                <column id="person"/>
+                            </columns>
+                            <rows datasource="punishmentDs"/>
+                            <buttonsPanel>
+                                <button action="punishmentsTable.create"/>
+                                <button action="punishmentsTable.edit"/>
+                                <button action="punishmentsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_1"
+                         caption="msg://tab1"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="witnessesesTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="person"/>
+                                <column id="type"/>
+                            </columns>
+                            <rows datasource="witnessesDs"/>
+                            <buttonsPanel>
+                                <button action="witnessesesTable.create"/>
+                                <button action="witnessesesTable.edit"/>
+                                <button action="witnessesesTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="accidenInjured"
+                         caption="msg://tab4"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="accidenInjuredsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                            </actions>
+                            <columns>
+                                <column id="person"/>
+                                <column id="disabilityGroup"/>
+                                <column id="traumaLevel"/>
+                                <column id="inductionDate"/>
+                                <column id="reIntroductoryDate"/>
+                                <column id="knowledgeTestDate"/>
+                                <column id="medicalExaminationDate"/>
+                                <column id="workingHours"/>
+                                <column id="physicalCondition"/>
+                                <column id="diagnosis"/>
+                                <column id="productionConnection"/>
+                                <column id="specialOpinion"/>
+                                <column id="employeeGuilt"/>
+                                <column id="employerGuilt"/>
+                                <column id="disabilityPercent"/>
+                                <column id="sicknessStartDate"/>
+                                <column id="sicknessEndDate"/>
+                                <column id="reasonNoProductionConnection"/>
+                                <column id="sicknessDays"/>
+                                <column id="startWorkDate"/>
+                                <column id="reabilitation"/>
+                                <column id="retrainingProfession"/>
+                                <column id="report"
+                                        caption="mainMsg://report"
+                                        generator="generateLinkToReport"/>
+                            </columns>
+                            <rows datasource="injuredDs"/>
+                            <rowsCount/>
+                            <buttonsPanel id="buttonsPanel"
+                                          alwaysVisible="true">
+                                <button id="createBtn"
+                                        action="accidenInjuredsTable.create"/>
+                                <button id="editBtn"
+                                        action="accidenInjuredsTable.edit"/>
+                                <button id="removeBtn"
+                                        action="accidenInjuredsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_3"
+                         caption="msg://tab3"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="accidentEventTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="violations"/>
+                                <column id="accidentReasonRemoval"/>
+                                <column id="executionPeriod"/>
+                                <column id="person"/>
+                                <column id="attachment"/>
+                            </columns>
+                            <rows datasource="eventDs"/>
+                            <buttonsPanel>
+                                <button action="accidentEventTable.create"/>
+                                <button action="accidentEventTable.edit"/>
+                                <button action="accidentEventTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

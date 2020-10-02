@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Calendar.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.calendar.CalendarBrowse"
+        lookupComponent="calendarsTable">
+    <dsContext>
+        <groupDatasource id="calendarsDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.Calendar"
+                         view="calendar.view">
+            <query>
+                <![CDATA[select e from tsadv$Calendar e]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="calendarHolidaysDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.CalendarHoliday"
+                              view="calendarHoliday.view">
+            <query>
+                <![CDATA[select e from tsadv$CalendarHoliday e where e.calendar.id = :ds$calendarsDs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="splitter"
+            spacing="true">
+        <filter id="filter"
+                applyTo="calendarsTable"
+                datasource="calendarsDs">
+            <properties include=".*"/>
+        </filter>
+        <split id="splitter"
+               width="100%">
+            <table id="calendarsTable"
+                   height="100%"
+                   width="100%">
+                <actions>
+                    <action id="create"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="calendar" caption="msg://code"/>
+                    <column id="description"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                </columns>
+                <rows datasource="calendarsDs"/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="calendarsTable.create"
+                            caption="mainMsg://table.btn.empty"/>
+                    <button id="editBtn"
+                            action="calendarsTable.edit"
+                            caption="mainMsg://table.btn.empty"/>
+                    <button id="removeBtn"
+                            action="calendarsTable.remove"
+                            caption="mainMsg://table.btn.empty"/>
+                </buttonsPanel>
+            </table>
+            <groupBox caption="msg://CalendarHolidays.browseCaption"
+                      height="100%"
+                      spacing="true"
+                      width="100%">
+                <table id="calendarHolidaysTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="name" caption="msg://name"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="state"/>
+                        <column id="dayType"/>
+                        <column id="transferStartDate"/>
+                        <column id="transferEndDate"/>
+                        <column id="actionDateFrom"
+                                resolution="MONTH"/>
+                        <column id="actionDateTo"
+                                resolution="MONTH"/>
+                    </columns>
+                    <rows datasource="calendarHolidaysDs"/>
+                    <buttonsPanel id = "holidaysTableButtonsPanel">
+                        <button id="holidaysTableCreateButton"
+                                action="calendarHolidaysTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button id="holidaysTableEditButton"
+                                action="calendarHolidaysTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button id="holidaysTableRemoveButton"
+                                action="calendarHolidaysTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

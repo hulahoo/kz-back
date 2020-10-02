@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.positionchangerequest.PositionChangeRequestBrowse"
+        focusComponent="positionChangeRequestsTable"
+        lookupComponent="positionChangeRequestsTable"
+        messagesPack="kz.uco.tsadv.web.positionchangerequest">
+    <dsContext>
+        <groupDatasource id="positionChangeRequestsDs"
+                         class="kz.uco.tsadv.modules.personal.model.PositionChangeRequest"
+                         maxResults="20"
+                         view="positionChangeRequest.edit">
+            <query>
+                <![CDATA[select e from tsadv$PositionChangeRequest e
+where e.createdBy in ( select a.login from base$UserExt a where a.id = :session$userId  )
+order by e.requestDate desc, e.createTs desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true"
+            expand="positionChangeRequestsTable"
+            width="100%">
+        <filter id="requestsFilter"
+                applyTo="positionChangeRequestsTable"
+                datasource="positionChangeRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <buttonsPanel id="buttonsPanel">
+            <button id="createPosition"
+                    caption="msg://request.btn.create"
+                    icon="icons/plus-btn.png"/>
+            <button id="editPosition"
+                    caption="msg://request.btn.edit"
+                    icon="icons/edit.png"/>
+            <button id="removePosition"
+                    caption="msg://request.btn.remove"
+                    icon="icons/remove.png"/>
+        </buttonsPanel>
+        <groupTable id="positionChangeRequestsTable"
+                    width="100%">
+            <columns>
+                <column id="requestNumber"
+                        link="true"
+                        linkInvoke="openChangeRequest"/>
+                <column id="requestType"/>
+                <column id="requestDate"/>
+                <column id="status"/>
+            </columns>
+            <rows datasource="positionChangeRequestsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

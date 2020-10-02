@@ -1,0 +1,3 @@
+alter table TSADV_GOODS_ORDER_DETAIL rename column recognition_provider_id to recognition_provider_id__u12610 ;
+drop index IDX_TSADV_GOODS_ORDER_DETAIL_RECOGNITION_PROVIDER ;
+alter table TSADV_GOODS_ORDER_DETAIL drop constraint FK_TSADV_GOODS_ORDER_DETAIL_RECOGNITION_PROVIDER ;

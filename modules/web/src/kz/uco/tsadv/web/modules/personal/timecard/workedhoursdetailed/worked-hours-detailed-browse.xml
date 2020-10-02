@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Details"
+        class="kz.uco.tsadv.web.modules.personal.timecard.workedhoursdetailed.WorkedHoursDetailedBrowse">
+    <dsContext>
+        <collectionDatasource id="workedHoursDetailsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.WorkedHoursDetailed"
+                              view="workedHoursDetailed-view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$WorkedHoursDetailed e
+                          where e.workedHoursSummary.id = :param$selectedWorkedHoursSummary
+                       order by e.timeIn]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="auto"
+                width="500"/>
+    <layout spacing="true" width="AUTO" expand="scheduleDetailsTable">
+        <table id="scheduleDetailsTable">
+            <actions>
+                <action id="create"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="scheduleElementType"/>
+                <column id="actualTimeIn"/>
+                <column id="actualTimeOut"/>
+                <column id="hours">
+                    <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                </column>
+            </columns>
+            <rows datasource="workedHoursDetailsDs"/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="scheduleDetailsTable.create"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="editBtn"
+                        action="scheduleDetailsTable.edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="removeBtn"
+                        action="scheduleDetailsTable.remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

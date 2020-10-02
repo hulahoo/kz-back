@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfDismissal">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <table id="dismissalsTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit1"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"
+                        trackSelection="true"
+                        invoke="edit"/>
+                <action id="remove"
+                        visible="false"
+                        caption="mainMsg://table.btn.empty"
+                        invoke="removeDismissal"
+                        icon="icons/remove.png"
+                trackSelection="true"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="personGroup.personFioWithEmployeeNumber"/>
+                <column id="dismissalReason"/>
+                <column id="dismissalDate"/>
+                <column id="lcArticle"/>
+                <column id="status"/>
+                <column id="requestDate"/>
+            </columns>
+            <rows datasource="dismissalsDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="DisCreate" action="dismissalsTable.create"/>
+                <button id="DisEdit" action="dismissalsTable.edit1"/>
+                <button id="DicRemove" action="dismissalsTable.remove"/>
+                <button id="DisExcel" action="dismissalsTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

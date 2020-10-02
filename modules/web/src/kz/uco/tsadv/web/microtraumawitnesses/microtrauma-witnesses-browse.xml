@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.microtraumawitnesses.MicrotraumaWitnessesBrowse"
+        focusComponent="microtraumaWitnessesesTable"
+        lookupComponent="microtraumaWitnessesesTable"
+        messagesPack="kz.uco.tsadv.web.microtraumawitnesses">
+    <dsContext>
+        <groupDatasource id="microtraumaWitnessesesDs"
+                         class="kz.uco.tsadv.entity.tb.MicrotraumaWitnesses"
+                         view="microtraumaWitnesses-view">
+            <query>
+                <![CDATA[select e from tsadv$MicrotraumaWitnesses e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="microtraumaWitnessesesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="microtraumaWitnessesesTable"
+                datasource="microtraumaWitnessesesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="microtraumaWitnessesesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="person"/>
+            </columns>
+            <rows datasource="microtraumaWitnessesesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="microtraumaWitnessesesTable.create"/>
+                <button id="editBtn"
+                        action="microtraumaWitnessesesTable.edit"/>
+                <button id="removeBtn"
+                        action="microtraumaWitnessesesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Course.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.course.CourseBrowse"
+        focusComponent="coursesTable"
+        lookupComponent="coursesTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.course">
+    <dsContext>
+        <groupDatasource id="coursesDs"
+                         class="kz.uco.tsadv.modules.learning.model.Course"
+                         view="course.browse">
+            <query>
+                <![CDATA[select e from tsadv$Course e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="coursesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="coursesTable"
+                datasource="coursesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="coursesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="logo"
+                        caption="msg://Logo"
+                        generator="generateCourseImageCell"
+                        sortable="false"/>
+                <column id="name"/>
+                <column id="shortDescription"/>
+                <column id="party"/>
+                <column id="category.langValue"/>
+                <column id="targetAudience"/>
+                <column id="learningType.langValue"
+                        caption="msg://learningType"/>
+                <column id="activeFlag"/>
+                <column id="selfEnrollment"/>
+            </columns>
+            <rows datasource="coursesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="coursesTable.create"/>
+                <button id="editBtn"
+                invoke="editAction"
+                icon="icons/edit.png"
+                caption="mainMsg://table.btn.empty"/>
+                <button id="removeBtn"
+                        action="coursesTable.remove"/>
+                <button id="enrollmentsBtn"
+                        caption="msg://Course.enrollmentsBtn"
+                        icon="GROUP"
+                        invoke="createEnrollments"/>
+                <button id="resultsBtn"
+                        caption="msg://Course.results"
+                        icon="BAR_CHART"
+                        invoke="openResults"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

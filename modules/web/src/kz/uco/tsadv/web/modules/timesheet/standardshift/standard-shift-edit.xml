@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://StandardShift.editorCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.standardshift.StandardShiftEdit"
+        datasource="standardShiftDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="standardShiftDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.StandardShift"
+                    view="standardShift.view"/>
+        <collectionDatasource id="shiftsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.Shift"
+                              view="shift.view">
+            <query>
+                <![CDATA[select e from tsadv$Shift e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="standardShiftDs">
+            <column width="250px">
+                <field editable="false"
+                       property="numberInShift"/>
+                <field captionProperty="name" optionsDatasource="shiftsDs"
+                       property="shift"/>
+                <field property="shiftDisplay"/>
+                <field custom="true"
+                       property="shiftDisplayDay"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

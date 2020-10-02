@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Question.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.question.QuestionEdit"
+        datasource="questionDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="questionDs"
+                    class="kz.uco.tsadv.modules.learning.model.Question"
+                    view="question.edit">
+            <collectionDatasource id="answersDs"
+                                  property="answers"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vBox"
+            spacing="true">
+        <vbox id="vBox" width="100%" expand="answersBox">
+            <fieldGroup id="fieldGroup"
+                        datasource="questionDs">
+                <column width="250px">
+                    <field property="type"/>
+                    <field property="score"/>
+                    <field property="text" width="400px">
+                        <textArea property="text" datasource="questionDs" width="100%" required="true"/>
+                    </field>
+                </column>
+            </fieldGroup>
+            <groupBox id="answersBox"
+                      caption="msg://Question.answers">
+                <table id="answersTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="answer"/>
+                        <column id="correct"/>
+                    </columns>
+                    <rows datasource="answersDs"/>
+                    <buttonsPanel>
+                        <button action="answersTable.create"/>
+                        <button action="answersTable.edit"/>
+                        <button action="answersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

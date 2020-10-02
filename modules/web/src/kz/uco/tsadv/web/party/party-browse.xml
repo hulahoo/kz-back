@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.party.PartyBrowse"
+        focusComponent="partiesTable"
+        lookupComponent="partiesTable"
+        messagesPack="kz.uco.tsadv.web.party">
+    <dsContext>
+        <groupDatasource id="partiesDs"
+                         class="kz.uco.base.entity.shared.Party"
+                         view="_local">
+            <query>
+                <![CDATA[select e from base$Party e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="partiesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="partiesTable"
+                datasource="partiesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="partiesTable"
+                    width="100%">
+            <columns>
+                <column id="name"/>
+                <column id="partyType"/>
+                <column id="active"/>
+            </columns>
+            <rows datasource="partiesDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

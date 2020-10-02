@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OrganizationGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.organizationgroup.OrganizationGroupBrowse"
+        focusComponent="organizationGroupsTable"
+        lookupComponent="organizationGroupsTable">
+    <dsContext>
+        <groupDatasource id="organizationGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                         maxResults="20"
+                         view="organizationGroup.browse">
+            <query>
+                <![CDATA[select e
+                           from base$OrganizationGroupExt e
+                           join e.list o
+                          where :session$systemDate between o.startDate and o.endDate]]>
+            </query>
+            <collectionDatasource id="listDs"
+                                  property="list"/>
+        </groupDatasource>
+        <collectionDatasource id="costCentersDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicCostCenter">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicCostCenter e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="payrollsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPayroll">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicPayroll e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="locationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation">
+            <query>
+                <![CDATA[select e
+                         from base$DicLocation e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="organizationTypesDs"
+                              class="kz.uco.base.entity.dictionary.DicOrgType">
+            <query>
+                <![CDATA[select e
+                         from base$DicOrgType e
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <filter id="organizationGroupsFilter"
+                applyTo="organizationGroupsTable"
+                datasource="organizationGroupsDs"/>
+        <groupBox id="groupBox"
+                  caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <split id="split"
+               orientation="vertical"
+               width="100%">
+            <groupTable id="organizationGroupsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="edit"
+                            caption="msg://table.btn.edit"
+                            icon="icons/edit.png"
+                            invoke="edit"
+                            shortcut="${TABLE_EDIT_SHORTCUT}"/>
+                    <action id="orgAnalytics"
+                            caption="msg://kz.uco.tsadv.web.modules.personal.position/analitycs.tab"
+                            invoke="orgAnalyticsEdit"
+                            trackSelection="true"/>
+                    <action id="excel"/>
+                </actions>
+                <columns>
+                    <column id="organization"
+                            caption="msg://kz.uco.tsadv.modules.personal.group/OrganizationGroup.organization"/>
+                    <column id="organization.type"
+                            caption="msg://kz.uco.tsadv.modules.personal.group/PersonContact.type"/>
+                    <column id="organization.costCenter"
+                            caption="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.costCenter"/>
+                    <column id="organization.payroll"
+                            caption="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.payroll"/>
+                    <column id="organization.location"
+                            caption="msg://kz.uco.tsadv.modules.personal.model/Address"/>
+                    <column id="organization.internal"
+                            caption="msg://Internal"/>
+                </columns>
+                <rows datasource="organizationGroupsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            caption="msg://table.btn.create"
+                            icon="icons/add.png"
+                            invoke="create"/>
+                    <button id="editBtn"
+                            action="organizationGroupsTable.edit"/>
+                    <button action="organizationGroupsTable.orgAnalytics"/>
+                    <button id="excelBtn"
+                            action="organizationGroupsTable.excel"
+                            caption="msg://table.btn.excel"/>
+                </buttonsPanel>
+            </groupTable>
+            <groupBox id="historyGroupBox"
+                      caption="msg://historyBox"
+                      height="100%">
+                <table id="historyTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="edit"
+                                caption="msg://table.btn.edit"
+                                invoke="editHistory"/>
+                        <action id="remove"
+                                caption="msg://table.btn.remove"
+                                invoke="removeHistory"/>
+                        <action id="removeLate"
+                                caption="msg://table.btn.remove.late"
+                                invoke="removeHistories"/>
+                    </actions>
+                    <columns>
+                        <column id="organizationName"/>
+                        <column id="type.langValue"/>
+                        <column id="costCenter.langValue"/>
+                        <column id="location.langValue"/>
+                        <column id="payroll.langValue"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="updatedBy"/>
+                        <column id="legacyID"/>
+                        <column id="internal"/>
+                    </columns>
+                    <rows datasource="listDs"/>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

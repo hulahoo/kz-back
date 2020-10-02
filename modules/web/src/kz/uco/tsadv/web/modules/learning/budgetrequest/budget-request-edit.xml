@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BudgetRequest.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.budgetrequest.BudgetRequestEdit"
+        datasource="budgetRequestDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="budgetRequestDs"
+                    class="kz.uco.tsadv.modules.learning.model.BudgetRequest"
+                    view="budgetRequest.view"/>
+        <collectionDatasource id="budgetStatusesDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicBudgetStatus"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[
+                        select e from tsadv$DicBudgetStatus e
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="DicTrainingMethodDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicTrainingMethod"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[
+                        select e from tsadv$DicTrainingMethod e
+                        ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="budgetRequestDs">
+                <field property="providerCompany" captionProperty="name" width="350px"/>
+                <field property="employeeCategory" width="350px"/>
+                <field property="budgetItem" width="350px"/>
+                <field property="learningType" width="350px"/>
+                <field property="course" width="350px"/>
+                <field property="courseName" width="350px"/>
+                <field property="reason" rows="3" width="350px"/>
+                <field property="city" width="350px"/>
+                <field property="day" width="350px"/>
+                <field property="hour" width="350px"/>
+                <field property="requiredEducation" width="350px"/>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

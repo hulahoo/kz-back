@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.healthdeteriorationwitnesses.HealthDeteriorationWitnessesBrowse"
+        focusComponent="healthDeteriorationWitnessesesTable"
+        lookupComponent="healthDeteriorationWitnessesesTable"
+        messagesPack="kz.uco.tsadv.web.healthdeteriorationwitnesses">
+    <dsContext>
+        <groupDatasource id="healthDeteriorationWitnessesesDs"
+                         class="kz.uco.tsadv.entity.tb.HealthDeteriorationWitnesses"
+                         view="healthDeteriorationWitnesses-view">
+            <query>
+                <![CDATA[select e from tsadv$HealthDeteriorationWitnesses e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="healthDeteriorationWitnessesesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="healthDeteriorationWitnessesesTable"
+                datasource="healthDeteriorationWitnessesesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="healthDeteriorationWitnessesesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="person"/>
+            </columns>
+            <rows datasource="healthDeteriorationWitnessesesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="healthDeteriorationWitnessesesTable.create"/>
+                <button id="editBtn"
+                        action="healthDeteriorationWitnessesesTable.edit"/>
+                <button id="removeBtn"
+                        action="healthDeteriorationWitnessesesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

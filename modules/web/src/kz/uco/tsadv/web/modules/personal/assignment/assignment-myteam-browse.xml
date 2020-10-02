@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://AssignmentMyTeam.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.assignment.AssignmentMyTeamBrowse"
+        focusComponent="assignmentsTable"
+        lookupComponent="assignmentsTable">
+    <dsContext>
+        <hierarchicalDatasource id="teamDs"
+                                class="kz.uco.tsadv.entity.MyTeamNew"
+                                hierarchyProperty="parent"
+                                view="myTeamNew-view">
+            <query>
+                <![CDATA[select e
+                        from tsadv$MyTeamNew e where 1=2]]>
+            </query>
+        </hierarchicalDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assignmentsTable"
+            spacing="true">
+        <hbox id="hBox"
+              spacing="true">
+            <hbox id="searchHBox"
+                  spacing="true">
+                <label value="msg://fio"/>
+                <textField id="searchTextField"/>
+                <button id="searchBtn"
+                        icon="SEARCH"
+                        invoke="searchBtn"/>
+            </hbox>
+            <button id="report"
+                    action="assignmentsTable.createReport"/>
+            <button id="reportWithoutSalary"
+                    action="assignmentsTable.createReportWithoutSalary"/>
+            <button id="reportStaffing"
+                    action="assignmentsTable.reportStaffing"/>
+        </hbox>
+        <treeTable id="assignmentsTable"
+                   width="100%">
+            <actions>
+                <action id="createReport"
+                        caption="msg://createReport"
+                        invoke="createReport"/>
+                <action id="createReportWithoutSalary"
+                        caption="msg://createReportWithoutSalary"
+                        invoke="createReportWithoutSalary"/>
+                <action id="reportStaffing"
+                        caption="msg://reportStaffing"
+                        invoke="reportStaffing"/>
+            </actions>
+            <columns>
+                <column id="fullName"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/Person.group"
+                        link="true"
+                        linkInvoke="openTeamMemberView"/>
+                <column id="positionNameLang1"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/Position.group"/>
+                <column id="organizationNameLang1"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.group"/>
+                <column id="gradeName"
+                        caption="msg://kz.uco.tsadv.modules.personal.group/GradeGroup.grade"/>
+            </columns>
+
+            <rows datasource="teamDs"/>
+        </treeTable>
+    </layout>
+</window>

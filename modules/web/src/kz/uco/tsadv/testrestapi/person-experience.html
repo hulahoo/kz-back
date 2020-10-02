@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Person experience CRUD</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en">en</input>
+                <input type="radio" name="lang" value="ru" checked>ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список записей "Опыт работы"
+    </div>
+    <table>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getExperience()" value="getUserPerson : experience">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="experience"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Создание записи "Опыт работы"
+    </div>
+    <table>
+        <tr>
+            <td> * Company:</td>
+            <td>
+                <input id="createCompany" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Job:</td>
+            <td>
+                <input id="createJob" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Start month:</td>
+            <td>
+                <input id="createStartMonth" type="date" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Until now:</td>
+            <td>
+                <input id="createUntilNow" type="checkbox" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * End month:</td>
+            <td>
+                <input id="createEndMonth" type="date" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Description:</td>
+            <td>
+                <textarea id="createDescription"></textarea>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="createExperience()" value="createExperience">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="createResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Обновление записи "Опыт работы"
+    </div>
+    <table>
+        <tr>
+            <td> * Id:</td>
+            <td>
+                <input id="updateId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Company:</td>
+            <td>
+                <input id="updateCompany" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Job:</td>
+            <td>
+                <input id="updateJob" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Start month:</td>
+            <td>
+                <input id="updateStartMonth" type="date" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Until now:</td>
+            <td>
+                <input id="updateUntilNow" type="checkbox" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * End month:</td>
+            <td>
+                <input id="updateEndMonth" type="date" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Description:</td>
+            <td>
+                <textarea id="updateDescription"></textarea>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="updateExperience()" value="updateExperience">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="updateResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Удаление записи "Опыт работы"
+    </div>
+    <table>
+        <tr>
+            <td> * Id:</td>
+            <td>
+                <input id="deleteId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="deleteExperience()" value="deleteExperience">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="deleteResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var access_token;
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+
+            });
+    }
+
+    function getExperience() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUserPerson?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var experience = JSON.parse(res).experience;
+                $('#experience').text(JSON.stringify(experience));
+            });
+    }
+
+    function createExperience() {
+        var data = {};
+        jQuery.extend(data, personExperienceModel);
+        data.experience.company = $("#createCompany").val();
+        data.experience.job = $("#createJob").val();
+        data.experience.startMonth = $("#createStartMonth").val();
+        data.experience.untilNow = $("#createUntilNow").is(':checked');
+        data.experience.endMonth = $("#createEndMonth").val();
+        data.experience.description = $("#createDescription").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/createExperience",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#createResult").text(JSON.stringify(res));
+            });
+    }
+
+    function updateExperience() {
+        var data = {};
+        jQuery.extend(data, personExperienceModel);
+        jQuery.extend(data, updateDeleteModel);
+
+        data.id = $("#updateId").val();
+        data.experience.company = $("#updateCompany").val();
+        data.experience.job = $("#updateJob").val();
+        data.experience.startMonth = $("#updateStartMonth").val();
+        data.experience.untilNow = $("#updateUntilNow").is(':checked');
+        data.experience.endMonth = $("#updateEndMonth").val();
+        data.experience.description = $("#updateDescription").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/updateExperience",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#updateResult").text(JSON.stringify(res));
+            });
+    }
+
+    function deleteExperience() {
+        var data = {};
+        jQuery.extend(data, updateDeleteModel);
+
+        data.id = $("#deleteId").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/deleteExperience",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#deleteResult").text(JSON.stringify(res));
+            });
+    }
+    /*]>*/
+
+</script>
+</body>
+</html>

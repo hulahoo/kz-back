@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RcQuestion.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.rcquestion.RcQuestionLookup"
+        focusComponent="rcQuestionsTable"
+        lookupComponent="rcQuestionsTable">
+    <dsContext>
+        <groupDatasource id="rcQuestionsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.RcQuestion"
+                         view="rcQuestion.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$RcQuestion e
+                          where e.id not in :param$excludeRcQuestionIds]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="rcQuestionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="rcQuestionsTable"
+                datasource="rcQuestionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="rcQuestionsTable"
+                    width="100%">
+            <columns>
+                <column id="questionType"/>
+                <column id="answerType"/>
+                <column id="questionText"/>
+                <column id="isActive"/>
+                <column id="questionCategory"/>
+                <column id="questionAccessibility"/>
+            </columns>
+            <rows datasource="rcQuestionsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

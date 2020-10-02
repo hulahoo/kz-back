@@ -1,0 +1,7 @@
+<html>
+Просим Вас согласовать заявление на отпуск ${personGroup.person.shortName}.
+Детали по ссылке:
+<a href="http://localhost:8085/tal/open?screen=tsadv$AbsenceRequest.edit&item=tsadv$AbsenceRequest-${absenceRequest.id}">
+${absenceRequest.id}
+</a>
+</html>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfMainData">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <scrollBox id="mainDataVbox"
+                   height="100%"
+                   spacing="true">
+            <groupBox id="mainDataBox"
+                      caption="mainMsg://mainData"
+                      height="100%">
+                <vbox id="userInfo"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup"
+                                datasource="personDs"
+                                width="100%">
+                        <column id="column1"
+                                width="200px">
+                            <field datasource="personDs"
+                                   property="firstName"
+                                   editable="false"/>
+                            <field datasource="personDs"
+                                   property="lastName"
+                                   editable="false"/>
+                            <field datasource="personDs"
+                                   property="middleName"
+                                   editable="false"/>
+                            <field caption="msg://Person.maritalStatus"
+                                   datasource="personDs"
+                                   property="maritalStatus"
+                                   editable="false"/>
+                            <field caption="msg://Person.type"
+                                   datasource="personDs"
+                                   property="type"
+                                   editable="false"/>
+                            <field id="secondAssignmentField">
+                                <checkBox id="checkbox"
+                                          caption="msg://kz.uco.tsadv.web.modules.personal.person.frames/repeatedAssignment"
+                                          editable="false"/>
+                            </field>
+
+                        </column>
+                        <column id="column2"
+                                width="250px">
+                            <field caption="msg://Person.nationality"
+                                   datasource="personDs"
+                                   property="nationality"
+                                   editable="false"/>
+                            <field caption="msg://Person.citizenship"
+                                   datasource="personDs"
+                                   property="citizenship"
+                                   editable="false"/>
+                            <field datasource="personDs"
+                                   property="employeeNumber"
+                                   editable="false"/>
+                            <field id="hireDate"
+                                   datasource="personDs"
+                                   property="hireDate"
+                                   editable="false"/>
+                            <field id="dismissalField">
+                                <textField id="textField"
+                                           caption="msg://dismissalDate"
+                                           editable="false"/>
+                            </field>
+                            <field datasource="personDs"
+                                   property="nonresidentType"
+                                   editable="false"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <groupBox id="identification"
+                      caption="msg://kz.uco.tsadv.web.modules.personal.person.frames/personIdentification">
+                <hbox width="auto">
+                    <vbox width="360px">
+                        <fieldGroup id="fieldGroupIdentification1"
+                                    datasource="personDs"
+                                    fieldCaptionWidth="150px"
+                                    editable="false">
+                            <field id="nationalIdentifier"
+                                   maxLength="12"
+                                   datasource="personDs"
+                                   property="nationalIdentifier"/>
+                            <field id="dateOfBirth"
+                                   datasource="personDs"
+                                   property="dateOfBirth"/>
+                        </fieldGroup>
+                    </vbox>
+                    <vbox width="70px">
+                        <label height="40px"/>
+                        <label id="yearsCounter"/>
+                    </vbox>
+
+                    <fieldGroup id="fieldGroupIdentification"
+                                datasource="personDs"
+                                width="50%"
+                                fieldCaptionWidth="160px"
+                    >
+                        <column width="250px">
+                            <field datasource="personDs"
+                                   property="sex"
+                                   required="true">
+                                <lookupField id="sex" optionsDatasource="dicSexDs" datasource="personDs"
+                                             property="sex"
+                                             editable="false"/>
+                            </field>
+                            <!--<field datasource="personDs"
+                                   property="dateOfDeath"
+                                   editable="false"/>-->
+                        </column>
+                    </fieldGroup>
+                </hbox>
+                <!--<fieldGroup id="fieldGroupIdentification"
+                            datasource="assignmentDs"
+                            width="100%">
+                    <column width="250px">
+                        <field datasource="personDs"
+                               maxLength="12"
+                               property="nationalIdentifier"/>
+                        <field datasource="personDs"
+                               property="dateOfBirth"
+                                id="dateOfBirth"/>
+                    </column>
+                    <column width="250px">
+                        <field datasource="personDs"
+                               property="sex"
+                               required="true">
+                            <lookupField id="sex" optionsDatasource="dicSexDs" datasource="personDs" property="sex"/>
+                        </field>
+                        <field datasource="personDs"
+                               property="dateOfDeath"/>
+                    </column>
+                </fieldGroup>-->
+            </groupBox>
+            <groupBox id="historyGroupBox"
+                      caption="msg://historyBox">
+                <table id="historyTable"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="fioWithEmployeeNumber"/>
+                        <column id="maritalStatus"/>
+                        <column id="type"/>
+                        <column id="citizenship"/>
+                        <column id="nonresidentType"/>
+                    </columns>
+                    <rows datasource="personHistoryDs"/>
+                </table>
+            </groupBox>
+        </scrollBox>
+    </layout>
+</window>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RcQuestion.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.rcquestion.RcQuestionEdit"
+        datasource="rcQuestionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.rcquestion">
+    <dsContext>
+        <datasource id="rcQuestionDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RcQuestion"
+                    view="rcQuestion.view">
+            <collectionDatasource id="answersDs"
+                                  property="answers"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="answersBox"
+            spacing="true">
+        <grid spacing="true"
+              width="100%">
+            <columns>
+                <column flex="1.5"/>
+                <column flex="3.0"/>
+                <column flex="0.5"/>
+            </columns>
+            <rows>
+                <row>
+                    <fieldGroup id="fieldGroup"
+                                datasource="rcQuestionDs"
+                                width="100%">
+                        <column width="100%">
+                            <field property="questionType"/>
+                            <field property="answerType"/>
+                            <field property="isActive"/>
+                            <field property="questionCategory"/>
+                            <field property="questionAccessibility"/>
+                        </column>
+                    </fieldGroup>
+                    <tabSheet height="100%">
+                        <tab id="questionText1"
+                             caption="msg://RcQuestion.questionText1"
+                             margin="true,true,false,false"
+                             spacing="true">
+                            <textArea datasource="rcQuestionDs"
+                                      height="100%"
+                                      property="questionText1"
+                                      width="100%"/>
+                        </tab>
+                        <tab id="questionText2"
+                             caption="msg://RcQuestion.questionText2"
+                             margin="true,true,false,false"
+                             spacing="true">
+                            <textArea datasource="rcQuestionDs"
+                                      height="100%"
+                                      property="questionText2"
+                                      width="100%"/>
+                        </tab>
+                        <tab id="questionText3"
+                             caption="msg://RcQuestion.questionText3"
+                             margin="true,true,false,false"
+                             spacing="true">
+                            <textArea datasource="rcQuestionDs"
+                                      height="100%"
+                                      property="questionText3"
+                                      width="100%"/>
+                        </tab>
+                        <tab id="questionText4"
+                             caption="msg://RcQuestion.questionText4"
+                             margin="true,true,false,false"
+                             spacing="true">
+                            <textArea datasource="rcQuestionDs"
+                                      height="100%"
+                                      property="questionText4"
+                                      width="100%"/>
+                        </tab>
+                        <tab id="questionText5"
+                             caption="msg://RcQuestion.questionText5"
+                             margin="true,true,false,false"
+                             spacing="true">
+                            <textArea datasource="rcQuestionDs"
+                                      height="100%"
+                                      property="questionText5"
+                                      width="100%"/>
+                        </tab>
+                    </tabSheet>
+                </row>
+            </rows>
+        </grid>
+        <groupBox id="answersBox"
+                  caption="msg://RcQuestion.answers">
+            <table id="answersTable"
+                   height="100%"
+                   width="100%">
+                <actions>
+                    <action id="create"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="order"/>
+                    <column id="answerText"/>
+                    <column id="answerResult"/>
+                    <column id="positive"
+                            caption="msg://interview.questionnaire.multi.pn"/>
+                </columns>
+                <rows datasource="answersDs"/>
+                <buttonsPanel>
+                    <button action="answersTable.create"/>
+                    <button action="answersTable.edit"/>
+                    <button action="answersTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

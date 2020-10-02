@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://FormSchedule"
+        class="kz.uco.tsadv.web.modules.timesheet.scheduleheader.FormSchedule">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="buttonsPanel">
+        <grid spacing="true">
+            <columns>
+                <column/>
+                <column/>
+            </columns>
+            <rows>
+                <row>
+                    <label value="msg://kz.uco.tsadv.modules.timesheet.model/ScheduleHeader.schedule"
+                           align="MIDDLE_LEFT"/>
+                    <pickerField id="standardSchedule"
+                                 required="true"
+                                 requiredMessage="msg://FormSchedule.fillSchedule"
+                                 metaClass="tsadv$StandardSchedule"
+                                 captionProperty="scheduleName"/>
+                </row>
+                <row>
+                    <label value="msg://kz.uco.tsadv.modules.timesheet.model/ScheduleHeader.month" align="MIDDLE_LEFT"/>
+                    <datePicker id="month"
+                                resolution="MONTH"/>
+                </row>
+            </rows>
+        </grid>
+        <buttonsPanel id="buttonsPanel">
+            <button id="form" caption="msg://FormSchedule.form" invoke="form"/>
+            <button id="cancel"
+                    action="windowClose"/>
+        </buttonsPanel>
+    </layout>
+</window>

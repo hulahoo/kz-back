@@ -1,0 +1,1 @@
+alter table TSADV_ATTESTATION_PARTICIPANT drop column PERSON_TYPE_ID__U55802 cascade ;

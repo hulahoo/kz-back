@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.learningexpense.LearningExpenseEditTsadv"
+        datasource="learningExpenseDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.learningexpense">
+    <dsContext>
+        <datasource id="learningExpenseDs"
+                    class="kz.uco.tsadv.modules.learning.model.LearningExpense"
+                    view="learningExpense.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="learningExpenseDs">
+            <column width="250px">
+                <field property="expenseType"/>
+                <field property="currency"/>
+                <field property="amount"/>
+                <!--<field property="personLearningContract"/>-->
+                <!--<field property="personEnrollment"/>-->
+                <field property="dicMonth"/>
+                <field property="year"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

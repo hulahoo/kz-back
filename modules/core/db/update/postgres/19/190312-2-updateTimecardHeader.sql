@@ -1,0 +1,1 @@
+alter table TSADV_TIMECARD_HEADER add column TIMECARD_CORRECTION_ID uuid ;

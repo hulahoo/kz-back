@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.budgetrequest.BudgetRequestBrowse"
+        focusComponent="budgetRequestsTable"
+        lookupComponent="budgetRequestsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.budgetrequest">
+    <dsContext>
+        <groupDatasource id="budgetRequestsDs"
+                         class="kz.uco.tsadv.modules.learning.model.BudgetRequest"
+                         view="budgetRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$BudgetRequest e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="budgetRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="budgetRequestsTable"
+                datasource="budgetRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="budgetRequestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="learningType"/>
+                <column id="course" captionProperty="course.name"/>
+                <column id="comment"/>
+                <column id="employeesCount"/>
+                <column id="learningCosts"/>
+                <column id="tripCosts"/>
+                <column id="status"/>
+                <column id="requiredEducation"/>
+            </columns>
+            <rows datasource="budgetRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="budgetRequestsTable.create"/>
+                <button id="editBtn"
+                        action="budgetRequestsTable.edit"/>
+                <button id="removeBtn"
+                        action="budgetRequestsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

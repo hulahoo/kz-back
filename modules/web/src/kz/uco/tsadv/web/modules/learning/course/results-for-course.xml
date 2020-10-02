@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption.for.Result"
+        class="kz.uco.tsadv.web.modules.learning.course.ResultsForCourse"
+        messagesPack="kz.uco.tsadv.web.modules.learning.course"
+>
+    <dsContext>
+        <collectionDatasource id="courseSectionAttemptsDs"
+                              class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
+                              view="courseSectionAttempt.for.result">
+            <query>
+                <![CDATA[select e from tsadv$CourseSectionAttempt e
+where e.courseSection.course.id = :param$courseId
+and e.deleteTs is null]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="forPivotTablesDs"
+                              class="kz.uco.tsadv.modules.learning.model.ForPivotTable"
+                              refreshMode="NEVER"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="forPivotTablesDataGrid"
+            spacing="true">
+        <dataGrid id="forPivotTablesDataGrid"
+                  datasource="forPivotTablesDs"
+                  width="100%"
+                  textSelectionEnabled="true"
+                  sortable="true">
+            <actions>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="personGroup"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel">
+                <label id="filterCaptionLabel"
+                       value="msg://filter"
+                       align="MIDDLE_LEFT"
+                       stylename="bold"
+                       width="100px"/>
+                <label id="personFullNameCaptionLabel"
+                       value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.fullNameCyrillic"
+                       align="MIDDLE_LEFT"
+                       stylename="bold"/>
+                <textField id="personFullNameTextField" width="400px"/>
+                <button id="searchButton"
+                        icon="SEARCH"
+                        caption="msg://table.btn.search"
+                        invoke="search"/>
+                <label id="spaceLabel" width="100px"/>
+                <button id="exportToExcelButton"
+                        action="forPivotTablesDataGrid.excel"/>
+            </buttonsPanel>
+        </dataGrid>
+    </layout>
+</window>

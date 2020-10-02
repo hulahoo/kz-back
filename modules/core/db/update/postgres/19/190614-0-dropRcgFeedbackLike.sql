@@ -1,0 +1,1 @@
+alter table tsadv_rcg_feedback_like rename to tsadv_rcg_feedback_like__u04840 ;

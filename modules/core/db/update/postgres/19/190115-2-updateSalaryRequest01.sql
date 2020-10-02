@@ -1,0 +1,1 @@
+alter table TSADV_SALARY_REQUEST add constraint FK_TSADV_SALARY_REQUEST_OLD_SALARY foreign key (OLD_SALARY) references TSADV_SALARY(ID);

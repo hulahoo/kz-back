@@ -1,0 +1,244 @@
+.scrum-board:after {
+    clear: both
+}
+
+.scrum-board:after, .scrum-board:before {
+    content: " ";
+    display: table
+}
+
+.scrum-board .scrum-board-wrapper {
+    border: 1px solid transparent;
+    margin-bottom: 15px;
+    padding-right: 0 !important;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.scrum-board .scrum-board-list-wrapper {
+    border: 1px solid rgb(197, 197, 197);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.scrum-filter-block {
+    padding-right: 8px !important;
+}
+
+.scrum-board .scrum-board-list-wrapper.disabled .scrum-board-list {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.scrum-board .scrum-board-list-wrapper .scrum-board-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 10000;
+    display: none;
+}
+
+.scrum-board .scrum-board-list-wrapper.disabled .scrum-board-loading {
+    display: inline-block;
+}
+
+.scrum-board .scrum-board-list {
+    background-color: #FFF;
+    -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
+    overflow: hidden !important;
+}
+
+.scrum-board .scrum-board-list:last-child {
+    margin-right: 0
+}
+
+.scrum-board .scrum-board-list.ui-sortable-helper {
+    -webkit-transform: rotate(2deg);
+    -ms-transform: rotate(2deg);
+    -o-transform: rotate(2deg);
+    transform: rotate(2deg)
+}
+
+.scrum-board .scrum-board-list {
+    height: 100%;
+    overflow: auto;
+    background-color: #FFF;
+    -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .1)
+}
+
+.scrum-board .scrum-board-list:last-child {
+    margin-right: 0
+}
+
+.scrum-board .scrum-board-list.ui-sortable-helper {
+    -webkit-transform: rotate(2deg);
+    -ms-transform: rotate(2deg);
+    -o-transform: rotate(2deg);
+    transform: rotate(2deg)
+}
+
+.scrum-board .scrum-board-list-header {
+    position: relative;
+    min-height: 18px;
+    padding: 10px 8px;
+    border-bottom: 1px solid rgb(197, 197, 197);
+}
+
+.scrum-board .scrum-board-list-header .scrum-board-list-title {
+    font-size: 13px;
+    font-weight: normal;
+    float: left;
+    font-family: Arial, sans-serif;
+}
+
+.scrum-board .scrum-board-list-header .scrum-board-list-info {
+    font-size: 14px;
+    text-align: center;
+    float: right;
+}
+
+.scrum-board .scrum-board-list-body {
+    height: 100%;
+    overflow: hidden;
+}
+
+.scrum-board .scrum-board-item-image, .scrum-board-item-placeholder {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .3), -17px 0 20px -20px rgba(0, 0, 0, .8), 17px 0 20px -20px rgba(0, 0, 0, .8), 0 0 30px rgba(0, 0, 0, .1) inset;
+}
+
+.scrum-board-item-placeholder {
+    margin-right: 7px;
+    margin-bottom: 7px;
+    border: 1px dotted gray !important;
+}
+
+.scrum-board table.scrum-board-items {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+    margin-bottom: 20px !important;
+}
+
+.scrum-board table.scrum-board-items td, .scrum-board table.scrum-board-items th {
+    font-size: 13px;
+    font-weight: normal;
+}
+
+table.scrum-board-items tbody {
+    display: block;
+    overflow: auto;
+}
+
+table.scrum-board-items thead, table.scrum-board-items thead tr, table.scrum-board-items tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+table.scrum-board-items tbody tr:hover,
+table.scrum-board-items tbody tr:focus {
+    cursor: move;
+}
+
+.scrum-board table.scrum-board-items .dropdown .dropdown-menu {
+    margin-left: 40px !important;
+}
+
+.scrum-board table.scrum-board-items thead tr th {
+    text-align: left;
+    background: #f9f9f9;
+    border-bottom: none !important;
+}
+
+.scrum-board table.scrum-board-items thead tr th .arrow {
+    float: right;
+    opacity: 0.5;
+}
+
+.scrum-board table.scrum-board-items thead tr th:hover,
+.scrum-board table.scrum-board-items thead tr th:focus {
+    cursor: pointer;
+}
+
+.scrum-board table.scrum-board-items thead tr th:hover .arrow,
+.scrum-board table.scrum-board-items thead tr th:focus .arrow {
+    opacity: 1;
+}
+
+.scrum-board .scrum-board-item a.dropdown-toggle:hover, .scrum-board .scrum-board-item a.dropdown-toggle:focus {
+    cursor: pointer;
+}
+
+.scrum-board .scrum-board-item .drag-handler {
+
+}
+
+.scrum-board .scrum-board-item .drag-handler:hover {
+    cursor: move
+}
+
+.scrum-board .scrum-board-item:hover {
+    background-color: rgba(0, 0, 0, .02)
+}
+
+.scrum-board .scrum-board-item-placeholder {
+    background-color: rgba(0, 0, 0, .03);
+    border: 1px dashed #ddd
+}
+
+.blockMsg p {
+    margin: 20px 10px 15px;
+    font-family: Arial, sans-serif;
+}
+
+/*colors*/
+.scrum-board .scrum-board-list-wrapper.drop-zone {
+    border: 1px dotted red;
+}
+
+.scrum-board .scrum-board-list-wrapper.drop-zone .scrum-board-list {
+    opacity: 0.5;
+}
+
+.scrum-board .scrum-board-list-wrapper.drop-zone-blue {
+    border: 1px dotted #166ed5;
+}
+
+.scrum-board .scrum-board-list-wrapper.drop-zone-blue .scrum-board-list {
+
+}
+
+.scrum-board .scrum-board-list.style-1 {
+    background-color: #e4edf1;
+}
+
+.scrum-board .scrum-board-list.style-2 {
+    background-color: #dafae5
+}
+
+.scrum-board .scrum-board-list.style-3 {
+    background-color: #edf6d5
+}
+
+.v-slot-scrum-operation-buttons {
+    margin-left: 10px !important;
+}
+
+.v-splitpanel-second-container-scrum-board-split .c-fglayout-slot,
+.v-splitpanel-second-container-scrum-board-split .c-fglayout-slot .v-customcomponent,
+.v-splitpanel-second-container-scrum-board-split .c-fglayout-slot .v-customcomponent .scrum-board-field,
+.v-splitpanel-second-container-scrum-board-split .c-fglayout-slot .v-customcomponent .scrum-board-field .scrum-board-list-wrapper {
+    height: 100% !important;
+}
+
+.v-splitpanel-second-container-scrum-board-split {
+    padding-top: 8px !important;
+}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.frames.ReqMember">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true">
+        <groupTable id="membersTable"
+                    height="100%"
+                    width="100%">
+            <actions>
+                <action id="create" invoke="customCreate"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="accessLevel"/>
+                <column id="personGroup.personFioWithEmployeeNumber"/>
+            </columns>
+            <rows datasource="membersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="membersButtonsPanel"
+                          alwaysVisible="true">
+                <button id="membersCreateBtn"
+                        action="membersTable.create"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="membersEditBtn"
+                        action="membersTable.edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="membersRemoveBtn"
+                        action="membersTable.remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

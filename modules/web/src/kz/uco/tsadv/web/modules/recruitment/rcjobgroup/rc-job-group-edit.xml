@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.rcjobgroup.RcJobGroupEdit"
+        datasource="rcJobGroupDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.rcjobgroup">
+    <dsContext>
+        <datasource id="rcJobGroupDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RcJobGroup"
+                    view="rcJobGroup.edit">
+            <collectionDatasource id="jobsDs"
+                                  property="jobs"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="rcJobGroupDs">
+            <column width="250px">
+                <field property="groupName"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="jobsBox"
+                  caption="msg://RcJobGroup.jobs">
+            <table id="jobsTable"
+                   height="200px"
+                   width="100%">
+                <actions>
+                    <action id="add"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/close.png"/>
+                </actions>
+                <columns>
+                    <column id="job"/>
+                </columns>
+                <rows datasource="jobsDs"/>
+                <buttonsPanel>
+                    <button action="jobsTable.add"/>
+                    <button action="jobsTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

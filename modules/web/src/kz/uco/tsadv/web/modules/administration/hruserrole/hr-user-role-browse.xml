@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://HrUserRole.browseCaption"
+        class="kz.uco.tsadv.web.modules.administration.hruserrole.HrUserRoleBrowse"
+        focusComponent="hrUserRolesTable"
+        lookupComponent="hrUserRolesTable">
+    <dsContext>
+        <groupDatasource id="hrUserRolesDs"
+                         class="kz.uco.tsadv.modules.personal.model.HrUserRole"
+                         view="hrUserRole.view">
+            <query>
+                <![CDATA[select e from tsadv$HrUserRole e join e.user u]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="hrUserRolesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="hrUserRolesTable"
+                datasource="hrUserRolesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="hrUserRolesTable"
+                    width="100%">
+            <actions>
+                <action id="create" icon="icons/plus-btn.png"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="user"/>
+                <column id="role" sortable="false"/>
+                <column id="dateFrom"/>
+                <column id="dateTo"/>
+            </columns>
+            <rows datasource="hrUserRolesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="hrUserRolesTable.create"/>
+                <button id="editBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="hrUserRolesTable.edit"/>
+                <button id="removeBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="hrUserRolesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://menu-config.courseSchedule"
+        class="kz.uco.tsadv.web.modules.personal.selflearning.CourseSchedule">
+
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <scrollBox id="scrollBox" width="100%" height="100%" stylename="bt-scroll">
+            <vbox id="courseVBox" width="100%" stylename="course-schedule-wrap">
+
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.trainingrequest.TrainingRequestEdit"
+        datasource="trainingRequestDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.trainingrequest">
+    <dsContext>
+        <datasource id="trainingRequestDs"
+                    class="kz.uco.tsadv.modules.learning.model.TrainingRequest"
+                    view="trainingRequest-view">
+            <collectionDatasource id="enrollmentDs"
+                                  property="enrollment"/>
+        </datasource>
+        <collectionDatasource id="dicLearningTypesDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicLearningType">
+            <query>
+                <![CDATA[select e from tsadv$DicLearningType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <fieldGroup id="fieldGroup"
+                        datasource="trainingRequestDs">
+                <column width="250px">
+                    <field caption="msg://requestNumber"
+                           property="requestNumber"/>
+                    <field caption="msg://budget"
+                           property="budget"/>
+                    <field caption="msg://learningType"
+                           optionsDatasource="dicLearningTypesDs"
+                           property="learningType"/>
+                    <field caption="msg://course"
+                           property="course"/>
+                    <field caption="msg://startDate"
+                           property="startDate"/>
+                    <field caption="msg://endDate"
+                           property="endDate"/>
+                    <field caption="msg://status"
+                           property="status"/>
+                </column>
+            </fieldGroup>
+            <tabSheet id="tabSheet">
+                <tab id="tab"
+                     caption="msg://Enrollment"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="enrollmentTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="personGroup"
+                                    caption="msg://personGroup"
+                                    captionProperty="personGroup.personFioWithEmployeeNumber"/>
+                            <column id="personGroup.currentAssignment.organizationGroup.organizationName"
+                                    caption="msg://organizationName"/>
+                            <column id="personGroup.currentAssignment.positionGroup.positionName"
+                                    caption="msg://positionName"/>
+                            <column id="reason"
+                                    caption="msg://reason"/>
+                        </columns>
+                        <rows datasource="enrollmentDs"/>
+                        <buttonsPanel id="buttonsPanel">
+                            <button id="createButton"
+                                    action="enrollmentTable.create"/>
+                            <button id="editButton"
+                                    action="enrollmentTable.edit"/>
+                            <button id="removeButton"
+                                    action="enrollmentTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"
+               width="AUTO"/>
+    </layout>
+</window>

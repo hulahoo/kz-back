@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.punishment.PunishmentTbEdit"
+        datasource="punishmentDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.punishment">
+    <dsContext>
+        <datasource id="punishmentDs"
+                    class="kz.uco.tsadv.entity.tb.Punishment"
+                    view="punishment-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="punishmentDs">
+            <column width="250px">
+                <field property="orderDate"/>
+                <field property="punishmentType"/>
+                <field property="person"/>
+                <field property="orderNumber"/>
+                <field property="punishmentDate"/>
+                <field property="description"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

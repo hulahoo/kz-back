@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://goods.image.gallery"
+        class="kz.uco.tsadv.web.modules.recognition.entity.goods.GoodsImageGallery"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.goods">
+
+    <dialogMode height="80%"
+                width="600"
+                modal="true"/>
+    <layout expand="goodsImagePreview" spacing="true" margin="true">
+        <image id="goodsImagePreview" width="100%" scaleMode="SCALE_DOWN"/>
+        <hbox id="goodsImagesBox" align="MIDDLE_CENTER" spacing="true" stylename="rcg-sh-gallery-images"/>
+    </layout>
+</window>

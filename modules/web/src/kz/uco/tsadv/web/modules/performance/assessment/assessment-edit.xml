@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Assessment.editor"
+        class="kz.uco.tsadv.web.modules.performance.assessment.AssessmentEdit"
+        datasource="assessmentDs"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assessment">
+    <dsContext>
+        <datasource id="assessmentDs"
+                    class="kz.uco.tsadv.modules.performance.model.Assessment"
+                    view="assessmentForCard">
+            <collectionDatasource id="assessmentParticipantDs"
+                                  property="assessmentParticipant">
+                <collectionDatasource id="assessmentCompetenceDs"
+                                      property="assessmentCompetence"/>
+                <collectionDatasource id="assessmentGoalDs"
+                                      property="assessmentGoal"/>
+            </collectionDatasource>
+        </datasource>
+        <collectionDatasource id="assessmentPersonAnswersDs"
+                              class="kz.uco.tsadv.modules.performance.model.AssessmentPersonAnswer"
+                              view="assessmentPersonAnswer-view">
+            <query>
+                <![CDATA[select e from tsadv$AssessmentPersonAnswer e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="765"
+                resizable="true"
+                width="1366"/>
+    <layout spacing="true">
+        <scrollBox height="100%"
+                   margin="false,true,false,false"
+                   spacing="true">
+            <hbox id="hbox"
+                  height="100px"
+                  spacing="true"
+                  width="100%">
+                <hbox height="100%"
+                      spacing="true">
+                    <embedded id="photoEmbedded"
+                              height="100px"
+                              relativeSrc="url://www.infomaniaco.com.br/wp-content/uploads/2012/01/anonymouslogo-100x100.jpg"
+                              width="100px"/>
+                    <vbox height="100%"
+                          spacing="true"
+                          width="AUTO">
+                        <label id="fioAssesmentTemplateLablel"
+                               stylename="h1 bold"/>
+                    </vbox>
+                </hbox>
+                <hbox align="TOP_RIGHT"
+                      spacing="true">
+                    <button id="button"
+                            caption="msg://table.btn.save"
+                            icon="icons/ok.png"
+                            invoke="onButtonClick"/>
+                    <button id="button_1"
+                            caption="msg://table.btn.cancel"
+                            icon="icons/cancel.png"
+                            invoke="onButton_1Click"/>
+                </hbox>
+            </hbox>
+            <tabSheet id="tabSheet">
+                <tab id="tab"
+                     caption="msg://CompetenceGroup.browseCaption"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <vbox id="vbox"
+                          spacing="true">
+                        <label stylename="h1 bold"
+                               value="msg://CompetenceGroup.browseCaption"/>
+                        <groupBox id="groupBox"
+                                  height="120px"
+                                  icon="icons/clear.png"
+                                  orientation="horizontal"
+                                  spacing="true"
+                                  width="100%">
+                            <label icon="font-icon:INFO_CIRCLE"
+                                   stylename="bold"
+                                   value="msg://Section Rating and Comments"/>
+                            <vbox id="ratingVbox"
+                                  align="MIDDLE_LEFT"
+                                  spacing="true"/>
+                            <vbox align="MIDDLE_LEFT"
+                                  spacing="true">
+                                <label align="TOP_CENTER"
+                                       value="msg://totalWieght"/>
+                                <label align="TOP_CENTER"
+                                       value="100%"/>
+                            </vbox>
+                        </groupBox>
+                    </vbox>
+                </tab>
+                <tab id="tab_1"
+                     caption="msg://goals"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <vbox id="vbox_1"
+                          spacing="true">
+                        <label stylename="h1 bold"
+                               value="msg://Goal.browser"/>
+                        <groupBox id="groupBox_1"
+                                  height="120px"
+                                  orientation="horizontal"
+                                  spacing="true"
+                                  width="100%">
+                            <label icon="font-icon:INFO_CIRCLE"
+                                   stylename="bold"
+                                   value="msg://Section Rating and Comments"/>
+                            <vbox id="ratingVbox_2"
+                                  align="MIDDLE_LEFT"
+                                  spacing="true"/>
+                            <vbox align="MIDDLE_LEFT"
+                                  spacing="true">
+                                <label align="TOP_CENTER"
+                                       value="msg://totalWieght"/>
+                                <label align="TOP_CENTER"
+                                       value="100%"/>
+                            </vbox>
+                        </groupBox>
+                    </vbox>
+                </tab>
+                <tab id="tab_2"
+                     caption="msg://questionaires"
+                     margin="true,false,false,false"
+                     spacing="true"/>
+                <tab id="tab_3"
+                     caption="msg://Overall Summary"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <vbox id="vbox_3"
+                          spacing="true">
+                        <label stylename="h1 bold"
+                               value="msg://assessment.lbl.total"/>
+                        <vbox spacing="true">
+                            <hbox height="120px"
+                                  spacing="true"
+                                  width="100%">
+                                <label icon="font-icon:INFO_CIRCLE"
+                                       stylename="bold"
+                                       value="msg://assessment.lbl.total.comments"/>
+                                <vbox id="ratingVbox_3"
+                                      align="MIDDLE_LEFT"
+                                      spacing="true"/>
+                                <vbox align="MIDDLE_LEFT"
+                                      spacing="true"/>
+                            </hbox>
+                            <grid id="grid"
+                                  spacing="true"
+                                  width="100%">
+                                <columns>
+                                    <column flex="1.0"/>
+                                    <column flex="10.0"/>
+                                </columns>
+                                <rows>
+                                    <row>
+                                        <label align="TOP_RIGHT"
+                                               value="msg://assessment.lbl.person.comments"/>
+                                        <richTextArea id="textAreaWorker"
+                                                      width="100%"/>
+                                    </row>
+                                    <row>
+                                        <label align="TOP_RIGHT"
+                                               value="msg://assessment.lbl.manager.comments"/>
+                                        <richTextArea id="textAreaManager"
+                                                      width="100%"/>
+                                    </row>
+                                    <row>
+                                        <label align="TOP_RIGHT"
+                                               value="msg://assessment.lbl.performance"/>
+                                        <fieldGroup id="fieldGroupPerformance">
+                                            <field id="fontRatePerformance"
+                                                   custom="true"/>
+                                        </fieldGroup>
+                                    </row>
+                                    <row>
+                                        <label align="TOP_RIGHT"
+                                               value="msg://assessment.lbl.potencial"/>
+                                        <fieldGroup id="fieldGroupPotential">
+                                            <field id="fontRatePotential"
+                                                   custom="true"/>
+                                        </fieldGroup>
+                                    </row>
+                                    <row>
+                                        <label align="TOP_RIGHT"
+                                               value="msg://assessment.lbl.risk.dismissal"/>
+                                        <fieldGroup id="fieldGroupRisk">
+                                            <field id="fontRateRisk"
+                                                   custom="true"/>
+                                        </fieldGroup>
+                                    </row>
+                                    <row>
+                                        <label align="TOP_RIGHT"
+                                               value="msg://assessment.lbl.after.dismissal"/>
+                                        <fieldGroup id="fieldGroupImpact">
+                                            <field id="fontRateImpact"
+                                                   custom="true"/>
+                                        </fieldGroup>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </vbox>
+                    </vbox>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+    </layout>
+</window>

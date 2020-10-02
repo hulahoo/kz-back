@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://scheduleHeader"
+        class="kz.uco.tsadv.web.modules.timesheet.standardschedule.StandardScheduleDetail">
+    <dsContext>
+        <groupDatasource id="scheduleHeadersDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.ScheduleHeader"
+                         view="scheduleHeaderWithOffset.view">
+            <query>
+                <![CDATA[select e
+                                from tsadv$ScheduleHeader e
+                                where e.schedule.id = :param$selectedSchedule
+                                 and e.month between :param$monthFrom and :param$monthTo]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <groupTable id="scheduleHeadersTable"
+                    height="100%"
+                    settingsEnabled="false"
+                    width="100%">
+            <actions>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="offset" caption="msg://Schedule.offset"
+                        captionProperty="offset.offsetScheduleName"/>
+                <column id="month"
+                        generator="mothWithYearGenerator"/>
+                <column id="isLocked"
+                        caption="msg://isLockedShort"/>
+                <column id="baseDays"
+                        caption="msg://baseDaysShort"/>
+                <column id="baseHours"
+                        caption="msg://baseHoursShort"/>
+                <column id="planDays"
+                        caption="msg://planDaysShort"/>
+                <column id="planHours"
+                        caption="msg://planHoursShort"/>
+                <column id="nightHours"
+                        caption="msg://nightHoursShort"/>
+                <column id="weekendDays"
+                        caption="msg://weekendDaysShort"/>
+                <column id="holidayWorkDays"
+                        caption="msg://holidayWorkDaysShort"/>
+                <column id="holidayWorkHours"
+                        caption="msg://holidayWorkHoursShort"/>
+                <column id="holidayDays"
+                        caption="msg://holidayDaysShort"/>
+            </columns>
+            <rows datasource="scheduleHeadersDs"/>
+        </groupTable>
+    </layout>
+</window>

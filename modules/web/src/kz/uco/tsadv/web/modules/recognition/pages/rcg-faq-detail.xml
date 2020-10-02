@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgFaqDetail"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+    <dialogMode height="AUTO"
+                width="600"
+                modal="true"
+                forceDialog="true"/>
+    <layout stylename="rcg-faq-detail-window"/>
+</window>

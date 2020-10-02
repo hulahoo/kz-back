@@ -1,0 +1,1 @@
+alter table TSADV_COURSE_FEEDBACK_PERSON_ANSWER_DETAIL add column QUESTION_ORDER integer ;

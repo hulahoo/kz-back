@@ -1,0 +1,206 @@
+.v-splitpanel-second-container-matrix-split-panel {
+    margin-top: 8px !important;
+    margin-left: 12px !important;
+}
+
+.v-slot-matrix-operation-buttons {
+    margin-top: -15px !important;
+}
+
+.matrix-filter-block {
+    padding-right: 10px;
+}
+
+.v-slot-matrix-vbox {
+    /*margin-top: -31px !important;*/
+}
+
+.matrix:after {
+    clear: both
+}
+
+.matrix:after, .matrix:before {
+    content: " ";
+    display: table
+}
+
+.matrix .matrix-wrapper {
+    border: 1px solid transparent;
+    margin-bottom: 5px;
+    padding-right: 0 !important;
+    padding-left: 5px;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+.matrix .matrix-list {
+    overflow: hidden;
+    background-color: #FFF;
+    /*-webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);*/
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -webkit-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    -moz-box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+    box-shadow: 0 15px 10px -10px rgba(0, 0, 0, 0.5), 0 1px 4px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 0, 0, 0.1) inset;
+
+    border-radius: 7px;
+}
+
+.matrix .matrix-list:last-child {
+    margin-right: 0
+}
+
+.matrix .matrix-list.ui-sortable-helper {
+    -webkit-transform: rotate(2deg);
+    -ms-transform: rotate(2deg);
+    -o-transform: rotate(2deg);
+    transform: rotate(2deg)
+}
+
+.matrix .matrix-list {
+    max-height: 100%;
+    overflow: hidden;
+    background-color: #FFF;
+    -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, .1);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, .1)
+}
+
+.matrix .matrix-list:last-child {
+    margin-right: 0
+}
+
+.matrix .matrix-list.ui-sortable-helper {
+    -webkit-transform: rotate(2deg);
+    -ms-transform: rotate(2deg);
+    -o-transform: rotate(2deg);
+    transform: rotate(2deg)
+}
+
+.matrix .matrix-list-header {
+    position: relative;
+    padding: 10px 8px 6px;
+}
+
+.matrix .matrix-list-header .matrix-list-title {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.matrix .matrix-list-header .matrix-list-info {
+    font-size: 12px;
+    text-align: center;
+}
+
+.matrix .matrix-list-body {
+    overflow-y: auto !important;
+}
+
+.matrix .matrix-item-image, .matrix-item-placeholder {
+    width: 30px;
+    height: 30px;
+    border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .3), -17px 0 20px -20px rgba(0, 0, 0, .8), 17px 0 20px -20px rgba(0, 0, 0, .8), 0 0 30px rgba(0, 0, 0, .1) inset;
+}
+
+.matrix-item-placeholder {
+    margin-right: 7px;
+    margin-bottom: 7px;
+    border: 1px dotted gray !important;
+}
+
+.matrix .matrix-list-body.has-v-text .matrix-items {
+    margin-left: 40px;
+}
+
+.matrix .matrix-items {
+    list-style: none;
+    margin-bottom: 0;
+    padding: 0 10px 10px;
+    margin-top: 0;
+    height: 90%;
+}
+
+.matrix .matrix-item {
+    margin-right: 7px;
+    margin-bottom: 7px;
+}
+
+.matrix .matrix-item, .matrix .matrix-item-placeholder {
+    float: left;
+}
+
+.matrix .matrix-item .drag-handler {
+
+}
+
+.matrix .matrix-item .drag-handler:hover {
+    cursor: move
+}
+
+.matrix .matrix-item:hover {
+    background-color: rgba(0, 0, 0, .02)
+}
+
+.matrix .matrix-item-placeholder {
+    background-color: rgba(0, 0, 0, .03);
+    border: 1px dashed #ddd
+}
+
+.v-text {
+    font-size: 13px;
+    transform: rotate(-90deg);
+    width: 200px;
+    text-align: center;
+    position: absolute;
+    left: -70px;
+    bottom: 40%;
+    font-weight: bold;
+}
+
+.blockMsg p {
+    margin: 20px 10px 15px;
+    font-family: Arial, sans-serif;
+}
+
+/*colors*/
+
+.matrix .matrix-list.style-1 {
+    background-color: #e4edf1;
+}
+
+.matrix .matrix-list.style-2 {
+    background-color: #dafae5
+}
+
+.matrix .matrix-list.style-3 {
+    background-color: #edf6d5
+}
+
+.matrix .matrix-list.style-4 {
+    background-color: #fef0d8
+}
+
+.matrix .matrix-list.style-5 {
+    background-color: #d6eef9
+}
+
+.matrix .matrix-list.style-6 {
+    background-color: #F1B5B3
+}
+
+.matrix .matrix-list.style-7 {
+    background-color: #ecfbf2
+}
+
+.matrix .matrix-list.style-8 {
+    background-color: #f6e5f2
+}
+
+.matrix .matrix-list.style-9 {
+    background-color: #EEF5F8
+}

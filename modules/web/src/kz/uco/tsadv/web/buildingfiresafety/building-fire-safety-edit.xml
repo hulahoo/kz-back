@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.buildingfiresafety.BuildingFireSafetyEdit"
+        datasource="buildingFireSafetyDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.buildingfiresafety">
+    <dsContext>
+        <datasource id="buildingFireSafetyDs"
+                    class="kz.uco.tsadv.entity.tb.BuildingFireSafety"
+                    view="buildingFireSafety-view">
+            <collectionDatasource id="fireWaterSupplyDs"
+                                  property="fireWaterSupply"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%">
+            <fieldGroup id="fieldGroup"
+                        datasource="buildingFireSafetyDs"
+                        height="100%"
+                        width="100%">
+                <column width="250px">
+                    <field property="fsBuildingCategory"/>
+                    <field property="fsOutdoorCategory"/>
+                    <field property="fireResistance"/>
+                    <field property="fireAutomationRequired"/>
+                    <field property="agreement"/>
+                </column>
+            </fieldGroup>
+            <frame id="windowActions"
+                   height="100%"
+                   screen="editWindowActions"/>
+            <tabSheet>
+                <tab id="tab"
+                     caption="msg://tab"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="fireWaterSupplyTable"
+                           height="200px"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/remove.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/edit.png"/>
+                        </actions>
+                        <columns>
+                            <column id="equipment"/>
+                            <column id="inventoryNumber"/>
+                            <column id="isWorking"/>
+                        </columns>
+                        <rows datasource="fireWaterSupplyDs"/>
+                        <buttonsPanel>
+                            <button action="fireWaterSupplyTable.create"/>
+                            <button action="fireWaterSupplyTable.edit"/>
+                            <button action="fireWaterSupplyTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+    </layout>
+</window>

@@ -1,0 +1,2 @@
+alter table TSADV_COIN_DISTRIBUTION_RULE drop column MANAGER_COINS__U63832 cascade ;
+alter table TSADV_COIN_DISTRIBUTION_RULE drop column EMPLOYEE_COINS__U54796 cascade ;

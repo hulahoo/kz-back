@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.book.BookEdit"
+        datasource="bookDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.book">
+    <dsContext>
+        <datasource id="bookDs"
+                    class="kz.uco.tsadv.entity.Book"
+                    view="book-edit-view"/>
+        <collectionDatasource id="categoriesDs"
+                              class="kz.uco.tsadv.entity.DicBookCategory"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicBookCategory e where e.active = true]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="800"
+                resizable="true"
+                width="1100"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <hbox spacing="true">
+                <groupBox id="groupBox"
+                          caption="msg://image"
+                          expand="image"
+                          height="300px"
+                          spacing="true"
+                          width="300px">
+                    <image id="image"
+                           align="MIDDLE_CENTER"
+                           scaleMode="CONTAIN"
+                           width="100%"/>
+                    <hbox id="hbox"
+                          align="BOTTOM_LEFT"
+                          spacing="true">
+                        <upload id="uploadField"/>
+                        <button id="clearImageBtn"
+                                caption="msg://clear"
+                                invoke="onClearImageBtnClick"/>
+                    </hbox>
+                </groupBox>
+                <fieldGroup id="fieldGroup"
+                            datasource="bookDs">
+                    <column width="300px"> <!--todo anuar 1 не хватает id -->
+                        <field id="bookName"
+                               property="bookNameLang1"
+                               required="true"/>
+                        <field id="author"
+                               property="authorLang1"/>
+                        <field id="publishDate"
+                               property="publishDate"/>
+                        <field id="isbn"
+                               property="isbn"/>
+                        <field id="active"
+                               property="active"/>
+                        <field id="averageScore"
+                               property="averageScore"/>
+                        <field id="language"
+                               property="language"/>
+                        <field id="category"
+                               optionsDatasource="categoriesDs"
+                               property="category"/>
+                    </column>
+                    <column width="350px"><!--todo anuar 1 не хватает id -->
+                        <field id="bookDescription"
+                               property="bookDescriptionLang1"
+                               rows="3"/>
+                        <field id="djvu"
+                               property="djvu"/>
+                        <field id="fb2"
+                               property="fb2"/>
+                        <field id="kf8"
+                               property="kf8"/>
+                        <field id="epub"
+                               property="epub"/>
+                        <field id="mobi"
+                               property="mobi"/>
+                        <field id="pdf"
+                               property="pdf"/>
+                    </column>
+                </fieldGroup>
+            </hbox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

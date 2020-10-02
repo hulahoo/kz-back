@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://LearningObject.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.learningobject.LearningObjectBrowse"
+        focusComponent="learningObjectsTable"
+        lookupComponent="learningObjectsTable">
+    <dsContext>
+        <groupDatasource id="learningObjectsDs"
+                         class="kz.uco.tsadv.modules.learning.model.LearningObject"
+                         view="learningObject.browse">
+            <query>
+                <![CDATA[select e from tsadv$LearningObject e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="learningObjectsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learningObjectsTable"
+                datasource="learningObjectsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learningObjectsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"
+                        icon="REMOVE_ACTION"
+                        invoke="removeItem"
+                        caption="mainMsg://table.btn.remove"
+                        trackSelection="true"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="objectName"
+                        generator="generateObjectNameCell"/>
+                <column id="contentType" />
+                <column id="file"
+                        link="true" captionProperty="file.name"/>
+                <column id="url" link="true"/>
+            </columns>
+            <rows datasource="learningObjectsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="learningObjectsTable.create"/>
+                <button id="editBtn"
+                        action="learningObjectsTable.edit"/>
+                <button id="removeBtn"
+                        action="learningObjectsTable.remove"/>
+                <button id="excel"
+                        action="learningObjectsTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

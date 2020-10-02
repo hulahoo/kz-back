@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Assignment.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.assignmentgroup.AssignmentGroupBrowse"
+        focusComponent="assignmentTable"
+        lookupComponent="assignmentTable">
+    <dsContext>
+        <groupDatasource id="assignmentsDs"
+                         class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                         view="assignmentExtBrowse.view">
+
+            <!--<query>
+                <![CDATA[select e
+                           from base$AssignmentGroupExt e
+                           join base$AssignmentExt a on a.group.id = e.id
+                           join base$PersonGroupExt pg on pg.id = a.personGroup.id
+                           join base$PersonExt p on p.group.id = pg.id
+                           where :session$systemDate between a.startDate and a.endDate
+                            and :session$systemDate between p.startDate and p.endDate
+                            and a.primaryFlag = true
+                           ]]>
+            </query>-->
+
+            <query>
+                <![CDATA[select e from base$AssignmentExt e
+                          where e.personGroup IS NOT NULL
+                            and :session$systemDate between e.startDate and e.endDate
+                            and e.primaryFlag = true]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="positionGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                              view="positionGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from base$PositionGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.positionGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 2
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$JobGroup e join e.list j
+                         where :session$systemDate between j.startDate and j.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="gradeGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.GradeGroup"
+                              view="gradeGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$GradeGroup e join e.list g
+                         where :session$systemDate between g.startDate and g.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="locationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation">
+            <query>
+                <![CDATA[select e
+                         from base$DicLocation e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="statusDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicAssignmentStatus e
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="1100"/>
+    <layout expand="assignmentTable"
+            spacing="true">
+        <filter id="assignmentsFilter"
+                applyTo="assignmentTable"
+                datasource="assignmentsDs">
+            <custom name="employeeNumber"
+                    caption="msg://kz.uco.tsadv.modules.personal.model/Person.employeeNumber"/>
+            <custom name="fullName"
+                    caption="msg://kz.uco.tsadv.modules.personal.model/Person.fullName"/>
+        </filter>
+        <groupBox id="groupBox"
+                  caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="assignmentTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        invoke="openAssignment"/>
+                <action id="edit"
+                        caption="msg://table.btn.edit"
+                        icon="icons/edit.png"
+                        invoke="edit"
+                        shortcut="${TABLE_EDIT_SHORTCUT}"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="personGroup"
+                        captionProperty="personGroup.personFioWithEmployeeNumber"
+                        link="true"
+                        linkInvoke="redirectCard"/>
+                <column id="positionGroup"
+                        captionProperty="positionGroup.position.positionFullName"/>
+                <column id="organizationGroup"
+                        captionProperty="organizationGroup.organization.organizationName"/>
+                <column id="jobGroup"
+                        caption="msg://jobGroup"
+                        captionProperty="jobGroup.job.jobName"/>
+                <column id="gradeGroup"
+                        caption="msg://gradeGroup"
+                        captionProperty="gradeGroup.grade.gradeName"/>
+                <column id="assignmentStatus"/>
+                <column id="location"
+                        caption="msg://location"/>
+                <column id="fte"/>
+            </columns>
+            <rows datasource="assignmentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        caption="msg://createpersongroupbrowse"
+                        invoke="createAssignment"/>
+                <button id="assignmentsTableEdit"
+                        action="assignmentTable.edit"/>
+                <button id="assignmentsTableCreate"
+                        action="assignmentTable.create"
+                        caption="msg://combination"
+                        icon="icons/add.png"/>
+                <button id="transfer"
+                        caption="msg://transfer"
+                        invoke="transfer"/>
+                <button id="dismissal"
+                        caption="msg://disminssal"
+                        invoke="dismissal"/>
+                <button id="history"
+                        caption="msg://History"
+                        invoke="openHistory"/>
+                <button id="assignmentsTableExcel"
+                        action="assignmentTable.excel"
+                        caption="msg://table.btn.excel"/>
+                <button id="timecard"
+                        invoke="timecard"
+                        caption="msg://timecard"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

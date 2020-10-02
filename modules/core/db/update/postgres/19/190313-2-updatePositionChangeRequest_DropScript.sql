@@ -1,0 +1,1 @@
+alter table TSADV_POSITION_CHANGE_REQUEST drop column REQUEST_NUMBER__U47236 cascade ;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgOrders"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+    <dsContext>
+        <groupDatasource id="goodsOrdersDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.GoodsOrder"
+                         view="goodsOrder.edit"
+                         maxResults="20">
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goodsOrdersTable"
+            spacing="true" height="100%" width="100%"
+            margin="true">
+        <groupTable id="goodsOrdersTable"
+                    width="100%">
+            <columns>
+                <column id="status"/>
+                <column id="totalSum"/>
+                <column id="orderNumber" link="true" linkInvoke="confirmGoodsOrder"/>
+                <column id="orderDate"/>
+                <column id="personGroup.fullName"/>
+            </columns>
+            <rows datasource="goodsOrdersDs"/>
+        </groupTable>
+    </layout>
+</window>

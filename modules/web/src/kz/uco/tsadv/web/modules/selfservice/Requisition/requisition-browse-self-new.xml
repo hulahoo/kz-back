@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.selfservice.Requisition.RequisitionBrowseSelfNew"
+        focusComponent="requisitionDataGrid"
+        lookupComponent="requisitionDataGrid"
+        messagesPack="kz.uco.tsadv.web.modules.selfservice.Requisition">
+    <dsContext>
+        <collectionDatasource id="requisitionsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                              view="requisition.for.self.new">
+            <query>
+                <![CDATA[select e from tsadv$Requisition e
+join tsadv$UserExtPersonGroup up
+on up.personGroup.id = e.managerPersonGroup.id
+where  up.userExt.id = :session$userId
+]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="requisitionDataGrid"
+            spacing="true">
+        <filter id="filter"
+                applyTo="requisitionDataGrid"
+                datasource="requisitionsDs">
+            <properties include=".*"/>
+        </filter>
+        <dataGrid id="requisitionDataGrid"
+                  datasource="requisitionsDs"
+                  frozenColumnCount="1"
+                  width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        description="mainMsg://createOrder"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        description="mainMsg://editOrder"
+                        trackSelection="true"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        description="mainMsg://deleteOrder"
+                        trackSelection="true"/>
+                <action id="refresh"
+                        caption="mainMsg://table.btn.empty"
+                        description="mainMsg://refreshOrder"/>
+            </actions>
+            <columns>
+                <column id="nameForSiteLang"
+                        caption="msg://ReplaceNamForSiteInRequisitionBrowse"
+                        property="nameForSiteLang"/>
+                <column id="jobGroup"
+                        caption="msg://Requisition.jobGroup"
+                        property="jobGroup.jobName"/>
+                <column id="location"
+                        caption="msg://Requisition.location"
+                        property="location.settlementLangValue"/>
+                <column id="openedPositionsCount2"
+                        caption="msg://requisition.browse.vacancy"
+                        property="openedPositionsCount"/>
+                <column id="startDate"
+                        property="startDate"/>
+                <column id="endDate"
+                        property="endDate"/>
+                <column id="finalCollectDate"
+                        property="finalCollectDate"/>
+                <column id="recruiterPersonGroup"
+                        caption="msg://Requisition.recruiter"
+                        property="recruiterPersonGroup.personLatinFioWithEmployeeNumber"/>
+                <column id="requisitionStatus"
+                        property="requisitionStatus"/>
+                <column id="jobRequestCount"
+                        caption="msg://JobRequest.browseCaption"
+                        property="jobRequestCount"/>
+                <column id="code"
+                        property="code"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="requisitionDataGrid.create"/>
+                <button id="editBtn"
+                        action="requisitionDataGrid.edit"/>
+                <button id="removeBtn"
+                        action="requisitionDataGrid.remove"/>
+                <button id="refreshBtn"
+                        action="requisitionDataGrid.refresh"/>
+            </buttonsPanel>
+        </dataGrid>
+    </layout>
+</window>

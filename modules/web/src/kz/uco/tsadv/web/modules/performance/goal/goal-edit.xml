@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Goal.editor"
+        class="kz.uco.tsadv.web.modules.performance.goal.GoalEdit"
+        datasource="goalDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="goalDs"
+                    class="kz.uco.tsadv.modules.performance.model.Goal"
+                    view="goal.edit"/>
+        <collectionDatasource id="measureTypesDs"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicMeasureType"
+                              view="dicMeasureType.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicMeasureType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="uomsDs"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              class="kz.uco.tsadv.modules.performance.dictionary.DicUOM"
+                              view="dicUOM.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicUOM e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="goalDs">
+            <column width="250px">
+                <field property="goalName"/>
+                <field property="successCriteria"/>
+                <field property="library"/>
+                <field optionsDatasource="measureTypesDs"
+                       property="measureType"/>
+                <field optionsDatasource="uomsDs"
+                       property="uom"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

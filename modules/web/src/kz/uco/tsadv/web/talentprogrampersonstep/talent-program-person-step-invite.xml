@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.talentprogrampersonstep.TalentProgramPersonStepInvite"
+        datasource="talentProgramPersonStepDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.talentprogrampersonstep">
+    <dsContext>
+        <datasource id="talentProgramPersonStepDs"
+                    class="kz.uco.tsadv.entity.TalentProgramPersonStep"
+                    view="talentProgramPersonStep-view"/>
+        <collectionDatasource id="dicTalentProgramStepsDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.entity.tb.dictionary.DicTalentProgramStep">
+            <query>
+                <![CDATA[select e from tsadv$DicTalentProgramStep e
+                        join tsadv$TalentProgramStep s
+                        where s.step = e and s.talentProgram.id = :param$talentProgramId]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="notificationTemplateDs"
+                    allowCommit="false"
+                    class="kz.uco.base.entity.core.notification.NotificationTemplate"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="700"/>
+    <layout spacing="true" expand="scrollBox" height="100%">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="talentProgramPersonStepDs"
+                        fieldCaptionWidth="150px">
+                <column width="300px">
+                    <field id="talentProgramStepField"
+                           optionsDatasource="dicTalentProgramStepsDs"
+                           property="dicTalentProgramStep"/>
+                    <field id="planedDate"
+                           caption="msg://dateFrom">
+                        <hbox id="dateVbox"
+                              expand="dateToHbox"
+                              spacing="true">
+                            <dateField id="dateFieldFrom"
+                                       dateFormat="dd.MM.yyyy"/>
+                            <hbox id="dateToHbox"
+                                  expand="dateFieldTo"
+                                  spacing="true">
+                                <label id="toDateLbl"
+                                       align="MIDDLE_CENTER"
+                                       value="msg://to"/>
+                                <dateField id="dateFieldTo"
+                                           dateFormat="dd.MM.yyyy"/>
+                            </hbox>
+                        </hbox>
+                    </field>
+                    <field id="hours"
+                           caption="msg://time">
+                        <hbox id="timeVbox"
+                              expand="timeToHbox"
+                              spacing="true">
+                            <hbox width="120px">
+                                <timeField id="timeFrom"
+                                           datasource="talentProgramPersonStepDs"
+                                           property="dateFrom"/>
+                            </hbox>
+                            <hbox id="timeToHbox"
+                                  expand="empty"
+                                  spacing="true">
+                                <label id="toLbl"
+                                       align="MIDDLE_LEFT"
+                                       value="msg://to"/>
+                                <timeField id="timeTo"
+                                           align="MIDDLE_LEFT"
+                                           datasource="talentProgramPersonStepDs"
+                                           property="dateTo"/>
+                                <label id="empty"/>
+                            </hbox>
+                        </hbox>
+                    </field>
+                    <field property="addressRu"/>
+                    <field property="addressEn"/>
+                </column>
+            </fieldGroup>
+            <hbox id="hbox"
+                  expand="tabSheetTemplate"
+                  spacing="true"
+                  width="100%">
+                <label align="MIDDLE_LEFT"
+                       value="msg://notification"
+                       width="145px"/>
+                <tabSheet id="tabSheetTemplate">
+                    <tab id="templateRu"
+                         expand="textAreaTemplateRu"
+                         caption="mainMsg://Language.ru">
+                        <richTextArea id="textAreaTemplateRu"
+                                      datasource="notificationTemplateDs"
+                                      property="emailTemplateLang1"
+                                      width="100%"/>
+                    </tab>
+                    <tab id="templateEn"
+                         expand="textAreaTemplateEn"
+                         caption="mainMsg://Language.en">
+                        <richTextArea id="textAreaTemplateEn"
+                                      datasource="notificationTemplateDs"
+                                      property="emailTemplateLang3"
+                                      width="100%"/>
+                    </tab>
+                    <tab id="templateKz"
+                         expand="textAreaTemplateKz"
+                         caption="mainMsg://Language.kz">
+                        <richTextArea id="textAreaTemplateKz"
+                                      datasource="notificationTemplateDs"
+                                      property="emailTemplateLang2"
+                                      width="100%"/>
+                    </tab>
+                </tabSheet>
+            </hbox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"
+               visible="false"/>
+        <buttonsPanel id="buttonsPanel">
+            <button id="invite"
+                    caption="msg://invite"
+                    invoke="onInvite"/>
+            <button id="cancel"
+                    caption="msg://table.btn.cancel"
+                    invoke="cancel"/>
+        </buttonsPanel>
+    </layout>
+</window>

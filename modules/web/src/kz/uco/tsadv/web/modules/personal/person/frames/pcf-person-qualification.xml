@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonQualification"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfPersonQualification"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <table id="personQualificationsTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="type"/>
+                <column id="assignValidationDate"/>
+                <column id="note"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="personQualificationsDs"/>
+            <buttonsPanel>
+                <button id="createButton"
+                        action="personQualificationsTable.create"/>
+                <button id="editButton"
+                        action="personQualificationsTable.edit"/>
+                <button id="removeButton"
+                        action="personQualificationsTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

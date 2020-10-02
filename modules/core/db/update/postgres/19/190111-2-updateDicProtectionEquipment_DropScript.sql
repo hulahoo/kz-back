@@ -1,0 +1,2 @@
+alter table TSADV_DIC_PROTECTION_EQUIPMENT drop column REPLACEMENT_UOM_ID__U22201 cascade ;
+alter table TSADV_DIC_PROTECTION_EQUIPMENT drop column UNIT_OF_MEASURE_ID__U10404 cascade ;

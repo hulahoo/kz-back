@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.personqualification.PersonQualificationEdit"
+        datasource="personQualificationDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.personqualification">
+    <dsContext>
+        <datasource id="personQualificationDs"
+                    class="kz.uco.tsadv.entity.tb.PersonQualification"
+                    view="personQualification-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personQualificationDs">
+            <column width="250px">
+                <field property="type"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="assignValidationDate"/>
+                <field property="attachment"/>
+                <field property="note"
+                       rows="5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

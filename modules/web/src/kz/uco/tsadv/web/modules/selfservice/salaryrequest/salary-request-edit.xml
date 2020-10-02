@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://SalaryRequest.editorCaption"
+        class="kz.uco.tsadv.web.modules.selfservice.salaryrequest.SalaryRequestEdit"
+        datasource="salaryRequestDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="salaryRequestDs"
+                    class="kz.uco.tsadv.modules.personal.model.SalaryRequest"
+                    view="salary-request.view"/>
+        <collectionDatasource id="reasonDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicSalaryChangeReason">
+            <query>
+                <![CDATA[select e from tsadv$DicSalaryChangeReason e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e
+                              where e.procInstance.entity.entityId = :ds$salaryRequestDs
+                              order by e.startDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicCurrenciesDs"
+                              class="kz.uco.base.entity.dictionary.DicCurrency">
+            <query>
+                <![CDATA[select e from base$DicCurrency e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="bpmRequestMessagesDs"
+                              class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
+                              view="bpmRequestMessage-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmRequestMessage e
+                    where e.entityId = :ds$salaryRequestDs
+                           and ( e.assignedUser.userExt.id = :session$user or e.assignedBy.userExt.id = :session$user )
+                    order by e.sendDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="100%"
+                width="710"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="salaryRequestDs">
+                <column>
+                    <field property="assignmentGroup"
+                           required="true"
+                           visible="false"/>
+                </column>
+            </fieldGroup>
+            <vbox id="headerVBox"
+                  spacing="true"
+                  width="500px">
+                <hbox id="requestNumberHbox"
+                      expand="requestNumber"
+                      spacing="true"
+                      width="100%">
+                    <label value="msg://reuqestNum"
+                           width="150px"/>
+                    <textField id="requestNumber"
+                               datasource="salaryRequestDs"
+                               editable="false"
+                               property="requestNumber"/>
+                </hbox>
+                <hbox id="statusHbox"
+                      expand="status"
+                      spacing="true"
+                      width="100%">
+                    <label value="msg://status"
+                           width="150px"/>
+                    <textField id="status"
+                               datasource="salaryRequestDs"
+                               editable="false"
+                               required="true"
+                               property="status"/>
+                </hbox>
+                <hbox id="person"
+                      expand="picker"
+                      spacing="true"
+                      width="100%">
+                    <label value="msg://personGroup"
+                           width="150px"/>
+                    <pickerField id="picker"
+                                 required="true"/>
+                </hbox>
+                <hbox id="reasonbox"
+                      expand="reason"
+                      spacing="true"
+                      width="100%">
+                    <label value="msg://reason"
+                           width="150px"/>
+                    <lookupField id="reason"
+                                 datasource="salaryRequestDs"
+                                 optionsDatasource="reasonDs"
+                                 property="reason"
+                                 required="true"/>
+                </hbox>
+            </vbox>
+            <grid id="grid"
+                  spacing="true"
+                  stylename="v-panel-caption"
+                  width="600px">
+                <columns>
+                    <column flex="2.0"/>
+                    <column flex="10.0"/>
+                    <column flex="10.0"/>
+                    <column flex="0.2"/>
+                </columns>
+                <rows>
+                    <row id="typeH">
+                        <label/>
+                        <label id="old"
+                               value="msg://oldValue"/>
+                        <label id="newD"
+                               value="msg://newValue"/>
+                    </row>
+                    <row id="dateFromH">
+                        <label value="msg://dateFrom"/>
+                        <dateField id="oldDateFrom"
+                                   datasource="salaryRequestDs"
+                                   editable="false"
+                                   property="oldSalary.startDate"/>
+                        <dateField id="newDateFrom"
+                                   datasource="salaryRequestDs"
+                                   property="startDate"
+                                   required="true"/>
+                    </row>
+                    <row id="amountH">
+                        <label id="amount"
+                               value="msg://amount"/>
+                        <textField id="oldAmount"
+                                   datasource="salaryRequestDs"
+                                   editable="false"
+                                   property="oldSalary.amount"/>
+                        <textField id="newAmount"
+                                   datasource="salaryRequestDs"
+                                   property="amount"
+                                   required="true"/>
+                        <label id="labelAmountIcon"/>
+                    </row>
+                    <row id="percentH">
+                        <label id="percent"
+                               value="msg://percentageChange"/>
+                        <label/>
+                        <textField id="newPercent"
+                                   datasource="salaryRequestDs"
+                                   datatype="double"
+                                   property="changePercent"/>
+                    </row>
+                    <row id="salaryTypeH">
+                        <label value="msg://salaryType"/>
+                        <lookupField id="oldSalaryType"
+                                     datasource="salaryRequestDs"
+                                     editable="false"
+                                     property="oldSalary.type"/>
+                        <lookupField id="newSalaryType"
+                                     datasource="salaryRequestDs"
+                                     property="type"
+                                     required="true"/>
+                        <label id="labelSalaryTypeIcon"/>
+                    </row>
+                    <row id="netGrossH">
+                        <label value="msg://netGross"/>
+                        <lookupField id="oldNetGross"
+                                     datasource="salaryRequestDs"
+                                     editable="false"
+                                     property="oldSalary.netGross"/>
+                        <lookupField id="newNetGross"
+                                     datasource="salaryRequestDs"
+                                     property="netGross"
+                                     required="true"/>
+                        <label id="labelNetGrossIcon"/>
+                    </row>
+                    <row id="currencyH">
+                        <label value="msg://currency"/>
+                        <lookupField id="oldCurrency"
+                                     editable="false"
+                                     property="oldSalary.currency"/>
+                        <lookupField id="newCurrency"
+                                     datasource="salaryRequestDs"
+                                     optionsDatasource="dicCurrenciesDs"
+                                     property="currency"
+                                     required="true"/>
+                        <label id="labelCurrencyIcon"/>
+                    </row>
+                </rows>
+            </grid>
+            <vbox>
+                <fieldGroup id="fieldGroup2"
+                            datasource="salaryRequestDs">
+                    <column width="250px">
+                        <field property="attachment"/>
+                    </column>
+                </fieldGroup>
+                <label value="msg://note"/>
+                <textArea id="note"
+                          datasource="salaryRequestDs"
+                          property="note"
+                          rows="3"
+                          width="100%"/>
+            </vbox>
+            <vbox id="bpmActorsVBox">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           width="100%">
+                        <columns>
+                            <column id="locName"
+                                    caption="msg://ProcActor.role"/>
+                            <column id="procActor.user"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="locOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                            <column id="comment"
+                                    maxTextLength="50"/>
+                        </columns>
+                        <rows datasource="procTasksDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+            <groupBox id="askQuestion"
+                      width="100%"
+                      caption="Вопросы и ответы"
+                      spacing="true"/>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button id="buttonOkId"
+                    caption="msg://save"
+                    invoke="save"/>
+            <button id="buttonCancelId"
+                    caption="msg://cancel"
+                    invoke="closeButton"/>
+            <button id="askQuestionBtn"
+                    caption="mainMsg://askQuestion"
+                    invoke="onAskQuestion"/>
+            <frame id="procActionsFrame"
+                   screen="procActionsFrame"
+                   width="AUTO"/>
+        </hbox>
+    </layout>
+</window>

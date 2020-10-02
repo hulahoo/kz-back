@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonAttachment.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.personattachment.PersonAttachmentBrowse"
+        focusComponent="personAttachmentsTable"
+        lookupComponent="personAttachmentsTable">
+    <dsContext>
+        <groupDatasource id="personAttachmentsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.PersonAttachment"
+                         view="personAttachment.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$PersonAttachment e
+                          where e.personGroup.id = :param$personGroupId]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personAttachmentsTable"
+            spacing="true">
+        <groupTable id="personAttachmentsTable"
+                    width="100%">
+            <columns>
+                <column id="personGroup" captionProperty="personGroup.personFioWithEmployeeNumber"/>
+                <column id="category"/>
+                <column id="description" maxTextLength="50"/>
+                <column id="downloadBtn"
+                        generator="getPersonAttachmentDownloadBtn"/>
+            </columns>
+            <rows datasource="personAttachmentsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

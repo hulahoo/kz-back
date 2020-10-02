@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.punishment.PunishmentEdit"
+        datasource="punishmentDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.punishment">
+    <dsContext>
+        <datasource id="punishmentDs"
+                    class="kz.uco.tsadv.modules.personal.model.Punishment"
+                    view="punishment.all"/>
+        <collectionDatasource id="lawArticlesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicLCArticle"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicLCArticle e
+]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="responsibleEmployeesDs"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                              view="personGroupExt.responsibleEmployee">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicPunishmentTypesesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPunishmentTypes"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPunishmentTypes e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <hbox spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="punishmentDs">
+                    <column width="250px">
+                        <field property="date"
+                               required="true"/>
+                        <field optionsDatasource="dicPunishmentTypesesDs"
+                               property="type"
+                               required="true"/>
+                        <field property="accident"/>
+                        <field property="offenceType"/>
+                        <field optionsDatasource="lawArticlesDs"
+                               property="lawArticle"
+                               required="true"/>
+                        <field id="responsibleEmployee"
+                               captionProperty="fullName"
+                               property="responsibleEmployee"/>
+                        <field property="notifyEmployees"/>
+                        <field property="reason"/>
+                        <field property="isSafetyEngineering"/>
+                        <field property="orderDate"
+                               required="true"/>
+                        <field property="orderNumber"
+                               required="true"/>
+                        <field property="accidentCause"
+                               rows="2"/>
+                    </column>
+                </fieldGroup>
+                <fieldGroup id="fieldGroup2"
+                            datasource="punishmentDs">
+                    <column width="250px">
+                        <field property="period"/>
+                        <field property="depression"/>
+                        <field property="ledToAccident"/>
+                        <field property="additionalEducation"/>
+                        <field property="examResults"/>
+                        <field property="acceptedAction"/>
+                        <field property="removingDate"/>
+                        <field property="removingOrderNum"/>
+                        <field property="removingOrderDate"/>
+                        <field property="earlyTerminationReason"
+                               rows="2"/>
+                    </column>
+                </fieldGroup>
+            </hbox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

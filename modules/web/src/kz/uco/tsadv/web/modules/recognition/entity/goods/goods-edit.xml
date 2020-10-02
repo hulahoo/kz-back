@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.goods.GoodsEdit"
+        datasource="goodsDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.goods">
+    <dsContext>
+        <datasource id="goodsDs"
+                    class="kz.uco.tsadv.modules.recognition.shop.Goods"
+                    view="goods.edit">
+            <collectionDatasource id="goodsImagesDs" property="goodsImages"/>
+            <collectionDatasource id="goodsImagesForReportDs" property="goodsImagesForReport"/>
+        </datasource>
+        <collectionDatasource id="fileDescriptorsDs"
+                              class="com.haulmont.cuba.core.entity.FileDescriptor"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from sys$FileDescriptor e
+                where e.id in :ds$goodsImagesDs.id]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            height="100%"
+            spacing="true"
+            width="100%">
+        <tabSheet id="tabSheet"
+                  width="100%">
+            <tab id="mainData"
+                 caption="msg://tab.mainData"
+                 expand="mainDataScroll"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <scrollBox id="mainDataScroll"
+                           height="100%">
+                    <fieldGroup border="visible"
+                                datasource="goodsDs"
+                                fieldCaptionWidth="210px">
+                        <column width="450px">
+                            <field property="price"
+                                   width="200px"/>
+                            <field property="active"/>
+                            <field property="category"/>
+                            <field property="recognitionProvider"/>
+                            <field id="goodsImagesField"
+                                   contextHelpText="msg://goodsImageField.helpText"
+                                   width="100%">
+                                <vbox width="100%" spacing="true">
+                                    <hbox align="MIDDLE_LEFT"
+                                          spacing="true"
+                                          width="AUTO">
+                                        <image id="goodsImagePreview"
+                                               height="120px"
+                                               scaleMode="FILL"
+                                               stylename="image-dotted-border"
+                                               width="120px"/>
+                                        <button invoke="openFileUploader"
+                                                icon="icons/reports-template-upload.png"
+                                                caption="msg://btn.empty.caption"/>
+                                    </hbox>
+                                    <flowBox id="goodsImagesBox" stylename="rcg-goods-image-flow" width="100%"
+                                             spacing="true"/>
+                                </vbox>
+                            </field>
+                            <field id="goodsImagesForReportField"
+                                   contextHelpText="goodsImageForReportField.helpText"
+                                   width="100%">
+                                <vbox width="100%" spacing="true">
+                                    <hbox align="MIDDLE_LEFT"
+                                          spacing="true"
+                                          width="AUTO">
+                                        <image id="goodsImageForReportPreview"
+                                               height="120px"
+                                               scaleMode="FILL"
+                                               stylename="image-dotted-border"
+                                               width="120px"/>
+                                        <button invoke="openImageForReportFileUploader"
+                                                icon="icons/reports-template-upload.png"
+                                                caption="msg://btn.empty.caption"/>
+                                    </hbox>
+                                    <flowBox id="goodsImagesForReportBox" stylename="rcg-goods-image-flow" width="100%"
+                                             spacing="true"/>
+                                </vbox>
+                            </field>
+                            <field property="legacyID" caption="msg://legacyId"/>
+                        </column>
+                    </fieldGroup>
+                    <fieldGroup border="visible"
+                                caption="msg://kz.uco.tsadv.modules.recognition.shop/Goods.name"
+                                datasource="goodsDs"
+                                fieldCaptionWidth="210px">
+                        <column width="450px">
+                            <field property="nameLang1"/>
+                            <field property="nameLang2"/>
+                            <field property="nameLang3"/>
+                            <field property="nameLang4"/>
+                            <field property="nameLang5"/>
+                        </column>
+                    </fieldGroup>
+                </scrollBox>
+            </tab>
+            <tab id="descriptions"
+                 caption="msg://tab.descriptions"
+                 margin="true,false,false,false">
+                <scrollBox id="descriptionScroll"
+                           height="100%">
+                    <fieldGroup id="fieldGroup"
+                                datasource="goodsDs">
+                        <column width="450px">
+                            <field property="descriptionLang1"
+                                   rows="4"/>
+                            <field property="descriptionLang2"
+                                   rows="4"/>
+                            <field property="descriptionLang3"
+                                   rows="4"/>
+                            <field property="descriptionLang4"
+                                   rows="4"/>
+                            <field property="descriptionLang5"
+                                   rows="4"/>
+                        </column>
+                    </fieldGroup>
+                </scrollBox>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

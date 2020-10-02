@@ -1,0 +1,1 @@
+alter table TSADV_PUNISHMENT add column RESPONSIBLE_EMPLOYEE_ID uuid ;

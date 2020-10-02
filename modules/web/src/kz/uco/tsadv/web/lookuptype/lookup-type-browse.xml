@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.lookuptype.LookupTypeBrowse"
+        focusComponent="lookupTypesTable"
+        lookupComponent="lookupTypesTable"
+        messagesPack="kz.uco.tsadv.web.lookuptype">
+    <dsContext>
+        <groupDatasource id="lookupTypesDs"
+                         class="kz.uco.tsadv.modules.administration.LookupType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$LookupType e]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="lookupValueDs"
+                         class="kz.uco.tsadv.modules.administration.LookupValue"
+                         view="lookupValue.edit">
+            <query>
+                <![CDATA[select e from tsadv$LookupValue e where e.lookupType.id = :ds$lookupTypesDs]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <vbox expand="lookupTypesTable"
+              height="100%"
+              margin="true, false, false, false"
+              spacing="true">
+            <filter id="filter"
+                    applyTo="lookupTypesTable"
+                    datasource="lookupTypesDs">
+                <properties include=".*"/>
+            </filter>
+            <groupTable id="lookupTypesTable"
+                        width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"/>
+                </actions>
+                <columns>
+                    <column id="lookupType"/>
+                    <column id="lookupNameLang1"/>
+                    <column id="lookupNameLang2"/>
+                    <column id="lookupNameLang3"/>
+                </columns>
+                <rows datasource="lookupTypesDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="lookupTypesTable.create"/>
+                    <button id="editBtn"
+                            action="lookupTypesTable.edit"/>
+                    <button id="removeBtn"
+                            action="lookupTypesTable.remove"/>
+                </buttonsPanel>
+            </groupTable>
+        </vbox>
+        <vbox spacing="true"
+              margin="true, false, false, false"
+              width="100%"
+              expand="lookupValuesTable">
+            <groupTable id="lookupValuesTable"
+                        width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"
+                            enable="false"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"/>
+                </actions>
+                <columns>
+                    <column id="lookupType.lookupType"/>
+                    <column id="descriptionLang1"/>
+                    <column id="descriptionLang2"/>
+                    <column id="descriptionLang3"/>
+                    <column id="lookupTypeCode"/>
+                    <column id="meaningLang1"/>
+                    <column id="meaningLang2"/>
+                    <column id="meaningLang3"/>
+                    <column id="enabledFlag"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                    <column id="tag"/>
+                </columns>
+                <rows datasource="lookupValueDs"/>
+                <buttonsPanel id="buttonsPanelValue"
+                              alwaysVisible="true">
+                    <button id="createBtnValue"
+                            action="lookupValuesTable.create"/>
+                    <button id="editBtnValue"
+                            action="lookupValuesTable.edit"/>
+                    <button id="removeBtnValue"
+                            action="lookupValuesTable.remove"/>
+                </buttonsPanel>
+            </groupTable>
+        </vbox>
+    </layout>
+</window>

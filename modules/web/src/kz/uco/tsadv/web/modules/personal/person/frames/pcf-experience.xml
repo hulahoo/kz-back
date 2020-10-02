@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfExperience">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <table id="personExperienceTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="company"/>
+                <column id="job"/>
+                <column id="startMonth"/>
+                <column id="endMonth"/>
+                <column id="untilNow"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="personExperienceDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createBtn"
+                        action="personExperienceTable.create"/>
+                <button id="editBtn"
+                        action="personExperienceTable.edit"/>
+                <button id="removeBtn"
+                        action="personExperienceTable.remove"/>
+                <button id="excelBtn"
+                        action="personExperienceTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

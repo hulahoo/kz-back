@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.attestationparticipant.AttestationParticipantEdit"
+        datasource="attestationParticipantDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.attestationparticipant">
+    <dsContext>
+        <datasource id="attestationParticipantDs"
+                    class="kz.uco.tsadv.modules.learning.model.AttestationParticipant"
+                    view="attestationParticipant.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="attestationParticipantDs">
+            <column width="250px">
+                <field id="attestation"
+                       editable="false"
+                       property="attestation"/>
+                <field id="personGroup"
+                       captionProperty="fullName"
+                       property="personGroup"/>
+                <field id="personGroupPersonType"
+                       property="personGroup.person.type">
+                    <textField editable="false"/>
+                </field>
+                <field id="attestationDate"
+                       property="attestationDate"/>
+                <field id="passingLanguage"
+                       property="passingLanguage"/>
+                <field id="result"
+                       property="result"/>
+                <field id="interviewResult"
+                       property="interviewResult"/>
+                <field id="commissionRecomendation"
+                       property="commissionRecomendation"/>
+                <field id="event"
+                       custom="true"
+                       property="event"/>
+                <field id="notAppeared"
+                       property="notAppeared"/>
+                <field id="notAppearedReason"
+                       property="notAppearedReason"/>
+                <field property="protocol"/>
+                <field property="attachment"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

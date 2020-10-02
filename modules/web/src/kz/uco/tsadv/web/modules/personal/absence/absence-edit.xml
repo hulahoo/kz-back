@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Absence.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.absence.AbsenceEdit"
+        datasource="absenceDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="absenceDs"
+                    class="kz.uco.tsadv.modules.personal.model.Absence"
+                    view="absence.view"/>
+        <collectionDatasource id="categoriesDs"
+                              class="com.haulmont.cuba.core.entity.Category"
+                              view="_local">
+            <query>
+                <![CDATA[select c from sys$Category c where c.entityType='tsadv$Absence']]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="typesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
+                              view="dicAbsenceType.view">
+            <query>
+                <![CDATA[select e from tsadv$DicAbsenceType e where e.code <> 'RECALL' AND e.code <> 'CANCEL' ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="absenceRequestsDs"
+                              class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
+                              view="absenceRequest.view">
+            <query>
+                <![CDATA[select distinct e from tsadv$AbsenceRequest e
+                              join e.assignmentGroup.list list
+                                  on :session$systemDate between list.startDate and list.endDate
+                                  and list.personGroup.id = :ds$absenceDs.personGroup.id ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="vacation_linkDs"
+                              class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence.view">
+            <query>
+                <![CDATA[select e from tsadv$Absence e where
+                e.personGroup.id = :ds$absenceDs.personGroup.id
+                and e.id <> :ds$absenceDs.id]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="auto"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <vbox id="vbox"
+                  spacing="true">
+                <hbox id="hbox"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup"
+                                datasource="absenceDs">
+                        <column id="column1"
+                                fieldCaptionWidth="150px"
+                                width="270px">
+                            <field id="type"
+                                   optionsDatasource="typesDs"
+                                   property="type"/>
+                            <field property="dateFrom"/>
+                            <field property="dateTo"/>
+                            <field id="absenceDays"
+                                   property="absenceDays"/>
+                            <field property="additionalDays"/>
+                            <field captionProperty="numberAndTypeAndDate"
+                                   optionsDatasource="vacation_linkDs"
+                                   property="parentAbsence"/>
+                            <field id="vacationDurationType"
+                                   caption="msg://vacationDurationType">
+                                <textField id="vacationDurationTypeLbl"
+                                           editable="false"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <fieldGroup id="fieldGroup1"
+                                datasource="absenceDs">
+                        <column id="column2"
+                                width="270px">
+                            <field property="notificationDate"/>
+                            <field captionProperty="requestName"
+                                   optionsDatasource="absenceRequestsDs"
+                                   property="absenceRequest"/>
+                            <field property="file"/>
+                        </column>
+                    </fieldGroup>
+                </hbox>
+                <fieldGroup id="additionalFields"
+                            visible="false"
+                            fieldCaptionWidth="150px">
+                    <column>
+                        <field id="orderNum"
+                               datasource="absenceDs"
+                               property="orderNum"
+                               width="270px"/>
+                        <field id="orderDate"
+                               datasource="absenceDs"
+                               property="orderDate"
+                               width="270px"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,1 @@
+alter table TSADV_ASSIGNMENT_SALARY_REQUEST add column ATTACHMENT_ID uuid ;

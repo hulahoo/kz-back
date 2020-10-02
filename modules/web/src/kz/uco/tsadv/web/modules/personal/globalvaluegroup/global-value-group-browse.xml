@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.globalvaluegroup.GlobalValueGroupBrowse"
+        focusComponent="globalValueGroupsTable"
+        lookupComponent="globalValueGroupsTable">
+    <dsContext>
+        <groupDatasource id="globalValueGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.GlobalValueGroup"
+                         view="globalValueGroup.view">
+            <query>
+                <![CDATA[select e from tsadv$GlobalValueGroup e
+  join tsadv$GlobalValue v
+ where v.group.id = e.id
+   and :session$systemDate between v.startDate and v.endDate]]>
+            </query>
+            <collectionDatasource id="globalValueDs"
+                                  property="list"/>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="cssLayout"
+            spacing="true">
+        <filter id="filter"
+                applyTo="globalValueGroupsTable"
+                datasource="globalValueGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="globalValueGroupsTable"
+                    height="300px"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"
+                        caption="msg://table.btn.edit"
+                        icon="icons/edit.png"
+                        invoke="edit"
+                        shortcut="${TABLE_EDIT_SHORTCUT}"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="globalValue.name"/>
+                <column id="globalValue.value"/>
+                <column id="globalValue.startDate"/>
+            </columns>
+            <rows datasource="globalValueGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        caption="msg://table.btn.create"
+                        icon="icons/add.png"
+                        invoke="openGlobalValue"/>
+                <button id="editBtn"
+                        action="globalValueGroupsTable.edit"/>
+                <button id="removeBtn"
+                        action="globalValueGroupsTable.excel"
+                        caption="msg://table.btn.excel"/>
+            </buttonsPanel>
+        </groupTable>
+        <groupBox id="historyGroupBox"
+                  caption="msg://historyBox"
+                  spacing="true">
+            <table height="200px"
+                   width="100%">
+                <actions>
+                    <action id="edit"
+                            caption="msg://table.btn.edit"
+                            invoke="editHistory"/>
+                    <action id="remove"
+                            caption="msg://table.btn.remove"
+                            invoke="removeHistory"/>
+                    <action id="removeLate"
+                            caption="msg://table.btn.remove.late"
+                            invoke="removeHistories"/>
+                </actions>
+                <columns>
+                    <column id="name"/>
+                    <column id="value"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                    <column id="code"/>
+                </columns>
+                <rows datasource="globalValueDs"/>
+            </table>
+        </groupBox>
+        <cssLayout id="cssLayout"/>
+    </layout>
+</window>

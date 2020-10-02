@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Agreement.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.agreement.AgreementLookup"
+        focusComponent="agreementsTable"
+        lookupComponent="agreementsTable">
+    <dsContext>
+        <groupDatasource id="agreementsDs"
+                         class="kz.uco.tsadv.modules.personal.model.Agreement"
+                         view="agreement.view">
+            <query>
+                <![CDATA[select e from tsadv$Agreement e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="agreementsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="agreementsTable"
+                datasource="agreementsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="agreementsTable"
+                    width="100%">
+            <columns>
+                <!--<column id="category"/>-->
+                <column id="agreementNumber"/>
+                <column id="dateFrom"/>
+                <column id="dateTo"/>
+                <column id="status"/>
+                <column id="personGroup" captionProperty="personGroup.personFioWithEmployeeNumber"/>
+            </columns>
+            <rows datasource="agreementsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </groupTable>
+    </layout>
+</window>

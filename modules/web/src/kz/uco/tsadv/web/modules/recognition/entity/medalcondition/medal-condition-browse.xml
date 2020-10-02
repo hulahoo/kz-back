@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.medalcondition.MedalConditionBrowse"
+        focusComponent="medalConditionsTable"
+        lookupComponent="medalConditionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.medalcondition">
+    <dsContext>
+        <groupDatasource id="medalConditionsDs"
+                         class="kz.uco.tsadv.modules.recognition.MedalCondition"
+                         view="medalCondition.edit">
+            <query>
+                <![CDATA[select e from tsadv$MedalCondition e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="medalConditionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="medalConditionsTable"
+                datasource="medalConditionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="medalConditionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="medal.langName" caption="msg://kz.uco.tsadv.modules.recognition/MedalCondition.medal"/>
+                <column id="quality.langValue"/>
+                <column id="qualityQuantity"/>
+                <column id="childMedal.langName"  caption="msg://kz.uco.tsadv.modules.recognition/MedalCondition.childMedal"/>
+                <column id="medalQuantity"/>
+            </columns>
+            <rows datasource="medalConditionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="medalConditionsTable.create"/>
+                <button id="editBtn"
+                        action="medalConditionsTable.edit"/>
+                <button id="removeBtn"
+                        action="medalConditionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

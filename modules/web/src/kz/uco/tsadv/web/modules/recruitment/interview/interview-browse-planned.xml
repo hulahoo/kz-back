@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://menu-config.ssPlannedInterview"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewBrowsePlanned"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.interview">
+    <dsContext>
+        <groupDatasource id="interviewsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                         view="interview.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$Interview e
+                           join e.jobRequest jr
+                           join jr.candidatePersonGroup pg
+                           join pg.list p
+                           join jr.requisition r
+                           join e.requisitionHiringStep rhs
+                           left join e.mainInterviewerPersonGroup ipg
+                           left join ipg.list ip
+                          where e.isScheduled = false
+                            and :session$systemDate between p.startDate and p.endDate
+                            and (e.mainInterviewerPersonGroup is null or :session$systemDate between ip.startDate and ip.endDate)
+                            and pg.id = :session$userPersonGroupId order by e.interviewDate DESC
+                            ]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="hiringStepsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.HiringStep"
+                              view="hiringStep.view">
+            <query>
+                <![CDATA[select e from tsadv$HiringStep e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="interviewHistoryDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.InterviewHistory"
+                              view="interviewHistory.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$InterviewHistory e
+                          where e.interview.id = :ds$interviewsDs
+                       order by e.createTs desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="interviewsTable"
+            spacing="true">
+        <groupBox caption="msg://CustomFilter"
+                  collapsable="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="interviewsTable"
+                    width="100%">
+            <actions>
+                <action id="edit"/>
+            </actions>
+            <columns>
+                <column id="jobRequest.requisition"
+                        captionProperty="jobRequest.requisition.code"/>
+                <column id="requisitionHiringStep"
+                        captionProperty="requisitionHiringStep.hiringStep.stepName"/>
+                <column id="interviewDate"/>
+                <column id="timeFrom"/>
+                <column id="timeTo"/>
+                <column id="mainInterviewerPersonGroup"
+                        captionProperty="mainInterviewerPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="interviewStatus"/>
+                <column id="place"
+                        captionProperty="place.addressLangValue"
+                        maxTextLength="30"/>
+                <column id="interviewReason"
+                        visible="false"/>
+                <column id="reason"
+                        maxTextLength="30"
+                        visible="false"/>
+            </columns>
+            <rows datasource="interviewsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="editBtn"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"
+                        action="interviewsTable.edit"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

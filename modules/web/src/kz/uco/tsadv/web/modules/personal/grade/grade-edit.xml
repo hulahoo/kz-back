@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Grade.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.grade.GradeEdit"
+        datasource="gradeDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="gradeDs"
+                    class="kz.uco.tsadv.modules.personal.model.Grade"
+                    view="grade.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="gradeDs">
+            <column width="250px">
+                <field property="gradeName"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="recognitionNominate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

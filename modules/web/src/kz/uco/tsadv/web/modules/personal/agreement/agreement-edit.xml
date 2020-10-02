@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.agreement.AgreementEdit"
+        datasource="agreementDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.agreement">
+    <dsContext>
+        <datasource id="agreementDs"
+                    class="kz.uco.tsadv.modules.personal.model.Agreement"
+                    view="agreement.view">
+            <collectionDatasource id="agreementDocumentsDs"
+                                  property="files">
+            </collectionDatasource>
+        </datasource>
+        <runtimePropsDatasource id="runtimePropsDs"
+                                mainDs="agreementDs"/>
+        <collectionDatasource id="categoriesDs"
+                              class="com.haulmont.cuba.core.entity.Category"
+                              view="category.edit">
+            <query>
+                <![CDATA[select e from sys$Category e where e.entityType = 'tsadv$Agreement']]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="statusesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAgreementStatus"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAgreementStatus e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="agreementTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicContractsType"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicContractsType e]]>
+            </query>
+        </collectionDatasource>
+        <!--<collectionDatasource id="agreementDocumentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.AgreementDocument"
+                              view="agreementDocument.view"
+                              property="files">
+            <query>
+                <![CDATA[select e from tsadv$AgreementDocument e where e.agreement.id = :ds$agreementDs.id]]>
+            </query>
+        </collectionDatasource>-->
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <vbox id="vBox" spacing="true" width="100%">
+                <hbox id="hBox"
+                      expand="groupBox"
+                      spacing="true"
+                      width="AUTO">
+                    <groupBox id="groupBox1" width="100%"
+                              caption="msg://PrimaryFields">
+                        <fieldGroup id="fieldGroup"
+                                    datasource="agreementDs"
+                                    height="auto">
+                            <column id="column1"
+                                    fieldCaptionWidth="150px"
+                                    width="250px">
+                                <field id="agreementType"
+                                       optionsDatasource="agreementTypesDs"
+                                       property="agreementType"/>
+                                <field id="agreementNumber"
+                                       property="agreementNumber"/>
+                                <field id="dateFrom"
+                                       property="dateFrom"/>
+                                <field id="dateTo"
+                                       property="dateTo"/>
+                                <field id="status"
+                                       optionsDatasource="statusesDs"
+                                       property="status"/>
+                                <field id="suspensionDateFrom"
+                                       property="suspensionDateFrom"
+                                       visible="false"
+                                       editable="false"/>
+                                <field id="suspensionDateTo"
+                                       property="suspensionDateTo"
+                                       visible="false"
+                                       editable="false"/>
+                            </column>
+                        </fieldGroup>
+                    </groupBox>
+                    <groupBox id="groupBox"
+                              caption="msg://AdditionalFields"
+                              spacing="true"
+                              visible="false"
+                              height="AUTO"
+                              width="100%"
+                    >
+                    </groupBox>
+                </hbox>
+                <table id="agreementDocumentsTable"
+                       height="auto"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <buttonsPanel id="docButtonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtn"
+                                action="agreementDocumentsTable.create"/>
+                        <button id="removeBtn"
+                                action="agreementDocumentsTable.remove"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="file"
+                                caption="msg://AgreementEdit.Files"
+                                captionProperty="file.name"
+                                link="true"
+                                linkInvoke="downloadAgreementDocument"/>
+                        <column id="description"/>
+                    </columns>
+                    <rows datasource="agreementDocumentsDs"/>
+                </table>
+            </vbox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

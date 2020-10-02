@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.questioninsection.QuestionInSectionEdit"
+        datasource="questionInSectionDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="questionInSectionDs"
+                    class="kz.uco.tsadv.modules.learning.model.QuestionInSection"
+                    view="questionInSection.browse"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="questionInSectionDs">
+            <column width="250px">
+                <field property="question"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PositionPersonCompetence.browse"
+        class="kz.uco.tsadv.web.modules.personal.reserve.PositionPersonCompetence">
+    <dsContext>
+        <hierarchicalDatasource id="hierarchyElementsDs"
+                                class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                                hierarchyProperty="parent"
+                                view="hierarchyElement.browse">
+            <query>
+                <![CDATA[select e
+                           from base$HierarchyElementExt e
+                          where :session$systemDate between e.startDate and e.endDate]]>
+            </query>
+        </hierarchicalDatasource>
+        <collectionDatasource id="personPercentagesDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.modules.personal.model.PersonPercentage"
+                              datasourceClass="kz.uco.tsadv.web.modules.personal.hierarchyelement.PersonPercentageDatasource"/>
+        <collectionDatasource id="positionPercentagesDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.modules.personal.model.PositionPercentage"
+                              datasourceClass="kz.uco.tsadv.web.modules.personal.hierarchyelement.PositionPercentageDatasource"/>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="positionGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                              view="positionGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from base$PositionGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.positionGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 2
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$JobGroup e join e.list j
+                         where :session$systemDate between j.startDate and j.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicLocationDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation">
+            <query>
+                <![CDATA[select e
+                         from base$DicLocation e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="assignmentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                              view="assignment.person">
+            <query>
+                <![CDATA[select e from base$AssignmentExt e where :session$systemDate between e.startDate and e.endDate]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <tabSheet id="tabSheet"
+                  height="100%">
+            <tab id="position"
+                 caption="msg://PositionPersonCompetence.by.position"
+                 margin="true,false,false,false">
+                <split id="split"
+                       height="100%"
+                       maxSplitPosition="400px"
+                       orientation="horizontal"
+                       width="100%">
+                    <tree id="tree"
+                          height="100%"
+                          width="100%">
+                        <treechildren captionProperty="name"
+                                      datasource="hierarchyElementsDs"/>
+                    </tree>
+                    <vbox id="splitRight"
+                          expand="personTable"
+                          height="100%"
+                          margin="false,true,false,true"
+                          spacing="true">
+                        <label id="organizationName"
+                               align="MIDDLE_CENTER"
+                               visible="false"/>
+                        <groupBox id="groupBoxFilter"
+                                  caption="mainMsg://CustomFilter"
+                                  collapsable="true">
+                            <grid id="gridFilter"
+                                  height="100%"
+                                  spacing="true"
+                                  width="100%">
+                                <columns count="5"/>
+                                <rows>
+                                    <row>
+                                        <label value="mainMsg://OrganizationStructure.filter"/>
+                                        <label value="mainMsg://PositionStructure.filter"/>
+                                        <label value="mainMsg://Jobs.filter"/>
+                                        <label value="mainMsg://Location.filter"/>
+                                        <label value="mainMsg://Matrix.filter"/>
+                                    </row>
+                                    <row>
+                                        <lookupPickerField id="organizationGroupLookupId"
+                                                           captionProperty="organization.organizationName"
+                                                           optionsDatasource="organizationGroupsDs"
+                                                           width="100%"/>
+                                        <lookupPickerField id="positionGroupLookupId"
+                                                           captionProperty="position.positionName"
+                                                           optionsDatasource="positionGroupsDs"
+                                                           width="100%"/>
+                                        <lookupPickerField id="jobGroupLookupId"
+                                                           captionProperty="job.jobName"
+                                                           optionsDatasource="jobGroupsDs"
+                                                           width="100%"/>
+                                        <lookupPickerField id="locationLookupId"
+                                                           captionProperty="langValue"
+                                                           optionsDatasource="dicLocationDs"
+                                                           width="100%"/>
+                                        <lookupField id="matrixLookup"
+                                                     stylename="matrix-filter-lookup"/>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </groupBox>
+                        <table id="personTable"
+                               multiselect="true"
+                               stylename="table-link-deco-disable"
+                               width="100%">
+                            <columns>
+                                <column id="personImage"
+                                        caption="msg://PersonPercentage.photo"
+                                        generator="personImage"
+                                        sortable="false"/>
+                                <column id="assignment.personGroup.person.fullName"
+                                        link="true"
+                                        linkInvoke="linkInvoke"/>
+                                <column id="hierarchyInfo"
+                                        generator="hierarchyInfo"/>
+                                <column id="managerAssignment.personGroup.person.fullName"
+                                        caption="msg://PersonPercentage.manager"
+                                        link="true"
+                                        linkInvoke="linkInvoke"/>
+                                <column id="matrix"
+                                        caption="msg://PersonPercentage.matrix"
+                                        generator="matrix"/>
+                                <column id="match"
+                                        caption="msg://PersonPercentage.match"
+                                        generator="matchPercent"
+                                        sortable="true"/>
+                            </columns>
+                            <rows datasource="personPercentagesDs"/>
+                            <rowsCount/>
+                            <buttonsPanel>
+                                <button id="addToReserve"
+                                        caption="msg://PositionPersonCompetence.add.to.reserve"
+                                        enable="false"
+                                        invoke="addToReserve"/>
+                            </buttonsPanel>
+                        </table>
+                    </vbox>
+                </split>
+            </tab>
+            <tab id="person"
+                 caption="msg://PositionPersonCompetence.by.person"
+                 margin="true,false,false,false">
+                <split id="splitForPerson"
+                       height="100%"
+                       orientation="horizontal"
+                       width="100%">
+                    <vbox expand="personList"
+                          height="100%"
+                          margin="false,true,false,false"
+                          spacing="true">
+                        <hbox id="searchLayout"
+                              margin="true,false,false,false"
+                              spacing="true"
+                              width="100%"/>
+                        <table id="personList"
+                               stylename="table-link-deco-disable"
+                               width="100%">
+                            <columns>
+                                <column id="personImage"
+                                        generator="personImageForPosition"/>
+                                <column id="personGroup.person.fioWithEmployeeNumber"
+                                        link="true"
+                                        linkInvoke="linkInvokePosition"/>
+                            </columns>
+                            <rows datasource="assignmentsDs"/>
+                        </table>
+                    </vbox>
+                    <vbox expand="positionTable"
+                          height="100%"
+                          margin="false,true,false,true"
+                          spacing="true">
+                        <groupBox id="positionFilterGroupBox"
+                                  caption="mainMsg://CustomFilter"
+                                  collapsable="true">
+                            <grid id="positionFilter"
+                                  height="100%"
+                                  spacing="true"
+                                  width="100%">
+                                <columns count="4"/>
+                                <rows>
+                                    <row>
+                                        <label value="mainMsg://OrganizationStructure.filter"/>
+                                        <label value="mainMsg://PositionStructure.filter"/>
+                                        <label value="mainMsg://Jobs.filter"/>
+                                        <label value="mainMsg://Location.filter"/>
+                                    </row>
+                                    <row>
+                                        <lookupPickerField id="positionOrgLookup"
+                                                           captionProperty="organization.organizationName"
+                                                           optionsDatasource="organizationGroupsDs"
+                                                           width="100%"/>
+                                        <lookupPickerField id="positionPosLookup"
+                                                           captionProperty="position.positionName"
+                                                           optionsDatasource="positionGroupsDs"
+                                                           width="100%"/>
+                                        <lookupPickerField id="positionJobLookup"
+                                                           captionProperty="job.jobName"
+                                                           optionsDatasource="jobGroupsDs"
+                                                           width="100%"/>
+                                        <lookupPickerField id="positionLocLookup"
+                                                           captionProperty="langValue"
+                                                           optionsDatasource="dicLocationDs"
+                                                           width="100%"/>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </groupBox>
+                        <table id="positionTable"
+                               width="100%">
+                            <columns>
+                                <column id="position.positionName"/>
+                                <column id="position.managerFlag"/>
+                                <column id="position.jobGroup.job.jobName"/>
+                                <column id="location.langValue"/>
+                                <column id="organization.organizationName"/>
+                                <column id="match"
+                                        generator="matchPosition"/>
+                            </columns>
+                            <rows datasource="positionPercentagesDs"/>
+                        </table>
+                    </vbox>
+                </split>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

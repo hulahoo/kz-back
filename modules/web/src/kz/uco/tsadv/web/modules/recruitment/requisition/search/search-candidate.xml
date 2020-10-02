@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.search.SearchCandidate"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.requisition.search">
+    <dsContext>
+        <collectionDatasource id="personGroupExtsDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                              view="personGroupExt-for-search-candidate">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e
+join e.list p on (current_date between p.startDate and p.endDate)
+where e.id not in (select jr.candidatePersonGroup.id
+from tsadv$JobRequest jr 
+where jr.requisition.id  = :param$requisition)
+order by p.firstName, p.lastName, p.middleName]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personGroupExtsDataGrid"
+            spacing="true">
+        <filter id="filter"
+                datasource="personGroupExtsDs"/>
+        <dataGrid id="personGroupExtsDataGrid"
+                  datasource="personGroupExtsDs"
+                  selectionMode="MULTI_CHECK"
+                  width="100%">
+            <actions>
+                <action id="addToJobRequest"
+                        caption="msg://addToJobRequest"
+                        invoke="onAddToJobRequest"
+                        trackSelection="true"/>
+            </actions>
+            <columns>
+                <column id="fullName"
+                        editable="false"
+                        property="fullName"/>
+                <column id="type"
+                        editable="false"
+                        property="person.type.langValue"/>
+                <column id="organizationName"
+                        editable="false"
+                        property="currentAssignment.organizationGroup.organizationName"/>
+                <column id="positionName"
+                        editable="false"
+                        property="currentAssignment.positionGroup.positionName"/>
+                <column id="personContacts"/>
+                <column id="city"
+                        caption="msg://city"
+                        editable="false"
+                        property="addresses"/>
+                <column id="dateOfBirth"
+                        caption="msg://dateOfBirth"
+                        editable="false"
+                        property="person"/>
+                <column id="totalExperience"
+                        caption="msg://totalExperience"
+                        editable="false"
+                        property="totalExperience"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="addToJobRequestButton"
+                        action="personGroupExtsDataGrid.addToJobRequest"/>
+            </buttonsPanel>
+        </dataGrid>
+        <pickerField id="pickerField"
+                     metaClass="tsadv$Requisition"
+                     visible="false"/>
+    </layout>
+</window>

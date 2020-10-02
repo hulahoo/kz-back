@@ -1,0 +1,238 @@
+package kz.uco.tsadv.modules.personal.group;
+
+import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.annotation.Extends;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
+import com.haulmont.cuba.core.global.PersistenceHelper;
+import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.shared.PositionGroup;
+import kz.uco.tsadv.modules.performance.model.PerformancePlan;
+import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
+import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+@NamePattern("%s|id")
+@Extends(PositionGroup.class)
+@Entity(name = "base$PositionGroupExt")
+public class PositionGroupExt extends PositionGroup {
+    private static final long serialVersionUID = -8784610299705796841L;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "group")
+    protected List<PositionExt> list;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "positionGroup")
+    protected List<VacationConditions> vacationConditionsList;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ANALYTICS_ID")
+    protected OrgAnalytics analytics;
+
+    @Transient
+    @MetaProperty(related = "list")
+    protected PositionExt position;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "positionGroup")
+    protected List<AssignmentExt> assignments;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "positionGroup")
+    protected List<CompetenceElement> competenceElements;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "positionGroup")
+    protected List<Case> cases;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "positionGroup")
+    protected List<SurCharge> surCharge;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "positionGroupName")
+    protected List<FlightTimeRate> flightTimeRate;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "positionGroupId")
+    protected List<FlySurCharge> flySurCharge;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "positionGroup")
+    protected List<PositionGroupGoalLink> goals;
+
+    @JoinTable(name = "TSADV_PERFORMANCE_PLAN_POSITION_GROUP_LINK",
+            joinColumns = @JoinColumn(name = "POSITION_GROUP_ID"),
+            inverseJoinColumns = @JoinColumn(name = "PERFORMANCE_PLAN_ID"))
+    @ManyToMany
+    protected List<PerformancePlan> performancePlans;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ADMIN_APPROVE_ID")
+    protected DicHrRole adminApprove;
+
+    public DicHrRole getAdminApprove() {
+        return adminApprove;
+    }
+
+    public void setAdminApprove(DicHrRole adminApprove) {
+        this.adminApprove = adminApprove;
+    }
+
+    public List<VacationConditions> getVacationConditionsList() {
+        return vacationConditionsList;
+    }
+
+    public void setVacationConditionsList(List<VacationConditions> vacationConditionsList) {
+        this.vacationConditionsList = vacationConditionsList;
+    }
+
+    public void setAnalytics(OrgAnalytics analytics) {
+        this.analytics = analytics;
+    }
+
+    public OrgAnalytics getAnalytics() {
+        return analytics;
+    }
+
+    public List<AssignmentExt> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<AssignmentExt> assignments) {
+        this.assignments = assignments;
+    }
+
+    public void setFlightTimeRate(List<FlightTimeRate> flightTimeRate) {
+        this.flightTimeRate = flightTimeRate;
+    }
+
+    public List<FlightTimeRate> getFlightTimeRate() {
+        return flightTimeRate;
+    }
+
+    public void setFlySurCharge(List<FlySurCharge> flySurCharge) {
+        this.flySurCharge = flySurCharge;
+    }
+
+    public List<FlySurCharge> getFlySurCharge() {
+        return flySurCharge;
+    }
+
+    public List<PositionGroupGoalLink> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(List<PositionGroupGoalLink> goals) {
+        this.goals = goals;
+    }
+
+    public void setPerformancePlans(List<PerformancePlan> performancePlans) {
+        this.performancePlans = performancePlans;
+    }
+
+    public List<PerformancePlan> getPerformancePlans() {
+        return performancePlans;
+    }
+
+    public void setSurCharge(List<SurCharge> surCharge) {
+        this.surCharge = surCharge;
+    }
+
+    public List<SurCharge> getSurCharge() {
+        return surCharge;
+    }
+
+    public void setCases(List<Case> cases) {
+        this.cases = cases;
+    }
+
+    public List<Case> getCases() {
+        return cases;
+    }
+
+    public void setCompetenceElements(List<CompetenceElement> competenceElements) {
+        this.competenceElements = competenceElements;
+    }
+
+    public List<CompetenceElement> getCompetenceElements() {
+        return competenceElements;
+    }
+
+    public void setList(List<PositionExt> list) {
+        this.list = list;
+    }
+
+    public List<PositionExt> getList() {
+        return list;
+    }
+
+    public void setPosition(PositionExt position) {
+        this.position = position;
+    }
+
+    public PositionExt getPosition() {
+        return position != null ? position : getPositionInDate(BaseCommonUtils.getSystemDate());
+    }
+
+    public PositionExt getPositionInDate(Date date) {
+        if (PersistenceHelper.isLoaded(this, "list") && list != null && !list.isEmpty()) {
+            list.stream()
+                    .filter(p -> p.getDeleteTs() == null
+                            && !date.before(p.getStartDate())
+                            && !date.after(p.getEndDate()))
+                    .findFirst()
+                    .ifPresent(p -> position = p);
+        }
+        return position;
+    }
+
+    // Для отображения имени вместо id в lookup и таблицах #Timur Tashmatov
+    @MetaProperty(related = "list")
+    public String getPositionName() {
+        PositionExt positionExtWithName = getPosition();
+        if (positionExtWithName == null) {
+            if (PersistenceHelper.isLoaded(this, "list") && list != null && !list.isEmpty()) {
+                for (PositionExt positionExt : list) {
+                    if (positionExtWithName == null || positionExt.getStartDate().after(positionExtWithName.getStartDate())) {
+                        positionExtWithName = positionExt;
+                    }
+                }
+
+            }
+        }
+        return positionExtWithName == null ? "" : positionExtWithName.getPositionName();
+    }
+
+    @MetaProperty(related = "list")
+    public String getFullName() {
+        PositionExt positionExtWithName = getPosition();
+        if (positionExtWithName == null) {
+            if (PersistenceHelper.isLoaded(this, "list") && list != null && !list.isEmpty()) {
+                for (PositionExt positionExt : list) {
+                    if (positionExtWithName == null || positionExt.getStartDate().after(positionExtWithName.getStartDate())) {
+                        positionExtWithName = positionExt;
+                    }
+                }
+
+            }
+        }
+        return positionExtWithName == null ? "" : positionExtWithName.getPositionFullName();
+    }
+}

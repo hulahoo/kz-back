@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicAssessmentStatus.browseCaption"
+        class="kz.uco.tsadv.web.modules.performance.dictionary.dicassessmentstatus.DicAssessmentStatusBrowse"
+        focusComponent="dicAssessmentStatusesTable"
+        lookupComponent="dicAssessmentStatusesTable">
+    <dsContext>
+        <groupDatasource id="dicAssessmentStatusesDs"
+                         class="kz.uco.tsadv.modules.performance.dictionary.DicAssessmentStatus"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAssessmentStatus e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAssessmentStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAssessmentStatusesTable"
+                datasource="dicAssessmentStatusesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAssessmentStatusesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicAssessmentStatusesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAssessmentStatusesTable.create"/>
+                <button id="editBtn"
+                        action="dicAssessmentStatusesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAssessmentStatusesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

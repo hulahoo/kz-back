@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.personlearninghistory.PersonLearningHistoryBrowse"
+        focusComponent="personLearningHistoriesTable"
+        lookupComponent="personLearningHistoriesTable"
+        messagesPack="kz.uco.tsadv.web.personlearninghistory">
+    <dsContext>
+        <groupDatasource id="personLearningHistoriesDs"
+                         class="kz.uco.tsadv.modules.personal.model.PersonLearningHistory"
+                         view="personLearningHistory.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonLearningHistory e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personLearningHistoriesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personLearningHistoriesTable"
+                datasource="personLearningHistoriesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personLearningHistoriesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="legacyID"/>
+                <column id="personGroup"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="hours"/>
+                <column id="course"/>
+                <column id="budgetItem"/>
+                <column id="employeeCategory"/>
+                <column id="learningType"/>
+                <column id="status"/>
+                <column id="party"/>
+                <column id="location"/>
+            </columns>
+            <rows datasource="personLearningHistoriesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personLearningHistoriesTable.create"/>
+                <button id="editBtn"
+                        action="personLearningHistoriesTable.edit"/>
+                <button id="removeBtn"
+                        action="personLearningHistoriesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

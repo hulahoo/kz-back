@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Self.learning.all.cources"
+        class="kz.uco.tsadv.web.modules.personal.selflearning.AllCourses">
+    <dsContext>
+        <hierarchicalDatasource id="categoryDs"
+                                class="kz.uco.tsadv.modules.learning.dictionary.DicCategory"
+                                hierarchyProperty="parentCategory"
+                                view="dicCategory.browse">
+            <query>
+                <![CDATA[select dc from tsadv$DicCategory dc]]>
+            </query>
+        </hierarchicalDatasource>
+        <collectionDatasource id="coursesDs"
+                              class="kz.uco.tsadv.modules.learning.model.Course"
+                              maxResults="20"
+                              view="course.tree">
+            <query>
+                <![CDATA[select e from tsadv$Course e ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout width="100%">
+        <split id="split"
+               height="100%"
+               maxSplitPosition="400px"
+               minSplitPosition="200px"
+               orientation="horizontal"
+               pos="300px"
+               width="100%">
+            <tree id="categoryTree"
+                  stylename="course-tree"
+                  width="100%">
+                <treechildren datasource="categoryDs"/>
+            </tree>
+            <vbox height="100%"
+                  margin="false,false,false,true">
+                <tabSheet id="tabSheet"
+                          height="100%">
+                    <tab id="course"
+                         caption="msg://all.courses.tab.course"
+                         margin="true,false,false,false">
+                        <vbox id="vbox"
+                              expand="scrollBox"
+                              height="100%"
+                              spacing="true">
+                            <filter id="filter"
+                                    datasource="coursesDs"
+                                    applyTo="coursesTable"/>
+                            <table id="coursesTable"
+                                   height="10px"
+                                   width="100%">
+                                <columns>
+                                    <column id="name"/>
+                                </columns>
+                                <rows datasource="coursesDs"/>
+                                <rowsCount/>
+                            </table>
+                            <scrollBox id="scrollBox"
+                                       stylename="sl-scroll-box">
+                                <flowBox id="categoryCourses"
+                                         height="100%"
+                                         margin="false,false,false,true"
+                                         stylename="sl-flow-box sl-all-courses"
+                                         width="100%"/>
+                            </scrollBox>
+                        </vbox>
+                    </tab>
+                    <tab id="learningPath"
+                         caption="msg://all.courses.tab.learning.path"
+                         margin="true,false,false,true">
+                        <scrollBox height="100%">
+                            <vbox id="learningPaths"/>
+                        </scrollBox>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </split>
+    </layout>
+</window>

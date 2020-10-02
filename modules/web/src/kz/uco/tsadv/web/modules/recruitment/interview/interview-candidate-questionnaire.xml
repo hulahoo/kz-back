@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://interview.questionnaire.start"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewCandidateQuestionnaire">
+    <dsContext>
+        <datasource id="personDs"
+                    allowCommit="false"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person.candidate"/>
+        <collectionDatasource id="questionnairesDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.InterviewQuestionnaire"
+                              view="interviewQuestionnaire.view">
+            <query>
+                <![CDATA[select e from tsadv$InterviewQuestionnaire e]]>
+            </query>
+            <collectionDatasource id="questionsDs"
+                                  property="questions">
+                <collectionDatasource id="answersDs"
+                                      property="answers"/>
+            </collectionDatasource>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            margin="false,false,true,false">
+        <vbox id="vBox"
+              expand="questionBlock"
+              height="100%"
+              margin="true"
+              spacing="true">
+            <hbox stylename="interview-q-candidate"
+                  width="100%">
+                <hbox id="userInfoSlot"
+                      align="MIDDLE_LEFT">
+                    <embedded id="userImage"
+                              stylename="course-card-image"/>
+                    <linkButton id="userFullName"
+                                align="MIDDLE_LEFT"
+                                stylename="interview-q-candidate-fn"/>
+                </hbox>
+            </hbox>
+            <table id="questionnaireResult"
+                   width="100%">
+                <columns>
+                    <column id="questionnaire.name"/>
+                    <column id="questionnaire.category.langValue"
+                            caption="msg://Interview.candidate.ques.category"/>
+                    <column id="totalScore"
+                            caption="msg://Interview.candidate.ques.total"
+                            generator="generateTotalScore"/>
+                </columns>
+                <rows datasource="questionnairesDs"/>
+            </table>
+            <hbox id="startInterviewBlock">
+                <button id="startInterview"
+                        caption="msg://Interview.candidate.ques.start"
+                        icon="font-icon:PLAY_CIRCLE_O"
+                        invoke="startInterview"/>
+            </hbox>
+            <vbox id="questionBlock"
+                  stylename="interview-q-wrap">
+                <vbox id="questionBuilder"/>
+                <hbox id="controlButtons"
+                      align="BOTTOM_LEFT"
+                      margin="true"
+                      spacing="true"
+                      stylename="interview-q-footer"
+                      width="100%">
+                    <hbox align="MIDDLE_LEFT"
+                          spacing="true">
+                        <button id="previousQuestionnaire"
+                                caption="mainMsg://table.btn.empty"
+                                icon="font-icon:ANGLE_DOUBLE_LEFT"
+                                invoke="previousQuestionnaire"/>
+                        <button id="previousBtn"
+                                caption="mainMsg://table.btn.empty"
+                                icon="font-icon:ANGLE_LEFT"
+                                invoke="previousQuestion"/>
+                        <button id="nextBtn"
+                                caption="mainMsg://table.btn.empty"
+                                icon="font-icon:ANGLE_RIGHT"
+                                invoke="nextQuestion"/>
+                        <button id="nextQuestionnaire"
+                                caption="mainMsg://table.btn.empty"
+                                icon="font-icon:ANGLE_DOUBLE_RIGHT"
+                                invoke="nextQuestionnaire"/>
+                    </hbox>
+                    <hbox expand="questionnaireName"
+                          width="100%">
+                        <label id="questionnaireName"
+                               align="MIDDLE_CENTER"
+                               stylename="interview-q-questionnaire"/>
+                        <button align="MIDDLE_RIGHT"
+                                caption="msg://Interview.candidate.ques.complete"
+                                icon="font-icon:FLAG_O"
+                                invoke="finishInterview"/>
+                    </hbox>
+                </hbox>
+            </vbox>
+        </vbox>
+    </layout>
+</window>

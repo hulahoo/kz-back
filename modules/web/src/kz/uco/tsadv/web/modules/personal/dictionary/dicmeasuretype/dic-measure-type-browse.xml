@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicMeasureType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicmeasuretype.DicMeasureTypeBrowse"
+        focusComponent="dicMeasureTypesTable"
+        lookupComponent="dicMeasureTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicmeasuretype">
+    <dsContext>
+        <groupDatasource id="dicMeasureTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicMeasureType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicMeasureType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicMeasureTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicMeasureTypesTable"
+                datasource="dicMeasureTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicMeasureTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicMeasureTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicMeasureTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicMeasureTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicMeasureTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

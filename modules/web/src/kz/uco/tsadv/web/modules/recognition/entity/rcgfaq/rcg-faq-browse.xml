@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.rcgfaq.RcgFaqBrowse"
+        focusComponent="rcgFaqsTable"
+        lookupComponent="rcgFaqsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.rcgfaq">
+    <dsContext>
+        <groupDatasource id="rcgFaqsDs"
+                         class="kz.uco.tsadv.modules.recognition.RcgFaq"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$RcgFaq e order by e.order]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="rcgFaqsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="rcgFaqsTable"
+                datasource="rcgFaqsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="rcgFaqsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="order"/>
+                <column id="code"/>
+                <column id="title"/>
+                <column id="content"
+                        maxTextLength="200"/>
+            </columns>
+            <rows datasource="rcgFaqsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="rcgFaqsTable.create"/>
+                <button id="editBtn"
+                        action="rcgFaqsTable.edit"/>
+                <button id="removeBtn"
+                        action="rcgFaqsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

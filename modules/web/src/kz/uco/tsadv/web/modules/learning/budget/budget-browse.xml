@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Budget.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.budget.BudgetBrowse"
+        focusComponent="budgetsTable"
+        lookupComponent="budgetsTable">
+    <dsContext>
+        <groupDatasource id="budgetsDs"
+                         class="kz.uco.tsadv.modules.learning.model.Budget"
+                         view="budget.view">
+            <query>
+                <![CDATA[select e from tsadv$Budget e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="budgetsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="budgetsTable"
+                datasource="budgetsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="budgetsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description" maxTextLength="50"/>
+                <column id="budgetStartDate"/>
+                <column id="budgetEndDate"/>
+                <column id="requestStartDate"/>
+                <column id="requestEndDate"/>
+                <column id="status"/>
+                <column id="previousBudget"/>
+            </columns>
+            <rows datasource="budgetsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="budgetsTable.create"/>
+                <button id="editBtn"
+                        action="budgetsTable.edit"/>
+                <button id="removeBtn"
+                        action="budgetsTable.remove"/>
+                <button id="excel"
+                        action="budgetsTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

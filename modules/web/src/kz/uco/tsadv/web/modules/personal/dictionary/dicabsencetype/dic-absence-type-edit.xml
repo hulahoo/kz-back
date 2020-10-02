@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicAbsenceType.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicabsencetype.DicAbsenceTypeEdit"
+        datasource="dicAbsenceTypeDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicabsencetype">
+    <dsContext>
+        <datasource id="dicAbsenceTypeDs"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
+                    view="dicAbsenceType.view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <groupBox orientation="horizontal"
+                      spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="dicAbsenceTypeDs">
+                    <column>
+                        <field property="code"/>
+                        <field property="langValue1"/>
+                        <field property="langValue2"/>
+                        <field property="langValue3"/>
+                        <field property="langValue4"/>
+                        <field property="langValue5"/>
+                        <field property="useInSelfService"/>
+                        <field property="absenceCategory"/>
+                        <field property="timesheetCode"/>
+                        <field property="isOnlyWorkingDay"/>
+                        <field property="isWorkingDay"/>
+                        <field property="useOnlyAbsenceType"/>
+                        <field property="displayAbsence"/>
+                        <field property="cancelParentAbsence"/>
+                        <field id="ignoreHolidays"
+                               property="ignoreHolidays"/>
+                        <field property="startDate"/>
+                        <field property="endDate"/>
+                        <field property="useInBalance"/>
+                        <field property="availableForTimecard"/>
+                    </column>
+                </fieldGroup>
+                <fieldGroup id="fieldGroup2"
+                            datasource="dicAbsenceTypeDs">
+                    <column width="250px">
+                        <field property="description1"/>
+                        <field property="description2"/>
+                        <field property="description3"/>
+                        <field property="description4"/>
+                        <field property="description5"/>
+                        <field property="vacationDurationType"
+                               caption="msg://vacationDurationType"/>
+                        <field property="order"/>
+                        <field property="isRequiredOrderNumber"/>
+                    </column>
+                </fieldGroup>
+            </groupBox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

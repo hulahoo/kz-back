@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.safetyevent.SafetyEventBrowse"
+        focusComponent="safetyEventsTable"
+        lookupComponent="safetyEventsTable"
+        messagesPack="kz.uco.tsadv.web.safetyevent">
+    <dsContext>
+        <groupDatasource id="safetyEventsDs"
+                         class="kz.uco.tsadv.entity.tb.SafetyEvent"
+                         view="safetyEvent-view">
+            <query>
+                <![CDATA[select e from tsadv$SafetyEvent e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="safetyEventsTable"
+            height="100%"
+            spacing="true">
+        <filter id="filter"
+                applyTo="safetyEventsTable"
+                datasource="safetyEventsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="safetyEventsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="code"/>
+                <column id="type"/>
+                <column id="uom"/>
+            </columns>
+            <rows datasource="safetyEventsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="safetyEventsTable.create"/>
+                <button id="editBtn"
+                        action="safetyEventsTable.edit"/>
+                <button id="removeBtn"
+                        action="safetyEventsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

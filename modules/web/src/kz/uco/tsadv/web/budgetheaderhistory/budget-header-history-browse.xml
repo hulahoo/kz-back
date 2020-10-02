@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.budgetheaderhistory.BudgetHeaderHistoryBrowse"
+        focusComponent="budgetHeaderHistoriesTable"
+        lookupComponent="budgetHeaderHistoriesTable"
+        messagesPack="kz.uco.tsadv.web.budgetheaderhistory">
+    <dsContext>
+        <groupDatasource id="budgetHeaderHistoriesDs"
+                         class="kz.uco.tsadv.modules.learning.model.BudgetHeaderHistory"
+                         view="budgetHeaderHistory-view">
+            <query>
+                <![CDATA[select e from tsadv$BudgetHeaderHistory e where e.budgetHeader.id=:param$budgetHeaderId]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="budgetHeaderHistoriesTable"
+            spacing="true">
+        <groupTable id="budgetHeaderHistoriesTable"
+                    width="100%">
+            <columns>
+                <column id="budgetHeader" captionProperty="budgetHeader.headerName"/>
+                <column id="changePerson" captionProperty="changePerson.fioWithEmployeeNumber"/>
+                <column id="updateTs"/>
+                <column id="comment"/>
+                <column id="budgetHeaderStatus"/>
+            </columns>
+            <rows datasource="budgetHeaderHistoriesDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

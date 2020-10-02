@@ -1,0 +1,14 @@
+alter table TSADV_GOODS alter column GOOD_NAME_LANG1 set data type varchar(500) ;
+alter table TSADV_GOODS alter column GOOD_NAME_LANG2 set data type varchar(500) ;
+alter table TSADV_GOODS alter column GOOD_NAME_LANG2 drop not null ;
+alter table TSADV_GOODS alter column GOOD_NAME_LANG3 set data type varchar(500) ;
+alter table TSADV_GOODS alter column GOOD_NAME_LANG3 drop not null ;
+alter table TSADV_GOODS alter column GOOD_NAME_LANG4 set data type varchar(500) ;
+alter table TSADV_GOODS alter column GOOD_NAME_LANG5 set data type varchar(500) ;
+alter table TSADV_GOODS alter column DESCRIPTION_LANG1 set data type varchar(2000) ;
+alter table TSADV_GOODS alter column DESCRIPTION_LANG2 set data type varchar(2000) ;
+alter table TSADV_GOODS alter column DESCRIPTION_LANG3 set data type varchar(2000) ;
+alter table TSADV_GOODS alter column DESCRIPTION_LANG4 set data type varchar(2000) ;
+alter table TSADV_GOODS alter column DESCRIPTION_LANG5 set data type varchar(2000) ;
+update TSADV_GOODS set ACTIVE = false where ACTIVE is null ;
+alter table TSADV_GOODS alter column ACTIVE set not null ;

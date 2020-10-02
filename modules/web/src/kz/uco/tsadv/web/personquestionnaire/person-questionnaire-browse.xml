@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.personquestionnaire.PersonQuestionnaireBrowse"
+        focusComponent="personQuestionnairesTable"
+        lookupComponent="personQuestionnairesTable"
+        messagesPack="kz.uco.tsadv.web.personquestionnaire">
+    <dsContext>
+        <groupDatasource id="personQuestionnairesDs"
+                         class="kz.uco.tsadv.modules.personal.model.PersonQuestionnaire"
+                         view="personQuestionnaire-view">
+            <query>
+                <![CDATA[select e from tsadv$PersonQuestionnaire e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personQuestionnairesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personQuestionnairesTable"
+                datasource="personQuestionnairesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personQuestionnairesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"
+                />
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="estimate"
+                        caption="msg://assess"
+                        trackSelection="true"
+                        invoke="estimate"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="questionnaire"/>
+                <column id="appraise"
+                        captionProperty="appraise.fullName"/>
+                <column id="appraiser"
+                        captionProperty="appraiser.fullName"/>
+                <column id="appraisalDate"/>
+                <column id="overallScore"/>
+                <column id="averageScore"/>
+            </columns>
+            <rows datasource="personQuestionnairesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personQuestionnairesTable.create"/>
+                <button id="editBtn"
+                        action="personQuestionnairesTable.edit"/>
+                <button id="removeBtn"
+                        action="personQuestionnairesTable.remove"/>
+                <button id="estimate"
+                        action="personQuestionnairesTable.estimate"/>
+                <button id="excelBtn"
+                        action="personQuestionnairesTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.importhistorylog.ImportHistoryLogEdit"
+        datasource="importHistoryLogDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.importhistorylog">
+    <dsContext>
+        <datasource id="importHistoryLogDs"
+                    class="kz.uco.tsadv.modules.administration.importer.ImportHistoryLog"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="importHistoryLogDs">
+            <column width="350px">
+                <field property="login"/>
+                <field property="message"
+                       rows="5"/>
+                <field property="stacktrace"
+                       rows="10"/>
+                <field property="params"
+                       rows="10"/>
+                <field property="success"/>
+                <field property="dateTime"/>
+                <field property="entitiesProcessed"/>
+                <field property="level"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

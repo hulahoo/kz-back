@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CertificationEnrollment.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.certificationenrollment.CertificationEnrollmentEdit"
+        datasource="certificationEnrollmentDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="certificationEnrollmentDs"
+                    class="kz.uco.tsadv.modules.learning.model.CertificationEnrollment"
+                    view="certificationEnrollment.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="certificationEnrollmentDs">
+            <column width="400px">
+                <field property="personGroup" captionProperty="person"/>
+                <field property="certification" captionProperty="name"/>
+                <field property="startDate"/>
+                <field property="nextDate" editable="false"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

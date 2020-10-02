@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.relationshiptypebeneficiary.RelationshipTypeBeneficiaryBrowse"
+        focusComponent="relationshipTypeBeneficiariesTable"
+        lookupComponent="relationshipTypeBeneficiariesTable">
+    <dsContext>
+        <groupDatasource id="relationshipTypeBeneficiariesDs"
+                         class="kz.uco.tsadv.modules.personal.model.RelationshipTypeBeneficiary"
+                         view="relationshipTypeBeneficiaryView">
+            <query>
+                <![CDATA[select e from tsadv$RelationshipTypeBeneficiary e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="relationshipTypeBeneficiariesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="relationshipTypeBeneficiariesTable"
+                datasource="relationshipTypeBeneficiariesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="relationshipTypeBeneficiariesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="parent"/>
+                <column id="child"/>
+            </columns>
+            <rows datasource="relationshipTypeBeneficiariesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="relationshipTypeBeneficiariesTable.create"/>
+                <button id="editBtn"
+                        action="relationshipTypeBeneficiariesTable.edit"/>
+                <button id="removeBtn"
+                        action="relationshipTypeBeneficiariesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

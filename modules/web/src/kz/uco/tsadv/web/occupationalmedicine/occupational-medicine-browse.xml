@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.occupationalmedicine.OccupationalMedicineBrowse"
+        focusComponent="occupationalMedicinesTable"
+        lookupComponent="occupationalMedicinesTable"
+        messagesPack="kz.uco.tsadv.web.occupationalmedicine">
+    <dsContext>
+        <groupDatasource id="occupationalMedicinesDs"
+                         class="kz.uco.tsadv.entity.tb.OccupationalMedicine"
+                         view="occupationalMedicine-view">
+            <query>
+                <![CDATA[select e from tsadv$OccupationalMedicine e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="occupationalMedicinesTable">
+        <filter id="filter"
+                applyTo="occupationalMedicinesTable"
+                datasource="occupationalMedicinesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="occupationalMedicinesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="organization" captionProperty="organization.organization.organizationName"/>
+                <column id="entryDate"/>
+            </columns>
+            <rows datasource="occupationalMedicinesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="occupationalMedicinesTable.create"/>
+                <button id="editBtn"
+                        action="occupationalMedicinesTable.edit"/>
+                <button id="removeBtn"
+                        action="occupationalMedicinesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

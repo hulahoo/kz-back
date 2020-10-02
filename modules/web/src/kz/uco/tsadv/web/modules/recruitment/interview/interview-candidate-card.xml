@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Interview.candidate.card"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewCandidateCard"
+        datasource="personDs">
+    <dsContext>
+        <datasource id="personDs"
+                    allowCommit="false"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person.candidate">
+            <datasource id="personGroupDs"
+                        property="group">
+                <collectionDatasource id="personCompetencesDs"
+                                      property="competenceElements"/>
+                <collectionDatasource id="personDocumentsDs"
+                                      property="personDocuments"/>
+                <collectionDatasource id="personContactsDs"
+                                      property="personContacts"/>
+                <collectionDatasource id="personEducationDs"
+                                      property="personEducation"/>
+                <collectionDatasource id="personExperienceDs"
+                                      property="personExperience"/>
+                <collectionDatasource id="personAttachmentDs"
+                                      property="personAttachment"/>
+                <collectionDatasource id="addressesDs"
+                                      property="addresses"/>
+                <collectionDatasource id="studentGrantsDs"
+                                      property="studentGrants"/>
+            </datasource>
+        </datasource>
+        <collectionDatasource id="dicSexDs"
+                              class="kz.uco.base.entity.dictionary.DicSex"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from base$DicSex e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobRequestsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                              datasourceClass="kz.uco.tsadv.datasource.RequisitionJobRequestDatasource"
+                              view="jobRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e where e.candidatePersonGroup.id = :ds$personGroupDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personReviewsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonReview"
+                              view="personReview.browse">
+            <query>
+                <![CDATA[select e from tsadv$PersonReview e
+where e.person.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="grid"
+            height="100%"
+            spacing="true">
+        <grid id="grid"
+              spacing="true"
+              width="100%">
+            <columns>
+                <column/>
+                <column flex="3.0"/>
+            </columns>
+            <rows>
+                <row>
+                    <vbox id="testCard"
+                          spacing="true"
+                          width="250px">
+                        <vbox stylename="start-course-card-wrap">
+                            <vbox stylename="start-course-card-header">
+                                <cssLayout id="courseLogoWrapper"
+                                           stylename="start-course-card-image-wrap">
+                                    <embedded id="userImage"
+                                              stylename="course-card-image"/>
+                                </cssLayout>
+                                <label id="userFullName"
+                                       datasource="personDs"
+                                       property="fullName"
+                                       stylename="start-course-name"
+                                       width="100%"/>
+                            </vbox>
+                        </vbox>
+                        <label id="cardMenu"
+                               htmlEnabled="true"
+                               width="100%"/>
+                    </vbox>
+                    <vbox id="allWrapper"
+                          height="100%"
+                          stylename="start-course-section-wrap">
+                        <scrollBox id="scrollBox"
+                                   height="100%"
+                                   stylename="bt-scroll course-info">
+                            <vbox id="vBox"
+                                  height="100%"
+                                  spacing="true">
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-1"
+                                           value="mainMsg://mainData"/>
+                                    <cssLayout responsive="true"
+                                               stylename="interview-response-block"
+                                               width="100%">
+                                        <fieldGroup id="fieldGroup1"
+                                                    datasource="personDs"
+                                                    stylename="interview-response-field-group">
+                                            <field property="firstName"/>
+                                            <field property="lastName"/>
+                                            <field property="middleName"/>
+                                            <field property="type"/>
+                                        </fieldGroup>
+                                        <fieldGroup id="fieldGroup2"
+                                                    datasource="personDs"
+                                                    stylename="interview-response-field-group">
+                                            <field property="nationality"/>
+                                            <field property="citizenship"/>
+                                            <field property="maritalStatus"/>
+                                        </fieldGroup>
+                                    </cssLayout>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-2"
+                                           value="mainMsg://candidateIdentification"/>
+                                    <cssLayout responsive="true"
+                                               stylename="interview-response-block"
+                                               width="100%">
+                                        <fieldGroup id="fieldGroup3"
+                                                    datasource="personDs"
+                                                    stylename="interview-response-field-group"
+                                                    width="100%">
+                                            <field maxLength="12"
+                                                   property="nationalIdentifier"/>
+                                            <field property="dateOfBirth"/>
+                                        </fieldGroup>
+                                        <fieldGroup id="fieldGroup4"
+                                                    datasource="personDs"
+                                                    stylename="interview-response-field-group">
+                                            <field property="sex"/>
+                                        </fieldGroup>
+                                    </cssLayout>
+                                </vbox>
+                                <vbox id="studentGrants">
+                                    <label stylename="interview-candidate-card-lbl section-3"
+                                           value="mainMsg://Student.grant.browseCaption"/>
+                                    <table id="studentGrantsTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="numberContract"/>
+                                            <column id="dateContract"/>
+                                            <column id="learningCenter"/>
+                                            <column id="specialization"/>
+                                            <column id="learningForm.langValue"
+                                                    caption="msg://kz.uco.tsadv.modules.personal.model/StudentGrant.learningForm"/>
+                                            <column id="learnEndDate"/>
+                                            <column id="reason"
+                                                    maxTextLength="100"/>
+                                            <column id="orderRequisition"
+                                                    maxTextLength="100"/>
+                                        </columns>
+                                        <rows datasource="studentGrantsDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-4"
+                                           value="mainMsg://PersonGroup.education"/>
+                                    <table id="personEducationTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="school"/>
+                                            <column id="startYear">
+                                                <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                                                           format="####"/>
+                                            </column>
+                                            <column id="endYear">
+                                                <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                                                           format="####"/>
+                                            </column>
+                                            <column id="specialization"/>
+                                            <column id="degree"/>
+                                            <column id="location"/>
+                                        </columns>
+                                        <rows datasource="personEducationDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-5"
+                                           value="mainMsg://PersonGroup.experience"/>
+                                    <table id="personExperienceTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="company"/>
+                                            <column id="job"/>
+                                            <column id="startMonth">
+                                                <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                                                           format="MM.yyyy"/>
+                                            </column>
+                                            <column id="endMonth">
+                                                <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                                                           format="MM.yyyy"/>
+                                            </column>
+                                            <column id="description"/>
+                                        </columns>
+                                        <rows datasource="personExperienceDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-6"
+                                           value="mainMsg://PersonGroup.attachments"/>
+                                    <table id="personAttachmentsTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="filename"/>
+                                            <column id="description"/>
+                                            <column id="category"/>
+                                            <column id="downloadBtn"
+                                                    generator="getPersonAttachmentDownloadBtn"/>
+                                        </columns>
+                                        <rows datasource="personAttachmentDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-7"
+                                           value="mainMsg://PersonCard.adressess"/>
+                                    <table id="addressesTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="addressType"/>
+                                            <column id="country"/>
+                                            <column id="postalCode"/>
+                                            <column id="city"/>
+                                            <column id="address"
+                                                    caption="msg://addressLine"/>
+                                            <column id="startDate"/>
+                                            <column id="endDate"/>
+                                        </columns>
+                                        <rows datasource="addressesDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-8"
+                                           value="mainMsg://Contacts"/>
+                                    <table id="personContactsTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="type.langValue"/>
+                                            <column id="contactValue"/>
+                                        </columns>
+                                        <rows datasource="personContactsDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-9"
+                                           value="mainMsg://Documents"/>
+                                    <table id="personDocumentsTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="documentType.langValue"/>
+                                            <column id="issueDate"/>
+                                            <column id="expiredDate"/>
+                                            <column id="issuedBy"/>
+                                            <column id="description"/>
+                                        </columns>
+                                        <rows datasource="personDocumentsDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-10"
+                                           value="mainMsg://Competences"/>
+                                    <table id="personCompetencesTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="competenceGroup.competence.competenceName"/>
+                                            <column id="scaleLevel"/>
+                                        </columns>
+                                        <rows datasource="personCompetencesDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox>
+                                    <label stylename="interview-candidate-card-lbl section-11"
+                                           value="msg://kz.uco.tsadv.core.personal.group/PersonGroup.jobRequests"/>
+                                    <table id="jobRequestsTable"
+                                           height="200px"
+                                           width="100%">
+                                        <columns>
+                                            <column id="requestDate"/>
+                                            <column id="requestStatus"/>
+                                            <column id="requisition.code"/>
+                                            <column id="requisition.organizationGroup"
+                                                    captionProperty="requisition.organizationGroup.organization.organizationName"/>
+                                            <column id="requisition.positionGroup"
+                                                    captionProperty="requisition.positionGroup.position.positionName"/>
+                                            <column id="requisition.jobGroup"
+                                                    captionProperty="requisition.jobGroup.job.jobName"/>
+                                            <column id="interview"
+                                                    caption="msg://kz.uco.tsadv.recruitment/HiringStep"
+                                                    captionProperty="interview.requisitionHiringStep.hiringStep.stepName"
+                                                    generator="generateInterview"/>
+                                            <column id="passedInterviews"
+                                                    generator="generatePassedInterviews"/>
+                                            <column id="competenceMatchPercent">
+                                                <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                                                           format="###.##&apos;%&apos;"/>
+                                            </column>
+                                            <column id="questionnaireMatchPercent">
+                                                <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                                                           format="###.##&apos;%&apos;"/>
+                                            </column>
+                                            <column id="jobRequestReason"/>
+                                            <column id="reason"/>
+                                            <column id="viewLater"/>
+                                        </columns>
+                                        <rows datasource="jobRequestsDs"/>
+                                    </table>
+                                </vbox>
+                                <vbox id="reviewsVbox"
+                                      height="250px">
+                                    <label stylename="interview-candidate-card-lbl section-12"
+                                           value="mainMsg://reviewsTable"/>
+                                </vbox>
+                            </vbox>
+                        </scrollBox>
+                    </vbox>
+                </row>
+            </rows>
+        </grid>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personcoin.PersonCoinBrowse"
+        focusComponent="personCoinsTable"
+        lookupComponent="personCoinsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personcoin">
+    <dsContext>
+        <groupDatasource id="personCoinsDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonCoin"
+                         view="personCoin.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonCoin e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personCoinsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personCoinsTable"
+                datasource="personCoinsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personCoinsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="insertCoins"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="personGroup.fullName"/>
+                <column id="coins"/>
+            </columns>
+            <rows datasource="personCoinsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personCoinsTable.create"/>
+                <button action="personCoinsTable.edit"/>
+                <button action="personCoinsTable.remove"/>
+                <button action="personCoinsTable.insertCoins"
+                        caption="Insert person coin"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

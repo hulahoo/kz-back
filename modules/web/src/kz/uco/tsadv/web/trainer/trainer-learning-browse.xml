@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.trainer.TrainerLearningBrowse"
+        focusComponent="trainersTable"
+        lookupComponent="trainersTable"
+        messagesPack="kz.uco.tsadv.web.trainer">
+    <dsContext>
+        <groupDatasource id="trainersDs"
+                         class="kz.uco.tsadv.modules.performance.model.Trainer"
+                         view="trainer.browse">
+            <query>
+                <![CDATA[select e from tsadv$Trainer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="trainersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="trainersTable"
+                datasource="trainersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="trainersTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="employee.fullName"/>
+                <column id="employee.person.type"/>
+                <column id="employee.currentAssignment.positionGroup.positionName"/>
+                <column id="employee.currentAssignment.organizationGroup.organizationName"/>
+                <column id="party.name"/>
+            </columns>
+            <rows datasource="trainersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="trainersTable.create"/>
+                <button id="editBtn"
+                        action="trainersTable.edit"/>
+                <button id="removeBtn"
+                        action="trainersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.personalprotection.PersonalProtectionEdit"
+        datasource="personalProtectionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.personalprotection">
+    <dsContext>
+        <datasource id="personalProtectionDs"
+                    class="kz.uco.tsadv.modules.personprotection.PersonalProtection"
+                    view="personalProtection.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personalProtectionDs">
+            <column width="250px">
+                <field captionProperty="personFioWithEmployeeNumber"
+                       property="employee"/>
+                <field property="protectionEquipment"/>
+                <field property="dateOfIssue"/>
+                <field property="status"/>
+                <field property="writtenOfReason"/>
+                <field property="writtenOfDate"/>
+                <field property="quantity"/>
+                <field property="planChangeDate"/>
+                <field property="condition"/>
+                <field property="isAcceptedByPerson"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

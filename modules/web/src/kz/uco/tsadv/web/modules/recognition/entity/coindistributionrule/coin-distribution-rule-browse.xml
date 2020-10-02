@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.coindistributionrule.CoinDistributionRuleBrowse"
+        focusComponent="coinDistributionRulesTable"
+        lookupComponent="coinDistributionRulesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.coindistributionrule">
+    <dsContext>
+        <groupDatasource id="coinDistributionRulesDs"
+                         class="kz.uco.tsadv.modules.recognition.CoinDistributionRule"
+                         view="coinDistributionRule.browse">
+            <query>
+                <![CDATA[select e from tsadv$CoinDistributionRule e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="coinDistributionRulesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="coinDistributionRulesTable"
+                datasource="coinDistributionRulesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="coinDistributionRulesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"/>
+                <column id="distributionFrequency"/>
+                <column id="zeroFrequency"/>
+                <column id="active"/>
+                <column id="coins"/>
+            </columns>
+            <rows datasource="coinDistributionRulesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="coinDistributionRulesTable.create"/>
+                <button id="editBtn"
+                        action="coinDistributionRulesTable.edit"/>
+                <button id="removeBtn"
+                        action="coinDistributionRulesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

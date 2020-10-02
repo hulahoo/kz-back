@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.lookupvalue.LookupValueEdit"
+        datasource="lookupValueDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.lookupvalue">
+    <dsContext>
+        <datasource id="lookupValueDs"
+                    class="kz.uco.tsadv.modules.administration.LookupValue"
+                    view="lookupValue.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="lookupValueDs">
+                <column width="250px">
+                    <field property="lookupType.lookupType" visible="false"/>
+                    <field property="lookupTypeCode"/>
+                    <field property="meaningLang1"/>
+                    <field property="meaningLang2"/>
+                    <field property="meaningLang3"/>
+                    <field property="descriptionLang1"/>
+                    <field property="descriptionLang2"/>
+                    <field property="descriptionLang3"/>
+                    <field property="enabledFlag"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field property="tag"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

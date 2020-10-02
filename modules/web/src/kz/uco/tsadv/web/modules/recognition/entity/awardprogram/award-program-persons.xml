@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://award.program.awards.person"
+        class="kz.uco.tsadv.web.modules.recognition.entity.awardprogram.AwardProgramPersons"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.awardprogram">
+    <dsContext>
+        <collectionDatasource id="programPersonAwardsDs"
+                              class="kz.uco.tsadv.modules.recognition.pojo.AwardProgramPerson"
+                              datasourceClass="kz.uco.tsadv.web.modules.recognition.entity.awardprogram.AwardProgramPersonsDs"
+                              maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$AwardProgramPerson e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personDataGrid" width="100%" height="100%" spacing="true">
+        <hbox id="vbox" spacing="true" width="AUTO" height="AUTO">
+            <label id="filterCaption" value="msg://filter.caption" stylename="award-program-filter"/>
+            <textField id="filterText" width="350px" height="AUTO"/>
+        </hbox>
+        <dataGrid id="personDataGrid"
+                  datasource="programPersonAwardsDs" width="100%"
+                  selectionMode="MULTI_CHECK"
+                  settingsEnabled="false"
+                  editorEnabled="false"
+                  reorderingAllowed="false"
+                  contextMenuEnabled="false">
+            <columns>
+                <column property="person.fullName"/>
+                <column property="count"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel>
+                <button id="addToShortListBtn"
+                        caption="msg://add.to.shortList" invoke="addToShortList"
+                        enable="false"/>
+            </buttonsPanel>
+        </dataGrid>
+    </layout>
+</window>

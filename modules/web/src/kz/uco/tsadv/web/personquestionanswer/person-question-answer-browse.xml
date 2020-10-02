@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.personquestionanswer.PersonQuestionAnswerBrowse"
+        focusComponent="personQuestionAnswersTable"
+        lookupComponent="personQuestionAnswersTable"
+        messagesPack="kz.uco.tsadv.web.personquestionanswer">
+    <dsContext>
+        <groupDatasource id="personQuestionAnswersDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonQuestionAnswer"
+                         view="personQuestionAnswer.browse">
+            <query>
+                <![CDATA[select e from tsadv$PersonQuestionAnswer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personQuestionAnswersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personQuestionAnswersTable"
+                datasource="personQuestionAnswersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personQuestionAnswersTable"
+                    width="100%">
+            <actions>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="personGroup.fullName"/>
+                <column id="question.text" maxTextLength="70"/>
+                <column id="question.answerType"/>
+                <column id="answer" generator="generateAnswer"/>
+                <column id="date"/>
+            </columns>
+            <rows datasource="personQuestionAnswersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button action="personQuestionAnswersTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

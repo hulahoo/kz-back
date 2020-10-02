@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.buildings.BuildingsEdit"
+        datasource="buildingsDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.buildings">
+    <dsContext>
+        <datasource id="buildingsDs"
+                    class="kz.uco.tsadv.entity.tb.Buildings"
+                    view="buildings-view">
+            <collectionDatasource id="costDs"
+                                  property="cost"/>
+            <collectionDatasource id="techStatusDs"
+                                  property="techStatus"/>
+            <collectionDatasource id="inspectionDs"
+                                  property="inspection">
+                <collectionDatasource id="buildingFireSafety" property="buildingFireSafety">
+                    <collectionDatasource id="FireWaterSupply" property="fireWaterSupply"/>
+                </collectionDatasource>
+            </collectionDatasource>
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+            <collectionDatasource id="maintenanceDs"
+                                  property="maintenance"/>
+            <collectionDatasource id="dismantlingDs"
+                                  property="dismantling"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%" spacing="true">
+            <vbox id="vbox"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="buildingsDs">
+                    <column width="250px">
+                        <field property="name"/>
+                        <field property="commissioning"/>
+                        <field property="buildingVolume"/>
+                        <field property="buildingArea"/>
+                        <field property="totalArea"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <groupBox id="hideGroupBox"
+                      caption="msg://detail"
+                      collapsable="true"
+                      collapsed="true">
+                <vbox id="vbox_3"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="buildingsDs">
+                        <column width="400px">
+                            <field property="technicalPassport"/>
+                            <field property="buildingPassport"/>
+                            <field property="technicalJournal"/>
+                            <field property="inventoryNumber"/>
+                            <field property="oldInventoryNumber"/>
+                            <field property="objectType"/>
+                            <field id="organization"
+                                   captionProperty="organization"
+                                   property="organization"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <frame id="windowActions"
+                   screen="editWindowActions"
+                   width="AUTO"/>
+            <vbox id="vbox2"
+                  height="100%"
+                  spacing="true">
+                <tabSheet>
+                    <tab id="tab"
+                         caption="msg://tab"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="buildingCostTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="costDate"/>
+                                <column id="balanceCost"/>
+                                <column id="residualValue"/>
+                            </columns>
+                            <rows datasource="costDs"/>
+                            <buttonsPanel>
+                                <button action="buildingCostTable.create"/>
+                                <button action="buildingCostTable.remove"/>
+                                <button action="buildingCostTable.edit"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_1"
+                         caption="msg://tab1"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="techStatusTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="technicalStatusDate"/>
+                                <column id="buildTechnicalStatus"/>
+                                <column id="technicalStatusBuildstructures"/>
+                            </columns>
+                            <rows datasource="techStatusDs"/>
+                            <buttonsPanel>
+                                <button action="techStatusTable.create"/>
+                                <button action="techStatusTable.remove"/>
+                                <button action="techStatusTable.edit"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_4"
+                         caption="msg://tab4"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="buildingTechnicalInspectionsesTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="inspectionDate"/>
+                                <column id="prescriptionNumber"/>
+                                <column id="damageDescription"/>
+                                <column id="recommendations"/>
+                                <column id="technicalJournalRecord"/>
+                                <column id="preparationDeadline"/>
+                                <column id="eliminateEvent"/>
+                                <column id="eliminationDeadline"/>
+                                <column id="eliminationOrPostponementNotification"/>
+                                <column id="repairProgram"/>
+                                <column id="inspectionCategory"/>
+                                <column id="inspectionType"/>
+                                <column id="inspectingFullName.person.fullName"/>
+                                <column id="buildTechnicalStatus"/>
+                                <column id="technicalStatusBuildstructures"/>
+                            </columns>
+                            <rows datasource="inspectionDs"/>
+                            <buttonsPanel>
+                                <button action="buildingTechnicalInspectionsesTable.create"/>
+                                <button action="buildingTechnicalInspectionsesTable.remove"/>
+                                <button action="buildingTechnicalInspectionsesTable.edit"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_2"
+                         caption="msg://tab2"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="attachmentsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="attachmentType"/>
+                                <column id="attachment"/>
+                            </columns>
+                            <rows datasource="attachmentDs"/>
+                            <buttonsPanel>
+                                <button action="attachmentsTable.create"/>
+                                <button action="attachmentsTable.remove"/>
+                                <button action="attachmentsTable.edit"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_3"
+                         caption="msg://tab3"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="buildingMaintenancesTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="inspectionReport"/>
+                                <column id="technicalResolution"/>
+                                <column id="maintenanceProhibition"/>
+                                <column id="technicalJournalRecord"/>
+                                <column id="currentRepairs"/>
+                                <column id="rebuilding"/>
+                                <column id="contractingOrganization"/>
+                                <column id="onBalance"/>
+                                <column id="dismantled"/>
+                                <column id="unmaintenance"/>
+                                <column id="onConservation"/>
+                                <column id="writeOfDate"/>
+                                <column id="dismantlingDate"/>
+                                <column id="managerFullName.personFioWithEmployeeNumber"/>
+                                <column id="responsibleFullName.personFioWithEmployeeNumber"/>
+                            </columns>
+                            <rows datasource="maintenanceDs"/>
+                            <buttonsPanel>
+                                <button action="buildingMaintenancesTable.create"/>
+                                <button action="buildingMaintenancesTable.remove"/>
+                                <button action="buildingMaintenancesTable.edit"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_5"
+                         caption="msg://tab5"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="repairsDismantlingsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="workType"/>
+                                <column id="workNumber"/>
+                                <column id="workCost"/>
+                            </columns>
+                            <rows datasource="dismantlingDs"/>
+                            <buttonsPanel>
+                                <button action="repairsDismantlingsTable.create"/>
+                                <button action="repairsDismantlingsTable.remove"/>
+                                <button action="repairsDismantlingsTable.edit"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

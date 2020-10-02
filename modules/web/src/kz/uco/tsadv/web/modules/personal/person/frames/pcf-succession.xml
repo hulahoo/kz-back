@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfSuccession">
+    <dsContext>
+        <datasource id="personGroupDs"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <table id="successionPlanningTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"
+                        invoke="createSuccessionPerson"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="succession.positionGroup.position.positionName"/>
+                <column id="readinessLevel"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="successorsDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button action="successionPlanningTable.create"/>
+                <button action="successionPlanningTable.edit"/>
+                <button action="successionPlanningTable.remove"/>
+                <button action="successionPlanningTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

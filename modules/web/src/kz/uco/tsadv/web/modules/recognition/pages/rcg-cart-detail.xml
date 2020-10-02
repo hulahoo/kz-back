@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgCartDetail"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+
+    <dialogMode height="500px"
+                width="45%"/>
+
+    <layout height="100%" width="100%" expand="vBox" stylename="rcg-cart-detail-window">
+        <vbox id="vBox" stylename="rcg-cart-detail-wrapper" width="100%" expand="scrollBox">
+            <scrollBox id="scrollBox" width="100%" stylename="bt-scroll">
+            </scrollBox>
+            <hbox id="footer" width="100%" spacing="true" stylename="rcg-cart-detail-footer">
+                <label id="statusLabel" align="MIDDLE_LEFT" htmlEnabled="true"/>
+                <label id="totalSumLabel" align="MIDDLE_RIGHT" htmlEnabled="true"/>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://menu-config.pmAssessmentsByPersons"
+        class="kz.uco.tsadv.web.modules.personal.assignment.AssignmentBrowseForManager"
+        xmlns:chart="http://schemas.haulmont.com/charts/charts.xsd">
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <frame id="filterFrame"
+               screen="filterFrame"/>
+    </layout>
+</window>

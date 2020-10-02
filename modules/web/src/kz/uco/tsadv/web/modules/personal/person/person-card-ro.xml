@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonCardRo"
+        extends="/kz/uco/tsadv/web/modules/personal/person/person-card-new.xml">
+    <dialogMode width="800"/>
+    <layout/>
+</window>

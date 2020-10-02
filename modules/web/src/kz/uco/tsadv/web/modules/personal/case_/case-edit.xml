@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.case_.CaseEdit"
+        datasource="caseDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.case_">
+    <dsContext>
+        <datasource id="caseDs"
+                    class="kz.uco.tsadv.modules.personal.model.Case"
+                    view="case.view"/>
+        <collectionDatasource id="caseTypesDs"
+                              class="kz.uco.tsadv.modules.personal.model.CaseType"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$CaseType e
+ where e.language = :ds$caseDs.language]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="caseDs">
+            <column width="250px">
+                <field generator="generateLanguageField"
+                       property="language"/>
+                <field optionsDatasource="caseTypesDs"
+                       property="caseType"/>
+                <field property="longName"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personpoint.PersonPointBrowse"
+        focusComponent="personPointsTable"
+        lookupComponent="personPointsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personpoint">
+    <dsContext>
+        <groupDatasource id="personPointsDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonPoint"
+                         view="personPoint.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonPoint e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personPointsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personPointsTable"
+                datasource="personPointsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personPointsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="insertPoints"/>
+            </actions>
+            <columns>
+                <column id="personGroup.fullName"/>
+                <column id="points"/>
+            </columns>
+            <rows datasource="personPointsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personPointsTable.create"/>
+                <button action="personPointsTable.edit"/>
+                <button action="personPointsTable.remove"/>
+                <button action="personPointsTable.insertPoints"
+                        caption="Insert person point"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

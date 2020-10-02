@@ -1,0 +1,2 @@
+alter table TSADV_DISMISSAL add constraint FK_TSADV_DISMISSAL_ORDER foreign key (ORDER_ID) references TSADV_ORDER(ID);
+create index IDX_TSADV_DISMISSAL_ORDER on TSADV_DISMISSAL (ORDER_ID);

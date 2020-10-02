@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.talentprogramexceptions.TalentProgramExceptionsBrowse"
+        focusComponent="talentProgramExceptionsesTable"
+        lookupComponent="talentProgramExceptionsesTable"
+        messagesPack="kz.uco.tsadv.web.talentprogramexceptions">
+    <dsContext>
+        <groupDatasource id="talentProgramExceptionsesDs"
+                         class="kz.uco.tsadv.entity.TalentProgramExceptions"
+                         view="talentProgramExceptions-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramExceptions e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="talentProgramExceptionsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="talentProgramExceptionsesTable"
+                datasource="talentProgramExceptionsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="talentProgramExceptionsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="talentProgram"/>
+                <column id="personGroup"/>
+            </columns>
+            <rows datasource="talentProgramExceptionsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="talentProgramExceptionsesTable.create"/>
+                <button id="editBtn"
+                        action="talentProgramExceptionsesTable.edit"/>
+                <button id="removeBtn"
+                        action="talentProgramExceptionsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

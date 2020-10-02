@@ -1,0 +1,32 @@
+create table TSADV_POSITION_CHANGE_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    --
+    REQUEST_NUMBER varchar(255) not null,
+    REQUEST_DATE date not null,
+    REQUEST_TYPE varchar(50) not null,
+    ORGANIZATION_GROUP_ID uuid,
+    POSITION_GROUP_ID uuid,
+    JOB_NAME_LANG1 varchar(1000),
+    JOB_NAME_LANG2 varchar(1000),
+    JOB_NAME_LANG3 varchar(1000),
+    LOCATION varchar(500),
+    GRADE_GROUP_ID uuid,
+    COST_CENTER_ID uuid,
+    FTE integer,
+    EFFECTIVE_DATE date,
+    COMMENTS varchar(2000),
+    PARENT_POSITION_GROUP_ID uuid,
+    MATERIAL_LIABILITY_AGREEMENT_REQUIRED boolean not null,
+    MRG_FORM_ID uuid,
+    JOB_INSTRUCTION_ID uuid,
+    --
+    primary key (ID)
+);

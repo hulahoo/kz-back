@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.partyext.PartyExtEdit"
+        datasource="partyExtDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.partyext">
+    <dsContext>
+        <datasource id="partyExtDs"
+                    class="kz.uco.tsadv.modules.learning.model.PartyExt"
+                    view="partyExt.edit">
+            <collectionDatasource id="addressDs"
+                                  property="address"/>
+            <collectionDatasource id="contactInfoDs"
+                                  property="contactInfo"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            height="100%"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <fieldGroup id="fieldGroup"
+                        datasource="partyExtDs">
+                <column id="column1"
+                        width="250px">
+                    <field id="name"
+                           property="name"/>
+                    <field id="partyType"
+                           property="partyType"/>
+                    <field id="active"
+                           property="active"/>
+                    <field property="trainingProvider"/>
+                    <field property="signer"/>
+                    <field property="job"/>
+                    <field property="reason"/>
+                </column>
+                <column id="column2"
+                        width="250px">
+                    <field id="bin"
+                           property="bin"/>
+                    <field id="rnn"
+                           property="rnn"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="addressBox"
+                      caption="msg://kz.uco.tsadv.modules.learning.model/PartyExt.address">
+                <table id="addressTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="add"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="region"/>
+                        <column id="district"/>
+                        <column id="city"/>
+                        <column id="street"/>
+                        <column id="hose"/>
+                        <column id="building"/>
+                        <column id="apartment"/>
+                    </columns>
+                    <rows datasource="addressDs"/>
+                    <buttonsPanel>
+                        <button action="addressTable.add"/>
+                        <button action="addressTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+            <groupBox id="contactInfoBox"
+                      caption="msg://kz.uco.tsadv.modules.learning.model/PartyExt.contactInfo">
+                <table id="contactInfoTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="value"/>
+                        <column id="doNotDisturb"/>
+                    </columns>
+                    <rows datasource="contactInfoDs"/>
+                    <buttonsPanel>
+                        <button action="contactInfoTable.create"/>
+                        <button action="contactInfoTable.edit"/>
+                        <button action="contactInfoTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

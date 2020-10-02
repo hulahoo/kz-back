@@ -1,0 +1,2 @@
+drop view tsadv_activity_task_view;
+drop view tsadv_bpm_proc_instance_vw;

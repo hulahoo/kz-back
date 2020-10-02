@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicquality.DicQualityBrowse"
+        focusComponent="dicQualitiesTable"
+        lookupComponent="dicQualitiesTable"
+        messagesPack="kz.uco.tsadv.web.dicquality">
+    <dsContext>
+        <groupDatasource id="dicQualitiesDs"
+                         class="kz.uco.tsadv.modules.recognition.dictionary.DicQuality"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicQuality e order by e.order asc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicQualitiesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicQualitiesTable"
+                datasource="dicQualitiesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicQualitiesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="order"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="fullLangValue1"/>
+                <column id="fullLangValue2"/>
+                <column id="fullLangValue3"/>
+                <column id="fullLangValue4"/>
+                <column id="fullLangValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicQualitiesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicQualitiesTable.create"/>
+                <button id="editBtn"
+                        action="dicQualitiesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicQualitiesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

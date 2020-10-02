@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursesectionsession.CourseSectionSessionBrowse"
+        focusComponent="courseSectionSessionsTable"
+        lookupComponent="courseSectionSessionsTable">
+    <dsContext>
+        <groupDatasource id="courseSectionSessionsDs"
+                         class="kz.uco.tsadv.modules.learning.model.CourseSectionSession"
+                         view="courseSectionSession.browse">
+            <query>
+                <![CDATA[select e from tsadv$CourseSectionSession e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseSectionSessionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="courseSectionSessionsTable"
+                datasource="courseSectionSessionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="courseSectionSessionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="learningCenter"/>
+                <column id="maxPerson"/>
+                <column id="courseSection"/>
+            </columns>
+            <rows datasource="courseSectionSessionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="courseSectionSessionsTable.create"/>
+                <button id="editBtn"
+                        action="courseSectionSessionsTable.edit"/>
+                <button id="removeBtn"
+                        action="courseSectionSessionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

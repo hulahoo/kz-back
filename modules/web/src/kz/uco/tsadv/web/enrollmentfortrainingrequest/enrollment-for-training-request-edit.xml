@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.enrollmentfortrainingrequest.EnrollmentForTrainingRequestEdit"
+        datasource="enrollmentForTrainingRequestDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.enrollmentfortrainingrequest">
+    <dsContext>
+        <datasource id="enrollmentForTrainingRequestDs"
+                    class="kz.uco.tsadv.modules.learning.model.EnrollmentForTrainingRequest"
+                    view="enrollmentForTrainingRequest-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="enrollmentForTrainingRequestDs">
+            <column width="250px">
+                <field caption="msg://personGroup"
+                       captionProperty="personFioWithEmployeeNumber"
+                       property="personGroup"/>
+                <field caption="msg://organizationName"
+                       property="personGroup.currentAssignment.organizationGroup.organizationName"/>
+                <field caption="msg://positionName"
+                       property="personGroup.currentAssignment.positionGroup.positionName"/>
+                <field caption="msg://moneyInBudget"
+                       property="moneyInBudget"/>
+                <field caption="msg://reason"
+                       property="reason"/>
+                <field caption="msg://status"
+                       property="status"/>
+                <field caption="msg://date"
+                       property="date"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

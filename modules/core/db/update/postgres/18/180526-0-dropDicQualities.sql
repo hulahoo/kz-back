@@ -1,0 +1,2 @@
+alter table tsadv_dic_qualities rename to tsadv_dic_qualities__u15905 ;
+alter table tsadv_recognition_qualities drop constraint FK_TSADV_RECOGNITION_QUALITIES_QUALITY ;

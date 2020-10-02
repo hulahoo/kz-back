@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Faq.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.faq.FaqEdit"
+        datasource="faqDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="faqDs"
+                    class="kz.uco.tsadv.modules.learning.model.Faq"
+                    view="faq.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <tabSheet>
+            <tab id="mainInfo"
+                 caption="msg://Faq.caption">
+                <fieldGroup id="fieldGroup"
+                            datasource="faqDs">
+                    <column width="250px">
+                        <field property="order"/>
+                        <field property="langValue1"/>
+                        <field property="langValue2"/>
+                        <field property="langValue3"/>
+                        <field property="langValue4"/>
+                        <field property="langValue5"/>
+                    </column>
+                </fieldGroup>
+            </tab>
+            <tab id="description"
+                 caption="msg://Faq.description">
+                <groupBox caption="msg://Faq.contentLangValue1">
+                    <richTextArea datasource="faqDs"
+                                  property="contentLangValue1"/>
+                </groupBox>
+                <groupBox caption="msg://Faq.contentLangValue2">
+                    <richTextArea datasource="faqDs"
+                                  property="contentLangValue2"/>
+                </groupBox>
+                <groupBox caption="msg://Faq.contentLangValue3">
+                    <richTextArea datasource="faqDs"
+                                  property="contentLangValue3"/>
+                </groupBox>
+                <groupBox caption="msg://Faq.contentLangValue4">
+                    <richTextArea datasource="faqDs"
+                                  property="contentLangValue4"/>
+                </groupBox>
+                <groupBox caption="msg://Faq.contentLangValue5">
+                    <richTextArea datasource="faqDs"
+                                  property="contentLangValue5"/>
+                </groupBox>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Person.browseCaptionSIZ"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonBrowseSiz"
+        focusComponent="personsTable"
+        lookupComponent="personsTable">
+    <dsContext>
+        <groupDatasource id="personsDs"
+                         class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                         maxResults="20"
+                         view="person.browse">
+            <query>
+                <![CDATA[select e
+                           from base$PersonExt e
+                           left join e.group.assignments a
+                          where :session$systemDate between e.startDate and e.endDate
+                            and :session$systemDate between a.startDate and a.endDate
+                            and a.assignmentStatus.code = 'ACTIVE'
+                            and a.primaryFlag = true]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="100%"
+                width="100%"/>
+    <layout expand="personsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personsTable"
+                datasource="personsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personsTable"
+                    width="100%">
+            <columns>
+                <column id="fioWithEmployeeNumber"
+                        link="true"
+                        linkInvoke="redirectCard"/>
+                <column id="nationalIdentifier"/>
+                <column id="group.currentAssignment.jobGroup"
+                        captionProperty="group.currentAssignment.jobGroup.job.jobName"/>
+                <column id="group.currentAssignment.organizationGroup"
+                        captionProperty="group.currentAssignment.organizationGroup.organization.organizationName"/>
+                <column id="group.currentAssignment.positionGroup"
+                        captionProperty="group.currentAssignment.positionGroup.position.positionName"/>
+                <column id="type"
+                        caption="msg://Person.type"/>
+            </columns>
+            <rows datasource="personsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

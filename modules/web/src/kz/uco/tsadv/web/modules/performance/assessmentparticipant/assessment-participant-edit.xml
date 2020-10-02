@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.assessmentparticipant.AssessmentParticipantEdit"
+        datasource="assessmentParticipantDs"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assessmentparticipant">
+    <dsContext>
+        <datasource id="assessmentParticipantDs"
+                    class="kz.uco.tsadv.modules.performance.model.AssessmentParticipant"
+                    view="assessmentParticipant.browse"/>
+        <collectionDatasource id="personGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                              view="personGroup.browse">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <table height="300px"
+               width="100%">
+            <columns>
+                <column id="person.userImage"
+                        generator="generateUserImageCell"/>
+                <column id="person"/>
+            </columns>
+            <rows datasource="personGroupsDs"/>
+        </table>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

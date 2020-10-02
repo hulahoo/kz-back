@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.restintegrationlog.RestIntegrationLogBrowse"
+        focusComponent="restIntegrationLogsTable"
+        lookupComponent="restIntegrationLogsTable"
+        messagesPack="kz.uco.tsadv.web.restintegrationlog">
+    <dsContext>
+        <groupDatasource id="restIntegrationLogsDs"
+                         class="kz.uco.tsadv.entity.RestIntegrationLog"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$RestIntegrationLog e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="restIntegrationLogsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="restIntegrationLogsTable"
+                datasource="restIntegrationLogsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="restIntegrationLogsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="login"/>
+                <column id="success"/>
+                <column id="requestId"/>
+                <column id="methodName"/>
+                <column id="params" maxTextLength="30"/>
+                <column id="message" maxTextLength="30"/>
+                <column id="dateTime"/>
+            </columns>
+            <rows datasource="restIntegrationLogsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="restIntegrationLogsTable.create"/>
+                <button id="editBtn"
+                        action="restIntegrationLogsTable.edit"/>
+                <button id="removeBtn"
+                        action="restIntegrationLogsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

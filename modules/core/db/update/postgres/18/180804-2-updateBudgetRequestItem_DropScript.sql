@@ -1,0 +1,12 @@
+alter table TSADV_BUDGET_REQUEST_ITEM drop column JAN_VALUE__U64464 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column FEB_VALUE__U99851 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column MAR_VALUE__U43510 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column APR_VALUE__U67660 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column MAY_VALUE__U59517 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column JUN_VALUE__U27948 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column JUL_VALUE__U14538 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column AUG_VALUE__U56061 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column SEP_VALUE__U51405 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column OCT_VALUE__U56247 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column NOV_VALUE__U63656 cascade ;
+alter table TSADV_BUDGET_REQUEST_ITEM drop column DEC_VALUE__U37331 cascade ;

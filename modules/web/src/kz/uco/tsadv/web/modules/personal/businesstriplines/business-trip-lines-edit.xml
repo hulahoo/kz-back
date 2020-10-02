@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BusinessTripLines.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.businesstriplines.BusinessTripLinesEdit"
+        datasource="businessTripLinesDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="businessTripLinesDs"
+                    class="kz.uco.tsadv.modules.personal.model.BusinessTripLines"
+                    view="businessTripLines-view"/>
+        <collectionDatasource id="dicCities"
+                              class="kz.uco.base.entity.dictionary.DicCity"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from base$DicCity e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="businessTripLinesDs">
+            <column id="column1"
+                    width="250px">
+                <field id="number"
+                       property="number"/>
+                <field id="cityFrom"
+                       optionsDatasource="dicCities"
+                       property="cityFrom"/>
+                <field id="cityTo"
+                       optionsDatasource="dicCities"
+                       property="cityTo"/>
+                <field id="dateFrom"
+                       property="dateFrom"/>
+                <field id="dateTo"
+                       property="dateTo"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

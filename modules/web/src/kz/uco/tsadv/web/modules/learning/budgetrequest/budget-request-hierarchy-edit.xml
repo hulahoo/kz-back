@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BudgetRequest.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.budgetrequest.BudgetRequestEdit"
+        datasource="budgetRequestDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="budgetRequestDs"
+                    class="kz.uco.tsadv.modules.learning.model.BudgetRequest"
+                    view="budgetRequest.view"/>
+        <collectionDatasource id="budgetStatusesDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicBudgetStatus"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[
+                        select e from tsadv$DicBudgetStatus e
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="DicTrainingMethodDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicTrainingMethod"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[
+                        select e from tsadv$DicTrainingMethod e
+                        ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="budgetRequestDs">
+                <column width="250px">
+                    <field property="budget"/>
+                    <field captionProperty="name"
+                           property="course"/>
+                    <field property="learningType"/>
+                    <field property="employeesCount"/>
+                    <field custom="true"
+                           property="month"/>
+                    <field property="comment"
+                           rows="15"/>
+                </column>
+                <column>
+                    <field property="learningCosts"/>
+                    <field property="tripCosts"/>
+                    <field captionProperty="name"
+                           property="providerCompany"/>
+                    <field captionProperty="organization"
+                           custom="true"
+                           property="organizationGroup"/>
+                    <field captionProperty="personFioWithEmployeeNumber"
+                           property="initiatorPersonGroup"/>
+                    <field editable="false"
+                           optionsDatasource="budgetStatusesDs"
+                           property="status"/>
+                    <field property="requiredEducation"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

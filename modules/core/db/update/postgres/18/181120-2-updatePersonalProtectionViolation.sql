@@ -1,0 +1,1 @@
+alter table TSADV_PERSONAL_PROTECTION_VIOLATION add column LEGACY_ID varchar(255) ;

@@ -1,0 +1,2 @@
+alter table TSADV_ABSENCE add constraint FK_TSADV_ABSENCE_CATEGORY foreign key (CATEGORY_ID) references SYS_CATEGORY(ID);
+create index IDX_TSADV_ABSENCE_CATEGORY on TSADV_ABSENCE (CATEGORY_ID);

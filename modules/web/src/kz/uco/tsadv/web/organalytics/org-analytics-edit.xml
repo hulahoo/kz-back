@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.organalytics.OrgAnalyticsEdit"
+        datasource="orgAnalyticsDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.organalytics">
+    <dsContext>
+        <datasource id="orgAnalyticsDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.OrgAnalytics"
+                    view="organalytics.edit">
+            <datasource id="organizationGroupDs"
+                        property="organizationGroup"/>
+        </datasource>
+        <collectionDatasource id="workingConditionsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicWorkingCondition"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicWorkingCondition e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="orgAnalyticsDs">
+            <column width="400px">
+                <field captionProperty="calendar"
+                       property="calendar"/>
+                <field captionProperty="offsetScheduleName"
+                       property="offset"/>
+                <field optionsDatasource="workingConditionsDs"
+                       property="workingCondition"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

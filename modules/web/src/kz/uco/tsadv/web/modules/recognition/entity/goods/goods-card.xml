@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recognition.entity.goods.GoodsCard"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.goods">
+    <dialogMode height="AUTO"
+                width="500"/>
+    <layout width="100%" stylename="rcg-sh-goods-card-w">
+        <hbox spacing="true" width="100%" expand="priceInfo">
+            <hbox height="100%" spacing="true" stylename="rcg-sh-gc-image-w">
+                <image id="goodsImagePreview" width="160px" height="115px" scaleMode="CONTAIN"
+                       stylename="rcg-sh-gc-image"/>
+                <scrollBox id="goodsImagesBox" height="100%" spacing="true"
+                           stylename="rcg-sh-gc-image-scroll bt-scroll"/>
+            </hbox>
+            <label id="goodsImageLabel" htmlEnabled="true"/>
+            <vbox id="priceInfo" spacing="true" stylename="rcg-sh-gc-price-w" height="115px">
+                <hbox width="100%" align="TOP_CENTER" expand="priceLabel">
+                    <label value="msg://goods.price" align="MIDDLE_LEFT" stylename="rcg-sh-gc-price-l"/>
+                    <label id="priceLabel" align="MIDDLE_RIGHT" htmlEnabled="true"/>
+                </hbox>
+                <hbox id="operationBlock" width="100%" expand="operationLink" spacing="true">
+                    <linkButton id="addToWishList"
+                                stylename="rcg-btn rcg-white-btn rcg-btn-sm"/>
+                    <linkButton id="operationLink" caption="msg://add.to.cart"
+                                stylename="rcg-sh-gc-operation rcg-btn rcg-blue-btn rcg-btn-sm"
+                                align="BOTTOM_CENTER"/>
+                </hbox>
+            </vbox>
+        </hbox>
+        <vbox id="content" width="100%" expand="description" spacing="true" stylename="rcg-sh-gc-info">
+            <label id="descriptionLabel" width="100%" stylename="rcg-sh-gc-desc-l"
+                   value="msg://goods.description"/>
+            <label id="description" width="100%" stylename="rcg-sh-gc-desc"/>
+        </vbox>
+    </layout>
+</window>

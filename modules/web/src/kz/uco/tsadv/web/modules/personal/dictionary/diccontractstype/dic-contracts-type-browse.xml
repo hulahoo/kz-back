@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.diccontractstype.DicContractsTypeBrowse"
+        focusComponent="dicContractsTypesTable"
+        lookupComponent="dicContractsTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.diccontractstype">
+    <dsContext>
+        <groupDatasource id="dicContractsTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicContractsType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicContractsType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicContractsTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicContractsTypesTable"
+                datasource="dicContractsTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicContractsTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+            </columns>
+            <rows datasource="dicContractsTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicContractsTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicContractsTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicContractsTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

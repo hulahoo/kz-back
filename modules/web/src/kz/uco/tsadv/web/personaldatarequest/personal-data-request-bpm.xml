@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.personaldatarequest.PersonalDataRequestBPM"
+        datasource="personalDataRequestDs"
+        messagesPack="kz.uco.tsadv.web.personaldatarequest">
+    <dsContext>
+        <datasource id="personalDataRequestDs"
+                    allowCommit="false"
+                    class="kz.uco.tsadv.modules.personal.model.PersonalDataRequest"
+                    view="personalDataRequest-view">
+            <collectionDatasource id="attachmentsDs"
+                                  allowCommit="false"
+                                  property="attachments"/>
+        </datasource>
+        <collectionDatasource id="procTasksDs"
+                              allowCommit="false"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e
+where e.procInstance.entity.entityId = :ds$personalDataRequestDs.id
+                       order by e.startDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="bpmRequestMessagesDs"
+                              class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
+                              view="bpmRequestMessage-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmRequestMessage e
+                    where e.entityId = :ds$personalDataRequestDs
+                           and ( e.assignedUser.userExt.id = :session$user or e.assignedBy.userExt.id = :session$user )
+                    order by e.sendDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <groupBox id="fieldGroupGroupBox"
+                      orientation="horizontal"
+                      spacing="true">
+                <vbox id="vbox"
+                      spacing="true">
+                    <vbox id="vboxRequest"
+                          spacing="true">
+                        <hbox spacing="true"
+                              width="100%">
+                            <label value="msg://request.number"/>
+                            <textField datasource="personalDataRequestDs"
+                                       editable="false"
+                                       property="requestNumber"
+                                       width="100%"/>
+                            <label/>
+                        </hbox>
+                    </vbox>
+                    <vbox id="vData"
+                          spacing="true">
+                        <hbox spacing="true"
+                              width="100%">
+                            <label value="msg://changedData"/>
+                            <label value="msg://oldData"/>
+                            <label value="msg://newData"/>
+                        </hbox>
+                    </vbox>
+                </vbox>
+            </groupBox>
+            <table id="attachmentTable"
+                   height="100%"
+                   width="100%">
+                <columns>
+                    <column id="name" caption="mainMsg://attachment.FileName" generator="generatorName"/>
+                </columns>
+                <rows datasource="attachmentsDs"/>
+            </table>
+            <vbox id="bpmActorsVBox">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           width="100%">
+                        <columns>
+                            <column id="locName"
+                                    caption="msg://ProcActor.role"/>
+                            <column id="procActor.user"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="locOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                            <column id="comment"
+                                    maxTextLength="50"/>
+                        </columns>
+                        <rows datasource="procTasksDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+            <groupBox id="askQuestion"
+                      caption="Вопросы и ответы"
+                      spacing="true"/>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button caption="msg://cancel"
+                    invoke="closeButton"/>
+            <button id="askQuestionBtn"
+                    caption="mainMsg://askQuestion"
+                    invoke="onAskQuestion"/>
+            <frame id="procActionsFrame"
+                   screen="procActionsFrame"
+                   width="AUTO"/>
+        </hbox>
+    </layout>
+</window>

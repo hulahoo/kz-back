@@ -1,0 +1,2 @@
+alter table TSADV_DIC_PERSONAL_PROTECTION_EQUIPMENT add column ACTIVE boolean ;
+alter table TSADV_DIC_PERSONAL_PROTECTION_EQUIPMENT add column ORDER_ integer ;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicprotectionequipmenttype.DicProtectionEquipmentTypeBrowse"
+        focusComponent="dicProtectionEquipmentTypesTable"
+        lookupComponent="dicProtectionEquipmentTypesTable"
+        messagesPack="kz.uco.tsadv.web.dicprotectionequipmenttype">
+    <dsContext>
+        <groupDatasource id="dicProtectionEquipmentTypesDs"
+                         class="kz.uco.tsadv.modules.personprotection.dictionary.DicProtectionEquipmentType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicProtectionEquipmentType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicProtectionEquipmentTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicProtectionEquipmentTypesTable"
+                datasource="dicProtectionEquipmentTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicProtectionEquipmentTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue"/>
+                <column id="active"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="legacyID"
+                        caption="mainMsg://legacyId"/>
+            </columns>
+            <rows datasource="dicProtectionEquipmentTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicProtectionEquipmentTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicProtectionEquipmentTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicProtectionEquipmentTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

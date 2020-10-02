@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.jobrequest.JobRequestFastEdit"
+        datasource="jobRequestDs"
+        focusComponent="candidatePersonGroupFieldGroup">
+    <dsContext>
+        <datasource id="jobRequestDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                    view="jobRequest-view">
+            <datasource id="candidatePersonGroupDs"
+                        property="candidatePersonGroup">
+                <datasource id="personDs"
+                            property="person"/>
+            </datasource>
+            <collectionDatasource id="interviewsDs"
+                                  property="interviews">
+                <collectionDatasource id="interviewDetailsDs"
+                                      property="interviewDetails"/>
+            </collectionDatasource>
+        </datasource>
+        <datasource id="requisitionSearchCandidateResultDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RequisitionSearchCandidateResult"/>
+        <groupDatasource id="requisitionsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                         view="requisition.view"/>
+        <collectionDatasource id="sexesDs"
+                              class="kz.uco.base.entity.dictionary.DicSex"
+                              view="_local">
+            <query>
+                <![CDATA[select e from base$DicSex e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicLocationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation"
+                              view="_local">
+            <query>
+                <![CDATA[select e from base$DicLocation e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="sourcesDs"
+                              class="kz.uco.tsadv.modules.recruitment.dictionary.DicSource"
+                              view="source-view">
+            <query>
+                <![CDATA[select e from tsadv$DicSource e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="contactTypeDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPhoneType"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPhoneType e]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="personContactEmailDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonContact"
+                    view="personContact.edit"/>
+        <datasource id="personContactPhoneDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonContact"
+                    view="personContact.edit"/>
+        <datasource id="addressDs"
+                    class="kz.uco.tsadv.modules.personal.model.Address"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="scrollBox" height="100%" width="100%">
+        <scrollBox id="scrollBox" width="100%" spacing="true">
+            <groupBox caption="msg://jobRequestFastCreate.candidate"
+                      spacing="true"
+                      stylename="without-border">
+                <pickerField id="pickerFieldCandidate"
+                             captionProperty="person"
+                             datasource="jobRequestDs"
+                             property="candidatePersonGroup"/>
+                <fieldGroup id="candidatePersonGroupFieldGroup"
+                            datasource="personDs">
+                    <column width="250px">
+                        <field property="lastName"/>
+                        <field property="firstName"/>
+                        <field property="middleName"/>
+                        <field property="nationalIdentifier" maxLength="12"/>
+                        <field optionsDatasource="sexesDs"
+                               property="sex"/>
+                        <field property="dateOfBirth"/>
+                        <field id="sourceField" property="source" datasource="jobRequestDs"
+                               optionsDatasource="sourcesDs"/>
+                    </column>
+                    <column width="250px">
+                        <field id="address" datasource="addressDs"
+                               caption="msg://city"
+                               property="address"/>
+                        <field id="email"
+                               datasource="personContactEmailDs"
+                               caption="Email"
+                               property="contactValue"/>
+                        <field id="phone"
+                               custom="true"
+                               caption="msg://mobile"
+                               property="maskedField"
+                               required="true"/>
+                        <field property="citizenship"/>
+                    </column>
+                </fieldGroup>
+            </groupBox>
+            <vbox id="vbox"
+                  spacing="true"/>
+        </scrollBox>
+        <frame id="windowActions" screen="editWindowActions"/>
+    </layout>
+</window>

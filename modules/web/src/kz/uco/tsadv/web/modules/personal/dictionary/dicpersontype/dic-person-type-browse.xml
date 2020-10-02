@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicPersonType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicpersontype.DicPersonTypeBrowse"
+        focusComponent="dicPersonTypesTable"
+        lookupComponent="dicPersonTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicpersontype">
+    <dsContext>
+        <groupDatasource id="dicPersonTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicPersonType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPersonType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicPersonTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicPersonTypesTable"
+                datasource="dicPersonTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicPersonTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicPersonTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicPersonTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicPersonTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicPersonTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

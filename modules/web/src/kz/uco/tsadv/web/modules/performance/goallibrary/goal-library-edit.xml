@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.goallibrary.GoalLibraryEdit"
+        datasource="goalLibraryDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="goalLibraryDs"
+                    class="kz.uco.tsadv.modules.performance.model.GoalLibrary"
+                    view="goalLibrary.edit"/>
+        <collectionDatasource id="categoriesDs"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              class="kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory"
+                              view="dicGoalCategory.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicGoalCategory e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="goalLibraryDs">
+            <column width="250px">
+                <field property="libraryName"/>
+                <field optionsDatasource="categoriesDs"
+                       property="category"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               align="BOTTOM_LEFT"
+               screen="editWindowActions"/>
+    </layout>
+</window>

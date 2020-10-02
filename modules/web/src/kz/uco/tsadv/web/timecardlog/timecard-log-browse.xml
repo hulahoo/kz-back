@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.timecardlog.TimecardLogBrowse"
+        focusComponent="timecardLogsTable"
+        lookupComponent="timecardLogsTable"
+        messagesPack="kz.uco.tsadv.web.timecardlog">
+    <dsContext>
+        <groupDatasource id="timecardLogsDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.TimecardLog"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$TimecardLog e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="timecardLogsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="timecardLogsTable"
+                datasource="timecardLogsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="timecardLogsTable"
+                    width="100%">
+            <columns>
+                <column id="initiatorLogin"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="success"/>
+                <column id="errorText"
+                        maxTextLength="30"/>
+                <column id="timecardsCount"/>
+                <column id="durationInSeconds"/>
+            </columns>
+            <rows datasource="timecardLogsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

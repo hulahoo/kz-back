@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://team.analytics"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgAnalytics"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+
+    <dsContext/>
+
+    <dialogMode height="90%"
+                width="90%"
+                forceDialog="true"
+                modal="true"/>
+
+    <layout width="100%" height="100%" expand="tabSheet" margin="true">
+        <tabSheet id="tabSheet" width="100%">
+            <tab id="chart1" expand="chart1Content" caption="msg://analytics.chart.1" margin="true">
+                <vbox id="chart1Content" spacing="true" width="100%" height="100%"/>
+            </tab>
+            <tab id="chart2" expand="chart2Content" caption="msg://analytics.chart.2" margin="true">
+                <vbox id="chart2Content" spacing="true" width="100%"/>
+            </tab>
+            <tab id="chart3" expand="chart3Content" caption="msg://analytics.chart.3" margin="true">
+                <vbox id="chart3Content" spacing="true" width="100%"/>
+            </tab>
+            <tab id="chart4" expand="chart4Content" caption="msg://analytics.chart.4" margin="true">
+                <vbox id="chart4Content" spacing="true" width="100%"/>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.assignment.Filterframe">
+
+    <dsContext>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <hbox spacing="true">
+            <label id="organizationGroupIdStr"
+                   visible="false"/>
+            <groupBox caption="msg://PositionStructure.filter">
+                <optionsGroup id="myTeamOptionGroupId"
+                              height="30px"
+                              orientation="horizontal"/>
+            </groupBox>
+            <groupBox caption="msg://OrganizationStructure.filter">
+                <lookupPickerField id="organizationGroupLookupId"
+                                   captionProperty="organization.organizationName"
+                                   optionsDatasource="organizationGroupsDs"/>
+            </groupBox>
+            <groupBox caption="msg://PersonName.filter">
+                <textField id="personNameId"/>
+            </groupBox>
+        </hbox>
+    </layout>
+</window>

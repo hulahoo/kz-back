@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        xmlns:chart="http://schemas.haulmont.com/charts/charts.xsd"
+        caption="mainMsg://DicLearningCenter.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.dictionary.diclearningcenter.DicLearningCenterEdit"
+        datasource="dicLearningCenterDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="dicLearningCenterDs"
+                    class="kz.uco.tsadv.modules.learning.dictionary.DicLearningCenter"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="dicLearningCenterDs">
+            <column width="250px">
+                <field property="langValue1"/>
+                <field property="langValue2"/>
+                <field property="langValue3"/>
+                <field property="langValue4"/>
+                <field property="langValue5"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="code"/>
+                <field property="address"/>
+            </column>
+        </fieldGroup>
+
+        <chart:mapViewer id="map"
+                         stylename="panel-full-container panel"
+                         height="100%"
+                         width="100%"/>
+
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

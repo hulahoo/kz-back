@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.persongroupext.InternEditor"
+        datasource="personExtDs">
+    <dsContext>
+        <collectionDatasource id="addressesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Address"
+                              view="address.view">
+            <query>
+                <![CDATA[select e from tsadv$Address e where 
+e.personGroup.id = :ds$groupDs]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="personExtDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="personExt.intern.edit">
+            <datasource id="groupDs"
+                        property="group">
+                <collectionDatasource id="personContactDs"
+                                      property="personContacts"/>
+                <collectionDatasource id="personEducationDs"
+                                      property="personEducation"/>
+            </datasource>
+        </datasource>
+        <collectionDatasource id="dicSexesDs"
+                              class="kz.uco.base.entity.dictionary.DicSex"
+                              view="_local">
+            <query>
+                <![CDATA[select e from base$DicSex e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet">
+        <tabSheet id="tabSheet">
+            <tab id="mainInfo"
+                 caption="msg://mainInfo"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <vbox spacing="true">
+                    <fieldGroup id="fieldGroup"
+                                datasource="personExtDs"
+                                fieldCaptionWidth="160px"
+                                width="100%">
+                        <column id="column1"
+                                width="250px">
+                            <field id="personLastNameId"
+                                   property="lastName"/>
+                            <field id="personFirstNameId"
+                                   property="firstName"/>
+                            <field id="personMiddleNameId"
+                                   property="middleName"/>
+                            <field id="personNationalIdentifierId"
+                                   property="nationalIdentifier"
+                                   required="true"/>
+                            <field id="personDateOfBirthId"
+                                   property="dateOfBirth"/>
+                            <field id="personSexId"
+                                   optionsDatasource="dicSexesDs"
+                                   property="sex"/>
+                            <field id="personCitizenshipId"
+                                   caption="mainMsg://citizenship"
+                                   property="citizenship"/>
+                            <field id="nationality"
+                                   property="nationality"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </tab>
+            <tab id="address"
+                 caption="msg://adressess"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="addressesTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"/>
+                    </actions>
+                    <columns>
+                        <column id="addressType"/>
+                        <column id="country"/>
+                        <column id="postalCode"/>
+                        <column id="city"/>
+                        <column id="address"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="addressesDs"/>
+                    <buttonsPanel id="addressesButtonsPanel">
+                        <button action="addressesTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="addressesTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="addressesTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="addressesTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="contacts"
+                 caption="msg://contacts"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="personContactsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="type"/>
+                        <column id="contactValue"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="personContactDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button action="personContactsTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personContactsTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personContactsTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personContactsTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="personEducation"
+                 caption="msg://personEducation"
+                 lazy="true"
+                 margin="true">
+                <table id="personEducationTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"
+                                icon="icons/excel.png"/>
+                    </actions>
+                    <columns>
+                        <column id="school"/>
+                        <column id="startYear"/>
+                        <column id="endYear"/>
+                        <column id="specialization"/>
+                        <column id="degree"/>
+                        <column id="location"/>
+                        <column id="level"/>
+                    </columns>
+                    <rows datasource="personEducationDs"/>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button action="personEducationTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personEducationTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personEducationTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="personEducationTable.excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame screen="editWindowActions"/>
+    </layout>
+</window>

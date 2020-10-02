@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursesection.CourseSectionBrowse"
+        focusComponent="courseSectionsTable"
+        lookupComponent="courseSectionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.coursesection">
+    <dsContext>
+        <groupDatasource id="courseSectionsDs"
+                         class="kz.uco.tsadv.modules.learning.model.CourseSection"
+                         view="courseSection.edit">
+            <query>
+                <![CDATA[select e from tsadv$CourseSection e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseSectionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="courseSectionsTable"
+                datasource="courseSectionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="courseSectionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="sectionName"/>
+                <column id="order"/>
+                <column id="sectionObject.content.objectName"/>
+                <column id="format"/>
+                <column id="description"/>
+                <column id="mandatory"/>
+            </columns>
+            <rows datasource="courseSectionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="courseSectionsTable.create"/>
+                <button id="editBtn"
+                        action="courseSectionsTable.edit"/>
+                <button id="removeBtn"
+                        action="courseSectionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

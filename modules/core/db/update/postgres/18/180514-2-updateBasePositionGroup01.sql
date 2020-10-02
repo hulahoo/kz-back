@@ -1,0 +1,1 @@
+alter table BASE_POSITION_GROUP add constraint FK_BASE_POSITION_GROUP_ANALYTICS foreign key (ANALYTICS_ID) references TSADV_ORG_ANALYTICS(ID);

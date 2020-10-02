@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.jobrequest.JobRequestSelfBrowse"
+        focusComponent="jobRequestsTable"
+        lookupComponent="jobRequestsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.jobrequest">
+    <dsContext>
+        <collectionDatasource id="jobRequestsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                              view="jobRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e
+ where e.candidatePersonGroup.id = :session$userPersonGroupId]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="jobRequestsTable"
+                datasource="jobRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="jobRequestsTable"
+               width="100%">
+            <columns>
+                <column id="requestDate"/>
+                <column id="requestStatus"/>
+                <column id="requisition"
+                        link="true"
+                        linkInvoke="toRquisition"/>
+                <column id="positionOrJob"
+                        caption="msg://jobRequestsTable.positionOrJob"
+                        generator="generatePositionOrJobCell"/>
+                <column id="viewLater"/>
+            </columns>
+            <rows datasource="jobRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="interviewsButtonId"
+                        caption="msg://jobRequestSelf.interview"
+                        invoke="onInterviewsButtonIdClick"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://GroupInterview.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.GroupInterviewEdit"
+        datasource="interviewDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.interview">
+    <dsContext>
+        <datasource id="interviewDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                    view="groupInterview.view">
+            <collectionDatasource id="interviewDetailsDs"
+                                  property="interviewDetails"/>
+            <collectionDatasource id="questionnairesDs"
+                                  property="questionnaires"/>
+        </datasource>
+        <collectionDatasource id="interviewsDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                              view="interview.view">
+            <query>
+                <![CDATA[select e from tsadv$Interview e where e.groupInterview.id = :ds$interviewDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="placesDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[select e from base$DicLocation e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <vbox id="vbox">
+                <split id="splitter"
+                       orientation="horizontal"
+                       width="100%">
+                    <hbox margin="false,true,true,true"
+                          spacing="true"
+                          width="100%">
+                        <fieldGroup id="fieldGroup"
+                                    datasource="interviewDs"
+                                    width="100%">
+                            <column width="100%">
+                                <field captionProperty="code"
+                                       editable="false"
+                                       property="requisition"/>
+                                <field id="requisitionHiringStep"
+                                       captionProperty="hiringStep"
+                                       property="requisitionHiringStep"/>
+                                <field property="interviewDate"
+                                       required="true"/>
+                                <field editable="false"
+                                       property="interviewStatus"
+                                       visible="false"/>
+                                <field captionProperty="personFioWithEmployeeNumber"
+                                       property="mainInterviewerPersonGroup"/>
+                                <field property="timeFrom"
+                                       required="true"/>
+                                <field property="timeTo"
+                                       required="true"/>
+                                <field captionProperty="addressLangValue"
+                                       optionsDatasource="placesDs"
+                                       property="place"
+                                       required="true"/>
+                            </column>
+                        </fieldGroup>
+                    </hbox>
+                    <hbox margin="false,true,true,true"
+                          spacing="true"
+                          width="100%">
+                        <table id="interviewsTable"
+                               height="100%"
+                               width="100%">
+                            <columns>
+                                <column id="jobRequest.candidatePersonGroup"
+                                        caption="msg://Person.fullname"
+                                        captionProperty="jobRequest.candidatePersonGroup.person.fullName"/>
+                                <column id="jobRequestCount"
+                                        caption="msg://jobRequestCount"/>
+                                <column id="cancelButton"
+                                        caption="msg://cancel"/>
+                                <column id="deleteButton"
+                                        caption="msg://deletefromlist"/>
+                            </columns>
+                            <rows datasource="interviewsDs"/>
+                        </table>
+                    </hbox>
+                </split>
+                <table id="interviewDetailsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="interviewerPersonGroup"
+                                captionProperty="interviewerPersonGroup.person.fullName"/>
+                    </columns>
+                    <rows datasource="interviewDetailsDs"/>
+                </table>
+                <table id="questionnairesTable"
+                       height="100%"
+                       multiselect="true"
+                       width="100%">
+                    <actions>
+                        <action id="add"
+                                caption="msg://table.btn.add"
+                                description="msg://table.btn.add"
+                                icon="font-icon:SEARCH_PLUS"
+                                invoke="addQuestionnaires"/>
+                        <action id="remove"
+                                caption="msg://table.btn.remove"
+                                icon="icons/remove.png"
+                                invoke="removeQuestionnaires"/>
+                    </actions>
+                    <columns>
+                        <column id="questionnaire"
+                                captionProperty="questionnaire.name"/>
+                        <column id="questionnaire.category"
+                                captionProperty="questionnaire.category.langValue"/>
+                    </columns>
+                    <rows datasource="questionnairesDs"/>
+                </table>
+            </vbox>
+        </scrollBox>
+        <hbox spacing="true">
+            <frame id="windowActions"
+                   screen="editWindowActions"/>
+            <buttonsPanel id="approvalProcessDraft">
+                <button caption="msg://Interview.approvalProcess.sendForApproval"
+                        invoke="sendForApproval"/>
+                <button caption="msg://Interview.approvalProcess.plan"
+                        invoke="planInterview"/>
+            </buttonsPanel>
+        </hbox>
+    </layout>
+</window>

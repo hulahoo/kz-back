@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.bpmrolesdefiner.BpmRolesDefinerBrowse"
+        focusComponent="bpmRolesDefinersTable"
+        lookupComponent="bpmRolesDefinersTable"
+        messagesPack="kz.uco.tsadv.web.bpmrolesdefiner">
+    <dsContext>
+        <groupDatasource id="bpmRolesDefinersDs"
+                         class="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"
+                         view="bpmRolesDefiner-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmRolesDefiner e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="bpmRolesDefinersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="bpmRolesDefinersTable"
+                datasource="bpmRolesDefinersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="bpmRolesDefinersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="procModel"/>
+            </columns>
+            <rows datasource="bpmRolesDefinersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="bpmRolesDefinersTable.create"/>
+                <button id="editBtn"
+                        action="bpmRolesDefinersTable.edit"/>
+                <button id="removeBtn"
+                        action="bpmRolesDefinersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

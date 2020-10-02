@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Dic.competence.type..browse"
+        class="kz.uco.tsadv.web.diccompetencetype.DicCompetenceTypeBrowse"
+        focusComponent="dicCompetenceTypesTable"
+        lookupComponent="dicCompetenceTypesTable"
+        messagesPack="kz.uco.tsadv.web.diccompetencetype">
+    <dsContext>
+        <groupDatasource id="dicCompetenceTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicCompetenceType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicCompetenceType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicCompetenceTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicCompetenceTypesTable"
+                datasource="dicCompetenceTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicCompetenceTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="legacyID"/>
+                <column id="isSystemRecord"/>
+            </columns>
+            <rows datasource="dicCompetenceTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicCompetenceTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicCompetenceTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicCompetenceTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

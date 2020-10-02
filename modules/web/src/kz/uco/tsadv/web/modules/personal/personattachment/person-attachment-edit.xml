@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonAttachment.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.personattachment.PersonAttachmentEdit"
+        datasource="personAttachmentDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="personAttachmentDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.PersonAttachment"
+                    view="personAttachment.view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personAttachmentDs">
+            <column width="250px">
+                <field property="category"/>
+                <field property="filename" editable="false"/>
+                <field property="description" rows="3"/>
+                <field property="attachment"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

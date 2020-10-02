@@ -1,0 +1,3 @@
+alter table TSADV_DIC_ABSENCE_TYPE add column AVAILABLE_FOR_TIMECARD boolean ^
+update TSADV_DIC_ABSENCE_TYPE set AVAILABLE_FOR_TIMECARD = false where AVAILABLE_FOR_TIMECARD is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column AVAILABLE_FOR_TIMECARD set not null ;

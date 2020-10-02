@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.feedback.dicrcgfeedbacktype.DicRcgFeedbackTypeBrowse"
+        focusComponent="dicRcgFeedbackTypesTable"
+        lookupComponent="dicRcgFeedbackTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.feedback.dicrcgfeedbacktype">
+    <dsContext>
+        <groupDatasource id="dicRcgFeedbackTypesDs"
+                         class="kz.uco.tsadv.modules.recognition.feedback.DicRcgFeedbackType"
+                         view="dicRcgFeedbackType.edit">
+            <query>
+                <![CDATA[select e from tsadv$DicRcgFeedbackType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicRcgFeedbackTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicRcgFeedbackTypesTable"
+                datasource="dicRcgFeedbackTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicRcgFeedbackTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="legacyID"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="order"/>
+                <column id="image"/>
+            </columns>
+            <rows datasource="dicRcgFeedbackTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicRcgFeedbackTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicRcgFeedbackTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicRcgFeedbackTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

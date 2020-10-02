@@ -1,0 +1,1 @@
+alter table TSADV_LEARNING_FEEDBACK_QUESTION add column DIC_QUESTION_TYPE_ID uuid ;

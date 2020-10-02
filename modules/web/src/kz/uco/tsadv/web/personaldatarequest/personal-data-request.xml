@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://personalData"
+        class="kz.uco.tsadv.web.personaldatarequest.PersonalDataRequestShow"
+        messagesPack="kz.uco.tsadv.web.personaldatarequest">
+    <dsContext>
+        <datasource id="personDs"
+                    allowCommit="false"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person.browse"/>
+        <collectionDatasource id="personContactsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonContact"
+                              view="personContact.full">
+            <query>
+                <![CDATA[select e from tsadv$PersonContact e
+where e.personGroup.id = :ds$personDs.group.id
+and :session$systemDate between e.startDate and e.endDate
+order by e.type.code]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="addressRequestsDs"
+                              class="kz.uco.tsadv.modules.personal.model.AddressRequest"
+                              view="addressRequest-view">
+            <query>
+                <![CDATA[select e from tsadv$AddressRequest e
+where e.personGroup.id = :ds$personDs.group.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="beneficiariesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Beneficiary"
+                              view="beneficiaryView">
+            <query>
+                <![CDATA[select distinct e from tsadv$Beneficiary e
+                join e.personGroupChild.list pp
+                    on :session$systemDate between pp.startDate and pp.endDate
+                where e.personGroupParent.id = :ds$personDs.group.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="addressesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Address"
+                              view="address.view">
+            <query>
+                <![CDATA[select e from tsadv$Address e
+where e.personGroup.id = :ds$personDs.group.id
+and :session$systemDate between e.startDate and e.endDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="procInstancesDs"
+                              class="com.haulmont.bpm.entity.ProcInstance"
+                              view="procInstance-browse">
+            <query>
+                <![CDATA[select e from bpm$ProcInstance e
+where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p 
+                             where p.personGroup.id = :session$userPersonGroupId )
+    or e.entity.entityId in ( select a.id from tsadv$AddressRequest a 
+                              where a.personGroup.id = :session$userPersonGroupId)]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <tabSheet id="mainTab"
+                  height="100%">
+            <tab id="currectInfo"
+                 caption="msg://myData"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <scrollBox id="scrollBox"
+                           height="100%">
+                    <groupBox id="mainDataBox"
+                              caption="mainMsg://mainData"
+                              height="100%">
+                        <vbox id="userInfo"
+                              spacing="true">
+                            <button id="editBtn"
+                                    icon="icons/edit.png"
+                                    invoke="onEditBtnClick"/>
+                            <fieldGroup id="fieldGroup"
+                                        datasource="personDs"
+                                        width="100%">
+                                <column id="column1">
+                                    <field id="lastName"
+                                           editable="false"
+                                           property="lastName"/>
+                                    <field id="firstName"
+                                           editable="false"
+                                           property="firstName"/>
+                                    <field id="middleName"
+                                           editable="false"
+                                           property="middleName"/>
+                                    <field id="dateOfBirth"
+                                           editable="false"
+                                           property="dateOfBirth"/>
+                                    <field id="nationalIdentifier"
+                                           editable="false"
+                                           property="nationalIdentifier"/>
+                                </column>
+                                <column id="column2">
+                                    <field id="lastNameLatin"
+                                           editable="false"
+                                           property="lastNameLatin"/>
+                                    <field id="firstNameLatin"
+                                           editable="false"
+                                           property="firstNameLatin"/>
+                                    <field id="middleNameLatin"
+                                           editable="false"
+                                           property="middleNameLatin"/>
+                                    <field id="maritalStatus"
+                                           editable="false"
+                                           property="maritalStatus"/>
+                                    <field id="employeeNumber"
+                                           editable="false"
+                                           property="employeeNumber"/>
+                                </column>
+                            </fieldGroup>
+                        </vbox>
+                    </groupBox>
+                    <groupBox id="contactGroupBox"
+                              caption="msg://contacts">
+                        <tabSheet id="tab">
+                            <tab id="contacts"
+                                 caption="msg://myContacts"
+                                 margin="true,false,false,false"
+                                 spacing="true">
+                                <vbox id="userContacts"
+                                      spacing="true">
+                                    <table id="userContact"
+                                           width="100%">
+                                        <actions>
+                                            <action id="create"/>
+                                            <action id="edit"/>
+                                            <action id="remove"/>
+                                        </actions>
+                                        <columns>
+                                            <column id="type"/>
+                                            <column id="contactValue"/>
+                                        </columns>
+                                        <rows datasource="personContactsDs"/>
+                                        <buttonsPanel>
+                                            <button action="userContact.create"
+                                                    icon="icons/plus-btn.png"/>
+                                            <button action="userContact.edit"/>
+                                            <button action="userContact.remove"/>
+                                        </buttonsPanel>
+                                    </table>
+                                </vbox>
+                            </tab>
+                            <tab id="contactFaces"
+                                 caption="msg://contactFaces"
+                                 margin="true,false,false,false"
+                                 spacing="true">
+                                <vbox id="userContactFaces"
+                                      spacing="true">
+                                    <table id="userContactFace"
+                                           width="100%">
+                                        <actions>
+                                            <action id="create"
+                                                    openType="THIS_TAB"/>
+                                            <action id="edit"/>
+                                            <action id="remove"/>
+                                        </actions>
+                                        <columns>
+                                            <column id="personGroupChild.fullName"/>
+                                            <column id="relationshipType.langValue"
+                                                    caption="msg://relationshipType"/>
+                                            <column id="email"
+                                                    caption="msg://email"
+                                                    generator="generateEmailCell"/>
+                                            <column id="phoneNumber"
+                                                    caption="msg://phone"
+                                                    generator="generatePhoneNumberCell"/>
+                                        </columns>
+                                        <rows datasource="beneficiariesDs"/>
+                                        <buttonsPanel>
+                                            <button action="userContactFace.create"
+                                                    icon="icons/plus-btn.png"/>
+                                            <button action="userContactFace.edit"/>
+                                            <button action="userContactFace.remove"/>
+                                        </buttonsPanel>
+                                    </table>
+                                </vbox>
+                            </tab>
+                        </tabSheet>
+                    </groupBox>
+                    <groupBox id="addresses"
+                              caption="msg://addresses"
+                              height="100%">
+                        <vbox id="userAddresses"
+                              spacing="true"/>
+                        <table id="userAddress"
+                               width="100%">
+                            <columns>
+                                <column id="addressType"/>
+                                <column id="address"/>
+                                <column id="postalCode"/>
+                                <column id="city"/>
+                                <column id="startDate"/>
+                                <column id="endDate"/>
+                            </columns>
+                            <rows datasource="addressesDs"/>
+                            <buttonsPanel id="addressBtn">
+                                <button id="addBtn"
+                                        icon="icons/plus-btn.png"
+                                        invoke="onAddressCreateBtn"/>
+                                <button id="editAddressBtn"
+                                        enable="false"
+                                        invoke="onAddressEditBtn"
+                                        icon="icons/edit.png"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
+                </scrollBox>
+            </tab>
+            <tab id="myRequests"
+                 caption="msg://myRequests"
+                 expand="procInstanse"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <filter datasource="procInstancesDs"/>
+                <table id="procInstanse"
+                       width="100%">
+                    <columns>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="entityName"
+                                generator="generateEntityNameCell"/>
+                        <column id="status"
+                                caption="msg://status"
+                                generator="generateStatusCell"/>
+                    </columns>
+                    <rows datasource="procInstancesDs"/>
+                    <rowsCount/>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

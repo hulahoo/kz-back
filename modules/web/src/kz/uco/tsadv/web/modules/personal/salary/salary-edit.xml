@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Salary.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.salary.SalaryEdit"
+        datasource="salaryDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+
+        <collectionDatasource id="salariesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Salary"
+                              view="salary.view">
+            <query>
+                <![CDATA[select e from tsadv$Salary e]]>
+            </query>
+        </collectionDatasource>
+
+        <collectionDatasource id="reasonDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicSalaryChangeReason">
+            <query>
+                <![CDATA[select e from tsadv$DicSalaryChangeReason e]]>
+            </query>
+        </collectionDatasource>
+
+        <datasource id="salaryDs"
+                    class="kz.uco.tsadv.modules.personal.model.Salary"
+                    view="salary.view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="400"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="salaryDs">
+            <column width="250px">
+                <field property="assignmentGroup"
+                       captionProperty="assignmentPersonFioWithEmployeeNumber"
+                       required="true"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="type"/>
+                <field property="amount" required="true"/>
+                <field property="currency"/>
+                <field custom="true"
+                       property="netGross"/>
+                <field property="reason" id="reason" optionsDatasource="reasonDs"/>
+                <field property="orderGroup" captionProperty="order"/>
+                <field property="agreement"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

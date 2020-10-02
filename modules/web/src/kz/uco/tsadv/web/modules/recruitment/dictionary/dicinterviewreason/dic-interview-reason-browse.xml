@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicInterviewReason.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.dictionary.dicinterviewreason.DicInterviewReasonBrowse"
+        focusComponent="dicInterviewReasonsTable"
+        lookupComponent="dicInterviewReasonsTable">
+    <dsContext>
+        <groupDatasource id="dicInterviewReasonsDs"
+                         class="kz.uco.tsadv.modules.recruitment.dictionary.DicInterviewReason"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicInterviewReason e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicInterviewReasonsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicInterviewReasonsTable"
+                datasource="dicInterviewReasonsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicInterviewReasonsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicInterviewReasonsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicInterviewReasonsTable.create"/>
+                <button id="editBtn"
+                        action="dicInterviewReasonsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicInterviewReasonsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

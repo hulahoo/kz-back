@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.coindistributionrule.CoinDistributionRuleEdit"
+        datasource="coinDistributionRuleDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.coindistributionrule">
+    <dsContext>
+        <datasource id="coinDistributionRuleDs"
+                    class="kz.uco.tsadv.modules.recognition.CoinDistributionRule"
+                    view="coinDistributionRule.edit">
+            <collectionDatasource id="gradesDs"
+                                  property="grades"/>
+            <collectionDatasource id="personsDs"
+                                  property="persons"/>
+            <collectionDatasource id="positionsDs"
+                                  property="positions"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="coinDistributionRuleDs">
+            <column width="250px">
+                <field property="name"/>
+                <field property="description"/>
+                <field property="distributionFrequency"/>
+                <field property="zeroFrequency"/>
+                <field property="active"/>
+                <field property="coins"/>
+            </column>
+        </fieldGroup>
+        <tabSheet id="tabSheet">
+            <tab id="personTab"
+                 caption="msg://personTab">
+                <groupBox id="personBox">
+                    <table id="personTable"
+                           height="200px"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="personGroup" captionProperty="personGroup.fioWithEmployeeNumber"/>
+                        </columns>
+                        <rows datasource="personsDs"/>
+                        <buttonsPanel>
+                            <button action="personTable.create"/>
+                            <button action="personTable.edit"/>
+                            <button action="personTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </groupBox>
+            </tab>
+            <tab id="positionTab"
+                 caption="msg://positionTab">
+                <groupBox id="positionBox">
+                    <table id="positionTable"
+                           height="200px"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="positionGroup" captionProperty="positionGroup.fullName"></column>
+                        </columns>
+                        <rows datasource="positionsDs"/>
+                        <buttonsPanel>
+                            <button action="positionTable.create"/>
+                            <button action="positionTable.edit"/>
+                            <button action="positionTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </groupBox>
+            </tab>
+            <tab id="gradeTab"
+                 caption="msg://kz.uco.tsadv.modules.recognition/CoinDistributionRule.grades">
+                <groupBox id="gradeBox">
+                    <table id="gradesTable"
+                           height="200px"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="gradeGroup.grade"/>
+                        </columns>
+                        <rows datasource="gradesDs"/>
+                        <buttonsPanel>
+                            <button action="gradesTable.create"/>
+                            <button action="gradesTable.edit"/>
+                            <button action="gradesTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </groupBox>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

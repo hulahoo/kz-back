@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.recognition.RecognitionEdit"
+        datasource="recognitionDs"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.recognition">
+    <dsContext>
+        <datasource id="recognitionDs"
+                    class="kz.uco.tsadv.modules.recognition.Recognition"
+                    view="recognition.edit">
+            <collectionDatasource id="recognitionQualitiesDs"
+                                  property="recognitionQualities"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
+    <layout expand="vBox"
+            spacing="true" height="100%">
+        <vbox id="vBox" expand="tabSheet">
+            <hbox spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="recognitionDs">
+                    <column width="250px">
+                        <field property="recognitionType"/>
+                        <field property="recognitionDate"/>
+                        <field property="coins" required="true"/>
+                        <field captionProperty="fullName"
+                               property="author"/>
+                        <field captionProperty="fullName"
+                               property="receiver"/>
+                        <field property="notifyManager"/>
+                    </column>
+                </fieldGroup>
+                <fieldGroup datasource="recognitionDs" border="visible">
+                    <field property="comment" width="500px" rows="2"/>
+                    <field property="commentRu" width="500px" rows="2"/>
+                    <field property="commentEn" width="500px" rows="2"/>
+                </fieldGroup>
+            </hbox>
+
+            <tabSheet id="tabSheet" width="100%">
+                <tab id="recognitionQualities"
+                     caption="msg://recognitionQualities"
+                     margin="true, false, false, false"
+                     spacing="true"
+                     expand="recognitionQualitiesTable">
+                    <table id="recognitionQualitiesTable"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <action id="remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </actions>
+                        <columns>
+                            <column id="quality"/>
+                        </columns>
+                        <rows datasource="recognitionQualitiesDs"/>
+                        <buttonsPanel>
+                            <button action="recognitionQualitiesTable.create"/>
+                            <button action="recognitionQualitiesTable.edit"/>
+                            <button action="recognitionQualitiesTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

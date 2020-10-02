@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Test REST API GET requests</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="country_lang" value="en" checked>en</input>
+                <input type="radio" name="country_lang" value="ru">ru</input>
+                <input type="radio" name="country_lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getCountries()" value="getCountries">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="countries"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="cit_lang" value="en" checked>en</input>
+                <input type="radio" name="cit_lang" value="ru">ru</input>
+                <input type="radio" name="cit_lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Country:</td>
+            <td>
+                <div id="cit_country_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getCities()" value="getCities">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="cities"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="cat_lang" value="en" checked>en</input>
+                <input type="radio" name="cat_lang" value="ru">ru</input>
+                <input type="radio" name="cat_lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getRequisitionCategories()" value="getRequisitionCategories">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requisitionCategories"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Code:</td>
+            <td>
+                <input type="text" id="reqs_code"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Job:</td>
+            <td>
+                <input type="text" id="job"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Country:</td>
+            <td>
+                <div id="reqs_country_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td>
+                <div id="city_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td>
+                <div id="cat_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Start date:</td>
+            <td>
+                <input type="date" id="start_date" value="2017-09-01"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="reqs_lang" value="en" checked>en</input>
+                <input type="radio" name="reqs_lang" value="ru">ru</input>
+                <input type="radio" name="reqs_lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getRequisitions()" value="getRequisitions">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requisitions"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Requisition id:</td>
+            <td>
+                <input id="req" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="req_lang" value="en" checked>en</input>
+                <input type="radio" name="req_lang" value="ru">ru</input>
+                <input type="radio" name="req_lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getRequisition()" value="getRequisition">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requisition"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="person_lang" value="en" checked>en</input>
+                <input type="radio" name="person_lang" value="ru">ru</input>
+                <input type="radio" name="person_lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getUserPerson()" value="getUserPerson">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="user_person"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>File id:</td>
+            <td>
+                <input id="file_id" type="text"/>
+                <a target="_blank" id="file_link"></a>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getFile()" value="getFile">
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Requisition id:</td>
+            <td>
+                <input id="sch_int_req" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="sch_int_lang" value="en" checked>en</input>
+                <input type="radio" name="sch_int_lang" value="ru">ru</input>
+                <input type="radio" name="sch_int_lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getScheduledInterviews()" value="getScheduledInterviews">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="scheduledInterviews"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Interview id:</td>
+            <td>
+                <input id="interview" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="requestInterview()" value="requestInterview">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requestInterview"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var access_token;
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+            });
+    }
+
+    function getCountries() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getCountries?lang=" + $("input[name=country_lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#countries").text(res);
+                var cities = JSON.parse(res);
+                var reqsInner = '';
+                var citInner = '';
+                cities.forEach(function (e) {
+                    citInner += ('<input type="checkbox" name="cit_country" value="' + e.id + '">' + e.name + '</input>');
+                    reqsInner += ('<input type="checkbox" name="reqs_country" value="' + e.id + '">' + e.name + '</input>');
+                });
+
+                document.getElementById("cit_country_div").innerHTML = citInner;
+                document.getElementById("reqs_country_div").innerHTML = reqsInner;
+            });
+    }
+
+    function getCities() {
+        var country = $('input[name=cit_country]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getCities?country=" + country + "&lang=" + $("input[name=cit_lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#cities").text(res);
+                var cities = JSON.parse(res);
+                var inner = '';
+                cities.forEach(function (e) {
+                    inner += ('<input type="checkbox" name="reqs_city" value="' + e.id + '">' + e.name + '</input>');
+                });
+
+                document.getElementById("city_div").innerHTML = inner;
+            });
+    }
+
+    function getRequisitionCategories() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getRequisitionCategories?lang=" + $("input[name=cat_lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#requisitionCategories").text(res);
+
+                var categories = JSON.parse(res);
+                var inner = '';
+                categories.forEach(function (e) {
+                    inner += ('<input type="checkbox" name="reqs_cat" value="' + e.id + '">' + e.name + '</input>');
+                });
+
+                document.getElementById("cat_div").innerHTML = inner;
+            });
+    }
+
+    function getRequisitions() {
+        var country = $('input[name=reqs_country]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        var cat = $('input[name=reqs_cat]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        var city = $('input[name=reqs_city]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getRequisitions?code=" + $('#reqs_code').val() + "&job=" + $('#job').val() + "&country=" + country + "&city=" + city + "&category=" + cat + "&startDate=" + $('#start_date').val() + "&lang=" + $("input[name=reqs_lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#requisitions").text(res);
+            });
+    }
+
+    function getRequisition() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getRequisition?requisition=" + $('#req').val() + "&lang=" + $("input[name=req_lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#requisition").text(res);
+            });
+    }
+
+    function getUserPerson() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUserPerson?lang=" + $("input[name=person_lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#user_person").text(res);
+            });
+    }
+
+    function getFile() {
+        var fileLink = document.getElementById('file_link');
+        fileLink.href = config.appUrl + config.fileUrl + "/" + $("#file_id").val() + "?access_token=" + access_token;
+        fileLink.download = "filename";
+        fileLink.click();
+    }
+
+    function getScheduledInterviews() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getScheduledInterviews?requisition=" + $('#sch_int_req').val() + "&lang=" + $("input[name=sch_int_lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#scheduledInterviews").text(res);
+            });
+    }
+
+    function requestInterview() {
+        var data = {interview: $('#interview').val()};
+
+        $.ajax(config.appUrl + config.serviceUrl + "/requestInterview",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#requestInterview").text(JSON.stringify(res));
+            });
+    }
+    /*]>*/
+
+</script>
+</body>
+</html>

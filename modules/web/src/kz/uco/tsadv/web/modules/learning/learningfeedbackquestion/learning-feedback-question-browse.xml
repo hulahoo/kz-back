@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.learningfeedbackquestion.LearningFeedbackQuestionBrowse"
+        focusComponent="learningFeedbackQuestionsTable"
+        lookupComponent="learningFeedbackQuestionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.learningfeedbackquestion">
+    <dsContext>
+        <groupDatasource id="learningFeedbackQuestionsDs"
+                         class="kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackQuestion"
+                         view="learningFeedbackQuestion.browse"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$LearningFeedbackQuestion e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="learningFeedbackQuestionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learningFeedbackQuestionsTable"
+                datasource="learningFeedbackQuestionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learningFeedbackQuestionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://create.description"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://edit.description"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://remove.description"/>
+            </actions>
+            <columns>
+                <column id="questionLangValue1"/>
+                <column id="questionLangValue2"/>
+                <column id="questionLangValue3"/>
+                <column id="questionType"/>
+            </columns>
+            <rows datasource="learningFeedbackQuestionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="learningFeedbackQuestionsTable.create"/>
+                <button id="editBtn"
+                        action="learningFeedbackQuestionsTable.edit"/>
+                <button id="removeBtn"
+                        action="learningFeedbackQuestionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

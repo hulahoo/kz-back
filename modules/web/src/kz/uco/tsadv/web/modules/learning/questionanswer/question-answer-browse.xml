@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.questionanswer.QuestionAnswerBrowse"
+        focusComponent="questionAnswersTable"
+        lookupComponent="questionAnswersTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.questionanswer">
+    <dsContext>
+        <groupDatasource id="questionAnswersDs"
+                         class="kz.uco.tsadv.modules.performance.model.QuestionAnswer"
+                         view="questionAnswer.browse">
+            <query>
+                <![CDATA[select e from tsadv$QuestionAnswer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="questionAnswersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="questionAnswersTable"
+                datasource="questionAnswersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="questionAnswersTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="answerLang1"/>
+                <column id="correctAnswer"/>
+            </columns>
+            <rows datasource="questionAnswersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="questionAnswersTable.create"/>
+                <button id="editBtn"
+                        action="questionAnswersTable.edit"/>
+                <button id="removeBtn"
+                        action="questionAnswersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

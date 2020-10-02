@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.learning.course.StartOnlineSection">
+    <timers>
+        <timer id="timer"
+               delay="1000"
+               onTimer="onTimer"
+               repeating="true"/>
+    </timers>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <vbox id="allWrapper" expand="scrollBox" height="100%" stylename="start-course-section-wrap" spacing="true">
+            <grid width="100%" stylename="course-start-timer-grid" margin="true" spacing="true">
+                <columns>
+                    <column flex="3"/>
+                    <column/>
+                </columns>
+                <rows>
+                    <row>
+                        <hbox id="timerBlock" visible="false" spacing="true" align="TOP_CENTER"
+                              stylename="course-start-timer-block">
+                            <label id="minute"/>
+                            <label id="second"/>
+                        </hbox>
+                        <buttonsPanel align="MIDDLE_RIGHT">
+                            <button caption="msg://course.card.complete"
+                                    icon="font-icon:FLAG_O"
+                                    width="100%"
+                                    id="finishTest"
+                                    visible="false"
+                                    invoke="finishTest"
+                                    align="BOTTOM_RIGHT"/>
+
+                            <button caption="msg://course.card.complete"
+                                    icon="font-icon:FLAG_O"
+                                    width="100%"
+                                    id="finishContent"
+                                    visible="false"
+                                    invoke="finishContent"
+                                    align="BOTTOM_RIGHT"/>
+
+                            <button caption="msg://course.card.close"
+                                    icon="font-icon:MAIL_REPLY"
+                                    width="100%"
+                                    id="closeResultWindow"
+                                    visible="false"
+                                    invoke="closeResultWindow"
+                                    align="BOTTOM_RIGHT"/>
+                        </buttonsPanel>
+                    </row>
+                </rows>
+            </grid>
+
+            <hbox id="wrapper" width="100%"/>
+
+            <scrollBox id="scrollBox" stylename="bt-scroll pr10">
+                <vbox id="testData">
+                </vbox>
+                <hbox id="nextPreviousHbox" align="BOTTOM_LEFT"
+                      spacing="true" stylename="start-course-section-np">
+                    <button caption="msg://Course.start.previous"
+                            id="previousBtn"
+                            icon="font-icon:ANGLE_DOUBLE_LEFT"
+                            visible="false"/>
+                    <button caption="msg://Course.start.next"
+                            id="nextBtn"
+                            icon="font-icon:ANGLE_DOUBLE_RIGHT"
+                            visible="false"/>
+                </hbox>
+            </scrollBox>
+        </vbox>
+    </layout>
+</window>

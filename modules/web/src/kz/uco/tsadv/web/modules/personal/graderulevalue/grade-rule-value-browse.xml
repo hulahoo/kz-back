@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://GradeRuleValue.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.graderulevalue.GradeRuleValueBrowse"
+        focusComponent="gradeRuleValuesTable"
+        lookupComponent="gradeRuleValuesTable">
+    <dsContext>
+        <groupDatasource id="gradeRuleValuesDs"
+                         class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"
+                         view="gradeRuleValue-view">
+            <query>
+                <![CDATA[select e from tsadv$GradeRuleValue e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="gradeRuleValuesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="gradeRuleValuesTable"
+                datasource="gradeRuleValuesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="gradeRuleValuesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="value"/>
+                <column id="min"/>
+                <column id="mid"/>
+                <column id="max"/>
+                <column id="gradeGroup.grade"/>
+            </columns>
+            <rows datasource="gradeRuleValuesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="gradeRuleValuesTable.create"/>
+                <button id="editBtn"
+                        action="gradeRuleValuesTable.edit"/>
+                <button id="removeBtn"
+                        action="gradeRuleValuesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

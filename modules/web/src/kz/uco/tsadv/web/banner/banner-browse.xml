@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.banner.BannerBrowse"
+        focusComponent="bannersTable"
+        lookupComponent="bannersTable"
+        messagesPack="kz.uco.tsadv.web.banner">
+    <dsContext>
+        <groupDatasource id="bannersDs"
+                         class="kz.uco.tsadv.modules.recognition.Banner"
+                         view="banner.edit">
+            <query>
+                <![CDATA[select e from tsadv$Banner e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="bannersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="bannersTable"
+                datasource="bannersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="bannersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="page" generator="generatePageName"/>
+                <column id="imageLang1"/>
+                <column id="imageLang2"/>
+                <column id="imageLang3"/>
+                <column id="active"/>
+            </columns>
+            <rows datasource="bannersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="bannersTable.create"/>
+                <button id="editBtn"
+                        action="bannersTable.edit"/>
+                <button id="removeBtn"
+                        action="bannersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

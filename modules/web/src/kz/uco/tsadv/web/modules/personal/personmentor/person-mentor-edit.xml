@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.personmentor.PersonMentorEdit"
+        datasource="personMentorDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.personmentor">
+    <dsContext>
+        <datasource id="personMentorDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonMentor"
+                    view="personMentor.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personMentorDs">
+            <column width="250px">
+                <field captionProperty="personFioWithEmployeeNumber"
+                       property="mentor"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="organizationGroup"
+                       captionProperty="organizationName"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

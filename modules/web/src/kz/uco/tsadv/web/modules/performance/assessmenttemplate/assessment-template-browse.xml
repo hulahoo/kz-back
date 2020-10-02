@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://assessmentTemplate.browse"
+        class="kz.uco.tsadv.web.modules.performance.assessmenttemplate.AssessmentTemplateBrowse"
+        focusComponent="assessmentTemplatesTable"
+        lookupComponent="assessmentTemplatesTable"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assessmenttemplate">
+    <dsContext>
+        <groupDatasource id="assessmentTemplatesDs"
+                         class="kz.uco.tsadv.modules.performance.model.AssessmentTemplate"
+                         view="assessmentTemplate.browse">
+            <query>
+                <![CDATA[select e from tsadv$AssessmentTemplate e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assessmentTemplatesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="assessmentTemplatesTable"
+                datasource="assessmentTemplatesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="assessmentTemplatesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="assessmentTemplateName"/>
+                <column id="selfAssessment"/>
+                <column id="managerAssessment"/>
+                <column id="participantAssessment"/>
+            </columns>
+            <rows datasource="assessmentTemplatesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="assessmentTemplatesTable.create"/>
+                <button id="editBtn"
+                        action="assessmentTemplatesTable.edit"/>
+                <button id="removeBtn"
+                        action="assessmentTemplatesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

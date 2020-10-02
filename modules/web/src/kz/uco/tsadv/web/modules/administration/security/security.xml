@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.administration.security.Security"
+        messagesPack="kz.uco.tsadv.web.modules.administration.security">
+    <dsContext>
+        <hierarchicalDatasource id="groupsDs"
+                                allowCommit="false"
+                                class="com.haulmont.cuba.security.entity.Group"
+                                hierarchyProperty="parent"
+                                view="group.browse">
+            <query>
+                <![CDATA[select e from sec$Group e]]>
+            </query>
+        </hierarchicalDatasource>
+        <collectionDatasource id="securityHierarchyNodesDs"
+                              class="kz.uco.tsadv.modules.administration.security.SecurityHierarchyNode"
+                              maxResults="20"
+                              view="securityHierarchyNode-browse">
+            <query>
+                <![CDATA[select e from tsadv$SecurityHierarchyNode e 
+where e.securityGroup.id = :ds$groupsDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="securityOrganizationEligibilitiesDs"
+                              class="kz.uco.tsadv.modules.administration.security.SecurityOrganizationEligibility"
+                              maxResults="20"
+                              view="securityOrganizationEligibility-view">
+            <query>
+                <![CDATA[select e from tsadv$SecurityOrganizationEligibility e
+where e.securityGroup.id = :ds$groupsDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="securityOrganizationListsDs"
+                              class="kz.uco.tsadv.modules.administration.security.SecurityOrganizationList"
+                              maxResults="20"
+                              view="securityOrganizationList-view">
+            <query>
+                <![CDATA[select e from tsadv$SecurityOrganizationList e
+where e.securityGroup.id = :ds$groupsDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="securityPersonListsDs"
+                              class="kz.uco.tsadv.modules.administration.security.SecurityPersonList"
+                              maxResults="20"
+                              view="securityPersonList-view">
+            <query>
+                <![CDATA[select e from tsadv$SecurityPersonList e
+where e.securityGroup.id = :ds$groupsDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="securityPersonTypesDs"
+                              class="kz.uco.tsadv.modules.administration.security.SecurityPersonType"
+                              maxResults="20"
+                              view="securityPersonType-view">
+            <query>
+                <![CDATA[select e from tsadv$SecurityPersonType e
+where e.securityGroup.id = :ds$groupsDs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <split id="split"
+               height="100%"
+               orientation="horizontal"
+               width="100%">
+            <vbox id="vbox"
+                  expand="groupsTable"
+                  height="100%">
+                <filter id="groupsFilter"
+                        datasource="groupsDs"/>
+                <treeTable id="groupsTable"
+                           width="100%">
+                    <actions>
+                        <action id="loadOrganizations"
+                                caption="msg://loadOrganizationList"
+                                invoke="loadOrganizations"
+                                trackSelection="true"/>
+                        <action id="loadPersons"
+                                caption="msg://loadPersons"
+                                invoke="loadPersons"
+                                trackSelection="true"/>
+                    </actions>
+                    <columns>
+                        <column id="name"/>
+                    </columns>
+                    <rows datasource="groupsDs"/>
+                    <buttonsPanel id="buttonsPanelGroupTable">
+                        <button id="loadOrganizationsButton"
+                                action="groupsTable.loadOrganizations"/>
+                        <button id="loadPersonsButton"
+                                action="groupsTable.loadPersons"/>
+                    </buttonsPanel>
+                </treeTable>
+            </vbox>
+            <tabSheet id="tabSheet"
+                      height="100%">
+                <tab id="tab"
+                     caption="msg://Tab"
+                     expand="securityHierarchyNodesTable"
+                     margin="true,false,false,true"
+                     spacing="true">
+                    <filter id="securityHierarchyNodesFilter"
+                            applyTo="securityHierarchyNodesTable"
+                            datasource="securityHierarchyNodesDs"/>
+                    <table id="securityHierarchyNodesTable"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    enable="false"/>
+                            <action id="edit"
+                                    trackSelection="true"/>
+                            <action id="remove"
+                                    trackSelection="true"/>
+                        </actions>
+                        <columns>
+                            <column id="organizationGroup.organizationName"/>
+                        </columns>
+                        <rows datasource="securityHierarchyNodesDs"/>
+                        <rowsCount/>
+                        <buttonsPanel id="buttonsPanel">
+                            <button id="createButton"
+                                    action="securityHierarchyNodesTable.create"/>
+                            <button id="editButton"
+                                    action="securityHierarchyNodesTable.edit"/>
+                            <button id="removeButton"
+                                    action="securityHierarchyNodesTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="tab1"
+                     caption="msg://Tab1"
+                     expand="securityOrganizationEligibilitiesTable"
+                     margin="true,false,false,true"
+                     spacing="true">
+                    <filter id="securityOrganizationEligibilitiesFilter"
+                            applyTo="securityOrganizationEligibilitiesTable"
+                            datasource="securityOrganizationEligibilitiesDs"/>
+                    <table id="securityOrganizationEligibilitiesTable"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    enable="false"/>
+                            <action id="edit"
+                                    trackSelection="true"/>
+                            <action id="remove"
+                                    trackSelection="true"/>
+                        </actions>
+                        <columns>
+                            <column id="organizationGroup.organizationName"/>
+                            <column id="include"/>
+                        </columns>
+                        <rows datasource="securityOrganizationEligibilitiesDs"/>
+                        <rowsCount/>
+                        <buttonsPanel id="buttonsPanel_1">
+                            <button id="createButton_1"
+                                    action="securityOrganizationEligibilitiesTable.create"/>
+                            <button id="editButton_1"
+                                    action="securityOrganizationEligibilitiesTable.edit"/>
+                            <button id="removeButton_1"
+                                    action="securityOrganizationEligibilitiesTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="tab4"
+                     caption="msg://Tab4"
+                     expand="securityPersonTypesTable"
+                     margin="true,false,false,true"
+                     spacing="true">
+                    <filter id="securityPersonTypesFilter"
+                            applyTo="securityPersonTypesTable"
+                            datasource="securityPersonTypesDs"/>
+                    <table id="securityPersonTypesTable"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    enable="false"/>
+                            <action id="edit"
+                                    trackSelection="true"/>
+                            <action id="remove"
+                                    trackSelection="true"/>
+                            <action id="load"
+                                    caption="msg://load"
+                                    enable="false"
+                                    invoke="load"/>
+                        </actions>
+                        <columns>
+                            <column id="personType.langValue"/>
+                        </columns>
+                        <rows datasource="securityPersonTypesDs"/>
+                        <rowsCount/>
+                        <buttonsPanel id="buttonspanel_4">
+                            <button id="createButton_4"
+                                    action="securityPersonTypesTable.create"/>
+                            <button id="editButton_4"
+                                    action="securityPersonTypesTable.edit"/>
+                            <button id="removeButton_4"
+                                    action="securityPersonTypesTable.remove"/>
+                            <button id="loadButton"
+                                    action="securityPersonTypesTable.load"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="tab2"
+                     caption="msg://Tab2"
+                     expand="securityOrganizationListsTable"
+                     margin="true,false,false,true"
+                     spacing="true">
+                    <filter id="securityOrganizationListsFilter"
+                            applyTo="securityOrganizationListsTable"
+                            datasource="securityOrganizationListsDs"/>
+                    <table id="securityOrganizationListsTable"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    enable="false"/>
+                            <action id="edit"
+                                    trackSelection="true"/>
+                            <action id="remove"
+                                    trackSelection="true"/>
+                        </actions>
+                        <columns>
+                            <column id="organizationGroup.organizationName"/>
+                            <column id="transactionDate"/>
+                        </columns>
+                        <rows datasource="securityOrganizationListsDs"/>
+                        <rowsCount/>
+                        <buttonsPanel id="buttonsPanel_2">
+                            <button id="createButton_2"
+                                    action="securityOrganizationListsTable.create"/>
+                            <button id="editButton_2"
+                                    action="securityOrganizationListsTable.edit"/>
+                            <button id="removeButton_2"
+                                    action="securityOrganizationListsTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="tab3"
+                     caption="msg://Tab3"
+                     expand="securityPersonListsTable"
+                     margin="true,false,false,true"
+                     spacing="true">
+                    <filter id="securityPersonListsFilter"
+                            applyTo="securityPersonListsTable"
+                            datasource="securityPersonListsDs"/>
+                    <table id="securityPersonListsTable"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    enable="false"/>
+                            <action id="edit"
+                                    trackSelection="true"/>
+                            <action id="remove"
+                                    trackSelection="true"/>
+                        </actions>
+                        <columns>
+                            <column id="personGroup.fullName"/>
+                            <column id="transactionDate"/>
+                        </columns>
+                        <rows datasource="securityPersonListsDs"/>
+                        <rowsCount/>
+                        <buttonsPanel id="buttonspanel_3">
+                            <button id="createButton_3"
+                                    action="securityPersonListsTable.create"/>
+                            <button id="editButton_3"
+                                    action="securityPersonListsTable.edit"/>
+                            <button id="removeButton_3"
+                                    action="securityPersonListsTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </split>
+    </layout>
+</window>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonContact.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.personcontact.PersonContactBrowse"
+        focusComponent="personContactsTable"
+        lookupComponent="personContactsTable">
+    <dsContext>
+        <groupDatasource id="personContactsDs"
+                         class="kz.uco.tsadv.modules.personal.model.PersonContact"
+                         view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$PersonContact e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personContactsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personContactsTable"
+                datasource="personContactsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personContactsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="type"/>
+                <column id="contactValue"/>
+            </columns>
+            <rows datasource="personContactsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personContactsTable.create"/>
+                <button id="editBtn"
+                        action="personContactsTable.edit"/>
+                <button id="removeBtn"
+                        action="personContactsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.persongroup.PersonGroupBrowse"
+        focusComponent="personGroupsTable"
+        lookupComponent="personGroupsTable">
+    <dsContext>
+        <groupDatasource id="personGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         maxResults="20"
+                         view="personGroup.browse">
+            <query>
+                <![CDATA[select e
+                           from base$PersonGroupExt e
+                           join e.list p
+                           left join e.assignments a
+                          where :session$systemDate between p.startDate and p.endDate
+                            and (:session$systemDate between a.startDate and a.endDate)]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="sexDs"
+                              class="kz.uco.base.entity.dictionary.DicSex">
+            <query>
+                <![CDATA[select e
+                         from base$DicSex e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="positionGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                              view="positionGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from base$PositionGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.positionGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 2
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$JobGroup e join e.list j
+                         where :session$systemDate between j.startDate and j.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="gradeGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.GradeGroup"
+                              view="gradeGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$GradeGroup e join e.list g
+                         where :session$systemDate between g.startDate and g.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="locationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation">
+            <query>
+                <![CDATA[select e
+                         from base$DicLocation e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPersonType">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicPersonType e
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="900"/>
+    <layout expand="personGroupsTable"
+            spacing="true">
+        <groupBox id="customFilterGroupBox"
+                  caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true"
+                  visible="false">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <filter id="filter"
+                applyTo="personGroupsTable"
+                datasource="personGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personGroupsTable"
+                    width="100%">
+            <columns>
+                <column id="userImage"
+                        caption="msg://Photo"
+                        generator="generateUserImageCell"
+                        sortable="false"/>
+                <column id="person.fullNameLatin"
+                        caption="msg://fullNameLatin"
+                        link="true"
+                        linkInvoke="redirectCard"/>
+                <column id="person.nationalIdentifier"
+                        visible="false"/>
+                <column id="person.dateOfBirth"
+                        visible="false"/>
+                <column id="person.sex"
+                        captionProperty="person.sex.langValue"
+                        visible="false"/>
+                <column id="person.hireDate"
+                        visible="false"/>
+                <column id="primaryAssignment.organizationGroup"
+                        captionProperty="primaryAssignment.organizationGroup.organization.organizationName"/>
+                <column id="primaryAssignment.positionGroup"
+                        captionProperty="primaryAssignment.positionGroup.fullName"/>
+                <column id="primaryAssignment.jobGroup"
+                        captionProperty="primaryAssignment.jobGroup.job.jobName"/>
+                <column id="primaryAssignment.gradeGroup"
+                        captionProperty="primaryAssignment.gradeGroup.grade.gradeName"/>
+                <column id="primaryAssignment.location.langValue"/>
+                <column id="person.type"
+                        caption="msg://Person.type"/>
+                <column id="generedOpenRequiestionCount"
+                        caption="msg://RequisitionOpenCount"
+                        generator="generateGeneredOpenRequiestionCountCell"/>
+            </columns>
+            <rows datasource="personGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel>
+                <button caption="msg://createpersongroupbrowse"
+                        invoke="createAssignment"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

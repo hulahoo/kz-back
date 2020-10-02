@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.disability.DisabilityEdit"
+        datasource="disabilityDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.disability">
+    <dsContext>
+        <datasource id="disabilityDs"
+                    class="kz.uco.tsadv.modules.personal.model.Disability"
+                    view="disability.all"/>
+        <collectionDatasource id="disabilityTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicDisabilityType"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicDisabilityType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="durationsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicDuration"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicDuration e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="disabilityDs">
+            <column width="250px">
+                <field optionsDatasource="disabilityTypesDs"
+                       property="disabilityType"/>
+                <field optionsDatasource="durationsDs"
+                       property="duration"/>
+                <field property="dateFrom"/>
+                <field property="dateTo"/>
+                <field custom="true"
+                       property="attachment"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

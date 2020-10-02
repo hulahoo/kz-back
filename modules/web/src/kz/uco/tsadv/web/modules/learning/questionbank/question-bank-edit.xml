@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://QuestionBank.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.questionbank.QuestionBankEdit"
+        datasource="questionBankDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="questionBankDs"
+                    class="kz.uco.tsadv.modules.learning.model.QuestionBank"
+                    view="questionBank.edit">
+            <collectionDatasource id="questionsDs"
+                                  property="questions">
+                <collectionDatasource id="answersDs" property="answers"/>
+            </collectionDatasource>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vBox"
+            spacing="true">
+        <vbox id="vBox" width="100%" expand="questionsBox">
+            <fieldGroup id="fieldGroup"
+                        datasource="questionBankDs">
+                <column width="250px">
+                    <field property="bankName"/>
+                    <field property="description">
+                        <textArea property="description" datasource="questionBankDs"/>
+                    </field>
+                </column>
+            </fieldGroup>
+            <groupBox id="questionsBox"
+                      caption="msg://QuestionBank.questions">
+                <table id="questionsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="text" maxTextLength="100"/>
+                        <column id="type"/>
+                        <column id="score"/>
+                    </columns>
+                    <rows datasource="questionsDs"/>
+                    <buttonsPanel>
+                        <button action="questionsTable.create"/>
+                        <button action="questionsTable.edit"/>
+                        <button action="questionsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

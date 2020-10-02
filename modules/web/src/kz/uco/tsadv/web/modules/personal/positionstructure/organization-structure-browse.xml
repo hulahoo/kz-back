@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OrganizationStructure.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.positionstructure.OrganizationStructureBrowse"
+        focusComponent="organizationStructuresTable"
+        lookupComponent="organizationStructuresTable">
+    <dsContext>
+        <groupDatasource id="organizationStructuresDs"
+                         class="kz.uco.tsadv.modules.personal.model.OrganizationStructure"
+                         view="organizationStructure.for.requisition"
+                         maxResults="20">
+            <query>
+                <![CDATA[select os from tsadv$OrganizationStructure os, base$OrganizationExt oe
+                    where os.path like concat('%',concat(oe.group.id,'%'))
+                    and :session$systemDate between os.startDate and os.endDate
+                    and :session$systemDate between oe.startDate and oe.endDate
+                    and os.deleteTs is null ]]>
+            </query>
+        </groupDatasource>
+
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="organizationStructuresTable"
+            spacing="true">
+        <groupBox caption="mainMsg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="organizationStructuresTable"
+                    width="100%">
+            <columns>
+                <column id="organizationGroup"
+                        captionProperty="organizationGroup.organization.organizationName"
+                        caption="msg://position"/>
+                <column id="parentOrganizationGroup"
+                        captionProperty="parentOrganizationGroup.organization.organizationName"
+                        caption="msg://parent.position"/>
+            </columns>
+            <rows datasource="organizationStructuresDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

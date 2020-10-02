@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.bpmusersubstitution.BpmUserSubstitutionSsBrowse"
+        focusComponent="bpmUserSubstitutionsTable"
+        lookupComponent="bpmUserSubstitutionsTable"
+        messagesPack="kz.uco.tsadv.web.bpmusersubstitution">
+    <dsContext>
+        <groupDatasource id="bpmUserSubstitutionsDs"
+                         class="kz.uco.tsadv.entity.tb.BpmUserSubstitution"
+                         view="bpmUserSubstitution-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmUserSubstitution e
+where e.user.id = :session$userId
+order by e.startDate desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="bpmUserSubstitutionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="bpmUserSubstitutionsTable"
+                datasource="bpmUserSubstitutionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="bpmUserSubstitutionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="substitutedUser"
+                        captionProperty="substitutedUser.fullName"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="bpmUserSubstitutionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="bpmUserSubstitutionsTable.create"/>
+                <button id="editBtn"
+                        action="bpmUserSubstitutionsTable.edit"/>
+                <button id="removeBtn"
+                        action="bpmUserSubstitutionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

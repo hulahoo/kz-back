@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.uom.UOMBrowse"
+        focusComponent="uOMsTable"
+        lookupComponent="uOMsTable"
+        messagesPack="kz.uco.tsadv.web.uom">
+    <dsContext>
+        <groupDatasource id="uOMsDs"
+                         class="kz.uco.tsadv.entity.tb.dictionary.UOM"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$UOM e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="uOMsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="uOMsTable"
+                datasource="uOMsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="uOMsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue"/>
+                <column id="active"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="legacyID"
+                        caption="mainMsg://legacyId"/>
+            </columns>
+            <rows datasource="uOMsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="uOMsTable.create"/>
+                <button id="editBtn"
+                        action="uOMsTable.edit"/>
+                <button id="removeBtn"
+                        action="uOMsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

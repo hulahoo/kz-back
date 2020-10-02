@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://extension"
+        class="kz.uco.tsadv.web.modules.personal.businesstrip.BusinessTripEditExtension"
+        datasource="businessTripNewDs"
+        messagesPack="kz.uco.tsadv.web.modules.personal.businesstrip">
+    <dsContext>
+        <datasource id="businessTripNewDs"
+                    class="kz.uco.tsadv.modules.personal.model.BusinessTrip"
+                    view="businessTrip-view">
+            <collectionDatasource id="businessTripLinesDs"
+                                  property="businessTripLines">
+                <collectionDatasource id="businessTripCostDs"
+                                      property="businessTripCost"/>
+            </collectionDatasource>
+        </datasource>
+        <collectionDatasource id="ordersDs"
+                              class="kz.uco.tsadv.modules.personal.model.Order"
+                              view="order-view">
+            <query>
+                <![CDATA[select e from tsadv$Order e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="280"
+                width="420"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="businessTripFieldGroup"
+                        datasource="businessTripNewDs">
+                <column width="250px">
+                    <field captionProperty="caption"
+                           optionsDatasource="ordersDs"
+                           property="order"/>
+                    <field property="orderNum"/>
+                    <field property="orderDate"/>
+                    <field property="dateFrom"/>
+                    <field property="dateTo"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

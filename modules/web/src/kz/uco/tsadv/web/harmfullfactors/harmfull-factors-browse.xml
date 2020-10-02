@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.harmfullfactors.HarmfullFactorsBrowse"
+        focusComponent="harmfullFactorsesTable"
+        lookupComponent="harmfullFactorsesTable"
+        messagesPack="kz.uco.tsadv.web.harmfullfactors">
+    <dsContext>
+        <groupDatasource id="harmfullFactorsesDs"
+                         class="kz.uco.tsadv.entity.tb.HarmfullFactors"
+                         view="harmfullFactors-view">
+            <query>
+                <![CDATA[select e from tsadv$HarmfullFactors e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="harmfullFactorsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="harmfullFactorsesTable"
+                datasource="harmfullFactorsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="harmfullFactorsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="organization" captionProperty="organization.organization.organizationName"/>
+                <column id="entryDate"/>
+                <column id="laboratory"/>
+            </columns>
+            <rows datasource="harmfullFactorsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="harmfullFactorsesTable.create"/>
+                <button id="editBtn"
+                        action="harmfullFactorsesTable.edit"/>
+                <button id="removeBtn"
+                        action="harmfullFactorsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

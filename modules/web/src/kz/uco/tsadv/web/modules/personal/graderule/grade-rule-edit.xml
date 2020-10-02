@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://GradeRule.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.graderule.GradeRuleEdit"
+        datasource="gradeRuleDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="gradeRuleDs"
+                    class="kz.uco.tsadv.modules.personal.model.GradeRule"
+                    view="gradeRule.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="gradeRuleDs">
+            <column width="250px">
+                <field property="ruleName"/>
+                <field property="currency"
+                       required="true"/>
+                <field property="grossNet"
+                       required="true"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

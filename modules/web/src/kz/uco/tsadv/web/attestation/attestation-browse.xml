@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.attestation.AttestationBrowse"
+        focusComponent="attestationsTable"
+        lookupComponent="attestationsTable"
+        messagesPack="kz.uco.tsadv.web.attestation">
+    <dsContext>
+        <groupDatasource id="attestationsDs"
+                         class="kz.uco.tsadv.modules.learning.model.Attestation"
+                         view="attestation.browse">
+            <query>
+                <![CDATA[select e from tsadv$Attestation e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="attestationsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="attestationsTable"
+                datasource="attestationsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="attestationsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="attestationName"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="subjectToAttestation"
+                        caption="msg://subjectToAttestation"
+                        generator="generateSubjectToAttestationCell"/>
+                <column id="passedAttestation"
+                        caption="msg://passedAttestation"
+                        generator="generatePassedAttestationCell"/>
+                <column id="notPassedAttestation"
+                        caption="msg://notPassedAttestation"
+                        generator="generateNotPassedAttestationCell"/>
+                <column id="notAppear"
+                        caption="msg://notAppear"
+                        generator="generateNotAppearCell"/>
+            </columns>
+            <rows datasource="attestationsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="attestationsTable.create"/>
+                <button id="editBtn"
+                        action="attestationsTable.edit"/>
+                <button id="removeBtn"
+                        action="attestationsTable.remove"/>
+                <button id="employerBtn"
+                        caption="msg://employerBtn"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

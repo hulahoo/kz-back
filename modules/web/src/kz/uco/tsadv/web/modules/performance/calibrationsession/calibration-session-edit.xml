@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CalibrationSession.editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.calibrationsession.CalibrationSessionEdit"
+        datasource="calibrationSessionDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="calibrationSessionDs"
+                    class="kz.uco.tsadv.modules.performance.model.CalibrationSession"
+                    view="calibrationSession.browse">
+            <collectionDatasource id="comissionsDs"
+                                  property="comissions"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="comissionsBox"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="calibrationSessionDs">
+            <column width="250px">
+                <field caption="msg://nameCalibrationSession"
+                       property="name"/>
+                <field caption="msg://dateCalibrationSession"
+                       property="date"/>
+                <field caption="msg://statusCalibrationSession"
+                       property="status"/>
+                <field caption="msg://administratorCalibrationSession"
+                       captionProperty="person"
+                       property="administrator"/>
+                <field caption="msg://templateCalibrationSession"
+                       captionProperty="assessmentTemplateName"
+                       property="template"/>
+            </column>
+        </fieldGroup>
+        <groupBox id="comissionsBox"
+                  caption="msg://commissionsCalibrationSession">
+            <table id="comissionsTable"
+                   height="100%"
+                   width="100%">
+                <actions>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="personImage"
+                            caption="msg://photoCalibrationSession"
+                            generator="generatePersonImage"
+                            sortable="false"/>
+                    <column id="person.person.fullName"/>
+                </columns>
+                <rows datasource="comissionsDs"/>
+                <buttonsPanel>
+                    <button action="addComission"
+                            caption="msg://table.btn.add"/>
+                    <button action="comissionsTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

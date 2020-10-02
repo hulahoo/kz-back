@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Organization.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.organization.OrganizationEdit"
+        datasource="organizationDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.organization">
+    <dsContext>
+        <datasource id="organizationDs"
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationExt"
+                    view="organization.edit">
+            <datasource id="orgGroupDs"
+                        property="group">
+                <datasource id="analyticsDs"
+                            property="analytics"/>
+            </datasource>
+        </datasource>
+        <collectionDatasource id="goalsDs"
+                              class="kz.uco.tsadv.modules.personal.model.OrganizationGroupGoalLink"
+                              view="organizationGroupGoalLink-view">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$OrganizationGroupGoalLink e
+                         where e.organizationGroup.id = :ds$orgGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="casesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Case"
+                              view="_minimal">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$Case e
+                         where e.organizationGroup.id = :ds$orgGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="orgHrUsersDs"
+                              class="kz.uco.tsadv.modules.personal.model.OrganizationHrUser"
+                              view="organizationHrUser.view">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$OrganizationHrUser e
+                         where e.organizationGroup.id = :ds$orgGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="orgCompetenceElementsDs"
+                              class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
+                              view="competenceElement-view">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$CompetenceElement e
+                         where e.organizationGroup.id = :ds$orgGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="hierarchyElementsDs"
+                              class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                              view="hierarchyElement.parent">
+            <query>
+                <![CDATA[
+                        select e
+                          from base$HierarchyElementExt e
+                         where e.organizationGroup.id = :ds$orgGroupDs
+                           and e.deleteTs is null
+                      order by e.hierarchy, e.startDate
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <groupDatasource id="parentElementsGoalsDs"
+                         class="kz.uco.tsadv.modules.personal.model.ParentElementsGoal"
+                         refreshMode="NEVER"/>
+        <!--<datasource id="orgAnalyticsBetweenDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.OrgAnalytics"
+                    view="orgAnalytics-view"/>-->
+        <collectionDatasource id="calendarsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.Calendar"
+                              view="calendar.view">
+            <query>
+                <![CDATA[select e from tsadv$Calendar e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="standardOffsetsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"
+                              view="standardOffset.view">
+            <query>
+                <![CDATA[select e from tsadv$StandardOffset e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicWorkingConditionsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicWorkingCondition"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicWorkingCondition e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="100%"
+                width="100%"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="tab1"
+                 caption="msg://mainData"
+                 expand="vbox"
+                 margin="true,true,true,false">
+                <vbox id="vbox"
+                      height="100%">
+                    <cssLayout id="cssLayout"
+                               height="100%">
+                        <hbox id="hbox"
+                              spacing="true">
+                            <fieldGroup id="fieldGrop1"
+                                        datasource="organizationDs">
+                                <column id="column1"
+                                        width="250px">
+                                    <field id="organizationNameLang1"
+                                           property="organizationNameLang1"/>
+                                    <field id="organizationNameLang2"
+                                           property="organizationNameLang2"/>
+                                    <field id="organizationNameLang3"
+                                           property="organizationNameLang3"/>
+                                    <field id="organizationNameLang4"
+                                           property="organizationNameLang4"/>
+                                    <field id="organizationNameLang5"
+                                           property="organizationNameLang5"/>
+                                    <field property="internal"/>
+                                </column>
+                            </fieldGroup>
+                            <fieldGroup id="fieldGroup"
+                                        datasource="organizationDs">
+                                <column width="250px">
+                                    <field id="location"
+                                           property="location"/>
+                                    <field id="type"
+                                           property="type"/>
+                                    <field id="costCenter"
+                                           property="costCenter"/>
+                                    <field id="payroll"
+                                           property="payroll"/>
+                                    <field id="startDate"
+                                           property="startDate"/>
+                                    <field id="endDate"
+                                           property="endDate"/>
+                                    <field id="legacyID"
+                                           editable="false"
+                                           property="legacyID"
+                                           visible="false"/>
+                                </column>
+                            </fieldGroup>
+                        </hbox>
+                    </cssLayout>
+                </vbox>
+                <frame id="windowActions"
+                       screen="editExtWindowActions"/>
+            </tab>
+            <tab id="tab2"
+                 caption="msg://Competences"
+                 margin="true,true,true,false">
+                <cssLayout id="layout2"
+                           height="100%"
+                           width="100%">
+                    <table id="competenceOrgTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="competenceGroup.competence.competenceName"/>
+                            <column id="competenceGroup.competence.scale.scaleName"/>
+                            <column id="scaleLevel"/>
+                        </columns>
+                        <rows datasource="orgCompetenceElementsDs"/>
+                        <buttonsPanel id="competenceOrgButtonsPanel">
+                            <button id="compCreateBtn"
+                                    action="competenceOrgTable.create"
+                                    caption="msg://table.btn.create"/>
+                            <button id="compEditBtn"
+                                    action="competenceOrgTable.edit"
+                                    caption="msg://table.btn.edit"/>
+                            <button id="compRemoveBtn"
+                                    action="competenceOrgTable.remove"
+                                    caption="msg://table.btn.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </cssLayout>
+            </tab>
+            <tab id="tab3"
+                 caption="msg://OrganizationHrUsers"
+                 margin="true,true,true,false">
+                <table id="orgHrUsersTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="user.login"/>
+                        <column id="fio"
+                                caption="msg://kz.uco.tsadv.web.modules.recruitment.interview/Person.fullname"
+                                generator="getPersonFio"/>
+                        <column id="role"
+                                caption="msg://kz.uco.tsadv.modules.personal.model/HrUserRole.role"
+                                generator="generateRolesList"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                        <column id="counter"/>
+                    </columns>
+                    <rows datasource="orgHrUsersDs"/>
+                    <buttonsPanel id="orgHrUsersButtonsPanel">
+                        <button id="orgHrUsersCreateBtn"
+                                action="orgHrUsersTable.create"
+                                caption="msg://table.btn.create"/>
+                        <button id="orgHrUsersEditBtn"
+                                action="orgHrUsersTable.edit"
+                                caption="msg://table.btn.edit"/>
+                        <button id="orgHrUsersRemoveBtn"
+                                action="orgHrUsersTable.remove"
+                                caption="msg://table.btn.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="casesTab"
+                 caption="msg://Organization.edit.casesTab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <frame id="caseFrame"
+                       height="100%"
+                       screen="caseFrame"/>
+            </tab>
+            <tab id="parents"
+                 caption="msg://HierarchyElement.parents">
+                <table id="hierarchyElementsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="reassignElement"
+                                invoke="reassignElement"
+                                caption="msg://reassignButton"/>
+                        <action id="close"
+                                caption="msg://table.btn.close"
+                                icon="icons/close.png"
+                                invoke="close"/>
+                    </actions>
+                    <columns>
+                        <column id="hierarchy.hierarchyName"/>
+                        <column id="parent.elementType"/>
+                        <column id="parent"
+                                generator="generateParentName"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="hierarchyElementsDs"/>
+                    <buttonsPanel id="parentsButtons">
+                        <button id="createBtn"
+                                action="hierarchyElementsTable.create"/>
+                        <button id="editBtn"
+                                action="hierarchyElementsTable.edit"/>
+                        <button id="removeBtn"
+                                action="hierarchyElementsTable.remove"/>
+                        <button id="reassign"
+                                action="hierarchyElementsTable.reassignElement"/>
+                        <button id="closeBtn"
+                                action="hierarchyElementsTable.close"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="goals"
+                 caption="msg://Goal.browser"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="goalsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="msg://table.btn.create"
+                                icon="icons/create.png"/>
+                        <action id="edit"
+                                caption="msg://table.btn.edit"
+                                icon="icons/edit.png"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="weight"/>
+                        <column id="goal.goalName"/>
+                        <column id="goal.successCriteria"/>
+                        <column id="goal.startDate"/>
+                        <column id="goal.endDate"/>
+                    </columns>
+                    <rows datasource="goalsDs"/>
+                    <buttonsPanel>
+                        <button id="goalsTableCreate"
+                                action="goalsTable.create"/>
+                        <button id="competenceOrgTableEdit"
+                                action="competenceOrgTable.edit"/>
+                        <button id="goalsTableRemove"
+                                action="goalsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+                <groupTable id="parentElementsGoalsTable"
+                            height="100%"
+                            width="100%">
+                    <columns>
+                        <group>
+                            <column id="elementType"/>
+                        </group>
+                        <column id="elementName"/>
+                        <column id="goalName"/>
+                        <column id="goalWeight"/>
+                    </columns>
+                    <rows datasource="parentElementsGoalsDs"/>
+                </groupTable>
+            </tab>
+        </tabSheet>
+        <fieldGroup id="fieldGroupOld"
+                    datasource="organizationDs"
+                    visible="false">
+            <column width="250px">
+                <field id="goalsTableCreate"
+                       property="organizationName"/>
+                <field id="location"
+                       property="location"/>
+                <field id="type"
+                       property="type"/>
+                <field id="costCenter"
+                       property="costCenter"/>
+                <field id="payroll"
+                       property="payroll"/>
+                <field id="startDate"
+                       editable="false"
+                       property="startDate"/>
+                <field id="endDate"
+                       editable="false"
+                       property="endDate"/>
+            </column>
+        </fieldGroup>
+    </layout>
+</window>

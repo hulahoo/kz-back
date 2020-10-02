@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicEducationLevel.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.dictionary.diceducationlevel.DicEducationLevelBrowse"
+        focusComponent="dicEducationLevelsTable"
+        lookupComponent="dicEducationLevelsTable">
+    <dsContext>
+        <groupDatasource id="dicEducationLevelsDs"
+                         class="kz.uco.tsadv.modules.learning.dictionary.DicEducationLevel"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicEducationLevel e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicEducationLevelsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicEducationLevelsTable"
+                datasource="dicEducationLevelsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicEducationLevelsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicEducationLevelsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicEducationLevelsTable.create"/>
+                <button id="editBtn"
+                        action="dicEducationLevelsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicEducationLevelsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

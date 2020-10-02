@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicagreementstatus.DicAgreementStatusBrowse"
+        focusComponent="dicAgreementStatusesTable"
+        lookupComponent="dicAgreementStatusesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicagreementstatus">
+    <dsContext>
+        <collectionDatasource id="dicAgreementStatusesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAgreementStatus"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAgreementStatus e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAgreementStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAgreementStatusesTable"
+                datasource="dicAgreementStatusesDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="dicAgreementStatusesTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicAgreementStatusesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAgreementStatusesTable.create"/>
+                <button id="editBtn"
+                        action="dicAgreementStatusesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAgreementStatusesTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

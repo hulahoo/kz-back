@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicCategory.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.dictionary.diccategory.DicCategoryEdit"
+        datasource="dicCategoryDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="dicCategoryDs"
+                    class="kz.uco.tsadv.modules.learning.dictionary.DicCategory"
+                    view="dicCategory.browse"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <hbox margin="false,false,true,false">
+            <label value="msg://Logo"
+                   width="100px"/>
+            <embedded id="categoryImage"
+                      align="MIDDLE_CENTER"
+                      height="100px"
+                      stylename="b-user-image-edit"
+                      width="100px"/>
+            <upload id="imageUpload"
+                    accept="*.jpg,*.png"
+                    align="MIDDLE_CENTER"
+                    clearButtonIcon="icons/item-remove.png"
+                    fileSizeLimit="1024000"
+                    showClearButton="true"
+                    uploadButtonIcon="icons/reports-template-upload.png"/>
+        </hbox>
+        <fieldGroup id="fieldGroup"
+                    datasource="dicCategoryDs">
+            <column width="250px">
+                <field property="langValue1"/>
+                <field property="langValue2"/>
+                <field property="langValue3"/>
+                <field property="langValue4"/>
+                <field property="langValue5"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="parentCategory"/>
+                <field property="code"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

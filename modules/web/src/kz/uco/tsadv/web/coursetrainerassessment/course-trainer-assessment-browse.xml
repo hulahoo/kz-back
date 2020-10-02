@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.coursetrainerassessment.CourseTrainerAssessmentBrowse"
+        focusComponent="courseTrainerAssessmentsTable"
+        lookupComponent="courseTrainerAssessmentsTable"
+        messagesPack="kz.uco.tsadv.web.coursetrainerassessment">
+    <dsContext>
+        <groupDatasource id="courseTrainerAssessmentsDs"
+                         class="kz.uco.tsadv.modules.performance.model.CourseTrainerAssessment"
+                         view="courseTrainerAssessment.edit">
+            <query>
+                <![CDATA[select e from tsadv$CourseTrainerAssessment e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseTrainerAssessmentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="courseTrainerAssessmentsTable"
+                datasource="courseTrainerAssessmentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="courseTrainerAssessmentsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="trainer.employee.personFioWithEmployeeNumber"/>
+                <column id="course.name"/>
+                <column id="assessmentDate"/>
+                <column id="assessor.personFioWithEmployeeNumber"/>
+                <column id="score"/>
+            </columns>
+            <rows datasource="courseTrainerAssessmentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="courseTrainerAssessmentsTable.create"/>
+                <button id="editBtn"
+                        action="courseTrainerAssessmentsTable.edit"/>
+                <button id="removeBtn"
+                        action="courseTrainerAssessmentsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

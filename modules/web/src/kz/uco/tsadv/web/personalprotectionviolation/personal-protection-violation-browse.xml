@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.personalprotectionviolation.PersonalProtectionViolationBrowse"
+        focusComponent="personalProtectionViolationsTable"
+        lookupComponent="personalProtectionViolationsTable"
+        messagesPack="kz.uco.tsadv.web.personalprotectionviolation">
+    <dsContext>
+        <groupDatasource id="personalProtectionViolationsDs"
+                         class="kz.uco.tsadv.modules.personprotection.PersonalProtectionViolation"
+                         view="personalProtectionViolation.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonalProtectionViolation e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personalProtectionViolationsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personalProtectionViolationsTable"
+                datasource="personalProtectionViolationsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personalProtectionViolationsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="personalProtection.protectionEquipment"/>
+                <column id="personalProtectionInspector.employee.personFioWithEmployeeNumber"
+                caption="msg://personalProtectionInspector"/>
+                <column id="violationDate"/>
+                <column id="violationInfo"/>
+            </columns>
+            <rows datasource="personalProtectionViolationsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personalProtectionViolationsTable.create"/>
+                <button id="editBtn"
+                        action="personalProtectionViolationsTable.edit"/>
+                <button id="removeBtn"
+                        action="personalProtectionViolationsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

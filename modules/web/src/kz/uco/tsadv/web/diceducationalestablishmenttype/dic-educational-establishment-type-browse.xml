@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.diceducationalestablishmenttype.DicEducationalEstablishmentTypeBrowse"
+        focusComponent="dicEducationalEstablishmentTypesTable"
+        lookupComponent="dicEducationalEstablishmentTypesTable"
+        messagesPack="kz.uco.tsadv.web.diceducationalestablishmenttype">
+    <dsContext>
+        <groupDatasource id="dicEducationalEstablishmentTypesDs"
+                         class="kz.uco.tsadv.modules.learning.dictionary.DicEducationalEstablishmentType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicEducationalEstablishmentType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicEducationalEstablishmentTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicEducationalEstablishmentTypesTable"
+                datasource="dicEducationalEstablishmentTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicEducationalEstablishmentTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="legacyID"/>
+                <column id="isSystemRecord"/>
+            </columns>
+            <rows datasource="dicEducationalEstablishmentTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicEducationalEstablishmentTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicEducationalEstablishmentTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicEducationalEstablishmentTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.businessrule.BusinessRuleBrowse"
+        focusComponent="businessRulesTable"
+        lookupComponent="businessRulesTable"
+        messagesPack="kz.uco.tsadv.web.businessrule">
+    <dsContext>
+        <groupDatasource id="businessRulesDs"
+                         class="kz.uco.tsadv.modules.administration.BusinessRule"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$BusinessRule e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="businessRulesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="businessRulesTable"
+                datasource="businessRulesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="businessRulesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="ruleCode"/>
+                <column id="ruleName"/>
+                <column id="description"/>
+                <column id="ruleStatus"/>
+                <column id="errorTextLang1"/>
+                <column id="errorTextLang2"/>
+                <column id="errorTextLang3"/>
+                <column id="errorTextLang4"/>
+                <column id="errorTextLang5"/>
+                <column id="warningTextLang1"/>
+                <column id="warningTextLang2"/>
+                <column id="warningTextLang3"/>
+                <column id="warningTextLang4"/>
+                <column id="warningTextLang5"/>
+            </columns>
+            <rows datasource="businessRulesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="businessRulesTable.create"/>
+                <button id="editBtn"
+                        action="businessRulesTable.edit"/>
+                <button id="removeBtn"
+                        action="businessRulesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>
+

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicNineBoxLevel.browseCaption"
+        class="kz.uco.tsadv.web.modules.performance.dictionary.dicnineboxlevel.DicNineBoxLevelBrowse"
+        focusComponent="dicNineBoxLevelsTable"
+        lookupComponent="dicNineBoxLevelsTable">
+    <dsContext>
+        <groupDatasource id="dicNineBoxLevelsDs"
+                         class="kz.uco.tsadv.modules.performance.dictionary.DicNineBoxLevel"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicNineBoxLevel e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicNineBoxLevelsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicNineBoxLevelsTable"
+                datasource="dicNineBoxLevelsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicNineBoxLevelsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicNineBoxLevelsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicNineBoxLevelsTable.create"/>
+                <button id="editBtn"
+                        action="dicNineBoxLevelsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicNineBoxLevelsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

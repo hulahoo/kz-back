@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OrderMaster.builder"
+        class="kz.uco.tsadv.web.ordermaster.OrderBuilder"
+        messagesPack="kz.uco.tsadv.web.ordermaster">
+
+    <dsContext>
+        <collectionDatasource id="personGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                              view="personGroup.master">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e join e.list p where :session$systemDate between p.startDate and p.endDate]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="personGroupDs"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                    view="personGroup.master">
+            <datasource id="personDs"
+                        property="person"/>
+            <collectionDatasource id="personContactsDs"
+                                  property="personContacts"/>
+            <collectionDatasource id="personDocumentsDs"
+                                  property="personDocuments"/>
+            <collectionDatasource id="agreementsDs"
+                                  property="agreements"/>
+            <collectionDatasource id="dismissalsDs"
+                                  property="dismissals"/>
+            <collectionDatasource id="casesDs"
+                                  property="cases"/>
+            <collectionDatasource id="addressesDs"
+                                  property="addresses"/>
+            <collectionDatasource id="businessTripDs"
+                                  property="businessTrip">
+                <collectionDatasource id="businessTripLinesDs"
+                                      property="businessTripLines">
+                    <collectionDatasource id="businessTripCostDs"
+                                          property="businessTripCost"/>
+                </collectionDatasource>
+            </collectionDatasource>
+        </datasource>
+        <datasource id="assignmentGroupDs"
+                    class="kz.uco.tsadv.modules.personal.group.AssignmentGroupExt"
+                    view="assignmentGroup.master">
+            <datasource id="assignmentDs"
+                        property="assignment"/>
+            <collectionDatasource id="salaryDs"
+                                  property="salaries"/>
+            <collectionDatasource id="surChargeDs"
+                                  property="surCharge"/>
+        </datasource>
+        <collectionDatasource id="competenceChartEntitiesDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.global.entity.CompetenceChartEntity"/>
+
+        <collectionDatasource id="salaryChartEntitiesDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.global.entity.SalaryChartEntity"/>
+
+        <collectionDatasource id="absencesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence.view">
+            <query>
+                <![CDATA[select e from tsadv$Absence e where e.personGroup.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+
+        <collectionDatasource id="tradeUnionsDs"
+                              class="kz.uco.tsadv.modules.personal.model.TradeUnion"
+                              view="tradeUnionOnPersonCard">
+            <query>
+                <![CDATA[select e from tsadv$TradeUnion e where e.personGroup.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+
+        <collectionDatasource id="beneficiariesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Beneficiary"
+                              view="beneficiaryView">
+            <query>
+                <![CDATA[select e from tsadv$Beneficiary e where e.personGroupParent.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+
+        <collectionDatasource id="absenceBalancesDs"
+                              class="kz.uco.tsadv.modules.personal.model.AbsenceBalance"
+                              view="absenceBalance.view">
+            <query>
+                <![CDATA[select e from tsadv$AbsenceBalance e
+                where e.personGroup.id = :ds$personGroupDs.id
+                order by e.dateFrom]]>
+            </query>
+            <collectionDatasource id="absencesToAbsenceBalanceDs"
+                                  property="absenceToAbsenceBalances"/>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <vbox id="wrapper"
+              expand="dynamicContentWrapper"
+              height="100%"
+              stylename="ob-wrapper">
+            <hbox expand="pageLabel"
+                  stylename="ob-header"
+                  width="100%">
+                <label id="pageLabel"
+                       align="MIDDLE_LEFT"
+                       stylename="ob-header-name"/>
+                <label id="pageNumber"
+                       align="MIDDLE_RIGHT"
+                       stylename="ob-header-page"/>
+            </hbox>
+            <vbox id="dynamicContentWrapper"
+                  stylename="ob-body">
+                <grid id="builderVariables"
+                      spacing="true"
+                      visible="false">
+                    <columns count="2"/>
+                    <rows>
+                        <row>
+                            <label value="msg://order.builder.field.person"/>
+                            <lookupPickerField id="personsLookup"
+                                               captionProperty="person.fullName"
+                                               optionsDatasource="personGroupsDs"
+                                               required="true"/>
+                        </row>
+                        <row>
+                            <label value="msg://order.builder.field.date"/>
+                            <dateField id="dateField"
+                                       required="true"
+                                       requiredMessage="msg://order.builder.date.null"/>
+                        </row>
+                    </rows>
+                </grid>
+                <vbox id="dynamicContent"
+                      height="100%"/>
+            </vbox>
+            <hbox spacing="true"
+                  stylename="ob-footer"
+                  width="100%">
+                <hbox align="MIDDLE_LEFT"
+                      spacing="true">
+                    <button id="previous"
+                            caption="mainMsg://table.btn.empty"
+                            icon="font-icon:ANGLE_LEFT"
+                            invoke="previous"/>
+                    <button id="next"
+                            caption="mainMsg://table.btn.empty"
+                            icon="font-icon:ANGLE_RIGHT"
+                            invoke="next"/>
+                </hbox>
+                <hbox align="MIDDLE_RIGHT" spacing="true">
+                    <button id="finishButton"
+                            align="MIDDLE_RIGHT"
+                            caption="msg://order.builder.finish"
+                            icon="font-icon:FLAG_O"
+                            invoke="finish"/>
+                    <button id="cancelButton"
+                            align="MIDDLE_RIGHT"
+                            caption="msg://order.builder.cancel"
+                            icon="font-icon:REMOVE"
+                            invoke="cancelChanges"/>
+                </hbox>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RequisitionMember.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisitionmember.RequisitionMemberEdit"
+        datasource="requisitionMemberDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="requisitionMemberDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RequisitionMember"
+                    view="requisitionMember.view"/>
+        <!--<collectionDatasource id="accessLevelsDs"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              class="kz.uco.tsadv.dictionary.DicRequisitionAccessLevel"
+                              view="_local">
+            <clearQuery>
+                <![CDATA[select e from tsadv$DicRequisitionAccessLevel e]]>
+            </clearQuery>
+        </collectionDatasource>-->
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="requisitionMemberDs">
+            <column width="250px">
+                <field id ="personGroupF" property="personGroup" captionProperty="personFioWithEmployeeNumber"/>
+                <field property="accessLevel"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

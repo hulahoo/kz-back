@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.budgetheader.BudgetHeaderEdit"
+        datasource="budgetHeaderDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.budgetheader">
+    <dsContext>
+        <datasource id="budgetHeaderDs"
+                    class="kz.uco.tsadv.modules.learning.model.BudgetHeader"
+                    view="budgetHeader-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="buttons"
+            spacing="true">
+
+        <fieldGroup id="fieldGroup"
+                    datasource="budgetHeaderDs">
+            <column width="250px">
+                <field property="headerName"/>
+                <field property="status" editable="false"/>
+                <field property="budget"/>
+                <field property="organizationGroup" captionProperty="organizationName"/>
+                <field property="responsiblePerson" captionProperty="personFioWithEmployeeNumber"/>
+            </column>
+        </fieldGroup>
+        <hbox id="buttons" spacing="true" stylename="c-edit-window-actions">
+            <button id="windowCommit" action="windowCommit" icon="theme://actions.Editor.Ok.icon"/>
+            <button id="sendToApprove" caption="msg://sendToApprove" invoke="sendToApprove"/>
+            <button id="approve" caption="msg://approve" invoke="approve"/>
+            <button id="rejectToDraft" caption="msg://rejectToDraft" invoke="rejectToDraft"/>
+            <button id="moveToObsolete" caption="msg://moveToObsolete" invoke="moveToObsolete"/>
+            <button id="windowClose" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
+        </hbox>
+    </layout>
+</window>

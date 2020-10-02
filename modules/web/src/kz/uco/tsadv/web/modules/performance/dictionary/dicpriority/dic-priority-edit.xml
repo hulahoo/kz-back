@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://priority.edit"
+        class="kz.uco.tsadv.web.modules.performance.dictionary.dicpriority.DicPriorityEdit"
+        datasource="dicPriorityDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.performance.dictionary.dicpriority">
+    <dsContext>
+        <datasource id="dicPriorityDs"
+                    class="kz.uco.tsadv.modules.performance.dictionary.DicPriority"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="dicPriorityDs">
+            <column width="250px">
+                <field property="langValue1"/>
+                <field property="langValue2"/>
+                <field property="langValue3"/>
+                <field property="langValue4"/>
+                <field property="langValue5"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="code"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

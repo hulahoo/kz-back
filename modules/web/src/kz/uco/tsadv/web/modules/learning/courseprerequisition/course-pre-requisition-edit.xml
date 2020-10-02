@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CoursePreRequisition.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.courseprerequisition.CoursePreRequisitionEdit"
+        datasource="coursePreRequisitionDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="coursePreRequisitionDs"
+                    class="kz.uco.tsadv.modules.learning.model.CoursePreRequisition"
+                    view="coursePreRequisition.edit.new"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="coursePreRequisitionDs">
+            <column width="250px">
+                <field property="requisitionCourse" captionProperty="name"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

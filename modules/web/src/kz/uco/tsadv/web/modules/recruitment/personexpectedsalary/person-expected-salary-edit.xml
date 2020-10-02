@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonExpectedSalary.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.personexpectedsalary.PersonExpectedSalaryEdit"
+        datasource="personExpectedSalaryDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="personExpectedSalaryDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExpectedSalary"
+                    view="personExpectedSalary.view"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                modal="true"
+                forceDialog="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personExpectedSalaryDs">
+            <column width="250px">
+                <field property="actualDate"/>
+                <field property="amount"/>
+                <field property="currency"/>
+                <field property="grossNet"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

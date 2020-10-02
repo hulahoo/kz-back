@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.myabsencebalance.MyAbsenceBalance"
+        focusComponent="absenceBalancesTable"
+        lookupComponent="absenceBalancesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.myabsencebalance">
+    <dsContext>
+        <collectionDatasource id="absenceBalancesDs"
+                              class="kz.uco.tsadv.modules.personal.model.AbsenceBalance"
+                              view="absenceBalance.view">
+            <query>
+                <![CDATA[select e from tsadv$AbsenceBalance e
+                    where e.personGroup.id = :session$userPersonGroupId
+                      and e.dateFrom >= (select p.hireDate from base$PersonExt p
+                                           where p.group.id = :session$userPersonGroupId
+                                             and :session$systemDate between p.startDate and p.endDate)
+                      and (0 = (select count(d.dismissalDate) from tsadv$Dismissal d
+                                          where d.personGroup.id = :session$userPersonGroupId
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup.id = :session$userPersonGroupId
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true))
+                          or e.dateFrom <= (select d.dismissalDate from tsadv$Dismissal d
+                                          where d.personGroup.id = :session$userPersonGroupId
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup.id = :session$userPersonGroupId
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true)))
+                        order by e.dateFrom asc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="absenceBalancesTable"
+            spacing="true">
+        <label id="balance"/>
+        <table id="absenceBalancesTable"
+               width="100%">
+            <columns>
+                <column id="typeDays"
+                        caption="msg://typeDays"
+                        generator="generateTypeDaysCell"/>
+                <column id="dateFrom"/>
+                <column id="dateTo"/>
+                <column id="balanceDays"/>
+                <column id="longAbsenceDays"
+                        visible="false"/>
+                <column id="additionalBalanceDays"/>
+                <column id="daysSpent"/>
+                <column id="daysLeft"/>
+            </columns>
+            <rows datasource="absenceBalancesDs"/>
+        </table>
+    </layout>
+</window>

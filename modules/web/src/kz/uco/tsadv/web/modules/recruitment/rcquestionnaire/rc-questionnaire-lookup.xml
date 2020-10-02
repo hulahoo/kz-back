@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RcQuestionnaire.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.rcquestionnaire.RcQuestionnaireLookup"
+        focusComponent="rcQuestionnairesTable"
+        lookupComponent="rcQuestionnairesTable">
+    <dsContext>
+        <groupDatasource id="rcQuestionnairesDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.RcQuestionnaire"
+                         view="rcQuestionnaire.lookup">
+            <query>
+                <![CDATA[select e
+                           from tsadv$RcQuestionnaire e
+                          where e.id not in :param$excludeRcQuestionnaireIds
+                          and e.id not in :param$excludeQuestionnaireIds
+                            and (coalesce(:param$filterByRequisition, FALSE) <> TRUE OR e.id in (select rq.questionnaire.id
+                                           from tsadv$RequisitionQuestionnaire rq
+                                          where rq.requisition.id = :param$requisitionId))]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="rcQuestionnairesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="rcQuestionnairesTable"
+                datasource="rcQuestionnairesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="rcQuestionnairesTable"
+                    width="100%">
+            <columns>
+                <column id="langName"/>
+                <column id="category"/>
+                <column id="status"/>
+            </columns>
+            <rows datasource="rcQuestionnairesDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

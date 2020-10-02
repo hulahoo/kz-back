@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://HiringStep.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.hiringstep.HiringStepBrowse"
+        focusComponent="hiringStepsTable"
+        lookupComponent="hiringStepsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.hiringstep">
+    <dsContext>
+        <groupDatasource id="hiringStepsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.HiringStep"
+                         view="hiringStep.view">
+            <query>
+                <![CDATA[select e from tsadv$HiringStep e]]>
+            </query>
+            <collectionDatasource id="membersDs"
+                                  property="members"/>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <filter id="filter"
+                applyTo="hiringStepsTable"
+                datasource="hiringStepsDs">
+            <properties include=".*"/>
+        </filter>
+        <split id="split"
+               width="100%">
+            <groupTable id="hiringStepsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="create"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="stepName"/>
+                    <column id="stepDescription"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                    <column id="attempts"/>
+                    <column id="attempts_control_level"/>
+                    <column id="number_between_attempts"/>
+                    <column id="period"/>
+                    <column id="type"/>
+                </columns>
+                <rows datasource="hiringStepsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="hiringStepsTable.create"
+                            caption=""/>
+                    <button id="editBtn"
+                            action="hiringStepsTable.edit"
+                            caption=""/>
+                    <button id="removeBtn"
+                            action="hiringStepsTable.remove"
+                            caption=""/>
+                </buttonsPanel>
+            </groupTable>
+            <groupBox id="membersGroupBox"
+                      caption="msg://HiringStep.members"
+                      expand="membersTable"
+                      height="100%">
+                <table id="membersTable"
+                       width="100%">
+                    <columns>
+                        <column id="hiringMemberType"/>
+                        <column id="role.name"
+                                caption="msg://HiringStepMember.role"/>
+                        <column id="userPersonGroup"
+                                captionProperty="userPersonGroup.personFioWithEmployeeNumber"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="mainInterviewer"/>
+                    </columns>
+                    <rows datasource="membersDs"/>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

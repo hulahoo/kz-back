@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://allTalentProgramApplications"
+        class="kz.uco.tsadv.web.talentprogramrequest.AllTalentProgramRequestBrowse"
+        focusComponent="talentProgramRequestsTable"
+        lookupComponent="talentProgramRequestsTable"
+        messagesPack="kz.uco.tsadv.web.talentprogramrequest">
+    <dsContext>
+        <groupDatasource id="talentProgramRequestsDs"
+                         allowCommit="false"
+                         class="kz.uco.tsadv.entity.TalentProgramRequest"
+                         maxResults="20"
+                         view="all-talentProgramRequest-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramRequest e
+where 1=1
+order by e.requestDate desc, e.id ]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="dicTalentProgramRequestStatusesDs"
+                              class="kz.uco.tsadv.entity.DicTalentProgramRequestStatus"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicTalentProgramRequestStatus e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicTalentProgramStepsDs"
+                              class="kz.uco.tsadv.entity.tb.dictionary.DicTalentProgramStep"
+                              view="_local">
+            <query>
+                <![CDATA[select a from tsadv$DicTalentProgramStep a 
+join tsadv$TalentProgramStep e
+where a.id = e.step.id
+and e.talentProgram.id = :ds$talentProgramDs.id
+order by e.orderNum]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="talentProgramDs"
+                    class="kz.uco.tsadv.entity.TalentProgram"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="talentProgramRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="talentProgramRequestsTable"
+                datasource="talentProgramRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupBox collapsable="true"
+                  caption="msg://steps.and.statuses"
+                  collapsed="true">
+            <cssLayout id="progressBarStep"
+                       stylename="ca-progress-bar"
+                       visible="false"/>
+            <cssLayout id="progressBarStatus"
+                       stylename="ca-progress-bar"
+                       visible="false"/>
+        </groupBox>
+        <table id="talentProgramRequestsTable"
+               width="100%">
+            <actions>
+                <action id="invite"
+                        caption="msg://inviteCandidate"
+                        enable="false"
+                        invoke="onInvite"/>
+                <action id="excel"/>
+                <action id="import" invoke="onImportXls" caption="mainMsg://button.import"/>
+            </actions>
+            <columns>
+                <column id="check"
+                        caption=" "
+                        generator="checkBox"/>
+                <column id="personGroup.fioWithEmployeeNumber"
+                        caption="mainMsg://widget.field.fio"/>
+                <column id="personGroup.primaryAssignment.organizationGroup.organizationName"
+                        caption="msg://organization"/>
+                <column id="personGroup.primaryAssignment.jobGroup.jobName"/>
+                <column id="personGroup.primaryAssignment.gradeGroup.grade"/>
+                <column id="requestDate"/>
+                <column id="status"/>
+                <column id="currentStep"/>
+                <column id="currentStepStatus"/>
+            </columns>
+            <rows datasource="talentProgramRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="chooseAll" invoke="chooseAll" caption="msg://chooseAll"/>
+                <button id="inviteBtn"
+                        action="talentProgramRequestsTable.invite"/>
+                <button id="excelBtn"
+                        action="talentProgramRequestsTable.excel"/>
+                <button id="importExcel"
+                        action="talentProgramRequestsTable.import"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.organizationssview.OrganizationSsViewBrowse"
+        focusComponent="organizationSsViewsTable"
+        lookupComponent="organizationSsViewsTable"
+        messagesPack="kz.uco.tsadv.web.organizationssview">
+    <dsContext>
+        <groupDatasource id="organizationSsViewsDs"
+                         class="kz.uco.tsadv.entity.dbview.OrganizationSsView"
+                         maxResults="20"
+                         view="organizationSsView-view">
+            <query>
+                <![CDATA[select e from tsadv$OrganizationSsView e
+where :param$date between e.startDate and e.endDate
+order by e.id]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="organizationSsViewsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="organizationSsViewsTable"
+                datasource="organizationSsViewsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="organizationSsViewsTable"
+                    width="100%">
+            <columns>
+                <column id="organizationName"/>
+                <column id="costCenter"/>
+            </columns>
+            <rows datasource="organizationSsViewsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

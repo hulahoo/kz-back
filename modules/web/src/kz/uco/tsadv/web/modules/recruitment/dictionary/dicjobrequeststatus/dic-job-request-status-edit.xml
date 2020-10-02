@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicJobRequestStatus.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.dictionary.dicjobrequeststatus.DicJobRequestStatusEdit"
+        datasource="dicJobRequestStatusDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="dicJobRequestStatusDs"
+                    class="kz.uco.tsadv.modules.recruitment.dictionary.DicJobRequestStatus"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="dicJobRequestStatusDs">
+            <column width="250px">
+                <field property="langValue1"/>
+                <field property="langValue2"/>
+                <field property="langValue3"/>
+                <field property="langValue4"/>
+                <field property="langValue5"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="code"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

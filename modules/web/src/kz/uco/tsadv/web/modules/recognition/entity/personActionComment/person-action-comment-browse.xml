@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personActionComment.PersonActionCommentBrowse"
+        focusComponent="personActionCommentsTable"
+        lookupComponent="personActionCommentsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personActionComment">
+    <dsContext>
+        <groupDatasource id="personActionCommentsDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonActionComment"
+                         view="personActionComment-view">
+            <query>
+                <![CDATA[select e from tsadv$PersonActionComment e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personActionCommentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personActionCommentsTable"
+                datasource="personActionCommentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personActionCommentsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="parentComment"/>
+                <column id="comment"/>
+                <column id="personGroup"/>
+            </columns>
+            <rows datasource="personActionCommentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personActionCommentsTable.create"/>
+                <button id="editBtn"
+                        action="personActionCommentsTable.edit"/>
+                <button id="removeBtn"
+                        action="personActionCommentsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

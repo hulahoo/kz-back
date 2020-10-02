@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.requisitionrequirement.RequisitionRequirementEdit"
+        datasource="requisitionRequirementDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.requisitionrequirement">
+    <dsContext>
+        <datasource id="requisitionRequirementDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RequisitionRequirement"
+                    view="requisitionRequirement-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="requisitionRequirementDs">
+            <column width="250px">
+                <field property="requisition"/>
+                <field id="requirement"
+                       captionProperty="questionText"
+                       property="requirement"/>
+                <field property="requirementLevel">
+                    <lookupField id="requirementLevelLookupField"
+                                 datasource="requisitionRequirementDs"
+                                 property="requirementLevel"/>
+                </field>
+                <field property="critical"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

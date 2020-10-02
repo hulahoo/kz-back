@@ -1,0 +1,1 @@
+alter table TSADV_GRADE_RULE drop column LEGACY_ID__U57234 cascade ;

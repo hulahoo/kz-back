@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://copyTimecard"
+        class="kz.uco.tsadv.web.modules.personal.timecard.copy.TimecardCopyWindow">
+    <dsContext>
+        <groupDatasource id="timecardDeviationsDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.TimecardDeviation"
+                         view="timecardDeviation-view">
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="auto"
+                width="300"/>
+    <layout>
+        <vbox spacing="true">
+            <datePicker id="month"
+                        caption="msg://chooseMonth"
+                        align="MIDDLE_CENTER"
+                        resolution="MONTH"/>
+            <optionsGroup id="hoursOptions" orientation="horizontal" align="MIDDLE_CENTER" caption="msg://whichTypeOfHoursCopy"/>
+
+            <hbox spacing="true" align="MIDDLE_CENTER"
+                  stylename="c-edit-window-actions">
+                <button id="ok"
+                        caption="msg://ok"
+                        invoke="save"
+                        icon="theme://actions.Editor.Ok.icon"/>
+
+                <button id="close"
+                        invoke="closeWindow"
+                        caption="msg://cancel"
+                        icon="theme://actions.Editor.Cancel.icon"/>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

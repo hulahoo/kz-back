@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfSalary">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <table id="personSalaryTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/excel.png"/>
+            </actions>
+            <columns>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="amount"/>
+                <column id="currency"/>
+                <column id="netGross"/>
+                <column id="type"/>
+            </columns>
+            <rows datasource="salaryDs"/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personSalaryTable.create"/>
+                <button id="editBtn"
+                        action="personSalaryTable.edit"/>
+                <button id="removeBtn"
+                        action="personSalaryTable.remove"/>
+                <button id="excelBtn"
+                        action="personSalaryTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

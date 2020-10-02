@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.timecard.workedhoursdetailed.WorkedHoursDetailedEdit"
+        datasource="workedHoursDetailedDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.timecard.workedhoursdetailed">
+    <dsContext>
+        <datasource id="workedHoursDetailedDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.WorkedHoursDetailed"
+                    view="workedHoursDetailed-with-parents"/>
+        <collectionDatasource id="elementsDs"
+                              class="kz.uco.tsadv.modules.timesheet.dictionary.DicScheduleElementType"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicScheduleElementType e
+                        where e.displayOnTimecardEditScreen = true]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="250"
+                width="400"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="workedHoursDetailedDs">
+            <column width="250px">
+                <field optionsDatasource="elementsDs"
+                       property="scheduleElementType"/>
+                <field property="actualTimeIn"/>
+                <field property="actualTimeOut"/>
+                <field property="hours" editable="false">
+                    <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                </field>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

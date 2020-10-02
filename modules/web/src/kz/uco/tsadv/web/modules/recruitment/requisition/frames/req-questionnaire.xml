@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.frames.ReqQuestionnaire">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true">
+        <table id="questionnairesTable"
+               editable="true"
+               height="100%"
+               multiselect="true"
+               width="100%">
+            <actions>
+                <action id="add"
+                        caption="mainMsg://table.btn.empty"
+                        description="mainMsg://table.btn.empty"
+                        icon="font-icon:SEARCH_PLUS"
+                        invoke="addQuestionnaires"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+            <column id="questionnaire" caption="msg://kz.uco.tsadv.web.modules.recruitment.requisition.frames/questionnaire"
+                        captionProperty="questionnaire.name"/>
+                <column id="questionnaire.category"
+                        captionProperty="questionnaire.category.langValue"/>
+                <column id="weight"
+                        editable="true"/>
+            </columns>
+            <rows datasource="questionnairesDs"/>
+            <rowsCount/>
+            <buttonsPanel alwaysVisible="true">
+                <button action="questionnairesTable.add"
+                        caption="mainMsg://table.btn.empty"/>
+                <button action="questionnairesTable.remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

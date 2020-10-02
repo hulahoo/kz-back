@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns="http://schemas.haulmont.com/cuba/rest-services-v2-ext.xsd">
+    <service name="tsadv_RecognitionRestService">
+        <method name="sendQuestionAnswer">
+            <param name="questionId"/>
+            <param name="answerId"/>
+        </method>
+        <method name="sendLike">
+            <param name="recognitionId"/>
+        </method>
+        <method name="sendLike">
+            <param name="employeeNumber"/>
+            <param name="recognitionId"/>
+        </method>
+        <method name="sendComment">
+            <param name="commentPojo"/>
+        </method>
+        <method name="loadAllRcgFaq">
+            <param name="language"/>
+        </method>
+        <method name="loadRcgFaq">
+            <param name="faqId"/>
+            <param name="language"/>
+        </method>
+        <method name="loadActiveQuestion"/>
+        <method name="hasActiveQuestion"/>
+        <method name="loadRecognitionTypes"/>
+        <method name="loadTopSender"/>
+        <method name="loadTopSender">
+            <param name="language" type="java.lang.String"/>
+        </method>
+        <method name="loadTopSender">
+            <param name="countOfMonths" type="java.lang.Integer"/>
+        </method>
+        <method name="loadTopSender">
+            <param name="language" type="java.lang.String"/>
+            <param name="countOfMonths" type="java.lang.Integer"/>
+        </method>
+        <method name="loadTopAwarded"/>
+        <method name="loadTopAwarded">
+            <param name="language" type="java.lang.String"/>
+        </method>
+        <method name="loadTopAwarded"/>
+        <method name="loadTopAwarded">
+            <param name="countOfMonths" type="java.lang.Integer"/>
+        </method>
+        <method name="loadTopAwarded">
+            <param name="language" type="java.lang.String"/>
+            <param name="countOfMonths" type="java.lang.Integer"/>
+        </method>
+        <method name="uploadPersonImage">
+            <param name="imageContent"/>
+        </method>
+        <method name="loadPersonPreferences">
+            <param name="employeeNumber"/>
+        </method>
+        <method name="getPersonPreferenceTypes">
+            <param name="language"/>
+        </method>
+        <method name="updatePersonPreference">
+            <param name="preferenceTypeId"/>
+            <param name="description"/>
+        </method>
+        <method name="loadRecognitions">
+            <param name="offset"/>
+            <param name="maxResult"/>
+            <param name="wallType"/>
+            <param name="sessionEmployeeNumber"/>
+            <param name="profileEmployeeNumber"/>
+            <param name="organizationGroupId"/>
+            <param name="filter"/>
+            <param name="language"/>
+            <param name="automaticTranslate"/>
+        </method>
+        <method name="recognitionsCount">
+            <param name="wallType"/>
+            <param name="profileEmployeeNumber"/>
+            <param name="organizationGroupId"/>
+            <param name="filter"/>
+            <param name="language"/>
+        </method>
+        <method name="loadQualities">
+            <param name="language"/>
+        </method>
+        <method name="loadOrganizations">
+            <param name="language"/>
+        </method>
+        <method name="recognitionCommentsCount">
+            <param name="recognitionId"/>
+        </method>
+        <method name="recognitionComments">
+            <param name="recognitionId"/>
+            <param name="offset"/>
+            <param name="maxResults"/>
+            <param name="language"/>
+            <param name="automaticTranslate"/>
+        </method>
+        <method name="loadTeamProfiles">
+            <param name="offset"/>
+            <param name="maxResults"/>
+            <param name="language"/>
+        </method>
+        <method name="teamProfilesCount"/>
+        <method name="createRecognition">
+            <param name="recognitionCreatePojo"/>
+            <param name="language"/>
+        </method>
+        <method name="loadProfile">
+            <param name="employeeNumber"/>
+            <param name="language"/>
+        </method>
+        <method name="loadTopNominee">
+            <param name="year"/>
+            <param name="organizationGroupId"/>
+        </method>
+        <method name="allNomineesCount">
+            <param name="year"/>
+            <param name="organizationGroupId"/>
+        </method>
+        <method name="loadAllNominee">
+            <param name="offset"/>
+            <param name="maxResults"/>
+            <param name="language"/>
+            <param name="year"/>
+            <param name="organizationGroupId"/>
+        </method>
+        <method name="myNomineesCount">
+            <param name="year"/>
+            <param name="organizationGroupId"/>
+        </method>
+        <method name="loadMyNominees">
+            <param name="offset"/>
+            <param name="maxResults"/>
+            <param name="year"/>
+            <param name="language"/>
+            <param name="organizationGroupId"/>
+        </method>
+        <method name="createPersonAward">
+            <param name="personAwardPojo"/>
+            <param name="language"/>
+        </method>
+        <method name="getDraftPersonAward">
+            <param name="authorEmployeeNumber"/>
+            <param name="receiverEmployeeNumber"/>
+        </method>
+        <method name="loadInfoByQRCode">
+            <param name="qrCode"/>
+        </method>
+        <method name="useVoucher">
+            <param name="qrCode"/>
+        </method>
+    </service>
+    <service name="tsadv_RecognitionService">
+        <method name="loadRecognitions">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="wallType"/>
+            <param name="personGroupId"/>
+            <param name="organizationGroupId"/>
+            <param name="filter"/>
+        </method>
+        <method name="loadComments">
+            <param name="recognitionId"/>
+            <param name="page"/>
+        </method>
+        <method name="sendComment">
+            <param name="commentPojo"/>
+        </method>
+        <method name="loadOrganizations"/>
+        <method name="loadProfiles">
+            <param name="page"/>
+            <param name="lastCount"/>
+        </method>
+        <method name="loadCoinLogs">
+            <param name="page"/>
+            <param name="lastCount"/>
+        </method>
+        <method name="loadTopSender"/>
+        <method name="loadTopSender">
+            <param name="language" type="java.lang.String"/>
+        </method>
+        <method name="loadTopSender">
+            <param name="countOfMonths" type="java.lang.Integer"/>
+        </method>
+        <method name="loadTopSender">
+            <param name="language" type="java.lang.String"/>
+            <param name="countOfMonths" type="java.lang.Integer"/>
+        </method>
+        <method name="loadTopAwarded"/>
+        <method name="loadTopAwarded">
+            <param name="language" type="java.lang.String"/>
+        </method>
+        <method name="loadTopAwarded">
+            <param name="countOfMonths" type="java.lang.Integer"/>
+        </method>
+        <method name="loadTopAwarded">
+            <param name="language" type="java.lang.String"/>
+            <param name="countOfMonths" type="java.lang.Integer"/>
+        </method>
+        <method name="loadComingBirthdays"/>
+        <method name="sendLike">
+            <param name="recognitionId"/>
+        </method>
+        <method name="loadPersonMedals">
+            <param name="personGroupId"/>
+        </method>
+        <method name="loadGoods">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="categoryId"/>
+            <param name="sort"/>
+        </method>
+        <method name="loadCategories"/>
+        <method name="addGoodsToCart">
+            <param name="goodsId"/>
+        </method>
+        <method name="loadCart">
+            <param name="page"/>
+            <param name="lastCount"/>
+        </method>
+        <method name="uploadProfileImage">
+            <param name="imageContent"/>
+        </method>
+        <method name="uploadPersonImage">
+            <param name="imageContent"/>
+        </method>
+        <method name="changePersonImage">
+            <param name="employeeNumber"/>
+            <param name="imageContent"/>
+        </method>
+        <method name="loadGoodsOrders">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="filter"/>
+        </method>
+        <method name="loadGoodsOrders">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="filter"/>
+            <param name="dicGoodsCategory"/>
+        </method>
+        <method name="updateGoodsQuantity">
+            <param name="goodsCartId"/>
+            <param name="goodsId"/>
+            <param name="quantity"/>
+        </method>
+        <method name="loadTopNominee">
+            <param name="year"/>
+            <param name="organizationGroupId"/>
+        </method>
+        <method name="loadTopNomineeWithDefault">
+            <param name="currentYear"/>
+            <param name="organizationGroupId"/>
+            <param name="lastYear"/>
+            <param name="onChange"/>
+        </method>
+        <method name="loadAllNominee">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="year"/>
+            <param name="organizationGroupId"/>
+        </method>
+        <method name="loadAllNomineeWithDefault">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="year"/>
+            <param name="organizationGroupId"/>
+            <param name="lastYear"/>
+            <param name="onChange"/>
+        </method>
+        <method name="loadNomineeYears">
+            <param name="awarded"/>
+        </method>
+        <method name="loadMyNomineeYears"/>
+        <method name="loadMyNominees">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="year"/>
+            <param name="organizationGroupId"/>
+        </method>
+        <method name="loadBanners">
+            <param name="page"/>
+        </method>
+        <method name="loadWishList">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="personGroupId"/>
+        </method>
+        <method name="addToWishList">
+            <param name="goodsId"/>
+        </method>
+    </service>
+    <service name="tsadv_EmployeeService">
+        <method name="generate">
+            <param name="personGroupId"/>
+            <param name="lang"/>
+            <param name="systemDate"/>
+        </method>
+        <method name="generateOgrChart">
+            <param name="personGroupId"/>
+        </method>
+        <method name="getImage">
+            <param name="personId"/>
+        </method>
+        <method name="getMatrixImage">
+            <param name="id"/>
+        </method>
+        <method name="getPersonForScrum">
+            <param name="byType"/>
+            <param name="orgId"/>
+            <param name="positionId"/>
+            <param name="jobId"/>
+            <param name="calibrationSessionId"/>
+            <param name="lang"/>
+        </method>
+        <method name="getMatrix">
+            <param name="type"/>
+            <param name="calibrationSessionId"/>
+            <param name="orgId"/>
+            <param name="positionId"/>
+            <param name="jobId"/>
+            <param name="lang"/>
+        </method>
+    </service>
+    <service name="tsadv_RcApiService">
+        <method name="getCountries" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getCities" allowAnonymous="true">
+            <param name="country"/>
+            <param name="lang"/>
+        </method>
+        <method name="getRequisitionCategories" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getSex" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getNationalities" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getCitizenship" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getMaritalStatuses" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getEducationDegrees">
+            <param name="lang"/>
+        </method>
+        <method name="getEducationLevels">
+            <param name="lang"/>
+        </method>
+        <method name="getContactTypes">
+            <param name="lang"/>
+        </method>
+        <method name="getAttachmentCategories">
+            <param name="lang"/>
+        </method>
+        <method name="getCompetences">
+            <param name="lang"/>
+        </method>
+        <method name="getScaleLevels">
+            <param name="competence"/>
+            <param name="lang"/>
+        </method>
+        <method name="getRequisitions" allowAnonymous="true">
+            <param name="code"/>
+            <param name="job"/>
+            <param name="country"/>
+            <param name="city"/>
+            <param name="category"/>
+            <param name="startDate"/>
+            <param name="lang"/>
+        </method>
+        <method name="getRequisitionsByPerson">
+            <param name="code"/>
+            <param name="job"/>
+            <param name="country"/>
+            <param name="city"/>
+            <param name="category"/>
+            <param name="startDate"/>
+            <param name="lang"/>
+        </method>
+        <method name="getRequisition" allowAnonymous="true">
+            <param name="requisition"/>
+            <param name="lang"/>
+        </method>
+        <method name="registerUser" allowAnonymous="true">
+            <param name="user"/>
+        </method>
+        <method name="getUserPerson">
+            <param name="lang"/>
+        </method>
+        <method name="checkFullProfile" allowAnonymous="true">
+            <param name="user"/>
+        </method>
+        <method name="uploadUserPhoto">
+            <param name="person"/>
+        </method>
+        <method name="getScheduledInterviews">
+            <param name="requisition"/>
+            <param name="lang"/>
+        </method>
+        <method name="requestInterview">
+            <param name="interview"/>
+        </method>
+        <method name="updatePerson">
+            <param name="person"/>
+        </method>
+        <method name="isEmployeeWithPersonGroupId"/>
+        <method name="createContact">
+            <param name="contact"/>
+        </method>
+        <method name="updateContact">
+            <param name="contact"/>
+            <param name="id"/>
+        </method>
+        <method name="deleteContact">
+            <param name="id"/>
+        </method>
+        <method name="createEducation">
+            <param name="education"/>
+        </method>
+        <method name="updateEducation">
+            <param name="education"/>
+            <param name="id"/>
+        </method>
+        <method name="deleteEducation">
+            <param name="id"/>
+        </method>
+        <method name="createExperience">
+            <param name="experience"/>
+        </method>
+        <method name="updateExperience">
+            <param name="experience"/>
+            <param name="id"/>
+        </method>
+        <method name="deleteExperience">
+            <param name="id"/>
+        </method>
+        <method name="createAttachment">
+            <param name="attachment"/>
+        </method>
+        <method name="updateAttachment">
+            <param name="attachment"/>
+            <param name="id"/>
+        </method>
+        <method name="deleteAttachment">
+            <param name="id"/>
+        </method>
+        <method name="createCompetence">
+            <param name="competence"/>
+        </method>
+        <method name="updateCompetence">
+            <param name="competence"/>
+            <param name="id"/>
+        </method>
+        <method name="deleteCompetence">
+            <param name="id"/>
+        </method>
+        <method name="getAllObjectModel" allowAnonymous="true"/>
+        <method name="getSources" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getInterviewStatusEnum" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getOfferStatusEnum" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getJobRequestStatusEnum" allowAnonymous="true">
+            <param name="lang"/>
+        </method>
+        <method name="getOffers">
+            <param name="lang"/>
+        </method>
+        <method name="approveUserOffer">
+            <param name="offer"/>
+        </method>
+        <method name="rejectUserOffer">
+            <param name="offerInt"/>
+        </method>
+        <method name="requestRequisition">
+            <param name="jobRequestInt"/>
+        </method>
+        <method name="getUserInterviews">
+            <param name="lang"/>
+        </method>
+        <method name="getUserJobRequests">
+            <param name="lang"/>
+        </method>
+        <method name="approveInterview">
+            <param name="interview"/>
+        </method>
+        <method name="cancelInterview">
+            <param name="interview"/>
+            <param name="reason"/>
+        </method>
+        <method name="getUser">
+            <param name="lang"/>
+        </method>
+        <method name="updateUser">
+            <param name="user"/>
+        </method>
+        <method name="changePassword">
+            <param name="oldPassword"/>
+            <param name="newPassword"/>
+        </method>
+        <method name="saveVideoFile">
+            <param name="requisition"/>
+            <param name="videoFile"/>
+        </method>
+        <method name="getPreScreenTest">
+            <param name="requisition"/>
+            <param name="lang"/>
+        </method>
+        <method name="hasJobRequestByUser">
+            <param name="requisition"/>
+        </method>
+        <method name="addAddress">
+            <param name="addressInt"/>
+        </method>
+        <method name="getAddress">
+            <param name="lang"/>
+        </method>
+        <method name="getAddressType">
+            <param name="lang"/>
+        </method>
+        <method name="deleteAddress">
+            <param name="id"/>
+        </method>
+        <method name="updateAddress">
+            <param name="addressInt"/>
+        </method>
+        <method name="checkVideoInterview">
+            <param name="candidateInt"/>
+        </method>
+        <method name="checkPrescreeningTest">
+            <param name="candidateInt"/>
+        </method>
+        <method name="addInterviewAnswer">
+            <param name="interviewQuestionnaireInt"/>
+        </method>
+        <method name="createPersonDocument">
+            <param name="personDocumentInt"/>
+        </method>
+        <method name="createAgreement">
+            <param name="agreementInt"/>
+        </method>
+        <method name="cancelJobRequest">
+            <param name="jobRequestId"/>
+        </method>
+    </service>
+    <service name="tsadv_RcgFeedbackService">
+        <method name="loadFeedback">
+            <param name="page"/>
+            <param name="lastCount"/>
+            <param name="type"/>
+            <param name="personGroupId"/>
+            <param name="filter"/>
+        </method>
+        <method name="loadFeedbackComments">
+            <param name="feedbackId"/>
+            <param name="page"/>
+        </method>
+        <method name="sendComment">
+            <param name="commentPojo"/>
+        </method>
+        <method name="loadChartData">
+            <param name="personGroupId"/>
+            <param name="direction"/>
+        </method>
+        <method name="feedbackCount">
+            <param name="type"/>
+            <param name="personGroupId"/>
+            <param name="filter"/>
+        </method>
+    </service>
+    <service name="tsadv_LmsService">
+        <method name="getPersonCourses"/>
+        <method name="getPersonHistory"/>
+        <method name="hasEnrollment">
+            <param name="courseId"/>
+        </method>
+        <method name="loadCourseData">
+            <param name="courseId"/>
+        </method>
+        <method name="registerToCourse">
+            <param name="courseId"/>
+        </method>
+        <method name="loadCourses"/>
+        <method name="loadCourses">
+            <param name="conditions"/>
+        </method>
+        <method name="loadLearningObject">
+            <param name="contentType"/>
+        </method>
+        <method name="startAndLoadTest">
+            <param name="courseSectionObjectId"/>
+            <param name="enrollmentId"/>
+        </method>
+        <method name="startAndLoadTest">
+            <param name="testId"/>
+        </method>
+        <method name="loadPersonTests"/>
+        <method name="finishTest">
+            <param name="answeredTest"/>
+        </method>
+        <method name="loadPersonProgress"/>
+        <method name="getCertificate">
+            <param name="enrollmentId"/>
+        </method>
+        <method name="removeCertificate">
+            <param name="certificateFileId"/>
+        </method>
+        <method name="personMonthEvents">
+            <param name="date"/>
+        </method>
+        <method name="getPersonNotifications"/>
+        <method name="getNotification">
+            <param name="notificationId"/>
+        </method>
+        <method name="changePassword">
+            <param name="oldPassword"/>
+            <param name="newPassword"/>
+        </method>
+        <method name="restorePassword" allowAnonymous="true">
+            <param name="userLogin"/>
+        </method>
+        <method name="getCourseTrainers">
+            <param name="courseId"/>
+        </method>
+        <method name="loadFeedbackData">
+            <param name="feedbackTemplateId"/>
+        </method>
+        <method name="finishFeedback">
+            <param name="answeredFeedback"/>
+        </method>
+        <method name="loadCourseSectionData">
+            <param name="enrollmentId"/>
+            <param name="courseSectionId"/>
+        </method>
+        <method name="loadBooks"/>
+    </service>
+</services>

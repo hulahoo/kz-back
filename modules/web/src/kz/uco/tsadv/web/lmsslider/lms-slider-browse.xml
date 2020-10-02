@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.lmsslider.LmsSliderBrowse"
+        focusComponent="lmsSlidersTable"
+        lookupComponent="lmsSlidersTable"
+        messagesPack="kz.uco.tsadv.web.lmsslider">
+    <dsContext>
+        <groupDatasource id="lmsSlidersDs"
+                         class="kz.uco.tsadv.lms.entity.LmsSlider"
+                         view="lmsSlider.with.images">
+            <query>
+                <![CDATA[select e from tsadv$LmsSlider e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="lmsSlidersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="lmsSlidersTable"
+                datasource="lmsSlidersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="lmsSlidersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="position"/>
+            </columns>
+            <rows datasource="lmsSlidersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="lmsSlidersTable.create"/>
+                <button id="editBtn"
+                        action="lmsSlidersTable.edit"/>
+                <button id="removeBtn"
+                        action="lmsSlidersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

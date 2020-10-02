@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.learningfeedbackanswer.LearningFeedbackAnswerEdit"
+        datasource="learningFeedbackAnswerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.learningfeedbackanswer">
+    <dsContext>
+        <datasource id="learningFeedbackAnswerDs"
+                    class="kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackAnswer"
+                    view="learningFeedbackAnswer.edit"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="600"/>
+    <layout expand="scrollBox" spacing="true" height="100%">
+        <scrollBox id="scrollBox" width="100%" spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="learningFeedbackAnswerDs"
+                        border="visible"
+                        fieldCaptionWidth="110px">
+                <column width="250px">
+                    <field property="order" width="100px"/>
+                    <field property="score" width="100px"/>
+                </column>
+            </fieldGroup>
+            <fieldGroup datasource="learningFeedbackAnswerDs"
+                        border="visible"
+                        fieldCaptionWidth="110px">
+                <column width="450px">
+                    <field property="answerLangValue1" rows="3"/>
+                    <field property="answerLangValue2" rows="3"/>
+                    <field property="answerLangValue3" rows="3"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Test REST API FILE</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <table>
+        <tr>
+            <td>File:</td>
+            <td>
+                <input type="file" id="file"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="uploadFile()" value="uploadFile">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="file_upload"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Photo:</td>
+            <td>
+                <input type="file" id="photo" accept="image/*"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="uploadUserPhoto()" value="uploadUserPhoto">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="photo_upload"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>File id:</td>
+            <td>
+                <input id="file_id" type="text"/>
+                <a target="_blank" id="file_link"></a>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="downloadFile()" value="downloadFile">
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getUserPhoto()" value="getUserPerson">
+            </td>
+        </tr>
+        <tr>
+            <td>Photo:</td>
+            <td>
+                <img id="photoImg" width="100px" height="auto"/>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var access_token;
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+            });
+    }
+
+    function uploadFile() {
+        var file = $("#file").get(0).files[0];
+        var data = new FormData();
+        data.append("fileName", file.name); // does not required
+        data.append("file", file); // required
+
+        $.ajax(config.appUrl + config.fileUrl + "/",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                processData: false,
+                contentType: false,
+                data: data
+            })
+            .success(function (res) {
+                $("#file_upload").text(JSON.stringify(res));
+            });
+
+    }
+
+
+    function downloadFile() {
+        var fileLink = document.getElementById('file_link');
+        fileLink.href = config.appUrl + config.fileUrl + "/" + $("#file_id").val() + "?access_token=" + access_token;
+        fileLink.download = "filename";
+        fileLink.click();
+    }
+
+    function uploadUserPhoto() {
+        var data = {};
+        jQuery.extend(data, personPhotoModel);
+
+        var file = $("#photo").get(0).files[0];
+        var reader = new FileReader();
+        reader.readAsBinaryString(file);
+
+        reader.onload = function (e) {
+            data.person.photo = btoa(e.target.result);
+
+            $.ajax(config.appUrl + config.serviceUrl + "/uploadUserPhoto",
+                {
+                    type: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + access_token,
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify(data)
+                })
+                .success(function (res) {
+                    $("#photo_upload").text(JSON.stringify(res));
+                });
+        };
+    }
+
+    function getUserPhoto() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUserPerson?lang=en",
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var photo = JSON.parse(res).photo;
+                $('#photoImg').attr('src', "data:image/;base64," + photo);
+            });
+    }
+    /*]>*/
+
+</script>
+</body>
+</html>

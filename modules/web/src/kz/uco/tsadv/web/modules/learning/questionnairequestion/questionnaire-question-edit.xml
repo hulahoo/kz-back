@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.questionnairequestion.QuestionnaireQuestionEdit"
+        datasource="questionnaireQuestionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.questionnairequestion">
+    <dsContext>
+        <datasource id="questionnaireQuestionDs"
+                    class="kz.uco.tsadv.modules.performance.model.QuestionnaireQuestion"
+                    view="questionnaireQuestion.edit"/>
+        <collectionDatasource id="questionTypesDs"
+                              class="kz.uco.tsadv.modules.performance.dictionary.DicQuestionType"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="dicQuestionType.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicQuestionType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="questionTextTabSheet"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="questionnaireQuestionDs">
+            <column width="250px">
+                <field optionsDatasource="questionTypesDs"
+                       property="questionType"/>
+                <field property="section"/>
+                <field property="order"/>
+            </column>
+        </fieldGroup>
+        <tabSheet id="questionTextTabSheet">
+            <tab id="questionTextLang1Tab"
+                 caption="msg://questionTextLang1"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <textArea id="questionTextLang1TextArea"
+                          datasource="questionnaireQuestionDs"
+                          height="100%"
+                          property="questionTextLang1"
+                          width="100%"/>
+            </tab>
+            <tab id="questionTextLang2Tab"
+                 caption="msg://questionTextLang2"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <textArea id="questionTextLang2TextArea"
+                          datasource="questionnaireQuestionDs"
+                          height="100%"
+                          property="questionTextLang2"
+                          width="100%"/>
+            </tab>
+            <tab id="questionTextLang3Tab"
+                 caption="msg://questionTextLang3"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <textArea id="questionTextLang3TextArea"
+                          datasource="questionnaireQuestionDs"
+                          height="100%"
+                          property="questionTextLang3"
+                          width="100%"/>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

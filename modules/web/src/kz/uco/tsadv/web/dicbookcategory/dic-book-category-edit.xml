@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.dicbookcategory.DicBookCategoryEdit"
+        datasource="dicBookCategoryDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.dicbookcategory">
+    <dsContext>
+        <datasource id="dicBookCategoryDs"
+                    class="kz.uco.tsadv.entity.DicBookCategory"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="800"
+                resizable="true"
+                width="1100"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="dicBookCategoryDs">
+                <column width="250px">
+                    <field property="legacyID"/>
+                    <field property="langValue1"/>
+                    <field property="description1"/>
+                    <field property="langValue2"/>
+                    <field property="description2"/>
+                    <field property="langValue3"/>
+                    <field property="description3"/>
+                    <field property="langValue4"/>
+                    <field property="description4"/>
+                    <field property="langValue5"/>
+                    <field property="description5"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field property="code"/>
+                    <field property="isSystemRecord"/>
+                    <field property="active"/>
+                    <field property="order"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

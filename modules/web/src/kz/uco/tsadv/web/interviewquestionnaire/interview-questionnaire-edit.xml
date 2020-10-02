@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.interviewquestionnaire.InterviewQuestionnaireEdit"
+        datasource="interviewQuestionnaireDs"
+        messagesPack="kz.uco.tsadv.web.interviewquestionnaire">
+    <dsContext>
+        <datasource id="interviewQuestionnaireDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.InterviewQuestionnaire"
+                    view="interviewQuestionnaire.view">
+            <collectionDatasource id="questionsDs"
+                                  property="questions">
+                <collectionDatasource id="answersDs"
+                                      property="answers"/>
+            </collectionDatasource>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800" modal="true" forceDialog="true"/>
+    <layout spacing="true" height="100%" expand="scrollBox">
+        <scrollBox id="scrollBox" width="100%" spacing="true">
+            <hbox stylename="int-q-test-result" spacing="true">
+                <label value="msg://test.result"/>
+                <label id="testResultValue"/>
+            </hbox>
+        </scrollBox>
+        <frame id="windowActions"
+               height="AUTO"
+               screen="editWindowActions"/>
+    </layout>
+</window>

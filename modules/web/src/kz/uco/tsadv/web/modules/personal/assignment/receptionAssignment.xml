@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.assignment.Receptionassignment"
+        datasource="assignmentGroupDs"
+        messagesPack="kz.uco.tsadv.web.modules.personal.assignment">
+    <dsContext>
+        <datasource id="assignmentGroupDs"
+                    class="kz.uco.tsadv.modules.personal.group.AssignmentGroupExt"
+                    view="assignmentGroup.view">
+            <datasource id="assignmentDs"
+                        property="assignment">
+                <datasource id="personGroupDs"
+                            property="personGroup">
+                    <datasource id="personDs"
+                                property="person"/>
+                </datasource>
+                <datasource id="positionGroupDs"
+                            property="positionGroup">
+                    <datasource id="positionDs"
+                                property="position"/>
+                </datasource>
+            </datasource>
+            <datasource id="analyticsDs"
+                        property="analytics"/>
+        </datasource>
+        <collectionDatasource id="dicSexDs"
+                              class="kz.uco.base.entity.dictionary.DicSex"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from base$DicSex e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="diсAssignmentCategoryDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAssignmentCategory"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicAssignmentCategory e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions" spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="assignmentGroupDs">
+            <column id="column1"
+                    width="250px">
+                <field id="firstName"
+                       property="assignment.personGroup.person.firstName"/>
+                <field id="lastName"
+                       property="assignment.personGroup.person.lastName"/>
+                <field id="middleName"
+                       property="assignment.personGroup.person.middleName"/>
+                <field id="firstNameLatin"
+                       property="assignment.personGroup.person.firstNameLatin"
+                       required="true"/>
+                <field id="lastNameLatin"
+                       property="assignment.personGroup.person.lastNameLatin"
+                       required="true"/>
+                <field id="middleNameLatin"
+                       property="assignment.personGroup.person.middleNameLatin"/>
+                <field id="nationalIdentifier"
+                       property="assignment.personGroup.person.nationalIdentifier"/>
+                <field id="dateOfBirth"
+                       property="assignment.personGroup.person.dateOfBirth"
+                       required="true"/>
+                <field property="assignment.personGroup.person.sex"
+                       required="true">
+                    <lookupField id="sex"
+                                 datasource="assignmentGroupDs"
+                                 optionsDatasource="dicSexDs"
+                                 property="assignment.personGroup.person.sex"/>
+                </field>
+                <field id="durationProbationPeriod"
+                       property="assignment.durationProbationPeriod"/>
+                <field id="unit"
+                       property="assignment.unit"/>
+                <field id="assignment.assignmentCategory"
+                       optionsDatasource="diсAssignmentCategoryDs"/>
+            </column>
+            <column id="column2"
+                    width="250px">
+                <field id="type"
+                       caption="msg://kz.uco.tsadv.web.modules.personal.persongroup/Person.type"
+                       property="assignment.personGroup.person.type"/>
+                <field id="hireDate"
+                       property="assignment.personGroup.person.hireDate"
+                       required="true"/>
+                <field id="employeeNumber"
+                       property="assignment.personGroup.person.employeeNumber"/>
+                <field id="assignmentNumber"
+                       property="assignmentNumber"
+                       editable="false"/>
+                <field id="positionName"
+                       captionProperty="fullName"
+                       property="assignment.positionGroup"
+                       required="true"/>
+                <field id="gradeGroup"
+                       captionProperty="grade"
+                       property="assignment.gradeGroup"/>
+                <field id="organizationGroup"
+                       captionProperty="organizationName"
+                       property="assignment.organizationGroup"
+                       required="true"/>
+                <field id="jobGroup"
+                       caption="msg://jobName"
+                       captionProperty="jobName"
+                       property="assignment.jobGroup"
+                       required="true"/>
+                <field id="costCenter"
+                       property="assignment.costCenter"/> <!--todo: Почему в релизе поле обязательно, в деве нет. Спосить у консультанта -->
+                <field id="calendar"
+                       captionProperty="description"
+                       property="analytics.calendar"/>
+                <field id="probationEndDate"
+                       property="assignment.probationEndDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

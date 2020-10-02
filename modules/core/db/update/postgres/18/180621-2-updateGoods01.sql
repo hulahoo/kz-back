@@ -1,0 +1,2 @@
+alter table TSADV_GOODS add constraint FK_TSADV_GOODS_CATEGORY foreign key (CATEGORY_ID) references TSADV_DIC_GOODS_CATEGORY(ID);
+create index IDX_TSADV_GOODS_CATEGORY on TSADV_GOODS (CATEGORY_ID);

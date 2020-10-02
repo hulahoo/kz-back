@@ -1,0 +1,4 @@
+alter table TSADV_BOOK_REVIEW add constraint FK_TSADV_BOOK_REVIEW_BOOK foreign key (BOOK_ID) references TSADV_BOOK(ID);
+alter table TSADV_BOOK_REVIEW add constraint FK_TSADV_BOOK_REVIEW_AUTHOR foreign key (AUTHOR_ID) references BASE_PERSON(ID);
+create index IDX_TSADV_BOOK_REVIEW_BOOK on TSADV_BOOK_REVIEW (BOOK_ID);
+create index IDX_TSADV_BOOK_REVIEW_AUTHOR on TSADV_BOOK_REVIEW (AUTHOR_ID);

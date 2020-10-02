@@ -1,0 +1,3 @@
+alter table TSADV_TALENT_PROGRAM add column ESSAY_REQUIREMENT_LANG1 text ;
+alter table TSADV_TALENT_PROGRAM add column ESSAY_REQUIREMENT_LANG2 text ;
+alter table TSADV_TALENT_PROGRAM add column ESSAY_REQUIREMENT_LANG3 text ;

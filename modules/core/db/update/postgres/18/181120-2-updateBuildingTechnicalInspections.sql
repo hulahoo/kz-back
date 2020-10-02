@@ -1,0 +1,1 @@
+alter table TSADV_BUILDING_TECHNICAL_INSPECTIONS add column LEGACY_ID varchar(255) ;

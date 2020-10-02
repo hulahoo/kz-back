@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://My.Enrollment.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.enrollment.MyEnrollment"
+        focusComponent="enrollmentsTable"
+        lookupComponent="enrollmentsTable">
+    <dsContext>
+        <groupDatasource id="enrollmentsDs"
+                         class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                         view="enrollment.ss.edit">
+            <query>
+                <![CDATA[select e from tsadv$Enrollment e
+                where e.personGroup.id = :session$userPersonGroupId
+                order by e.date desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="enrollmentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="enrollmentsTable"
+                datasource="enrollmentsDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="enrollmentsTable" width="100%">
+            <actions>
+                <action id="edit"/>
+            </actions>
+            <columns>
+                <column id="course.name"/>
+                <column id="status"/>
+                <column id="date"/>
+                <column id="isCertification" generator="checkIsCertification"
+                        caption="msg://enrollment.isCertification" align="CENTER"/>
+                <column id="reason" maxTextLength="50"/>
+            </columns>
+            <rows datasource="enrollmentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="editBtn"
+                        action="enrollmentsTable.edit"
+                        caption="msg://table.btn.cancel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

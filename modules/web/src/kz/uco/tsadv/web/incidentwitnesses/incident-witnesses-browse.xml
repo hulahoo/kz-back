@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.incidentwitnesses.IncidentWitnessesBrowse"
+        focusComponent="incidentWitnessesesTable"
+        lookupComponent="incidentWitnessesesTable"
+        messagesPack="kz.uco.tsadv.web.incidentwitnesses">
+    <dsContext>
+        <groupDatasource id="incidentWitnessesesDs"
+                         class="kz.uco.tsadv.entity.tb.IncidentWitnesses"
+                         view="incidentWitnesses-view">
+            <query>
+                <![CDATA[select e from tsadv$IncidentWitnesses e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="incidentWitnessesesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="incidentWitnessesesTable"
+                datasource="incidentWitnessesesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="incidentWitnessesesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="person"/>
+            </columns>
+            <rows datasource="incidentWitnessesesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="incidentWitnessesesTable.create"/>
+                <button id="editBtn"
+                        action="incidentWitnessesesTable.edit"/>
+                <button id="removeBtn"
+                        action="incidentWitnessesesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

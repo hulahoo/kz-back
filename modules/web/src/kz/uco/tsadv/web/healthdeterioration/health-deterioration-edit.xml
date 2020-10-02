@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.healthdeterioration.HealthDeteriorationEdit"
+        datasource="healthDeteriorationDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.healthdeterioration">
+    <dsContext>
+        <datasource id="healthDeteriorationDs"
+                    class="kz.uco.tsadv.entity.tb.HealthDeterioration"
+                    view="healthDeterioration-view">
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+            <collectionDatasource id="complaintDs"
+                                  property="complaint"/>
+            <collectionDatasource id="witnessesDs"
+                                  property="witnesses"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox id="scrollBox"
+                   height="100%"
+                   spacing="true">
+            <vbox id="vbox"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="healthDeteriorationDs">
+                    <column width="250px">
+                        <field property="date"/>
+                        <field property="sickPerson"/>
+                        <field property="managerPerson"/>
+                        <field id="organization"
+                               property="organization" captionProperty="organization"/>
+                        <field property="result"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <groupBox caption="msg://detail"
+                      collapsable="true"
+                      collapsed="true">
+                    <vbox id="vbox_2"
+                          spacing="true">
+                        <fieldGroup id="fieldGroup1"
+                        datasource="healthDeteriorationDs">
+                            <column>
+                                <field property="time"/>
+                                <field property="startShift"/>
+                                <field property="endShift"/>
+                                <field property="preliminaryDiagnosis"/>
+                                <field property="description"/>
+                                <field property="reason"/>
+                                <field property="sticknessStartDate"/>
+                                <field property="sticknessEndDate"/>
+                                <field property="finalDiagnosis"/>
+                                <field property="resultDate"/>
+                            </column>
+                        </fieldGroup>
+                    </vbox>
+            </groupBox>
+            <frame id="windowActions"
+                   screen="editWindowActions"/>
+            <vbox id="vbox_1"
+                  spacing="true">
+                <tabSheet>
+                    <tab id="tab"
+                         caption="msg://tab"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="attachmentsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="attachmentType"/>
+                                <column id="attachment"/>
+                            </columns>
+                            <rows datasource="attachmentDs"/>
+                            <buttonsPanel>
+                                <button action="attachmentsTable.create"/>
+                                <button action="attachmentsTable.edit"/>
+                                <button action="attachmentsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_1"
+                         caption="msg://tab1"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="complaintsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="complaints"/>
+                                <column id="index"/>
+                            </columns>
+                            <rows datasource="complaintDs"/>
+                            <buttonsPanel>
+                                <button action="complaintsTable.create"/>
+                                <button action="complaintsTable.edit"/>
+                                <button action="complaintsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_2"
+                         caption="msg://tab2"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="healthDeteriorationWitnessesesTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="person"/>
+                            </columns>
+                            <rows datasource="witnessesDs"/>
+                            <buttonsPanel>
+                                <button action="healthDeteriorationWitnessesesTable.create"/>
+                                <button action="healthDeteriorationWitnessesesTable.edit"/>
+                                <button action="healthDeteriorationWitnessesesTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

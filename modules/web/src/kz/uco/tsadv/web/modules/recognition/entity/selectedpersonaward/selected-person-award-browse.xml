@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.selectedpersonaward.SelectedPersonAwardBrowse"
+        focusComponent="selectedPersonAwardsTable"
+        lookupComponent="selectedPersonAwardsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.selectedpersonaward">
+    <dsContext>
+        <groupDatasource id="selectedPersonAwardsDs"
+                         class="kz.uco.tsadv.modules.recognition.SelectedPersonAward"
+                         view="selectedPersonAward.edit"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$SelectedPersonAward e
+                         join e.awardProgram ap
+                            where e.personGroup.id in (select a.personGroup.id from base$AssignmentExt a
+                                         where current_date between a.startDate and a.endDate
+                                         and a.organizationGroup.id in (select o.group.id from base$OrganizationExt o
+                                                          where current_date between o.startDate and o.endDate))
+                                  and e.personGroup.id in (select p.group.id from base$PersonExt p
+                                         where current_date between p.startDate and p.endDate)]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="selectedPersonAwardsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="selectedPersonAwardsTable"
+                datasource="selectedPersonAwardsDs">
+            <properties include=".*"/>
+        </filter>
+        <dataGrid id="selectedPersonAwardsTable"
+                  width="100%"
+                  datasource="selectedPersonAwardsDs"
+                  settingsEnabled="false"
+                  selectionMode="MULTI_CHECK">
+            <actions>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="nominate"/>
+            </actions>
+            <columns>
+                <column property="personGroup.fullName"/>
+                <column property="awarded"/>
+                <column property="awardProgram.name"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="editBtn"
+                        action="selectedPersonAwardsTable.edit"/>
+                <button id="removeBtn"
+                        action="selectedPersonAwardsTable.remove"/>
+                <button id="nominate"
+                        action="selectedPersonAwardsTable.nominate"/>
+            </buttonsPanel>
+        </dataGrid>
+    </layout>
+</window>

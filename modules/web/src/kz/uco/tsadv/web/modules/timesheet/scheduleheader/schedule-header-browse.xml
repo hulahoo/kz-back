@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ScheduleHeader.browseCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.scheduleheader.ScheduleHeaderBrowse"
+        focusComponent="scheduleHeadersTable"
+        lookupComponent="scheduleHeadersTable">
+    <dsContext>
+        <groupDatasource id="scheduleHeadersDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.ScheduleHeader"
+                         view="scheduleHeader.view">
+            <query>
+                <![CDATA[select e from tsadv$ScheduleHeader e]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="scheduleSummariesDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.ScheduleSummary"
+                              view="scheduleSummary.view">
+            <query>
+                <![CDATA[select e from tsadv$ScheduleSummary e where e.header.id = :ds$scheduleHeadersDs order by e.day]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="scheduleDetailsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.ScheduleDetail"
+                              view="scheduleDetail.view">
+            <query>
+                <![CDATA[select e from tsadv$ScheduleDetail e where e.summary.id = :ds$scheduleSummariesDs order by e.timeIn, e.elementType]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vSplit"
+            spacing="true">
+        <filter id="filter"
+                applyTo="scheduleHeadersTable"
+                datasource="scheduleHeadersDs">
+            <properties include=".*"/>
+        </filter>
+        <split id="vSplit"
+               width="100%">
+            <groupTable id="scheduleHeadersTable"
+                        height="100%"
+                        settingsEnabled="false"
+                        width="100%">
+                <actions>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="schedule"
+                            captionProperty="schedule.scheduleName"/>
+                    <column id="month"/>
+                    <column id="offset"
+                            captionProperty="offset.offsetDisplay"/>
+                    <column id="isLocked"/>
+                    <column id="baseDays"/>
+                    <column id="baseHours"/>
+                    <column id="planDays"/>
+                    <column id="planHours"/>
+                    <column id="nightHours"/>
+                    <column id="weekendDays"/>
+                    <column id="holidayWorkDays"/>
+                    <column id="holidayWorkHours"/>
+                    <column id="holidayDays"/>
+                </columns>
+                <rows datasource="scheduleHeadersDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="formSchedule"
+                            icon="font-icon:CALENDAR_PLUS_O"
+                            caption="msg://scheduleHeadersTable.form.btn"
+                            invoke="formSchedule"/>
+                    <button id="editBtn"
+                            caption="mainMsg://table.btn.empty"
+                            action="scheduleHeadersTable.edit"/>
+                    <button id="removeBtn"
+                            caption="mainMsg://table.btn.empty"
+                            action="scheduleHeadersTable.remove"/>
+                </buttonsPanel>
+            </groupTable>
+            <split id="hSplit"
+                   height="100%"
+                   orientation="horizontal"
+                   width="100%">
+                <table id="scheduleSummariesTable"
+                       settingsEnabled="false"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="dayDate"/>
+                        <column id="shiftName"/>
+                        <column id="startTime"/>
+                        <column id="endTime"/>
+                        <column id="hours"/>
+                    </columns>
+                    <rows datasource="scheduleSummariesDs"/>
+                </table>
+                <table id="scheduleDetailsTable"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="elementType"/>
+                        <column id="timeIn"/>
+                        <column id="timeOut"/>
+                        <column id="hours"/>
+                    </columns>
+                    <rows datasource="scheduleDetailsDs"/>
+                </table>
+            </split>
+        </split>
+    </layout>
+</window>

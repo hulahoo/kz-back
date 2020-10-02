@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.learning.budget.OrganizationhierarchyBudget"
+        messagesPack="kz.uco.tsadv.web.modules.learning.budget">
+    <dsContext>
+        <hierarchicalDatasource id="hierarchyElementsDs"
+                                class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                                hierarchyProperty="parent"
+                                view="hierarchyElement.browse">
+            <query>
+                <![CDATA[select e from base$HierarchyElementExt e
+where e.organizationGroup is not null]]>
+            </query>
+        </hierarchicalDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <split id="splitter"
+               height="100%"
+               orientation="horizontal"
+               width="100%">
+            <tree id="tree"
+                  height="100%"
+                  width="100%">
+                <treechildren captionProperty="name"
+                              datasource="hierarchyElementsDs"/>
+            </tree>
+            <hbox id="hboxId"
+                  height="100%"
+                  margin="false,true,false,true"
+                  width="100%">
+            </hbox>
+        </split>
+    </layout>
+</window>

@@ -1,0 +1,28 @@
+div.tipi {
+    background-color: #1f1f1f;
+    color: #f1f1f1;
+    position: absolute;
+    padding: 5px;
+    display: none;
+    font-size: 12px;
+}
+
+div.rating-container {
+    text-align: center;
+}
+
+div.rating-container div.stars {
+    display: inline-block;
+}
+
+div.rating-container div.stars i {
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    margin-right: 3px;
+    padding: 3px;
+}
+
+.rating-container span.star-message {
+    font-size: 13px;
+}

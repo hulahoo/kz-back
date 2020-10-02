@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.timecard.frames.TimecardFrame">
+    <dsContext>
+        <collectionDatasource id="absencesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence.view">
+            <query>
+                <![CDATA[select e from tsadv$Absence e where e.personGroup.id = :custom$personGroupId
+                    and (
+                        (:custom$startDate between e.dateFrom and e.dateTo)
+                         or  (:custom$endDate between e.dateFrom and e.dateTo)
+                         or (:custom$startDate <= e.dateFrom and :custom$endDate >= e.dateTo)
+                     )
+                    ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="businessTripsDs"
+                              class="kz.uco.tsadv.modules.personal.model.BusinessTrip"
+                              view="businessTrip-like-absence">
+            <query>
+                <![CDATA[select e from tsadv$BusinessTrip e
+                        where e.personGroup.id=:custom$personGroupId
+                        and (
+                        (:custom$startDate between e.dateFrom and e.dateTo)
+                         or  (:custom$endDate between e.dateFrom and e.dateTo)
+                         or (:custom$startDate <= e.dateFrom and :custom$endDate >= e.dateTo)
+                     )]]>
+            </query>
+        </collectionDatasource>
+        <valueCollectionDatasource id="absencesAndTripsDs">
+            <properties>
+                <property datatype="date"
+                          name="name"/>
+                <property datatype="date"
+                          name="dateFrom"/>
+                <property datatype="date"
+                          name="dateTo"/>
+                <property datatype="int"
+                          name="absenceDays"/>
+                <property datatype="string"
+                          name="type"/>
+                <property datatype="string"
+                          name="status"/>
+                <property datatype="string"
+                          name="orderNumber"/>
+                <property datatype="date"
+                          name="orderDate"/>
+                <property datatype="string"
+                          name="additional"/>
+            </properties>
+        </valueCollectionDatasource>
+        <collectionDatasource id="timecardAbsencesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence.view">
+            <query>
+                <![CDATA[select e from tsadv$Absence e where e.personGroup.id = :custom$personGroupId
+                    and e.type.availableForTimecard = true
+                    and (
+                        (:custom$startDate between e.dateFrom and e.dateTo)
+                         or  (:custom$endDate between e.dateFrom and e.dateTo)
+                         or (:custom$startDate <= e.dateFrom and :custom$endDate >= e.dateTo)
+                     )
+                    ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="assignmentSchedulesDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
+                              view="assignmentSchedule.view">
+            <query>
+                <![CDATA[select e from tsadv$AssignmentSchedule e where e.assignmentGroup.id = :custom$assignmentGroupId
+                     and (
+                            (:custom$startDate between e.startDate and e.endDate)
+                             or  (:custom$endDate between e.startDate and e.endDate)
+                             or (:custom$startDate <= e.startDate and :custom$endDate >= e.endDate)
+                         )
+                    ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="summariesDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.WorkedHoursSummary"
+                              view="workedHoursSummary-view">
+            <query>
+                <![CDATA[select e from tsadv$WorkedHoursSummary e where 1=2]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="800"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <split id="split"
+               height="100%"
+               orientation="vertical"
+               pos="70"
+               width="100%">
+            <dataGrid id="dataGrid"
+                      datasource="timecardsDs"
+                      height="100%"
+                      selectionMode="MULTI"
+                      stylename="timecard-datagrid"
+                      width="100%">
+                <actions>
+                    <action id="formTimeCards"
+                            invoke="formTimeCards"/>
+                    <action id="deviations"
+                            enable="false"
+                            invoke="insertDeviation"/>
+                    <action id="copyTimecard"
+                            enable="false"
+                            icon="icons/excel.png"
+                            invoke="copyTimecard"/>
+                </actions>
+                <columns>
+                    <column id="name"
+                            caption="msg://Person"
+                            maximumWidth="170"
+                            property="name"/>
+                    <column id="costCenter"
+                            caption="msg://costCenter"
+                            maximumWidth="125"
+                            property="costCenterString"/>
+                    <column id="positionName"
+                            caption="msg://positionName"
+                            maximumWidth="125"
+                            property="positionName"/>
+                    <column id="schedules"
+                            caption="msg://Schedules"
+                            maximumWidth="125"
+                            property="schedules"/>
+                    <column id="summary1"
+                            caption="1"
+                            property="summary1.timecardRepresentation"/>
+                    <column id="summary2"
+                            caption="2"
+                            property="summary2.timecardRepresentation"/>
+                    <column id="summary3"
+                            caption="3"
+                            property="summary3.timecardRepresentation"/>
+                    <column id="summary4"
+                            caption="4"
+                            property="summary4.timecardRepresentation"/>
+                    <column id="summary5"
+                            caption="5"
+                            property="summary5.timecardRepresentation"/>
+                    <column id="summary6"
+                            caption="6"
+                            property="summary6.timecardRepresentation"/>
+                    <column id="summary7"
+                            caption="7"
+                            property="summary7.timecardRepresentation"/>
+                    <column id="summary8"
+                            caption="8"
+                            property="summary8.timecardRepresentation"/>
+                    <column id="summary9"
+                            caption="9"
+                            property="summary9.timecardRepresentation"/>
+                    <column id="summary10"
+                            caption="10"
+                            property="summary10.timecardRepresentation"/>
+                    <column id="summary11"
+                            caption="11"
+                            property="summary11.timecardRepresentation"/>
+                    <column id="summary12"
+                            caption="12"
+                            property="summary12.timecardRepresentation"/>
+                    <column id="summary13"
+                            caption="13"
+                            property="summary13.timecardRepresentation"/>
+                    <column id="summary14"
+                            caption="14"
+                            property="summary14.timecardRepresentation"/>
+                    <column id="summary15"
+                            caption="15"
+                            property="summary15.timecardRepresentation"/>
+                    <column id="summary16"
+                            caption="16"
+                            property="summary16.timecardRepresentation"/>
+                    <column id="summary17"
+                            caption="17"
+                            property="summary17.timecardRepresentation"/>
+                    <column id="summary18"
+                            caption="18"
+                            property="summary18.timecardRepresentation"/>
+                    <column id="summary19"
+                            caption="19"
+                            property="summary19.timecardRepresentation"/>
+                    <column id="summary20"
+                            caption="20"
+                            property="summary20.timecardRepresentation"/>
+                    <column id="summary21"
+                            caption="21"
+                            property="summary21.timecardRepresentation"/>
+                    <column id="summary22"
+                            caption="22"
+                            property="summary22.timecardRepresentation"/>
+                    <column id="summary23"
+                            caption="23"
+                            property="summary23.timecardRepresentation"/>
+                    <column id="summary24"
+                            caption="24"
+                            property="summary24.timecardRepresentation"/>
+                    <column id="summary25"
+                            caption="25"
+                            property="summary25.timecardRepresentation"/>
+                    <column id="summary26"
+                            caption="26"
+                            property="summary26.timecardRepresentation"/>
+                    <column id="summary27"
+                            caption="27"
+                            property="summary27.timecardRepresentation"/>
+                    <column id="summary28"
+                            caption="28"
+                            property="summary28.timecardRepresentation"/>
+                    <column id="summary29"
+                            caption="29"
+                            property="summary29.timecardRepresentation"/>
+                    <column id="summary30"
+                            caption="30"
+                            property="summary30.timecardRepresentation"/>
+                    <column id="summary31"
+                            caption="31"
+                            property="summary31.timecardRepresentation"/>
+                    <column id="planWorkHours"
+                            caption="msg://planWorkHours"
+                            property="planWorkHours">
+                        <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                    </column>
+                    <column id="planWorkDays"
+                            caption="msg://planWorkDays"
+                            property="planWorkDays"/>
+                    <column id="baseWorkHours"
+                            caption="msg://baseWorkHours"
+                            property="baseWorkHours">
+                        <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                    </column>
+                    <column id="baseWorkDays"
+                            caption="msg://baseWorkDays"
+                            property="baseWorkDays"/>
+                    <column id="factHoursWithoutOvertime"
+                            caption="msg://factHoursWithoutOvertime"
+                            property="factHoursWithoutOvertime">
+                        <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                    </column>
+                    <column id="overtimeHours"
+                            caption="msg://overtimeHours"
+                            property="overtimeHours">
+                        <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                    </column>
+                    <column id="factWorkDays"
+                            caption="msg://factWorkDays"
+                            property="factWorkDays"/>
+                    <column id="dayHours"
+                            caption="msg://dayHours"
+                            property="dayHours">
+                        <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                    </column>
+                    <column id="nightHours"
+                            caption="msg://nightHours"
+                            property="nightHours">
+                        <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                    </column>
+                    <column id="annualVacationDays"
+                            caption="msg://annualVacationDays"
+                            property="annualVacationDays"/>
+                    <column id="unpaidVacationDays"
+                            caption="msg://unpaidVacationDays"
+                            property="unpaidVacationDays"/>
+                    <column id="sickDays"
+                            caption="msg://sickDays"
+                            property="sickDays"/>
+                    <column id="absenceDays"
+                            caption="msg://absenceDays"
+                            property="absenceDays"/>
+                    <column id="totalFreeDays"
+                            caption="msg://totalFreeDays"
+                            property="totalFreeDays"/>
+                    <column id="bussinessTrip"
+                            caption="msg://bussinessTrip"
+                            property="bussinessTrip"/>
+                    <column id="totalAbsence"
+                            caption="msg://totalAbsence"
+                            property="totalAbsence"/>
+                    <column id="totalWorkedDays"
+                            caption="msg://totalWorkedDays"
+                            property="totalWorkedDays"/>
+                    <column id="quarantine"
+                            property="quarantine"/>
+                    <column id="downtime"
+                            property="downtime"/>
+                    <column id="grandTotalDays"
+                            caption="msg://grandTotalDays"
+                            property="grandTotalDays"/>
+                </columns>
+                <rowsCount/>
+                <buttonsPanel align="MIDDLE_CENTER">
+                    <popupButton id="actionsButton"
+                                 caption="msg://actions"
+                                 description="Press me">
+                        <actions>
+                            <action id="formButton"
+                                    caption="msg://Timecard.form"
+                                    invoke="formTimeCards"/>
+                            <action id="copyTimecard"
+                                    caption="msg://copyTimecard"
+                                    icon="COPY"
+                                    invoke="copyTimecard"/>
+                            <action id="setCorrective"
+                                    caption="msg://setCorrective"
+                                    invoke="setCorrective"/>
+                            <action id="unsetCorrective"
+                                    caption="msg://unsetCorrective"
+                                    invoke="unsetCorrective"/>
+                        </actions>
+                    </popupButton>
+                    <button id="deviations"
+                            action="dataGrid.deviations"
+                            caption="msg://Deviations"/>
+                    <popupButton id="reportButton"
+                                 caption="msg://report"
+                                 description="Press me">
+                        <actions>
+                            <action id="reportExcel"
+                                    caption="msg://XLSX"
+                                    invoke="reportExcel"/>
+                            <action id="reportPdf"
+                                    caption="msg://PDF"
+                                    invoke="reportPdf"/>
+                        </actions>
+                    </popupButton>
+                    <checkBox id="enableInclusions"
+                              align="BOTTOM_LEFT"
+                              caption="msg://enableInclusions"/>
+                    <hbox spacing="true">
+                        <dateField id="dateField" resolution="DAY"/>
+                        <textField id="searchByNumber"
+                                   align="BOTTOM_RIGHT"
+                                   description="msg://findPersonByCode"
+                                   width="100px"/>
+                        <linkButton id="searchButton"
+                                    align="MIDDLE_LEFT"
+                                    description="msg://findPersonByCode"
+                                    icon="font-icon:SEARCH"
+                                    invoke="searchPersonByCode"/>
+                    </hbox>
+                </buttonsPanel>
+            </dataGrid>
+            <tabSheet id="tabsheet"
+                      height="100%">
+                <tab id="absencesTab"
+                     caption="msg://absences">
+                    <table id="absencesTable"
+                           height="100%"
+                           stylename="timecard-table"
+                           width="100%">
+                        <columns>
+                            <column id="dateFrom"
+                                    caption="msg://dateFrom"/>
+                            <column id="dateTo"
+                                    caption="msg://dateTo"/>
+                            <column id="absenceDays"
+                                    caption="msg://absenceDaysCount"/>
+                            <column id="type"
+                                    caption="msg://type"/>
+                            <column id="status"
+                                    caption="msg://status"/>
+                            <column id="orderNumber"
+                                    caption="msg://kz.uco.tsadv.modules.personal.model/Absence.orderNum"/>
+                            <column id="orderDate"
+                                    caption="msg://kz.uco.tsadv.modules.personal.model/Absence.orderDate"/>
+                            <column id="additional"
+                                    caption="msg://additional"/>
+                        </columns>
+                        <rows datasource="absencesAndTripsDs"/>
+                    </table>
+                </tab>
+                <tab id="schedulesTab"
+                     caption="msg://schedules"
+                     lazy="true">
+                    <table id="assignmentSchedulesTable"
+                           height="100%"
+                           stylename="timecard-table"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"
+                                    icon="icons/edit.png"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="offset.offsetScheduleName"
+                                    caption="msg://schedule"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                        </columns>
+                        <rows datasource="assignmentSchedulesDs"/>
+                        <buttonsPanel>
+                            <button id="assignmentSchedulesTableCreate"
+                                    action="assignmentSchedulesTable.create"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <button id="assignmentSchedulesTableEdit"
+                                    action="assignmentSchedulesTable.edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <button action="assignmentSchedulesTable.remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="timecardInDetailTab"
+                     caption="msg://timecardInDetail">
+                    <table id="summariesTable"
+                           height="100%"
+                           stylename="timecard-table"
+                           width="100%">
+                        <columns>
+                            <column id="workedDate"/>
+                            <column id="hours"
+                                    caption="msg://kz.uco.tsadv.modules.timesheet.model/WorkedHoursSummary.hours">
+                                <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                            </column>
+                            <column id="planHours"
+                                    caption="msg://planHours">
+                                <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                            </column>
+                            <column id="shift.name"
+                                    caption="msg://kz.uco.tsadv.modules.timesheet.model/WorkedHoursSummary.shift"/>
+                            <column id="scheduleElementType"/>
+                            <column id="absenceType"
+                                    caption="msg://absenceType"/>
+                        </columns>
+                        <rows datasource="summariesDs"/>
+                    </table>
+                </tab>
+                <tab id="timecardAbsencesTab"
+                     caption="msg://timecardAbsences">
+                    <table id="timecardAbsencesTable"
+                           height="100%"
+                           stylename="timecard-table"
+                           width="100%">
+                        <actions>
+                            <action id="create"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="dateFrom"/>
+                            <column id="dateTo"/>
+                            <column id="absenceDays"/>
+                            <column id="type"/>
+                        </columns>
+                        <rows datasource="timecardAbsencesDs"/>
+                        <buttonsPanel>
+                            <button action="timecardAbsencesTable.create"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <button action="timecardAbsencesTable.edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <button action="timecardAbsencesTable.remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+            </tabSheet>
+        </split>
+    </layout>
+</window>

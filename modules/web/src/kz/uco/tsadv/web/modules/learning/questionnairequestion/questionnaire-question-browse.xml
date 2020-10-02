@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.questionnairequestion.QuestionnaireQuestionBrowse"
+        focusComponent="questionnaireQuestionsTable"
+        lookupComponent="questionnaireQuestionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.questionnairequestion">
+    <dsContext>
+        <groupDatasource id="questionnaireQuestionsDs"
+                         class="kz.uco.tsadv.modules.performance.model.QuestionnaireQuestion"
+                         view="questionnaireQuestion.browse">
+            <query>
+                <![CDATA[select e from tsadv$QuestionnaireQuestion e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="questionnaireQuestionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="questionnaireQuestionsTable"
+                datasource="questionnaireQuestionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="questionnaireQuestionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="questionText"/>
+                <column id="questionType"/>
+                <column id="score"/>
+                <column id="questionTextLang1"/>
+                <column id="questionTextLang2"/>
+                <column id="questionTextLang3"/>
+                <column id="questionTextLang4"/>
+                <column id="questionTextLang5"/>
+                <column id="section"/>
+            </columns>
+            <rows datasource="questionnaireQuestionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="questionnaireQuestionsTable.create"/>
+                <button id="editBtn"
+                        action="questionnaireQuestionsTable.edit"/>
+                <button id="removeBtn"
+                        action="questionnaireQuestionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

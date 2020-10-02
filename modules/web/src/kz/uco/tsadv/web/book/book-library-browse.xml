@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.book.BookLibraryBrowse"
+        focusComponent="booksTable"
+        messagesPack="kz.uco.tsadv.web.book">
+    <dsContext>
+        <collectionDatasource id="booksDs"
+                              class="kz.uco.tsadv.entity.Book"
+                              view="book-library-view">
+            <query>
+                <![CDATA[select e from tsadv$Book e]]>
+            </query>
+        </collectionDatasource>
+        <hierarchicalDatasource id="bookCategoriesDs"
+                                class="kz.uco.tsadv.entity.DicBookCategory"
+                                hierarchyProperty="parentBookCategory"
+                                view="book-category-view">
+            <query>
+                <![CDATA[select e from tsadv$DicBookCategory e where e.active = true order by e.createTs]]>
+            </query>
+        </hierarchicalDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <split id="split"
+               height="100%"
+               maxSplitPosition="300px"
+               minSplitPosition="200px"
+               orientation="horizontal"
+               pos="300px"
+               width="100%">
+            <vbox id="bookCategoriesBox"
+                  height="100%"
+                  width="100%"
+                  margin="false, true, false, false">
+                <tree id="bookCategoriesTree"
+                      height="100%"
+                      width="100%">
+                    <treechildren captionProperty="langValue"
+                                  datasource="bookCategoriesDs"/>
+                </tree>
+            </vbox>
+            <vbox id="vbox"
+                  expand="scrollBox"
+                  height="100%"
+                  spacing="true"
+                  margin="false,false,false, true">
+                <filter id="filter"
+                        applyTo="booksTable"
+                        datasource="booksDs">
+                    <properties include=".*"/>
+                </filter>
+                <table id="booksTable"
+                       height="10px"
+                       width="100%">
+                    <columns>
+                        <column id="bookNameLang1"/>
+                    </columns>
+                    <rows datasource="booksDs"/>
+                    <rowsCount/>
+                </table>
+                <scrollBox id="scrollBox">
+                    <flowBox id="bookCategories"
+                             margin="false,false,false,true"
+                             spacing="true"
+                             width="100%"/>
+                </scrollBox>
+            </vbox>
+        </split>
+    </layout>
+</window>

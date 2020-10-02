@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://DicSuitabilityToMilitaryBrowse"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicsuitabilitytomilitary.DicSuitabilityToMilitaryBrowse"
+        focusComponent="dicSuitabilityToMilitariesTable"
+        lookupComponent="dicSuitabilityToMilitariesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicsuitabilitytomilitary">
+    <dsContext>
+        <groupDatasource id="dicSuitabilityToMilitariesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicSuitabilityToMilitary"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicSuitabilityToMilitary e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicSuitabilityToMilitariesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicSuitabilityToMilitariesTable"
+                datasource="dicSuitabilityToMilitariesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicSuitabilityToMilitariesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicSuitabilityToMilitariesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicSuitabilityToMilitariesTable.create"/>
+                <button id="editBtn"
+                        action="dicSuitabilityToMilitariesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicSuitabilityToMilitariesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

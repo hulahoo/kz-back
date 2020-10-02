@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.persongroup.PersonGroupBrowseRo"
+        extends="/kz/uco/tsadv/web/modules/personal/persongroup/person-group-browse.xml">
+    <dialogMode
+            width="800"/>
+    <layout/>
+</window>

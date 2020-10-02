@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.goodswarehouse.GoodsWarehouseBrowse"
+        focusComponent="goodsWarehousesTable"
+        lookupComponent="goodsWarehousesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.goodswarehouse">
+    <dsContext>
+        <groupDatasource id="goodsWarehousesDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.GoodsWarehouse"
+                         view="goodsWarehouse.edit">
+            <query>
+                <![CDATA[select e from tsadv$GoodsWarehouse e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goodsWarehousesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="goodsWarehousesTable"
+                datasource="goodsWarehousesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="goodsWarehousesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="goods"/>
+                <column id="quantity"/>
+            </columns>
+            <rows datasource="goodsWarehousesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="goodsWarehousesTable.create"/>
+                <button id="editBtn"
+                        action="goodsWarehousesTable.edit"/>
+                <button id="removeBtn"
+                        action="goodsWarehousesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

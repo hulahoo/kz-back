@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonGroupCandidate.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.persongroup.PersonGroupCandidate"
+        focusComponent="personGroupsTable"
+        lookupComponent="personGroupsTable">
+    <dsContext>
+        <groupDatasource id="personGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         view="personGroup.candidate">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e join e.list p
+ where :session$systemDate between p.startDate and p.endDate
+   and e.id not in (select j.candidatePersonGroup.id 
+                      from tsadv$JobRequest j
+                     where j.requisition.id = :param$requisitionId)]]>
+                <filter>
+                    <and>
+                        <c>(:component$personNameId IS NULL OR :component$personNameEn IS NULL
+                            OR lower(concat(p.lastName, concat(' ', concat(p.firstName, concat(' ',
+                            coalesce(p.middleName,''))))))
+                            like lower(concat('%', concat(:component$personNameId, '%')))
+                            OR lower(concat(p.lastName, concat(' ', concat(p.firstName, concat(' ',
+                            coalesce(p.middleName,''))))))
+                            like lower(concat('%', concat(:component$personNameEn, '%')))
+                            OR lower(concat(p.lastNameLatin, concat(' ', concat(p.firstNameLatin, concat(' ',
+                            coalesce(p.middleNameLatin,''))))))
+                            like lower(concat('%', concat(:component$personNameId, '%')))
+                            OR lower(concat(p.lastNameLatin, concat(' ', concat(p.firstNameLatin, concat(' ',
+                            coalesce(p.middleNameLatin,''))))))
+                            like lower(concat('%', concat(:component$personNameEn, '%')))
+                            )
+                        </c>
+                    </and>
+                </filter>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personGroupsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personGroupsTable"
+                datasource="personGroupsDs">
+            <custom caption="msg://kz.uco.tsadv.modules.personal.model/Person.lastName"
+                    name="personLastName"
+                    paramClass="java.lang.String">p.lastName like ?
+            </custom>
+            <custom caption="msg://kz.uco.tsadv.modules.personal.model/Person.firstName"
+                    name="personFirstName"
+                    paramClass="java.lang.String">p.firstName like ?
+            </custom>
+            <custom caption="msg://kz.uco.tsadv.modules.personal.model/Person.middleName"
+                    name="personMiddleName"
+                    paramClass="java.lang.String">p.middleName like ?
+            </custom>
+            <properties include=".*"/>
+        </filter>
+        <hbox spacing="true">
+            <groupBox caption="msg://PersonName.filter">
+                <textField id="personNameId"/>
+                <textField id="personNameEn" visible="false"/>
+            </groupBox>
+        </hbox>
+        <groupTable id="personGroupsTable"
+                    width="100%">
+            <actions>
+                <action id="createCandidate"
+                        description="msg://Person.candidate.create"
+                        invoke="openCandidate"/>
+                <action id="createStudent"
+                        description="msg://Person.student.create"
+                        invoke="openStudent"/>
+                <action id="editCandidate"
+                        icon="icons/edit.png"
+                        caption="mainMsg://table.btn.empty"
+                        invoke="openCandidateEdit"
+                        shortcut="${TABLE_EDIT_SHORTCUT}"
+                        description="mainMsg://editOrder"/>
+                <action id="remove"
+                        description="mainMsg://deleteOrder"/>
+            </actions>
+            <columns>
+                <column id="userImage"
+                        caption="msg://Photo"
+                        generator="generateUserImageCell"
+                        sortable="false"/>
+                <column id="fullName"/>
+                <column id="person.type.langValue"
+                        sortable="false"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/Person.type"/>
+                <column id="jobRequestCount" caption="msg://jobRequestCount"/>
+                <column id="resume" caption="msg://resume"/>
+                <column id="contacts" caption="msg://contacts"/>
+            </columns>
+            <rows datasource="personGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personGroupsTable.createCandidate"
+                        icon="images/button_icons/candidate-16px.png"/>
+                <button action="personGroupsTable.createStudent"
+                        icon="images/button_icons/student-16px.png"/>
+                <button id="editBtn"
+                        action="personGroupsTable.editCandidate"
+                        caption="mainMsg://table.btn.empty"
+                        icon="theme://actions.Edit.icon"/>
+                <button id="removeBtn"
+                        action="personGroupsTable.remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

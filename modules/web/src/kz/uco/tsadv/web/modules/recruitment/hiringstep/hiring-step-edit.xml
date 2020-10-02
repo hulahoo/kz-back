@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://HiringStep.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.hiringstep.HiringStepEdit"
+        datasource="hiringStepDs"
+        focusComponent="fieldGroup1"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.hiringstep">
+    <dsContext>
+        <datasource id="hiringStepDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.HiringStep"
+                    view="hiringStep.view">
+            <collectionDatasource id="membersDs"
+                                  property="members"/>
+            <collectionDatasource id="questionnairesDs"
+                                  property="questionnaires"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="AUTO"/>
+    <layout expand="tabs"
+            spacing="true">
+        <hbox spacing="true">
+            <fieldGroup id="fieldGroup1"
+                        datasource="hiringStepDs">
+                <column width="250px">
+                    <field property="stepName"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field property="attempts"/>
+                    <field property="attempts_control_level"/>
+                    <field property="number_between_attempts"/>
+                    <field property="period"/>
+                    <field property="type"/>
+                    <field property="isJobTest"/>
+                </column>
+            </fieldGroup>
+            <fieldGroup id="fieldGroup2"
+                        datasource="hiringStepDs">
+                <column width="400px">
+                    <field property="stepDescription"
+                           rows="4"/>
+                    <field captionProperty="name"
+                           property="test"/>
+                    <field id="default_"
+                           property="default_"/>
+                    <field id="orderDefault"
+                           property="orderDefault"/>
+                </column>
+            </fieldGroup>
+        </hbox>
+        <tabSheet id="tabs">
+            <tab id="members"
+                 caption="msg://HiringStep.members"
+                 margin="true">
+                <table id="membersTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"
+                                invoke="onCreate"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"
+                                invoke="onEdit"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/item-remove.png"/>
+                    </actions>
+                    <columns>
+                        <column id="hiringMemberType"/>
+                        <column id="role.langValue"
+                                caption="msg://HiringStepMember.role"/>
+                        <column id="userPersonGroup"
+                                captionProperty="userPersonGroup.personFioWithEmployeeNumber"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="mainInterviewer"/>
+                    </columns>
+                    <rows datasource="membersDs"/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtn"
+                                action="membersTable.create"/>
+                        <button id="editBtn"
+                                action="membersTable.edit"/>
+                        <button id="removeBtn"
+                                action="membersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="questionnaires"
+                 caption="msg://HiringStep.questionnaires"
+                 margin="true">
+                <table id="questionnairesTable"
+                       editable="true"
+                       height="100%"
+                       multiselect="true"
+                       width="100%">
+                    <actions>
+                        <action id="add"
+                                caption="msg://table.btn.add"
+                                description="mainMsg://table.btn.add"
+                                icon="font-icon:SEARCH_PLUS"
+                                invoke="addQuestionnaires"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="questionnaire"
+                                captionProperty="questionnaire.name"/>
+                        <column id="questionnaire.category"
+                                captionProperty="questionnaire.category.langValue"/>
+                    </columns>
+                    <rows datasource="questionnairesDs"/>
+                    <rowsCount/>
+                    <buttonsPanel alwaysVisible="true">
+                        <button action="questionnairesTable.add"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="questionnairesTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

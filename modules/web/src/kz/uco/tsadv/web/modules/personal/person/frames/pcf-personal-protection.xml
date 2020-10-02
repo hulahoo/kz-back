@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ppe"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfPersonalProtection"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <table id="personalProtectionTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="msg://issue"
+                        icon="null"/>
+                <action id="edit"
+                        caption="msg://replacement"
+                        icon="null"/>
+                <action id="return"
+                        invoke="returnButton"
+                        caption="msg://return"
+                        trackSelection="true"/>
+            </actions>
+            <columns>
+                <column id="protectionEquipment"
+                        caption="msg://kz.uco.tsadv.modules.personprotection/PersonalProtection.protectionEquipment"/>
+                <column id="quantity"
+                        caption="msg://kz.uco.tsadv.modules.personprotection/PersonalProtection.quantity"/>
+                <column id="protectionEquipment.unitOfMeasure"
+                        caption="msg://kz.uco.tsadv.modules.personprotection.dictionary/DicProtectionEquipment.unitOfMeasure"/>
+                <column id="protectionEquipment.isSingle"
+                        caption="msg://kz.uco.tsadv.modules.personprotection.dictionary/DicProtectionEquipment.isSingle"/>
+                <column id="dateOfIssue"
+                        caption="msg://kz.uco.tsadv.modules.personprotection/PersonalProtection.dateOfIssue"/>
+                <column id="planChangeDate"
+                        caption="msg://kz.uco.tsadv.modules.personprotection/PersonalProtection.planChangeDate"/>
+            </columns>
+            <rows datasource="personalProtectionDs"/>
+            <buttonsPanel id="personalProtectionButtonsPanel">
+                <button action="personalProtectionTable.create"/>
+                <button action="personalProtectionTable.edit"/>
+                <button action="personalProtectionTable.return"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

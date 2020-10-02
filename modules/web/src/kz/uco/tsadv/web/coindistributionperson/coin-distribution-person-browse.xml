@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.coindistributionperson.CoinDistributionPersonBrowse"
+        focusComponent="coinDistributionPersonsTable"
+        lookupComponent="coinDistributionPersonsTable"
+        messagesPack="kz.uco.tsadv.web.coindistributionperson">
+    <dsContext>
+        <groupDatasource id="coinDistributionPersonsDs"
+                         class="kz.uco.tsadv.modules.recognition.CoinDistributionPerson"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$CoinDistributionPerson e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="coinDistributionPersonsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="coinDistributionPersonsTable"
+                datasource="coinDistributionPersonsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="coinDistributionPersonsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+            </columns>
+            <rows datasource="coinDistributionPersonsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="coinDistributionPersonsTable.create"/>
+                <button id="editBtn"
+                        action="coinDistributionPersonsTable.edit"/>
+                <button id="removeBtn"
+                        action="coinDistributionPersonsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

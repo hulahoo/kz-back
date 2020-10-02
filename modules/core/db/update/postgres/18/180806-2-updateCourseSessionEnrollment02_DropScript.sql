@@ -1,0 +1,1 @@
+alter table TSADV_COURSE_SESSION_ENROLLMENT drop column PERSON_GROUP_ID__U93237 cascade ;

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.learnergroup.LearnerGroupComplexEdit"
+        focusComponent="learnerGroupsTable"
+        lookupComponent="learnerGroupsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.learnergroup">
+    <dsContext>
+        <groupDatasource id="learnerGroupsDs"
+                         class="kz.uco.tsadv.modules.learning.model.LearnerGroup"
+                         view="learnerGroup-complex-edit">
+            <query>
+                <![CDATA[
+                    select e
+                      from tsadv$LearnerGroup e
+                ]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="learnersDs"
+                         class="kz.uco.tsadv.modules.learning.model.Learner"
+                         view="learnerGroup-learner-list">
+            <query>
+                <![CDATA[
+                     select e
+                       from tsadv$Learner e
+                      where e.group.id = :ds$learnerGroupsDs
+                ]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="800"
+                width="1100"/>
+    <layout expand="groupsVsLearnersSplit"
+            spacing="true">
+        <split id="groupsVsLearnersSplit"
+               orientation="horizontal"
+               pos="30"
+               width="100%">
+            <vbox id="learnerGroupsBox"
+                  height="100%"
+                  margin="false, true, false, false"
+                  spacing="true"
+                  expand="learnerGroupsTable">
+                <label id="learnerGroupsBoxLabel"
+                       value="msg://groups"
+                       stylename="bold"/>
+                <filter id="groupsFilter"
+                        applyTo="learnerGroupsTable"
+                        datasource="learnerGroupsDs"
+                        collapsable="true"
+                        collapsed="true">
+                    <properties include=".*"/>
+                </filter>
+                <groupTable id="learnerGroupsTable"
+                            width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="PLUS"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="active" caption="msg://active.short"/>
+                        <column id="code"/>
+                    </columns>
+                    <rows datasource="learnerGroupsDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="groupsButtonsPanel"
+                                  alwaysVisible="true">
+                        <button id="groupCreateBtn"
+                                action="learnerGroupsTable.create"/>
+                        <button id="groupEditBtn"
+                                action="learnerGroupsTable.edit"/>
+                        <button id="groupRemoveBtn"
+                                action="learnerGroupsTable.remove"/>
+                    </buttonsPanel>
+                </groupTable>
+                <textArea id="groupDescription"
+                          caption="msg://kz.uco.tsadv.modules.learning.model/LearnerGroup.description"
+                          datasource="learnerGroupsDs"
+                          property="description"
+                          height="200px"
+                          width="100%"/>
+            </vbox>
+            <vbox id="learnersBox"
+                  height="100%"
+                  margin="false, false, false, true"
+                  spacing="true"
+                  expand="learnersDataGrid">
+                <label id="learnersBoxLabel"
+                       value="msg://kz.uco.tsadv.web.modules.learning.learner/browseCaption"
+                       stylename="bold"/>
+                <filter id="learnersFilter"
+                        applyTo="learnersDataGrid"
+                        datasource="learnersDs">
+                    <properties include=".*"/>
+                </filter>
+                <dataGrid id="learnersDataGrid"
+                          datasource="learnersDs"
+                          selectionMode="MULTI_CHECK"
+                          width="100%">
+                    <actions>
+                        <action id="addLearnerAction"
+                                caption="msg://addLearnerAction"
+                                icon="PLUS"
+                                invoke="addLearner"
+                                enable="false"/>
+                        <action id="addLearnersFromRequestAction"
+                                caption="msg://addLearnersFromRequestAction"
+                                icon="GROUP"
+                                invoke="addLearnersFromRequest"
+                                enable="false"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="fullNameCyrillic"
+                                property="personGroup.relevantPerson.fullNameCyrillic"/>
+                        <column id="nationalIdentifier"
+                                property="personGroup.relevantPerson.nationalIdentifier"/>
+                        <column id="positionGroup"
+                                property="personGroup.primaryAssignment.positionGroup"/>
+                        <column id="organizationGroup"
+                                property="personGroup.primaryAssignment.organizationGroup"/>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel id="learnersButtonsPanel"
+                                  alwaysVisible="true">
+                        <button id="addLearnerBtn"
+                                action="learnersDataGrid.addLearnerAction"/>
+                        <button id="addLearnersFromRequestBtn"
+                                action="learnersDataGrid.addLearnersFromRequestAction"/>
+                        <button id="learnerRemoveBtn"
+                                action="learnersDataGrid.remove"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </vbox>
+        </split>
+    </layout>
+</window>

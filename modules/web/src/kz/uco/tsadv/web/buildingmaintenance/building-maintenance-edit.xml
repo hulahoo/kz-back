@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.buildingmaintenance.BuildingMaintenanceEdit"
+        datasource="buildingMaintenanceDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.buildingmaintenance">
+    <dsContext>
+        <datasource id="buildingMaintenanceDs"
+                    class="kz.uco.tsadv.entity.tb.BuildingMaintenance"
+                    view="buildingMaintenance-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <vbox id="vbox"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="buildingMaintenanceDs">
+                    <column width="250px">
+                        <field property="inspectionReport"/>
+                        <field property="technicalResolution"/>
+                        <field property="maintenanceProhibition"/>
+                        <field property="technicalJournalRecord"/>
+                        <field property="currentRepairs"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <groupBox caption="msg://detail"
+                      collapsable="true"
+                      collapsed="true">
+                <vbox id="vbox_1"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="buildingMaintenanceDs">
+                        <column>
+                            <field property="rebuilding"/>
+                            <field property="contractingOrganization"/>
+                            <field property="onBalance"/>
+                            <field property="dismantled"/>
+                            <field property="unmaintenance"/>
+                            <field property="onConservation"/>
+                            <field property="writeOfDate"/>
+                            <field property="dismantlingDate"/>
+                            <field property="managerFullName" captionProperty="person"/>
+                            <field property="responsibleFullName" captionProperty="person"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <frame id="windowActions"
+                   screen="editWindowActions"/>
+        </scrollBox>
+    </layout>
+</window>

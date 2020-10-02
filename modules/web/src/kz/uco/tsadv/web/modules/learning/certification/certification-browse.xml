@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Certification.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.certification.CertificationBrowse"
+        focusComponent="certificationsTable"
+        lookupComponent="certificationsTable">
+    <dsContext>
+        <groupDatasource id="certificationsDs"
+                         class="kz.uco.tsadv.modules.learning.model.Certification"
+                         view="certification.browse">
+            <query>
+                <![CDATA[select e from tsadv$Certification e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="certificationsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="certificationsTable"
+                datasource="certificationsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="certificationsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="course.name" caption="msg://Certification.course.name"/>
+                <column id="notifyDay"/>
+                <column id="lifeDay"/>
+                <column id="calculateType"/>
+                <column id="period"/>
+            </columns>
+            <rows datasource="certificationsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="certificationsTable.create"/>
+                <button id="editBtn"
+                        action="certificationsTable.edit"/>
+                <button id="removeBtn"
+                        action="certificationsTable.remove"/>
+                <button id="excel"
+                        action="certificationsTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

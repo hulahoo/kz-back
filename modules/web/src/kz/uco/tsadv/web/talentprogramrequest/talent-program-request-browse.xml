@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://talentProgramRequests"
+        class="kz.uco.tsadv.web.talentprogramrequest.TalentProgramRequestBrowse"
+        focusComponent="talentProgramRequestsTable"
+        lookupComponent="talentProgramRequestsTable">
+    <dsContext>
+        <groupDatasource id="talentProgramRequestsDs"
+                         class="kz.uco.tsadv.entity.TalentProgramRequest"
+                         view="all-talentProgramRequest-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramRequest e
+where e.personGroup.id = :session$userPersonGroupId and e.deleteTs is null]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="talentProgramsDs"
+                         class="kz.uco.tsadv.entity.TalentProgram"
+                         view="talentProgram-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgram e
+where :session$systemDate between e.startDate and e.endDate
+and e.isActive = true order by e.startDate desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox id="scrollBox"
+                   height="100%">
+            <hbox height="700px"
+                  spacing="true"
+                  width="100%">
+                <groupTable id="talentProgramRequestsTable"
+                            height="100%"
+                            width="100%">
+                    <actions>
+                        <action id="edit"/>
+                    </actions>
+                    <columns>
+                        <column id="talentProgramm"
+                                caption="msg://TalentProgram"
+                                generator="talentProgramGenerator"/>
+                        <column id="requestDate"
+                                caption="msg://requestDate"/>
+                        <column id="status.langValue"
+                                caption="msg://requestStatus" visible="false"/>
+                    </columns>
+                    <rows datasource="talentProgramRequestsDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtn"
+                                caption="msg://applyRequest"
+                                invoke="apply"/>
+<!--                        <button id="editBtn"-->
+<!--                                caption="msg://open"-->
+<!--                                action="talentProgramRequestsTable.edit"/>-->
+                        <link id="openIntraNet"
+                              caption="msg://details"/>
+                    </buttonsPanel>
+                </groupTable>
+                <image id="image"
+                       height="100%"
+                       scaleMode="FILL"
+                       width="80%"/>
+            </hbox>
+        </scrollBox>
+    </layout>
+</window>

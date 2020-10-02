@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.coindistributionposition.CoinDistributionPositionEdit"
+        datasource="coinDistributionPositionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.coindistributionposition">
+    <dsContext>
+        <datasource id="coinDistributionPositionDs"
+                    class="kz.uco.tsadv.modules.recognition.CoinDistributionPosition"
+                    view="coinDistributionPosition.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                modal="true"
+                height="AUTO"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="coinDistributionPositionDs">
+            <column width="250px">
+                <field id="positionGroup"
+                       captionProperty="fullName"
+                       property="positionGroup"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

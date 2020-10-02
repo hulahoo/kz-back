@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfPunishmentBrowse"
+        focusComponent="punishmentsTable"
+        lookupComponent="punishmentsTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true">
+        <table id="punishmentsTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="date"/>
+                <column id="type"/>
+                <column id="accident"/>
+                <column id="offenceType"/>
+                <column id="reason"/>
+                <column id="isSafetyEngineering"/>
+                <column id="period"/>
+                <column id="orderNumber"/>
+                <column id="orderDate"/>
+                <column id="depression"/>
+                <column id="ledToAccident"/>
+                <column id="additionalEducation"/>
+                <column id="examResults"/>
+                <column id="acceptedAction"/>
+                <column id="removingDate"/>
+                <column id="removingOrderNum"/>
+                <column id="removingOrderDate"/>
+            </columns>
+            <rows datasource="punishmentDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="punishmentsTable.create"/>
+                <button id="editBtn"
+                        action="punishmentsTable.edit"/>
+                <button id="removeBtn"
+                        action="punishmentsTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

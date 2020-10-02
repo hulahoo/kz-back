@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Student.grant.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.studentgrant.StudentGrantEdit"
+        datasource="studentGrantDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="studentGrantDs"
+                    class="kz.uco.tsadv.modules.personal.model.StudentGrant"
+                    view="studentGrant.browse"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="studentGrantDs">
+            <column width="250px">
+                <field property="numberContract"/>
+                <field property="dateContract"/>
+                <field property="learningCenter"/>
+                <field property="specialization"/>
+                <field property="learningForm"/>
+                <field property="learnEndDate"/>
+                <field property="reason"/>
+                <field property="orderRequisition"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,21 @@
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.report.ParameterEditorExt"
+        extends="com/haulmont/reports/gui/parameter/edit/parameter-edit.xml"
+        xmlns:ext="http://schemas.haulmont.com/cuba/window-ext.xsd"
+        messagesPack="kz.uco.tsadv.web.report">
+    <layout>
+        <tabSheet id="tabsheet">
+            <tab id="optionsTab">
+                <grid>
+                    <rows>
+                        <row ext:index="7">
+                            <label id="captionPropertyLabel" value="msg://captionProperty" align="MIDDLE_LEFT"/>
+                            <lookupField id="captionProperty" datasource="parameterDs" property="captionProperty"
+                                         width="100%"/>
+                        </row>
+                    </rows>
+                </grid>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

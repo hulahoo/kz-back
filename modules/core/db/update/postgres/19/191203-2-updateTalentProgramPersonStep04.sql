@@ -1,0 +1,5 @@
+update tsadv_talent_program_person_step
+set talent_program_request_id = r.id
+from tsadv_talent_program_request r
+where r.person_group_id = tsadv_talent_program_person_step.person_group_id
+  and tsadv_talent_program_person_step.talent_program_request_id is null;

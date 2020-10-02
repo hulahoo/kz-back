@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.punishment.PunishmentBrowse"
+        focusComponent="punishmentsTable"
+        lookupComponent="punishmentsTable"
+        messagesPack="kz.uco.tsadv.web.punishment">
+    <dsContext>
+        <groupDatasource id="punishmentsDs"
+                         class="kz.uco.tsadv.entity.tb.Punishment"
+                         view="punishment-view">
+            <query>
+                <![CDATA[select e from tsadv$Punishment e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="punishmentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="punishmentsTable"
+                datasource="punishmentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="punishmentsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="orderDate"/>
+                <column id="punishmentType"/>
+                <column id="person"/>
+                <column id="orderNumber"/>
+                <column id="punishmentDate"/>
+                <column id="description"/>
+            </columns>
+            <rows datasource="punishmentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="punishmentsTable.create"/>
+                <button id="editBtn"
+                        action="punishmentsTable.edit"/>
+                <button id="removeBtn"
+                        action="punishmentsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

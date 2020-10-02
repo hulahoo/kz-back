@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.learner.LearnerEdit"
+        datasource="learnerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.learner">
+    <dsContext>
+        <datasource id="learnerDs"
+                    class="kz.uco.tsadv.modules.learning.model.Learner"
+                    view="learner-edit"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="learnerDs">
+            <column width="350px">
+                <field id="group"
+                       property="group"/>
+                <field id="personGroup"
+                       property="personGroup"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

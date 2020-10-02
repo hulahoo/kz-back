@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Job.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.job.JobEdit"
+        datasource="jobDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="jobDs"
+                    class="kz.uco.tsadv.modules.personal.model.Job"
+                    view="job.edit">
+            <datasource id="groupDs"
+                        property="group">
+                <collectionDatasource id="casesDs"
+                                      property="cases"/>
+                <collectionDatasource id="goalsDs"
+                                      property="goals"/>
+                <collectionDatasource id="competenceDs"
+                                      property="competence"/>
+            </datasource>
+            <collectionDatasource id="infoSalaryMarketDs"
+                                  property="infoSalaryMarket"/>
+        </datasource>
+        <collectionDatasource id="dicEmployeeCategoriesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="dicEmployeeCategory.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicEmployeeCategory e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="vacationConditionsDs"
+                              class="kz.uco.tsadv.modules.personal.model.VacationConditions"
+                              view="vacationConditions-view">
+            <query>
+                <![CDATA[select a
+                  from tsadv$VacationConditions a
+                 where a.jobGroup.id = :ds$jobDs.group.id
+                 order by a.startDate desc, a.endDate desc ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobProtectionEquipmentDs"
+                              class="kz.uco.tsadv.modules.personprotection.JobProtectionEquipment"
+                              view="jobProtectionEquipment.edit">
+            <query>
+                <![CDATA[select e from tsadv$JobProtectionEquipment e
+                   where e.jobGroup.id = :ds$jobDs.group.id]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="100%"
+                width="100%"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="tab"
+                 caption="msg://mainInfo"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <hbox spacing="true">
+                    <fieldGroup id="fieldGroup2"
+                                datasource="jobDs">
+                        <column width="250px">
+                            <field id="jobNameLangId1"
+                                   property="jobNameLang1"/>
+                            <field id="jobNameLangId2"
+                                   property="jobNameLang2"/>
+                            <field id="jobNameLangId3"
+                                   property="jobNameLang3"/>
+                            <field id="jobNameLangId4"
+                                   property="jobNameLang4"/>
+                            <field id="jobNameLangId5"
+                                   property="jobNameLang5"/>
+                        </column>
+                    </fieldGroup>
+                    <fieldGroup id="fieldGroup"
+                                datasource="jobDs">
+                        <column width="250px">
+                            <field property="jobName"
+                                   visible="false"/>
+                            <field id="instruction"
+                                   custom="true"/>
+                            <field optionsDatasource="dicEmployeeCategoriesDs"
+                                   property="employeeCategory"/>
+                            <field property="jobCategory"/>
+                            <field editable="true"
+                                   property="startDate"/>
+                            <field id="endDate"
+                                   editable="false"
+                                   property="endDate"/>
+                        </column>
+                    </fieldGroup>
+                </hbox>
+            </tab>
+            <tab id="additional"
+                 caption="msg://job.edit.tab.additional"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <scrollBox id="scrollBox"
+                           height="100%"
+                           stylename="bt-scroll">
+                    <vbox id="additionalVBox"
+                          spacing="true">
+                        <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirements">
+                            <tabSheet id="tabSheetReqLang"
+                                      height="100%">
+                                <tab id="reqLang1"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang1"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea1"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang1"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="reqLang2"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang2"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea2"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang2"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="reqLang3"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang3"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea3"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang3"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="reqLang4"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang4"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea4"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang4"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="reqLang5"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang5"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea5"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang5"
+                                                  width="100%"/>
+                                </tab>
+                            </tabSheet>
+                        </groupBox>
+                        <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescription">
+                            <tabSheet id="tabSheetDescLang"
+                                      height="100%">
+                                <tab id="descLang1"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang1"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea6"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang1"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="descLang2"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang2"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea7"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang2"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="descLang3"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang3"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea8"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang3"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="descLang4"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang4"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea9"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang4"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="descLang5"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang5"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea10"
+                                                  datasource="jobDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang5"
+                                                  width="100%"/>
+                                </tab>
+                            </tabSheet>
+                        </groupBox>
+                    </vbox>
+                </scrollBox>
+            </tab>
+            <tab id="tab_1"
+                 caption="msg://Position.vacationConditionsTab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="vacationConditionsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.create"
+                                invoke="createVacationConditions"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"/>
+                    </actions>
+                    <columns>
+                        <column id="additionalDays"/>
+                        <column id="daysType"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="vacationConditionsDs"/>
+                    <buttonsPanel>
+                        <button id="createButton"
+                                action="vacationConditionsTable.create"/>
+                        <button id="editButton"
+                                action="vacationConditionsTable.edit"/>
+                        <button id="removeButton"
+                                action="vacationConditionsTable.remove"/>
+                        <button action="vacationConditionsTable.excel"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="infoSalaryMarket"
+                 caption="msg://Job.info.salary.market"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="infoSalaryMarketTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="min"/>
+                        <column id="mid"/>
+                        <column id="max"/>
+                        <column id="mediana"/>
+                        <column id="kvart1"/>
+                        <column id="kvart2"/>
+                        <column id="kvart3"/>
+                        <column id="kvart4"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="infoSalaryMarketDs"/>
+                    <buttonsPanel>
+                        <button action="infoSalaryMarketTable.create"/>
+                        <button action="infoSalaryMarketTable.edit"/>
+                        <button action="infoSalaryMarketTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="cases"
+                 caption="msg://Job.edit.casesTab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <frame id="frame"
+                       screen="caseFrame"/>
+            </tab>
+            <tab id="goals"
+                 caption="msg://Goal.browser"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="goalsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/create.png"
+                                invoke="onGoalCreate"/>
+                        <action id="edit"
+                                icon="icons/edit.png"
+                                invoke="onGoalEdit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="weight"/>
+                        <column id="goal.goalName"/>
+                        <column id="goal.successCriteria"/>
+                        <column id="goal.startDate"/>
+                        <column id="goal.endDate"/>
+                    </columns>
+                    <rows datasource="goalsDs"/>
+                    <buttonsPanel>
+                        <button action="goalsTable.create"
+                                caption="msg://table.btn.create"/>
+                        <button action="goalsTable.edit"
+                                caption="msg://table.btn.edit"/>
+                        <button action="goalsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tab_2"
+                 caption="msg://Competence.browser"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="competenceTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="competenceGroup.competence.competenceName"/>
+                        <column id="competenceGroup.competence.scale.scaleName"/>
+                        <column id="scaleLevel"/>
+                    </columns>
+                    <rows datasource="competenceDs"/>
+                    <buttonsPanel id="buttonsPanel">
+                        <button id="createButton_1"
+                                action="competenceTable.create"/>
+                        <button id="editButton_1"
+                                action="competenceTable.edit"/>
+                        <button id="button_1"
+                                action="competenceTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="JobProtectionEquipment"
+                 caption="msg://JobProtectionEquipment"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="jobProtectionEquipmentTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="personalProtectionEquipment"/>
+                        <column id="normPerYear"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="jobProtectionEquipmentDs"/>
+                    <buttonsPanel id="jobProtectionEquipmentButtonsPanel">
+                        <button id="jobProtectionEquipmentCreateButton"
+                                action="jobProtectionEquipmentTable.create"/>
+                        <button id="jobProtectionEquipmentEditButton"
+                                action="jobProtectionEquipmentTable.edit"/>
+                        <button id="jobProtectionEquipmentRemoveButton"
+                                action="jobProtectionEquipmentTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

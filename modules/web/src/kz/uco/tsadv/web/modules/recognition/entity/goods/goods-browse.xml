@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.goods.GoodsBrowse"
+        focusComponent="goodsesTable"
+        lookupComponent="goodsesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.goods">
+    <dsContext>
+        <groupDatasource id="goodsesDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.Goods"
+                         maxResults="20"
+                         view="goods.edit">
+            <query>
+                <![CDATA[select e from tsadv$Goods e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goodsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="goodsesTable"
+                datasource="goodsesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="goodsesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="nameLang1"/>
+                <column id="nameLang2"/>
+                <column id="nameLang3"/>
+                <column id="nameLang4"/>
+                <column id="nameLang5"/>
+                <column id="descriptionLang1"/>
+                <column id="descriptionLang2"/>
+                <column id="descriptionLang3"/>
+                <column id="descriptionLang4"/>
+                <column id="descriptionLang5"/>
+                <column id="price"/>
+                <column id="active"/>
+                <column id="category"/>
+                <column id="recognitionProvider"/>
+            </columns>
+            <rows datasource="goodsesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="goodsesTable.create"/>
+                <button id="editBtn"
+                        action="goodsesTable.edit"/>
+                <button id="removeBtn"
+                        action="goodsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

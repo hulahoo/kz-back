@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.goodsorder.GoodsOrderEdit"
+        datasource="goodsOrderDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.goodsorder">
+    <dsContext>
+        <datasource id="goodsOrderDs"
+                    class="kz.uco.tsadv.modules.recognition.shop.GoodsOrder"
+                    view="goodsOrder.edit">
+            <collectionDatasource id="detailsDs"
+                                  property="details"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true" height="100%" width="100%">
+        <scrollBox id="scrollBox" width="100%" spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="goodsOrderDs">
+                <column width="300px">
+                    <field property="status"/>
+                    <field property="totalSum"/>
+                    <field property="orderNumber"/>
+                    <field property="orderDate"/>
+                    <field property="personGroup" captionProperty="fullName"/>
+                    <field property="deliveryAddress" captionProperty="langValue" required="true"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="detailsBox"
+                      caption="msg://kz.uco.tsadv.modules.recognition.shop/GoodsOrder.details">
+                <table id="detailsTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="goods"/>
+                        <column id="quantity"/>
+                        <column id="voucherUsed"/>
+                    </columns>
+                    <rows datasource="detailsDs"/>
+                    <buttonsPanel>
+                        <button action="detailsTable.create"/>
+                        <button action="detailsTable.edit"/>
+                        <button action="detailsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.jobrequest.JobRequestStatusEdit"
+        datasource="jobRequestDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.jobrequest">
+    <dsContext>
+        <datasource id="jobRequestDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                    view="jobRequest-status-edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="500"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="jobRequestDs">
+            <column width="250px">
+                <field property="requestStatus"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

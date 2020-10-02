@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://TransferRequest.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.transferrequest.TransferRequestEdit"
+        datasource="transferRequestDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="transferRequestDs"
+                    class="kz.uco.tsadv.modules.personal.model.TransferRequest"
+                    view="transferRequest.edit"/>
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e, bpm$ProcInstance pi
+                          where pi.entity.entityId = :ds$transferRequestDs
+                            and e.procInstance.id = pi.id
+                       order by e.createTs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="editBox">
+        <vbox id="editBox" expand="bpmActorsBox">
+            <hbox width="100%" spacing="true">
+                <groupBox>
+                    <fieldGroup id="fieldGroup" width="500px"
+                                datasource="transferRequestDs">
+                        <column width="100%">
+                            <field property="assignmentGroup" custom="true"/>
+                            <field property="assignmentGroup.assignment.positionGroup.position" editable="false"/>
+                            <field property="assignmentGroup.assignment.organizationGroup.organization"
+                                   editable="false"/>
+                            <field property="newPositionGroup" custom="true"/>
+                            <field property="newOrganizationGroup" editable="false" captionProperty="organization"/>
+                            <field property="requestDate"/>
+                            <field property="transferDate"/>
+                            <field property="requestStatus" editable="false"/>
+                        </column>
+                    </fieldGroup>
+                </groupBox>
+                <groupBox id="procActionsBox" width="100%"
+                          height="100%"
+                          caption="msg://TransferRequest.approvalProcess"
+                          orientation="vertical"
+                          spacing="true">
+                    <frame id="procActionsFrame"
+                           screen="procActionsFrame"/>
+                </groupBox>
+            </hbox>
+            <groupBox id="bpmActorsBox" width="100%" caption="msg://TransferRequest.approvalProcess.actors">
+                <table id="procTasksTable"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="locName" caption="msg://ProcActor.role"/>
+                        <column id="procActor.user"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="locOutcome" caption="msg://ProcActor.decision"/>
+                        <column id="comment" maxTextLength="50"/>
+                    </columns>
+                    <rows datasource="procTasksDs"/>
+                </table>
+            </groupBox>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

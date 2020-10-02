@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://comment"
+        class="kz.uco.tsadv.web.modules.personal.businesstrip.BusinessTripEditComment"
+        datasource="businessTripDs"
+        messagesPack="kz.uco.tsadv.web.modules.personal.businesstrip">
+    <dsContext>
+        <datasource id="businessTripDs"
+                    class="kz.uco.tsadv.modules.personal.model.BusinessTrip"
+                    view="businessTrip-view"/>
+        <collectionDatasource id="ordersDs"
+                              class="kz.uco.tsadv.modules.personal.model.Order"
+                              view="order-view">
+            <query>
+                <![CDATA[select e from tsadv$Order e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="230"
+                width="420"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="businessTripFieldGroup"
+                        datasource="businessTripDs">
+                <column width="250px">
+                    <field captionProperty="caption"
+                           optionsDatasource="ordersDs"
+                           property="order"/>
+                    <field property="orderNum"/>
+                    <field property="orderDate"/>
+                    <field property="dateFrom"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

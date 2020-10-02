@@ -1,0 +1,2 @@
+alter table TSADV_DIC_QUESTIONNAIRE_QUESTION_SECTION add column ACTIVE boolean ;
+alter table TSADV_DIC_QUESTIONNAIRE_QUESTION_SECTION add column ORDER_ integer ;

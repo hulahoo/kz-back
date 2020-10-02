@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Assignment.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.assignment.AssignmentHistoryEdit"
+        datasource="assignmentDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="assignmentDs"
+                    class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                    view="assignment.historyEdit">
+            <datasource id="assignmentGroupDs"
+                        property="group">
+                <collectionDatasource id="assignmentsDs"
+                                      property="list"/>
+            </datasource>
+        </datasource>
+        <collectionDatasource id="substituteEmployeesDs"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                              view="personGroupExt.substituteEmployee">
+            <query>
+                <![CDATA[select e from base$PersonGroupExt e
+                           join e.list l
+                          where e.id<>:ds$assignmentDs.personGroup.id
+                            and :session$systemDate between l.startDate and l.endDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="assignmentStatusDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicAssignmentStatus e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="diсAssignmentCategoryDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAssignmentCategory"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicAssignmentCategory e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <vbox id="vbox1"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="assignmentDs">
+                    <column id="column1"
+                            fieldCaptionWidth="170px"
+                            width="250px">
+                        <field captionProperty="personFioWithEmployeeNumber"
+                               editable="false"
+                               property="personGroup"
+                               required="true"/>
+                        <field custom="true"
+                               property="positionGroup"/>
+                        <field captionProperty="organization"
+                               editable="false"
+                               property="organizationGroup"/>
+                        <field captionProperty="job"
+                               editable="false"
+                               property="jobGroup"/>
+                        <field property="startDate"/>
+                        <field id="assignmentNumber"
+                               editable="false"
+                               property="group.assignmentNumber"/>
+                        <field property="assignmentCategory"
+                               optionsDatasource="diсAssignmentCategoryDs"/>
+                    </column>
+                    <column id="column2"
+                            fieldCaptionWidth="160px">
+                        <field property="location"/>
+                        <field captionProperty="grade"
+                               property="gradeGroup"/>
+                        <field property="fte"/>
+                        <field property="endDate"/>
+                        <field property="costCenter"/>
+
+                    </column>
+                </fieldGroup>
+                <fieldGroup id="fieldGroup3"
+                            datasource="assignmentDs">
+                    <column id="fieldGroup3col1"
+                            fieldCaptionWidth="170px"
+                            width="250px">
+                        <field property="orderNumber"/>
+                        <field id="substituteEmployee"
+                               captionProperty="fullName"
+                               property="substituteEmployee"/>
+                        <field id="primaryFlag"
+                               property="primaryFlag"/>
+                    </column>
+                    <column id="fieldGroup3col2"
+                            fieldCaptionWidth="160px">
+                        <field property="orderDate"/>
+                        <field id="assignmentStatus"
+                               optionsDatasource="assignmentStatusDs"
+                               property="assignmentStatus"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <groupBox id="probationPeriod"
+                      caption="msg://probation"
+                      collapsable="true"
+                      collapsed="false">
+                <vbox id="vbox2"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="assignmentDs">
+                        <column>
+                            <field property="durationProbationPeriod"/>
+                            <field property="unit"/>
+                            <field property="probationEndDate"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <!--<groupBox caption="msg://replacement"
+                      collapsed="true"
+                      collapsable="true">
+                <vbox id="vbox3"
+                      spacing="true">
+                    fieldGroup id="fieldGroup2"
+                                datasource="assignmentDs">
+                        <column>
+
+
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>-->
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

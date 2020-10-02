@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicCostCenter.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.diccostcenter.DicCostCenterBrowse"
+        focusComponent="dicCostCentersTable"
+        lookupComponent="dicCostCentersTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.diccostcenter">
+    <dsContext>
+        <groupDatasource id="dicCostCentersDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicCostCenter"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicCostCenter e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicCostCentersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicCostCentersTable"
+                datasource="dicCostCentersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicCostCentersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="legacyID"/>
+            </columns>
+            <rows datasource="dicCostCentersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicCostCentersTable.create"/>
+                <button id="editBtn"
+                        action="dicCostCentersTable.edit"/>
+                <button id="removeBtn"
+                        action="dicCostCentersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.microtraumainjured.MicrotraumaInjuredEdit"
+        datasource="microtraumaInjuredDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.microtraumainjured">
+    <dsContext>
+        <datasource id="microtraumaInjuredDs"
+                    class="kz.uco.tsadv.entity.tb.MicrotraumaInjured"
+                    view="microtraumaInjured-view">
+            <collectionDatasource id="organDs"
+                                  property="organ"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%">
+            <vbox id="vbox"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="microtraumaInjuredDs">
+                    <column width="250px">
+                        <field property="person"/>
+                        <field property="correctiveActions"/>
+                        <field property="noteMicrotraumaToAccident"/>
+                    </column>
+                </fieldGroup>
+                <frame id="windowActions"
+                       height="100%"
+                       screen="editWindowActions"/>
+            </vbox>
+            <vbox id="vbox2"
+                  height="100%"
+                  spacing="true">
+                <tabSheet id="tabSheet">
+                    <tab id="tab"
+                         caption="msg://tab"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="organTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="injuredOrgan"/>
+                            </columns>
+                            <rows datasource="organDs"/>
+                            <buttonsPanel>
+                                <button action="organTable.create"/>
+                                <button action="organTable.remove"/>
+                                <button action="organTable.edit"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

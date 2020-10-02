@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.excavation.ExcavationBrowse"
+        focusComponent="excavationsTable"
+        lookupComponent="excavationsTable"
+        messagesPack="kz.uco.tsadv.web.excavation">
+    <dsContext>
+        <groupDatasource id="excavationsDs"
+                         class="kz.uco.tsadv.entity.tb.dictionary.Excavation"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$Excavation e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="excavationsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="excavationsTable"
+                datasource="excavationsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="excavationsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="legacyID"/>
+                <column id="isSystemRecord"/>
+            </columns>
+            <rows datasource="excavationsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="excavationsTable.create"/>
+                <button id="editBtn"
+                        action="excavationsTable.edit"/>
+                <button id="removeBtn"
+                        action="excavationsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.personalprotection.PersonalProtectionEditReturn"
+        datasource="personalProtectionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.personalprotection">
+    <dsContext>
+        <datasource id="personalProtectionDs"
+                    class="kz.uco.tsadv.modules.personprotection.PersonalProtection"
+                    view="personalProtection.edit"/>
+        <collectionDatasource id="DicProtectionEquipmentConditionDs"
+                              class="kz.uco.tsadv.modules.personprotection.dictionary.DicProtectionEquipmentCondition"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicProtectionEquipmentCondition e ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <groupBox id="groupBox"
+                  orientation="horizontal">
+            <fieldGroup id="fieldGroup"
+                        captionAlignment="TOP"
+                        datasource="personalProtectionDs"
+                        width="44%">
+                <column width="250px">
+                    <field editable="false"
+                           property="protectionEquipment"/>
+                    <field editable="false"
+                           property="protectionEquipment.type"/>
+                    <field editable="false"
+                           property="dateOfIssue"/>
+                    <field property="writtenOfDate"
+                           required="true"/>
+                    <field optionsDatasource="DicProtectionEquipmentConditionDs"
+                           property="condition"/>
+                </column>
+                <column width="250px">
+                    <field editable="false"
+                           property="quantity"/>
+                    <field editable="false"
+                           property="protectionEquipment.unitOfMeasure"/>
+                    <field editable="false"
+                           property="planChangeDate"/>
+                    <field property="writtenOfReason"/>
+                </column>
+            </fieldGroup>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

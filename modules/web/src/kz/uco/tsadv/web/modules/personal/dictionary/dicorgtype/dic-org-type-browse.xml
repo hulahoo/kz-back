@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicOrgType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicorgtype.DicOrgTypeBrowse"
+        focusComponent="dicOrgTypesTable"
+        lookupComponent="dicOrgTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicorgtype">
+    <dsContext>
+        <groupDatasource id="dicOrgTypesDs"
+                         class="kz.uco.base.entity.dictionary.DicOrgType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from base$DicOrgType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicOrgTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicOrgTypesTable"
+                datasource="dicOrgTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicOrgTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicOrgTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicOrgTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicOrgTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicOrgTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.globalvalue.GlobalValueEdit"
+        datasource="globalValueDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="globalValueDs"
+                    class="kz.uco.tsadv.modules.personal.model.GlobalValue"
+                    view="globalValue.edit"/>
+    </dsContext>
+    <dialogMode height="auto"
+                width="auto"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="globalValueDs">
+            <column width="250px">
+                <field property="name"/>
+                <field property="value"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="code"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

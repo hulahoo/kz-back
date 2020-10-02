@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.bpm.form.ExtProcActionsFrame"
+        extends="/com/haulmont/bpm/gui/procactions/proc-actions-frame.xml"
+        messagesPack="kz.uco.tsadv.web.bpm.form">
+    <layout/>
+</window>

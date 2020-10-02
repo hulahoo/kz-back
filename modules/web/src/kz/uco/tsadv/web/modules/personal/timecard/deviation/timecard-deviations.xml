@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Deviations"
+        class="kz.uco.tsadv.web.modules.personal.timecard.deviation.TimecardDeviationsWindow"
+        focusComponent="timecardDeviationsTable">
+    <dsContext>
+        <groupDatasource id="timecardDeviationsDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.TimecardDeviation"
+                         view="timecardDeviation-view">
+            <query>
+                <![CDATA[select o from tsadv$TimecardDeviation o
+                 where o.assignmentGroup.id in :custom$assignmentGroups
+               and ((o.dateFrom <= :custom$endDate and o.dateFrom >= :custom$startDate)
+               or (o.dateTo <= :custom$endDate and o.dateTo >= :custom$startDate)
+             or (o.dateFrom >= :custom$startDate and o.dateTo <= :custom$endDate)
+              or (o.dateFrom <= :custom$endDate and o.dateTo >= :custom$endDate))
+                    ]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="auto"
+                width="auto"/>
+    <layout expand="browse"
+            spacing="true">
+        <groupBox id="editGroupBox"
+                  caption="msg://InsertNewDeviation"
+                  collapsable="true"
+                  collapsed="true"
+                  spacing="true"
+                  stylename="light"
+                  width="auto">
+            <vbox id="editVbox"
+                  spacing="true"
+                  width="auto">
+                <hbox spacing="true">
+                    <dateField id="dateFromField"
+                               caption="msg://DateFrom"
+                               dateFormat="dd.MM.yyyy"
+                               required="true"/>
+                    <dateField id="dateToField"
+                               caption="msg://DateTo"
+                               dateFormat="dd.MM.yyyy"
+                               required="true"/>
+                    <textField id="hoursField"
+                               caption="msg://Hours"
+                               datatype="double"
+                               required="true"
+                               width="60"/>
+                    <optionsGroup id="typesField"
+                                  caption="msg://ChangeHoursType"
+                                  multiselect="true"
+                                  required="true"/>
+                    <optionsGroup id="changeFromWhichEndField"
+                                  caption="msg://changeFromWhichEnd"/>
+                </hbox>
+                <checkBox id="changeWeekends"
+                              caption="msg://changeWeekends"/>
+                <buttonsPanel align="MIDDLE_LEFT">
+                    <button id="save"
+                            caption="msg://Save"
+                            invoke="save"/>
+                    <button id="close"
+                            caption="msg://Close"
+                            invoke="closeWindow"/>
+                    <button id="delete"
+                            caption="msg://Delete"
+                            invoke="delete"/>
+                </buttonsPanel>
+            </vbox>
+        </groupBox>
+        <vbox id="browse">
+            <groupTable id="timecardDeviationsTable"
+                        width="100%">
+                <columns>
+                    <column id="hours"/>
+                    <column id="dateFrom"/>
+                    <column id="dateTo"/>
+                    <column id="isChangesFactHours"/>
+                    <column id="isChangesPlanHours"/>
+                    <column id="isChangesDetailsFromBegin"/>
+                    <column id="changesWeekends"/>
+                </columns>
+                <rows datasource="timecardDeviationsDs"/>
+            </groupTable>
+        </vbox>
+    </layout>
+</window>

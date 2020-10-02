@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.learningfeedbacktemplate.LearningFeedbackTemplateBrowse"
+        focusComponent="learningFeedbackTemplatesTable"
+        lookupComponent="learningFeedbackTemplatesTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.learningfeedbacktemplate">
+    <dsContext>
+        <groupDatasource id="learningFeedbackTemplatesDs"
+                         class="kz.uco.tsadv.modules.learning.model.feedback.LearningFeedbackTemplate"
+                         view="learningFeedbackTemplate.edit"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$LearningFeedbackTemplate e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="learningFeedbackTemplatesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learningFeedbackTemplatesTable"
+                datasource="learningFeedbackTemplatesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learningFeedbackTemplatesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://create.description"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        description="msg://edit.description"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        description="msg://remove.description"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="active"/>
+                <column id="description" maxTextLength="60"/>
+                <column id="usageType"/>
+                <column id="employee"/>
+                <column id="manager"/>
+                <column id="trainer"/>
+            </columns>
+            <rows datasource="learningFeedbackTemplatesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="learningFeedbackTemplatesTable.create"/>
+                <button id="editBtn"
+                        action="learningFeedbackTemplatesTable.edit"/>
+                <button id="removeBtn"
+                        action="learningFeedbackTemplatesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

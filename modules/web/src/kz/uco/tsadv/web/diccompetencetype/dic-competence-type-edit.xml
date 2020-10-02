@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Dic.competence.type..edit"
+        class="kz.uco.tsadv.web.diccompetencetype.DicCompetenceTypeEdit"
+        datasource="dicCompetenceTypeDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.diccompetencetype">
+    <dsContext>
+        <datasource id="dicCompetenceTypeDs"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicCompetenceType"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="dicCompetenceTypeDs">
+                <column width="250px">
+                    <field property="langValue1"/>
+                    <field property="description1"/>
+                    <field property="langValue2"/>
+                    <field property="description2"/>
+                    <field property="langValue3"/>
+                    <field property="description3"/>
+                    <field property="langValue4"/>
+                    <field property="description4"/>
+                    <field property="langValue5"/>
+                    <field property="description5"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field property="code"/>
+                    <field property="legacyID"/>
+                    <field property="isSystemRecord"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

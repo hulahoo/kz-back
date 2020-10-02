@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dictradeunion.DicTradeUnionBrowse"
+        focusComponent="dicTradeUnionsTable"
+        lookupComponent="dicTradeUnionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dictradeunion">
+    <dsContext>
+        <groupDatasource id="dicTradeUnionsDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicTradeUnion"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicTradeUnion e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicTradeUnionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicTradeUnionsTable"
+                datasource="dicTradeUnionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicTradeUnionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicTradeUnionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicTradeUnionsTable.create"/>
+                <button id="editBtn"
+                        action="dicTradeUnionsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicTradeUnionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

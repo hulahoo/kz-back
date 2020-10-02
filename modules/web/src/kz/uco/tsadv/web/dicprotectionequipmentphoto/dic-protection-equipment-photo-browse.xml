@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicprotectionequipmentphoto.DicProtectionEquipmentPhotoBrowse"
+        focusComponent="dicProtectionEquipmentPhotosTable"
+        lookupComponent="dicProtectionEquipmentPhotosTable"
+        messagesPack="kz.uco.tsadv.web.dicprotectionequipmentphoto">
+    <dsContext>
+        <groupDatasource id="dicProtectionEquipmentPhotosDs"
+                         class="kz.uco.tsadv.modules.personprotection.dictionary.DicProtectionEquipmentPhoto"
+                         view="dicProtectionEquipmentPhoto.edit">
+            <query>
+                <![CDATA[select e from tsadv$DicProtectionEquipmentPhoto e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicProtectionEquipmentPhotosTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicProtectionEquipmentPhotosTable"
+                datasource="dicProtectionEquipmentPhotosDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicProtectionEquipmentPhotosTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="legacyID"/>
+                <column id="description"/>
+                <column id="attachment"/>
+            </columns>
+            <rows datasource="dicProtectionEquipmentPhotosDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicProtectionEquipmentPhotosTable.create"/>
+                <button id="editBtn"
+                        action="dicProtectionEquipmentPhotosTable.edit"/>
+                <button id="removeBtn"
+                        action="dicProtectionEquipmentPhotosTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

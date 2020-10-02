@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://SuccessionPlanning.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.successionplanning.SuccessionPlanningBrowse"
+        focusComponent="successionPlanningsTable"
+        lookupComponent="successionPlanningsTable">
+    <dsContext>
+        <groupDatasource id="successionPlanningsDs"
+                         class="kz.uco.tsadv.modules.personal.model.SuccessionPlanning"
+                         view="successionPlanning.browse">
+            <query>
+                <![CDATA[select e from tsadv$SuccessionPlanning e]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="successorsDs"
+                         class="kz.uco.tsadv.modules.personal.model.Successor"
+                         view="successor.browse">
+            <query>
+                <![CDATA[select e
+                from tsadv$Successor e
+                where e.succession.id = :ds$successionPlanningsDs
+                order by e.readinessLevel.code]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vbox"
+            spacing="true">
+        <filter id="filter"
+                applyTo="successionPlanningsTable"
+                datasource="successionPlanningsDs">
+            <properties include=".*"/>
+        </filter>
+        <vbox id="vbox"
+              spacing="true">
+            <groupTable id="successionPlanningsTable"
+                        height="100%"
+                        multiselect="true"
+                        width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="positionGroup.fullName"
+                            caption="msg://position"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                    <column id="description"/>
+                </columns>
+                <rows datasource="successionPlanningsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="successionPlanningsTable.create"/>
+                    <button id="editBtn"
+                            action="successionPlanningsTable.edit"/>
+                    <button id="removeBtn"
+                            action="successionPlanningsTable.remove"/>
+                </buttonsPanel>
+            </groupTable>
+            <groupBox id="groupBox"
+                      caption="msg://Successor.browseCaption"
+                      height="100%"
+                      spacing="true">
+                <groupTable id="successorsTable"
+                            height="100%"
+                            width="100%">
+                    <columns>
+                        <column id="personImage"
+                                caption="msg://Photo"
+                                generator="generatePersonImageCell"
+                                sortable="false"
+                                width="115"/>
+                        <column id="personGroup.personFioWithEmployeeNumber"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="readinessLevel"/>
+                        <column id="personGroup.activeAssessment.overalRating"/>
+                        <column id="personGroup.activeAssessment.performance"/>
+                        <column id="personGroup.activeAssessment.potential"/>
+                        <column id="personGroup.activeAssessment.riskOfLoss"/>
+                        <column id="personGroup.activeAssessment.impactOfLoss"/>
+                    </columns>
+                    <rows datasource="successorsDs"/>
+                </groupTable>
+            </groupBox>
+        </vbox>
+    </layout>
+</window>

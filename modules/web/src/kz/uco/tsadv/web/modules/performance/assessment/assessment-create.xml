@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.assessment.AssessmentCreate"
+        datasource="assessmentDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assessment">
+    <dsContext>
+        <datasource id="assessmentDs"
+                    class="kz.uco.tsadv.modules.performance.model.Assessment"
+                    view="assessment.create">
+            <collectionDatasource id="assessmentParticipantDs"
+                                  property="assessmentParticipant">
+                <collectionDatasource id="assessmentCompetenceDs"
+                                      property="assessmentCompetence"/>
+                <collectionDatasource id="assessmentGoalDs"
+                                      property="assessmentGoal"/>
+            </collectionDatasource>
+        </datasource>
+        <collectionDatasource id="statusesDs"
+                              class="kz.uco.tsadv.modules.performance.dictionary.DicAssessmentStatus"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicAssessmentStatus e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="assessmentDs">
+                <column width="250px">
+                    <field property="assessmentName"/>
+                    <field captionProperty="assessmentTemplateName"
+                           property="template"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field optionsDatasource="statusesDs"
+                           property="status"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="assessmentParticipantBox"
+                      caption="msg://kz.uco.tsadv.performancemanagement/Assessment.assessmentParticipant">
+                <table id="assessmentParticipantTable"
+                       height="200px"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="participantPersonGroup.personFioWithEmployeeNumber"/>
+                        <column id="participantType"/>
+                        <column id="competenceRating"/>
+                        <column id="goalRating"/>
+                        <column id="overallRating"/>
+                        <column id="performance"/>
+                        <column id="potential"/>
+                        <column id="riskOfLoss"/>
+                        <column id="impactOfLoss"/>
+                    </columns>
+                    <rows datasource="assessmentParticipantDs"/>
+                    <buttonsPanel>
+                        <button action="assessmentParticipantTable.create"/>
+                        <button action="assessmentParticipantTable.edit"/>
+                        <button action="assessmentParticipantTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

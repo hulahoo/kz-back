@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.partyext.PartyExtBrowse"
+        focusComponent="partyExtsTable"
+        lookupComponent="partyExtsTable"
+        messagesPack="kz.uco.tsadv.web.partyext">
+    <dsContext>
+        <groupDatasource id="partyExtsDs"
+                         class="kz.uco.tsadv.modules.learning.model.PartyExt"
+                         maxResults="20"
+                         view="partyExt.browse">
+            <query>
+                <![CDATA[select e from base$PartyExt e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="partyExtsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="partyExtsTable"
+                datasource="partyExtsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="partyExtsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="partyType"/>
+                <column id="active"/>
+                <column id="bin"/>
+                <column id="rnn"/>
+                <column id="trainingProvider"/>
+                <column id="signer"/>
+                <column id="job"/>
+                <column id="reason"/>
+            </columns>
+            <rows datasource="partyExtsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createBtn"
+                        action="partyExtsTable.create"/>
+                <button id="editBtn"
+                        action="partyExtsTable.edit"/>
+                <button id="removeBtn"
+                        action="partyExtsTable.remove"/>
+                <!--<button id="contactTypesBtn"-->
+                        <!--caption="msg://contactTypes"/>-->
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ImportScenario.editorCaption"
+        class="kz.uco.tsadv.web.modules.administration.importscenario.ImportScenarioEdit"
+        datasource="importFileDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="importFileDs"
+                    class="kz.uco.tsadv.modules.administration.importer.ImportScenario"
+                    view="importScenario.view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="importFileDs"
+                    fieldCaptionWidth="150px">
+            <column width="250px">
+                <field property="name"/>
+                <field property="template"/>
+                <field property="importer"
+                       caption="msg://ImportScenario.selectImporter"
+                       custom="true"
+                       required="true"/>
+            </column>
+        </fieldGroup>
+        <fieldGroup id="fieldGroupTextFields"
+                    datasource="importFileDs"
+                    fieldCaptionWidth="150px">
+            <column width="450px">
+                <field property="comment"
+                       rows="5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

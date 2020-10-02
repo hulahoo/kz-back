@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.gui.userext.ExtUserBrowser"
+        extends="/com/haulmont/cuba/gui/app/security/user/browse/user-browse.xml"
+        xmlns:ext="http://schemas.haulmont.com/cuba/window-ext.xsd"
+        messagesPack="kz.uco.tsadv.gui.userext">
+
+    <layout>
+        <groupTable id="usersTable">
+            <columns>
+                <column id="personGroup.person.fioWithEmployeeNumber" ext:index="2" visible="false"/>
+                <column id="position" visible="false"/>
+            </columns>
+        </groupTable>
+    </layout>
+</window>

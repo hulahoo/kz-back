@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonEducation.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.personeducation.PersonEducationEdit"
+        datasource="personEducationDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="personEducationDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.PersonEducation"
+                    view="personEducation.view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personEducationDs">
+            <column id="column"
+                    width="250px">
+                <field id="school"
+                       property="school"
+                       required="true"/>
+                <field id="startYear"
+                       property="startYear">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                               format="####"/>
+                </field>
+                <field id="endYear"
+                       property="endYear">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.NumberFormatter"
+                               format="####"/>
+                </field>
+                <field id="specialization"
+                       property="specialization"/>
+                <field id="level"
+                       property="level"/>
+                <field id="degree"
+                       property="degree"/>
+                <field id="location"
+                       property="location"/>
+                <field id="diplomaNumber"
+                       property="diplomaNumber"/>
+                <field id="graduationDate"
+                       property="graduationDate"/>
+                <field id="foreignEducation"
+                       property="foreignEducation"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

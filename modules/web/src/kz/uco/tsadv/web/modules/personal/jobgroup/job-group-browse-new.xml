@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Job.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.jobgroup.JobGroupBrowseNew"
+        focusComponent="jobGroupsTable"
+        lookupComponent="jobGroupsTable">
+    <dsContext>
+        <groupDatasource id="jobGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                         maxResults="50"
+                         view="jobGroup.browse">
+            <query>
+                <![CDATA[select e
+                           from tsadv$JobGroup e
+                           join e.list j
+                          where :session$systemDate between j.startDate and j.endDate order by e.updateTs desc]]>
+            </query>
+            <collectionDatasource id="listDs"
+                                  property="list"/>
+        </groupDatasource>
+        <collectionDatasource id="employeeCategoriesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory">
+            <query>
+                <![CDATA[select e
+                           from tsadv$DicEmployeeCategory e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <groupBox caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <split id="split"
+               orientation="vertical"
+               width="100%">
+            <groupTable id="jobGroupsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="edit"
+                            caption="msg://table.btn.edit"
+                            icon="icons/edit.png"
+                            invoke="edit"
+                            shortcut="${TABLE_EDIT_SHORTCUT}"/>
+                    <action id="excel"/>
+                </actions>
+                <columns>
+                    <column id="jobName"
+                            caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobName"
+                            captionProperty="jobName"/>
+                    <column id="job.instructionName"
+                            link="true"
+                            linkInvoke="downloadInstruction"/>
+                    <column id="job.employeeCategory"/>
+                </columns>
+                <rows datasource="jobGroupsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button caption="msg://table.btn.create"
+                            icon="icons/add.png"
+                            invoke="openJob"/>
+                    <button action="jobGroupsTable.edit"/>
+                    <button action="jobGroupsTable.excel"
+                            caption="msg://table.btn.excel"/>
+                </buttonsPanel>
+            </groupTable>
+            <groupBox id="historyGroupBox"
+                      caption="msg://historyBox"
+                      height="100%">
+                <table id="historyTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="edit"
+                                caption="msg://table.btn.edit"
+                                invoke="editHistory"/>
+                        <action id="remove"
+                                caption="msg://table.btn.remove"
+                                invoke="removeHistory"/>
+                        <action id="removeLate"
+                                caption="msg://table.btn.remove.late"
+                                invoke="removeHistories"/>
+                    </actions>
+                    <columns>
+                        <column id="jobName"/>
+                        <column id="employeeCategory"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="updatedBy"/>
+                    </columns>
+                    <rows datasource="listDs"/>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

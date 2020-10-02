@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://SurChargeName.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.surchargename.SurChargeNameBrowse"
+        focusComponent="surChargeNamesTable"
+        lookupComponent="surChargeNamesTable">
+    <dsContext>
+        <groupDatasource id="surChargeNamesDs"
+                         class="kz.uco.tsadv.modules.personal.model.SurChargeName"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$SurChargeName e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="surChargeNamesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="surChargeNamesTable"
+                datasource="surChargeNamesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="surChargeNamesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="surChargeNamesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="surChargeNamesTable.create"/>
+                <button id="editBtn"
+                        action="surChargeNamesTable.edit"/>
+                <button id="removeBtn"
+                        action="surChargeNamesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

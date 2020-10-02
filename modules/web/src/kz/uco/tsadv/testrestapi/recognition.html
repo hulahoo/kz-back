@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Recognition</title>
+    <script src="jquery.min.js"></script>
+    <script src="recognition-config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang</td>
+        </tr>
+        <td>
+            <input type="radio" name="lang" value="en">en</input>
+            <input type="radio" name="lang" value="ru" checked>ru</input>
+            <input type="radio" name="lang" value="kz">kz</input>
+        </td>
+    </table>
+</div>
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="admin"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="admin"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="login()" value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Премия за проект
+    </div>
+    <table>
+        <tr>
+            <td>authorEmployeeNumber:</td>
+            <td>
+                <input type="text" id="author_employee_number" value="10035"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>receiverEmployeeNumber:</td>
+            <td>
+                <input type="text" id="receiver_employee_number" value="5835"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getDraftPersonAward()" value="getDraftPersonAward">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="person_award"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadQualities
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="loadQualities()" value="loadQualities">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="loadQualitiesLabel"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadOrganizations
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="loadOrganizations()" value="loadOrganizations">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="loadOrganizationsLabel"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        myNomineesCount
+    </div>
+    <table>
+        <tr>
+            <td>year</td>
+            <td>
+                <input type="text" id="year">
+            </td>
+        </tr>
+        <tr>
+            <td>organizationGroupId</td>
+            <td>
+                <input type="text" id="organizationGroupId">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="myNomineesCount()" value="myNomineesCount">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label type="text" id="resultNomCountLabel"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadMyNominees
+    </div>
+    <table>
+        <tr>
+            <td>
+                offset
+            </td>
+            <td>
+                <input type="text" id="offsetMyNominees">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                maxResults
+            </td>
+            <td>
+                <input type="text" id="maxResultsMyNominees">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                year
+            </td>
+            <td>
+                <input type="text" id="yearMyNominees">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                organizationGroupId
+            </td>
+            <td>
+                <input type="text" id="organizationGroupIdMyNominees">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="loadMyNominees()" value="loadMyNominees">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label type="text" id="resultLoadMyNomineesLabel"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadAllNominee
+    </div>
+    <table>
+        <tr>
+            <td>
+                offset
+            </td>
+            <td>
+                <input type="text" id="offsetNominee">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                maxResults
+            </td>
+            <td>
+                <input type="text" id="maxResultsNominee">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                year
+            </td>
+            <td>
+                <input type="text" id="yearNominee">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                organizationGroupId
+            </td>
+            <td>
+                <input type="text" id="organizationGroupIdNominee">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="loadAllNominee()" value="loadAllNominee">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="resultAllNominee"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadProfile
+    </div>
+    <table>
+        <tr>
+            <td>employeeNumber</td>
+            <td>
+                <input type="text" id="employee_num_prof" value="8305">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="loadProfile()" value="loadProfile">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="resultLoadProfile"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadTopNominee
+    </div>
+    <table>
+        <tr>
+            <td>year</td>
+            <td>
+                <input type="text" id="yearTopNominee">
+            </td>
+        </tr>
+        <tr>
+            <td>organizationGroupId</td>
+            <td>
+                <input type="text" id="organizationGroupIdTopNominee">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="loadTopNominee()" value="loadTopNominee">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="resultTopNominee"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        allNomineesCount
+    </div>
+    <table>
+        <tr>
+            <td>year</td>
+            <td>
+                <input type="text" id="year_all_nom_count">
+            </td>
+        </tr>
+        <tr>
+            <td>organizationGroupId</td>
+            <td>
+                <input type="text" id="organizationGroupId_all_nom_count">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="allNomineesCount()" value="allNomineesCount">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="result_all_nom_count"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        recognitionCommentsCount
+    </div>
+    <table>
+        <tr>
+            <td>recognitionId</td>
+            <td>
+                <input type="text" id="recognition_id_comment">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="recognitionCommentsCount()" value="recognitionCommentsCount">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="result_rec_comments_count"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        recognitionComments
+    </div>
+    <table>
+        <tr>
+            <td>recognitionId</td>
+            <td>
+                <input type="text" id="rec_comm">
+            </td>
+        </tr>
+        <tr>
+            <td>offset</td>
+            <td>
+                <input type="text" id="offset_rec_id">
+            </td>
+        </tr>
+        <tr>
+            <td>maxResults</td>
+            <td>
+                <input type="text" id="max_results_rec_id">
+            </td>
+        </tr>
+        <tr>
+            <td>automaticTranslate</td>
+            <td>
+                <input type="text" id="automatic_translate">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="recognitionComments()" value="recognitionComments"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="result_rec_comment"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadTeamProfiles
+    </div>
+    <table>
+        <tr>
+            <td>offset</td>
+            <td>
+                <input type="text" id="offsetTeamProf">
+            </td>
+        </tr>
+        <tr>
+            <td>maxResults</td>
+            <td>
+                <input type="text" id="maxResultsTeamProf">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="loadTeamProfiles()" value="loadTeamProfiles">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="resultTeamProfiles"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        teamProfilesCount
+    </div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="teamProfilesCount()" value="teamProfilesCount">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="resultTeamProfilesCount"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadPersonPreferences
+    </div>
+    <table>
+        <tr>
+            <td>employeeNumber</td>
+            <td>
+                <input type="text" id="emp_num_person_pref">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="loadPersonPreferences()" value="loadPersonPreferences">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="resultLoadPersonPreferences"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        getPersonPreferenceTypes
+    </div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="getPersonPreferenceTypes()" value="getPersonPreferenceTypes">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="resultPersonPrefTypes"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        recognitionsCount
+    </div>
+    <table>
+        <tr>
+            <td>wallType</td>
+            <td>
+                <input type="text" id="wallTypeRecCount">
+            </td>
+        </tr>
+        <tr>
+            <td>profileEmployeeNumber</td>
+            <td>
+                <input type="text" id="profileEmployeeNumberRecCount">
+            </td>
+        </tr>
+        <tr>
+            <td>organizationGroupId</td>
+            <td>
+                <input type="text" id="organizationGroupIdRecCount">
+            </td>
+        </tr>
+        <tr>
+            <td>filter</td>
+            <td>
+                <input type="text" id="filterRecCount">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="recognitionsCount()" value="recognitionsCount">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="resultRecCount"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadRecognitions
+    </div>
+    <table>
+        <tr>
+            <td>offset</td>
+            <td>
+                <input type="text" id="offsetLoadRec">
+            </td>
+        </tr>
+        <tr>
+            <td>maxResult</td>
+            <td>
+                <input type="text" id="maxResultLoadRec">
+            </td>
+        </tr>
+        <tr>
+            <td>wallType</td>
+            <td>
+                <input type="text" id="wallTypeLoadRec">
+            </td>
+        </tr>
+        <tr>
+            <td>profileEmployeeNumber</td>
+            <td>
+                <input type="text" id="profileEmployeeNumberLoadRec">
+            </td>
+        </tr>
+        <tr>
+            <td>organizationGroupId</td>
+            <td>
+                <input type="text" id="organizationGroupIdLoadRec">
+            </td>
+        </tr>
+        <tr>
+            <td>filter</td>
+            <td>
+                <input type="text" id="filterLoadRec">
+            </td>
+        </tr>
+        <tr>
+            <td>automaticTranslate</td>
+            <td>
+                <input type="text" id="automaticTranslateLoadRec">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="loadRecognitions()" value="loadRecognitions">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="resultLoadRec"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        createPersonAward
+    </div>
+    <table>
+        <tr>
+            <td>authorEmployeeNumber</td>
+            <td>
+                <input type="text" id="pojo_emp_number">
+            </td>
+        <tr>
+            <td>receiverEmployeeNumber</td>
+            <td>
+                <input type="text" id="pojo_receiver_number">
+            </td>
+        </tr>
+        <tr>
+            <td>history должна быть не менее 300 символов</td>
+            <td>
+                <input type="text" id="pojo_history">
+            </td>
+        </tr>
+        <tr>
+            <td>why должна быть не менее 100 символов</td>
+            <td>
+                <input type="text" id="pojo_why">
+            </td>
+        </tr>
+        <tr>
+            <td>status</td>
+            <td>
+                <input type="text" id="pojo_status">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="createPersonAward()" value="createPersonAward"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="resultCreatePersonAward"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        createRecognition
+    </div>
+    <table>
+        <tr>
+            <td>authorEmployeeNumber</td>
+            <td>
+                <input type="text" id="create_rec_auth_em_num">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                quality id
+            </td>
+            <td>
+                <input type="text" id="qualId">
+            </td>
+        </tr>
+        <tr>
+            <td>receiverEmployeeNumber</td>
+            <td>
+                <input type="text" id="create_rec_em_num">
+            </td>
+        </tr>
+        <tr>
+            <td>recognitionTypeId</td>
+            <td>
+                <input type="text" id="create_rec_type_id">
+            </td>
+        </tr>
+        <tr>
+            <td>* notifyManager</td>
+            <td>
+                <input type="text" id="create_rec_notify_manager">
+            </td>
+        </tr>
+        <tr>
+            <td>comment</td>
+            <td>
+                <input type="text" id="create_rec_comment">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="createRecognition()" value="createRecognition">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="resultCreateRecognition"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        updatePersonPreference
+    </div>
+    <table>
+        <tr>
+            <td>preferenceTypeId</td>
+            <td>
+                <input type="text" id="pref_type_id">
+            </td>
+        </tr>
+        <tr>
+            <td>description</td>
+            <td>
+                <input type="text" id="pref_desc">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="updatePersonPreference()" value="updatePersonPreference">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="resultUpdatePersonPref"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadTopSender
+    </div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="loadTopSender()" value="loadTopSender">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="loadTopSenderResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadTopAwarded
+    </div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="loadTopAwarded()" value="loadTopAwarded">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="loadTopAwardedResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadRecognitionTypes
+    </div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="loadRecognitionTypes()" value="loadRecognitionTypes">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="loadRecognitionTypesResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        hasActiveQuestion
+    </div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="hasActiveQuestion()" value="hasActiveQuestion">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="hasActiveQuestionResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadActiveQuestion
+    </div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="loadActiveQuestion()" value="loadActiveQuestion">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="loadActiveQuestionResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        send question answer
+    </div>
+    <table>
+        <tr>
+            <td>Question ID</td>
+            <td>
+                <input type="text" id="questionId"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Answer ID</td>
+            <td>
+                <input type="text" id="answerId"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" onclick="sendQuestionAnswer()" value="sendQuestionAnswer"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label id="sendQuestionAnswerResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="method">
+    <div class="description">
+        loadAllRcgFaq
+    </div>
+    <table>
+        <tr>
+            <td>
+                <input type="button" onclick="loadAllRcgFaq()" value="loadAllRcgFaq">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label id="loadAllRcgFaqResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        loadRcgFaq
+    </div>
+    <table>
+        <tr>
+            <td>Faq ID</td>
+            <td>
+                <input type="text" id="faqId">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" onclick="loadRcgFaq()" value="loadRcgFaq">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label id="loadRcgFaqResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        create recognition comment
+    </div>
+    <table>
+        <tr>
+            <td>Recognition ID</td>
+            <td>
+                <input type="text" id="createCommentRcgId"/>
+            </td>
+        </tr>
+        <tr>
+            <td>Comment text</td>
+            <td>
+                <textarea id="createCommentText"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>Parent comment ID</td>
+            <td>
+                <input type="text" id="createCommentParentId"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" onclick="createRecognitionComment()" value="createRecognitionComment"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="createCommentResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        like / dislike recognition
+    </div>
+    <table>
+        <tr>
+            <td>Recognition ID</td>
+            <td>
+                <input type="text" id="sendLikeRcgId"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" onclick="sendLike()" value="Like / dislike recognition"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label id="sendLikeResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    var access_token;
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+            });
+    }
+
+    function getDraftPersonAward() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getDraftPersonAward", {
+            type: "GET",
+            data: {
+                authorEmployeeNumber: $('#author_employee_number').val(),
+                receiverEmployeeNumber: $('#receiver_employee_number').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#person_award").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#person_award").text(JSON.stringify(res))
+        })
+    }
+
+    function loadQualities() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadQualities", {
+            type: "GET",
+            data: {
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#loadQualitiesLabel").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#loadQualitiesLabel").text(JSON.stringify(res))
+        })
+    }
+
+    function loadOrganizations() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadOrganizations", {
+            type: "GET",
+            data: {
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#loadOrganizationsLabel").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#loadOrganizationsLabel").text(JSON.stringify(res))
+        })
+    }
+
+    function loadAllRcgFaq() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadAllRcgFaq", {
+            contentType: "application/json",
+            type: "GET",
+            data: {
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#loadAllRcgFaqResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#loadAllRcgFaqResult").text(JSON.stringify(res))
+        })
+    }
+
+    function loadRcgFaq() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadRcgFaq", {
+            contentType: "application/json",
+            type: "GET",
+            data: {
+                faqId: $('#faqId').val(),
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#loadRcgFaqResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#loadRcgFaqResult").text(JSON.stringify(res))
+        })
+    }
+
+    function loadTopSender() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadTopSender", {
+            type: "GET",
+            data: {
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#loadTopSenderResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#loadTopSenderResult").text(JSON.stringify(res))
+        })
+    }
+
+    function loadTopAwarded() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadTopAwarded", {
+            type: "GET",
+            data: {
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#loadTopAwardedResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#loadTopAwardedResult").text(JSON.stringify(res))
+        })
+    }
+
+    function loadRecognitionTypes() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadRecognitionTypes", {
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#loadRecognitionTypesResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#loadRecognitionTypesResult").text(JSON.stringify(res))
+        })
+    }
+
+    function hasActiveQuestion() {
+        $.ajax(config.appUrl + config.serviceUrl + "/hasActiveQuestion", {
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#hasActiveQuestionResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#hasActiveQuestionResult").text(JSON.stringify(res))
+        })
+    }
+
+    function loadActiveQuestion() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadActiveQuestion", {
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#loadActiveQuestionResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#loadActiveQuestionResult").text(JSON.stringify(res))
+        })
+    }
+
+    function myNomineesCount() {
+        $.ajax(config.appUrl + config.serviceUrl + "/myNomineesCount", {
+            type: "GET",
+            data: {
+                year: $('#year').val(),
+                organizationGroupId: $('#organizationGroupId').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultNomCountLabel").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultNomCountLabel").text(JSON.stringify(res))
+        })
+    }
+
+    function loadMyNominees() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadMyNominees", {
+            type: "GET",
+            data: {
+                offset: $('#offsetMyNominees').val(),
+                maxResults: $('#maxResultsMyNominees').val(),
+                language: $("input[name=lang]:checked").val(),
+                year: $('#yearMyNominees').val(),
+                organizationGroupId: $('#organizationGroupIdMyNominees').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultLoadMyNomineesLabel").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultLoadMyNomineesLabel").text(JSON.stringify(res))
+        })
+    }
+
+    function loadAllNominee() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadAllNominee", {
+            type: "GET",
+            data: {
+                offset: $('#offsetNominee').val(),
+                maxResults: $('#maxResultsNominee').val(),
+                language: $("input[name=lang]:checked").val(),
+                year: $('#yearNominee').val(),
+                organizationGroupId: $('#organizationGroupIdNominee').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultAllNominee").text(JSON.stringify(res));
+        }).error(function (res) {
+                $("#resultAllNominee").text(JSON.stringify(res))
+            }
+        )
+    }
+
+    function loadProfile() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadProfile", {
+            type: "GET",
+            data: {
+                employeeNumber: $('#employee_num_prof').val(),
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultLoadProfile").text(JSON.stringify(res));
+        }).error(function (res) {
+                $("#resultLoadProfile").text(JSON.stringify(res))
+            }
+        )
+    }
+
+    function loadTopNominee() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadTopNominee", {
+            type: "GET",
+            data: {
+                year: $('#yearTopNominee').val(),
+                organizationGroupId: $('#organizationGroupIdTopNominee').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultTopNominee").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultTopNominee").text(JSON.stringify(res))
+        })
+    }
+
+    function allNomineesCount() {
+        $.ajax(config.appUrl + config.serviceUrl + "/allNomineesCount", {
+            type: "GET",
+            data: {
+                year: $('#year_all_nom_count').val(),
+                organizationGroupId: $('#organizationGroupId_all_nom_count').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#result_all_nom_count").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#result_all_nom_count").text(JSON.stringify(res))
+        })
+    }
+
+    function recognitionCommentsCount() {
+        $.ajax(config.appUrl + config.serviceUrl + "/recognitionCommentsCount", {
+            type: "GET",
+            data: {
+                recognitionId: $('#recognition_id_comment').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#result_rec_comments_count").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#result_rec_comments_count").text(JSON.stringify(res))
+        })
+    }
+
+    function recognitionComments() {
+        $.ajax(config.appUrl + config.serviceUrl + "/recognitionComments", {
+            type: "GET",
+            data: {
+                recognitionId: $('#rec_comm').val(),
+                offset: $('#offset_rec_id').val(),
+                maxResults: $('#max_results_rec_id').val(),
+                language: $("input[name=lang]:checked").val(),
+                automaticTranslate: $('#automatic_translate').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#result_rec_comment").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#result_rec_comment").text(JSON.stringify(res))
+        })
+    }
+
+    function loadTeamProfiles() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadTeamProfiles", {
+            type: "GET",
+            data: {
+                offset: $('#offsetTeamProf').val(),
+                maxResults: $('#maxResultsTeamProf').val(),
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultTeamProfiles").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultTeamProfiles").text(JSON.stringify(res))
+        })
+    }
+
+    function teamProfilesCount() {
+        $.ajax(config.appUrl + config.serviceUrl + "/teamProfilesCount", {
+            type: "GET",
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultTeamProfilesCount").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultTeamProfilesCount").text(JSON.stringify(res))
+        })
+    }
+
+    function loadPersonPreferences() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadPersonPreferences", {
+            type: "GET",
+            data: {
+                employeeNumber: $('#emp_num_person_pref').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultLoadPersonPreferences").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultLoadPersonPreferences").text(JSON.stringify(res))
+        })
+    }
+
+    function getPersonPreferenceTypes() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getPersonPreferenceTypes", {
+            type: "GET",
+            data: {
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultPersonPrefTypes").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultPersonPrefTypes").text(JSON.stringify(res))
+        })
+    }
+
+    function recognitionsCount() {
+        $.ajax(config.appUrl + config.serviceUrl + "/recognitionsCount", {
+            type: "GET",
+            data: {
+                wallType: $('#wallTypeRecCount').val(),
+                profileEmployeeNumber: $('#profileEmployeeNumberRecCount').val(),
+                organizationGroupId: $('#organizationGroupIdRecCount').val(),
+                filter: $('#filterRecCount').val(),
+                language: $("input[name=lang]:checked").val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultRecCount").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultRecCount").text(JSON.stringify(res))
+        })
+    }
+
+    function loadRecognitions() {
+        $.ajax(config.appUrl + config.serviceUrl + "/loadRecognitions", {
+            type: "GET",
+            data: {
+                offset: $('#offsetLoadRec').val(),
+                maxResult: $('#maxResultLoadRec').val(),
+                wallType: $('#wallTypeLoadRec').val(),
+                profileEmployeeNumber: $('#profileEmployeeNumberLoadRec').val(),
+                organizationGroupId: $('#organizationGroupIdLoadRec').val(),
+                filter: $('#filterLoadRec').val(),
+                language: $("input[name=lang]:checked").val(),
+                automaticTranslate: $('#automaticTranslateLoadRec').val()
+            },
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultLoadRec").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultLoadRec").text(JSON.stringify(res))
+        })
+    }
+
+    function createRecognitionComment() {
+        var data = $.extend({}, commentModel);
+        data.commentPojo.recognitionId = $('#createCommentRcgId').val();
+        data.commentPojo.text = $('#createCommentText').val();
+        data.commentPojo.parentCommentId = $('#createCommentParentId').val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/sendComment", {
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#createCommentResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#createCommentResult").text(JSON.stringify(res));
+        })
+    }
+
+    function sendLike() {
+        $.ajax(config.appUrl + config.serviceUrl + "/sendLike", {
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                recognitionId: $('#sendLikeRcgId').val()
+            }),
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#sendLikeResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#sendLikeResult").text(JSON.stringify(res));
+        })
+    }
+
+    function sendQuestionAnswer() {
+        $.ajax(config.appUrl + config.serviceUrl + "/sendQuestionAnswer", {
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                questionId: $('#questionId').val(),
+                answerId: $('#answerId').val()
+            }),
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#sendQuestionAnswerResult").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#sendQuestionAnswerResult").text(JSON.stringify(res));
+        })
+    }
+
+
+    function createPersonAward() {
+        var data = {};
+
+        jQuery.extend(data, createPersonAwardModel);
+        data.personAwardPojo.authorEmployeeNumber = $('#pojo_emp_number').val();
+        data.personAwardPojo.receiverEmployeeNumber = $('#pojo_receiver_number').val();
+        data.personAwardPojo.history = $('#pojo_history').val();
+        data.personAwardPojo.why = $('#pojo_why').val();
+        data.personAwardPojo.status = $('#pojo_status').val();
+        data.language = $("input[name=lang]:checked").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/createPersonAward", {
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultCreatePersonAward").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultCreatePersonAward").text(JSON.stringify(res))
+        })
+    }
+
+    function createRecognition() {
+        var data = {};
+
+        jQuery.extend(data, createRecognitionModel);
+        data.recognitionCreatePojo.authorEmployeeNumber = $('#create_rec_auth_em_num').val();
+        data.recognitionCreatePojo.qualities = [{
+            id: $('#qualId').val()
+        }];
+        data.recognitionCreatePojo.receiverEmployeeNumber = $('#create_rec_em_num').val();
+        data.recognitionCreatePojo.recognitionTypeId = $('#create_rec_type_id').val();
+        data.recognitionCreatePojo.notifyManager = $('#create_rec_notify_manager').val();
+        data.recognitionCreatePojo.comment = $('#create_rec_comment').val();
+        data.language = $("input[name=lang]:checked").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/createRecognition", {
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultCreateRecognition").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultCreateRecognition").text(JSON.stringify(res))
+        })
+    }
+
+    function updatePersonPreference() {
+        var data = {};
+
+        jQuery.extend(data, updatePersonPreferenceModel);
+        data.preferenceTypeId = $('#pref_type_id').val();
+        data.description = $('#pref_desc').val();
+        $.ajax(config.appUrl + config.serviceUrl + "/updatePersonPreference", {
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            headers: {
+                "Authorization": "Bearer " + access_token
+            }
+        }).success(function (res) {
+            $("#resultUpdatePersonPref").text(JSON.stringify(res));
+        }).error(function (res) {
+            $("#resultUpdatePersonPref").text(JSON.stringify(res))
+        })
+    }
+</script>
+</body>
+</html>

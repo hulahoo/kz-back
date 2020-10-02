@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.incident.IncidentBrowse"
+        focusComponent="incidentsTable"
+        lookupComponent="incidentsTable"
+        messagesPack="kz.uco.tsadv.web.incident">
+    <dsContext>
+        <groupDatasource id="incidentsDs"
+                         class="kz.uco.tsadv.entity.tb.Incident"
+                         view="incident-view">
+            <query>
+                <![CDATA[select e from tsadv$Incident e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="incidentsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="incidentsTable"
+                datasource="incidentsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="incidentsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="managerPerson"/>
+                <column id="organization" captionProperty="organization.organization.organizationName"/>
+                <column id="incidentType"/>
+                <column id="incidentDate"/>
+                <column id="incidentTime"/>
+                <column id="startShift"/>
+                <column id="endShift"/>
+                <column id="incidentConditions"/>
+                <column id="incidentReason"/>
+                <column id="damage"/>
+                <column id="correctiveActions"/>
+                <column id="stoppedProcess"/>
+            </columns>
+            <rows datasource="incidentsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="incidentsTable.create"/>
+                <button id="editBtn"
+                        action="incidentsTable.edit"/>
+                <button id="removeBtn"
+                        action="incidentsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

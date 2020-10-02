@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://confirm.browseCaption"
+        class="kz.uco.tsadv.web.goodsorder.GoodsOrderConfirm"
+        datasource="goodsOrderDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.goodsorder">
+    <dsContext>
+        <datasource id="goodsOrderDs"
+                    class="kz.uco.tsadv.modules.recognition.shop.GoodsOrder"
+                    view="goodsOrder.edit">
+            <collectionDatasource id="detailsDs"
+                                  property="details"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="box"
+            height="100%"
+            spacing="true"
+            width="100%">
+        <vbox id="box"
+              expand="detailsBox"
+              spacing="true">
+            <fieldGroup id="fieldGroup"
+                        border="visible"
+                        datasource="goodsOrderDs"
+                        editable="false">
+                <column width="300px">
+                    <field property="status"/>
+                    <field property="totalSum"/>
+                    <field property="discount">
+                        <textField id="discountTextField"/>
+                    </field>
+                    <field property="orderNumber"/>
+                    <field property="orderDate"/>
+                    <field captionProperty="fullName"
+                           property="personGroup"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="detailsBox"
+                      caption="msg://kz.uco.tsadv.modules.recognition.shop/GoodsOrder.details"
+                      expand="detailsTable">
+                <table id="detailsTable"
+                       width="100%">
+                    <columns>
+                        <column id="goods"/>
+                        <column id="quantity"/>
+                        <column id="excluded"/>
+                        <column id="comment"
+                                maxTextLength="70"/>
+                        <column id="voucherUsed"/>
+                    </columns>
+                    <rows datasource="detailsDs"/>
+                    <buttonsPanel>
+                        <button id="excludeGoodsBtn"
+                                caption="msg://goods.order.confirm.exclude.btn"
+                                enable="false"
+                                invoke="excludeGoods"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </vbox>
+        <hbox spacing="true"
+              stylename="c-edit-window-actions">
+            <button id="windowCommit"
+                    action="windowCommit"
+                    caption="msg://goods.order.confirm.approve.btn"/>
+            <button id="rejectOrder"
+                    action="rejectOrder"
+                    caption="msg://goods.order.confirm.reject.btn"/>
+            <button id="deliveredBtn"
+                    action="deliveredOrder"
+                    caption="msg://goods.order.confirm.delivered.btn"/>
+            <button id="windowClose"
+                    action="windowClose"
+                    icon="EDITOR_CANCEL"/>
+        </hbox>
+    </layout>
+</window>

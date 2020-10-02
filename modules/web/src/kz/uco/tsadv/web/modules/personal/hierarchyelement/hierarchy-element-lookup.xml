@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://HierarchyElement.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.hierarchyelement.HierarchyElementLookup"
+        focusComponent="hierarchyElementsTree"
+        lookupComponent="hierarchyElementsTree">
+    <dsContext>
+        <hierarchicalDatasource id="hierarchyElementsDs"
+                                class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                                hierarchyProperty="parent"
+                                view="hierarchyElement.lookup">
+            <query>
+                <![CDATA[select e
+                           from base$HierarchyElementExt e
+                          where :param$date between e.startDate and e.endDate
+                            and e.hierarchy.id = :component$hierarchyLookup
+                            and e.elementType IN (1, :param$elementType)]]>
+            </query>
+        </hierarchicalDatasource>
+        <collectionDatasource id="hierarchiesDs"
+                              class="kz.uco.base.entity.shared.Hierarchy"
+                              view="hierarchy.view">
+            <query>
+                <![CDATA[select e from base$Hierarchy e order by e.primaryFlag desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <actions>
+        <action id="search"
+                invoke="searchForHierarchyElement"/>
+    </actions>
+    <dialogMode height="800"
+                width="1100"/>
+    <layout expand="hierarchyElementsTree"
+            spacing="true">
+        <groupBox caption="msg://Hierarchy.Filter" width="100%">
+            <hbox width="100%">
+                <lookupField optionsDatasource="hierarchiesDs" id="hierarchyLookup" width="100%"/>
+            </hbox>
+            <hbox id="searchHbox"
+                  spacing="true"
+                  margin="true"
+                  width="100%"
+                  expand="searchField">
+                <textField id="searchField"
+                           align="MIDDLE_CENTER" width="100%"/>
+                <button id="searchButton"
+                        caption="msg://kz.uco.tsadv.web/table.btn.search"
+                        action="search" width="100px"/>
+            </hbox>
+        </groupBox>
+        <tree id="hierarchyElementsTree"
+              width="100%">
+            <treechildren datasource="hierarchyElementsDs" captionProperty="name" hierarchyProperty="parent"/>
+        </tree>
+    </layout>
+</window>

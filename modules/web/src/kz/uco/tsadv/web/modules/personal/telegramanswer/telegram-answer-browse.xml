@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://TelegramCommandBrowser"
+        class="kz.uco.tsadv.web.modules.personal.telegramanswer.TelegramAnswerBrowse"
+        focusComponent="telegramAnswersTable"
+        lookupComponent="telegramAnswersTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.telegramanswer">
+    <dsContext>
+        <groupDatasource id="telegramAnswersDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.TelegramAnswer"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$TelegramAnswer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="telegramAnswersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="telegramAnswersTable"
+                datasource="telegramAnswersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="telegramAnswersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="comandName"
+                        caption="msg://commandName"/>
+            </columns>
+            <rows datasource="telegramAnswersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="telegramAnswersTable.create"/>
+                <button id="editBtn"
+                        action="telegramAnswersTable.edit"/>
+                <button id="removeBtn"
+                        action="telegramAnswersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

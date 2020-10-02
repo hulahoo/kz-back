@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.budgetheader.BudgetHeaderBrowse"
+        messagesPack="kz.uco.tsadv.web.modules.learning.budgetheader">
+    <dsContext>
+        <hierarchicalDatasource id="organizationTreeDs"
+                                class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                                hierarchyProperty="parent"
+                                view="hierarchyElement.browse">
+            <query>
+                <![CDATA[select e
+                           from base$HierarchyElementExt e
+                          where :session$systemDate between e.startDate and e.endDate
+                                and e.hierarchy.id = CAST(:param$hId uuid)
+                            order by e.id]]>
+            </query>
+        </hierarchicalDatasource>
+        <collectionDatasource id="budgetHeadersDs"
+                              class="kz.uco.tsadv.modules.learning.model.BudgetHeader"
+                              maxResults="20"
+                              view="budgetHeader-view">
+            <query>
+                <![CDATA[select e from tsadv$BudgetHeader e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <split id="split"
+               height="100%"
+               orientation="horizontal"
+               pos="20"
+               width="100%">
+            <vbox expand="organizationTree"
+                  height="100%"
+                  spacing="true">
+                <cssLayout stylename="org-tree-search-w"
+                           width="100%">
+                    <textField id="searchField"
+                               icon="icons/search.png"
+                               inputPrompt="mainMsg://help.search.prompt"
+                               stylename="inline-icon"
+                               width="100%"/>
+                    <linkButton id="removeSearchText"
+                                caption="msg://btn.empty.caption"
+                                icon="icons/remove.png"
+                                stylename="org-tree-remove-text"/>
+                </cssLayout>
+                <tree id="organizationTree"
+                      width="100%">
+                    <treechildren captionProperty="name"
+                                  datasource="organizationTreeDs"/>
+                </tree>
+            </vbox>
+            <vbox id="vbox"
+                  expand="budgetHeadersTable"
+                  height="100%"
+                  margin="false,false,true,true"
+                  spacing="true">
+                <filter id="filter"
+                        applyTo="budgetHeadersTable"
+                        datasource="budgetHeadersDs">
+                    <properties include=".*"/>
+                </filter>
+                <table id="budgetHeadersTable"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="details"
+                                invoke="details"/>
+                        <action id="history"
+                                invoke="history"/>
+                        <action id="copy"
+                                invoke="copy"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="headerName"/>
+                        <column id="responsiblePerson"
+                                captionProperty="responsiblePerson.personFioWithEmployeeNumber"/>
+                        <column id="status"/>
+                        <column id="updateTs"/>
+                        <column id="budget"/>
+                    </columns>
+                    <rows datasource="budgetHeadersDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtn"
+                                action="budgetHeadersTable.create"/>
+                        <button id="editBtn"
+                                action="budgetHeadersTable.edit"/>
+                        <button id="removeBtn"
+                                action="budgetHeadersTable.remove"/>
+                        <button id="detailsBtn"
+                                action="budgetHeadersTable.details"
+                                caption="msg://details"/>
+                        <button id="historyBtn"
+                                action="budgetHeadersTable.history"
+                                caption="msg://history"/>
+                        <button id="copyBtn"
+                                action="budgetHeadersTable.copy"
+                                caption="msg://copy"/>
+                    </buttonsPanel>
+                </table>
+            </vbox>
+        </split>
+    </layout>
+</window>

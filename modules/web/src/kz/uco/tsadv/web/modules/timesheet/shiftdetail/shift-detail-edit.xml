@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ShiftDetail.editorCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.shiftdetail.ShiftDetailEdit"
+        datasource="shiftDetailDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="shiftDetailDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.ShiftDetail"
+                    view="shiftDetail.view"/>
+        <collectionDatasource id="elementTypesDs"
+                              class="kz.uco.tsadv.modules.timesheet.dictionary.DicScheduleElementType"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicScheduleElementType e where e.code in ('WORK_HOURS', 'BREAK', 'R', 'NIGHT_HOURS')]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="shiftDetailDs">
+            <column width="250px">
+                <field optionsDatasource="elementTypesDs"
+                       property="elementType"/>
+                <field custom="true"
+                       property="dayFrom"/>
+                <field property="timeFrom"/>
+                <field custom="true"
+                       property="dayTo"/>
+                <field property="timeTo"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

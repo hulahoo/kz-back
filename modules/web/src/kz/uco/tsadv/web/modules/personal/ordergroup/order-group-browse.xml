@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OrderGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.ordergroup.OrderGroupBrowse"
+        focusComponent="orderGroupsTable"
+        lookupComponent="orderGroupsTable">
+    <dsContext>
+        <groupDatasource id="orderGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.OrderGroup"
+                         view="orderGroup-view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$OrderGroup e
+                           join e.list o
+                          where 1 = 1]]>
+            </query>
+            <collectionDatasource id="listDs"
+                                  property="list"/>
+        </groupDatasource>
+        <collectionDatasource id="orderTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicOrderType">
+            <query>
+                <![CDATA[select e
+                           from tsadv$DicOrderType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="orderStatusesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicOrderStatus">
+            <query>
+                <![CDATA[select e
+                           from tsadv$DicOrderStatus e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="approverPersonsDs"
+                              view="personGroup.browse"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt">
+            <query>
+                <![CDATA[select e
+                           from base$PersonGroupExt e
+                           join e.list p
+                          where :session$systemDate between p.startDate and p.endDate]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <groupBox caption="msg://CustomFilter"
+                  collapsed="true"
+                  collapsable="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <split id="split"
+               orientation="vertical"
+               width="100%">
+            <groupTable id="orderGroupsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="createOrder"
+                            invoke="openOrder"/>
+                    <action id="editOrder"
+                            caption="msg://table.btn.edit"
+                            invoke="openOrderEdit"
+                            shortcut="${TABLE_EDIT_SHORTCUT}"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="order.orderType"/>
+                    <column id="order.orderNumber"/>
+                    <column id="order.orderDate"/>
+                    <column id="order.orderStatus"/>
+                    <column id="order.approverPersonGroup"
+                            captionProperty="order.approverPersonGroup.personFioWithEmployeeNumber"/>
+                </columns>
+                <rows datasource="orderGroupsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="orderGroupsTable.createOrder"
+                            caption="msg://table.btn.create"
+                            icon="icons/add.png"/>
+                    <button id="editBtn"
+                            action="orderGroupsTable.editOrder"
+                            caption="msg://table.btn.edit"
+                            icon="icons/edit.png"/>
+                    <button id="reportButton"
+                            caption="msg://Report"
+                            icon="font-icon:DOWNLOAD"
+                            invoke="getReport"/>
+                </buttonsPanel>
+            </groupTable>
+            <groupBox id="historyGroupBox"
+                      caption="msg://historyBox"
+                      height="100%"
+                      spacing="true"
+                      width="100%">
+                <table id="historyTable"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="orderNumber"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="updatedBy"/>
+                    </columns>
+                    <rows datasource="listDs"/>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

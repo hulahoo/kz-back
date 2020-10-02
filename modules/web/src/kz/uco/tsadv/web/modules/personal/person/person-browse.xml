@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Person.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonBrowse"
+        focusComponent="personsTable"
+        lookupComponent="personsTable">
+    <dsContext>
+        <groupDatasource id="personsDs"
+                         class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                         maxResults="20"
+                         view="person.browse">
+            <query>
+                <![CDATA[select e
+                           from base$PersonExt e
+                           left join e.group.assignments a
+                          where :session$systemDate between e.startDate and e.endDate
+                            and :session$systemDate between a.startDate and a.endDate
+                            and a.assignmentStatus.code = 'ACTIVE'
+                            and a.primaryFlag = true]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="100%"
+                width="100%"/>
+    <layout expand="personsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personsTable"
+                datasource="personsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personsTable"
+                    width="100%">
+            <actions>
+                <action id="dismissal"
+                        caption="msg://dismissal"
+                        invoke="dismissal"
+                        trackSelection="true"/>
+            </actions>
+            <columns>
+                <column id="userImage"
+                        caption="msg://Photo"
+                        generator="generateUserImageCell"
+                        sortable="false"/>
+                <column id="fioWithEmployeeNumber"
+                        link="true"
+                        linkInvoke="redirectCard"/>
+                <column id="nationalIdentifier"
+                        visible="false"/>
+                <column id="dateOfBirth"
+                        visible="false"/>
+                <column id="sex"
+                        captionProperty="person.sex.langValue"
+                        visible="false"/>
+                <column id="hireDate"
+                        visible="false"/>
+                <column id="group.currentAssignment.organizationGroup"
+                        captionProperty="group.currentAssignment.organizationGroup.organization.organizationName"/>
+                <column id="group.currentAssignment.positionGroup"
+                        captionProperty="group.currentAssignment.positionGroup.position.positionFullName"/>
+                <column id="group.currentAssignment.jobGroup"
+                        captionProperty="group.currentAssignment.jobGroup.job.jobName"/>
+                <column id="group.currentAssignment.gradeGroup"
+                        captionProperty="group.currentAssignment.gradeGroup.grade.gradeName"/>
+                <column id="group.currentAssignment.location.langValue"/>
+                <column id="type.langValue"
+                        caption="msg://Person.type"/>
+                <column id="generedOpenRequiestionCount"
+                        caption="msg://RequisitionOpenCount"
+                        generator="generateGeneredOpenRequiestionCountCell"/>
+            </columns>
+            <rows datasource="personsDs"/>
+            <rowsCount/>
+            <buttonsPanel>
+                <button caption="msg://createpersongroupbrowse"
+                        invoke="createAssignment"/>
+                <button id="transfer"
+                        caption="msg://transfer"
+                        invoke="transfer"/>
+                <button id="combination"
+                        caption="msg://combination"
+                        invoke="combination"/>
+                <button id="dismissal"
+                        action="personsTable.dismissal"/>
+                <button id="absence"
+                        caption="msg://absence"
+                        invoke="absence"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

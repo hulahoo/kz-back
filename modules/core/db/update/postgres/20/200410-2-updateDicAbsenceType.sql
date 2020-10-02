@@ -1,0 +1,3 @@
+alter table TSADV_DIC_ABSENCE_TYPE add column IS_REQUIRED_ORDER_NUMBER boolean ^
+update TSADV_DIC_ABSENCE_TYPE set IS_REQUIRED_ORDER_NUMBER = false where IS_REQUIRED_ORDER_NUMBER is null ;
+alter table TSADV_DIC_ABSENCE_TYPE alter column IS_REQUIRED_ORDER_NUMBER set not null ;

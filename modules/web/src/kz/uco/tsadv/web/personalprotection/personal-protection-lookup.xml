@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.personalprotection.PersonalProtectionLookup"
+        focusComponent="personalProtectionsTable"
+        lookupComponent="personalProtectionsTable"
+        messagesPack="kz.uco.tsadv.web.personalprotection">
+    <dsContext>
+        <groupDatasource id="personalProtectionsDs"
+                         class="kz.uco.tsadv.modules.personprotection.PersonalProtection"
+                         view="personalProtection.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonalProtection e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personalProtectionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personalProtectionsTable"
+                datasource="personalProtectionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personalProtectionsTable"
+                    width="100%">
+            <columns>
+                <column id="employee.personFioWithEmployeeNumber"/>
+                <column id="protectionEquipment"/>
+                <column id="dateOfIssue"/>
+                <column id="status"/>
+                <column id="writtenOfReason"/>
+                <column id="writtenOfDate"/>
+            </columns>
+            <rows datasource="personalProtectionsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

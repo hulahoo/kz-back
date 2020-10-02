@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.budgetheaderhistory.BudgetHeaderHistoryEdit"
+        datasource="budgetHeaderHistoryDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.budgetheaderhistory">
+    <dsContext>
+        <datasource id="budgetHeaderHistoryDs"
+                    class="kz.uco.tsadv.modules.learning.model.BudgetHeaderHistory"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="auto"
+                width="auto"/>
+    <layout expand="buttons"
+            spacing="true">
+        <fieldGroup id="fieldGroup" captionAlignment="TOP"
+                    datasource="budgetHeaderHistoryDs">
+            <column width="350px">
+                <field rows="4" property="comment"/>
+            </column>
+        </fieldGroup>
+        <hbox id="buttons" spacing="true" align="MIDDLE_CENTER" stylename="c-edit-window-actions">
+            <button id="windowCommit" action="windowCommit" icon="theme://actions.Editor.Ok.icon"/>
+        </hbox>
+    </layout>
+</window>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CourseSection.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursesection.CourseSectionEdit"
+        datasource="courseSectionDs"
+        focusComponent="mainInfo">
+    <dsContext>
+        <datasource id="courseSectionDs"
+                    class="kz.uco.tsadv.modules.learning.model.CourseSection"
+                    view="courseSection.edit">
+            <collectionDatasource id="sessionDs"
+                                  property="session"/>
+            <datasource id="objectDs"
+                        property="sectionObject"/>
+            <datasource id="sectionObjectDs"
+                        property="sectionObject"/>
+        </datasource>
+        <collectionDatasource id="objectTypeDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicLearningObjectType"/>
+        <collectionDatasource id="formatDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicCourseFormat"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="mainInfo"
+                 caption="msg://mainInfo"
+                 expand="sessionGroupBox"
+                 margin="true,true,true,false">
+                <grid spacing="true">
+                    <columns count="2"/>
+                    <rows>
+                        <row>
+                            <grid spacing="true"
+                                  stylename="section-object-edit-grid">
+                                <columns count="2"/>
+                                <rows>
+                                    <row>
+                                        <label value="mainMsg://CourseSection.sectionName"/>
+                                        <textField datasource="courseSectionDs"
+                                                   property="sectionName"
+                                                   width="300px"/>
+                                    </row>
+                                    <row>
+                                        <label value="mainMsg://CourseSectionObject.order"/>
+                                        <textField datasource="courseSectionDs"
+                                                   property="order"
+                                                   width="300px"/>
+                                    </row>
+                                    <row>
+                                        <label value="mainMsg://CourseSection.format"/>
+                                        <lookupField datasource="courseSectionDs"
+                                                     optionsDatasource="formatDs"
+                                                     property="format"
+                                                     width="300px"/>
+                                    </row>
+                                </rows>
+                            </grid>
+                            <grid id="onlineGrid"
+                                  spacing="true"
+                                  stylename="section-object-edit-grid">
+                                <columns count="2"/>
+                                <rows>
+                                    <row>
+                                        <label value="mainMsg://CourseSectionObject.objectType"/>
+                                        <lookupField id="objectType"
+                                                     datasource="courseSectionDs"
+                                                     nullOptionVisible="false"
+                                                     optionsDatasource="objectTypeDs"
+                                                     property="sectionObject.objectType"
+                                                     width="300px"/>
+                                    </row>
+                                    <row>
+                                        <label id="contentLabel"
+                                               value="mainMsg://CourseSectionObject.content"/>
+                                        <pickerField id="content"
+                                                     captionProperty="objectName"
+                                                     datasource="sectionObjectDs"
+                                                     property="content"
+                                                     width="300px"/>
+                                    </row>
+                                    <row>
+                                        <label id="testLabel"
+                                               value="mainMsg://CourseSectionObject.test"/>
+                                        <pickerField id="test"
+                                                     captionProperty="name"
+                                                     datasource="sectionObjectDs"
+                                                     property="test"
+                                                     width="300px"/>
+                                    </row>
+                                </rows>
+                            </grid>
+                        </row>
+                        <row>
+                            <label value="msg://kz.uco.tsadv.modules.learning.model/CourseSection.mandatory"/>
+                            <checkBox datasource="courseSectionDs"
+                                      property="mandatory"
+                                      width="250px"/>
+                        </row>
+                    </rows>
+                </grid>
+                <groupBox id="sessionGroupBox"
+                          caption="msg://CourseSectionSession.browseCaption">
+                    <table id="sectionSessionTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="name"/>
+                            <column id="trainer.trainerFullName"
+                                    caption="msg://kz.uco.tsadv.web.modules.learning.coursesectionsession/trainer"/>
+                            <column id="learningCenter.langValue"/>
+                            <column id="maxPerson"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                        </columns>
+                        <rows datasource="sessionDs"/>
+                        <buttonsPanel>
+                            <button action="sectionSessionTable.create"/>
+                            <button action="sectionSessionTable.edit"/>
+                            <button action="sectionSessionTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </groupBox>
+            </tab>
+            <tab id="description"
+                 caption="msg://CourseSection.description"
+                 margin="true,true,true,false">
+                <richTextArea id="richTextArea"
+                              datasource="courseSectionDs"
+                              height="100%"
+                              property="description"
+                              width="100%"/>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

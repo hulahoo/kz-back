@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RcAnswer.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.rcanswer.RcAnswerEdit"
+        datasource="rcAnswerDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="rcAnswerDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RcAnswer"
+                    view="rcAnswer.view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    width="100%"
+                    datasource="rcAnswerDs">
+            <column width="350px">
+                <field property="order"/>
+                <field property="answerResult"/>
+                <field property="answerText1" rows="2"/>
+                <field property="answerText2" rows="2"/>
+                <field property="answerText3" rows="2"/>
+                <field property="answerText4" rows="2"/>
+                <field property="answerText5" rows="2"/>
+                <field id="positiveField">
+                    <optionsGroup id="positiveOptionsGroup" orientation="horizontal" visible="false"/>
+                </field>
+            </column>
+        </fieldGroup>
+
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.goodsorderdetail.GoodsOrderDetailWithVoucherBrowse"
+        focusComponent="goodsOrderDetailsWithVoucherTable"
+        lookupComponent="goodsOrderDetailsWithVoucherTable"
+        messagesPack="kz.uco.tsadv.web.goodsorderdetail">
+    <dsContext>
+        <groupDatasource id="goodsOrderDetailWithVouchersDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.GoodsOrderDetail"
+                         view="goodsOrderDetailWithVoucher">
+            <query>
+                <![CDATA[select e from tsadv$GoodsOrderDetail e
+                        join e.goods.category c
+                        where c.code ='VOUCHER']]>
+            </query>
+            <datasource id="goodsDs"
+                        property="goods">
+                <datasource id="categoryDs"
+                            property="category"/>
+            </datasource>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goodsOrderDetailsWithVoucherTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="goodsOrderDetailsWithVoucherTable"
+                datasource="goodsOrderDetailWithVouchersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="goodsOrderDetailsWithVoucherTable"
+                    width="100%">
+            <actions>
+                <action id="useVoucherAction" invoke="useVoucher" enable="false"/>
+            </actions>
+            <columns>
+                <column id="goods.name"/>
+                <column id="goodsOrder.orderDate"/>
+                <column id="qrCode"/>
+                <column id="quantity"/>
+                <column id="goodsOrder.personGroup.fioWithEmployeeNumber" caption="msg://fioWithEmployeeNumber"/>
+                <column id="goods.recognitionProvider.providerNameLang1"/>
+                <column id="voucherUsed"/>
+            </columns>
+            <rows datasource="goodsOrderDetailWithVouchersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="useVoucherBtn"
+                        action="goodsOrderDetailsWithVoucherTable.useVoucherAction"
+                        caption="msg://SelectAnEntry"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

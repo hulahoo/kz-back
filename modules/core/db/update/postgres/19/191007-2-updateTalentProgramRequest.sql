@@ -1,0 +1,4 @@
+alter table TSADV_TALENT_PROGRAM_REQUEST rename column status_id to status_id__u29763 ;
+drop index IDX_TSADV_TALENT_PROGRAM_REQUEST_STATUS ;
+alter table TSADV_TALENT_PROGRAM_REQUEST drop constraint FK_TSADV_TALENT_PROGRAM_REQUEST_STATUS ;
+alter table TSADV_TALENT_PROGRAM_REQUEST add column STATUS_ID uuid ;

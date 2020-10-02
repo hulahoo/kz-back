@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.rcjobgroup.RcJobGroupBrowse"
+        focusComponent="rcJobGroupsTable"
+        lookupComponent="rcJobGroupsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.rcjobgroup">
+    <dsContext>
+        <collectionDatasource id="rcJobGroupsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.RcJobGroup"
+                              view="rcJobGroup.browse">
+            <query>
+                <![CDATA[select e from tsadv$RcJobGroup e]]>
+            </query>
+            <collectionDatasource id="jobsDs"
+                                  property="jobs"/>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <vbox expand="rcJobGroupsTable"
+              height="100%"
+              spacing="true">
+            <filter id="filter"
+                    applyTo="rcJobGroupsTable"
+                    datasource="rcJobGroupsDs">
+                <properties include=".*"/>
+            </filter>
+            <table id="rcJobGroupsTable"
+                   width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/edit.png"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/close.png"/>
+                </actions>
+                <columns>
+                    <column id="groupName"/>
+                </columns>
+                <rows datasource="rcJobGroupsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="rcJobGroupsTable.create"/>
+                    <button id="editBtn"
+                            action="rcJobGroupsTable.edit"/>
+                    <button id="removeBtn"
+                            action="rcJobGroupsTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </vbox>
+        <groupBox id="groupBox"
+                  caption="msg://browseCaption"
+                  height="100%"
+                  spacing="true">
+            <table id="jobsTable"
+                   height="100%"
+                   width="100%">
+                <columns>
+                    <column id="job"/>
+                </columns>
+                <rows datasource="jobsDs"/>
+            </table>
+        </groupBox>
+    </layout>
+</window>

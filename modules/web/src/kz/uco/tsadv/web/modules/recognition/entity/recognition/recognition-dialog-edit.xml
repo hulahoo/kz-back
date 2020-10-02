@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.recognition.RecognitionDialogEdit"
+        datasource="recognitionDs"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.recognition">
+    <dsContext>
+        <datasource id="recognitionDs"
+                    class="kz.uco.tsadv.modules.recognition.Recognition"
+                    view="recognition.edit">
+            <collectionDatasource id="recognitionQualitiesDs"
+                                  property="recognitionQualities"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600px"
+                width="40%"/>
+    <layout expand="scrollBox" stylename="rcg-window-layout rcg-gt-wrapper">
+        <scrollBox id="scrollBox" width="100%" stylename="rcg-dialog-scroll b-scroll">
+            <vbox id="receiverBlock" stylename="rcg-gt-block" spacing="true">
+                <label value="msg://rcg.receiver" stylename="rcg-gt-title"/>
+                <suggestionPickerField id="suggestionPickerField"
+                                       asyncSearchDelayMs="1"
+                                       datasource="recognitionDs"
+                                       minSearchStringLength="3"
+                                       captionProperty="firstLastName"
+                                       property="receiver"
+                                       width="100%">
+                    <query entityClass="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                           escapeValueForLike="true"
+                           searchStringFormat="%$searchString%"
+                           view="personGroup.search">
+                        <![CDATA[select pg from base$PersonGroupExt pg
+                    join pg.list p
+                    join pg.assignments a
+                    join a.assignmentStatus d on (d.code = 'ACTIVE' or d.code = 'SUSPENDED')
+                    where current_date between p.startDate and p.endDate
+                    and current_date between a.startDate and a.endDate and a.primaryFlag = True
+                    and p.type.code = 'EMPLOYEE'
+                    and ((lower(p.firstName) like lower(:searchString) or lower(p.lastName) like lower(:searchString) or lower(concat(p.firstName, concat(' ', p.lastName))) like lower(:searchString))
+                    or (lower(p.firstNameLatin) like lower(:searchString) or lower(p.lastNameLatin) like lower(:searchString)  or lower(concat(p.firstNameLatin,concat(' ', p.lastNameLatin))) like lower(:searchString)))]]>
+                    </query>
+                </suggestionPickerField>
+
+                <hbox id="organization" spacing="true" width="100%">
+                    <vbox spacing="true" margin="false,true,false,false">
+                        <label value="msg://rcg.org" stylename="rcg-gt-title"/>
+                        <textField id="organizationField" editable="false" width="100%"/>
+                    </vbox>
+                    <vbox spacing="true">
+                        <label value="msg://rcg.pos" stylename="rcg-gt-title"/>
+                        <textField id="positionField" editable="false" width="100%"/>
+                    </vbox>
+                </hbox>
+            </vbox>
+
+            <flowBox stylename="rcg-gt-block" spacing="true" width="100%">
+                <vbox id="typeBlock" spacing="true" margin="false,true,false,false" width="AUTO">
+                    <label id="rcgTypeLabel" htmlEnabled="true"/>
+                    <hbox id="rcgTypeWrapper" spacing="true"/>
+                </vbox>
+                <vbox spacing="true" margin="false,false,false,true" width="AUTO">
+                    <label value="msg://rcg.price" stylename="rcg-gt-title"/>
+                    <label id="rcgTypeCoin"
+                           icon="images/recognition/points.png"
+                           value="0"
+                           stylename="rcg-gt-type-coins" width="100%"/>
+                    <label id="errorLabel" stylename="rcg-gt-error"/>
+                </vbox>
+            </flowBox>
+            <vbox stylename="rcg-gt-block" spacing="true" width="100%">
+                <hbox width="100%" spacing="true">
+                    <label align="MIDDLE_LEFT"
+                           value="msg://rcg.comment" stylename="rcg-gt-title"/>
+                    <label id="commentMinLength"
+                           align="MIDDLE_RIGHT"
+                           value="msg://comment.min.length"
+                           stylename="rcg-gt-title rcg-gt-length-info"/>
+                </hbox>
+                <textArea id="comment"
+                          datasource="recognitionDs"
+                          property="comment"
+                          width="100%"
+                          height="90px"/>
+            </vbox>
+            <vbox id="qualitiesBlock" stylename="rcg-gt-block" spacing="true">
+                <label value="msg://rcg.select.quality" stylename="rcg-gt-title"/>
+                <flowBox id="qualitiesBox" width="100%" spacing="true" stylename="rcg-gt-quality-box"/>
+            </vbox>
+        </scrollBox>
+        <hbox id="windowActions" width="100%" height="64px" stylename="rcg-window-footer rcg-gt-footer"
+              expand="notifyManager">
+            <checkBox id="notifyManager" caption="msg://rcg.send.notify"
+                      align="MIDDLE_LEFT"
+                      stylename="rcg-gt-notify-manager"
+                      datasource="recognitionDs"
+                      property="notifyManager"/>
+            <linkButton id="windowCommit" action="windowCommit" caption="msg://rcg.send.btn"
+                        stylename="rcg-btn rcg-blue-btn rcg-btn-md" align="MIDDLE_RIGHT"/>
+        </hbox>
+    </layout>
+</window>

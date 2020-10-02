@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://profile.settings"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgProfileSettings"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages"
+        datasource="profileSettingDs">
+    <dsContext>
+        <datasource id="profileSettingDs"
+                    class="kz.uco.tsadv.modules.recognition.RecognitionProfileSetting"
+                    view="recognitionProfileSetting.edit"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                width="500"/>
+    <layout width="100%" expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" width="100%">
+            <grid width="100%">
+                <columns>
+                    <column flex="2"/>
+                    <column/>
+                </columns>
+                <rows>
+                    <row>
+                        <label value="msg://kz.uco.tsadv.modules.recognition/RecognitionProfileSetting.automaticTranslate"
+                               width="100%"/>
+                        <checkBox datasource="profileSettingDs" property="automaticTranslate"/>
+                    </row>
+                </rows>
+            </grid>
+        </scrollBox>
+        <frame id="windowActions" screen="editWindowActions"/>
+    </layout>
+</window>

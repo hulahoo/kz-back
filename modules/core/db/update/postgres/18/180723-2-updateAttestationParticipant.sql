@@ -1,0 +1,1 @@
+alter table TSADV_ATTESTATION_PARTICIPANT add column PERSON_TYPE_ID uuid ;

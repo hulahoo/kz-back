@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://rcg.rest.pg"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgRestPlayGround"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%" width="100%" expand="scrollBox">
+        <scrollBox id="scrollBox" width="100%" spacing="true">
+            <vbox width="100%" spacing="true">
+                <groupBox caption="loadQualities" spacing="true" width="AUTO">
+                    <fieldGroup id="loadQualitiesFG" border="visible">
+                        <column width="250px">
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadQualities" invoke="loadQualities"/>
+                </groupBox>
+
+                <groupBox caption="loadOrganizations" spacing="true" width="AUTO">
+                    <fieldGroup id="loadOrganizationsFG" border="visible">
+                        <column width="250px">
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadOrganizations" invoke="loadOrganizations"/>
+                </groupBox>
+
+                <groupBox caption="getDraftPersonAward" spacing="true" width="AUTO">
+                    <fieldGroup id="getDraftPersonAwardFG" border="visible">
+                        <column width="250px">
+                            <field id="authorEmployeeNumber" caption="Author employee number">
+                                <textField/>
+                            </field>
+                            <field id="receiverEmployeeNumber" caption="Receiver employee number">
+                                <textField/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="getDraftPersonAward" invoke="getDraftPersonAward"/>
+                </groupBox>
+
+                <groupBox caption="Nominate" spacing="true" width="AUTO">
+                    <fieldGroup id="nominateFG" border="visible">
+                        <column width="250px">
+                            <field id="authorEmployeeNumber" caption="Author employee number">
+                                <textField/>
+                            </field>
+                            <field id="receiverEmployeeNumber" caption="Receiver employee number">
+                                <textField/>
+                            </field>
+                            <field id="status" caption="Status">
+                                <lookupField optionsEnum="kz.uco.tsadv.modules.recognition.enums.AwardStatus"/>
+                            </field>
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                            <field id="history" caption="History" width="400px">
+                                <textArea rows="5"/>
+                            </field>
+                            <field id="why" caption="Why" width="400px">
+                                <textArea rows="5"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="Nominate" invoke="nominate"/>
+                </groupBox>
+
+                <groupBox caption="loadMyNominees" spacing="true" width="AUTO">
+                    <fieldGroup id="loadMyNomineesFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="offset" caption="Offset">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="maxResults" caption="MaxResults">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                            <field id="year" caption="Year">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="organizationGroupId" caption="OrganizationGroup">
+                                <pickerField metaClass="base$OrganizationGroupExt" captionProperty="organizationName"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadMyNominees" invoke="loadMyNominees"/>
+                </groupBox>
+
+                <groupBox caption="myNomineesCount" spacing="true" width="AUTO">
+                    <fieldGroup id="myNomineesCountFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="year" caption="Year">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="organizationGroupId" caption="OrganizationGroup">
+                                <pickerField metaClass="base$OrganizationGroupExt" captionProperty="organizationName"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="myNomineesCount" invoke="myNomineesCount"/>
+                </groupBox>
+
+                <groupBox caption="loadAllNominee" spacing="true" width="AUTO">
+                    <fieldGroup id="loadAllNomineeFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="offset" caption="Offset">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="maxResults" caption="MaxResults">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                            <field id="year" caption="Year">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="organizationGroupId" caption="OrganizationGroup">
+                                <pickerField metaClass="base$OrganizationGroupExt" captionProperty="organizationName"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadAllNominee" invoke="loadAllNominee"/>
+                </groupBox>
+
+                <groupBox caption="allNomineesCount" spacing="true" width="AUTO">
+                    <fieldGroup id="allNomineesCountFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="year" caption="Year">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="organizationGroupId" caption="OrganizationGroup">
+                                <pickerField metaClass="base$OrganizationGroupExt" captionProperty="organizationName"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="allNomineesCount" invoke="allNomineesCount"/>
+                </groupBox>
+
+                <groupBox caption="loadTopNominee" spacing="true" width="AUTO">
+                    <fieldGroup id="loadTopNomineeFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="year" caption="Year">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="organizationGroupId" caption="OrganizationGroup">
+                                <pickerField metaClass="base$OrganizationGroupExt" captionProperty="organizationName"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadTopNominee" invoke="loadTopNominee"/>
+                </groupBox>
+
+                <groupBox caption="loadProfile" spacing="true" width="AUTO">
+                    <fieldGroup id="loadProfileFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="employeeNumber" caption="Employee number">
+                                <textField/>
+                            </field>
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadProfile" invoke="loadProfile"/>
+                </groupBox>
+
+
+                <groupBox caption="teamProfilesCount" spacing="true" width="AUTO">
+                    <button caption="teamProfilesCount" invoke="teamProfilesCount"/>
+                </groupBox>
+
+                <groupBox caption="loadTeamProfiles" spacing="true" width="AUTO">
+                    <fieldGroup id="loadTeamProfilesFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="offset" caption="Offset">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="maxResults" caption="MaxResults">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadTeamProfiles" invoke="loadTeamProfiles"/>
+                </groupBox>
+
+                <groupBox caption="recognitionCommentsCount" spacing="true" width="AUTO">
+                    <fieldGroup id="recognitionCommentsCountFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="recognitionId" caption="Recognition">
+                                <pickerField metaClass="tsadv$Recognition"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="recognitionCommentsCount" invoke="recognitionCommentsCount"/>
+                </groupBox>
+
+                <groupBox caption="recognitionComments" spacing="true" width="AUTO">
+                    <fieldGroup id="recognitionCommentsFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="recognitionId" caption="Recognition">
+                                <pickerField metaClass="tsadv$Recognition"/>
+                            </field>
+                            <field id="offset" caption="Offset">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="maxResults" caption="MaxResults">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                            <field id="automaticTranslate" caption="AutomaticTranslate">
+                                <textField datatype="int"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="recognitionComments" invoke="recognitionComments"/>
+                </groupBox>
+
+                <groupBox caption="recognitionsCount" spacing="true" width="AUTO">
+                    <fieldGroup id="recognitionsCountFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="wallType" caption="WallType">
+                                <lookupField required="true"/>
+                            </field>
+                            <field id="profileEmployeeNumber" caption="Profile employee number">
+                                <textField/>
+                            </field>
+                            <field id="organizationGroupId" caption="OrganizationGroup">
+                                <pickerField metaClass="base$OrganizationGroupExt"
+                                             captionProperty="organizationName"/>
+                            </field>
+                            <field id="filter" caption="Filter">
+                                <textField/>
+                            </field>
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="recognitionsCount" invoke="recognitionsCount"/>
+                </groupBox>
+
+                <groupBox caption="loadRecognitions" spacing="true" width="AUTO">
+                    <fieldGroup id="loadRecognitionsFG" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="offset" caption="Offset">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="maxResults" caption="MaxResults">
+                                <textField datatype="int"/>
+                            </field>
+                            <field id="wallType" caption="WallType">
+                                <lookupField required="true"/>
+                            </field>
+                            <field id="profileEmployeeNumber" caption="Profile Employee Number">
+                                <textField/>
+                            </field>
+                            <field id="organizationGroupId" caption="OrganizationGroup">
+                                <pickerField metaClass="base$OrganizationGroupExt"
+                                             captionProperty="organizationName"/>
+                            </field>
+                            <field id="filter" caption="Filter">
+                                <textField/>
+                            </field>
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                            <field id="automaticTranslate" caption="AutomaticTranslate">
+                                <textField datatype="int"/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadRecognitions" invoke="loadRecognitions"/>
+                </groupBox>
+
+                <groupBox caption="updatePersonPreference" spacing="true" width="AUTO">
+                    <fieldGroup id="updatePersonPreferenceFg" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="preferenceTypeId" caption="PreferenceTypeId">
+                                <pickerField metaClass="tsadv$DicPersonPreferenceType"/>
+                            </field>
+                            <field id="description" caption="description">
+                                <textArea/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="updatePersonPreference" invoke="updatePersonPreference"/>
+                </groupBox>
+
+                <groupBox caption="getPersonPreferenceTypes" spacing="true" width="AUTO">
+                    <fieldGroup id="getPersonPreferenceTypesFg" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="language" caption="Language">
+                                <textField/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="getPersonPreferenceTypes" invoke="getPersonPreferenceTypes"/>
+                </groupBox>
+
+                <groupBox caption="Load Person Preferences" spacing="true" width="AUTO">
+                    <fieldGroup id="loadPersonPreferencesFg" border="visible"
+                                fieldCaptionWidth="230px">
+                        <column width="250px">
+                            <field id="employeeNumber" caption="Employee number">
+                                <textField/>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="loadPersonPreferences" invoke="loadPersonPreferences"/>
+                </groupBox>
+                <groupBox caption="Create recognition" spacing="true" width="AUTO">
+                    <fieldGroup id="createRecognitionFG" border="visible">
+                        <column width="250px">
+                            <field id="authorEmployeeNumber" caption="Author employee number">
+                                <textField/>
+                            </field>
+                            <field id="receiverEmployeeNumber" caption="Receiver employee number">
+                                <textField/>
+                            </field>
+                            <field id="recognitionType" caption="Recognition type">
+                                <pickerField metaClass="tsadv$DicRecognitionType"/>
+                            </field>
+                            <field id="notifyManager" caption="Notify manager">
+                                <checkBox/>
+                            </field>
+                            <field id="comment" caption="Comment" width="400px">
+                                <textArea rows="5"/>
+                            </field>
+                            <field id="qualities" caption="Qualities">
+                                <vbox spacing="true">
+                                    <pickerField id="quality1" metaClass="tsadv$DicQuality"/>
+                                    <pickerField id="quality2" metaClass="tsadv$DicQuality"/>
+                                </vbox>
+                            </field>
+                        </column>
+                    </fieldGroup>
+                    <button caption="Create recognition" invoke="createRecognition"/>
+                </groupBox>
+
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

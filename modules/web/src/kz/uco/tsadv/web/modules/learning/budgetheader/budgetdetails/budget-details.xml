@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BudgetDetails"
+        class="kz.uco.tsadv.web.modules.learning.budgetheader.budgetdetails.BudgetDetailsWindow"
+        focusComponent="budgetRequestsTable"
+        lookupComponent="budgetRequestsTable">
+    <dsContext>
+        <groupDatasource id="budgetRequestsDs"
+                         class="kz.uco.tsadv.modules.learning.model.BudgetRequest"
+                         view="budgetRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$BudgetRequest e where e.budgetHeader.id=:param$budgetHeaderId]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="budgetRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="budgetRequestsTable"
+                datasource="budgetRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="budgetRequestsTable"
+                    width="100%">
+            <!--<actions>-->
+                <!--<action id="create"/>-->
+                <!--<action id="edit"/>-->
+                <!--<action id="remove"/>-->
+                <!--<action id="copyPreviousBudget"-->
+                        <!--invoke="copyPreviousBudget"/>-->
+            <!--</actions>-->
+            <columns>
+                <column id="budget"/>
+                <column id="calcCourseName"/>
+                <column id="learningType"/>
+                <column id="employeesCount"/>
+                <column id="month">
+                    <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter"
+                               format="MM.yyyy"/>
+                </column>
+                <column id="learningCosts"/>
+                <column id="tripCosts"/>
+                <column id="providerCompany"/>
+                <column id="comment"
+                        maxTextLength="40"/>
+                <column id="initiatorPersonGroup"
+                        captionProperty="initiatorPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="organizationGroup" captionProperty="organizationGroup.organization.organizationName"/>
+                <column id="status"/>
+            </columns>
+            <rows datasource="budgetRequestsDs"/>
+            <rowsCount/>
+            <!--<buttonsPanel id="buttonsPanel"-->
+                          <!--alwaysVisible="true">-->
+                <!--<button id="createBtn"-->
+                        <!--action="budgetRequestsTable.create"/>-->
+                <!--<button id="editBtn"-->
+                        <!--action="budgetRequestsTable.edit"/>-->
+                <!--<button id="removeBtn"-->
+                        <!--action="budgetRequestsTable.remove"/>-->
+                <!--<button id="copyBtn"-->
+                        <!--action="budgetRequestsTable.copyPreviousBudget"-->
+                        <!--caption="msg://BudgetRequest.copyPreviousBudget"-->
+                        <!--icon="icons/copy.png"/>-->
+            <!--</buttonsPanel>-->
+        </groupTable>
+    </layout>
+</window>

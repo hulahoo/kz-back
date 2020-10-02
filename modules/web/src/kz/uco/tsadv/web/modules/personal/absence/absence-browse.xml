@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Absence.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.absence.AbsenceBrowse"
+        focusComponent="absencesTable"
+        lookupComponent="absencesTable">
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <table id="absencesTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="type"/>
+                <column id="dateFrom"/>
+                <column id="dateTo"/>
+                <column id="absenceDays"
+                        caption="msg://kz.uco.tsadv.web.modules.personal.absence/AbsenceBrowse.absenceDays"/>
+                <column id="additionalDays"
+                        caption="msg://kz.uco.tsadv.web.modules.personal.absence/AbsenceBrowse.additionalDays"/>
+            </columns>
+            <rows datasource="absencesDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button action="absencesTable.create"/>
+                <button action="absencesTable.edit"/>
+                <button action="absencesTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

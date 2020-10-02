@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfMilitaryForm"
+        focusComponent="militaryFormsTable"
+        lookupComponent="militaryFormsTable">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <table id="militaryFormsTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="date_from"/>
+                <column id="date_to"/>
+                <column id="military_document_type"/>
+                <column id="document_number"/>
+                <column id="military_type"/>
+                <column id="attitude_to_military"/>
+                <column id="military_office"/>
+                <column id="troops_structure"/>
+                <column id="military_rank"/>
+                <column id="officer_type"/>
+                <column id="suitability_to_military"/>
+                <column id="specialization"/>
+                <column id="dely"/>
+                <column id="dely_description"/>
+                <column id="register_group"/>
+                <column id="register_category"/>
+                <column id="date_post"/>
+            </columns>
+            <rows datasource="militaryRankDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="militaryFormsTable.create"/>
+                <button id="editBtn"
+                        action="militaryFormsTable.edit"/>
+                <button id="removeBtn"
+                        action="militaryFormsTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

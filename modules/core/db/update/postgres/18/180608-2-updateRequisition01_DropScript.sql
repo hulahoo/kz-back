@@ -1,0 +1,1 @@
+alter table TSADV_REQUISITION drop column SUBSTITUTABLE_DISCRIPTION__U16613 cascade ;

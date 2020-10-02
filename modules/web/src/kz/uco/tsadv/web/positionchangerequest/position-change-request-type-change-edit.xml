@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.positionchangerequest.PositionChangeRequestTypeChangeEdit"
+        datasource="positionChangeRequestDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.positionchangerequest">
+    <dsContext>
+        <datasource id="positionChangeRequestDs"
+                    class="kz.uco.tsadv.modules.personal.model.PositionChangeRequest"
+                    view="positionChangeRequest.edit"/>
+        <datasource id="positionGroupExtDs"
+                    class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"/>
+
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e
+where e.procInstance.entity.entityId = :ds$positionChangeRequestDs
+                       order by e.startDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="bpmRequestMessagesDs"
+                              class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
+                              view="bpmRequestMessage-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmRequestMessage e
+                    where e.entityId = :ds$positionChangeRequestDs
+                           and ( e.assignedUser.userExt.id = :session$user or e.assignedBy.userExt.id = :session$user )
+                    order by e.sendDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <groupBox id="dataGroup"
+                      spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="positionChangeRequestDs">
+                    <column width="250px">
+                        <field editable="false"
+                               property="requestNumber"/>
+                        <field editable="false"
+                               property="requestDate"/>
+                        <field editable="false"
+                               property="requestType"/>
+                        <field property="positionGroup"
+                               requiredMessage="msg://requiredPosition"
+                               required="true">
+                            <pickerField id="positionGroup"
+                                         captionProperty="fullName"
+                                         metaClass="base$PositionGroupExt"/>
+                        </field>
+                        <field property="effectiveDate"
+                               required="true"/>
+                    </column>
+                </fieldGroup>
+                <grid id="grid"
+                      spacing="true"
+                      stylename="v-panel-caption"
+                      width="100%">
+                    <columns>
+                        <column flex="2.0"/>
+                        <column flex="10.0"/>
+                        <column flex="10.0"/>
+                        <column flex="0.2"/>
+                    </columns>
+                    <rows>
+                        <row>
+                            <label/>
+                            <label id="currentValue"
+                                   value="msg://currentValue"/>
+                            <label id="newValue"
+                                   value="msg://newValue"/>
+                        </row>
+                        <row>
+                            <label id="labelOrganization"/>
+                            <pickerField id="currentOrganization"
+                                         captionProperty="organizationName"
+                                         datasource="positionGroupExtDs"
+                                         editable="false"
+                                         property="position.organizationGroupExt"
+                                         width="100%"/>
+                            <pickerField id="newOrganization"
+                                         captionProperty="organizationName"
+                                         datasource="positionChangeRequestDs"
+                                         property="organizationGroup"
+                                         required="true"
+                                         width="100%"/>
+                            <label id="labelOrganizationIcon"/>
+                        </row>
+                        <row>
+                            <label id="labelJobNameLang1"/>
+                            <textField id="currentNameRu"
+                                       datasource="positionGroupExtDs"
+                                       editable="false"
+                                       property="position.jobGroup.job.jobNameLang1"
+                                       width="100%"/>
+                            <textField id="newNameRu"
+                                       datasource="positionChangeRequestDs"
+                                       property="jobNameLang1"
+                                       required="true"
+                                       width="100%"/>
+                            <label id="labelJobNameLang1Icon"/>
+                        </row>
+                        <row>
+                            <label id="labelJobNameLang2"/>
+                            <textField id="currentNameKz"
+                                       datasource="positionGroupExtDs"
+                                       editable="false"
+                                       property="position.jobGroup.job.jobNameLang2"
+                                       width="100%"/>
+                            <textField id="newNameKz"
+                                       datasource="positionChangeRequestDs"
+                                       property="jobNameLang2"
+                                       required="true"
+                                       width="100%"/>
+                            <label id="labelJobNameLang2Icon"/>
+                        </row>
+                        <row>
+                            <label id="labelJobNameLang3"/>
+                            <textField id="currentNameEn"
+                                       datasource="positionGroupExtDs"
+                                       editable="false"
+                                       property="position.jobGroup.job.jobNameLang3"
+                                       width="100%"/>
+                            <textField id="newNameEN"
+                                       datasource="positionChangeRequestDs"
+                                       property="jobNameLang3"
+                                       required="true"
+                                       width="100%"/>
+                            <label id="labelJobNameLang3Icon"/>
+                        </row>
+                        <row>
+                            <label id="labelLocation"/>
+                            <textField id="currentLocation"
+                                       datasource="positionGroupExtDs"
+                                       editable="false"
+                                       property="position.baza"
+                                       width="100%"/>
+                            <textField id="newLocation"
+                                       datasource="positionChangeRequestDs"
+                                       property="location"
+                                       required="true"
+                                       width="100%"/>
+                            <label id="labelLocationIcon"/>
+                        </row>
+                        <row>
+                            <label id="labelCostCent"/>
+                            <pickerField id="currentCostCent"
+                                         captionProperty="langValue"
+                                         datasource="positionGroupExtDs"
+                                         editable="false"
+                                         property="position.costCenter"
+                                         width="100%"/>
+                            <pickerField id="newCostCent"
+                                         captionProperty="langValue"
+                                         datasource="positionChangeRequestDs"
+                                         property="costCenter"
+                                         required="true"
+                                         width="100%"/>
+                            <label id="labelCostCentIcon"/>
+                        </row>
+                        <row>
+                            <label id="labelGradeGroup"/>
+                            <pickerField id="currentGradeGroup"
+                                         captionProperty="grade"
+                                         datasource="positionGroupExtDs"
+                                         editable="false"
+                                         property="position.gradeGroup"
+                                         width="100%"/>
+                            <pickerField id="newGradeGroup"
+                                         captionProperty="grade"
+                                         datasource="positionChangeRequestDs"
+                                         property="gradeGroup"
+                                         required="true"
+                                         width="100%"/>
+                            <label id="labelGradeGroupIcon"/>
+                        </row>
+                        <row>
+                            <label id="labelFte"/>
+                            <textField id="currentFte"
+                                       datasource="positionGroupExtDs"
+                                       editable="false"
+                                       property="position.fte"
+                                       width="100%"/>
+                            <textField id="newFte"
+                                       datasource="positionChangeRequestDs"
+                                       property="fte"
+                                       required="true"
+                                       width="100%"/>
+                            <label id="labelFteIcon"/>
+                        </row>
+                        <row>
+                            <label id="labelParentPositionGroup"/>
+                            <pickerField id="currentParentPositionGroup"
+                                         captionProperty="fullName"
+                                         metaClass="base$PositionGroupExt"
+                                         editable="false"
+                                         width="100%"/>
+                            <pickerField id="newParentPositionGroupField"
+                                         captionProperty="positionName"
+                                         metaClass="tsadv$PositionSsView"
+                                         required="true"
+                                         requiredMessage="msg://requiredParentPosition"
+                                         width="100%"/>
+                            <label id="labelParentPositionGroupIcon"/>
+                        </row>
+                    </rows>
+                </grid>
+                <fieldGroup id="fieldGroup2"
+                            datasource="positionChangeRequestDs">
+                    <column width="250px">
+                        <field property="materialLiabilityAgreementRequired"/>
+                        <field property="mrgForm"/>
+                        <field property="jobInstruction"/>
+                        <field editable="false"
+                               property="status"/>
+                    </column>
+                </fieldGroup>
+                <fieldGroup id="fieldGroup3"
+                            datasource="positionChangeRequestDs"
+                            width="100%">
+                    <column width="100%">
+                        <field property="comments"
+                               rows="5"
+                               width="100%"/>
+                    </column>
+                </fieldGroup>
+            </groupBox>
+            <groupBox id="bpmActorsBox"
+                      caption="msg://TransferRequest.approvalProcess.actors"
+                      spacing="true">
+                <table id="procTasksTable"
+                       width="100%">
+                    <columns>
+                        <column id="locName"
+                                caption="msg://ProcActor.role"/>
+                        <column id="procActor.user"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="locOutcome"
+                                caption="msg://ProcActor.decision"/>
+                        <column id="comment"
+                                maxTextLength="50"/>
+                    </columns>
+                    <rows datasource="procTasksDs"/>
+                </table>
+            </groupBox>
+            <groupBox id="askQuestion"
+                      width="100%"
+                      caption="Вопросы и ответы"
+                      spacing="true"/>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button caption="msg://cancel"
+                    invoke="closeButton"/>
+            <button id="askQuestionBtn"
+                    caption="mainMsg://askQuestion"
+                    invoke="onAskQuestion"/>
+            <frame id="procActionsFrame"
+                   screen="procActionsFrame"
+                   width="AUTO"/>
+        </hbox>
+    </layout>
+</window>

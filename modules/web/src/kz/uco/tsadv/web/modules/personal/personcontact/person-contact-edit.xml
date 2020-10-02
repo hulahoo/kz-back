@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonContact.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.personcontact.PersonContactEdit"
+        datasource="personContactDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="personContactDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonContact"
+                    view="personContact.edit"/>
+        <collectionDatasource id="contactTypeDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPhoneType"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPhoneType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personContactDs">
+            <column width="250px">
+                <field id="typeId"
+                       optionsDatasource="contactTypeDs"
+                       property="type"/>
+                <field id="contactValueId"
+                       property="contactValue"/>
+                <field id="maskedFieldId"
+                       custom="true"
+                       property="maskedField"
+                       required="true"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

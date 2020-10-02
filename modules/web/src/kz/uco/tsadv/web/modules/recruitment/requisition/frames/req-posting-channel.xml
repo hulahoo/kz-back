@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.frames.ReqPostingChannel">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true">
+        <groupTable id="postingChannelsTable"
+                    height="100%"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="postingChannel.channalName"/>
+                <column id="postingChannel.connectionURL"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="postingChannelsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="postingChannelsButtonsPanel"
+                          alwaysVisible="true">
+                <button id="postingChannelsCreateBtn"
+                        action="postingChannelsTable.create"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="postingChannelsEditBtn"
+                        action="postingChannelsTable.edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="postingChannelsRemoveBtn"
+                        action="postingChannelsTable.remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

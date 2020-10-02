@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RequisitionSearchCandidate.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionSearchCandidateBrowse">
+    <dsContext>
+        <datasource id="searchCandidateDs"
+                    allowCommit="false"
+                    class="kz.uco.tsadv.modules.recruitment.model.RequisitionSearchCandidate"/>
+        <collectionDatasource id="candidatePercentagesDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.modules.recruitment.model.RequisitionSearchCandidateResult"
+                              datasourceClass="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionSearchCandidateDatasource"/>
+        <collectionDatasource id="dicEducationLevelDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicEducationLevel"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from tsadv$DicEducationLevel e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vBox"
+            width="100%">
+        <vbox id="vBox"
+              expand="searchResultTable"
+              spacing="true">
+            <groupBox>
+                <fieldGroup id="fieldGroup"
+                            datasource="searchCandidateDs">
+                    <column width="60px">
+                        <field property="reserve"/>
+                        <field property="employee"/>
+                    </column>
+                    <column width="60px">
+                        <field property="student"/>
+                        <field property="externalCandidate"/>
+                    </column>
+                    <column width="180px">
+                        <field optionsDatasource="dicEducationLevelDs"
+                               property="levelEducation"/>
+                        <field property="experience"
+                               width="100px"/>
+                    </column>
+                    <column width="AUTO">
+                        <field property="readRelocation"
+                               width="100px"/>
+                        <field property="reservedCandidate"/>
+                    </column>
+                </fieldGroup>
+                <hbox>
+                    <button id="search"
+                            caption="msg://requisition.search.candidate.search.btn"
+                            icon="icons/search.png"
+                            invoke="search"/>
+                </hbox>
+            </groupBox>
+            <table id="searchResultTable"
+                   multiselect="true"
+                   width="100%">
+                <columns>
+                    <column id="photo"
+                            caption="msg://requisition.search.candidate.col.photo"
+                            generator="generatePersonImage"
+                            width="65"/>
+                    <column id="person.fullName"
+                            link="true"
+                            linkInvoke="redirectToCard"/>
+                    <column id="person.type.langValue"
+                            caption="msg://requisition.search.candidate.col.personType"/>
+                    <column id="match"
+                            caption="msg://requisition.search.candidate.col.match"/>
+                    <column id="positionName"
+                            caption="msg://requisition.search.candidate.col.pos"/>
+                    <column id="organizationName"
+                            caption="msg://requisition.search.candidate.col.org"/>
+                    <column id="clickCount"
+                            caption="msg://requisition.search.candidate.col.click"
+                            link="true"
+                            linkInvoke="redirectToResponds"/>
+                    <column id="contacts"
+                            caption="msg://requisition.search.candidate.col.contact"
+                            generator="generateContacts"/>
+                    <column id="files"
+                            caption="msg://requisition.search.candidate.col.file"
+                            generator="generateFiles"/>
+                    <column id="isReserved"/>
+                </columns>
+                <rows datasource="candidatePercentagesDs"/>
+                <buttonsPanel>
+                    <button id="addToCandidate"
+                            caption="msg://requisition.search.candidate.add.btn"
+                            icon="icons/plus-btn.png"
+                            invoke="addToCandidate"/>
+                    <button id="sendResume"
+                            caption="msg://requisition.search.candidate.btn.send.resume"
+                            enable="false"
+                            icon="font-icon:EXTERNAL_LINK"/>
+                </buttonsPanel>
+            </table>
+        </vbox>
+    </layout>
+</window>

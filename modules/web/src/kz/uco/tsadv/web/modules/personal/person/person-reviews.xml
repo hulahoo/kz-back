@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonReview.page.caption"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonReviews">
+    <dsContext>
+        <datasource id="assignmentDs"
+                    class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                    view="_minimal"/>
+        <collectionDatasource id="likeReviewDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonReview"
+                              view="personReview.browse"/>
+        <collectionDatasource id="dislikeReviewDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonReview"
+                              view="personReview.browse"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true"
+            width="100%">
+        <grid id="grid"
+              height="100%"
+              spacing="true"
+              width="100%">
+            <columns>
+                <column/>
+                <column flex="3.0"/>
+            </columns>
+            <rows>
+                <row>
+                    <cssLayout>
+                        <htmlBox id="personCardLeftMenu"
+                                 template="simple-person-card"/>
+                    </cssLayout>
+                    <vbox expand="tabSheet"
+                          height="100%">
+                        <tabSheet id="tabSheet">
+                            <tab id="likeTab"
+                                 caption="msg://PersonReview.tab.like"
+                                 icon="font-icon:THUMBS_O_UP"
+                                 margin="true,false,false,false">
+                                <table id="likeTable"
+                                       columnHeaderVisible="false"
+                                       contextMenuEnabled="false"
+                                       height="100%"
+                                       showSelection="false"
+                                       width="100%">
+                                    <columns>
+                                        <column id="generated"
+                                                generator="generateRow"/>
+                                    </columns>
+                                    <rows datasource="likeReviewDs"/>
+                                </table>
+                            </tab>
+                            <tab id="dislikeTab"
+                                 caption="msg://PersonReview.tab.dislike"
+                                 icon="font-icon:THUMBS_O_DOWN"
+                                 margin="true,false,false,false">
+                                <table id="dislikeTable"
+                                       columnHeaderVisible="false"
+                                       contextMenuEnabled="false"
+                                       height="100%"
+                                       showSelection="false"
+                                       width="100%">
+                                    <columns>
+                                        <column id="generated"
+                                                generator="generateRow"/>
+                                    </columns>
+                                    <rows datasource="dislikeReviewDs"/>
+                                </table>
+                            </tab>
+                        </tabSheet>
+                        <groupBox id="reviewForm">
+                            <hbox expand="body"
+                                  spacing="true"
+                                  width="100%">
+                                <label id="authorImage"
+                                       htmlEnabled="true"/>
+                                <vbox id="body"
+                                      spacing="true">
+                                    <richTextArea id="richText"
+                                                  height="200px"
+                                                  width="100%"/>
+                                    <buttonsPanel>
+                                        <button id="add"
+                                                caption="msg://PersonReview.btn.add"
+                                                icon="font-icon:PLUS"
+                                                invoke="addReview"/>
+                                        <button id="save"
+                                                caption="msg://PersonReview.btn.save"
+                                                icon="icons/save.png"
+                                                invoke="saveReview"
+                                                visible="false"/>
+                                        <button id="cancel"
+                                                caption="msg://PersonReview.btn.cancel"
+                                                icon="font-icon:REMOVE"
+                                                invoke="reset"/>
+                                    </buttonsPanel>
+                                </vbox>
+                            </hbox>
+                        </groupBox>
+                    </vbox>
+                </row>
+            </rows>
+        </grid>
+    </layout>
+</window>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dismissal.DismissalBrowse"
+        messagesPack="kz.uco.tsadv.web.dismissal">
+    <dsContext>
+        <collectionDatasource id="dismissalsDs"
+                              class="kz.uco.tsadv.modules.personal.model.Dismissal"
+                              view="dismissal.card">
+            <query>
+                <![CDATA[select e from tsadv$Dismissal e
+where e.personGroup.id = :param$personGroup]]>
+            </query>
+        </collectionDatasource>
+
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <frame id="frameId"
+               height="100%"
+               screen="pcf-dismissal"/>
+    </layout>
+</window>

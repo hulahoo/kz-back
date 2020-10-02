@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.frames.RequisitionJobRequest"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.requisition.frames">
+    <dsContext>
+        <collectionDatasource id="jobRequestCardSettingsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequestCardSetting"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$JobRequestCardSetting e where e.user.id = :session$userExtId]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vbox1"
+            height="100%">
+        <hbox expand="flowbox"
+              spacing="true"
+              width="100%">
+            <flowBox id="flowbox"
+                     spacing="true">
+                <button id="create"
+                        action="jobRequestsTable.create"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://descCreate"
+                        height="30px"
+                        icon="images/button_icons/user.png"/>
+                <button id="fastCreateButton"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://fastCreateDescr"
+                        icon="images/button_icons/empleado.png"
+                        invoke="onFastCreateClick"/>
+                <button id="createInterview"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://createInterviewDescr"
+                        icon="images/button_icons/meeting.png"
+                        invoke="createInterview"/>
+                <button id="createGroupInterview"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://createGroupInterviewDescr"
+                        icon="images/button_icons/group.png"
+                        invoke="createGroupInterview"/>
+                <button id="fastCreateInterview"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://fastCreateInterviewDescr"
+                        icon="images/button_icons/businessman.png"
+                        invoke="fastCreateInterview"/>
+                <button id="search"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://searchDescr"
+                        icon="images/button_icons/search.png"
+                        invoke="searchCandidate"/>
+                <button id="createOffer"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://createOffer"
+                        icon="images/button_icons/casehand2.png"
+                        invoke="onCreateOfferButtonClick"/>
+                <button id="refresh"
+                        icon="icons/refresh.png"
+                        invoke="refresh"/>
+                <button id="exel"
+                        icon="icons/excel.png"
+                        invoke="excelImport"/>
+                <popupButton id="actions"
+                             description="mainMsg://table.btn.actions"
+                             icon="font-icon:NAVICON">
+                    <actions>
+                        <action id="jobRequestsEditAction"
+                                caption="msg://jobRequestsTableEdit"
+                                enable="false"
+                                invoke="editJobRequest"/>
+                        <action id="jobRequestsRemoveAction"
+                                caption="msg://jobRequestsTableRemove"
+                                enable="false"
+                                invoke="removeJobRequest"/>
+                        <action id="hire"
+                                caption="msg://jobRequestsTable.hire.candidate"
+                                invoke="hireCandidate"/>
+                        <action id="sendToReserve"
+                                caption="msg://jobRequestsTable.sendToReserve"
+                                invoke="sendToReserve"/>
+                        <action id="excludeFromReserve"
+                                caption="msg://jobRequestsTable.excludeFromReserve"
+                                invoke="excludeFromReserve"/>
+                        <action id="refuseCandidate"
+                                caption="msg://JobRequest.renouncement.2"
+                                invoke="refuseCandidate"/>
+                        <action id="resumeBtn"
+                                caption="msg://resume"
+                                invoke="createResume"
+                                enable="false"/>
+                    </actions>
+                </popupButton>
+            </flowBox>
+            <hbox id="hbox"/>
+            <button id="cardOrTable"
+                    invoke="onCardOrTableClick"/>
+        </hbox>
+        <vbox id="vbox1"
+              expand="vbox2">
+            <vbox id="vbox2">
+                <dataGrid id="jobRequestsTable"
+                          datasource="jobRequestsDs"
+                          frozenColumnCount="2"
+                          height="95%"
+                          selectionMode="MULTI"
+                          sortable="false"
+                          width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="createInterview"
+                                caption="msg://jobRequestsTable.createInterview"
+                                icon="font-icon:CALENDAR_PLUS_O"
+                                invoke="createInterview"/>
+                        <action id="search"
+                                caption="msg://jobRequestsTable.search.candidate"
+                                icon="icons/search.png"
+                                invoke="searchCandidate"/>
+                        <action id="sendToReserve"
+                                caption="msg://jobRequestsTable.sendToReserve"
+                                invoke="sendToReserve"/>
+                        <action id="excludeFromReserve"
+                                caption="msg://jobRequestsTable.excludeFromReserve"
+                                invoke="excludeFromReserve"/>
+                        <action id="createGroupInterview"
+                                caption="msg://jobRequestsTable.createGroupInterview"
+                                invoke="createGroupInterview"/>
+                        <action id="excel"/>
+                    </actions>
+                    <columns>
+                        <column id="viewLater"
+                                property="viewLater"/>
+                        <column id="candidatePersonGroup"
+                                property="candidatePersonGroup.person"
+                                caption="msg://kz.uco.tsadv.modules.personal.model/Person.fullName"/>
+                        <column id="linkedin"
+                                caption="msg://LinkedIn"/>
+                        <column id="contacts"
+                                caption="msg://PersonGroup.personContacts"/>
+                        <column id="personType"
+                                caption="msg://table.column.header.type"
+                                property="candidatePersonGroup.person.type"/>
+                        <column id="isReserved"
+                                property="isReserved"/>
+                        <column id="attachments"
+                                caption="msg://kz.uco.tsadv.core.personal.group/PersonGroup.personAttachment"/>
+                        <column id="requestStatus"
+                                caption="msg://table.column.header.status"
+                                property="requestStatus"/>
+                        <column id="lastStep"
+                                caption="msg://JobRequest.lastStep"/>
+                        <column id="steps"
+                                caption="msg://JobRequest.steps"/>
+                        <column id="competenceMatchString"
+                                property="competenceMatchString"/>
+                    </columns>
+                </dataGrid>
+            </vbox>
+            <vbox align="BOTTOM_LEFT"
+                  expand="frame"
+                  height="190px">
+                <label align="BOTTOM_LEFT"
+                       height="25px"
+                       value="msg://Interview"/>
+                <frame id="frame"
+                       align="BOTTOM_LEFT"
+                       screen="job-request-interview"/>
+            </vbox>
+        </vbox>
+    </layout>
+</window>

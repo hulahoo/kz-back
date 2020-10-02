@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.restintegrationlog.RestIntegrationLogEdit"
+        datasource="restIntegrationLogDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.restintegrationlog">
+    <dsContext>
+        <datasource id="restIntegrationLogDs"
+                    class="kz.uco.tsadv.entity.RestIntegrationLog"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="restIntegrationLogDs">
+            <column width="250px">
+                <field property="login"/>
+                <field property="success"/>
+                <field property="requestId"/>
+                <field property="methodName"/>
+                <field property="params" rows="5"/>
+                <field property="message" rows="7"/>
+                <field property="dateTime"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

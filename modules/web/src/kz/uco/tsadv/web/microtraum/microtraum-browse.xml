@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.microtraum.MicrotraumBrowse"
+        focusComponent="microtraumsTable"
+        lookupComponent="microtraumsTable"
+        messagesPack="kz.uco.tsadv.web.microtraum">
+    <dsContext>
+        <groupDatasource id="microtraumsDs"
+                         class="kz.uco.tsadv.entity.tb.Microtraum"
+                         view="microtraum-view">
+            <query>
+                <![CDATA[select e from tsadv$Microtraum e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="microtraumsTable">
+        <filter id="filter"
+                applyTo="microtraumsTable"
+                datasource="microtraumsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="microtraumsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="managerPerson"/>
+                <column id="reportedPerson"/>
+                <column id="organization"
+                        captionProperty="organization.organization.organizationName"/>
+                <column id="microtraumaDate"/>
+                <column id="microtraumaTime"/>
+                <column id="microtraumaReason"/>
+                <column id="micratraumaConditions"/>
+                <column id="shiftStart"/>
+                <column id="shiftEnd"/>
+            </columns>
+            <rows datasource="microtraumsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="microtraumsTable.create"/>
+                <button id="editBtn"
+                        action="microtraumsTable.edit"/>
+                <button id="removeBtn"
+                        action="microtraumsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

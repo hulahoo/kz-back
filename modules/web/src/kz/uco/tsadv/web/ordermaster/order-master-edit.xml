@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.ordermaster.OrderMasterEdit"
+        datasource="orderMasterDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.ordermaster">
+    <dsContext>
+        <datasource id="orderMasterDs"
+                    class="kz.uco.tsadv.modules.personal.model.OrderMaster"
+                    view="orderMaster.edit">
+            <collectionDatasource id="orderMasterEntityDs"
+                                  property="orderMasterEntities">
+                <collectionDatasource id="entityPropertyDs"
+                                      property="properties"/>
+            </collectionDatasource>
+        </datasource>
+
+        <collectionDatasource id="dicOrderTypeDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicOrderType"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicOrderType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vBox"
+            spacing="true">
+        <vbox id="vBox"
+              expand="tablesVBox"
+              spacing="true">
+            <fieldGroup id="fieldGroup">
+                <column width="300px">
+                    <field property="orderType" datasource="orderMasterDs"
+                           optionsDatasource="dicOrderTypeDs"
+                           captionProperty="langValue"/>
+                </column>
+            </fieldGroup>
+            <vbox id="tablesVBox"
+                  spacing="true"
+                  width="100%">
+                <table id="orderMasterEntityTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="order"/>
+                        <column id="entityLangName"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button action="orderMasterEntityTable.create"/>
+                        <button action="orderMasterEntityTable.edit"/>
+                        <button action="orderMasterEntityTable.remove"/>
+                    </buttonsPanel>
+                    <rows datasource="orderMasterEntityDs"/>
+                </table>
+                <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/OrderMasterEntity.properties" height="100%">
+                    <table id="propertiesTable"
+                           editable="true"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="edit"/>
+                        </actions>
+                        <columns>
+                            <column id="langName"
+                                    editable="false"/>
+                        </columns>
+                        <rows datasource="entityPropertyDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

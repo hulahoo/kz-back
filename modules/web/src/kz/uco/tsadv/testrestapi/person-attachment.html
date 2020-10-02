@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Person attachment CRUD</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en">en</input>
+                <input type="radio" name="lang" value="ru" checked>ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список записей "Приложения"
+    </div>
+    <table>
+        <tr>
+            <td/>
+            <td/>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getAttachments()" value="getUserPerson : attachments">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="attachments"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Создание записи "Приложения"
+    </div>
+    <table>
+        <tr>
+            <td> * Category:</td>
+            <td>
+                <select id="createCategory">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Description:</td>
+            <td>
+                <textarea id="createDescription"></textarea>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * File:</td>
+            <td>
+                <input type="file" id="createFile"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="createAttachment()" value="createAttachment">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="createResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Обновление записи "Приложения"
+    </div>
+    <table>
+        <tr>
+            <td> * Id:</td>
+            <td>
+                <input id="updateId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Category:</td>
+            <td>
+                <select id="updateCategory">
+
+                </select>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Description:</td>
+            <td>
+                <textarea id="updateDescription"></textarea>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * File:</td>
+            <td>
+                <input type="file" id="updateFile"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="updateAttachment()" value="updateAttachment">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="updateResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Удаление записи "Приложения"
+    </div>
+    <table>
+        <tr>
+            <td> * Id:</td>
+            <td>
+                <input id="deleteId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="deleteAttachment()" value="deleteAttachment">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="deleteResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var access_token;
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+
+                fillSelects();
+            });
+    }
+
+    function fillSelects() {
+        var lang = $("input[name=lang]:checked").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/getAttachmentCategories?lang=" + lang,
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var types = JSON.parse(res);
+                var inner = '<option value="">select value</option>';
+                types.forEach(function (e) {
+                    inner += ('<option value="' + e.id + '">' + e.name + '</option>');
+                });
+
+                document.getElementById("createCategory").innerHTML = inner;
+                document.getElementById("updateCategory").innerHTML = inner;
+            });
+    }
+
+    function getAttachments() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUserPerson?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                var attachments = JSON.parse(res).attachments;
+                $('#attachments').text(JSON.stringify(attachments));
+            });
+    }
+
+    function createAttachment() {
+        var data = {};
+        jQuery.extend(data, personAttachmentModel);
+        data.attachment.category = $("#createCategory").val();
+        data.attachment.description = $("#createDescription").val();
+
+        var file = $("#createFile").get(0).files[0];
+        var fileData = new FormData();
+        fileData.append("fileName", file.name); // does not required
+        fileData.append("file", file); // required
+
+        $.ajax(config.appUrl + config.fileUrl + "/",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                processData: false,
+                contentType: false,
+                data: fileData
+            })
+            .success(function (res) {
+                var uploadedFile = res;
+                data.attachment.file = uploadedFile.id;
+                data.attachment.filename = uploadedFile.name;
+
+                $.ajax(config.appUrl + config.serviceUrl + "/createAttachment",
+                    {
+                        type: "POST",
+                        headers: {
+                            "Authorization": "Bearer " + access_token,
+                        },
+                        contentType: "application/json",
+                        data: JSON.stringify(data)
+                    })
+                    .success(function (res) {
+                        $("#createResult").text(JSON.stringify(res));
+                    });
+            });
+    }
+
+    function updateAttachment() {
+        var data = {};
+        jQuery.extend(data, personAttachmentModel);
+        jQuery.extend(data, updateDeleteModel);
+
+        data.id = $("#updateId").val();
+        data.attachment.category = $("#updateCategory").val();
+        data.attachment.description = $("#updateDescription").val();
+
+        if ($("#updateFile").get(0).files[0] == undefined) {
+            $.ajax(config.appUrl + config.serviceUrl + "/updateAttachment",
+                {
+                    type: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + access_token,
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify(data)
+                })
+                .success(function (res) {
+                    $("#updateResult").text(JSON.stringify(res));
+                });
+        }
+        else {
+            var file = $("#updateFile").get(0).files[0];
+            var fileData = new FormData();
+            fileData.append("fileName", file.name); // does not required
+            fileData.append("file", file); // required
+
+            $.ajax(config.appUrl + config.fileUrl + "/",
+                {
+                    type: "POST",
+                    headers: {
+                        "Authorization": "Bearer " + access_token,
+                    },
+                    processData: false,
+                    contentType: false,
+                    data: fileData
+                })
+                .success(function (res) {
+                    var uploadedFile = res;
+                    data.attachment.file = uploadedFile.id;
+                    data.attachment.filename = uploadedFile.name;
+
+                    $.ajax(config.appUrl + config.serviceUrl + "/updateAttachment",
+                        {
+                            type: "POST",
+                            headers: {
+                                "Authorization": "Bearer " + access_token,
+                            },
+                            contentType: "application/json",
+                            data: JSON.stringify(data)
+                        })
+                        .success(function (res) {
+                            $("#updateResult").text(JSON.stringify(res));
+                        });
+                });
+        }
+        /* */
+    }
+
+    function deleteAttachment() {
+        var data = {};
+        jQuery.extend(data, updateDeleteModel);
+
+        data.id = $("#deleteId").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/deleteAttachment",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#deleteResult").text(JSON.stringify(res));
+            });
+    }
+    /*]>*/
+
+</script>
+</body>
+</html>

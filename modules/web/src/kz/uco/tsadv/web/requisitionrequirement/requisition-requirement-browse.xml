@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.requisitionrequirement.RequisitionRequirementBrowse"
+        focusComponent="requisitionRequirementsTable"
+        lookupComponent="requisitionRequirementsTable"
+        messagesPack="kz.uco.tsadv.web.requisitionrequirement">
+    <dsContext>
+        <groupDatasource id="requisitionRequirementsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.RequisitionRequirement"
+                         view="requisitionRequirement-view">
+            <query>
+                <![CDATA[select e from tsadv$RequisitionRequirement e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="requisitionRequirementsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="requisitionRequirementsTable"
+                datasource="requisitionRequirementsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="requisitionRequirementsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="requisition"/>
+                <column id="requirement"
+                        captionProperty="requirement.questionText1"/>
+                <column id="requirementLevel"
+                        captionProperty="requirementLevel.answerText1"/>
+                <column id="critical"/>
+            </columns>
+            <rows datasource="requisitionRequirementsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="requisitionRequirementsTable.create"/>
+                <button id="editBtn"
+                        action="requisitionRequirementsTable.edit"/>
+                <button id="removeBtn"
+                        action="requisitionRequirementsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

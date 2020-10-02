@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.frames.RequisitionGroupInterview">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <split width="100%" height="100%">
+            <table id="groupInterviewsTable" width="100%" height="100%">
+                <actions>
+                    <action id="edit"/>
+                </actions>
+                <columns>
+                    <column id="requisitionHiringStep.hiringStep.stepName" />
+                    <column id="interviewDate"/>
+                    <column id="timeFrom"/>
+                    <column id="timeTo"/>
+                    <column id="interviewStatus" visible="false"/>
+                    <column id="mainInterviewerPersonGroup"
+                            captionProperty="mainInterviewerPersonGroup.personFioWithEmployeeNumber"/>
+                    <column id="place"/>
+                    <column id="groupDraftCount" caption="msg://InterviewStatus.DRAFT"/>
+                    <column id="groupOnApprovalCount" caption="msg://InterviewStatus.ON_APPROVAL"/>
+                    <column id="groupPlannedCount" caption="msg://InterviewStatus.PLANNED"/>
+                    <column id="groupCompletedCount" caption="msg://InterviewStatus.COMPLETED"/>
+                    <column id="groupFailedCount" caption="msg://InterviewStatus.FAILED"/>
+                    <column id="groupCancelledCount" caption="msg://InterviewStatus.CANCELLED"/>
+                    <column id="groupOnCancellationCount"
+                            caption="msg://InterviewStatus.ON_CANCELLATION"/>
+                </columns>
+                <rows datasource="groupInterviewsDs"/>
+                <buttonsPanel>
+                    <button action="groupInterviewsTable.edit"
+                            caption="mainMsg://table.btn.empty"/>
+                </buttonsPanel>
+            </table>
+            <table width="100%" height="100%">
+                <columns>
+                    <column id="jobRequest.candidatePersonGroup"
+                            captionProperty="jobRequest.candidatePersonGroup.person.fullName"/>
+                    <column id="interviewStatus"/>
+                    <column id="interviewReason"/>
+                    <column id="reason"/>
+                    <column id="comment" maxTextLength="30"/>
+                </columns>
+                <rows datasource="groupInterviewChildrenDs"/>
+            </table>
+        </split>
+    </layout>
+</window>

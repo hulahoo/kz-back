@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfAssignment">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <scrollBox id="scrollBox"
+                   height="100%">
+            <vbox id="assignmentScroll"
+                  height="100%">
+                <hbox id="hbox"
+                      spacing="true"
+                      width="100%">
+                    <fieldGroup id="fieldGroup"
+                                datasource="assignmentHistoryDs"
+                                width="100%">
+                        <column id="column1"
+                                width="100%">
+                            <field id="organizationName"
+                                   editable="false"
+                                   property="organizationGroup.organization.organizationName"/>
+                            <field id="positionName"
+                                   editable="false"
+                                   property="positionGroup.position.positionFullName"/>
+                            <field id="jobName"
+                                   editable="false"
+                                   property="positionGroup.position.jobGroup.job.jobName"/>
+                            <field id="gradeName"
+                                   editable="false"
+                                   property="gradeGroup.grade.gradeName"/>
+                            <field id="managerFlag"
+                                   editable="false"
+                                   property="positionGroup.position.managerFlag"/>
+                            <field id="substituteEmployee"
+                                   captionProperty="fullName"
+                                   editable="false"
+                                   property="substituteEmployee"/>
+                        </column>
+                        <column id="column2"
+                                width="100%">
+                            <field id="payroll.langValue"
+                                   editable="false"
+                                   property="positionGroup.position.payroll.langValue"/>
+                            <field id="fte"
+                                   editable="false"
+                                   property="fte"/>
+                            <field id="location.langValue"
+                                   editable="false"
+                                   property="location.langValue"/>
+                            <field id="assignmentStatus"
+                                   editable="false"
+                                   property="assignmentStatus"/>
+                            <field id="ruleName"
+                                   editable="false"
+                                   property="positionGroup.position.gradeRule.ruleName"/>
+                            <field id="orderNumber"
+                                   editable="false"
+                                   property="orderNumber"/>
+                            <field id="orderDate"
+                                   editable="false"
+                                   property="orderDate"/>
+                        </column>
+                    </fieldGroup>
+                </hbox>
+                <hbox id="buttonsHbox"
+                      spacing="true">
+                    <button id="excel"
+                            action="historyTable.excel"
+                            align="BOTTOM_LEFT"/>
+                </hbox>
+                <groupBox id="historyGroupBox"
+                          caption="msg://historyBox">
+                    <table id="historyTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="excel"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/excel.png"/>
+                        </actions>
+                        <columns>
+                            <column id="startDate" generator="generateDate"/>
+                            <column id="endDate"/>
+                            <column id="organizationGroup.organization.organizationName"/>
+                            <column id="positionGroup.position.positionFullName"/>
+                            <column id="positionGroup.position.jobGroup.job.jobName"/>
+                            <column id="gradeGroup.grade.gradeName"/>
+                            <column id="substituteEmployee.fullName"
+                                    caption="msg://kz.uco.tsadv.modules.personal.model/AssignmentExt.substituteEmployee"/>
+                            <column id="temporaryEndDate"/>
+                            <column id="positionGroup.position.managerFlag"/>
+                            <column id="positionGroup.position.payroll.langValue"/>
+                            <column id="fte"/>
+                            <column id="location.langValue"/>
+                            <column id="assignmentStatus"/>
+                            <column id="updatedBy"/>
+                        </columns>
+                        <rows datasource="assignmentHistoryDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

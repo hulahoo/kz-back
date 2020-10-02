@@ -1,0 +1,6 @@
+@import "base-ext";
+@import "base-ext-defaults";
+
+@mixin kz_uco_tsadv {
+  @include kz_uco_tsadv-base-ext;
+}

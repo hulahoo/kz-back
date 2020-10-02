@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.calculationSheet.CalculationSheet"
+        messagesPack="kz.uco.tsadv.web.modules.personal.calculationSheet">
+    <dsContext>
+        <collectionDatasource id="dicLanguagesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicLanguage">
+            <query>
+                <![CDATA[select e from tsadv$DicLanguage e
+where e.code <> 'KZ']]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="250"
+                width="400"/>
+    <layout spacing="true">
+        <vbox id="vbox"
+              spacing="true">
+            <hbox spacing="true"
+                  width="100%">
+                <label id="dateFromLabel" align="MIDDLE_CENTER"
+                       value="msg://DateFrom"
+                       width="60px"/>
+                <lookupField id="monthsStartField" nullOptionVisible="false" width="110px" pageLength="12"/>
+                <dateField id="yearsStartField" resolution="YEAR" width="80px" dateFormat="yyyy"/>
+            </hbox>
+            <hbox spacing="true"
+                  width="100%">
+                <label id="dateToLabel" align="MIDDLE_CENTER"
+                       value="msg://DateTo"
+                       width="60px"/>
+                <lookupField id="monthsEndField" nullOptionVisible="false" width="110px" pageLength="12"/>
+                <dateField id="yearsEndField" resolution="YEAR" width="80px" dateFormat="yyyy"/>
+            </hbox>
+            <lookupField id="lang"
+                         align="MIDDLE_CENTER"
+                         caption="msg://language"
+                         optionsDatasource="dicLanguagesDs"
+                         required="true"/>
+            <button id="report"
+                    align="MIDDLE_CENTER"
+                    caption="msg://reportSheed"
+                    invoke="report"/>
+        </vbox>
+    </layout>
+</window>

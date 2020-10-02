@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://StandardSchedule.editorCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.standardschedule.StandardScheduleEdit"
+        datasource="scheduleDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="scheduleDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.StandardSchedule"
+                    view="schedule.view">
+            <collectionDatasource id="standardOffsetsDs"
+                                  property="standardOffsets"/>
+            <collectionDatasource id="standardShiftsDs"
+                                  property="standardShifts"/>
+        </datasource>
+        <collectionDatasource id="baseStandardSchedulesDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.StandardSchedule"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$StandardSchedule e where e.scheduleType = 'NORMATIVE']]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="calendarsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.Calendar"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$Calendar e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabs"
+            spacing="true">
+        <tabSheet id="tabs">
+            <tab id="mainInfo"
+                 caption="msg://ScheduleTab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="scheduleDs">
+                    <column id="columnId" width="250px">
+                        <field id="scheduleName" property="scheduleName"/>
+                        <field id="description" property="description"/>
+                        <field id="startDate"
+                               property="startDate"/>
+                        <field id="endDate"
+                               property="endDate"/>
+                        <field id="period"
+                               property="period"/>
+                        <field id="scheduleType"
+                               property="scheduleType"/>
+                        <field captionProperty="scheduleName"
+                               optionsDatasource="baseStandardSchedulesDs"
+                               id="baseStandardSchedule" property="baseStandardSchedule"/>
+                        <field captionProperty="calendar"
+                               optionsDatasource="calendarsDs"
+                               id="calendar"
+                               property="calendar"/>
+                        <field id="isHolidayWorkDay"
+                               property="isHolidayWorkDay"/>
+                    </column>
+                </fieldGroup>
+            </tab>
+            <tab id="standardOffsets"
+                 caption="msg://kz.uco.tsadv.modules.timesheet.model/StandardSchedule.standardOffsets"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="standardOffsetsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="offsetDisplay"/>
+                        <column id="offsetDisplayDays"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="standardOffsetsDs"/>
+                    <buttonsPanel>
+                        <button action="standardOffsetsTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="standardOffsetsTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button action="standardOffsetsTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="standardShifts"
+                 caption="msg://kz.uco.tsadv.modules.timesheet.model/StandardSchedule.standardShifts"
+                 margin="true,false,false,false">
+                <table id="standardShiftsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="edit"/>
+                    </actions>
+                    <columns>
+                        <column id="numberInShift"/>
+                        <column id="shift"
+                                captionProperty="shift.name"/>
+                        <column id="shiftDisplayDay"/>
+                    </columns>
+                    <rows datasource="standardShiftsDs"/>
+                    <buttonsPanel>
+                        <button action="standardShiftsTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

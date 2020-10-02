@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://AssignmentSchedule.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.assignmentschedule.AssignmentScheduleBrowse"
+        focusComponent="tree"
+        lookupComponent="tree">
+    <dsContext>
+        <hierarchicalDatasource id="hierarchyElementsDs"
+                                class="kz.uco.tsadv.entity.TimecardHierarchy"
+                                datasourceClass="kz.uco.tsadv.datasource.TimecardHierarchyDatasource"
+                                hierarchyProperty="parent"/>
+        <collectionDatasource id="timesheetDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.Timesheet"
+                              datasourceClass="kz.uco.tsadv.datasource.TimesheetDatasource"
+                              maxResults="15"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="split">
+        <split id="split"
+               orientation="horizontal"
+               pos="20"
+               width="100%">
+            <vbox height="100%"
+                  expand="tree"
+                  margin="false,true,false,false">
+                <hbox spacing="true" expand="cleanSearch">
+                    <linkButton id="search"
+                                caption="msg://findPerson"
+                                icon="font-icon:SEARCH"
+                                invoke="openPersonLookup"/>
+                    <linkButton id="cleanSearch"
+                                caption="msg://refresh"
+                                align="TOP_RIGHT"
+                                icon="REFRESH"
+                                invoke="cleanSearch"/>
+                </hbox>
+                <tree id="tree"
+                      stylename="b-tree"
+                      width="100%">
+                    <treechildren captionProperty="name"
+                                  datasource="hierarchyElementsDs"/>
+                </tree>
+            </vbox>
+            <vbox id="paramsBox" height="100%" expand="cssLayout">
+                <hbox expand="items"
+                      spacing="true"
+                      width="100%">
+                    <hbox id="items"
+                          expand="offsetsBox"
+                          spacing="true">
+                        <hbox margin="true"
+                              spacing="true">
+                            <dateField id="month"
+                                        align="MIDDLE_LEFT"
+                                        resolution="DAY"/>
+                            <label align="MIDDLE_LEFT"
+                                   value="msg://kz.uco.tsadv.modules.timesheet.model/ScheduleHeader.schedule"/>
+                        </hbox>
+                        <flowBox id="offsetsBox"
+                                 margin="true"
+                                 spacing="true"/>
+                    </hbox>
+                    <hbox align="TOP_RIGHT"
+                          margin="true"
+                          spacing="true">
+                        <hbox spacing="true" align="BOTTOM_CENTER">
+                            <dateField id="dateField" resolution="DAY"/>
+                            <textField id="searchByNumber"
+                                       width="100px"
+                            description="msg://findPersonByCode"
+                            align="BOTTOM_RIGHT"/>
+                            <linkButton id="searchButton"
+                                        invoke="searchPersonByCode"
+                                        icon="font-icon:SEARCH"
+                                        description="msg://findPersonByCode"
+                                        align="MIDDLE_LEFT"/>
+                        </hbox>
+                        <cssLayout id="trashLayout"/>
+                    </hbox>
+                </hbox>
+                <vbox id="cssLayout" width="100%"
+                      margin="false"/>
+            </vbox>
+        </split>
+    </layout>
+</window>

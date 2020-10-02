@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonGroupReview.caption"
+        class="kz.uco.tsadv.web.modules.personal.persongroup.PersonGroupReviews">
+    <dsContext>
+        <groupDatasource id="personGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         view="personGroup.browse">
+            <query>
+                <![CDATA[select e
+                           from base$PersonGroupExt e
+                           join e.list p
+                           left join e.assignments a
+                          where :session$systemDate between p.startDate and p.endDate
+                            and (p.type.code <> 'EMPLOYEE' OR :session$systemDate between a.startDate and a.endDate)
+                            ]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="sexDs"
+                              class="kz.uco.base.entity.dictionary.DicSex">
+            <query>
+                <![CDATA[select e
+                         from base$DicSex e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="positionGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                              view="positionGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from base$PositionGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.positionGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 2
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$JobGroup e join e.list j
+                         where :session$systemDate between j.startDate and j.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="gradeGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.GradeGroup"
+                              view="gradeGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$GradeGroup e join e.list g
+                         where :session$systemDate between g.startDate and g.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="locationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation">
+            <query>
+                <![CDATA[select e
+                         from base$DicLocation e
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicPersonType">
+            <query>
+                <![CDATA[select e
+                         from tsadv$DicPersonType e
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                modal="true"
+                width="900"/>
+    <layout expand="personGroupsTable"
+            spacing="true">
+        <groupBox caption="mainMsg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="personGroupsTable"
+                    width="100%">
+            <actions>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="userImage"
+                        caption="mainMsg://Photo"
+                        generator="generateUserImageCell"
+                        sortable="false"/>
+                <column id="person.fioWithEmployeeNumber"
+                        link="true"
+                        linkInvoke="redirectReview"/>
+                <column id="person.nationalIdentifier"/>
+                <column id="person.dateOfBirth"/>
+                <column id="person.sex.langValue"/>
+                <column id="person.hireDate"/>
+                <column id="currentAssignment.organizationGroup.organization.organizationName"/>
+                <column id="currentAssignment.positionGroup.position.positionName"/>
+                <column id="currentAssignment.jobGroup.job.jobName"/>
+                <column id="currentAssignment.gradeGroup.grade.gradeName"/>
+                <column id="currentAssignment.location.langValue"/>
+                <column id="person.type"/>
+                <column id="likeCount"
+                        caption="msg://likeCount"/>
+                <column id="disLikeCount"
+                        caption="msg://disLikeCount"/>
+            </columns>
+            <rows datasource="personGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel>
+                <button action="personGroupsTable.refresh"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

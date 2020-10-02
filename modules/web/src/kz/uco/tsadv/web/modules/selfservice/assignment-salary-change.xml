@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.selfservice.AssignmentSalaryChange"
+        focusComponent="assignmentsTable"
+        lookupComponent="assignmentsTable">
+    <dsContext>
+        <hierarchicalDatasource id="teamDs"
+                                allowCommit="false"
+                                class="kz.uco.tsadv.entity.MyTeamNew"
+                                hierarchyProperty="parent">
+            <query>
+                <![CDATA[select e
+                        from tsadv$MyTeamNew e where 1=2]]>
+            </query>
+        </hierarchicalDatasource>
+        <collectionDatasource id="procInstancesDs"
+                              class="com.haulmont.bpm.entity.ProcInstance">
+            <query>
+                <![CDATA[select e from bpm$ProcInstance e]]>
+            </query>
+        </collectionDatasource>
+        <valueCollectionDatasource id="requestDs"
+                                   maxResults="20">
+            <query>
+                <![CDATA[select e.requestNumber,'assignment' as name,
+ e.personGroup.id, e.dateFrom, e.status 
+from tsadv$AssignmentRequest e
+where e.createdBy in ( select a.login from base$UserExt a
+                      where a.id = :session$userId )
+union
+select asr.requestNumber,'assignmentSalary' as name,
+ asr.personGroup.id, asr.dateFrom, asr.status
+from tsadv$AssignmentSalaryRequest asr
+where asr.createdBy in ( select au.login from base$UserExt au
+                      where au.id = :session$userId )
+union
+select sr.requestNumber,'salaryRequest' as name,
+ l.personGroup.id, sr.startDate, sr.status
+from tsadv$SalaryRequest sr
+join sr.assignmentGroup.list l
+where sr.createTs between l.startDate and l.endDate
+    and l.primaryFlag = 'TRUE'
+    and sr.createdBy in ( select aus.login from base$UserExt aus
+                      where aus.id = :session$userId )
+union
+select e.requestNumber,'temporaryTranslation' as name,
+ e.personGroup.id, e.startDate, e.status
+from tsadv$TemporaryTranslationRequest e
+where e.createdBy in ( select a.login from base$UserExt a
+                      where a.id = :session$userId )]]>
+            </query>
+            <properties>
+                <property datatype="long"
+                          name="requestNumber"/>
+                <property datatype="string"
+                          name="name"/>
+                <property datatype="uuid"
+                          name="personGroupId"/>
+                <property datatype="date"
+                          name="dateFrom"/>
+                <property class="kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus"
+                          name="status"/>
+            </properties>
+        </valueCollectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <popupButton id="popupButton"
+                     caption="msg://popupButton"
+                     showActionIcons="true">
+            <actions>
+                <action id="salaryRequest"
+                        caption="msg://salaryRequestCreate"
+                        icon="BITCOIN"
+                        invoke="onSalaryRequestCreate"/>
+                <action id="assignmentRequest"
+                        caption="msg://assignment"
+                        icon="HOSPITAL_O"
+                        invoke="onAssignmentRequestCreate"/>
+                <action id="assignmentSalaryRequest"
+                        caption="msg://assignmentSalary"
+                        invoke="onAssignmentSalaryRequestCreate"/>
+                <action id="temporaryTranslationRequestCreate"
+                        caption="msg://temporaryTranslation"
+                        invoke="onTemporaryTranslationRequestCreate"/>
+            </actions>
+        </popupButton>
+        <tabSheet id="tabSheet">
+            <tab id="data"
+                 caption="msg://data"
+                 expand="assignmentsTable"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <hbox id="searchHBox"
+                      spacing="true">
+                    <label value="msg://fio"/>
+                    <textField id="searchTextField"/>
+                    <button id="searchBtn"
+                            icon="SEARCH"
+                            invoke="searchBtn"/>
+                </hbox>
+                <treeTable id="assignmentsTable"
+                           width="100%">
+                    <columns>
+                        <column id="fullName"
+                                caption="msg://kz.uco.tsadv.modules.personal.model/Person.group"
+                                link="true"
+                                linkInvoke="openTeamMemberView"/>
+                        <column id="positionNameLang1"
+                                caption="msg://kz.uco.tsadv.modules.personal.model/Position.group"/>
+                        <column id="organizationNameLang1"
+                                caption="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.group"/>
+                        <column id="gradeName"
+                                caption="Grade"/>
+                    </columns>
+                    <rows datasource="teamDs"/>
+                </treeTable>
+            </tab>
+            <tab id="request"
+                 caption="msg://request"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="requestTable"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="requestNumber"
+                                caption="№"
+                                link="true"
+                                linkInvoke="openRequest"/>
+                        <column id="name"
+                                caption="msg://nameRequest"
+                                generator="getName"/>
+                        <column id="personGroupId"
+                                caption="msg://employee"
+                                generator="getFullName"/>
+                        <column id="dateFrom"
+                                caption="msg://dateFrom"/>
+                        <column id="status"
+                                caption="msg://status"/>
+                    </columns>
+                    <rows datasource="requestDs"/>
+                    <rowsCount/>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

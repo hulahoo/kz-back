@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.personalprotectioninspector.PersonalProtectionInspectorEdit"
+        datasource="personalProtectionInspectorDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.personalprotectioninspector">
+    <dsContext>
+        <datasource id="personalProtectionInspectorDs"
+                    class="kz.uco.tsadv.modules.personprotection.PersonalProtectionInspector"
+                    view="personalProtectionInspector.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personalProtectionInspectorDs">
+            <column width="250px">
+                <field property="employee" captionProperty="personFioWithEmployeeNumber"/>
+                <field property="organizationGroup" captionProperty="organizationName"/>
+                <field property="assignmentDate"/>
+                <field property="assignmentOrder"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

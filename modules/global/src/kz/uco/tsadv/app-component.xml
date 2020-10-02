@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
+               dependsOn="com.haulmont.reports, com.haulmont.charts, com.haulmont.fts, com.haulmont.addon.restapi, kz.uco.base, com.haulmont.bpm, kz.uco.uactivity">
+    <module blocks="*"
+            name="global">
+        <artifact appJar="true"
+                  name="tsadv-global"/>
+        <property name="cuba.persistenceConfig"
+                  value="+kz/uco/tsadv/persistence.xml"/>
+        <property name="cuba.metadataConfig"
+                  value="+kz/uco/tsadv/metadata.xml"/>
+        <property name="cuba.viewsConfig"
+                  value="+kz/uco/tsadv/views.xml"/>
+    </module>
+    <module blocks="core"
+            dependsOn="global"
+            name="core">
+        <artifact appJar="true"
+                  name="tsadv-core"/>
+        <artifact classifier="db"
+                  configuration="dbscripts"
+                  ext="zip"
+                  name="tsadv-core"/>
+        <property name="cuba.springContextConfig"
+                  value="+kz/uco/tsadv/spring.xml"/>
+        <property name="cuba.ftsConfig"
+                  value="+kz/uco/tsadv/fts.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+kz.uco.tsadv.core"/>
+    </module>
+    <module blocks="web,desktop"
+            dependsOn="global"
+            name="gui">
+        <artifact appJar="true"
+                  name="tsadv-gui"/>
+    </module>
+    <module blocks="web"
+            dependsOn="gui"
+            name="web">
+        <artifact appJar="true"
+                  name="tsadv-web"/>
+        <artifact classifier="web"
+                  configuration="webcontent"
+                  ext="zip"
+                  name="tsadv-web"/>
+        <artifact configuration="themes"
+                  name="tsadv-web" ext="jar"/>
+        <property name="cuba.springContextConfig"
+                  value="+kz/uco/tsadv/web-spring.xml"/>
+        <property name="cuba.dispatcherSpringContextConfig"
+                  value="+kz/uco/tsadv/dispatcher-spring.xml"/>
+        <property name="cuba.rest.servicesConfig"
+                  value="+kz/uco/tsadv/rest-services.xml"/>
+        <property name="cuba.windowConfig"
+                  value="+kz/uco/tsadv/web-screens.xml"/>
+        <property name="cuba.menuConfig"
+                  value="+kz/uco/tsadv/web-menu.xml"/>
+        <property name="cuba.permissionConfig"
+                  value="+kz/uco/tsadv/web-permissions.xml"/>
+        <property name="cuba.mainMessagePack"
+                  value="+kz.uco.tsadv.web kz.uco.tsadv.global kz.uco.tsadv.core"/>
+<!--        <property name="cuba.restSpringContextConfig"-->
+<!--                  value="+kz/uco/tsadv/rest-dispatcher-spring.xml"/>-->
+    </module>
+</app-component>

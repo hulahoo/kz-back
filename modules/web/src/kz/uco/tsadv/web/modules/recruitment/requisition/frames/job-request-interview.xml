@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.frames.JobRequestInterview">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <table id="interviewTable"
+               height="100%"
+               width="100%"
+               sortable="false"
+               showSelection="false">
+            <actions>
+                <action id="edit"/>
+            </actions>
+            <columns>
+                <column id="requisitionHiringStep"
+                        captionProperty="requisitionHiringStep.hiringStep.stepName"
+                        generator="generateInterviewLink"
+                        link="true"/>
+                <column id="interviewStatus"/>
+                <column id="cause" caption="msg://cause" generator="generateCause"/>
+                <column id="interviewDate"/>
+                <column id="timeFrom"/>
+                <column id="timeTo"/>
+                <column id="questionnaireMatchPercent"
+                        generator="generateQuestionnairesLink"/>
+                <column id="comment"
+                        maxTextLength="30"/>
+                <column id="totalScore" generator="generateScore" caption="msg://interview.question.score"/>
+            </columns>
+            <rows datasource="interviewsDs"/>
+        </table>
+    </layout>
+</window>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Test.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.test.TestBrowse"
+        focusComponent="testsTable"
+        lookupComponent="testsTable">
+    <dsContext>
+        <collectionDatasource id="testsDs"
+                              class="kz.uco.tsadv.modules.learning.model.Test"
+                              view="test.browse">
+            <query>
+                <![CDATA[select e from tsadv$Test e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="testsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="testsTable"
+                datasource="testsDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="testsTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="excel"/>
+                <action id="publish"
+                        invoke="publishBtnClick"
+                        trackSelection="true"/>
+            </actions>
+            <columns>
+                <column id="name"/>
+                <column id="description"
+                        maxTextLength="60"/>
+                <column id="type.langValue"
+                        caption="msg://kz.uco.tsadv.modules.learning.model/Test.type"/>
+                <column id="active"/>
+                <column id="maxAttempt"/>
+                <column id="daysBetweenAttempts"/>
+                <column id="timer"/>
+                <column id="sectionOrder"/>
+                <column id="targetScore"/>
+                <column id="showResults"/>
+                <column id="showSectionNewPage"/>
+                <column id="questionPerPage"/>
+            </columns>
+            <rows datasource="testsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="testsTable.create"/>
+                <button id="editBtn"
+                        action="testsTable.edit"/>
+                <button id="removeBtn"
+                        action="testsTable.remove"/>
+                <button id="excel"
+                        action="testsTable.excel"/>
+                <button id="publishButton"
+                        action="testsTable.publish"
+                        caption="msg://publish.btn"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

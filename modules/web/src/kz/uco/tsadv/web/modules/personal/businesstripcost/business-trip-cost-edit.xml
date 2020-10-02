@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://BusinessTripCost.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.businesstripcost.BusinessTripCostEdit"
+        datasource="businessTripCostDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="businessTripCostDs"
+                    class="kz.uco.tsadv.modules.personal.model.BusinessTripCost"
+                    view="businessTripCost-view"/>
+        <collectionDatasource id="dicCurrenciesTypeDs"
+                              class="kz.uco.base.entity.dictionary.DicCurrency"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from base$DicCurrency e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="businessTripCostDs">
+            <column width="470px">
+                <field property="costType"/>
+                <field property="currency"
+                       id="currency"
+                       optionsDatasource="dicCurrenciesTypeDs"/>
+                <field property="amount"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

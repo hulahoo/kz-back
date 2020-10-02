@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicassignmentcategory.DicAssignmentCategoryBrowse"
+        focusComponent="dicAssignmentCategoriesTable"
+        lookupComponent="dicAssignmentCategoriesTable"
+        messagesPack="kz.uco.tsadv.web.dicassignmentcategory">
+    <dsContext>
+        <groupDatasource id="dicAssignmentCategoriesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicAssignmentCategory"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAssignmentCategory e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAssignmentCategoriesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAssignmentCategoriesTable"
+                datasource="dicAssignmentCategoriesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAssignmentCategoriesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="order"/>
+            </columns>
+            <rows datasource="dicAssignmentCategoriesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAssignmentCategoriesTable.create"/>
+                <button id="editBtn"
+                        action="dicAssignmentCategoriesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAssignmentCategoriesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,1 @@
+alter table TSADV_ASSIGNMENT_REQUEST add column SUBSTITUTED_EMPLOYEE_ID uuid ;

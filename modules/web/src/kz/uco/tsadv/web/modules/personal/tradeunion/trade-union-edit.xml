@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.tradeunion.TradeUnionEdit"
+        datasource="tradeUnionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.tradeunion">
+    <dsContext>
+        <datasource id="tradeUnionDs"
+                    class="kz.uco.tsadv.modules.personal.model.TradeUnion"
+                    view="tradeUnionOnPersonCard"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="tradeUnionDs">
+            <column width="250px">
+                <field property="dicTradeUnion"
+                       caption="msg://dicTradeUnion"/>
+                <field property="joingTradeUnion"
+                       caption="msg://joingTradeUnion"/>
+                <field property="dateTo"
+                       caption="msg://kz.uco.tsadv.web.modules.personal.person.frames/dateTo"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

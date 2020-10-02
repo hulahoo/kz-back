@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://learning.path.card"
+        class="kz.uco.tsadv.web.modules.learning.learningpath.LearningPathCard">
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <grid id="grid"
+              height="100%"
+              spacing="true"
+              width="100%">
+            <columns>
+                <column/>
+                <column flex="3.0"/>
+            </columns>
+            <rows>
+                <row>
+                    <cssLayout>
+                        <htmlBox id="lpCardLeftMenu"
+                                 template="lp-card-menu"/>
+                    </cssLayout>
+                    <tabSheet id="tabSheet"
+                              height="100%"
+                              stylename="course-card-tabs">
+                        <tab id="info"
+                             caption="msg://learning.path.main.data"
+                             margin="true" expand="scroll">
+                            <hbox width="100%" margin="false,false,true,false">
+                                <hbox align="MIDDLE_LEFT" spacing="true">
+                                    <linkButton id="defaultMode" caption="Default" stylename="tl-mode-link"/>
+                                    <linkButton id="timeLineMode" caption="TimeLine" stylename="tl-mode-link"/>
+                                </hbox>
+                                <hbox id="colourPicker" align="MIDDLE_RIGHT" spacing="true">
+                                    <linkButton stylename="tl-light" invoke="lightTimeLine"/>
+                                    <linkButton stylename="tl-dark" invoke="darkTimeLine"/>
+                                </hbox>
+                            </hbox>
+
+                            <scrollBox id="scroll" height="100%" stylename="course-info bt-scroll full-height br5"
+                                       width="100%">
+                                <vbox id="learningPathVBox" spacing="true">
+                                </vbox>
+                                <cssLayout id="timeLine" width="100%" height="100%" stylename="timeline" responsive="true">
+                                </cssLayout>
+                            </scrollBox>
+                        </tab>
+                        <tab id="review"
+                             caption="msg://learning.path.assess"
+                             expand="reviewScroll"
+                             margin="true">
+                            <scrollBox id="reviewScroll" stylename="bt-scroll">
+                                <vbox id="courseReviewVBox"/>
+                            </scrollBox>
+                            <hbox spacing="true"
+                                  stylename="cc-review-form"
+                                  width="100%" margin="true" expand="gridCourseReviewCreate">
+                                <grid id="gridCourseReviewCreate" spacing="true">
+                                    <columns>
+                                        <column/>
+                                        <column flex="3.0"/>
+                                    </columns>
+                                    <rows>
+                                        <row>
+                                            <embedded id="personImage"
+                                                      height="100px"
+                                                      stylename="b-user-image-edit"
+                                                      width="100px"/>
+                                            <vbox id="reviewForm"
+                                                  spacing="true"/>
+                                        </row>
+                                    </rows>
+                                </grid>
+                            </hbox>
+                        </tab>
+                    </tabSheet>
+                </row>
+            </rows>
+        </grid>
+    </layout>
+</window>

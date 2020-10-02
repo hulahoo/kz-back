@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfCourse"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <table id="enrollmentsApprovedTable"
+               width="100%">
+            <columns>
+                <column id="course.category.langValue"/>
+                <column id="course.name"/>
+                <column id="status"/>
+                <column id="date"/>
+            </columns>
+            <rows datasource="enrollmentsApprovedDs"/>
+        </table>
+        <groupBox caption="msg://AttemptsToPass"
+                  spacing="true">
+            <table width="100%">
+                <columns>
+                    <column id="courseSection.sectionName"/>
+                    <column id="courseSectionFormat"/>
+                    <column id="attemptDate"/>
+                    <column id="success"/>
+                </columns>
+                <rows datasource="courseSectionAttemptsDs"/>
+            </table>
+        </groupBox>
+    </layout>
+</window>

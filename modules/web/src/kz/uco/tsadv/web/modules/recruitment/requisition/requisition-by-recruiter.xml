@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Requisition.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionByRecruiter">
+    <dsContext>
+        <collectionDatasource id="myRecruitmentDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                              view="requisition.view">
+            <query>
+                <![CDATA[select e from tsadv$Requisition e
+                where e.recruiterPersonGroup.id = :session$userPersonGroupId order by e.createTs desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="requisitionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="requisitionsTable"
+                datasource="myRecruitmentDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="requisitionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="requisitionType"/>
+                <column id="employmentType"/>
+                <column id="location"/>
+                <column id="organizationGroup" captionProperty="organizationGroup.organization.organizationName"/>
+                <column id="positionGroup" captionProperty="positionGroup.position.positionName"/>
+                <column id="jobGroup" captionProperty="jobGroup.job.jobName"/>
+                <column id="openedPositionsCount"/>
+                <column id="recruiterPersonGroup" captionProperty="recruiterPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="requisitionStatus"/>
+            </columns>
+            <rows datasource="myRecruitmentDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="requisitionsTable.create"/>
+                <button id="editBtn"
+                        action="requisitionsTable.edit"/>
+                <button id="removeBtn"
+                        action="requisitionsTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

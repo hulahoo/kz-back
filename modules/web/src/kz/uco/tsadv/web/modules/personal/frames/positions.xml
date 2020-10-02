@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.frames.PositionFrame"
+        messagesPack="kz.uco.tsadv.web.modules.personal.frames">
+    <dsContext>
+        <datasource id="gradeGroupValueDs"
+                    class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <vbox id="vboxPos"
+              expand="layout1"
+              height="100%">
+            <scrollBox id="layout1"
+                       height="100%"
+                       spacing="true">
+                <hbox spacing="true">
+                    <label width="113px"></label>
+                    <label width="397px"
+                           value="msg://kz.uco.tsadv.web.modules.personal.position/Position.fullNameCaption"/>
+                    <label width="300px" value="msg://kz.uco.tsadv.web.modules.personal.position/Position.nameCaption"/>
+                </hbox>
+
+                <hbox spacing="true" id="hbox1">
+                    <fieldGroup datasource="positionDs" id="fieldGroup2">
+                        <column width="388px"
+                                fieldCaptionWidth="120px"
+                                id="col1FieldGroup2">
+                            <field id="positionNameLang1Reducted"
+                                   property="positionNameLang1Reducted"
+                                   caption="msg://kz.uco.tsadv.web/lang1"
+                                   editable="false"
+                                   link="true"
+                                   linkScreen="base$Position.edit"
+                            />
+                            <field id="positionNameLang2Reducted"
+                                   property="positionNameLang2Reducted"
+                                   caption="msg://kz.uco.tsadv.web/lang2"
+                                   editable="false"
+                                   link="true"
+                                   linkScreen="base$Position.edit"
+                            />
+
+                            <field id="positionNameLang3Reducted"
+                                   property="positionNameLang3Reducted"
+                                   caption="msg://kz.uco.tsadv.web/lang3"
+                                   editable="false"
+                                   link="true"
+                                   linkScreen="base$Position.edit"
+                            />
+                        </column>
+                        <column width="300px">
+                            <field id="positionNameLang1"
+                                   property="positionNameLang1"
+                                   caption=""
+                                   editable="false"/>
+                            <field id="positionNameLang2"
+                                   property="positionNameLang2"
+                                   caption=""
+                                   editable="false"/>
+                            <field id="positionNameLang3"
+                                   property="positionNameLang3"
+                                   caption=""
+                                   editable="false"/>
+                        </column>
+                    </fieldGroup>
+                </hbox>
+
+                <hbox spacing="true" id="hbox">
+
+                    <fieldGroup id="fieldGroup"
+                                datasource="positionDs">
+                        <column id="col1FieldGroup"
+                                width="300px"
+                                fieldCaptionWidth="120px">
+
+                            <field id="baza"
+                                   property="baza"
+                                   editable="false"/>
+
+                            <field id="costCenter"
+                                   property="costCenter"
+                                   editable="false"/>
+
+                            <field id="extra"
+                                   property="extra"
+                                   editable="false"/>
+
+                            <field id="jobGroup"
+                                   captionProperty="job"
+                                   property="jobGroup"
+                                   editable="false"/>
+
+                            <field id="organizationGroupExt"
+                                   captionProperty="organizationName"
+                                   property="organizationGroupExt"
+                                   editable="false"/>
+
+
+                        </column>
+                        <column id="col2FieldGroup"
+                                width="300px"
+                                fieldCaptionWidth="90px">
+
+                            <field id="startDate"
+                                   property="startDate"
+                                   editable="false"/>
+                            <field id="endDate"
+                                   property="endDate"
+                                   editable="false"/>
+
+                            <field id="positionStatus"
+                                   property="positionStatus"
+                                   editable="false"/>
+
+                            <field id="fte"
+                                   property="fte"
+                                   editable="false"/>
+                            <field id="maxPersons"
+                                   property="maxPersons"
+                                   caption="msg://kz.uco.tsadv.modules.personal.model/Position.maxPersons"
+                                   editable="false"/>
+                            <field id="positionNameLang1"
+                                   property="positionNameLang1"
+                                   visible="false"/>
+                            <field id="positionNameLang2"
+                                   property="positionNameLang2"
+                                   visible="false"/>
+                            <field id="positionNameLang3"
+                                   property="positionNameLang3"
+                                   visible="false"/>
+                        </column>
+                    </fieldGroup>
+                </hbox>
+                <label value="Дополнительная информация"/>
+                <hbox stylename="border-top" width="AUTO" spacing="true" margin="true, false, false, false"
+                      id="addHbox">
+                    <vbox id="addVBox">
+                        <fieldGroup datasource="positionDs" id="addFieldGroup1" width="520px">
+                            <column width="300px" fieldCaptionWidth="120px" id="addColumn">
+                                <field id="gradeGroup"
+                                       captionProperty="grade"
+                                       property="gradeGroup"
+                                       editable="false"/>
+                                <field id="gradeRule"
+                                       property="gradeRule"
+                                       editable="false"/>
+                                <field id="location"
+                                       property="location"
+                                       editable="false"
+                                />
+                                <field id="payroll"
+                                       property="payroll"
+                                       editable="false"/>
+                            </column>
+                        </fieldGroup>
+                        <fieldGroup datasource="positionDs" width="520px">
+                            <column fieldCaptionWidth="250px">
+                                <field property="managerFlag"
+                                       editable="false"/>
+                            </column>
+                        </fieldGroup>
+                    </vbox>
+                    <vbox id="addVbox1" width="auto">
+                        <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/GradeRuleValue">
+                            <fieldGroup datasource="gradeGroupValueDs">
+                                <column width="200px">
+                                    <field editable="false"
+                                           property="value"/>
+                                    <field editable="false"
+                                           property="min"/>
+                                    <field editable="false"
+                                           property="mid"/>
+                                    <field editable="false"
+                                           property="max"/>
+                                </column>
+                            </fieldGroup>
+                        </groupBox>
+                    </vbox>
+                </hbox>
+            </scrollBox>
+
+        </vbox>
+    </layout>
+</window>

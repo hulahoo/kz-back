@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Grade.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.grade.GradeBrowse"
+        focusComponent="gradesTable"
+        lookupComponent="gradesTable">
+    <dsContext>
+        <groupDatasource id="gradesDs"
+                         class="kz.uco.tsadv.modules.personal.model.Grade"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$Grade e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="gradesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="gradesTable"
+                datasource="gradesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="gradesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="gradeName"/>
+                <column id="recognitionNominate"/>
+            </columns>
+            <rows datasource="gradesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="gradesTable.create"/>
+                <button id="editBtn"
+                        action="gradesTable.edit"/>
+                <button id="removeBtn"
+                        action="gradesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

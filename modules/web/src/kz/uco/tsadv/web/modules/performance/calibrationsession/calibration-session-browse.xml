@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CalibrationSession.browseCaption"
+        class="kz.uco.tsadv.web.modules.performance.calibrationsession.CalibrationSessionBrowse"
+        focusComponent="calibrationSessionsTable"
+        lookupComponent="calibrationSessionsTable">
+    <dsContext>
+        <collectionDatasource id="calibrationSessionsDs"
+                              class="kz.uco.tsadv.modules.performance.model.CalibrationSession"
+                              view="calibrationSession.browse">
+            <query>
+                <![CDATA[select e from tsadv$CalibrationSession e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="calibrationSessionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="calibrationSessionsTable"
+                datasource="calibrationSessionsDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="calibrationSessionsTable"
+               width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="name"
+                        caption="msg://nameCalibrationSession"/>
+                <column id="date"/>
+                <column id="administrator.person.fullName"/>
+                <column id="status"
+                        caption="msg://statusCalibrationSession"/>
+                <column id="template.assessmentTemplateName"/>
+            </columns>
+            <rows datasource="calibrationSessionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="calibrationSessionsTable.create"/>
+                <button id="editBtn"
+                        action="calibrationSessionsTable.edit"/>
+                <button id="removeBtn"
+                        action="calibrationSessionsTable.remove"/>
+                <button id="membersBtn"
+                        caption="msg://calibration.session.members"
+                        invoke="showMembers"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

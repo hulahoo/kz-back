@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.accidentevent.AccidentEventEdit"
+        datasource="accidentEventDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.accidentevent">
+    <dsContext>
+        <datasource id="accidentEventDs"
+                    class="kz.uco.tsadv.entity.tb.AccidentEvent"
+                    view="accidentEvent-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="accidentEventDs">
+            <column width="250px">
+                <field property="person"/>
+                <field property="violations"/>
+                <field property="accidentReasonRemoval"/>
+                <field property="executionPeriod"/>
+                <field property="attachment"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

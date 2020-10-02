@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicAddressType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicaddresstype.DicAddressTypeBrowse"
+        focusComponent="dicAddressTypesTable"
+        lookupComponent="dicAddressTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicaddresstype">
+    <dsContext>
+        <groupDatasource id="dicAddressTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicAddressType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAddressTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAddressTypesTable"
+                datasource="dicAddressTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAddressTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicAddressTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicAddressTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicAddressTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicAddressTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

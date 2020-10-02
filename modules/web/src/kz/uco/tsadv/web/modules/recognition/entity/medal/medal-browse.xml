@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.medal.MedalBrowse"
+        focusComponent="medalsTable"
+        lookupComponent="medalsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.medal">
+    <dsContext>
+        <groupDatasource id="medalsDs"
+                         class="kz.uco.tsadv.modules.recognition.Medal"
+                         view="medal.edit">
+            <query>
+                <![CDATA[select e from tsadv$Medal e]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="medalConditionQualitiesDs"
+                              class="kz.uco.tsadv.modules.recognition.MedalCondition"
+                              view="medalCondition.edit">
+            <query>
+                <![CDATA[select e from tsadv$MedalCondition e where e.childMedal is null and e.medal.id = :ds$medalsDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="medalConditionChildMedalsDs"
+                              class="kz.uco.tsadv.modules.recognition.MedalCondition"
+                              view="medalCondition.edit">
+            <query>
+                <![CDATA[select e from tsadv$MedalCondition e where e.quality is null and e.medal.id = :ds$medalsDs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="medalsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="medalsTable"
+                datasource="medalsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="medalsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langName1"/>
+                <column id="langName2"/>
+                <column id="langName3"/>
+                <column id="langName4"
+                        visible="false"/>
+                <column id="langName5"
+                        visible="false"/>
+                <column id="template"/>
+                <column id="icon"/>
+                <column id="sort"/>
+            </columns>
+            <rows datasource="medalsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="medalsTable.create"/>
+                <button id="editBtn"
+                        action="medalsTable.edit"/>
+                <button id="removeBtn"
+                        action="medalsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <tabSheet id="tabSheet"
+                  height="190px">
+            <tab id="qualityTab"
+                 caption="msg://qualityTab"
+                 spacing="true">
+                <table id="qualityTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                enable="false"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="quality"/>
+                        <column id="qualityQuantity"/>
+                    </columns>
+                    <rows datasource="medalConditionQualitiesDs"/>
+                    <buttonsPanel id="qualityTabBtnPanel"
+                                  alwaysVisible="true">
+                        <button id="qualityCreateBtn"
+                                action="qualityTable.create"/>
+                        <button id="qualityEditBtn"
+                                action="qualityTable.edit"/>
+                        <button id="qualityRemoveBtn"
+                                action="qualityTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="childTab"
+                 caption="msg://childTab"
+                 spacing="true">
+                <table id="childTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                enable="false"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="childMedal"
+                                caption="msg://badge"/>
+                        <column id="medalQuantity"
+                                caption="msg://badgeQuantity"/>
+                    </columns>
+                    <rows datasource="medalConditionChildMedalsDs"/>
+                    <buttonsPanel id="childTabBtnPanel"
+                                  alwaysVisible="true">
+                        <button id="childCreateBtn"
+                                action="childTable.create"/>
+                        <button id="childEditBtn"
+                                action="childTable.edit"/>
+                        <button id="childRemoveBtn"
+                                action="childTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

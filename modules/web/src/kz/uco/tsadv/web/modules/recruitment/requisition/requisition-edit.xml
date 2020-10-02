@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Requisition.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionEdit"
+        datasource="requisitionDs"
+        focusComponent="fieldGroup1"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.requisition">
+    <dsContext>
+        <datasource id="requisitionDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                    view="requisition.view">
+            <datasource id="positionGroupDs"
+                        property="positionGroup"/>
+            <datasource id="jobGroupDs"
+                        property="jobGroup"/>
+            <collectionDatasource id="requisitionRequirementsDs"
+                                  property="requisitionRequirements"/>
+        </datasource>
+        <groupDatasource id="competencesDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.RequisitionCompetence"
+                         view="requisitionCompetence.view">
+            <query>
+                <![CDATA[select e
+                          from tsadv$RequisitionCompetence e
+                         where e.requisition.id = :ds$requisitionDs]]>
+            </query>
+            <datasource id="competenceGroupDs"
+                        property="competenceGroup"/>
+        </groupDatasource>
+        <groupDatasource id="postingChannelsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.RequisitionPostingChannel"
+                         view="requisitionPostingChannel.view">
+            <query>
+                <![CDATA[select e
+                          from tsadv$RequisitionPostingChannel e
+                         where e.requisition.id = :ds$requisitionDs]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="membersDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.RequisitionMember"
+                         view="requisitionMember.view">
+            <query>
+                <![CDATA[select e
+                          from tsadv$RequisitionMember e
+                         where e.requisition.id = :ds$requisitionDs]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="hiringStepsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.RequisitionHiringStep"
+                         view="requisitionHiringStep.view">
+            <query>
+                <![CDATA[select e
+                          from tsadv$RequisitionHiringStep e
+                         where e.requisition.id = :ds$requisitionDs
+                         order by e.order]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="dicEmploymentTypesDs"
+                              class="kz.uco.tsadv.modules.recruitment.dictionary.DicEmploymentType"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from tsadv$DicEmploymentType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="questionnairesDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.RequisitionQuestionnaire"
+                              view="requisitionQuestionnaire.view">
+            <query>
+                <![CDATA[select e from tsadv$RequisitionQuestionnaire e where e.requisition.id = :ds$requisitionDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobRequestsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                              datasourceClass="kz.uco.tsadv.datasource.RequisitionJobRequestDatasource"
+                              maxResults="10"
+                              view="jobRequest.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$JobRequest e
+                           join e.candidatePersonGroup cpg
+                           join cpg.list cp
+                          where e.requisition.id = :ds$requisitionDs
+                            and :session$systemDate between cp.startDate and cp.endDate
+                            order by e.requestDate desc
+                            ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="requisitionHistoryDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.RequisitionHistory"
+                              view="requisitionHistory.browse">
+            <query>
+                <![CDATA[select e from tsadv$RequisitionHistory e
+                where e.requisition.id = :ds$requisitionDs.id
+                order by e.createTs desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="interviewsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                              datasourceClass="kz.uco.tsadv.datasource.InterviewDatasource"
+                              view="interview.view">
+            <query>
+                <![CDATA[select e from tsadv$Interview e
+                where e.jobRequest.id = :ds$jobRequestsDs.id
+                order by e.createTs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="groupInterviewsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                              datasourceClass="kz.uco.tsadv.datasource.GroupInterviewDatasource"
+                              view="groupInterview.view">
+            <query>
+                <![CDATA[select e from tsadv$Interview e
+                where e.requisition.id = :ds$requisitionDs
+                  and e.isGroup = TRUE
+                order by e.createTs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="groupInterviewChildrenDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                              view="interview.view">
+            <query>
+                <![CDATA[select e from tsadv$Interview e
+                where e.groupInterview.id = :ds$groupInterviewsDs
+                order by e.createTs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicCitiesDs"
+                              class="kz.uco.base.entity.dictionary.DicCity"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="dicCity.edit">
+            <query>
+                <![CDATA[select e from base$DicCity e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="changesDs"
+                              class="kz.uco.tsadv.global.entity.FieldChangeEntity"/>
+        <collectionDatasource id="substitutablePersonGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                              view="personGroup.browse">
+            <query>
+                <![CDATA[select e.personGroup from base$AssignmentExt e
+]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="scaleLevelsDs"
+                              class="kz.uco.tsadv.modules.personal.model.ScaleLevel"
+                              view="scaleLevelOptionDatasource">
+            <query>
+                <![CDATA[select e from tsadv$ScaleLevel e
+where e.scale.id = (select e2.scale.id from tsadv$Competence e2
+where e2.group.id = :ds$competenceGroupDs 
+and :session$systemDate between e2.startDate and e2.endDate)]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="collectionJobGroupDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e from tsadv$JobGroup e, tsadv$Job j where
+                e.id = j.group.id and
+                :session$systemDate between j.startDate and j.endDate]]>
+            </query>
+        </collectionDatasource>
+        <valueCollectionDatasource id="cardFilterSettingsDs">
+            <properties idProperty="cardBlockType">
+                <property datatype="string"
+                          name="cardBlockType"/>
+                <property datatype="boolean"
+                          name="checked"/>
+            </properties>
+        </valueCollectionDatasource>
+    </dsContext>
+    <timers>
+        <timer autostart="true"
+               delay="1"
+               onTimer="adjustRichTextAreas"/>
+    </timers>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="changes"
+                 caption="msg://Requisition.changes"
+                 expand="changesTable"
+                 visible="false">
+                <table id="changesTable"
+                       width="100%">
+                    <columns>
+                        <column id="field"/>
+                        <column id="oldValue"
+                                generator="getOldValue"/>
+                        <column id="newValue"
+                                generator="getNewValue"/>
+                    </columns>
+                    <rows datasource="changesDs"/>
+                </table>
+                <hbox id="changesActionHboxId"
+                      margin="true,false,false,false"
+                      spacing="true"
+                      stylename="c-edit-window-actions">
+                    <button id="changesApprove"
+                            caption="msg://Requisition.btn.approve"
+                            invoke="approveConfirm"/>
+                    <button id="changesReject"
+                            caption="msg://Requisition.btn.cancel"
+                            invoke="rejectConfirm"/>
+                    <button id="changesWindowClose"
+                            action="windowClose"
+                            icon="icons/cancel.png"/>
+                </hbox>
+            </tab>
+            <tab id="mainInfo"
+                 caption="mainMsg://mainInfo"
+                 margin="true">
+                <scrollBox id="scrollBox"
+                           height="100%">
+                    <split id="splitMainInfo"
+                           orientation="horizontal"
+                           width="100%">
+                        <fieldGroup id="fieldGroup1"
+                                    datasource="requisitionDs"
+                                    width="593px">
+
+                            <field id="code"
+                                   property="code"/>
+                            <field id="requisitionType"
+                                   property="requisitionType"/>
+                            <field id="requisitionTemplate"
+                                   property="requisitionTemplate"/>
+                            <field id="startDate"
+                                   property="startDate"/>
+                            <field id="finalCollectDate"
+                                   property="finalCollectDate"/>
+                            <field id="endDate"
+                                   caption="msg://EndDate"
+                                   property="endDate"/>
+                            <field id="recruiterPersonGroup"
+                                   captionProperty="personLatinFioWithEmployeeNumber"
+                                   property="recruiterPersonGroup"/>
+                            <field id="employmentType"
+                                   optionsDatasource="dicEmploymentTypesDs"
+                                   property="employmentType"/>
+                            <field id="location"
+                                   captionProperty="settlementLangValue"
+                                   optionsDatasource="dicCitiesDs"
+                                   property="location"/>
+                            <field id="jobGroup"
+                                   captionProperty="job"
+                                   custom="true"
+                                   optionsDatasource="collectionJobGroupDs"
+                                   property="jobGroup"/>
+                            <field id="positionGroup"
+                                   captionProperty="position"
+                                   custom="true"
+                                   property="positionGroup"/>
+                            <field id="managerPersonGroup"
+                                   captionProperty="personLatinFioWithEmployeeNumber"
+                                   property="managerPersonGroup"
+                                   required="true"/>
+                            <field id="organizationGroup"
+                                   custom="true"
+                                   property="organizationGroup"/>
+                            <field id="costCenter"
+                                   editable="false"
+                                   property="costCenter"/>
+                            <field id="openedPositionsCount"
+                                   property="openedPositionsCount"/>
+                            <field id="forSubstitution"
+                                   property="forSubstitution"/>
+                            <field id="substitutableDescription"
+                                   property="substitutableDescription"
+                                   rows="4"
+                                   visible="false"/>
+                            <field id="substitutablePersonGroup"
+                                   captionProperty="personFioWithEmployeeNumber"
+                                   optionsDatasource="substitutablePersonGroupsDs"
+                                   property="substitutablePersonGroup"/>
+                            <field id="videoInterviewRequired"
+                                   property="videoInterviewRequired"/>
+                            <field id="withoutOffer"
+                                   property="withoutOffer"/>
+                            <field id="requisitionStatus"
+                                   editable="false"
+                                   property="requisitionStatus"/>
+                        </fieldGroup>
+                        <vbox margin="false,false,false,true"
+                              spacing="true">
+                            <tabSheet id="descTabSheet">
+                                <tab id="descLang1"
+                                     caption="msg://Requisition.descriptionLang1"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <vbox id="split1vbox1"
+                                          responsive="true"
+                                          spacing="true">
+                                        <fieldGroup id="requisitionFieldGroup"
+                                                    datasource="requisitionDs"
+                                                    width="100%">
+                                            <field id="nameForSiteLang1Id"
+                                                   property="nameForSiteLang1"
+                                                   width="100%"/>
+                                        </fieldGroup>
+                                        <richTextArea id="requisitionRichTextArea1"
+                                                      datasource="requisitionDs"
+                                                      height="350px"
+                                                      property="descriptionLang1"
+                                                      responsive="true"
+                                                      width="100%"/>
+                                    </vbox>
+                                    <vbox margin="true,false,false,false"
+                                          spacing="true">
+                                        <button caption="mainMsg://table.btn.empty"
+                                                description="mainMsg://table.btn.copy"
+                                                icon="font-icon:ARROW_UP"
+                                                invoke="managerDescriptionCopy"/>
+                                        <richTextArea id="addRichTextArea1"
+                                                      caption="msg://Requisition.managerDescriptionLang"
+                                                      datasource="requisitionDs"
+                                                      editable="false"
+                                                      height="200px"
+                                                      property="managerDescriptionLang1"
+                                                      width="100%"/>
+                                    </vbox>
+                                </tab>
+                                <tab id="descLang2"
+                                     caption="msg://Requisition.descriptionLang2"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <vbox id="split2vbox1"
+                                          spacing="true">
+                                        <fieldGroup datasource="requisitionDs"
+                                                    width="100%">
+                                            <field id="nameForSiteLang2"
+                                                   property="nameForSiteLang2"
+                                                   width="100%"/>
+                                        </fieldGroup>
+                                        <richTextArea id="requisitionRichTextArea2"
+                                                      datasource="requisitionDs"
+                                                      height="350px"
+                                                      property="descriptionLang2"
+                                                      responsive="true"
+                                                      width="100%"/>
+                                    </vbox>
+                                    <vbox height="100%"
+                                          margin="true,false,false,false"
+                                          spacing="true">
+                                        <button caption="mainMsg://table.btn.empty"
+                                                description="mainMsg://table.btn.copy"
+                                                icon="font-icon:ARROW_UP"
+                                                invoke="managerDescriptionCopy"/>
+                                        <richTextArea id="addRichTextArea2"
+                                                      caption="msg://Requisition.managerDescriptionLang"
+                                                      datasource="requisitionDs"
+                                                      editable="false"
+                                                      height="200px"
+                                                      property="managerDescriptionLang2"
+                                                      width="100%"/>
+                                    </vbox>
+                                </tab>
+                                <tab id="descLang3"
+                                     caption="msg://Requisition.descriptionLang3"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <vbox id="split3vbox1"
+                                          spacing="true">
+                                        <fieldGroup datasource="requisitionDs"
+                                                    width="100%">
+                                            <field id="nameForSiteLang3"
+                                                   property="nameForSiteLang3"
+                                                   width="100%"/>
+                                        </fieldGroup>
+                                        <richTextArea id="requisitionRichTextArea3"
+                                                      datasource="requisitionDs"
+                                                      height="350px"
+                                                      property="descriptionLang3"
+                                                      responsive="true"
+                                                      width="100%"/>
+                                    </vbox>
+                                    <vbox height="100%"
+                                          margin="true,false,false,false"
+                                          spacing="true">
+                                        <button caption="mainMsg://table.btn.empty"
+                                                description="mainMsg://table.btn.copy"
+                                                icon="font-icon:ARROW_UP"
+                                                invoke="managerDescriptionCopy"/>
+                                        <richTextArea id="addRichTextArea3"
+                                                      caption="msg://Requisition.managerDescriptionLang"
+                                                      datasource="requisitionDs"
+                                                      editable="false"
+                                                      height="200px"
+                                                      property="managerDescriptionLang3"
+                                                      width="100%"/>
+                                    </vbox>
+                                </tab>
+                            </tabSheet>
+                        </vbox>
+                    </split>
+                </scrollBox>
+            </tab>
+            <tab id="competences"
+                 caption="msg://Requisition.competences"
+                 lazy="true"
+                 margin="true">
+                <frame screen="req-competence"/>
+            </tab>
+            <tab id="hiringSteps"
+                 caption="msg://Requisition.hiringSteps"
+                 lazy="true"
+                 margin="true">
+                <frame screen="req-hiring-step"/>
+            </tab>
+            <tab id="members"
+                 caption="msg://Requisition.members"
+                 lazy="true"
+                 margin="true">
+                <frame screen="req-member"/>
+            </tab>
+            <tab id="postingChannels"
+                 caption="msg://Requisition.postingChannels"
+                 lazy="true"
+                 margin="true">
+                <frame screen="req-posting-channel"/>
+            </tab>
+            <tab id="jobRequests"
+                 caption="msg://Requisition.jobRequests"
+                 lazy="true"
+                 margin="true">
+                <split id="vSplitter"
+                       height="100%"
+                       orientation="horizontal"
+                       width="100%">
+                    <groupBox id="storeStyleFilterBox"
+                              caption="msg://CustomFilter"
+                              height="100%"
+                              stylename="widget-group-box"/>
+                    <hbox id="hbox"
+                          height="100%"
+                          margin="false,false,false,true"
+                          width="100%">
+                        <frame screen="requisition-job-request"/>
+                    </hbox>
+                </split>
+            </tab>
+            <tab id="groupInterviews"
+                 caption="msg://Requisition.groupInterviews"
+                 lazy="true"
+                 margin="true">
+                <frame screen="requisition-group-interview"/>
+            </tab>
+            <tab id="questionnaires"
+                 caption="msg://Requisition.questionnaires"
+                 lazy="true"
+                 margin="true">
+                <frame screen="req-questionnaire"/>
+            </tab>
+            <tab id="historyTabId"
+                 caption="msg://Requisition.history"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="historyTable"
+                       height="100%"
+                       width="100%">
+                    <columns>
+                        <column id="status"
+                                caption="msg://Requisition.requisitionStatus"/>
+                        <column id="createTs"/>
+                        <column id="createdBy"
+                                caption="msg://Requisition.history.changeBy"/>
+                        <column id="reason"
+                                maxTextLength="200"/>
+                        <column id="openedPositionsCount"/>
+                    </columns>
+                    <rows datasource="requisitionHistoryDs"/>
+                </table>
+            </tab>
+            <tab id="requisitionRequirementsTab"
+                 caption="msg://requisitionRequirementsTab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <dataGrid id="requisitionRequirementsDataGrid"
+                          datasource="requisitionRequirementsDs"
+                          height="100%"
+                          width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"
+                                trackSelection="true"/>
+                        <action id="remove"
+                                trackSelection="true"/>
+                    </actions>
+                    <columns>
+                        <column id="requirement"
+                                editable="false"
+                                property="requirement.questionText"/>
+                        <column id="requirementLevel"
+                                editable="false"
+                                property="requirementLevel.answerText"/>
+                        <column id="critical"
+                                property="critical"/>
+                    </columns>
+                    <buttonsPanel id="requisitionRequirementButtonPanel">
+                        <button id="createButton"
+                                action="requisitionRequirementsDataGrid.create"/>
+                        <button id="editButton"
+                                action="requisitionRequirementsDataGrid.edit"/>
+                        <button id="removeButton"
+                                action="requisitionRequirementsDataGrid.remove"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </tab>
+        </tabSheet>
+        <hbox id="actionHboxId"
+              margin="true,false,false,false"
+              spacing="true"
+              stylename="c-edit-window-actions">
+            <button id="windowCommit"
+                    caption="mainMsg://actions.Ok"
+                    icon="icons/ok.png"
+                    invoke="customWindowCommit"/>
+            <button id="windowClose"
+                    action="windowClose"
+                    icon="icons/cancel.png"/>
+            <button id="sendToRecruiter"
+                    caption="msg://Requisition.btn.send"
+                    invoke="sendToRecruiterConfirm"/>
+            <button id="close"
+                    caption="msg://Requisition.btn.requisClose"
+                    invoke="closeConfirm"/>
+            <button id="approve"
+                    caption="msg://Requisition.btn.approve"
+                    invoke="approveConfirm"/>
+            <button id="reject"
+                    caption="msg://Requisition.btn.cancel"
+                    invoke="rejectConfirm"/>
+        </hbox>
+    </layout>
+</window>

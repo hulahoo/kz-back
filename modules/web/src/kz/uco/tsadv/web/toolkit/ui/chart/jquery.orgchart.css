@@ -1,0 +1,721 @@
+.custom-chart-wrap .c-fglayout .v-widget {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.custom-chart-wrap .c-fglayout {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.custom-chart-wrap .c-fglayout .custom-chart .v-slot, .custom-chart-wrap .c-fglayout .custom-chart .v-slot .v-widget {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: visible !important;
+}
+
+.custom-chart-wrap .c-fglayout-slot, .custom-chart-wrap .v-widget {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.orgchart {
+    min-height: 202px;
+    min-width: 202px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 20px;
+}
+
+.orgchart .hidden, .orgchart ~ .hidden {
+    display: none !important;
+}
+
+.orgchart *, .orgchart *:before, .orgchart *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.orgchart.b2t {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+}
+
+.orgchart.l2r {
+    position: absolute;
+    transform: rotate(-90deg) rotateY(180deg);
+    -ms-transform: rotate(-90deg) rotateY(180deg);
+    -moz-transform: rotate(-90deg) rotateY(180deg);
+    -webkit-transform: rotate(-90deg) rotateY(180deg);
+    transform-origin: left top;
+    -ms-transform-origin: left top;
+    -moz-transform-origin: left top;
+    -webkit-transform-origin: left top;
+}
+
+.orgchart .verticalNodes ul {
+    list-style: none;
+    margin: 0px;
+    padding-left: 18px;
+    text-align: left;
+}
+
+.orgchart .verticalNodes ul:first-child {
+    margin-top: 2px;
+}
+
+.orgchart .verticalNodes > td::before {
+    content: '';
+    border: 1px solid #d4d4d4;
+}
+
+.orgchart .verticalNodes > td > ul > li:first-child::before {
+    top: -4px;
+    height: 30px;
+    width: calc(50% - 2px);
+    border-width: 2px 0 0 2px;
+}
+
+.orgchart .verticalNodes ul > li {
+    position: relative;
+}
+
+.orgchart .verticalNodes ul > li::before,
+.orgchart .verticalNodes ul > li::after {
+    content: '';
+    position: absolute;
+    left: -6px;
+    border-color: #d4d4d4;
+    border-style: solid;
+    border-width: 0 0 2px 2px;
+}
+
+.orgchart .verticalNodes ul > li::before {
+    top: -4px;
+    height: 30px;
+    width: 11px;
+}
+
+.orgchart .verticalNodes ul > li::after {
+    top: 1px;
+    height: 100%;
+}
+
+.orgchart .verticalNodes ul > li:first-child::after {
+    top: 24px;
+    width: 11px;
+    border-width: 2px 0 0 2px;
+}
+
+.orgchart .verticalNodes ul > li:last-child::after {
+    border-width: 2px 0 0;
+}
+
+.orgchart.r2l {
+    position: absolute;
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform-origin: left top;
+    -ms-transform-origin: left top;
+    -moz-transform-origin: left top;
+    -webkit-transform-origin: left top;
+}
+
+.orgchart > .spinner {
+    font-size: 100px;
+    margin-top: 30px;
+    color: rgba(68, 157, 68, 0.8);
+}
+
+.orgchart table {
+    border-spacing: 0 !important;
+    border-collapse: separate !important;
+}
+
+.orgchart > table:first-child {
+    margin: 20px auto;
+}
+
+.orgchart td {
+    text-align: center;
+    vertical-align: top;
+    padding: 0;
+}
+
+.orgchart tr.lines td.topLine {
+    border-top: 1px solid #d4d4d4;
+}
+
+.orgchart tr.lines td.rightLine {
+    border-right: 1px solid #d4d4d4;
+    float: none;
+    border-radius: 0;
+}
+
+.orgchart tr.lines td.leftLine {
+    border-left: 1px solid #d4d4d4;
+    float: none;
+    border-radius: 0;
+}
+
+.orgchart tr.lines .downLine {
+    background-color: #d4d4d4;
+    margin: 0 auto;
+    height: 20px;
+    width: 2px;
+    float: none;
+}
+
+/* node styling */
+.orgchart .node {
+    display: inline-block;
+    position: relative;
+    margin: 0 10px;
+    border-radius: 5px;
+    border: 1px solid #d4d4d4;
+    text-align: center;
+    width: 120px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .3), -17px 0 20px -20px rgba(0, 0, 0, .8), 17px 0 20px -20px rgba(0, 0, 0, .8), 0 0 30px rgba(0, 0, 0, .1) inset;
+}
+
+.orgchart .node .node-image {
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+}
+
+.orgchart .node .node-image > img {
+    width: 118px;
+    height: 145px !important;
+}
+
+.orgchart .node .title {
+    text-shadow: none !important;
+    margin-top: -2px;
+    font-family: Tahoma, sans-serif;
+    font-weight: 600;
+    text-align: left;
+    padding: 4px 7px 0;
+    font-size: 12px;
+}
+
+.orgchart .node .node-last-name {
+    text-shadow: none !important;
+    margin-top: -2px;
+    font-family: Tahoma, sans-serif;
+    font-weight: 600;
+    text-align: left;
+    padding: 0 7px;
+    font-size: 12px;
+}
+
+.node-position {
+    line-height: 16px;
+    font-family: Helvetica, sans-serif;
+    font-size: 12px;
+    text-align: left;
+    padding: 3px 7px 1px;
+}
+
+.node-footer {
+    text-align: left;
+    font-size: 10px;
+    font-family: Helvetica, sans-serif;
+    color: #808080;
+    padding: 5px 10px;
+}
+
+.node-footer > i {
+    position: relative;
+    font-size: 14px;
+    top: 1px;
+}
+
+.node-footer > span {
+    margin-left: 3px;
+}
+
+.node .node-info {
+    font-family: Tahoma, sans-serif;
+    color: #696969;
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-radius: 4px;
+    width: 400px;
+    top: 0;
+    left: 130px;
+    height: auto;
+    display: none;
+    z-index: 1000;
+    text-align: left;
+    padding: 10px 15px;
+    background-color: white;
+    box-shadow: 0 8px 6px -6px #696969, 0 0 40px rgba(0, 0, 0, .1) inset;
+}
+
+.node .node-info .node-info-fn, .node .node-info .node-info-pos, .node .node-info .node-info-tel, .node .node-info .node-info-email {
+    padding-bottom: 4px;
+}
+
+.node .node-info .node-info-fn {
+
+}
+
+.node .node-info .node-info-pos {
+
+}
+
+.node .node-info .node-info-pos,
+.node .node-info .node-info-tel,
+.node .node-info .node-info-email,
+.node .node-info .node-info-man,
+.node .node-info .node-info-loc,
+.node .node-info .node-info-grade,
+.node .node-info .node-info-org {
+    font-size: 13px;
+    font-family: Arial, sans-serif;
+}
+
+.node .node-info .node-info-tel > i,
+.node .node-info .node-info-email > i,
+.node .node-info .node-info-org > i,
+.node .node-info .node-info-pos > i {
+    margin-right: 5px;
+}
+
+.node .node-info .node-info-tel {
+
+}
+
+.node .node-info .node-info-email {
+
+}
+
+.node .node-info .node-info-man {
+
+}
+
+/** node menu style */
+
+.node .node-info .node-actions-link {
+    padding: 10px 0 5px;
+}
+
+.node .node-info .node-actions-link > a {
+    font-size: 13px;
+    font-family: Tahoma, sans-serif;
+    text-decoration: none;
+}
+
+.node .node-info .node-menu {
+    font-family: Tahoma, sans-serif;
+    display: none;
+}
+
+.node .node-info .node-menu .node-actions {
+    border-top: 1px solid #d4d4d4;
+    margin: 0 -15px;
+    padding: 15px;
+}
+
+.node .node-info .node-menu .node-actions .node-action-title,
+.node .node-info .node-menu .node-redirects .node-redirect-title {
+
+}
+
+.node .node-info .node-menu .node-actions .node-action-list,
+.node .node-info .node-menu .node-redirects .node-redirect-list {
+
+}
+
+.node .node-info .node-menu .node-actions .node-action-list table,
+.node .node-info .node-menu .node-redirects .node-redirect-list table {
+    width: 100%;
+}
+
+.node .node-info .node-menu .node-actions .node-action-list table td:first-child,
+.node .node-info .node-menu .node-redirects .node-redirect-list table td:first-child {
+    width: 194px;
+}
+
+.node .node-info .node-menu .node-actions .node-action-list ul,
+.node .node-info .node-menu .node-redirects .node-redirect-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 0;
+}
+
+.node .node-info .node-menu .node-actions .node-action-list ul li,
+.node .node-info .node-menu .node-redirects .node-redirect-list ul li {
+    text-align: left;
+}
+
+.node .node-info .node-menu .node-actions .node-action-list ul li > a,
+.node .node-info .node-menu .node-redirects .node-redirect-list ul li > a {
+    font-size: 12px;
+}
+
+.orgchart.l2r .node, .orgchart.r2l .node {
+    width: 50px;
+    height: 130px;
+}
+
+.orgchart .node > .spinner {
+    position: absolute;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+    vertical-align: middle;
+    font-size: 30px;
+    color: rgba(68, 157, 68, 0.8);
+}
+
+.orgchart .node:hover {
+    background-color: #f5f5f5;
+    /*transition: .5s;*/
+    cursor: pointer;
+    z-index: 20;
+}
+
+.orgchart .node.focused {
+    background-color: #f5f5f5;
+}
+
+.orgchart .node.focused .node-info {
+    display: block;
+    background-color: white;
+}
+
+.orgchart .ghost-node {
+    position: fixed;
+    left: -10000px;
+    top: -10000px;
+}
+
+.orgchart .ghost-node > * {
+    fill: #ffffff;
+    stroke: #bf0000;
+}
+
+.orgchart .node.allowedDrop {
+    border-color: rgba(68, 157, 68, 0.9);
+}
+
+.orgchart.b2t .node .title {
+    transform: rotate(-180deg);
+    -ms-transform: rotate(-180deg);
+    -moz-transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+    transform-origin: center bottom;
+    -ms-transform-origin: center bottom;
+    -moz-transform-origin: center bottom;
+    -webkit-transform-origin: center bottom;
+}
+
+.orgchart.l2r .node .title {
+    transform: rotate(-90deg) translate(-40px, -40px) rotateY(180deg);
+    -ms-transform: rotate(-90deg) translate(-40px, -40px) rotateY(180deg);
+    -moz-transform: rotate(-90deg) translate(-40px, -40px) rotateY(180deg);
+    -webkit-transform: rotate(-90deg) translate(-40px, -40px) rotateY(180deg);
+    transform-origin: bottom center;
+    -ms-transform-origin: bottom center;
+    -moz-transform-origin: bottom center;
+    -webkit-transform-origin: bottom center;
+    width: 120px;
+}
+
+.orgchart.r2l .node .title {
+    transform: rotate(-90deg) translate(-40px, -40px);
+    -ms-transform: rotate(-90deg) translate(-40px, -40px);
+    -moz-transform: rotate(-90deg) translate(-40px, -40px);
+    -webkit-transform: rotate(-90deg) translate(-40px, -40px);
+    transform-origin: bottom center;
+    -ms-transform-origin: bottom center;
+    -moz-transform-origin: bottom center;
+    -webkit-transform-origin: bottom center;
+    width: 120px;
+}
+
+.orgchart .node .title .symbol {
+    float: left;
+    margin-top: 4px;
+    margin-left: 2px;
+}
+
+.orgchart .node .content {
+    width: 100%;
+    height: 20px;
+    font-size: 11px;
+    line-height: 18px;
+    text-align: center;
+    color: #333;
+}
+
+.orgchart.b2t .node .content {
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform-origin: center top;
+    -ms-transform-origin: center top;
+    -moz-transform-origin: center top;
+    -webkit-transform-origin: center top;
+}
+
+.orgchart.l2r .node .content {
+    transform: rotate(-90deg) translate(-40px, -40px) rotateY(180deg);
+    -ms-transform: rotate(-90deg) translate(-40px, -40px) rotateY(180deg);
+    -moz-transform: rotate(-90deg) translate(-40px, -40px) rotateY(180deg);
+    -webkit-transform: rotate(-90deg) translate(-40px, -40px) rotateY(180deg);
+    transform-origin: top center;
+    -ms-transform-origin: top center;
+    -moz-transform-origin: top center;
+    -webkit-transform-origin: top center;
+    width: 120px;
+}
+
+.orgchart.r2l .node .content {
+    transform: rotate(-90deg) translate(-40px, -40px);
+    -ms-transform: rotate(-90deg) translate(-40px, -40px);
+    -moz-transform: rotate(-90deg) translate(-40px, -40px);
+    -webkit-transform: rotate(-90deg) translate(-40px, -40px);
+    transform-origin: top center;
+    -ms-transform-origin: top center;
+    -moz-transform-origin: top center;
+    -webkit-transform-origin: top center;
+    width: 120px;
+}
+
+.orgchart .node .edge {
+    font-size: 15px;
+    position: absolute;
+    color: rgba(68, 157, 68, 0.5);
+    cursor: default;
+    transition: .2s;
+    -webkit-transition: .2s;
+}
+
+.orgchart.noncollapsable .node .edge {
+    display: none;
+}
+
+.orgchart .edge:hover {
+    color: #449d44;
+    cursor: pointer;
+}
+
+.orgchart .node .verticalEdge {
+    width: calc(100% - 10px);
+    width: -webkit-calc(100% - 10px);
+    width: -moz-calc(100% - 10px);
+    left: 5px;
+}
+
+.orgchart .node .topEdge {
+    top: -4px;
+}
+
+.orgchart .node .bottomEdge {
+    bottom: -4px;
+}
+
+.orgchart .node .horizontalEdge {
+    width: 15px;
+    height: calc(100% - 10px);
+    height: -webkit-calc(100% - 10px);
+    height: -moz-calc(100% - 10px);
+    top: 5px;
+}
+
+.orgchart .node .rightEdge {
+    right: -4px;
+}
+
+.orgchart .node .leftEdge {
+    left: -4px;
+}
+
+.orgchart .node .horizontalEdge::before {
+    position: absolute;
+    top: calc(50% - 7px);
+    top: -webkit-calc(50% - 7px);
+    top: -moz-calc(50% - 7px);
+}
+
+.orgchart .node .rightEdge::before {
+    right: 3px;
+}
+
+.orgchart .node .leftEdge::before {
+    left: 3px;
+}
+
+.orgchart .node .toggleBtn {
+    position: absolute;
+    left: 5px;
+    bottom: -2px;
+    color: rgba(68, 157, 68, 0.6);
+}
+
+.orgchart .node .toggleBtn:hover {
+    color: rgba(68, 157, 68, 0.8);
+}
+
+.oc-export-btn {
+    display: inline-block;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #fff;
+    background-color: #5cb85c;
+    border: 1px solid transparent;
+    border-color: #4cae4c;
+    border-radius: 4px;
+}
+
+.oc-export-btn[disabled] {
+    cursor: not-allowed;
+    filter: alpha(opacity=30);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    opacity: 0.3;
+}
+
+.oc-export-btn:hover, .oc-export-btn:focus, .oc-export-btn:active {
+    background-color: #449d44;
+    border-color: #347a34;
+}
+
+.orgchart ~ .mask {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    z-index: 999;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.orgchart ~ .mask .spinner {
+    position: absolute;
+    top: calc(50% - 54px);
+    left: calc(50% - 54px);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 108px;
+}
+
+.orgchart .node {
+    transition: all 0.3s;
+    webkit-transition: all 0.3s;
+    opacity: 1;
+    top: 0;
+    left: 0;
+}
+
+.orgchart .slide-down {
+    opacity: 0;
+    top: 40px;
+}
+
+.orgchart.l2r .node.slide-down, .orgchart.r2l .node.slide-down {
+    top: 130px;
+}
+
+.orgchart .slide-up {
+    opacity: 0;
+    top: -40px;
+}
+
+.orgchart.l2r .node.slide-up, .orgchart.r2l .node.slide-up {
+    top: -130px;
+}
+
+.orgchart .slide-right {
+    opacity: 0;
+    left: 130px;
+}
+
+.orgchart.l2r .node.slide-right, .orgchart.r2l .node.slide-right {
+    left: 40px;
+}
+
+.orgchart .slide-left {
+    opacity: 0;
+    left: -130px;
+}
+
+.orgchart.l2r .node.slide-left, .orgchart.r2l .node.slide-left {
+    left: -40px;
+}
+
+.zoom-wrap-ul {
+    list-style-type: none;
+    position: fixed;
+    top: 100px;
+    right: 15px;
+    z-index: 1000000;
+}
+
+.zoom-wrap-ul > li:nth-child(2) {
+    border-right: none;
+    border-left: none;
+    background-color: #197de1;
+    background-image: -webkit-linear-gradient(top, #1b87e3 2%, #166ed5 98%);
+    background-image: linear-gradient(to bottom, #1b87e3 2%, #166ed5 98%);
+    background-origin: border-box;
+    color: #ecf2f8;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.zoom-wrap-ul > li:first-child {
+    border-radius: 4px 0 0 4px;
+}
+
+.zoom-wrap-ul > li:last-child {
+    border-radius: 0 4px 4px 0;
+}
+
+.zoom-wrap-ul > li {
+    float: left;
+    border: 1px solid #c5c5c5;
+    padding: 2px 10px;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+}
+
+.zoom-wrap-ul > li > a {
+    display: block;
+    text-decoration: none !important;
+}
+
+.zoom-wrap-ul > li.zoom-op:hover, .zoom-wrap-ul > li.zoom-op:focus {
+    cursor: pointer;
+    background: #f5f5f5;
+}

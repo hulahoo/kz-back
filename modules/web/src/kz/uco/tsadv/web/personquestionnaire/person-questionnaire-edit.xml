@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.personquestionnaire.PersonQuestionnaireEdit"
+        datasource="personQuestionnaireDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.personquestionnaire">
+    <dsContext>
+        <datasource id="personQuestionnaireDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonQuestionnaire"
+                    view="personQuestionnaire-view"/>
+        <collectionDatasource id="questionnairesDs"
+                              class="kz.uco.tsadv.modules.performance.model.Questionnaire"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$Questionnaire e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="personQuestionnaireDs">
+            <column width="350px">
+                <field captionProperty="questionnaireName"
+                       optionsDatasource="questionnairesDs"
+                       property="questionnaire"/>
+                <field id="appraiser">
+                    <suggestionPickerField captionProperty="fullName"
+                                           datasource="personQuestionnaireDs"
+                                           property="appraiser"/>
+                </field>
+                <field id="appraise">
+                    <suggestionPickerField captionProperty="fullName"
+                                           datasource="personQuestionnaireDs"
+                                           property="appraise"/>
+                </field>
+                <field property="status"/>
+                <field property="appraisalDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

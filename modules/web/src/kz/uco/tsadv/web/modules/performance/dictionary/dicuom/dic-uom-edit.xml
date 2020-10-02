@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicUOM.editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.dictionary.dicuom.DicUOMEdit"
+        datasource="dicUOMDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="dicUOMDs"
+                    class="kz.uco.tsadv.modules.performance.dictionary.DicUOM"
+                    view="dicUOM.browse"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="dicUOMDs">
+            <column width="250px">
+                <field property="langValue1"/>
+                <field property="langValue2"/>
+                <field property="langValue3"/>
+                <field property="langValue4"/>
+                <field property="langValue5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,1 @@
+alter table TSADV_DIC_ATTESTATION_EVENT add column DIC_ATTESTATION_RESULT_ID uuid ;

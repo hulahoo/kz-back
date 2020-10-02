@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.jobrequest.JobrequestNew"
+        messagesPack="kz.uco.tsadv.web.jobrequest">
+    <dsContext>
+        <collectionDatasource id="jobRequestsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                              view="jobRequest-for-new">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e
+where e.requisition.id = :param$requisitionId ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobRequestsDataGrid"
+            spacing="true">
+        <filter id="jobRequestsFilter"
+                datasource="jobRequestsDs"/>
+        <cssLayout id="progressBar"
+                   stylename="ca-progress-bar"/>
+        <dataGrid id="jobRequestsDataGrid"
+                  datasource="jobRequestsDs"
+                  width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"
+                        trackSelection="true"/>
+                <action id="remove"
+                        trackSelection="true"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="fullName"
+                        editable="false"
+                        property="candidatePersonGroup.fullName"/>
+                <column id="type"
+                        editable="false"
+                        property="candidatePersonGroup.person.type"/>
+                <column id="requestStatus"
+                        editable="false"
+                        property="requestStatus"/>
+                <column id="requestDate"
+                        editable="false"
+                        property="requestDate"/>
+            </columns>
+            <buttonsPanel>
+                <button id="createButton"
+                        action="jobRequestsDataGrid.create"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://descCreate"
+                        height="30px"
+                        icon="images/button_icons/user.png"/>
+                <button id="fastCreateButton"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://fastCreateDescr"
+                        icon="images/button_icons/empleado.png"
+                        invoke="onFastCreateClick"/>
+                <button id="createInterview"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://createInterviewDescr"
+                        enable="false"
+                        icon="images/button_icons/meeting.png"
+                        invoke="createInterview"/>
+                <button id="search"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://searchDescr"
+                        icon="images/button_icons/search.png"
+                        invoke="searchCandidate"/>
+                <button id="createOffer"
+                        caption="mainMsg://table.btn.empty"
+                        description="msg://createOffer"
+                        enable="false"
+                        icon="images/button_icons/casehand2.png"
+                        invoke="onCreateOfferButtonClick"/>
+                <button id="exel"
+                        action="jobRequestsDataGrid.excel"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/excel.png"/>
+                <popupButton id="actions"
+                             description="mainMsg://table.btn.actions"
+                             icon="font-icon:NAVICON">
+                    <actions>
+                        <action id="jobRequestsEditAction"
+                                caption="msg://jobRequestsTableEdit"
+                                enable="false"
+                                invoke="editJobRequest"/>
+                        <action id="jobRequestsRemoveAction"
+                                caption="msg://jobRequestsTableRemove"
+                                enable="false"
+                                invoke="removeJobRequest"/>
+                        <action id="refuseCandidate"
+                                caption="msg://JobRequest.renouncement.2"
+                                enable="false"
+                                invoke="refuseCandidate"/>
+                        <action id="resumeBtn"
+                                caption="msg://resume"
+                                enable="false"
+                                invoke="createResume"/>
+                    </actions>
+                </popupButton>
+            </buttonsPanel>
+        </dataGrid>
+    </layout>
+</window>

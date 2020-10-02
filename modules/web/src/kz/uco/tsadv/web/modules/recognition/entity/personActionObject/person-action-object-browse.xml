@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personActionObject.PersonActionObjectBrowse"
+        focusComponent="personActionObjectsTable"
+        lookupComponent="personActionObjectsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personActionObject">
+    <dsContext>
+        <groupDatasource id="personActionObjectsDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonActionObject"
+                         view="personActionObject-view">
+            <query>
+                <![CDATA[select e from tsadv$PersonActionObject e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personActionObjectsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personActionObjectsTable"
+                datasource="personActionObjectsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personActionObjectsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="action"/>
+                <column id="object"/>
+            </columns>
+            <rows datasource="personActionObjectsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personActionObjectsTable.create"/>
+                <button id="editBtn"
+                        action="personActionObjectsTable.edit"/>
+                <button id="removeBtn"
+                        action="personActionObjectsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

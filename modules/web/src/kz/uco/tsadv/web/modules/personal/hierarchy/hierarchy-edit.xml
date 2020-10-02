@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Hierarchy.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.hierarchy.HierarchyEdit"
+        datasource="hierarchyDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="hierarchyDs"
+                    class="kz.uco.base.entity.shared.Hierarchy"
+                    view="hierarchy.view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="hierarchyDs">
+            <column width="250px">
+                <field property="hierarchyName"/>
+                <field property="primaryFlag"/>
+                <field property="type"/>
+            </column>
+        </fieldGroup>
+
+        <frame id="windowActions" screen="editWindowActions"/>
+    </layout>
+</window>

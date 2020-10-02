@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.attestation.AttestationEdit"
+        datasource="attestationDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.attestation">
+    <dsContext>
+        <datasource id="attestationDs"
+                    class="kz.uco.tsadv.modules.learning.model.Attestation"
+                    loadDynamicAttributes="true"
+                    view="attestation.edit"/>
+        <collectionDatasource id="attestationTypesDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicAttestationType"
+                              view="dicAttestationType-view">
+            <query>
+                <![CDATA[select e from tsadv$DicAttestationType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="attestationOrganizationsDs"
+                              class="kz.uco.tsadv.modules.learning.model.AttestationOrganization"
+                              view="attestationOrganization-view">
+            <query>
+                <![CDATA[select e from tsadv$AttestationOrganization e 
+where e.attestation.id = :ds$attestationDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="attestationPositionsDs"
+                              class="kz.uco.tsadv.modules.learning.model.AttestationPosition"
+                              view="attestationPosition-view">
+            <query>
+                <![CDATA[select e from tsadv$AttestationPosition e 
+where e.attestation.id = :ds$attestationDs]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="attestationJobsDs"
+                              class="kz.uco.tsadv.modules.learning.model.AttestationJob"
+                              view="attestationJob-view">
+            <query>
+                <![CDATA[select e from tsadv$AttestationJob e where 
+e.attestation.id = :ds$attestationDs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="attestationDs">
+            <column width="250px">
+                <field id="attestationName"
+                       property="attestationName"/>
+                <field id="attestationType"
+                       optionsDatasource="attestationTypesDs"
+                       property="attestationType"/>
+                <field id="startDate"
+                       property="startDate"/>
+                <field id="endDate"
+                       property="endDate"/>
+                <field property="reason"/>
+                <field id="documentNumber"
+                       property="documentNumber"/>
+                <field id="documentDate"
+                       property="documentDate"/>
+            </column>
+        </fieldGroup>
+        <tabSheet id="tabSheet">
+            <tab id="tabOrganization"
+                 caption="msg://organizations"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="attestationOrganizationsTable"
+                       width="100%"
+                       height="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"
+                                trackSelection="true"/>
+                        <action id="remove"
+                                trackSelection="true"/>
+                    </actions>
+                    <columns>
+                        <column id="organizationGroup.organizationName"
+                                caption="msg://organizationName"/>
+                        <column id="includeChild"/>
+                    </columns>
+                    <rows datasource="attestationOrganizationsDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanelOrganization">
+                        <button id="createButtonOrganization"
+                                action="attestationOrganizationsTable.create"/>
+                        <button id="editButtonOrganization"
+                                action="attestationOrganizationsTable.edit"/>
+                        <button id="removeButtonOrganization"
+                                action="attestationOrganizationsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tabPosition"
+                 caption="msg://positions"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="attestationPositionsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"
+                                trackSelection="true"/>
+                        <action id="remove"
+                                trackSelection="true"/>
+                    </actions>
+                    <columns>
+                        <column id="positionGroup.positionName"/>
+                    </columns>
+                    <rows datasource="attestationPositionsDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanelPosition">
+                        <button id="createButtonPosition"
+                                action="attestationPositionsTable.create"/>
+                        <button id="editButtonPosition"
+                                action="attestationPositionsTable.edit"/>
+                        <button id="removeButtonPosition"
+                                action="attestationPositionsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tabJob"
+                 caption="msg://jobs"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="attestationJobsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"
+                                trackSelection="true"/>
+                        <action id="remove"
+                                trackSelection="true"/>
+                    </actions>
+                    <columns>
+                        <column id="jobGroup.jobName"
+                                caption="msg://jobs"/>
+                    </columns>
+                    <rows datasource="attestationJobsDs"/>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button id="createButtonJob"
+                                action="attestationJobsTable.create"/>
+                        <button id="editButtonJob"
+                                action="attestationJobsTable.edit"/>
+                        <button id="removeButtonJob"
+                                action="attestationJobsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgProfile"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+    <dialogMode height="600"
+                width="800"/>
+    <layout width="100%" stylename="rcg-profile rcg-page-content"/>
+</window>

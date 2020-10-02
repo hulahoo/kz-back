@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicBusinessTripType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicbusinesstriptype.DicBusinessTripTypeBrowse"
+        focusComponent="dicBusinessTripTypesTable"
+        lookupComponent="dicBusinessTripTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicbusinesstriptype">
+    <dsContext>
+        <groupDatasource id="dicBusinessTripTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicBusinessTripType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicBusinessTripType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicBusinessTripTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicBusinessTripTypesTable"
+                datasource="dicBusinessTripTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicBusinessTripTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="timesheetCode"/>
+                <column id="timecardWeekendCode"/>
+                <column id="workingDay"/>
+            </columns>
+            <rows datasource="dicBusinessTripTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicBusinessTripTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicBusinessTripTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicBusinessTripTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

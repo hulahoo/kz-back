@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Scale.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.scale.ScaleEdit"
+        datasource="scaleDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="scaleDs"
+                    class="kz.uco.tsadv.modules.personal.model.Scale"
+                    view="scale-view">
+            <groupDatasource id="scaleLevelsDs"
+                             property="scaleLevels"/>
+        </datasource>
+    </dsContext>
+    <dialogMode forceDialog="false"
+                height="AUTO"
+                modal="false"
+                width="600"/>
+    <layout expand="scaleLevelsBox"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="scaleDs">
+            <column width="250px">
+                <field property="scaleName"/>
+            </column>
+        </fieldGroup>
+
+        <groupBox id="scaleLevelsBox" expand="scaleLevelsTable" caption="msg://ScaleLevel.browse">
+            <groupTable id="scaleLevelsTable"
+                        width="100%">
+                <actions>
+                    <action id="create"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                </actions>
+                <columns>
+                    <column id="levelNameLang1"/>
+                    <column id="levelNameLang2"/>
+                    <column id="levelNameLang3"/>
+                    <column id="levelNameLang4"/>
+                    <column id="levelNameLang5"/>
+                    <column id="levelNumber"/>
+                    <column id="levelName"
+                            visible="false"/>
+                    <column id="levelDescriptionLang1"/>
+                </columns>
+                <rows datasource="scaleLevelsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="scaleLevelsTable.create"/>
+                    <button id="editBtn"
+                            action="scaleLevelsTable.edit"/>
+                    <button id="removeBtn"
+                            action="scaleLevelsTable.remove"/>
+                </buttonsPanel>
+            </groupTable>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

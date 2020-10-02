@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Person.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.timecard.employeelistfortimecard.EmployeeListForTimecardBrowse"
+        messagesPack="kz.uco.tsadv.web.modules.personal.timecard.employeelistfortimecard"
+        focusComponent="personsTable"
+        lookupComponent="personsTable">
+    <dsContext>
+        <groupDatasource id="personsDs"
+                         class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                         maxResults="20"
+                         view="person.browse">
+            <query>
+                <![CDATA[
+                 select e
+                   from base$PersonExt e
+                   join base$AssignmentExt a on a.personGroup.id = e.group.id
+                  where :param$date between e.startDate and e.endDate
+                    and :param$date between a.startDate and a.endDate
+                    and e.type.code in ('EMPLOYEE', 'EXEMPLOYEE')
+                    and (   a.assignmentStatus.code = 'ACTIVE'
+                         or a.assignmentStatus.code = 'SUSPENDED'
+                         or (    a.assignmentStatus.code = 'TERMINATED'
+                             and a.startDate >= :param$monthBegin
+                            )
+                        )
+                    and (   coalesce(
+                              (select max(ep.type.code)
+                                 from base$PersonExt ep
+                                where ep.group.id = e.group.id
+                                  and ep.endDate = cast((e.startDate - 1) date)),
+                              'EMPLOYEE') = 'EMPLOYEE'
+                          or e.type.code = 'EMPLOYEE'
+                        )
+                    and a.primaryFlag = true ]]>
+                <!-- Только работники (текущий статус или предыдущий статус должен быть работник) -->
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="100%"
+                width="100%"/>
+    <layout expand="personsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personsTable"
+                datasource="personsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personsTable"
+                    width="100%">
+            <columns>
+                <column id="userImage"
+                        caption="msg://Photo"
+                        generator="generateUserImageCell"
+                        sortable="false"/>
+                <column id="fioWithEmployeeNumber"
+                        link="true"
+                        linkInvoke="redirectCard"/>
+                <column id="nationalIdentifier"
+                        visible="false"/>
+                <column id="dateOfBirth"
+                        visible="false"/>
+                <column id="sex"
+                        captionProperty="person.sex.langValue"
+                        visible="false"/>
+                <column id="hireDate"
+                        visible="false"/>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.organizationGroup"
+                        captionProperty="group.currentAssignmentWithSuspendedStatus.organizationGroup.organization.organizationName"/>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.positionGroup"
+                        captionProperty="group.currentAssignmentWithSuspendedStatus.positionGroup.position.positionFullName"/>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.jobGroup"
+                        captionProperty="group.currentAssignmentWithSuspendedStatus.jobGroup.job.jobName"/>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.gradeGroup"
+                        captionProperty="group.currentAssignmentWithSuspendedStatus.gradeGroup.grade.gradeName"/>
+                <column id="group.currentAssignmentWithSuspendedAndTerminatedStatus.location.langValue"/>
+                <column id="type"
+                        caption="msg://Person.type"/>
+            </columns>
+            <rows datasource="personsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

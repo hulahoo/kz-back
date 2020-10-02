@@ -1,0 +1,2 @@
+alter table TSADV_PERSONAL_DATA_REQUEST rename column previous_first_name to previous_first_name__u15012 ;
+alter table TSADV_PERSONAL_DATA_REQUEST rename column previous_last_name to previous_last_name__u40234 ;

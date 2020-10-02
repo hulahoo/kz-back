@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.preandpostshiftinspection.PreAndPostShiftInspectionBrowse"
+        focusComponent="preAndPostShiftInspectionsTable"
+        lookupComponent="preAndPostShiftInspectionsTable"
+        messagesPack="kz.uco.tsadv.web.preandpostshiftinspection">
+    <dsContext>
+        <groupDatasource id="preAndPostShiftInspectionsDs"
+                         class="kz.uco.tsadv.entity.tb.PreAndPostShiftInspection"
+                         view="preAndPostShiftInspection-view">
+            <query>
+                <![CDATA[select e from tsadv$PreAndPostShiftInspection e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="preAndPostShiftInspectionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="preAndPostShiftInspectionsTable"
+                datasource="preAndPostShiftInspectionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="preAndPostShiftInspectionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="organization" captionProperty="organization.organization.organizationName"/>
+                <column id="entryDate"/>
+                <column id="inspectionType"/>
+                <column id="inspectedNumber"/>
+                <column id="passedPreShiftInspection"/>
+                <column id="passedPostShiftInspection"/>
+            </columns>
+            <rows datasource="preAndPostShiftInspectionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="preAndPostShiftInspectionsTable.create"/>
+                <button id="editBtn"
+                        action="preAndPostShiftInspectionsTable.edit"/>
+                <button id="removeBtn"
+                        action="preAndPostShiftInspectionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

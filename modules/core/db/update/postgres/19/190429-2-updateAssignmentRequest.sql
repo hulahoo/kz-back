@@ -1,0 +1,1 @@
+alter table TSADV_ASSIGNMENT_REQUEST add column ACTUAL_POSITION_GROUP_ID uuid ;

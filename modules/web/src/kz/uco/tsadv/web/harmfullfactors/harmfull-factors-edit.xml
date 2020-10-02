@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.harmfullfactors.HarmfullFactorsEdit"
+        datasource="harmfullFactorsDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.harmfullfactors">
+    <dsContext>
+        <datasource id="harmfullFactorsDs"
+                    class="kz.uco.tsadv.entity.tb.HarmfullFactors"
+                    view="harmfullFactors-view">
+            <collectionDatasource id="detailsDs"
+                                  property="details"/>
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+            <collectionDatasource id="preAndPostDs"
+                                  property="preAndPost"/>
+            <collectionDatasource id="notAllowedPersonDs"
+                                  property="notAllowedPerson">
+                    <collectionDatasource id="attachmentDs1" property="attachment"/>
+            </collectionDatasource>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <vbox id="vbox"
+              spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="harmfullFactorsDs">
+                <column width="250px">
+                    <field captionProperty="organization"
+                           property="organization"/>
+                    <field property="entryDate"/>
+                    <field property="laboratory"/>
+                </column>
+            </fieldGroup>
+            <frame id="windowActions"
+                   height="100%"
+                   screen="editWindowActions"/>
+        </vbox>
+        <tabSheet id="tabSheet">
+            <tab id="tab"
+                 caption="msg://tab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="harmfulFactorsDetailsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="totalSamples"/>
+                        <column id="maxPermisConcentration"/>
+                        <column id="maxSingleConcentration"/>
+                        <column id="harmfulFactorType"/>
+                    </columns>
+                    <rows datasource="detailsDs"/>
+                    <buttonsPanel>
+                        <button action="harmfulFactorsDetailsTable.create"/>
+                        <button action="harmfulFactorsDetailsTable.edit"/>
+                        <button action="harmfulFactorsDetailsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tab_1"
+                 caption="msg://tab1"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="attachmentsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="attachmentType"/>
+                        <column id="attachment"/>
+                    </columns>
+                    <rows datasource="attachmentDs"/>
+                    <buttonsPanel>
+                        <button action="attachmentsTable.create"/>
+                        <button action="attachmentsTable.edit"/>
+                        <button action="attachmentsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tab_2"
+                 caption="msg://tab2"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="preAndPostTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="entryDate"/>
+                        <column id="inspectedNumber"/>
+                        <column id="passedPreShiftInspection"/>
+                        <column id="passedPostShiftInspection"/>
+                        <column id="organization" captionProperty="organization.organization.organizationName"/>
+                        <column id="inspectionType"/>
+                    </columns>
+                    <rows datasource="preAndPostDs"/>
+                    <buttonsPanel>
+                        <button action="preAndPostTable.create"/>
+                        <button action="preAndPostTable.remove"/>
+                        <button action="preAndPostTable.edit"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tab3"
+                 caption="msg://tab3"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="notAllowedPersonTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="dispensaryConfirmation"/>
+                        <column id="notAllowed"/>
+                        <column id="intoxicationType"/>
+                    </columns>
+                    <rows datasource="notAllowedPersonDs"/>
+                    <buttonsPanel>
+                        <button action="notAllowedPersonTable.create"/>
+                        <button action="notAllowedPersonTable.edit"/>
+                        <button action="notAllowedPersonTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

@@ -1,0 +1,1 @@
+alter table TSADV_POSITION_CHANGE_REQUEST add column ATTACHMENT_ID uuid ;

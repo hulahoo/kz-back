@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.dicprotectionequipmenttype.DicProtectionEquipmentTypeEdit"
+        datasource="dicProtectionEquipmentTypeDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.dicprotectionequipmenttype">
+    <dsContext>
+        <datasource id="dicProtectionEquipmentTypeDs"
+                    class="kz.uco.tsadv.modules.personprotection.dictionary.DicProtectionEquipmentType"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <groupBox id="groupBox"
+                  orientation="horizontal"
+                  outerMargin="false, false, false, false">
+            <fieldGroup id="fieldGroup"
+                        captionAlignment="TOP"
+                        datasource="dicProtectionEquipmentTypeDs"
+                        width="42%">
+                <column width="250px">
+                    <field property="code"/>
+                    <field property="langValue1"/>
+                    <field property="langValue2"/>
+                    <field property="langValue3"/>
+                    <field property="langValue4"/>
+                    <field property="langValue5"/>
+                    <field property="startDate"/>
+                    <field property="isSystemRecord"/>
+                </column>
+                <column width="250px">
+                    <field property="legacyID"
+                           caption="mainMsg://legacyId"/>
+                    <field property="description1"/>
+                    <field property="description2"/>
+                    <field property="description3"/>
+                    <field property="description4"/>
+                    <field property="description5"/>
+                    <field property="endDate"/>
+                    <field property="active"/>
+                </column>
+            </fieldGroup>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.dictionary.dicquestionnairetype.DicQuestionnaireTypeBrowse"
+        focusComponent="dicQuestionnaireTypesTable"
+        lookupComponent="dicQuestionnaireTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.dictionary.dicquestionnairetype">
+    <dsContext>
+        <groupDatasource id="dicQuestionnaireTypesDs"
+                         class="kz.uco.tsadv.modules.recognition.dictionary.DicQuestionnaireType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicQuestionnaireType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicQuestionnaireTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicQuestionnaireTypesTable"
+                datasource="dicQuestionnaireTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicQuestionnaireTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="legacyID"/>
+                <column id="isSystemRecord"/>
+            </columns>
+            <rows datasource="dicQuestionnaireTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicQuestionnaireTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicQuestionnaireTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicQuestionnaireTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

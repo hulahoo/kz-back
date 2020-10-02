@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.goodsissue.GoodsIssueBrowse"
+        focusComponent="goodsIssuesTable"
+        lookupComponent="goodsIssuesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.goodsissue">
+    <dsContext>
+        <groupDatasource id="goodsIssuesDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.GoodsIssue"
+                         view="goodsIssue.edit">
+            <query>
+                <![CDATA[select e from tsadv$GoodsIssue e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goodsIssuesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="goodsIssuesTable"
+                datasource="goodsIssuesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="goodsIssuesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="goods.name"/>
+                <column id="quantity"/>
+                <column id="order"/>
+            </columns>
+            <rows datasource="goodsIssuesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="goodsIssuesTable.create"/>
+                <button id="editBtn"
+                        action="goodsIssuesTable.edit"/>
+                <button id="removeBtn"
+                        action="goodsIssuesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

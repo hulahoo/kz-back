@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.buildingmaintenance.BuildingMaintenanceBrowse"
+        focusComponent="buildingMaintenancesTable"
+        lookupComponent="buildingMaintenancesTable"
+        messagesPack="kz.uco.tsadv.web.buildingmaintenance">
+    <dsContext>
+        <groupDatasource id="buildingMaintenancesDs"
+                         class="kz.uco.tsadv.entity.tb.BuildingMaintenance"
+                         view="buildingMaintenance-view">
+            <query>
+                <![CDATA[select e from tsadv$BuildingMaintenance e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="buildingMaintenancesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="buildingMaintenancesTable"
+                datasource="buildingMaintenancesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="buildingMaintenancesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="inspectionReport"/>
+                <column id="technicalResolution"/>
+                <column id="maintenanceProhibition"/>
+                <column id="technicalJournalRecord"/>
+                <column id="currentRepairs"/>
+                <column id="rebuilding"/>
+                <column id="contractingOrganization"/>
+                <column id="onBalance"/>
+                <column id="dismantled"/>
+                <column id="unmaintenance"/>
+                <column id="onConservation"/>
+                <column id="writeOfDate"/>
+                <column id="dismantlingDate"/>
+                <column id="managerFullName.personFioWithEmployeeNumber"/>
+                <column id="responsibleFullName.personFioWithEmployeeNumber"/>
+            </columns>
+            <rows datasource="buildingMaintenancesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="buildingMaintenancesTable.create"/>
+                <button id="editBtn"
+                        action="buildingMaintenancesTable.edit"/>
+                <button id="removeBtn"
+                        action="buildingMaintenancesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

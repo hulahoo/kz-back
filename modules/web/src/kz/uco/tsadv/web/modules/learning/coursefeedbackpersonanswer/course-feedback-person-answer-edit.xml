@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswer.CourseFeedbackPersonAnswerEdit"
+        datasource="courseFeedbackPersonAnswerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswer">
+    <dsContext>
+        <datasource id="courseFeedbackPersonAnswerDs"
+                    class="kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer"
+                    view="courseFeedbackPersonAnswer.edit">
+            <collectionDatasource id="detailsDs"
+                                  property="details"/>
+        </datasource>
+        <collectionDatasource id="courseSectionSessionsDs"
+                              class="kz.uco.tsadv.modules.learning.model.CourseSectionSession"
+                              view="_local">
+            <query>
+                <![CDATA[
+                   select css
+                     from tsadv$CourseSectionSession css
+                ]]>
+                <filter>
+                    <c>
+                        css.courseSection.course.id = :component$courseField
+                    </c>
+                </filter>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="detailsTable"
+            height="100%"
+            spacing="true"
+            width="100%">
+        <fieldGroup id="fieldGroup"
+                    datasource="courseFeedbackPersonAnswerDs">
+            <column id="column1"
+                    width="550px">
+                <field id="course">
+                    <pickerField id="courseField"
+                                 datasource="courseFeedbackPersonAnswerDs"
+                                 property="course"/>
+                </field>
+                <field id="courseSectionSession"
+                       property="courseSectionSession"
+                       optionsDatasource="courseSectionSessionsDs"
+                       captionProperty="name"/>
+                <field id="feedbackTemplate"
+                       property="feedbackTemplate"/>
+                <field id="completeDate"
+                       property="completeDate"
+                       width="150px"/>
+            </column>
+            <column id="column2"
+                    width="380px">
+                <field id="responsibleRole"
+                       property="responsibleRole"/>
+                <field id="personGroup"
+                       captionProperty="fullName"
+                       property="personGroup"/>
+                <field id="sumScore"
+                       property="sumScore"/>
+                <field id="avgScore"
+                       property="avgScore"/>
+            </column>
+        </fieldGroup>
+        <table id="detailsTable"
+               width="100%">
+            <columns>
+                <column id="questionOrder"/>
+                <column id="question.questionLangValue"/>
+                <column id="answer.answerLangValue"
+                        generator="answerField"/>
+                <column id="score"/>
+            </columns>
+            <rows datasource="detailsDs"/>
+            <rowsCount/>
+        </table>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

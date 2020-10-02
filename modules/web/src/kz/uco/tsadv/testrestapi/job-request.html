@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Requisition methods</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en">en</input>
+                <input type="radio" name="lang" value="ru" checked>ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+
+                fillSelects();
+            });
+    }
+
+    function fillSelects() {
+        var lang = $("input[name=lang]:checked").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getCountries?lang=" + lang,
+            {
+                type: "GET",
+                /*headers: {
+                 "Authorization": "Bearer " + access_token
+                 }*/
+            })
+            .success(function (res) {
+                var countries = JSON.parse(res);
+                var reqsInner = '';
+                countries.forEach(function (e) {
+                    reqsInner += ('<input onchange="fillCities();" type="checkbox" name="reqs_country" value="' + e.id + '">' + e.name + '</input>');
+                });
+
+                document.getElementById("reqs_country_div").innerHTML = reqsInner;
+            });
+
+        fillCities();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getRequisitionCategories?lang=" + lang,
+            {
+                type: "GET",
+                /*headers: {
+                 "Authorization": "Bearer " + access_token
+                 }*/
+            })
+            .success(function (res) {
+                var categories = JSON.parse(res);
+                var inner = '';
+                categories.forEach(function (e) {
+                    inner += ('<input type="checkbox" name="reqs_cat" value="' + e.id + '">' + e.name + '</input>');
+                });
+
+                document.getElementById("cat_div").innerHTML = inner;
+            });
+
+        function fillCities() {
+            var lang = $("input[name=lang]:checked").val();
+
+            var country = $('input[name=reqs_country]:checked').map(function () {
+                return this.value;
+            }).get().join(",");
+
+            $.ajax(config.appUrl + config.serviceUrl + "/getCities?country=" + country + "&lang=" + lang,
+                {
+                    type: "GET",
+                    /*headers: {
+                     "Authorization": "Bearer " + access_token
+                     }*/
+                })
+                .success(function (res) {
+                    var cities = JSON.parse(res);
+                    var inner = '';
+                    cities.forEach(function (e) {
+                        inner += ('<input type="checkbox" name="reqs_city" value="' + e.id + '">' + e.name + '</input>');
+                    });
+
+                    document.getElementById("city_div").innerHTML = inner;
+                });
+        }
+    }
+</script>
+
+</body>
+</html>

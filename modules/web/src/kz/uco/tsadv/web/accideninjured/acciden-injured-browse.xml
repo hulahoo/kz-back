@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.accideninjured.AccidenInjuredBrowse"
+        focusComponent="accidenInjuredsTable"
+        lookupComponent="accidenInjuredsTable"
+        messagesPack="kz.uco.tsadv.web.accideninjured">
+    <dsContext>
+        <groupDatasource id="accidenInjuredsDs"
+                         class="kz.uco.tsadv.entity.tb.AccidenInjured"
+                         view="accidenInjured-view">
+            <query>
+                <![CDATA[select e from tsadv$AccidenInjured e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <groupTable id="accidenInjuredsTable"
+                    height="100%"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="person"/>
+                <column id="disabilityGroup"/>
+                <column id="traumaLevel"/>
+                <column id="inductionDate"/>
+                <column id="reIntroductoryDate"/>
+                <column id="knowledgeTestDate"/>
+                <column id="medicalExaminationDate"/>
+                <column id="workingHours"/>
+                <column id="physicalCondition"/>
+                <column id="diagnosis"/>
+                <column id="productionConnection"/>
+                <column id="specialOpinion"/>
+                <column id="employeeGuilt"/>
+                <column id="employerGuilt"/>
+                <column id="disabilityPercent"/>
+                <column id="sicknessStartDate"/>
+                <column id="sicknessEndDate"/>
+                <column id="reasonNoProductionConnection"/>
+                <column id="sicknessDays"/>
+                <column id="startWorkDate"/>
+                <column id="reabilitation"/>
+                <column id="retrainingProfession"/>
+                <column id="report"
+                        generator="generateLinkToReport"/>
+            </columns>
+            <rows datasource="accidenInjuredsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="accidenInjuredsTable.create"/>
+                <button id="editBtn"
+                        action="accidenInjuredsTable.edit"/>
+                <button id="removeBtn"
+                        action="accidenInjuredsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

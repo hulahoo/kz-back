@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.absence.AbsenceLookup"
+        focusComponent="absencesTable"
+        lookupComponent="absencesTable"
+        messagesPack="kz.uco.tsadv.web.absence">
+    <dsContext>
+        <groupDatasource id="absencesDs"
+                         class="kz.uco.tsadv.modules.personal.model.Absence"
+                         maxResults="20"
+                         view="absence.view">
+            <query>
+                <![CDATA[select e from tsadv$Absence e
+where e.personGroup.id = :session$userPersonGroupId
+order by e.dateFrom desc]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="procInstancesDs"
+                              class="com.haulmont.bpm.entity.ProcInstance"
+                              maxResults="20"
+                              view="procInstance-browse">
+            <query>
+                <![CDATA[select e from bpm$ProcInstance e
+where e.entity.entityId in ( select a.id from tsadv$AbsenceRequest a
+                     where a.assignmentGroup in ( select s.group from base$AssignmentExt s
+                                           where s.personGroup.id = :session$userPersonGroupId ) )
+ order by e.createTs desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true"
+            width="100%">
+        <tabSheet id="tabSheet"
+                  height="100%">
+            <tab id="currectInfo"
+                 caption="msg://myAbsences"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <scrollBox height="100%">
+                    <groupBox spacing="true">
+                        <filter id="filter"
+                                applyTo="absencesTable"
+                                datasource="absencesDs">
+                            <properties include=".*"/>
+                        </filter>
+                        <groupTable id="absencesTable"
+                                    width="100%">
+                            <actions>
+                                <action id="excel"/>
+                            </actions>
+                            <columns>
+                                <column id="type"/>
+                                <column id="dateFrom"/>
+                                <column id="dateTo"/>
+                                <column id="absenceDays"
+                                        caption="msg://days"/>
+                            </columns>
+                            <rows datasource="absencesDs"/>
+                            <rowsCount/>
+                            <buttonsPanel id="buttonsPanel"
+                                          alwaysVisible="true">
+                                <button id="addBtn"
+                                        icon="icons/plus-btn.png"
+                                        invoke="addAbsence"/>
+                                <button id="excelBtn"
+                                        action="absencesTable.excel"/>
+                                <button id="balanceBtn"
+                                        caption="msg://balanceBnt"
+                                        invoke="onBalanceBtnClick"/>
+                            </buttonsPanel>
+                        </groupTable>
+                    </groupBox>
+                </scrollBox>
+            </tab>
+            <tab id="myRequests"
+                 caption="msg://myRequests"
+                 expand="procInstanse"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <filter datasource="procInstancesDs"/>
+                <table id="procInstanse"
+                       width="100%">
+                    <columns>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="entityName"
+                                generator="generateEntityNameCell"/>
+                        <column id="status"
+                                caption="msg://status"
+                                generator="generateStatusCell"/>
+                    </columns>
+                    <rows datasource="procInstancesDs"/>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

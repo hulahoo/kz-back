@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.dictionary.dicinternshiprating.DicInternshipRatingBrowse"
+        focusComponent="dicInternshipRatingsTable"
+        lookupComponent="dicInternshipRatingsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.dictionary.dicinternshiprating">
+    <dsContext>
+        <groupDatasource id="dicInternshipRatingsDs"
+                         class="kz.uco.tsadv.modules.learning.dictionary.DicInternshipRating"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicInternshipRating e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicInternshipRatingsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicInternshipRatingsTable"
+                datasource="dicInternshipRatingsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicInternshipRatingsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="legacyID"/>
+                <column id="isSystemRecord"/>
+            </columns>
+            <rows datasource="dicInternshipRatingsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicInternshipRatingsTable.create"/>
+                <button id="editBtn"
+                        action="dicInternshipRatingsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicInternshipRatingsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswer.CourseFeedbackPersonAnswerBrowse"
+        focusComponent="courseFeedbackPersonAnswersTable"
+        lookupComponent="courseFeedbackPersonAnswersTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswer">
+    <dsContext>
+        <groupDatasource id="courseFeedbackPersonAnswersDs"
+                         class="kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer"
+                         view="courseFeedbackPersonAnswer.edit"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$CourseFeedbackPersonAnswer e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseFeedbackPersonAnswersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="courseFeedbackPersonAnswersTable"
+                datasource="courseFeedbackPersonAnswersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="courseFeedbackPersonAnswersTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="course"/>
+                <column id="courseSectionSession.name"/>
+                <column id="responsibleRole"/>
+                <column id="personGroup.fullName"/>
+                <column id="completeDate"/>
+                <column id="sumScore"/>
+                <column id="avgScore"/>
+            </columns>
+            <rows datasource="courseFeedbackPersonAnswersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="courseFeedbackPersonAnswersTable.create"/>
+                <button id="editBtn"
+                        action="courseFeedbackPersonAnswersTable.edit"/>
+                <button id="removeBtn"
+                        action="courseFeedbackPersonAnswersTable.remove"/>
+                <button action="courseFeedbackPersonAnswersTable.excel"/>
+                <button id="showAnswersBtn" caption="msg://table.btn.answers" invoke="showAnswers" enable="false"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

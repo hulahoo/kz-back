@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicOrderReason.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicorderreason.DicOrderReasonBrowse"
+        focusComponent="dicOrderReasonsTable"
+        lookupComponent="dicOrderReasonsTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicorderreason">
+    <dsContext>
+        <groupDatasource id="dicOrderReasonsDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicOrderReason"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicOrderReason e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicOrderReasonsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicOrderReasonsTable"
+                datasource="dicOrderReasonsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicOrderReasonsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicOrderReasonsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicOrderReasonsTable.create"/>
+                <button id="editBtn"
+                        action="dicOrderReasonsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicOrderReasonsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

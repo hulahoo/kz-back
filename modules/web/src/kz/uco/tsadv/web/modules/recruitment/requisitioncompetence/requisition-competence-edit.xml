@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RequisitionCompetence.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisitioncompetence.RequisitionCompetenceEdit"
+        datasource="requisitionCompetenceDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="requisitionCompetenceDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RequisitionCompetence"
+                    view="requisitionCompetence.view"/>
+        <collectionDatasource id="scaleLevelsDs"
+                              class="kz.uco.tsadv.modules.personal.model.ScaleLevel"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e
+                           from tsadv$ScaleLevel e
+                          where e.scale.id = :ds$requisitionCompetenceDs.competenceGroup.competence.scale.id
+                       order by e.levelNumber]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="requisitionCompetenceDs">
+            <column width="250px">
+                <field captionProperty="competence"
+                       property="competenceGroup"/>
+                <field optionsDatasource="scaleLevelsDs"
+                       property="scaleLevel"/>
+                <field property="criticalness" custom="true"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

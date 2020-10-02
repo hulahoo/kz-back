@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.talentprogramgrade.TalentProgramGradeEdit"
+        datasource="talentProgramGradeDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.talentprogramgrade">
+    <dsContext>
+        <datasource id="talentProgramGradeDs"
+                    class="kz.uco.tsadv.entity.TalentProgramGrade"
+                    view="talentProgramGrade-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="talentProgramGradeDs">
+            <column width="250px">
+                <field caption="msg://grade"
+                       property="gradeGroup"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

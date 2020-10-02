@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<studio>
+    <functionalitySettings>
+        <functionality id="oneToOneIndex"
+                       state="ENABLE"/>
+        <functionality id="joinedInheritanceDeleteCascade"
+                       state="DISABLE"/>
+        <functionality id="newFkConstraintNaming"
+                       state="DISABLE"/>
+    </functionalitySettings>
+    <settings>
+        <showInfoOutdatedScheme>false</showInfoOutdatedScheme>
+    </settings>
+</studio>

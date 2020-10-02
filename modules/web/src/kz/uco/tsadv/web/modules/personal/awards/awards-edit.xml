@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.awards.AwardsEdit"
+        datasource="awardsDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.awards">
+    <dsContext>
+        <datasource id="awardsDs"
+                    class="kz.uco.tsadv.modules.personal.model.Awards"
+                    view="awards.all"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="awardsDs">
+            <column width="250px">
+                <field property="promotionType" required="true"/>
+                <field property="awardType" custom="true"/>
+                <field property="date"/>
+                <field property="orderNum"/>
+                <field property="orderDate"/>
+                <field custom="true"
+                       property="surChargeType"/>
+                <field property="value"/>
+                <field editable="false"
+                       property="calculated"
+                       visible="false"/>
+                <field property="reason"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicLCArticle.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.diclcarticle.DicLCArticleBrowse"
+        focusComponent="dicLCArticlesTable"
+        lookupComponent="dicLCArticlesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.diclcarticle">
+    <dsContext>
+        <groupDatasource id="dicLCArticlesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicLCArticle"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicLCArticle e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicLCArticlesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicLCArticlesTable"
+                datasource="dicLCArticlesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicLCArticlesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="attribute"/>
+                <column id="article"/>
+                <column id="item"/>
+                <column id="subItem"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicLCArticlesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicLCArticlesTable.create"/>
+                <button id="editBtn"
+                        action="dicLCArticlesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicLCArticlesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

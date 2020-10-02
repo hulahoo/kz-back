@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Question.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.question.QuestionBrowse"
+        focusComponent="questionsTable"
+        lookupComponent="questionsTable">
+    <dsContext>
+        <collectionDatasource id="questionsDs"
+                              class="kz.uco.tsadv.modules.learning.model.Question"
+                              view="question.edit">
+            <query>
+                <![CDATA[select e from tsadv$Question e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="questionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="questionsTable"
+                datasource="questionsDs">
+            <properties include=".*"/>
+        </filter>
+        <button id="selectAllBtn"
+                invoke="selectAll"
+                caption="mainMsg://selectAllBtn"/>
+        <table id="questionsTable"
+               multiselect="true"
+               width="100%">
+            <columns>
+                <column id="text"
+                        maxTextLength="80"/>
+                <column id="type"/>
+                <column id="score"/>
+            </columns>
+            <rows datasource="questionsDs"/>
+        </table>
+    </layout>
+</window>

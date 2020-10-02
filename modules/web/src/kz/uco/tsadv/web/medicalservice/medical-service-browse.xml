@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.medicalservice.MedicalServiceBrowse"
+        focusComponent="medicalServicesTable"
+        lookupComponent="medicalServicesTable"
+        messagesPack="kz.uco.tsadv.web.medicalservice">
+    <dsContext>
+        <groupDatasource id="medicalServicesDs"
+                         class="kz.uco.tsadv.entity.tb.MedicalService"
+                         view="medicalService-view">
+            <query>
+                <![CDATA[select e from tsadv$MedicalService e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%">
+            <filter id="filter"
+                    applyTo="medicalServicesTable"
+                    datasource="medicalServicesDs">
+                <properties include=".*"/>
+            </filter>
+            <groupTable id="medicalServicesTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/edit.png"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/remove.png"/>
+                </actions>
+                <columns>
+                    <column id="agreementDate"/>
+                    <column id="agreementNumber"/>
+                    <column id="medicalCenter"/>
+                    <column id="dateFrom"/>
+                    <column id="dateTo"/>
+                    <column id="cost"/>
+                </columns>
+                <rows datasource="medicalServicesDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="medicalServicesTable.create"/>
+                    <button id="editBtn"
+                            action="medicalServicesTable.edit"/>
+                    <button id="removeBtn"
+                            action="medicalServicesTable.remove"/>
+                </buttonsPanel>
+            </groupTable>
+        </scrollBox>
+    </layout>
+</window>

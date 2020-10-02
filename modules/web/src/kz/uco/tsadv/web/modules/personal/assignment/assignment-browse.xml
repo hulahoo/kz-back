@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Assignment.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.assignment.AssignmentBrowse"
+        focusComponent="assignmentsTable"
+        lookupComponent="assignmentsTable">
+    <dsContext>
+        <groupDatasource id="assignmentsDs"
+                         class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                         view="assignmentBrowse.view">
+            <query>
+                <![CDATA[select e
+                        from base$AssignmentExt e, tsadv$PositionStructure ps, base$PositionExt pos, base$PersonExt p
+                        where ps.positionGroup.id = e.positionGroup.id
+                          and pos.group.id = e.positionGroup.id
+                          and p.group.id = e.personGroup.id
+                          and e.group.id not in :param$excludeAssignmentGroupIds
+                          and ( :component$filterDate between e.startDate and e.endDate
+                            and :component$filterDate between pos.startDate and pos.endDate
+                            and :component$filterDate between p.startDate and p.endDate
+                            and :component$filterDate between ps.startDate and ps.endDate
+                            and :component$filterDate between ps.posStartDate and ps.posEndDate)
+                        order by ps.lvl]]>
+                <filter>
+                    <and>
+                        <c>(:component$organizationGroupIdStr IS NULL
+                            OR {E}.organizationGroup.id IN (
+                            select ps.organizationGroup.id
+                            from tsadv$PositionStructure ps
+                            where ps.elementType = 1
+                              and :component$filterDate between ps.startDate and ps.endDate
+                              and ps.organizationGroupPath like concat('%', concat(:component$organizationGroupIdStr,
+                            '%'))
+                            ))</c>
+                        <c>(:component$personNameId IS NULL
+                            OR lower(concat(p.lastName, concat(' ', concat(p.firstName, concat(' ',
+                            coalesce(p.middleName,''))))))
+                            like lower(concat('%', concat(:component$personNameId, '%')))
+                            )</c>
+                        <c>(:component$positionNameId IS NULL
+                            OR lower(pos.positionName) like lower(concat('%', concat(:component$positionNameId, '%')))
+                            )</c>
+                    </and>
+                </filter>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :component$filterDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assignmentsTable"
+            spacing="true">
+        <hbox spacing="true">
+            <dateField id="filterDate"
+                       resolution="DAY"
+                       visible="false"/>
+            <label id="organizationGroupIdStr"
+                   visible="false"/>
+            <groupBox caption="msg://OrganizationStructure.filter">
+                <lookupPickerField id="organizationGroupLookupId"
+                                   captionProperty="organization.organizationName"
+                                   optionsDatasource="organizationGroupsDs"/>
+            </groupBox>
+            <groupBox caption="msg://PositionName.filter">
+                <textField id="positionNameId"/>
+            </groupBox>
+            <groupBox caption="msg://PersonName.filter">
+                <textField id="personNameId"/>
+            </groupBox>
+        </hbox>
+        <groupTable id="assignmentsTable"
+                    width="100%">
+            <columns>
+                <column id="personGroup.personFioWithEmployeeNumber"/>
+                <column id="positionGroup.position"
+                        captionProperty="positionGroup.position.positionName"/>
+                <column id="organizationGroup.organization"
+                        captionProperty="organizationGroup.organization.organizationName"/>
+            </columns>
+            <rows datasource="assignmentsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

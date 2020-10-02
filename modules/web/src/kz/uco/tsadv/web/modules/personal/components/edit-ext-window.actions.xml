@@ -1,0 +1,11 @@
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd">
+    <layout>
+        <hbox spacing="true" stylename="c-edit-window-actions">
+            <button id="windowCommit" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
+                    caption="msg://table.btn.save"/>
+            <button id="windowCommitHistory" caption="msg://table.btn.save.history"
+                    action="windowCommitHistory"/>
+            <button id="windowClose" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
+        </hbox>
+    </layout>
+</window>

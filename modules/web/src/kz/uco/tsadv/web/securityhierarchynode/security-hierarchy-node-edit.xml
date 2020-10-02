@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.securityhierarchynode.SecurityHierarchyNodeEdit"
+        datasource="securityHierarchyNodeDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.securityhierarchynode">
+    <dsContext>
+        <datasource id="securityHierarchyNodeDs"
+                    class="kz.uco.tsadv.modules.administration.security.SecurityHierarchyNode"
+                    view="securityHierarchyNode-edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="securityHierarchyNodeDs">
+            <column width="250px">
+                <field property="securityGroup"/>
+                <field property="organizationGroup" captionProperty="organizationName"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

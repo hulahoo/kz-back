@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.positionbpmrole.PositionBpmRoleEdit"
+        datasource="positionBpmRoleDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.positionbpmrole">
+    <dsContext>
+        <datasource id="positionBpmRoleDs"
+                    class="kz.uco.tsadv.entity.tb.PositionBpmRole"
+                    view="positionBpmRole-view">
+            <collectionDatasource id="bpmRolesLinkDs"
+                                  property="bpmRolesLink"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="positionBpmRoleDs">
+            <column width="400px">
+                <field captionProperty="fullName"
+                       property="positionGroup"
+                       required="true"/>
+                <field property="procModel"
+                       captionProperty="name"
+                       required="true"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

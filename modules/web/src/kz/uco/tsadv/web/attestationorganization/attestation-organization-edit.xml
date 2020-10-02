@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.attestationorganization.AttestationOrganizationEdit"
+        datasource="attestationOrganizationDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.attestationorganization">
+    <dsContext>
+        <datasource id="attestationOrganizationDs"
+                    class="kz.uco.tsadv.modules.learning.model.AttestationOrganization"
+                    view="attestationOrganization-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="attestationOrganizationDs">
+            <field id="attestation"
+                   property="attestation" captionProperty="attestationName" editable="false"/>
+            <field id="organizationGroup"
+                   property="organizationGroup" captionProperty="organizationName"/>
+            <field id="includeChild"
+                   property="includeChild"/>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

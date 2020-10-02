@@ -1,0 +1,2 @@
+alter table TSADV_TIMECARD_CORRECTION add column INTEGRATION_USER_LOGIN varchar(255) ;
+alter table TSADV_TIMECARD_CORRECTION add column ORGANIZATION_BIN varchar(255) ;

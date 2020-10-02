@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Interview.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.InterviewEdit"
+        datasource="interviewDs"
+        focusComponent="fieldGroup1"
+        messagesPack="kz.uco.tsadv.web.modules.recruitment.interview">
+    <dsContext>
+        <datasource id="interviewDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                    view="interview.view">
+            <collectionDatasource id="interviewDetailsDs"
+                                  property="interviewDetails"/>
+            <collectionDatasource id="questionnairesDs"
+                                  property="questionnaires"/>
+        </datasource>
+        <collectionDatasource id="interviewReasonsDs"
+                              class="kz.uco.tsadv.modules.recruitment.dictionary.DicInterviewReason"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicInterviewReason e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicLocationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation"
+                              view="_local">
+            <query>
+                <![CDATA[select e from base$DicLocation e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="100%"
+                width="100%"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <vbox id="vbox"
+                  margin="false,false,true,false">
+                <hbox margin="false,false,true,false"
+                      spacing="true"
+                      width="100%">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="interviewDs"
+                                width="100%">
+                        <column width="100%">
+                            <field caption="msg://Requisition.code"
+                                   captionProperty="name"
+                                   editable="false"
+                                   property="jobRequest"/>
+                            <field captionProperty="hiringStep"
+                                   editable="false"
+                                   property="requisitionHiringStep"/>
+                            <field property="interviewDate"/>
+                            <field property="interviewStatus"/>
+                            <field captionProperty="personFioWithEmployeeNumber"
+                                   property="mainInterviewerPersonGroup"
+                                   required="true"/>
+                            <field property="timeFrom"/>
+                            <field property="timeTo"/>
+                            <field captionProperty="addressLangValue"
+                                   optionsDatasource="dicLocationsDs"
+                                   property="place"/>
+                            <field id="placeMap"
+                                   caption="mainMsg://table.btn.empty"
+                                   custom="true"/>
+                        </column>
+                    </fieldGroup>
+                    <fieldGroup id="fieldGroup2"
+                                datasource="interviewDs"
+                                width="100%">
+                        <column width="100%">
+                            <field linkScreenOpenType="DIALOG"
+                                   property="interviewReason">
+                                <lookupPickerField datasource="interviewDs"
+                                                   optionsDatasource="interviewReasonsDs"
+                                                   property="interviewReason"/>
+                            </field>
+                            <field property="comment"
+                                   rows="6"/>
+                            <field caption="msg://attachment"
+                                   property="attachment"/>
+                        </column>
+                    </fieldGroup>
+                </hbox>
+                <table id="questionnairesTable"
+                       showSelection="false"
+                       width="100%">
+                    <actions>
+                        <action id="add"
+                                caption="msg://btn.empty.caption"
+                                description="msg://table.btn.add"
+                                icon="font-icon:SEARCH_PLUS"
+                                invoke="addQuestionnaires"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="questionnaire.name"/>
+                        <column id="result"
+                                align="CENTER"
+                                caption="msg://interview.actions"
+                                generator="generateQuestionnaireResult"/>
+                    </columns>
+                    <rows datasource="questionnairesDs"/>
+                    <buttonsPanel>
+                        <button action="questionnairesTable.add"/>
+                    </buttonsPanel>
+                </table>
+            </vbox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

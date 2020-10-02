@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.rcgquestion.RcgQuestionEdit"
+        datasource="rcgQuestionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.rcgquestion">
+    <dsContext>
+        <datasource id="rcgQuestionDs"
+                    class="kz.uco.tsadv.modules.recognition.RcgQuestion"
+                    view="rcgQuestion.edit">
+            <collectionDatasource id="answersDs"
+                                  property="answers"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="wrapper"
+            height="100%"
+            spacing="true"
+            width="100%">
+        <scrollBox id="wrapper" width="100%" spacing="true">
+            <fieldGroup id="fieldGroup" datasource="rcgQuestionDs" border="visible"
+                        fieldCaptionWidth="125px">
+                <column width="450px">
+                    <field property="textLang1"/>
+                    <field property="textLang2"/>
+                    <field property="textLang3"/>
+                    <field property="textLang4"/>
+                    <field property="textLang5"/>
+                </column>
+            </fieldGroup>
+            <fieldGroup id="descriptionFg" datasource="rcgQuestionDs" border="visible"
+                        fieldCaptionWidth="125px">
+                <column width="450px">
+                    <field property="descriptionLang1" rows="3"/>
+                    <field property="descriptionLang2" rows="3"/>
+                    <field property="descriptionLang3" rows="3"/>
+                    <field property="descriptionLang4" rows="3"/>
+                    <field property="descriptionLang5" rows="3"/>
+                </column>
+            </fieldGroup>
+            <fieldGroup datasource="rcgQuestionDs" border="visible"
+                        fieldCaptionWidth="125px">
+                <column width="450px">
+                    <field property="active"/>
+                    <field property="answerType"/>
+                    <field property="coins"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="answersBox"
+                      caption="msg://kz.uco.tsadv.modules.recognition/RcgQuestion.answers"
+                      expand="answersTable">
+                <table id="answersTable"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="text"/>
+                        <column id="code"/>
+                        <column id="score"/>
+                    </columns>
+                    <rows datasource="answersDs"/>
+                    <buttonsPanel>
+                        <button action="answersTable.create"/>
+                        <button action="answersTable.edit"/>
+                        <button action="answersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

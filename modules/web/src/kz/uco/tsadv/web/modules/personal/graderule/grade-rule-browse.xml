@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://GradeRule.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.graderule.GradeRuleBrowse"
+        focusComponent="gradeRulesTable"
+        lookupComponent="gradeRulesTable">
+    <dsContext>
+        <groupDatasource id="gradeRulesDs"
+                         class="kz.uco.tsadv.modules.personal.model.GradeRule"
+                         view="gradeRule.view">
+            <query>
+                <![CDATA[select e from tsadv$GradeRule e]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="gradeRuleValueGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.GradeRuleValueGroup"
+                         view="gradeRuleValueGroup.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$GradeRuleValueGroup e join e.list grv
+                          where grv.gradeRule.id = :ds$gradeRulesDs
+                            and :session$systemDate between grv.startDate and grv.endDate
+                        ]]>
+            </query>
+            <collectionDatasource id="listDs"
+                                  property="list"/>
+        </groupDatasource>
+        <collectionDatasource id="gradeGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.GradeGroup"
+                              view="gradeGroup.browse">
+            <query>
+                <![CDATA[select e
+                           from tsadv$GradeGroup e join e.list g
+                          where :session$systemDate between g.startDate and g.endDate
+                        ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <split id="horSplit"
+               height="100%"
+               orientation="horizontal"
+               width="100%">
+            <vbox expand="gradeRulesTable"
+                  height="100%"
+                  margin="false,true,false,false"
+                  spacing="true">
+                <filter id="gradeRuleFilter"
+                        applyTo="gradeRulesTable"
+                        datasource="gradeRulesDs"
+                        modeSwitchVisible="false">
+                    <properties include=".*"/>
+                </filter>
+                <groupTable id="gradeRulesTable"
+                            width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="ruleName"/>
+                        <column id="grossNet"/>
+                        <column id="currency"/>
+                    </columns>
+                    <rows datasource="gradeRulesDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtn"
+                                action="gradeRulesTable.create"/>
+                        <button id="editBtn"
+                                action="gradeRulesTable.edit"/>
+                        <button id="removeBtn"
+                                action="gradeRulesTable.remove"/>
+                    </buttonsPanel>
+                </groupTable>
+            </vbox>
+            <split id="verSplit"
+                   height="100%"
+                   orientation="vertical"
+                   width="100%">
+                <vbox height="100%"
+                      margin="false,true,true,true"
+                      spacing="true">
+                    <groupBox caption="msg://GradeRuleValue.browseCaption"
+                              expand="gradeRuleValueGroupsTable"
+                              height="100%"
+                              spacing="true"
+                              width="100%">
+                        <groupBox caption="msg://CustomFilter"
+                                  collapsable="true"
+                                  collapsed="true">
+                            <vbox id="filterBox"/>
+                        </groupBox>
+                        <groupTable id="gradeRuleValueGroupsTable"
+                                    width="100%">
+                            <actions>
+                                <action id="create"
+                                        icon="icons/add.png"
+                                        invoke="openGradeRuleValue"/>
+                                <action id="edit"
+                                        caption="msg://table.btn.edit"
+                                        icon="icons/edit.png"
+                                        invoke="edit"
+                                        shortcut="${TABLE_EDIT_SHORTCUT}"/>
+                                <action id="excel"/>
+                            </actions>
+                            <columns>
+                                <column id="gradeRuleValue.min"/>
+                                <column id="gradeRuleValue.mid"/>
+                                <column id="gradeRuleValue.max"/>
+                                <column id="gradeRuleValue.value"/>
+                                <column id="gradeRuleValue.gradeGroup.grade"/>
+                            </columns>
+                            <rows datasource="gradeRuleValueGroupsDs"/>
+                            <rowsCount/>
+                            <buttonsPanel id="gradeRuleValueGroupsButtonsPanel"
+                                          alwaysVisible="true">
+                                <button action="gradeRuleValueGroupsTable.create"
+                                        caption="msg://table.btn.create"/>
+                                <button action="gradeRuleValueGroupsTable.edit"/>
+                                <button action="gradeRuleValueGroupsTable.excel"
+                                        caption="msg://table.btn.excel"/>
+                            </buttonsPanel>
+                        </groupTable>
+                    </groupBox>
+                </vbox>
+                <vbox expand="historyGroupBox"
+                      height="100%"
+                      margin="false,true,false,true"
+                      spacing="true">
+                    <groupBox id="historyGroupBox"
+                              caption="msg://historyBox">
+                        <table id="historyTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="edit"
+                                        caption="msg://table.btn.edit"
+                                        invoke="editHistory"/>
+                                <action id="remove"
+                                        caption="msg://table.btn.remove"
+                                        invoke="removeHistory"/>
+                                <action id="removeLate"
+                                        caption="msg://table.btn.remove.late"
+                                        invoke="removeHistories"/>
+                            </actions>
+                            <columns>
+                                <column id="min"/>
+                                <column id="mid"/>
+                                <column id="max"/>
+                                <column id="value"/>
+                                <column id="gradeGroup.grade"/>
+                                <column id="startDate"/>
+                                <column id="endDate"/>
+                                <column id="updatedBy"/>
+                            </columns>
+                            <rows datasource="listDs"/>
+                        </table>
+                    </groupBox>
+                </vbox>
+            </split>
+        </split>
+    </layout>
+</window>

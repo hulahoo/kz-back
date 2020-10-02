@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.diclocation.DicLocationEdit"
+        datasource="dicLocationDs"
+        extends="/kz/uco/base/web/dictionary/diclocation/dic-location-edit.xml">
+    <dsContext/>
+    <dialogMode/>
+    <layout/>
+</window>

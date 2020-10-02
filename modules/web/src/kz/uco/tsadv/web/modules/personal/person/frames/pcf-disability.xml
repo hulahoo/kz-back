@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfDisability"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <table id="disabilityTable" height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="disabilityType"/>
+                <column id="duration"/>
+                <column id="dateFrom"/>
+                <column id="dateTo"/>
+                <column id="attachmentName"
+                        link="true"
+                        linkInvoke="downloadAttachment"/>
+            </columns>
+            <rows datasource="disabilityDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createBtn"
+                        action="disabilityTable.create"/>
+                <button id="editBtn"
+                        action="disabilityTable.edit"/>
+                <button id="removeBtn"
+                        action="disabilityTable.remove"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

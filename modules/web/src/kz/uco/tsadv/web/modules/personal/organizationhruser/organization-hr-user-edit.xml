@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OrganizationHrUser.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.organizationhruser.OrganizationHrUserEdit"
+        datasource="organizationHrUserDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="organizationHrUserDs"
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationHrUser"
+                    view="organizationHrUser.view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="organizationHrUserDs">
+            <column width="250px">
+                <field property="user"
+                       required="true"
+                        />
+                <field property="dateFrom"/>
+                <field property="dateTo"/>
+                <field property="counter"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

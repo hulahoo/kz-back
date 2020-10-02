@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://standardOffsetBrowse"
+        class="kz.uco.tsadv.web.modules.timesheet.standardoffset.StandardOffsetBrowse"
+        focusComponent="standardOffsetsTable"
+        lookupComponent="standardOffsetsTable"
+        messagesPack="kz.uco.tsadv.web.modules.timesheet.standardoffset">
+    <dsContext>
+        <groupDatasource id="standardOffsetsDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"
+                         view="standardOffset.view">
+            <query>
+                <![CDATA[select e from tsadv$StandardOffset e order by e.standardSchedule.scheduleName]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="standardOffsetsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="standardOffsetsTable"
+                datasource="standardOffsetsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="standardOffsetsTable"
+                    settingsEnabled="false"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="offsetScheduleName" caption="msg://Offset.scheduleName"/>
+            </columns>
+            <rows datasource="standardOffsetsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="standardOffsetsTable.create"/>
+                <button id="editBtn"
+                        action="standardOffsetsTable.edit"/>
+                <button id="removeBtn"
+                        action="standardOffsetsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

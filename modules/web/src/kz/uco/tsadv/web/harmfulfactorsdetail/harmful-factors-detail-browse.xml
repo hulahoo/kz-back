@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.harmfulfactorsdetail.HarmfulFactorsDetailBrowse"
+        focusComponent="harmfulFactorsDetailsTable"
+        lookupComponent="harmfulFactorsDetailsTable"
+        messagesPack="kz.uco.tsadv.web.harmfulfactorsdetail">
+    <dsContext>
+        <groupDatasource id="harmfulFactorsDetailsDs"
+                         class="kz.uco.tsadv.entity.tb.HarmfulFactorsDetail"
+                         view="harmfulFactorsDetail-view">
+            <query>
+                <![CDATA[select e from tsadv$HarmfulFactorsDetail e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="harmfulFactorsDetailsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="harmfulFactorsDetailsTable"
+                datasource="harmfulFactorsDetailsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="harmfulFactorsDetailsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="harmfulFactorType"/>
+                <column id="totalSamples"/>
+                <column id="maxPermisConcentration"/>
+                <column id="maxSingleConcentration"/>
+            </columns>
+            <rows datasource="harmfulFactorsDetailsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="harmfulFactorsDetailsTable.create"/>
+                <button id="editBtn"
+                        action="harmfulFactorsDetailsTable.edit"/>
+                <button id="removeBtn"
+                        action="harmfulFactorsDetailsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

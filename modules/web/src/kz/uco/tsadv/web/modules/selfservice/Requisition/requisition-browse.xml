@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.selfservice.Requisition.RequisitionBrowse"
+        focusComponent="requisitionsTable"
+        lookupComponent="requisitionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.selfservice.Requisition.Requisitionselfservice">
+    <dsContext>
+        <groupDatasource id="requisitionsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                         view="requisition-for-selfservice-browse">
+            <query>
+                <![CDATA[select e from tsadv$Requisition e
+                          where e.requisitionStatus=1
+                            and e.finalCollectDate > :session$systemDate]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="requisitionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="requisitionsTable"
+                datasource="requisitionsDs" >
+        </filter>
+        <groupTable id="requisitionsTable"
+                    showSelection="false"
+                    width="100%">
+            <columns>
+                <column id="jobGroup.job.jobName"
+                        caption="msg://filter.by.jobGroup"
+                        generator="generateJobGroupCell"/>
+                <column id="code"/>
+                <column id="location.langValue"
+                        caption="msg://city"/>
+                <column id="finalCollectDate"/>
+            </columns>
+            <rows datasource="requisitionsDs"/>
+        </groupTable>
+    </layout>
+</window>

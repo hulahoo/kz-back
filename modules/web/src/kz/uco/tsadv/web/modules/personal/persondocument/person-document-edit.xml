@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonDocument.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.persondocument.PersonDocumentEdit"
+        datasource="personDocumentDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="personDocumentDs"
+                    class="kz.uco.tsadv.modules.personal.model.PersonDocument"
+                    view="personDocument.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <hbox spacing="true"
+              width="100%">
+            <fieldGroup id="fieldGroup"
+                        datasource="personDocumentDs">
+                <column width="250px">
+                    <field property="documentType"/>
+                    <field property="documentNumber"/>
+                    <field property="series"/>
+                    <field property="issueDate"/>
+                    <field property="expiredDate"/>
+                    <field property="issuedBy"/>
+                    <field editable="false"
+                           property="status"/>
+                    <field property="description"/>
+                    <field property="file"/>
+                    <field property="personGroup"
+                           visible="false"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="procActionsBox"
+                      caption="msg://PersonDocumentApproval"
+                      height="100%"
+                      orientation="vertical"
+                      spacing="true">
+                <frame id="procActionsFrame"
+                       screen="procActionsFrame"/>
+            </groupBox>
+        </hbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

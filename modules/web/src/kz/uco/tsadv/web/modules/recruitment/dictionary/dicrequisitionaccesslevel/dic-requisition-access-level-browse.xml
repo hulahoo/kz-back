@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicRequisitionAccessLevel.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.dictionary.dicrequisitionaccesslevel.DicRequisitionAccessLevelBrowse"
+        focusComponent="dicRequisitionAccessLevelsTable"
+        lookupComponent="dicRequisitionAccessLevelsTable">
+    <dsContext>
+        <groupDatasource id="dicRequisitionAccessLevelsDs"
+                         class="kz.uco.tsadv.modules.recruitment.dictionary.DicRequisitionAccessLevel"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicRequisitionAccessLevel e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicRequisitionAccessLevelsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicRequisitionAccessLevelsTable"
+                datasource="dicRequisitionAccessLevelsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicRequisitionAccessLevelsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicRequisitionAccessLevelsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicRequisitionAccessLevelsTable.create"/>
+                <button id="editBtn"
+                        action="dicRequisitionAccessLevelsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicRequisitionAccessLevelsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

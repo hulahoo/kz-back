@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfEducation">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vBox"
+            height="100%"
+            width="100%">
+        <vbox id="vBox">
+            <hbox height="100%"
+                  margin="true, false, false ,false"
+                  width="100%">
+                <dataGrid id="personEducationTable"
+                          datasource="personEducationDs"
+                          height="100%"
+                          width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="school"
+                                property="school"
+                        />
+                        <column id="startYear"
+                                property="startYear"/>
+                        <column id="endYear"
+                                property="endYear"/>
+                        <column id="specialization"
+                                property="specialization"/>
+                        <column id="level"
+                                property="level"/>
+                        <column id="degree"
+                                property="degree"/>
+                        <column id="location"
+                                property="location"/>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel">
+                        <button id="createBtn"
+                                action="personEducationTable.create"/>
+                        <button id="editBtn"
+                                action="personEducationTable.edit"/>
+                        <button id="removeBtn"
+                                action="personEducationTable.remove"/>
+                        <button id="excelBtn"
+                                action="personEducationTable.excel"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

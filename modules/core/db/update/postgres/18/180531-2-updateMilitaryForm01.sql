@@ -1,0 +1,2 @@
+alter table TSADV_MILITARY_FORM add constraint FK_TSADV_MILITARY_FORM_UDO foreign key (UDO_ID) references TSADV_DIC_UDO(ID);
+create index IDX_TSADV_MILITARY_FORM_UDO on TSADV_MILITARY_FORM (UDO_ID);

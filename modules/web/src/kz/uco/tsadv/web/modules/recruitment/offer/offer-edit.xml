@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OfferBrowse.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.offer.OfferEdit"
+        datasource="offerDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="offerDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.Offer"
+                    view="offer.browse">
+            <datasource id="fileDs"
+                        property="file"/>
+            <collectionDatasource id="historyDs"
+                                  property="history"/>
+        </datasource>
+        <collectionDatasource id="offerTemplatesDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.OfferTemplate"
+                              view="_minimal"/>
+        <collectionDatasource id="currenciesDs"
+                              class="kz.uco.base.entity.dictionary.DicCurrency"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from base$DicCurrency e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e, bpm$ProcInstance pi
+                          where pi.entity.entityId = :ds$offerDs
+                            and e.procInstance.id = pi.id
+                       order by e.createTs]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <vbox id="editBox"
+                  spacing="true">
+                <hbox id="hbox"
+                      spacing="true"
+                      width="100%">
+                    <groupBox id="fieldGroupGroupBox">
+                        <fieldGroup id="fieldGroup"
+                                    datasource="offerDs">
+                            <column width="250px">
+                                <field id="jobRequestId"
+                                       captionProperty="name"
+                                       property="jobRequest"/>
+                                <field id="proposedSalaryId"
+                                       property="proposedSalary"
+                                       required="true"/>
+                                <field id="currencyId"
+                                       optionsDatasource="currenciesDs"
+                                       property="currency"
+                                       required="true"/>
+                                <field id="proposedStartDateId"
+                                       property="proposedStartDate"
+                                       required="true"/>
+                                <field id="expireDateId"
+                                       property="expireDate"
+                                       required="true"/>
+                                <field id="statusId"
+                                       editable="false"
+                                       property="status"/>
+                                <field id="offerTemplateId"
+                                       optionsDatasource="offerTemplatesDs"
+                                       property="offerTemplate"
+                                       required="true"/>
+                                <field id="fileId"
+                                       property="file"/>
+                                <field id="needBuisnessPartnerApproveId"
+                                       property="needBuisnessPartnerApprove"/>
+                            </column>
+                        </fieldGroup>
+                    </groupBox>
+                </hbox>
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors">
+                    <table id="procTasksTable"
+                           height="280px"
+                           width="100%">
+                        <columns>
+                            <column id="locName"
+                                    caption="msg://ProcActor.role"/>
+                            <column id="procActor.user"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="locOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                            <column id="comment"
+                                    maxTextLength="50"/>
+                        </columns>
+                        <rows datasource="procTasksDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <frame id="procActionsFrame"
+                   screen="procActionsFrame"
+                   width="AUTO"/>
+            <hbox id="approvedActionsGroupBoxId"
+                  spacing="true">
+                <button id="acceptButtonId"
+                        caption="msg://acceptButton"
+                        invoke="onAcceptButtonIdClick"/>
+                <button id="declineButtonId"
+                        caption="msg://declineButton"
+                        invoke="onDeclineButtonIdClick"/>
+            </hbox>
+            <button id="buttonCancelId"
+                    caption="msg://cancel"
+                    invoke="cancleButton"/>
+        </hbox>
+    </layout>
+</window>

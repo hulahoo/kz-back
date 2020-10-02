@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PositionStructure.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.positionstructure.PositionStructureBrowse"
+        lookupComponent="positionExtTable">
+    <dsContext>
+        <groupDatasource id="positionExtDs"
+                         class="kz.uco.tsadv.modules.personal.model.PositionExt"
+                         view="positionExt.view.for.candidate">
+            <query>
+                <![CDATA[select pe from base$PositionExt pe
+                        where pe.organizationGroupExt.id in
+                        (select oe.group.id from
+                        base$OrganizationExt oe
+                        where :session$systemDate between oe.startDate and oe.endDate )
+                        and :session$systemDate between pe.startDate and pe.endDate
+                        and pe.fte > 0
+                        and pe.deleteTs is null
+                      ]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <vbox expand="positionExtTable"
+              height="100%"
+              spacing="true">
+            <filter datasource="positionExtDs"/>
+            <dataGrid id="positionExtTable"
+                      datasource="positionExtDs"
+                      width="100%">
+                <columns>
+                    <column id="positionGroup"
+                            property="positionFullName"/>
+                    <column id="organizationGroup"
+                            property="organizationGroupExt.organizationName"/>
+                    <column id="managerFlag"
+                            property="managerFlag"/>
+                </columns>
+                <rowsCount/>
+            </dataGrid>
+        </vbox>
+    </layout>
+</window>

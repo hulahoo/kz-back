@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Requisition.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.RequisitionBrowse"
+        focusComponent="requisitionsTable"
+        lookupComponent="requisitionsTable">
+    <dsContext>
+        <groupDatasource id="requisitionsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                         view="requisition.view"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$Requisition e
+                left join e.recruiterPersonGroup rp
+                left join rp.list p on :session$systemDate between p.startDate and p.endDate
+                order by e.startDate desc]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="dicEmploymentTypesDs"
+                              class="kz.uco.tsadv.modules.recruitment.dictionary.DicEmploymentType"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from tsadv$DicEmploymentType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicLocationsDs"
+                              class="kz.uco.base.entity.dictionary.DicLocation"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_local">
+            <query>
+                <![CDATA[select e from base$DicLocation e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from tsadv$JobGroup e join e.list j
+                         where :session$systemDate between j.startDate and j.endDate
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="positionGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                              view="positionGroup.browse">
+            <query>
+                <![CDATA[select e
+                         from base$PositionGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.positionGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 2
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicCitiesDs"
+                              class="kz.uco.base.entity.dictionary.DicCity"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="dicCity.edit">
+            <query>
+                <![CDATA[select e from base$DicCity e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <vbox expand="requisitionsTable"
+              height="100%"
+              spacing="true">
+            <groupBox id="groupBoxCustomFilter"
+                      caption="msg://CustomFilter"
+                      collapsable="true">
+                <vbox id="filterBox"/>
+            </groupBox>
+            <filter id="filter"
+                    caption="msg://CustomFilter"
+                    applyTo="requisitionsTable"
+                    datasource="requisitionsDs">
+                <properties include=".*"/>
+            </filter>
+            <dataGrid id="requisitionsTable"
+                      datasource="requisitionsDs"
+                      frozenColumnCount="1"
+                      settingsEnabled="true"
+                      width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"
+                            description="mainMsg://createOrder"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"
+                            description="mainMsg://editOrder"/>
+                    <action id="remove"
+                            enable="false"
+                            trackSelection="true"
+                            caption="mainMsg://table.btn.empty"
+                            description="mainMsg://deleteOrder"/>
+                    <action id="refresh"
+                            caption="mainMsg://table.btn.empty"
+                            description="mainMsg://refreshOrder"/>
+                    <action id="copy"
+                            caption="mainMsg://table.btn.empty"
+                            description="mainMsg://table.btn.copy"
+                            icon="icons/copy.png"
+                            invoke="copy"/>
+                </actions>
+                <columns>
+                    <column id="nameForSiteLang"
+                            property="nameForSiteLang"
+                            caption="msg://ReplaceNamForSiteInRequisitionBrowse"/>
+                    <column id="jobGroup"
+                            property="jobGroup.job"
+                            caption="msg://Requisition.jobGroup"/>
+                    <column id="location"
+                            caption="msg://Requisition.location"
+                            property="location.settlementLangValue"/>
+                    <column id="openedPositionsCount2"
+                            caption="msg://requisition.browse.vacancy"
+                            property="openedPositionsCount"/>
+                    <column id="startDate"
+                            property="startDate"/>
+                    <column id="endDate"
+                            property="endDate"/>
+                    <column id="finalCollectDate"
+                            property="finalCollectDate"/>
+                    <column id="recruiterPersonGroup"
+                            property="recruiterPersonGroup.personLatinFioWithEmployeeNumber"
+                            caption="msg://Requisition.recruiter"/>
+                    <column id="requisitionStatus"
+                            property="requisitionStatus"/>
+                    <column id="jobRequestCount"
+                            caption="msg://JobRequest.browseCaption"
+                            property="jobRequestCount"/>
+                    <column id="code"
+                            property="code"/>
+                </columns>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="requisitionsTable.create"/>
+                    <button id="editBtn"
+                            action="requisitionsTable.edit"/>
+                    <button id="removeBtn"
+                            icon="icons/remove.png"
+                            invoke="removeRequisition"/>
+                    <button action="requisitionsTable.refresh"/>
+                    <button action="requisitionsTable.copy"/>
+                </buttonsPanel>
+            </dataGrid>
+        </vbox>
+    </layout>
+</window>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.personal.order.OrderClose"
+        datasource="orderDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="orderDs"
+                    class="kz.uco.tsadv.modules.personal.model.Order"
+                    view="order-view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <label/>
+            <fieldGroup id="fieldGroup"
+                        datasource="orderDs">
+                <column width="250px">
+                    <field property="endDate"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editExtWindowActions"/>
+    </layout>
+</window>

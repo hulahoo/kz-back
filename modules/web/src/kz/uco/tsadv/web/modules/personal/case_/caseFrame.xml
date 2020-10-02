@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.case_.Caseframe"
+        messagesPack="kz.uco.tsadv.web.modules.personal.case_">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <table id="casesTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/excel.png"/>
+            </actions>
+            <columns>
+                <column id="language"/>
+                <column id="caseType"/>
+                <column id="longName"/>
+            </columns>
+            <rows datasource="casesDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createBtn"
+                        action="casesTable.create"/>
+                <button id="editBtn"
+                        action="casesTable.edit"/>
+                <button id="removeBtn"
+                        action="casesTable.remove"/>
+                <button id="excelBtn"
+                        action="casesTable.excel"/>
+                <button id="generate"
+                        caption="msg://Job.edit.casesTable.generateButton"
+                        icon="font-icon:REFRESH"
+                        invoke="onGenerateClick"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

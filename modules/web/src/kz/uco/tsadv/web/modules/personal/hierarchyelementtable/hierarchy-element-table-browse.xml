@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://HierarchyElementTable.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.hierarchyelementtable.HierarchyElementTableBrowse"
+        focusComponent="hierarchyElementsTable"
+        lookupComponent="hierarchyElementsTable">
+    <dsContext>
+        <hierarchicalDatasource id="hierarchyElementsDs"
+                                class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                                hierarchyProperty="parent"
+                                view="hierarchyElement.browse">
+            <query>
+                <![CDATA[select e
+                           from base$HierarchyElementExt e
+                          where :session$systemDate between e.startDate and e.endDate]]>
+            </query>
+        </hierarchicalDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="hierarchyElementsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="hierarchyElementsTable"
+                datasource="hierarchyElementsDs">
+            <properties include=".*"/>
+        </filter>
+        <treeTable id="hierarchyElementsTable"
+                   width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"
+                        icon="icons/remove.png"
+                        />
+                <action id="close"
+                        caption="msg://table.btn.close"
+                        icon="icons/close.png"
+                        invoke="close"/>
+                <action id="reassignElement"
+                        invoke="reassignElement"
+                        caption="msg://reassignButton"/>
+            </actions>
+            <columns>
+                <column id="elementType"/>
+                <column id="name"
+                        caption="msg://name"/>
+                <column id="parent"
+                        generator="generateParentName"
+                        caption="msg://parent"
+                        />
+                <column id="hierarchy"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="hierarchyElementsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="hierarchyElementsTable.create"/>
+                <button id="editBtn"
+                        action="hierarchyElementsTable.edit"/>
+                <button id="removeBtn"
+                        action="hierarchyElementsTable.remove"/>
+                <button id = "reassign"
+                        action="hierarchyElementsTable.reassignElement"/>
+                <button id="closeBtn"
+                        action="hierarchyElementsTable.close"/>
+            </buttonsPanel>
+        </treeTable>
+    </layout>
+</window>

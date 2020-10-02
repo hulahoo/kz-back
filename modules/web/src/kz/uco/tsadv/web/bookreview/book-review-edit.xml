@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Book.createReview"
+        class="kz.uco.tsadv.web.bookreview.BookReviewEdit"
+        datasource="bookReviewDs"
+        messagesPack="kz.uco.tsadv.web.bookreview">
+    <dsContext>
+        <datasource id="bookReviewDs"
+                    class="kz.uco.tsadv.entity.BookReview"
+                    view="bookReview-edit-view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                resizable="true"
+                width="AUTO"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <vbox id="review_vbox"
+              spacing="true"
+              width="100%">
+            <hbox id="wrapRatingStar"
+                  spacing="true"
+                  width="AUTO"/>
+            <textArea id="review_text"
+                          datasource="bookReviewDs"
+                          property="reviewText"
+                          width="600px"
+                          height="300px"/>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Competence.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.competence.CompetenceBrowse"
+        focusComponent="competencesTable"
+        lookupComponent="competencesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.competence">
+    <dsContext>
+        <groupDatasource id="competencesDs"
+                         class="kz.uco.tsadv.modules.personal.model.Competence"
+                         view="competence-view">
+            <query>
+                <![CDATA[select e from tsadv$Competence e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="competencesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="competencesTable"
+                datasource="competencesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="competencesTable"
+
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="competenceName"/>
+            </columns>
+            <rows datasource="competencesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="competencesTable.create"/>
+                <button id="editBtn"
+                        action="competencesTable.edit"/>
+                <button id="removeBtn"
+                        action="competencesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

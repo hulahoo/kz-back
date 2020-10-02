@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Test.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.test.TestEdit"
+        datasource="testDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="testDs"
+                    class="kz.uco.tsadv.modules.learning.model.Test"
+                    view="test.edit">
+            <collectionDatasource id="sectionsDs"
+                                  property="sections">
+                <collectionDatasource id="questionsDs"
+                                      property="questions"/>
+            </collectionDatasource>
+            <collectionDatasource id="jobTestDs"
+                                  property="jobTest"/>
+            <collectionDatasource id="positionTestDs"
+                                  property="positionTest"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="mainInfo"
+                 caption="mainMsg://mainInfo"
+                 expand="vBox"
+                 margin="true,true,true,false">
+                <vbox id="vBox"
+                      expand="sectionsBox"
+                      spacing="true"
+                      width="100%">
+                    <fieldGroup id="fieldGroup"
+                                datasource="testDs">
+                        <column width="250px">
+                            <field property="name"/>
+                            <field property="type"/>
+                            <field property="daysBetweenAttempts"/>
+                            <field property="sectionOrder"/>
+                            <field property="description">
+                                <textArea datasource="testDs"
+                                          property="description"/>
+                            </field>
+                            <field property="showSectionNewPage"/>
+                            <field property="questionPerPage"/>
+                        </column>
+                        <column width="250px">
+                            <field property="targetScore"/>
+                            <field property="maxAttempt"/>
+                            <field property="timer"/>
+                            <field property="showResults"/>
+                            <field property="active"/>
+                        </column>
+                    </fieldGroup>
+                    <groupBox id="sectionsBox"
+                              caption="msg://Test.sections">
+                        <table id="sectionsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"/>
+                                <action id="edit"/>
+                                <action id="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="sectionName"/>
+                                <column id="questionOrder"/>
+                                <column id="questionBank.bankName"/>
+                                <column id="questionPerPage"/>
+                                <column id="answerOrder"/>
+                            </columns>
+                            <rows datasource="sectionsDs"/>
+                            <buttonsPanel>
+                                <button action="sectionsTable.create"/>
+                                <button action="sectionsTable.edit"/>
+                                <button action="sectionsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
+                </vbox>
+            </tab>
+            <tab id="instruction"
+                 caption="msg://Test.instruction"
+                 margin="true,false,false,false">
+                <richTextArea id="richTextArea"
+                              datasource="testDs"
+                              height="100%"
+                              property="instruction"
+                              width="100%"/>
+            </tab>
+            <tab id="positionTestBox"
+                 caption="msg://positionTest"
+                 margin="true, false, false, false">
+                <table id="positionTestTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="positionGroup.positionName"/>
+                        <column id="purpose"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="positionTestDs"/>
+                    <buttonsPanel>
+                        <button action="positionTestTable.create"/>
+                        <button action="positionTestTable.edit"/>
+                        <button action="positionTestTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="jobTestBox"
+                 caption="msg://jobTest"
+                 margin="true, false, false, false">
+                <table id="jobTestTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="jobGroup.jobName"
+                        caption="msg://jobName"/>
+                        <column id="purpose"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="jobTestDs"/>
+                    <buttonsPanel>
+                        <button action="jobTestTable.create"/>
+                        <button action="jobTestTable.edit"/>
+                        <button action="jobTestTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

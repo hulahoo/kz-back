@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.internshipexpenses.InternshipExpensesEdit"
+        datasource="internshipExpensesDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.internshipexpenses">
+    <dsContext>
+        <datasource id="internshipExpensesDs"
+                    class="kz.uco.tsadv.modules.learning.model.InternshipExpenses"
+                    view="internshipExpenses.edit"/>
+        <collectionDatasource id="currencyDs"
+                              class="kz.uco.base.entity.dictionary.DicCurrency"
+                              view="_local">
+            <query>
+                <![CDATA[select e from base$DicCurrency e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="internshipExpensesDs">
+            <column width="250px">
+                <field property="expenseType"/>
+                <field property="amount"/>
+                <field property="currency"
+                       optionsDatasource="currencyDs"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

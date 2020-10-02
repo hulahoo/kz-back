@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Relocation.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.relocation.ReLocationEdit"
+        datasource="reLocationDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="reLocationDs"
+                    class="kz.uco.tsadv.modules.personal.model.ReLocation"
+                    view="reLocation.browse"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="reLocationDs"
+                    width="100%">
+            <field caption="msg://person.card.ReLocation.city"
+                   property="city"
+                   width="100%"/>
+            <field property="description" rows="4" width="100%" maxLength="4000"/>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

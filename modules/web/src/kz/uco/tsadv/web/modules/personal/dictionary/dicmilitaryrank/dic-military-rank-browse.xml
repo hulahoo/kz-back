@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://DicMilitaryRankBrowse"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicmilitaryrank.DicMilitaryRankBrowse"
+        focusComponent="dicMilitaryRanksTable"
+        lookupComponent="dicMilitaryRanksTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicmilitaryrank">
+    <dsContext>
+        <groupDatasource id="dicMilitaryRanksDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicMilitaryRank"
+                         view="dicMilitaryRank-view">
+            <query>
+                <![CDATA[select e from tsadv$DicMilitaryRank e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicMilitaryRanksTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicMilitaryRanksTable"
+                datasource="dicMilitaryRanksDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicMilitaryRanksTable"
+                    multiselect="true"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="categoryComposition"
+                        caption="msg://CategoryCompositionColumn"/>
+                <column id="troopType"
+                        caption="msg://TroopTypeColumn"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicMilitaryRanksDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicMilitaryRanksTable.create"/>
+                <button id="editBtn"
+                        action="dicMilitaryRanksTable.edit"/>
+                <button id="removeBtn"
+                        action="dicMilitaryRanksTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

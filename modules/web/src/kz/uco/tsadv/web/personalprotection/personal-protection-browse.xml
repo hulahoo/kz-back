@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.personalprotection.PersonalProtectionBrowse"
+        focusComponent="basePersonGroupTable"
+        lookupComponent="basePersonGroupTable"
+        messagesPack="kz.uco.tsadv.web.personalprotection">
+    <dsContext>
+        <groupDatasource id="personGroupExtDs"
+                         class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                         view="personGroupExtInternship.edit">
+            <query>
+                <![CDATA[select distinct e.employee from tsadv$PersonalProtection e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="basePersonGroupTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="basePersonGroupTable"
+                datasource="personGroupExtDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="basePersonGroupTable"
+                    width="100%">
+            <columns>
+                <column id="personFioWithEmployeeNumber"/>
+                <column id="currentAssignment.organizationGroup.organizationName"
+                        caption="msg://organization"/>
+                <column id="currentAssignment.positionGroup.positionName"/>
+            </columns>
+            <rows datasource="personGroupExtDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        caption="mainMsg://table.btn.create"
+                        invoke="customCreate"/>
+                <button id="removeBtn"
+                        caption="msg://table.btn.remove"/>
+                <button id="siz"
+                        caption="msg://siz"
+                        invoke="goToSiz"
+                        enable="false"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

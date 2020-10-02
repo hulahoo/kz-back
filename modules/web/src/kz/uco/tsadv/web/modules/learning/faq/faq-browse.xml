@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Faq.browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.faq.FaqBrowse"
+        focusComponent="faqsTable"
+        lookupComponent="faqsTable">
+    <dsContext>
+        <groupDatasource id="faqsDs"
+                         class="kz.uco.tsadv.modules.learning.model.Faq"
+                         view="faq.browse">
+            <query>
+                <![CDATA[select e from tsadv$Faq e order by e.order]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="faqsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="faqsTable"
+                datasource="faqsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="faqsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="order"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+            </columns>
+            <rows datasource="faqsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="faqsTable.create"/>
+                <button id="editBtn"
+                        action="faqsTable.edit"/>
+                <button id="removeBtn"
+                        action="faqsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

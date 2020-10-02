@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://RequisitionHiringStep.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisitionhiringstep.RequisitionHiringStepEdit"
+        datasource="requisitionHiringStepDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="requisitionHiringStepDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RequisitionHiringStep"
+                    view="requisitionHiringStep.view"/>
+    </dsContext>
+    <dialogMode height="AUTO"
+                modal="true"
+                forceDialog="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="requisitionHiringStepDs">
+            <column width="250px">
+                <field property="hiringStep"/>
+                <field property="order"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

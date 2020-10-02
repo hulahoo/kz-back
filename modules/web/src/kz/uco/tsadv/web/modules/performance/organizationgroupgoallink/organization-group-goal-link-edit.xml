@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.performance.organizationgroupgoallink.OrganizationGroupGoalLinkEdit"
+        datasource="organizationGroupGoalLinkDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="organizationGroupGoalLinkDs"
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationGroupGoalLink"
+                    view="organizationGroupGoalLink-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="organizationGroupGoalLinkDs">
+            <column width="300px">
+                <field property="goal"/>
+                <field property="weight"/>
+                <field property="targetValue"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

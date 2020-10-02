@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Wait.fill.members.caption"
+        class="kz.uco.tsadv.web.modules.performance.calibrationmember.WaitFillMembers">
+
+    <dialogMode height="AUTO"
+                width="800"/>
+    <layout>
+        <vbox id="confirmBlock" spacing="true">
+            <label id="confirmText" value="msg://calibration.member.fill.confirm"/>
+            <label id="waitLoading" htmlEnabled="true" visible="false"/>
+        </vbox>
+        <hbox id="buttonsBlock"
+              align="BOTTOM_RIGHT"
+              spacing="true"
+              stylename="c-edit-window-actions">
+
+            <button id="windowCommit"
+                    caption="msg://button.yes"
+                    action="yes"/>
+
+            <button id="windowClose"
+                    caption="msg://button.no"
+                    action="no"/>
+        </hbox>
+    </layout>
+</window>

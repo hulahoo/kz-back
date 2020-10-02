@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.selfservice.newbeautytree.BeautyTreeNew">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            stylename="beauty-tree-wrap custom-chart-wrap"
+            width="100%">
+        <scrollBox id="scrollBox"
+                   height="100%"
+                   stylename="custom-chart"/>
+    </layout>
+</window>

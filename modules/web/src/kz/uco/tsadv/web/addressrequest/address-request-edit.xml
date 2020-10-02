@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.addressrequest.AddressRequestEdit"
+        datasource="addressRequestDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.addressrequest">
+    <dsContext>
+        <datasource id="addressRequestDs"
+                    class="kz.uco.tsadv.modules.personal.model.AddressRequest"
+                    view="addressRequest-view"/>
+        <collectionDatasource id="dicAddressTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType">
+            <query>
+                <![CDATA[select e from tsadv$DicAddressType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e
+                          where e.procInstance.entity.entityId = :ds$addressRequestDs
+                       order by e.startDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicCountriesDs"
+                              class="kz.uco.base.entity.dictionary.DicCountry">
+            <query>
+                <![CDATA[select e from base$DicCountry e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="countriesDs"
+                              class="kz.uco.base.entity.dictionary.DicCountry"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from base$DicCountry e]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="addressDs"
+                    class="kz.uco.tsadv.modules.personal.model.Address"
+                    view="address.view"/>
+        <collectionDatasource id="bpmRequestMessagesDs"
+                              class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
+                              view="bpmRequestMessage-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmRequestMessage e
+                    where e.entityId = :ds$addressRequestDs
+                           and ( e.assignedUser.userExt.id = :session$user or e.assignedBy.userExt.id = :session$user )
+                    order by e.sendDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="400"
+                width="AUTO"/>
+    <layout spacing="true"
+            width="100%"
+            expand="scrollBox">
+        <scrollBox id="scrollBox"
+                   width="100%"
+                   spacing="true">
+            <groupBox id="fieldGroupGroupBox">
+                <fieldGroup id="fieldGroup"
+                            datasource="addressRequestDs">
+                    <column width="250px">
+                        <field editable="false"
+                               property="requestNumber"/>
+                        <field optionsDatasource="dicAddressTypesDs"
+                               property="addressType"
+                               required="true"/>
+                        <field property="address"
+                               required="true"/>
+                        <field optionsDatasource="countriesDs"
+                               property="country"/>
+                        <field property="postalCode"/>
+                        <field property="city"/>
+                        <field property="attachment"/>
+                        <field editable="false"
+                               property="status"/>
+                    </column>
+                </fieldGroup>
+            </groupBox>
+            <vbox id="bpmActorsVBox"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           width="100%">
+                        <columns>
+                            <column id="locName"
+                                    caption="msg://ProcActor.role"/>
+                            <column id="procActor.user"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="locOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                            <column id="comment"
+                                    maxTextLength="50"/>
+                        </columns>
+                        <rows datasource="procTasksDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+            <groupBox id="askQuestion"
+                      width="100%"
+                      caption="Вопросы и ответы"
+                      spacing="true"/>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button id="buttonCancelId"
+                    caption="msg://cancel"
+                    invoke="closeButton"/>
+            <button id="askQuestionBtn"
+                    caption="mainMsg://askQuestion"
+                    invoke="onAskQuestion"/>
+            <frame id="procActionsFrame"
+                   screen="procActionsFrame"
+                   width="AUTO"/>
+        </hbox>
+    </layout>
+</window>

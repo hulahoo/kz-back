@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicpostingchannel.DicPostingChannelBrowse"
+        focusComponent="dicPostingChannelsTable"
+        lookupComponent="dicPostingChannelsTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicpostingchannel">
+    <dsContext>
+        <groupDatasource id="dicPostingChannelsDs"
+                         class="kz.uco.tsadv.modules.recruitment.dictionary.DicPostingChannel"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPostingChannel e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicPostingChannelsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicPostingChannelsTable"
+                datasource="dicPostingChannelsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicPostingChannelsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/close.png"/>
+            </actions>
+            <columns>
+                <column id="channalName"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="password"/>
+                <column id="userName"/>
+                <column id="connectionURL"/>
+            </columns>
+            <rows datasource="dicPostingChannelsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicPostingChannelsTable.create"/>
+                <button id="editBtn"
+                        action="dicPostingChannelsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicPostingChannelsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

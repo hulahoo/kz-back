@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.trainer.TrainerEdit"
+        datasource="trainerDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.trainer">
+    <dsContext>
+        <datasource id="trainerDs"
+                    class="kz.uco.tsadv.modules.performance.model.Trainer"
+                    view="trainer.edit">
+            <collectionDatasource id="courseTrainerDs"
+                                  property="courseTrainer"/>
+            <collectionDatasource id="courseTrainerAssessmentDs"
+                                  property="courseTrainerAssessment"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="trainerDs">
+            <column width="250px">
+                <field captionProperty="personFioWithEmployeeNumber"
+                       property="employee"/>
+                <field property="addPaymentAmount"/>
+                <field property="orderNumber"/>
+                <field property="orderDate"/>
+                <field captionProperty="name"
+                       property="party"/>
+            </column>
+        </fieldGroup>
+        <tabSheet>
+            <tab id="courseTrainerTab"
+                 caption="msg://courseTrainer"
+                 margin="true, false, false, false">
+                <table id="courseTrainerTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="course.name"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                    </columns>
+                    <rows datasource="courseTrainerDs"/>
+                    <buttonsPanel>
+                        <button action="courseTrainerTable.create"/>
+                        <button action="courseTrainerTable.edit"/>
+                        <button action="courseTrainerTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="courseTrainerAssessmentTab"
+                 caption="msg://courseTrainerAssessment"
+                 margin="true, false, false, false">
+                <table id="courseTrainerAssessmentTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="course.name"/>
+                        <column id="assessmentDate"/>
+                        <column id="assessor.personFioWithEmployeeNumber"/>
+                        <column id="score"/>
+                    </columns>
+                    <rows datasource="courseTrainerAssessmentDs"/>
+                    <buttonsPanel>
+                        <button action="courseTrainerAssessmentTable.create"/>
+                        <button action="courseTrainerAssessmentTable.edit"/>
+                        <button action="courseTrainerAssessmentTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

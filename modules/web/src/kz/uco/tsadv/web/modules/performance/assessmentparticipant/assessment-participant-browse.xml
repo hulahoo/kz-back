@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.performance.assessmentparticipant.AssessmentParticipantBrowse"
+        focusComponent="assessmentParticipantsTable"
+        lookupComponent="assessmentParticipantsTable"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assessmentparticipant">
+    <dsContext>
+        <groupDatasource id="assessmentParticipantsDs"
+                         class="kz.uco.tsadv.modules.performance.model.AssessmentParticipant"
+                         view="assessmentParticipant.browse">
+            <query>
+                <![CDATA[select e from tsadv$AssessmentParticipant e
+                         where e.participantPersonGroup.id = :session$userPersonGroupId
+                         and e.participantType.code = 'participant']]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <groupTable id="assessmentParticipantsTable"
+                    height="100%"
+                    width="100%">
+            <actions>
+                <action id="edit"
+                        invoke="onAssessButonClick"/>
+            </actions>
+            <columns>
+                <column id="assessment.employeePersonGroup.person.userImage"
+                        caption="msg://Photo"
+                        generator="generateUserImageCell"
+                        sortable="false"/>
+                <column id="assessment.employeePersonGroup.personFioWithEmployeeNumber"/>
+                <column id="assessment.assessmentName"/>
+                <column id="competenceRating"/>
+                <column id="goalRating"/>
+                <column id="overallRating"/>
+            </columns>
+            <rows datasource="assessmentParticipantsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="assessButon"
+                        action="assessmentParticipantsTable.edit"
+                        icon="font-icon:STAR"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

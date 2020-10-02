@@ -1,0 +1,1 @@
+alter table TSADV_AGREEMENT_DOCUMENT add column DESCRIPTION varchar(255) ;

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personaward.PersonAwardBrowse"
+        focusComponent="personAwardsTable"
+        lookupComponent="personAwardsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personaward">
+    <dsContext>
+        <groupDatasource id="personAwardsDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonAward"
+                         view="personAward.edit"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$PersonAward e order by e.date desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personAwardsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personAwardsTable"
+                datasource="personAwardsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personAwardsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="type"/>
+                <column id="date"/>
+                <column id="author.fullName" caption="msg://kz.uco.tsadv.modules.recognition/PersonAward.author"/>
+                <column id="receiver.fullName" caption="msg://kz.uco.tsadv.modules.recognition/PersonAward.receiver"/>
+                <column id="history" maxTextLength="50"/>
+                <column id="why" maxTextLength="50"/>
+                <column id="status"/>
+                <column id="awardProgram.name"/>
+            </columns>
+            <rows datasource="personAwardsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personAwardsTable.create"/>
+                <button id="editBtn"
+                        action="personAwardsTable.edit"/>
+                <button id="removeBtn"
+                        action="personAwardsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.recognitionloginlog.RecognitionLoginLogBrowse"
+        focusComponent="recognitionLoginLogsTable"
+        lookupComponent="recognitionLoginLogsTable"
+        messagesPack="kz.uco.tsadv.web.recognitionloginlog">
+    <dsContext>
+        <groupDatasource id="recognitionLoginLogsDs"
+                         class="kz.uco.tsadv.modules.recognition.RecognitionLoginLog"
+                         view="_local"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$RecognitionLoginLog e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="recognitionLoginLogsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="recognitionLoginLogsTable"
+                datasource="recognitionLoginLogsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="recognitionLoginLogsTable"
+                    width="100%">
+            <columns>
+                <column id="login"/>
+                <column id="sessionId"/>
+                <column id="dateTime"/>
+            </columns>
+            <rows datasource="recognitionLoginLogsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

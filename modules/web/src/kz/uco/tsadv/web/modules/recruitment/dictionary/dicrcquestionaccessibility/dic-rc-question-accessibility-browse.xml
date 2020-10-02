@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicRcQuestionAccessibility.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.dictionary.dicrcquestionaccessibility.DicRcQuestionAccessibilityBrowse"
+        focusComponent="dicRcQuestionAccessibilitiesTable"
+        lookupComponent="dicRcQuestionAccessibilitiesTable">
+    <dsContext>
+        <groupDatasource id="dicRcQuestionAccessibilitiesDs"
+                         class="kz.uco.tsadv.modules.recruitment.dictionary.DicRcQuestionAccessibility"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicRcQuestionAccessibility e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicRcQuestionAccessibilitiesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicRcQuestionAccessibilitiesTable"
+                datasource="dicRcQuestionAccessibilitiesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicRcQuestionAccessibilitiesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicRcQuestionAccessibilitiesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicRcQuestionAccessibilitiesTable.create"/>
+                <button id="editBtn"
+                        action="dicRcQuestionAccessibilitiesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicRcQuestionAccessibilitiesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

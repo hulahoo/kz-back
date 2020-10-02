@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.timesheet.standardschedule.StandardScheduleDayDetail">
+    <dsContext>
+
+        <collectionDatasource id="scheduleDetailsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.ScheduleDetail"
+                              view="scheduleDetail.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$ScheduleDetail e
+                          where e.summary.id = :param$selectedScheduleSummary
+                       order by e.timeIn, e.elementType]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="auto"
+                width="800"/>
+    <layout spacing="true">
+        <table id="scheduleDetailsTable"
+               height="100%"
+               width="100%">
+            <columns>
+                <column id="elementType"/>
+                <column id="timeIn"/>
+                <column id="timeOut"/>
+                <column id="hours">
+                    <formatter class="kz.uco.tsadv.formatter.TimecardRepresentationFormatter"/>
+                </column>
+            </columns>
+            <rows datasource="scheduleDetailsDs"/>
+        </table>
+    </layout>
+</window>

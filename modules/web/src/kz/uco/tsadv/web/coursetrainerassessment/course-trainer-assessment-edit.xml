@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.coursetrainerassessment.CourseTrainerAssessmentEdit"
+        datasource="courseTrainerAssessmentDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.coursetrainerassessment">
+    <dsContext>
+        <datasource id="courseTrainerAssessmentDs"
+                    class="kz.uco.tsadv.modules.performance.model.CourseTrainerAssessment"
+                    view="courseTrainerAssessment.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="courseTrainerAssessmentDs">
+            <column width="250px">
+                <field property="course" captionProperty="name"/>
+                <field property="assessmentDate"/>
+                <field property="assessor" captionProperty="personFioWithEmployeeNumber"/>
+                <field property="score"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

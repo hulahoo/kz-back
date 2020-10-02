@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.individualdevelopmentplan.IndividualDevelopmentPlanBrowse"
+        focusComponent="individualDevelopmentPlansTable"
+        lookupComponent="individualDevelopmentPlansTable"
+        messagesPack="kz.uco.tsadv.web.individualdevelopmentplan">
+    <dsContext>
+        <groupDatasource id="individualDevelopmentPlansDs"
+                         class="kz.uco.tsadv.modules.learning.model.IndividualDevelopmentPlan"
+                         view="individualDevelopmentPlan.edit">
+            <query>
+                <![CDATA[select e from tsadv$IndividualDevelopmentPlan e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="individualDevelopmentPlansTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="individualDevelopmentPlansTable"
+                datasource="individualDevelopmentPlansDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="individualDevelopmentPlansTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="personGroup.personFioWithEmployeeNumber"/>
+                <column id="planName"/>
+                <column id="status"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="individualDevelopmentPlansDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="individualDevelopmentPlansTable.create"/>
+                <button id="editBtn"
+                        action="individualDevelopmentPlansTable.edit"/>
+                <button id="removeBtn"
+                        action="individualDevelopmentPlansTable.remove"/>
+                <!--<button id="detail"-->
+                        <!--invoke="goToDetail"-->
+                        <!--caption="msg://detail"-->
+                        <!--enable="false"/>-->
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

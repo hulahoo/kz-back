@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.workplacemsds.WorkplaceMSDSEdit"
+        datasource="workplaceMSDSDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.workplacemsds">
+    <dsContext>
+        <datasource id="workplaceMSDSDs"
+                    class="kz.uco.tsadv.entity.tb.WorkplaceMSDS"
+                    view="workplaceMSDS-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="workplaceMSDSDs">
+            <column width="250px">
+                <field property="developPlanDate"/>
+                <field property="developFactDate"/>
+                <field property="msds"/>
+                <field property="document"/>
+                <field property="status"/>
+                <field property="donePlanDate"/>
+                <field property="doneFactDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

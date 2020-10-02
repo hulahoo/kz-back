@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RcQuestionnaire.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.rcquestionnaire.RcQuestionnaireBrowse"
+        focusComponent="rcQuestionnairesTable"
+        lookupComponent="rcQuestionnairesTable">
+    <dsContext>
+        <groupDatasource id="rcQuestionnairesDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.RcQuestionnaire"
+                         view="rcQuestionnaire.view">
+            <query>
+                <![CDATA[select e from tsadv$RcQuestionnaire e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="rcQuestionnairesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="rcQuestionnairesTable"
+                datasource="rcQuestionnairesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="rcQuestionnairesTable"
+                    width="100%">
+            <actions>
+                <action id="create" icon="icons/plus-btn.png"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langName"/>
+                <column id="status"/>
+                <column id="category"/>
+                <column id="instruction" maxTextLength="50"/>
+            </columns>
+            <rows datasource="rcQuestionnairesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        caption=""
+                        action="rcQuestionnairesTable.create"/>
+                <button id="editBtn"
+                        caption=""
+                        action="rcQuestionnairesTable.edit"/>
+                <button id="removeBtn"
+                        caption=""
+                        action="rcQuestionnairesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://PersonCardNoAssignment.caption"
+        class="kz.uco.tsadv.web.modules.personal.person.PersonCardNoAssignment"
+        datasource="personGroupDs">
+    <dsContext>
+        <datasource id="personGroupDs"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                    view="personGroup.noAssignment">
+            <datasource id="personDs"
+                        property="person">
+            </datasource>
+        </datasource>
+        <collectionDatasource id="personHistoryDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                              view="person-view">
+            <query>
+                <![CDATA[select e from base$PersonExt e
+                          where e.group.id = :ds$personGroupDs.id
+                          order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personContactsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonContact"
+                              view="personContact.card">
+            <query>
+                <![CDATA[select e from tsadv$PersonContact e
+                          where e.personGroup.id = :ds$personGroupDs.id
+                          order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personDocumentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonDocument"
+                              view="personDocument.card">
+            <query>
+                <![CDATA[select e from tsadv$PersonDocument e
+                          where e.personGroup.id = :ds$personGroupDs.id
+                          order by e.issueDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="addressesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Address"
+                              view="address.view">
+            <query>
+                <![CDATA[select e from tsadv$Address e
+                where e.personGroup.id = :ds$personGroupDs.id
+                order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="beneficiariesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Beneficiary"
+                              view="beneficiaryView">
+            <query>
+                <![CDATA[select e from tsadv$Beneficiary e where e.personGroupParent.id = :ds$personGroupDs.id
+                          order by e.dateFrom desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="casesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Case"
+                              view="case.view">
+            <query>
+                <![CDATA[select e from tsadv$Case e
+                          where e.personGroup.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="flySurChargeDs"
+                              class="kz.uco.tsadv.modules.personal.model.FlySurCharge"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$FlySurCharge e
+                          where e.assignmentGroupId.id = :ds$assignmentGroupDs.id
+                          order by e.dateFrom desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="militaryRankDs"
+                              class="kz.uco.tsadv.modules.personal.model.MilitaryForm"
+                              view="militaryForm-view">
+            <query>
+                <![CDATA[select e from tsadv$MilitaryForm e
+                      where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.date_from desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="disabilityDs"
+                              class="kz.uco.tsadv.modules.personal.model.Disability"
+                              view="disability.all">
+            <query>
+                <![CDATA[select e from tsadv$Disability e
+                      where e.personGroupExt.id = :ds$personGroupDs.id
+                      order by e.dateFrom desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="retirementDs"
+                              class="kz.uco.tsadv.modules.personal.model.Retirement"
+                              view="retirement.all">
+            <query>
+                <![CDATA[select e from tsadv$Retirement e
+                      where e.personGroupExt.id = :ds$personGroupDs.id
+                      order by e.dateFrom desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="agreementsDs"
+                              class="kz.uco.tsadv.modules.personal.model.Agreement"
+                              view="agreement.view">
+            <query>
+                <![CDATA[select e from tsadv$Agreement e
+                      where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.dateFrom desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personExperienceDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.PersonExperience"
+                              view="personExperience.view">
+            <query>
+                <![CDATA[select e from tsadv$PersonExperience e
+                      where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.startMonth desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="jobRequestsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                              view="jobRequest.card">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e
+                      where e.candidatePersonGroup.id = :ds$personGroupDs.id
+                      order by e.requestDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dismissalsDs"
+                              class="kz.uco.tsadv.modules.personal.model.Dismissal"
+                              view="dismissal.card">
+            <query>
+                <![CDATA[select e from tsadv$Dismissal e
+                      where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.dismissalDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="tradeUnionsDs"
+                              class="kz.uco.tsadv.modules.personal.model.TradeUnion"
+                              view="tradeUnionOnPersonCard">
+            <query>
+                <![CDATA[select e from tsadv$TradeUnion e where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.joingTradeUnion desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="relocationDs"
+                              class="kz.uco.tsadv.modules.personal.model.ReLocation"
+                              view="relocation.card">
+            <query>
+                <![CDATA[select e from tsadv$ReLocation e
+                      where e.personGroup.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="punishmentDs"
+                              class="kz.uco.tsadv.modules.personal.model.Punishment"
+                              view="punishment.all">
+            <query>
+                <![CDATA[select e from tsadv$Punishment e
+                      where e.assignmentGroup.id = :ds$assignmentGroupDs.id
+                      order by e.date desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="awardsDs"
+                              class="kz.uco.tsadv.modules.personal.model.Awards"
+                              view="awards.all">
+            <query>
+                <![CDATA[select e from tsadv$Awards e
+                      where e.assignmentGroup.id = :ds$assignmentGroupDs.id
+                      order by e.date desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personMentorsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonMentor"
+                              view="personMentor.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonMentor e where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personLearningHistoryDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonLearningHistory"
+                              view="personLearningHistory.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonLearningHistory e where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.startDate desc]]>
+            </query>
+            <collectionDatasource id="learningExpenseDs" property="learningExpense"/>
+        </collectionDatasource>
+        <collectionDatasource id="personLearningContractDs"
+                              class="kz.uco.tsadv.modules.learning.model.PersonLearningContract"
+                              view="personLearningContract.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonLearningContract e where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.contractDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="salaryDs"
+                              class="kz.uco.tsadv.modules.personal.model.Salary"
+                              view="salary.view">
+            <query>
+                <![CDATA[select e from tsadv$Salary e where e.assignmentGroup.id = :ds$assignmentGroupDs.id order by e.startDate DESC]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="surChargeDs"
+                              class="kz.uco.tsadv.modules.personal.model.SurCharge"
+                              view="surCharge.card">
+            <query>
+                <![CDATA[select e from tsadv$SurCharge e
+                      where e.assignmentGroup.id = :ds$assignmentGroupDs.id
+                      order by e.dateFrom desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personEducationDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.PersonEducation"
+                              view="personEducation.view">
+            <query>
+                <![CDATA[select e from tsadv$PersonEducation e
+                      where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.startYear desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="competencePersonDs"
+                              class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
+                              view="competenceElement.card">
+            <query>
+                <![CDATA[select e from tsadv$CompetenceElement e
+                      where e.personGroup.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="competenceChartEntitiesDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.global.entity.CompetenceChartEntity"/>
+        <collectionDatasource id="assessmentsDs"
+                              class="kz.uco.tsadv.modules.performance.model.Assessment"
+                              view="assessmentForCard">
+            <query>
+                <![CDATA[select e from tsadv$Assessment e
+                where e.employeePersonGroup.id = :ds$personGroupDs.id
+                      order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="salaryChartEntitiesDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.global.entity.SalaryChartEntity"/>
+        <collectionDatasource id="absencesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence.view">
+            <query>
+                <![CDATA[select e from tsadv$Absence e
+                where e.personGroup.id = :ds$personGroupDs.id
+                  and e.dateFrom >= (select coalesce(p.hireDate, p.startDate) from base$PersonExt p
+                                           where p.group.id = :ds$personGroupDs.id
+                                             and :session$systemDate between p.startDate and p.endDate)
+                  and (0 = (select count(d.dismissalDate) from tsadv$Dismissal d
+                                          where d.personGroup.id = :ds$personGroupDs.id
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup.id = :ds$personGroupDs.id
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true))
+                            or e.dateFrom <= (select d.dismissalDate from tsadv$Dismissal d
+                                          where d.personGroup.id = :ds$personGroupDs.id
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup.id = :ds$personGroupDs.id
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true)))
+                order by e.dateFrom desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="successionPlanningsDs"
+                              class="kz.uco.tsadv.modules.personal.model.SuccessionPlanning">
+            <query>
+                <![CDATA[select e from tsadv$SuccessionPlanning e where e.personGroup.id = :ds$personGroupDs.id
+                      order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="successorsDs"
+                              class="kz.uco.tsadv.modules.personal.model.Successor"
+                              view="successor-view">
+            <query>
+                <![CDATA[select e from tsadv$Successor e where e.personGroup.id = :ds$personGroupDs.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="enrollmentsApprovedDs"
+                              class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                              view="enrollmentPersonCard">
+            <query>
+                <![CDATA[select e from tsadv$Enrollment e
+                    where e.personGroup.id = :ds$personGroupDs.id and
+                    e.status in (3,5) order by e.status
+
+]]>
+            </query>
+        </collectionDatasource>
+
+        <collectionDatasource id="absenceBalancesDs"
+                              class="kz.uco.tsadv.modules.personal.model.AbsenceBalance"
+                              view="absenceBalance.view">
+            <query>
+                <![CDATA[select e from tsadv$AbsenceBalance e
+                    where e.personGroup.id = :ds$personGroupDs.id
+                      and e.dateFrom >= (select p.hireDate from base$PersonExt p
+                                           where p.group.id = :ds$personGroupDs.id
+                                             and :session$systemDate between p.startDate and p.endDate)
+                      and (0 = (select count(d.dismissalDate) from tsadv$Dismissal d
+                                          where d.personGroup.id = :ds$personGroupDs.id
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup.id = :ds$personGroupDs.id
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true))
+                          or e.dateFrom <= (select d.dismissalDate from tsadv$Dismissal d
+                                          where d.personGroup.id = :ds$personGroupDs.id
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup.id = :ds$personGroupDs.id
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true)))
+                        order by e.dateFrom asc]]>
+            </query>
+        </collectionDatasource>
+
+        <collectionDatasource id="absenceBalancesVDs"
+                              class="kz.uco.tsadv.entity.dbview.AbsenceBalanceV"
+                              datasourceClass="kz.uco.tsadv.datasource.AbsenceBalanceDatasource">
+            <!--<query>
+                <![CDATA[select e from tsadv$AbsenceBalanceV e
+                where e.personGroup.id = :ds$personGroupDs.id
+                order by e.dateFrom desc
+                ]]>
+            </query>-->
+            <!--<query>
+                <![CDATA[select e from tsadv$AbsenceBalance e
+                    where e.personGroup.id = :ds$personGroupDs.id
+                      and e.dateFrom >= (select p.hireDate from base$PersonExt p
+                                           where p.group.id = :ds$personGroupDs.id
+                                             and :session$systemDate between p.startDate and p.endDate)
+                      and (0 = (select count(d.dismissalDate) from tsadv$Dismissal d
+                                          where d.personGroup.id = :ds$personGroupDs.id
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup.id = :ds$personGroupDs.id
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true))
+                          or e.dateFrom <= (select d.dismissalDate from tsadv$Dismissal d
+                                          where d.personGroup.id = :ds$personGroupDs.id
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup.id = :ds$personGroupDs.id
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true)))
+                        order by e.dateFrom asc]]>
+            </query>-->
+        </collectionDatasource>
+        <collectionDatasource id="courseSectionAttemptsDs"
+                              class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
+                              view="courseSectionAttempt.browse">
+            <query>
+                <![CDATA[                select e
+                from tsadv$CourseSectionAttempt e
+                where e.enrollment.id = :ds$enrollmentsApprovedDs.id
+                order by e.attemptDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="calendarsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.Calendar"
+                              view="calendar.view">
+            <query>
+                <![CDATA[select e from tsadv$Calendar e
+                          order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="standardOffsetsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"
+                              view="standardOffset.view">
+            <query>
+                <![CDATA[select e from tsadv$StandardOffset e
+                          order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicWorkingConditionsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicWorkingCondition"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicWorkingCondition e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="businessTripDs"
+                              class="kz.uco.tsadv.modules.personal.model.BusinessTrip"
+                              view="businessTrip-view">
+            <query>
+                <![CDATA[select e from tsadv$BusinessTrip e
+                          where e.personGroup.id = :ds$personGroupDs.id
+                          order by e.dateFrom desc]]>
+            </query>
+            <collectionDatasource id="businessTripLinesDs"
+                                  property="businessTripLines">
+                <collectionDatasource id="businessTripCostDs"
+                                      property="businessTripCost"/>
+            </collectionDatasource>
+        </collectionDatasource>
+        <collectionDatasource id="dicSexDs"
+                              class="kz.uco.base.entity.dictionary.DicSex"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from base$DicSex e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personalProtectionDs"
+                              class="kz.uco.tsadv.modules.personprotection.PersonalProtection"
+                              view="personalProtection.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonalProtection e where e.employee.id = :ds$personGroupDs.id
+                   and e.status = 'ISSUED_BY'
+                          order by e.dateOfIssue desc]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personQualificationsDs"
+                              class="kz.uco.tsadv.entity.tb.PersonQualification"
+                              view="personQualification-view">
+            <query>
+                <![CDATA[select e from tsadv$PersonQualification e where e.personGroup.id = :ds$personGroupDs.id
+                    order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="1000"/>
+    <layout height="100%"
+            spacing="true"
+            width="100%">
+        <grid id="grid"
+              height="100%"
+              spacing="true"
+              width="100%">
+            <columns>
+                <column/>
+                <column flex="3.0"/>
+            </columns>
+            <rows>
+                <row>
+                    <cssLayout>
+                        <htmlBox id="personCardLeftMenu"
+                                 template="person-card-menu">
+                            <vbox id="leftLinks"/>
+                        </htmlBox>
+                    </cssLayout>
+                    <vbox expand="personCardContent"
+                          height="100%"
+                          spacing="true">
+                        <tabSheet id="tabSheet">
+                            <tab id="mainData"
+                                 caption="msg://PersonCard.tab.mainData"
+                                 icon="font-icon:USER"/>
+                            <tab id="profile"
+                                 caption="msg://PersonCard.tab.profile"
+                                 icon="font-icon:ARCHIVE"/>
+                        </tabSheet>
+                        <vbox id="personCardContent"/>
+                    </vbox>
+                </row>
+            </rows>
+        </grid>
+    </layout>
+</window>

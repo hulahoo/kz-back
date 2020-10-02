@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.technicalstatus.TechnicalStatusEdit"
+        datasource="technicalStatusDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.technicalstatus">
+    <dsContext>
+        <datasource id="technicalStatusDs"
+                    class="kz.uco.tsadv.entity.tb.TechnicalStatus"
+                    view="technicalStatus-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="technicalStatusDs">
+            <column width="250px">
+                <field property="buildTechnicalStatus"/>
+                <field property="technicalStatusDate"/>
+                <field property="technicalStatusBuildstructures"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

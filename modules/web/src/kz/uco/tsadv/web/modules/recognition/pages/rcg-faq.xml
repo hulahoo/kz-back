@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recognition.pages.RcgFaq"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.pages">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="faqScrollWrapper" height="100%">
+        <scrollBox id="faqScrollWrapper" width="100%">
+            <hbox stylename="rcg-faq-w-h" height="210px">
+
+            </hbox>
+            <vbox id="rcgFaqBlock" stylename="rcg-faq-block">
+                <hbox stylename="rcg-faq-block-h">
+                    <label value="msg://faq.title" stylename="rcg-faq-block-h-t"/>
+                </hbox>
+                <vbox id="rcgFaqContent" width="100%" margin="true,false,true,false">
+
+                </vbox>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

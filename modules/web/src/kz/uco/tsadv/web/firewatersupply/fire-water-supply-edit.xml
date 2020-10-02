@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.firewatersupply.FireWaterSupplyEdit"
+        datasource="fireWaterSupplyDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.firewatersupply">
+    <dsContext>
+        <datasource id="fireWaterSupplyDs"
+                    class="kz.uco.tsadv.entity.tb.FireWaterSupply"
+                    view="fireWaterSupply-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="fireWaterSupplyDs"
+                    width="100%">
+            <column width="250px">
+                <field property="equipment"/>
+                <field property="inventoryNumber"/>
+                <field property="isWorking"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

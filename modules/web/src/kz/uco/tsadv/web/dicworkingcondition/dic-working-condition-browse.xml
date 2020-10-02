@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicworkingcondition.DicWorkingConditionBrowse"
+        focusComponent="dicWorkingConditionsTable"
+        lookupComponent="dicWorkingConditionsTable"
+        messagesPack="kz.uco.tsadv.web.dicworkingcondition">
+    <dsContext>
+        <groupDatasource id="dicWorkingConditionsDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicWorkingCondition"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicWorkingCondition e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicWorkingConditionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicWorkingConditionsTable"
+                datasource="dicWorkingConditionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicWorkingConditionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="legacyID"/>
+                <column id="isSystemRecord"/>
+            </columns>
+            <rows datasource="dicWorkingConditionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicWorkingConditionsTable.create"/>
+                <button id="editBtn"
+                        action="dicWorkingConditionsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicWorkingConditionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

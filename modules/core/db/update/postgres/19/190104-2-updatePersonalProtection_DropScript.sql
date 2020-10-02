@@ -1,0 +1,1 @@
+--alter table TSADV_PERSONAL_PROTECTION drop column PROTECTION_EQUIPMENT_ID__U65626 cascade ;

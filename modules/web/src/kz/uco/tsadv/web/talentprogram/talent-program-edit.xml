@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.talentprogram.TalentProgramEdit"
+        datasource="talentProgramDs"
+        focusComponent="talentProgramFieldGroup">
+    <dsContext>
+        <datasource id="talentProgramDs"
+                    class="kz.uco.tsadv.entity.TalentProgram"
+                    view="talentProgram-view_1"/>
+        <groupDatasource id="talentProgramGradesDs"
+                         class="kz.uco.tsadv.entity.TalentProgramGrade"
+                         view="talentProgramGrade-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramGrade e
+where e.talentProgram.id = :ds$talentProgramDs.id]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="talentProgramStepsDs"
+                         class="kz.uco.tsadv.entity.TalentProgramStep"
+                         view="talentProgramStep-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramStep e 
+where e.talentProgram.id = :ds$talentProgramDs.id order by e.orderNum]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="talentProgramStepSkillsDs"
+                         class="kz.uco.tsadv.entity.TalentProgramStepSkill"
+                         view="talentProgramStepSkill-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramStepSkill e
+where e.talentProgramStep.id = :ds$talentProgramStepsDs.id]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="activeTalentProgramsDs"
+                         class="kz.uco.tsadv.entity.TalentProgram">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgram e 
+where e.isActive=true and e.deleteTs is null]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="talentProgramExceptionsesDs"
+                         class="kz.uco.tsadv.entity.TalentProgramExceptions"
+                         view="talentProgramExceptions-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramExceptions e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <tabSheet id="tabSheet">
+                <tab id="tab"
+                     caption="mainMsg://mainData"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <hbox spacing="true">
+                        <fieldGroup id="talentProgramFieldGroup"
+                                    datasource="talentProgramDs">
+                            <column width="250px">
+                                <field property="programNameLang1"
+                                       required="true"/>
+                                <field property="programNameLang2"
+                                       required="true"/>
+                                <field property="programNameLang3"
+                                       required="true"/>
+                                <field id="isActiveField"
+                                       property="isActive"/>
+                                <field property="startDate"
+                                       required="true"/>
+                                <field property="endDate"
+                                       required="true"/>
+                                <field property="webLink"
+                                       required="true"/>
+                                <field caption="msg://banner(rus)"
+                                       datasource="talentProgramDs"
+                                       property="bannerLang1"
+                                       required="true"/>
+                                <field caption="msg://banner(kz)"
+                                       datasource="talentProgramDs"
+                                       property="bannerLang2"
+                                       required="true"/>
+                                <field caption="msg://banner(en)"
+                                       datasource="talentProgramDs"
+                                       property="bannerLang3"
+                                       required="true"/>
+                                <field property="questionOfEssayRu"
+                                       rows="3"/>
+                                <field property="questionOfEssayKz"
+                                       rows="3"/>
+                                <field property="questionOfEssayEn"
+                                       rows="3"/>
+                            </column>
+                        </fieldGroup>
+                        <vbox spacing="true">
+                            <tabSheet id="ruleTabSheet">
+                                <tab id="tab1"
+                                     caption="mainMsg://Rules(ru)"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <richTextArea id="participationRuleLang1"
+                                                  datasource="talentProgramDs"
+                                                  property="participationRuleLang1"/>
+                                </tab>
+                                <tab id="tab2"
+                                     caption="msg://Rules(kz)"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <richTextArea id="participationRuleLang2"
+                                                  datasource="talentProgramDs"
+                                                  property="participationRuleLang2"/>
+                                </tab>
+                                <tab id="tab3"
+                                     caption="msg://Rules(eng)"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <richTextArea id="participationRuleLang3"
+                                                  datasource="talentProgramDs"
+                                                  property="participationRuleLang3"/>
+                                </tab>
+                            </tabSheet>
+                            <tabSheet id="essayTabSheet">
+                                <tab id="tab_3"
+                                     caption="msg://EssayReq(Ru)"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <richTextArea id="essayRequirementRu"
+                                                  datasource="talentProgramDs"
+                                                  property="essayRequirementLang1"/>
+                                </tab>
+                                <tab id="tab_4"
+                                     caption="msg://EssayReq(kz)"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <richTextArea id="essayRequirementKz"
+                                                  datasource="talentProgramDs"
+                                                  property="essayRequirementLang2"/>
+                                </tab>
+                                <tab id="tab_5"
+                                     caption="msg://EssayReq(en)"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <richTextArea id="essayRequirementEng"
+                                                  datasource="talentProgramDs"
+                                                  property="essayRequirementLang3"/>
+                                </tab>
+                            </tabSheet>
+                        </vbox>
+                    </hbox>
+                </tab>
+                <tab id="tab_1"
+                     caption="mainMsg://Grade"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <groupTable id="talentProgramGradesTable"
+                                width="100%">
+                        <actions>
+                            <action id="add"
+                                    description="mainMsg://Add"/>
+                            <action id="remove"
+                                    caption="mainMsg://Remove"/>
+                        </actions>
+                        <columns>
+                            <column id="gradeGroup.grade"/>
+                        </columns>
+                        <rows datasource="talentProgramGradesDs"/>
+                        <buttonsPanel>
+                            <button id="addGradeButton"
+                                    caption="mainMsg://Add"
+                                    icon="PLUS_CIRCLE"
+                                    invoke="addGrade"/>
+                            <button id="removeGradeButton"
+                                    caption="mainMsg://Remove"
+                                    invoke="removeGrade"/>
+                        </buttonsPanel>
+                    </groupTable>
+                </tab>
+                <tab id="tab_2"
+                     caption="mainMsg://Steps"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <scrollBox height="100%">
+                        <vbox height="80%"
+                              spacing="true">
+                            <groupTable id="talentProgramStepsTable"
+                                        height="50%"
+                                        width="1025px">
+                                <actions>
+                                    <action id="add"
+                                            description="mainMsg://Add"/>
+                                    <action id="edit"
+                                            caption="mainMsg://Edit"/>
+                                    <action id="remove"
+                                            caption="mainMsg://Remove"/>
+                                </actions>
+                                <columns>
+                                    <column id="orderNum"
+                                            caption="msg://OrderNum"/>
+                                    <column id="step.langValue"/>
+                                </columns>
+                                <rows datasource="talentProgramStepsDs"/>
+                                <buttonsPanel>
+                                    <button id="addStepButton"
+                                            caption="mainMsg://Add"
+                                            icon="PLUS_CIRCLE"
+                                            invoke="addSteps"/>
+                                    <button id="removeStepButton"
+                                            caption="mainMsg://Remove"
+                                            invoke="removeStep"/>
+                                    <button id="editStepsButton"
+                                            action="talentProgramStepsTable.edit"/>
+                                </buttonsPanel>
+                            </groupTable>
+                            <groupTable id="talentProgramStepSkillTable"
+                                        height="50%"
+                                        width="100%">
+                                <actions>
+                                    <action id="add"
+                                            description="mainMsg://Add"/>
+                                    <action id="edit"
+                                            caption="mainMsg://Edit"/>
+                                    <action id="remove"
+                                            caption="mainMsg://Remove"/>
+                                </actions>
+                                <columns>
+                                    <column id="orderNumber"
+                                            caption="msg://OrderNum"/>
+                                    <column id="skill.langValue"/>
+                                </columns>
+                                <rows datasource="talentProgramStepSkillsDs"/>
+                                <buttonsPanel>
+                                    <button id="addSkilButton"
+                                            caption="mainMsg://Add"
+                                            icon="PLUS_CIRCLE"
+                                            invoke="addSkill"/>
+                                    <button id="removeSkillButton"
+                                            caption="mainMsg://Remove"
+                                            invoke="removeSkill"/>
+                                    <button id="editStepSkillButton"
+                                            action="talentProgramStepSkillTable.edit"/>
+                                </buttonsPanel>
+                            </groupTable>
+                        </vbox>
+                    </scrollBox>
+                </tab>
+                <tab id="exceptions"
+                     caption="msg://Exceptions"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <groupTable id="talentProgramExceptionsTable"
+                                width="100%">
+                        <actions>
+                            <action id="add"
+                                    description="mainMsg://Add"/>
+                            <action id="remove"
+                                    caption="mainMsg://Remove"/>
+                        </actions>
+                        <columns>
+                            <column id="personGroup.fioWithEmployeeNumber"/>
+                        </columns>
+                        <rows datasource="talentProgramExceptionsesDs"/>
+                        <buttonsPanel>
+                            <button id="addExcButton"
+                                    caption="mainMsg://Add"
+                                    icon="PLUS_CIRCLE"
+                                    invoke="addException"/>
+                            <button id="removeExcButton"
+                                    caption="mainMsg://Remove"
+                                    invoke="removeExceptions"/>
+                        </buttonsPanel>
+                    </groupTable>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

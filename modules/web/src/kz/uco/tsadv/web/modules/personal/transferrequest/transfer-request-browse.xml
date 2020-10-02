@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://TransferRequest.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.transferrequest.TransferRequestBrowse"
+        focusComponent="transferRequestsTable"
+        lookupComponent="transferRequestsTable">
+    <dsContext>
+        <groupDatasource id="transferRequestsDs"
+                         class="kz.uco.tsadv.modules.personal.model.TransferRequest"
+                         view="transferRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$TransferRequest e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="transferRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="transferRequestsTable"
+                datasource="transferRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="transferRequestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="refresh"/>
+            </actions>
+            <columns>
+                <column id="assignmentGroup" captionProperty="assignmentGroup.assignment.personGroup.personFioWithEmployeeNumber"/>
+                <column id="assignmentGroup.assignment.positionGroup.position"/>
+                <column id="assignmentGroup.assignment.organizationGroup.organization"/>
+                <column id="requestDate"/>
+                <column id="transferDate"/>
+                <column id="newPositionGroup" captionProperty="newPositionGroup.position.positionName"/>
+                <column id="newOrganizationGroup" captionProperty="newOrganizationGroup.organization.organizationName"/>
+                <column id="requestStatus"/>
+                <column id="createdBy"/>
+            </columns>
+            <rows datasource="transferRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="transferRequestsTable.create"/>
+                <button id="editBtn"
+                        action="transferRequestsTable.edit"/>
+                <button id="removeBtn"
+                        action="transferRequestsTable.remove"/>
+                <button id="refreshBtn"
+                        action="transferRequestsTable.refresh"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

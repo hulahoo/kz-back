@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://personCardMilitaryFormEdit"
+        class="kz.uco.tsadv.web.modules.personal.militaryform.MilitaryFormEdit"
+        datasource="militaryFormDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="militaryFormDs"
+                    class="kz.uco.tsadv.modules.personal.model.MilitaryForm"
+                    view="militaryForm-view"/>
+        <collectionDatasource id="dicMilitaryDocumentTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicMilitaryDocumentType"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicMilitaryDocumentType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicMilitaryTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicMilitaryType"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicMilitaryType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicAttitudeToMilitariesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicAttitudeToMilitary"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicAttitudeToMilitary e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicTroopsStructuresDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicTroopsStructure"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicTroopsStructure e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicMilitaryRanksDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicMilitaryRank"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicMilitaryRank e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicOfficerTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicOfficerType"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicOfficerType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicSuitabilityToMilitariesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicSuitabilityToMilitary"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicSuitabilityToMilitary e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicRegisterGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicRegisterGroup"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicRegisterGroup e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="dicRegisterCategoriesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicRegisterCategory"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicRegisterCategory e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="udoesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicUdo"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicUdo e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox id="scrollBox"
+                   height="100%"
+                   spacing="true">
+            <fieldGroup id="fieldGroup2"
+                        datasource="militaryFormDs">
+                <column>
+                    <field property="date_from"/>
+                </column>
+                <column>
+                    <field property="date_to"/>
+                </column>
+            </fieldGroup>
+            <vbox id="vbox"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="militaryFormDs">
+                    <column width="350px">
+                        <field optionsDatasource="dicMilitaryDocumentTypesDs"
+                               property="military_document_type"/>
+                        <field property="document_number"/>
+                        <field optionsDatasource="dicMilitaryTypesDs"
+                               property="military_type"/>
+                        <field optionsDatasource="dicAttitudeToMilitariesDs"
+                               property="attitude_to_military"/>
+                        <field optionsDatasource="udoesDs"
+                               property="udo"/>
+                        <field optionsDatasource="dicTroopsStructuresDs"
+                               property="troops_structure"/>
+                        <field optionsDatasource="dicMilitaryRanksDs"
+                               property="military_rank"/>
+                        <field optionsDatasource="dicOfficerTypesDs"
+                               property="officer_type"/>
+                        <field optionsDatasource="dicSuitabilityToMilitariesDs"
+                               property="suitability_to_military"/>
+                        <field property="specialization"/>
+                        <field property="dely"/>
+                        <field property="dely_description"/>
+                        <field optionsDatasource="dicRegisterGroupsDs"
+                               property="register_group"/>
+                        <field optionsDatasource="dicRegisterCategoriesDs"
+                               property="register_category"/>
+                        <field property="date_post"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <frame id="windowActions"
+                   screen="editWindowActions"/>
+        </scrollBox>
+    </layout>
+</window>

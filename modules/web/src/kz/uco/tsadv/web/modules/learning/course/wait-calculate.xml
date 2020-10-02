@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.learning.course.WaitCalculate">
+    <dialogMode height="600"
+                width="800" closeable="false" closeOnClickOutside="false" modal="true" forceDialog="true"/>
+    <layout>
+        <label id="messageLabel" value="Пожалуйста подождите, идет сохранение данных"/>
+        <progressBar id="progressBar" width="100%"/>
+    </layout>
+</window>

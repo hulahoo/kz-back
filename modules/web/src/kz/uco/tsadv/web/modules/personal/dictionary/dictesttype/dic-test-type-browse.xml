@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicTestType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dictesttype.DicTestTypeBrowse"
+        focusComponent="dicTestTypesTable"
+        lookupComponent="dicTestTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dictesttype">
+    <dsContext>
+        <groupDatasource id="dicTestTypesDs"
+                         class="kz.uco.tsadv.modules.learning.dictionary.DicTestType"
+                         view="dicTestType.browse">
+            <query>
+                <![CDATA[select e from tsadv$DicTestType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicTestTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicTestTypesTable"
+                datasource="dicTestTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicTestTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicTestTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicTestTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicTestTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicTestTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

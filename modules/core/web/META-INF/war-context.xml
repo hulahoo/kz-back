@@ -1,0 +1,14 @@
+<Context>
+    <!-- Database connection -->
+    <Resource driverClassName="org.postgresql.Driver"
+              maxIdle="2"
+              maxTotal="20"
+              maxWaitMillis="5000"
+              name="jdbc/CubaDS"
+              password="tal"
+              type="javax.sql.DataSource"
+              url="jdbc:postgresql://apps.uco.kz/tsadv_dev"
+              username="tal"/>
+    <!-- Switch off session serialization -->
+    <Manager pathname=""/>
+</Context>

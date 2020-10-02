@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CalibrationMember.browseCaption"
+        class="kz.uco.tsadv.web.modules.performance.calibrationmember.CalibrationMemberBrowse">
+    <dsContext>
+        <datasource id="calibrationSessionDs"
+                    class="kz.uco.tsadv.modules.performance.model.CalibrationSession"
+                    view="calibrationSession.browse"/>
+
+        <collectionDatasource id="calibrationMembersDs"
+                         class="kz.uco.tsadv.modules.performance.model.CalibrationMember"
+                         view="calibrationMember.browse">
+            <query>
+                <![CDATA[select e from tsadv$CalibrationMember e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <grid id="grid"
+              height="100%"
+              spacing="true"
+              width="100%">
+            <columns>
+                <column/>
+                <column flex="3.0"/>
+            </columns>
+            <rows>
+                <row>
+                    <groupBox caption="msg://calibration.member.cal.session"
+                              width="AUTO">
+                        <fieldGroup align="TOP_CENTER"
+                                    datasource="calibrationSessionDs">
+                            <column>
+                                <field editable="false"
+                                       property="name"/>
+                                <field editable="false"
+                                       property="date"/>
+                                <field captionProperty="assessmentTemplateName"
+                                       editable="false"
+                                       property="template"/>
+                                <field editable="false"
+                                       property="status"/>
+                                <field editable="false"
+                                       property="administrator.person.fullName"/>
+                            </column>
+                        </fieldGroup>
+                    </groupBox>
+                    <vbox expand="calibrationMembersTable"
+                          height="100%"
+                          spacing="true">
+                        <filter id="filter"
+                                applyTo="calibrationMembersTable"
+                                datasource="calibrationMembersDs">
+                            <properties include=".*"/>
+                        </filter>
+                        <table id="calibrationMembersTable"
+                                    width="100%">
+                            <actions>
+                                <action id="edit"/>
+                                <action id="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="person.person.fullName"/>
+                                <column id="potencial"/>
+                                <column id="performance"/>
+                                <column id="riskOfLoss"/>
+                                <column id="impactOfLoss"/>
+                                <column id="competenceOverall"/>
+                                <column id="goalOverall"/>
+                            </columns>
+                            <rows datasource="calibrationMembersDs"/>
+                            <rowsCount/>
+                            <buttonsPanel id="buttonsPanel"
+                                          alwaysVisible="true">
+                                <button id="editBtn"
+                                        action="calibrationMembersTable.edit"/>
+                                <button id="removeBtn"
+                                        action="calibrationMembersTable.remove"/>
+                                <button id="fillMembersBtn"
+                                        action="fillMembers"
+                                        caption="msg://calibration.session.member.fill"/>
+                                <popupButton id="matrixButton"
+                                             caption="msg://calibration.member.matrix">
+                                    <actions>
+                                        <action id="action1"
+                                                caption="msg://calibration.member.matrix.performance"
+                                                invoke="showMatrixPerformance"/>
+                                        <action id="action2"
+                                                caption="msg://calibration.member.matrix.risk"
+                                                invoke="showMatrixRisk"/>
+                                        <action id="action3"
+                                                caption="msg://menu-config.scrum-competence"
+                                                invoke="showScrumCompetence"/>
+                                        <action id="action4"
+                                                caption="msg://menu-config.scrum-goal"
+                                                invoke="showScrumGoal"/>
+                                    </actions>
+                                </popupButton>
+                            </buttonsPanel>
+                        </table>
+                    </vbox>
+                </row>
+            </rows>
+        </grid>
+    </layout>
+</window>

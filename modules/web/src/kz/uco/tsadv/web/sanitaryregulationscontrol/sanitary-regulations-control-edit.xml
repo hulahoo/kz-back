@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.sanitaryregulationscontrol.SanitaryRegulationsControlEdit"
+        datasource="sanitaryRegulationsControlDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.sanitaryregulationscontrol">
+    <dsContext>
+        <datasource id="sanitaryRegulationsControlDs"
+                    class="kz.uco.tsadv.entity.tb.SanitaryRegulationsControl"
+                    view="sanitaryRegulationsControl-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="sanitaryRegulationsControlDs">
+            <column width="250px">
+                <field property="controlType"/>
+                <field property="totalControl"/>
+                <field property="identifiedInconsistencies"/>
+                <field property="eliminatedInconsistencies"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

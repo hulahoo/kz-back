@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dicgoodscategory.DicGoodsCategoryBrowse"
+        focusComponent="dicGoodsCategoriesTable"
+        lookupComponent="dicGoodsCategoriesTable"
+        messagesPack="kz.uco.tsadv.web.dicgoodscategory">
+    <dsContext>
+        <groupDatasource id="dicGoodsCategoriesDs"
+                         class="kz.uco.tsadv.modules.recognition.dictionary.DicGoodsCategory"
+                         view="dicGoodsCategory.edit"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$DicGoodsCategory e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicGoodsCategoriesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicGoodsCategoriesTable"
+                datasource="dicGoodsCategoriesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicGoodsCategoriesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="code"/>
+                <column id="langValue"/>
+                <column id="parent"/>
+            </columns>
+            <rows datasource="dicGoodsCategoriesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicGoodsCategoriesTable.create"/>
+                <button id="editBtn"
+                        action="dicGoodsCategoriesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicGoodsCategoriesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

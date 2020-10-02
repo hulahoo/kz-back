@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.selectedpersonaward.SelectedPersonAwardEdit"
+        datasource="selectedPersonAwardDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.selectedpersonaward">
+    <dsContext>
+        <datasource id="selectedPersonAwardDs"
+                    class="kz.uco.tsadv.modules.recognition.SelectedPersonAward"
+                    view="selectedPersonAward.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="600px"
+                modal="true"
+                width="800px"/>
+
+    <layout expand="tabSheet" spacing="true" width="100%" height="100%">
+        <fieldGroup id="fieldGroup"
+                    datasource="selectedPersonAwardDs">
+            <column width="250px">
+                <field captionProperty="name"
+                       property="awardProgram"/>
+                <field captionProperty="fullName"
+                       property="personGroup"/>
+                <field property="awarded"/>
+            </column>
+        </fieldGroup>
+        <tabSheet id="tabSheet" width="100%">
+            <tab id="tab1" caption="msg://kz.uco.tsadv.modules.recognition/SelectedPersonAward.descriptionLangValue1"
+                 margin="true,false,false,false"
+                 expand="textArea1">
+                <textArea id="textArea1"
+                          datasource="selectedPersonAwardDs" property="descriptionLangValue1"
+                          width="100%"/>
+            </tab>
+            <tab id="tab2" caption="msg://kz.uco.tsadv.modules.recognition/SelectedPersonAward.descriptionLangValue2"
+                 margin="true,false,false,false"
+                 expand="textArea2">
+                <textArea id="textArea2" datasource="selectedPersonAwardDs" property="descriptionLangValue2"
+                          width="100%"/>
+            </tab>
+            <tab id="tab3" caption="msg://kz.uco.tsadv.modules.recognition/SelectedPersonAward.descriptionLangValue3"
+                 margin="true,false,false,false"
+                 expand="textArea3">
+                <textArea id="textArea3" datasource="selectedPersonAwardDs" property="descriptionLangValue3"
+                          width="100%"/>
+            </tab>
+            <tab id="tab4" caption="msg://kz.uco.tsadv.modules.recognition/SelectedPersonAward.descriptionLangValue4"
+                 margin="true,false,false,false"
+                 expand="textArea4">
+                <textArea id="textArea4" datasource="selectedPersonAwardDs" property="descriptionLangValue4"
+                          width="100%"/>
+            </tab>
+            <tab id="tab5" caption="msg://kz.uco.tsadv.modules.recognition/SelectedPersonAward.descriptionLangValue5"
+                 margin="true,false,false,false"
+                 expand="textArea5">
+                <textArea id="textArea5" datasource="selectedPersonAwardDs" property="descriptionLangValue5"
+                          width="100%"/>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions" screen="editWindowActions"/>
+    </layout>
+</window>

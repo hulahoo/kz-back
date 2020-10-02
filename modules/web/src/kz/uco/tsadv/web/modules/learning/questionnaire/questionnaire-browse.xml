@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://QuestionnaireBrowser"
+        class="kz.uco.tsadv.web.modules.learning.questionnaire.QuestionnaireBrowse"
+        focusComponent="questionnairesTable"
+        lookupComponent="questionnairesTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.questionnaire">
+    <dsContext>
+        <groupDatasource id="questionnairesDs"
+                         class="kz.uco.tsadv.modules.performance.model.Questionnaire"
+                         view="questionnaire.browse">
+            <query>
+                <![CDATA[select e from tsadv$Questionnaire e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%">
+        <scrollBox id="scrollBox"
+                   height="100%"
+                   spacing="true">
+            <filter id="filter"
+                    applyTo="questionnairesTable"
+                    datasource="questionnairesDs">
+                <properties include=".*"/>
+            </filter>
+            <groupTable id="questionnairesTable"
+                        width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"/>
+                    <action id="estimate"
+                            caption="msg://assessByPerson"
+                            trackSelection="true"
+                            invoke="esitmate"/>
+                </actions>
+                <columns>
+                    <column id="questionnaireName"
+                            caption="msg://questionnaireName"/>
+                    <column id="status"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                </columns>
+                <rows datasource="questionnairesDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="questionnairesTable.create"/>
+                    <button id="editBtn"
+                            action="questionnairesTable.edit"/>
+                    <button id="removeBtn"
+                            action="questionnairesTable.remove"/>
+                    <button id="estimateBtn"
+                            action="questionnairesTable.estimate"/>
+                </buttonsPanel>
+            </groupTable>
+        </scrollBox>
+    </layout>
+</window>

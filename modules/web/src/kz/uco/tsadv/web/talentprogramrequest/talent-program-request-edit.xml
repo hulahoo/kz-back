@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.talentprogramrequest.TalentProgramRequestEdit"
+        datasource="talentProgramRequestDs">
+    <dsContext>
+        <datasource id="talentProgramRequestDs"
+                    class="kz.uco.tsadv.entity.TalentProgramRequest"
+                    view="all-talentProgramRequest-view"/>
+        <collectionDatasource id="steps"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.entity.TalentProgramStep"
+                              view="talentProgramStep-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramStep e
+where e.talentProgram.id = :ds$talentProgramRequestDs.talentProgram.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="talentProgramPersonStepsDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.entity.TalentProgramPersonStep"
+                              view="talentProgramPersonStep-view">
+            <query>
+                <![CDATA[select e from tsadv$TalentProgramPersonStep e
+where e.talentProgramRequest.id = :ds$talentProgramRequestDs.id]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <vbox spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="talentProgramRequestDs"
+                            editable="false">
+                    <column width="450px">
+                        <field caption="mainMsg://widget.field.fio"
+                               property="personGroup.fioWithEmployeeNumber"/>
+                        <field id="job"
+                               property="personGroup.primaryAssignment.jobGroup.jobName"/>
+                        <field id="organization"
+                               caption="msg://organization"
+                               property="personGroup.primaryAssignment.organizationGroup.organizationName"/>
+                        <field id="baza"
+                               property="personGroup.primaryAssignment.positionGroup.position.baza"/>
+                        <field id="grade"
+                               property="personGroup.primaryAssignment.gradeGroup.grade"/>
+                        <field id="experience"
+                               caption="msg://experienceField">
+                            <textField id="experienceField"
+                                       editable="false"/>
+                        </field>
+                        <field property="requestDate"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <tabSheet>
+                <tab id="essayTab"
+                     caption="msg://essay"
+                     expand="requirementsCheck"
+                     spacing="true">
+                    <button id="rulesButton"
+                            caption="msg://essayRules"
+                            invoke="rules"/>
+                    <vbox id="vBoxTextArea"
+                          spacing="true">
+                        <label id="lblEssayHat"
+                               htmlEnabled="true"
+                               width="100%"/>
+                        <textArea id="textArea"
+                                  datasource="talentProgramRequestDs"
+                                  editable="false"
+                                  property="essay"
+                                  required="true"
+                                  rows="10"
+                                  width="100%"/>
+                    </vbox>
+                    <label id="charsCount"
+                           htmlEnabled="true"/>
+                    <checkBox id="requirementsCheck"
+                              caption="msg://requirementsCheck"
+                              editable="false"/>
+                </tab>
+                <tab id="steps"
+                     caption="msg://step.results">
+                    <table id="tableSteps"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="editPersonStep"
+                                    enable="false"
+                                    invoke="openEditorPersonStep"/>
+                        </actions>
+                        <columns>
+                            <column id="step.langValue" caption="msg://step"/>
+                            <column id="status" caption="msg://status" generator="statusGenerator"/>
+                            <column id="file" caption="msg://file" generator="fileGenerator"/>
+                        </columns>
+                        <rows datasource="steps"/>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

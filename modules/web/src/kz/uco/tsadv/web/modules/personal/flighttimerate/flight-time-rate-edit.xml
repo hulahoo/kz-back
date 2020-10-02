@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.flighttimerate.FlightTimeRateEdit"
+        datasource="flightTimeRateDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.flighttimerate">
+    <dsContext>
+        <datasource id="flightTimeRateDs"
+                    class="kz.uco.tsadv.modules.personal.model.FlightTimeRate"
+                    view="flightTimeRate-view"/>
+        <collectionDatasource id="dicRateTypesDs"
+                              class="kz.uco.tsadv.entity.tb.dictionary.DicRateType">
+            <query>
+                <![CDATA[select e from tsadv$DicRateType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="flightTimeRateDs">
+            <column width="250px">
+                <field property="value"
+                       required="true"/>
+                <field optionsDatasource="dicRateTypesDs"
+                       property="dicRateType"
+                       required="true"/>
+                <field property="dateFrom"
+                       required="true"/>
+                <field property="dateTo"/>
+                <field property="hoursFrom"
+                       required="true"/>
+                <field property="hoursTo"
+                       required="true"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

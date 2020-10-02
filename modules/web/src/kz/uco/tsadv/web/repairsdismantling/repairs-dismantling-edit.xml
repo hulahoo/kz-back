@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.repairsdismantling.RepairsDismantlingEdit"
+        datasource="repairsDismantlingDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.repairsdismantling">
+    <dsContext>
+        <datasource id="repairsDismantlingDs"
+                    class="kz.uco.tsadv.entity.tb.RepairsDismantling"
+                    view="repairsDismantling-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="repairsDismantlingDs">
+            <column width="250px">
+                <field property="workType"/>
+                <field property="workNumber"/>
+                <field property="workCost"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

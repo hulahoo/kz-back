@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicCostType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.diccosttype.DicCostTypeBrowse"
+        focusComponent="dicCostTypesTable"
+        lookupComponent="dicCostTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.diccosttype">
+    <dsContext>
+        <groupDatasource id="dicCostTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicCostType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicCostType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicCostTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicCostTypesTable"
+                datasource="dicCostTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicCostTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isBusinessTrip"/>
+            </columns>
+            <rows datasource="dicCostTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicCostTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicCostTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicCostTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

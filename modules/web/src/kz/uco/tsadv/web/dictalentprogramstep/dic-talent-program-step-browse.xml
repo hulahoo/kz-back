@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.dictalentprogramstep.DicTalentProgramStepBrowse"
+        focusComponent="dicTalentProgramStepsTable"
+        lookupComponent="dicTalentProgramStepsTable"
+        messagesPack="kz.uco.tsadv.web.dictalentprogramstep">
+    <dsContext>
+        <groupDatasource id="dicTalentProgramStepsDs"
+                         class="kz.uco.tsadv.entity.tb.dictionary.DicTalentProgramStep"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicTalentProgramStep e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicTalentProgramStepsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicTalentProgramStepsTable"
+                datasource="dicTalentProgramStepsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicTalentProgramStepsTable"
+                    multiselect="true"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="legacyID"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="order"/>
+            </columns>
+            <rows datasource="dicTalentProgramStepsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicTalentProgramStepsTable.create"/>
+                <button id="editBtn"
+                        action="dicTalentProgramStepsTable.edit"/>
+                <button id="removeBtn"
+                        action="dicTalentProgramStepsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

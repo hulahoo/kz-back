@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.importhistory.ImportHistoryBrowse"
+        focusComponent="importHistoriesTable"
+        lookupComponent="importHistoriesTable"
+        messagesPack="kz.uco.tsadv.web.importhistory">
+    <dsContext>
+        <groupDatasource id="importHistoriesDs"
+                         class="kz.uco.tsadv.modules.administration.importer.ImportHistory"
+                         view="importHistory.browse">
+            <query>
+                <![CDATA[select e from tsadv$ImportHistory e order by e.createTs desc]]>
+            </query>
+            <collectionDatasource id="recordsDs"
+                                  property="records"/>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="importHistoriesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="importHistoriesTable"
+                datasource="importHistoriesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="importHistoriesTable"
+                    width="100%">
+            <columns>
+                <column id="importScenario"/>
+                <column id="file" generator="generateFileCell"/>
+                <column id="started"/>
+                <column id="finished"/>
+            </columns>
+            <rows datasource="importHistoriesDs"/>
+            <rowsCount/>
+        </groupTable>
+        <table id="table"
+               height="250px"
+               width="100%">
+            <columns>
+                <column id="message"/>
+                <column id="stacktrace"
+                        maxTextLength="30"/>
+                <column id="login"/>
+                <column id="params"
+                        maxTextLength="30"/>
+                <column id="success"/>
+                <column id="dateTime"/>
+                <column id="level"/>
+            </columns>
+            <rows datasource="recordsDs"/>
+        </table>
+    </layout>
+</window>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://performancePlan.browse"
+        class="kz.uco.tsadv.web.modules.performance.performanceplan.PerformancePlanBrowse"
+        focusComponent="performancePlansTable"
+        lookupComponent="performancePlansTable">
+    <dsContext>
+        <groupDatasource id="performancePlansDs"
+                         class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
+                         view="performancePlan.browse">
+            <query>
+                <![CDATA[select e from tsadv$PerformancePlan e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="performancePlansTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="performancePlansTable"
+                datasource="performancePlansDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="performancePlansTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="performancePlanName"/>
+                <column id="previousPlan"/>
+                <column id="description"/>
+                <column id="administratorPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="performancePlansDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="performancePlansTable.create"/>
+                <button id="editBtn"
+                        action="performancePlansTable.edit"/>
+                <button id="removeBtn"
+                        action="performancePlansTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

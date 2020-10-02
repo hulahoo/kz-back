@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Timecard.browse"
+        class="kz.uco.tsadv.web.modules.personal.timecard.TimecardBrowse"
+        focusComponent="tree"
+        lookupComponent="tree">
+    <dsContext>
+        <hierarchicalDatasource id="hierarchyElementsDs"
+                                class= "kz.uco.tsadv.entity.TimecardHierarchy"
+                                datasourceClass="kz.uco.tsadv.datasource.TimecardHierarchyDatasource"
+                                hierarchyProperty="parent"/>
+        <collectionDatasource id="timecardsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.Timecard"
+                              datasourceClass="kz.uco.tsadv.datasource.TimecardDatasource"
+                              maxResults="20"/>
+    </dsContext>
+    <dialogMode height="100%"
+                width="100%"/>
+    <layout spacing="true">
+        <split id="split"
+               height="100%"
+               orientation="horizontal"
+               settingsEnabled="false"
+               pos="17"
+               width="100%">
+            <vbox id="vbox"
+                  expand="tree"
+                  height="100%"
+                  margin="false,true,false,false">
+                <hbox spacing="true">
+                    <dateField id="month"
+                               resolution="DAY"/>
+                </hbox>
+                <hbox spacing="true" expand="cleanSearch">
+                    <linkButton id="search"
+                                caption="msg://findPerson"
+                                icon="font-icon:SEARCH"
+                                invoke="openPersonLookup"/>
+                    <linkButton id="cleanSearch"
+                                caption="msg://refresh"
+                                align="TOP_RIGHT"
+                                icon="REFRESH"
+                                invoke="cleanSearch"/>
+                </hbox>
+                <tree id="tree"
+                      stylename="b-tree"
+                      width="100%">
+                    <treechildren captionProperty="name"
+                                  datasource="hierarchyElementsDs"/>
+                </tree>
+            </vbox>
+            <vbox id="cssLayout"
+                  height="100%"/>
+        </split>
+    </layout>
+</window>

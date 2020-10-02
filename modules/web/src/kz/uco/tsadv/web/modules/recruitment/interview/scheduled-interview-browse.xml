@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://ScheduledInterview.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.interview.ScheduledInterviewBrowse"
+        focusComponent="interviewsTable"
+        lookupComponent="interviewsTable">
+    <dsContext>
+        <groupDatasource id="interviewsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.Interview"
+                         view="scheduledInterview.view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$Interview e
+                           join e.requisition r
+                           join e.requisitionHiringStep rhs
+                           left join e.mainInterviewerPersonGroup ipg
+                           left join ipg.list ip
+                          where e.isScheduled = true
+                            and (e.mainInterviewerPersonGroup is null or :session$systemDate between ip.startDate and ip.endDate)]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="hiringStepsDs"
+                              class="kz.uco.tsadv.modules.recruitment.model.HiringStep"
+                              view="hiringStep.view">
+            <query>
+                <![CDATA[select e from tsadv$HiringStep e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="interviewsTable"
+            spacing="true">
+        <groupBox caption="msg://CustomFilter"
+                  collapsable="true"
+                  collapsed="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="interviewsTable"
+                    width="100%">
+            <actions>
+                <action id="create" icon="icons/plus-btn.png"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="requisition.code"/>
+                <column id="requisition.organizationGroup"
+                        captionProperty="requisition.organizationGroup.organization.organizationName"/>
+                <column id="requisition.positionGroup"
+                        captionProperty="requisition.positionGroup.position.positionName"/>
+                <column id="requisition.jobGroup" captionProperty="requisition.jobGroup.job.jobName"/>
+                <column id="requisitionHiringStep" captionProperty="requisitionHiringStep.hiringStep.stepName"/>
+                <column id="interviewDate"/>
+                <column id="mainInterviewerPersonGroup" captionProperty="mainInterviewerPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="timeFrom"/>
+                <column id="timeTo"/>
+                <column id="place" captionProperty="place.addressLangValue"/>
+                <column id="maxCandidatesCount"/>
+            </columns>
+            <rows datasource="interviewsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="interviewsTable.create"/>
+                <button id="editBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="interviewsTable.edit"/>
+                <button id="removeBtn"
+                        caption="mainMsg://table.btn.empty"
+                        action="interviewsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

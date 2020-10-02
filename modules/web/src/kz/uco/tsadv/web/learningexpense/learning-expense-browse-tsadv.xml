@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.learningexpense.LearningExpenseBrowseTsadv"
+        focusComponent="learningExpensesTable"
+        lookupComponent="learningExpensesTable"
+        messagesPack="kz.uco.tsadv.web.learningexpense">
+    <dsContext>
+        <groupDatasource id="learningExpensesDs"
+                         class="kz.uco.tsadv.modules.learning.model.LearningExpense"
+                         view="learningExpense.edit">
+            <query>
+                <![CDATA[select e from tsadv$LearningExpense e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="learningExpensesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learningExpensesTable"
+                datasource="learningExpensesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learningExpensesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="legacyID"/>
+                <column id="expenseType"/>
+                <column id="currency"/>
+                <column id="amount"/>
+                <column id="personLearningContract"/>
+                <column id="personEnrollment"/>
+                <column id="dicMonth"/>
+                <column id="year"/>
+            </columns>
+            <rows datasource="learningExpensesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="learningExpensesTable.create"/>
+                <button id="editBtn"
+                        action="learningExpensesTable.edit"/>
+                <button id="removeBtn"
+                        action="learningExpensesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

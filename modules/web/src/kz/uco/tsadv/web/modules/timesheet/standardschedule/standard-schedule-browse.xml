@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://StandardSchedule.browseCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.standardschedule.StandardScheduleBrowse"
+        focusComponent="schedulesTable"
+        lookupComponent="schedulesTable">
+    <dsContext>
+        <groupDatasource id="schedulesDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.StandardSchedule"
+                         view="schedule.view">
+            <query>
+                <![CDATA[select e from tsadv$StandardSchedule e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="schedulesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="schedulesTable"
+                datasource="schedulesDs">
+            <properties include=".*"/>
+        </filter>
+            <groupTable id="schedulesTable"
+                        settingsEnabled="true"
+                        multiselect="true"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="create"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"/>
+                    <action id="remove"/>
+                    <action id="formSchedule"
+                            icon="font-icon:CALENDAR_PLUS_O"
+                            caption="msg://scheduleHeadersTable.form.btn"
+                            invoke="formSchedule"/>
+                    <action id="showSchedule"
+                            icon="font-icon:LIST_UL"
+                            caption="msg://scheduleHeadersTable.show.btn"
+                            invoke="showSchedule"/>
+                </actions>
+                <columns>
+                    <column id="scheduleName"/>
+                    <column id="description" maxTextLength="50"/>
+                    <column id="startDate"/>
+                    <column id="endDate"/>
+                    <column id="period"/>
+                    <column id="scheduleType"/>
+                    <column id="baseStandardSchedule"
+                            captionProperty="baseStandardSchedule.scheduleName"/>
+                    <column id="isHolidayWorkDay"/>
+                </columns>
+                <rows datasource="schedulesDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel">
+                    <button id="createBtn"
+                            action="schedulesTable.create"
+                            caption="mainMsg://table.btn.empty"/>
+                    <button id="editBtn"
+                            action="schedulesTable.edit"
+                            caption="mainMsg://table.btn.empty"/>
+                    <button id="removeBtn"
+                            action="schedulesTable.remove"
+                            caption="mainMsg://table.btn.empty"/>
+
+                    <label value="mainMsg://Schedule.monthFrom" align="MIDDLE_LEFT"/>
+                    <dateField id="monthFrom" resolution="MONTH" dateFormat="MM.yyyy"/>
+                    <label value="mainMsg://Schedule.monthTo" align="MIDDLE_LEFT"/>
+                    <dateField id="monthTo" resolution="MONTH" dateFormat="MM.yyyy"/>
+                    <button id="formSchedule" action="schedulesTable.formSchedule"/>
+                    <button id="showSchedule" action="schedulesTable.showSchedule"/>
+                </buttonsPanel>
+            </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Certification.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.certification.CertificationEdit"
+        datasource="certificationDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="certificationDs"
+                    class="kz.uco.tsadv.modules.learning.model.Certification"
+                    view="certification.browse"/>
+        <collectionDatasource id="statusDs"
+                              class="kz.uco.tsadv.modules.learning.dictionary.DicCertificationStatus"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
+                              view="_minimal">
+            <query>
+                <![CDATA[select e from tsadv$DicCertificationStatus e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="650"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="certificationDs">
+            <column width="250px">
+                <field property="name"/>
+                <field captionProperty="name"
+                       property="course"/>
+                <field property="notifyDay"/>
+                <field property="lifeDay"/>
+                <field property="calculateType"/>
+                <field property="period"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

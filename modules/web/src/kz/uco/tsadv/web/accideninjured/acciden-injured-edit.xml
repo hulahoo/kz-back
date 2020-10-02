@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.accideninjured.AccidenInjuredEdit"
+        datasource="accidenInjuredDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.accideninjured">
+    <dsContext>
+        <datasource id="accidenInjuredDs"
+                    class="kz.uco.tsadv.entity.tb.AccidenInjured"
+                    view="accidenInjured-view">
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+            <collectionDatasource id="resultDs"
+                                  property="result"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%">
+            <vbox id="vbox"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="accidenInjuredDs">
+                    <column width="250px">
+                        <field property="person"/>
+                        <field property="disabilityGroup"/>
+                        <field property="traumaLevel"/>
+                        <field property="inductionDate"/>
+                        <field property="reIntroductoryDate"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <groupBox caption="msg://detail"
+                      collapsable="true"
+                      collapsed="true">
+                <vbox id="vbox_2"
+                      spacing="true">
+                    <fieldGroup id="fieldGroup1"
+                                datasource="accidenInjuredDs">
+                        <column>
+                            <field property="knowledgeTestDate"/>
+                            <field property="medicalExaminationDate"/>
+                            <field property="workingHours"/>
+                            <field property="physicalCondition"/>
+                            <field property="diagnosis"/>
+                            <field property="productionConnection"/>
+                            <field property="employeeGuilt"/>
+                            <field property="employerGuilt"/>
+                            <field property="disabilityPercent"/>
+                            <field property="sicknessStartDate"/>
+                            <field property="reabilitation"/>
+                            <field property="retrainingProfession"/>
+                            <field property="reasonNoProductionConnection"/>
+                            <field property="specialOpinion"/>
+                            <field property="sicknessEndDate"/>
+                            <field property="sicknessDays"/>
+                            <field property="startWorkDate"/>
+                        </column>
+                    </fieldGroup>
+                </vbox>
+            </groupBox>
+            <frame id="windowActions"
+                   screen="editWindowActions"/>
+            <vbox id="vbox_1"
+                  height="100%"
+                  spacing="true">
+                <tabSheet>
+                    <tab id="tab"
+                         caption="msg://tab"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="attachmentsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="attachmentType"/>
+                                <column id="attachment"/>
+                            </columns>
+                            <rows datasource="attachmentDs"/>
+                            <buttonsPanel>
+                                <button action="attachmentsTable.create"/>
+                                <button action="attachmentsTable.edit"/>
+                                <button action="attachmentsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                    <tab id="tab_1"
+                         caption="msg://tab1"
+                         margin="true,false,false,false"
+                         spacing="true">
+                        <table id="investigationResultsTable"
+                               height="100%"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="remove"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/remove.png"/>
+                                <action id="edit"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/edit.png"/>
+                            </actions>
+                            <columns>
+                                <column id="investigationDate"/>
+                                <column id="productionConnection"/>
+                                <column id="employeeGuilt"/>
+                                <column id="employerguilt"/>
+                                <column id="investigationType"/>
+                            </columns>
+                            <rows datasource="resultDs"/>
+                            <buttonsPanel>
+                                <button action="investigationResultsTable.create"/>
+                                <button action="investigationResultsTable.edit"/>
+                                <button action="investigationResultsTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </tab>
+                </tabSheet>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.dicprotectionequipmentphoto.DicProtectionEquipmentPhotoEdit"
+        datasource="dicProtectionEquipmentPhotoDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.dicprotectionequipmentphoto">
+    <dsContext>
+        <datasource id="dicProtectionEquipmentPhotoDs"
+                    class="kz.uco.tsadv.modules.personprotection.dictionary.DicProtectionEquipmentPhoto"
+                    view="dicProtectionEquipmentPhoto.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <groupBox caption="msg://photo" spacing="true"
+                  height="300px" width="323px" expand="image">
+            <image id="image"
+                   width="100%"
+                   align="MIDDLE_CENTER"
+                   scaleMode="CONTAIN"/>
+            <hbox align="BOTTOM_LEFT"
+                  spacing="true">
+                <upload id="uploadField"/>
+                <button id="downloadImageBtn"
+                        caption="msg://download"
+                        invoke="onDownloadImageBtnClick"/>
+                <button id="clearImageBtn"
+                        caption="msg://clear"
+                        invoke="onClearImageBtnClick"/>
+            </hbox>
+        </groupBox>
+        <fieldGroup id="fieldGroup"
+                    datasource="dicProtectionEquipmentPhotoDs">
+            <column width="250px">
+                <field property="description"
+                       rows="5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

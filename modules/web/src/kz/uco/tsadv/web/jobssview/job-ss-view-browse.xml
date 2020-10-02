@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.jobssview.JobSsViewBrowse"
+        focusComponent="jobSsViewsTable"
+        lookupComponent="jobSsViewsTable"
+        messagesPack="kz.uco.tsadv.web.jobssview">
+    <dsContext>
+        <groupDatasource id="jobSsViewsDs"
+                         class="kz.uco.tsadv.entity.dbview.JobSsView"
+                         maxResults="20"
+                         view="jobSsView-view">
+            <query>
+                <![CDATA[select e from tsadv$JobSsView e
+where :param$date between e.startDate and e.endDate
+order by e.id]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobSsViewsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="jobSsViewsTable"
+                datasource="jobSsViewsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="jobSsViewsTable"
+                    width="100%">
+            <columns>
+                <column id="jobName"/>
+                <column id="employeeCategory"/>
+            </columns>
+            <rows datasource="jobSsViewsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

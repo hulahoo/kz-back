@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.sanitaryhygieneevent.SanitaryHygieneEventBrowse"
+        focusComponent="sanitaryHygieneEventsTable"
+        lookupComponent="sanitaryHygieneEventsTable"
+        messagesPack="kz.uco.tsadv.web.sanitaryhygieneevent">
+    <dsContext>
+        <groupDatasource id="sanitaryHygieneEventsDs"
+                         class="kz.uco.tsadv.entity.tb.SanitaryHygieneEvent"
+                         view="sanitaryHygieneEvent-view">
+            <query>
+                <![CDATA[select e from tsadv$SanitaryHygieneEvent e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="sanitaryHygieneEventsTable" height="100%">
+            <groupTable id="sanitaryHygieneEventsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/edit.png"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/remove.png"/>
+                </actions>
+                <columns>
+                    <column id="developedEvents"/>
+                    <column id="doneEvents"/>
+                </columns>
+                <rows datasource="sanitaryHygieneEventsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createBtn"
+                            action="sanitaryHygieneEventsTable.create"/>
+                    <button id="editBtn"
+                            action="sanitaryHygieneEventsTable.edit"/>
+                    <button id="removeBtn"
+                            action="sanitaryHygieneEventsTable.remove"/>
+                </buttonsPanel>
+            </groupTable>
+    </layout>
+</window>

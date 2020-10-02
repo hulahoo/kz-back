@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://learning.path.edit"
+        class="kz.uco.tsadv.web.modules.learning.learningpath.LearningPathEdit"
+        datasource="learningPathDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="learningPathDs"
+                    class="kz.uco.tsadv.modules.learning.model.LearningPath"
+                    view="learningPath.edit">
+            <collectionDatasource id="coursesDs"
+                                  property="courses"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+
+        <tabSheet id="tabSheet">
+            <tab id="mainData" caption="msg://Learning.path.main.data"
+                 margin="true,true,true,false" expand="coursesBox">
+                <fieldGroup id="fieldGroup"
+                            datasource="learningPathDs">
+                    <column width="250px">
+                        <field property="category"/>
+                        <field property="name"/>
+                        <field property="startDate"/>
+                        <field property="endDate"/>
+                    </column>
+                </fieldGroup>
+
+                <groupBox id="coursesBox"
+                          caption="msg://kz.uco.tsadv.modules.learning.model/LearningPath.courses"
+                          expand="coursesTable" width="100%" height="100%">
+                    <table id="coursesTable" width="100%">
+                        <actions>
+                            <action id="remove" caption="mainMsg://table.btn.empty"/>
+                        </actions>
+                        <columns>
+                            <column id="orderNumber" align="CENTER"/>
+                            <column id="logo" generator="generateCourseLogo" sortable="false"/>
+                            <column id="course.name" sortable="false"/>
+                        </columns>
+                        <rows datasource="coursesDs"/>
+                        <buttonsPanel>
+                            <button invoke="addCourse" id="addCourse"
+                                    caption="msg://learning.path.course.add"
+                                    icon="icons/plus-btn.png"/>
+                            <button invoke="editCourse" id="editCourse"
+                                    caption="msg://learning.path.course.edit"
+                                    icon="icons/edit.png"
+                                    enable="false"/>
+                            <button action="coursesTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </groupBox>
+            </tab>
+            <tab id="description" caption="msg://Learning.path.description"
+                 margin="true,true,true,false">
+                <richTextArea id="richTextArea"
+                              datasource="learningPathDs"
+                              height="100%"
+                              property="description"
+                              width="100%"/>
+            </tab>
+        </tabSheet>
+
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

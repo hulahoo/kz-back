@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.StandartSettings">
+    <dsContext>
+        <collectionDatasource id="bpmUserSubstitutionsDs"
+                              class="kz.uco.tsadv.entity.tb.BpmUserSubstitution"
+                              maxResults="20"
+                              view="bpmUserSubstitution-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmUserSubstitution e
+where e.user.id = :session$userId
+order by e.startDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="buttons"
+            height="100%">
+        <tabSheet id="tabSheet">
+            <tab id="tab"
+                 caption="msg://tabPersonalSitting"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <groupBox id="groupBox">
+                    <hbox id="hbox"
+                          spacing="true">
+                        <label id="label"
+                               value="msg://Photo"
+                               width="150px"/>
+                        <image id="userImage"
+                               align="MIDDLE_CENTER"
+                               height="100px"
+                               scaleMode="FILL"
+                               stylename="circle-image"
+                               width="100px"/>
+                        <upload id="imageUpload"
+                                accept="*.jpg,*.png"
+                                align="MIDDLE_CENTER"
+                                clearButtonIcon="icons/item-remove.png"
+                                fileSizeLimit="1024000"
+                                showClearButton="true"
+                                uploadButtonIcon="icons/reports-template-upload.png"/>
+                    </hbox>
+                    <grid id="grid"
+                          spacing="true"
+                          width="100%">
+                        <columns>
+                            <column flex="0.0"/>
+                            <column flex="1.0"/>
+                        </columns>
+                        <rows>
+                            <row id="row">
+                                <label id="label_1"
+                                       visible="false"
+                                       value="msg://mainWindowMode"/>
+                                <optionsGroup id="modeOptions"
+                                              visible="false"/>
+                            </row>
+                            <row id="row_1">
+                                <label id="label_2"
+                                       value="msg://mainWindowTheme"
+                                       visible="false"/>
+                                <lookupField id="appThemeField"
+                                             visible="false"
+                                             required="true"
+                                             requiredMessage="msg://mainWindowThemeMsg"
+                                             width="100px"/>
+                            </row>
+                            <row id="row_2">
+                                <label id="label_3"
+                                       value="msg://mainWindowLang"/>
+                                <lookupField id="appLangField"
+                                             width="100px"/>
+                            </row>
+                            <row id="row_3">
+                                <label id="label_4"
+                                       value="msg://com.haulmont.cuba.security.entity/User.timeZone"/>
+                                <hbox id="hbox_1"
+                                      expand="timeZoneAutoField"
+                                      spacing="true"
+                                      width="100%">
+                                    <lookupField id="timeZoneLookup"
+                                                 width="100px"/>
+                                    <checkBox id="timeZoneAutoField"
+                                              align="MIDDLE_LEFT"/>
+                                </hbox>
+                            </row>
+                            <row id="row_4">
+                                <label id="label_5"
+                                       align="MIDDLE_LEFT"
+                                       value="msg://linkLinkedin"/>
+                                <linkButton id="linkedinButton"
+                                            icon="images/linkedin/gray-no-border-30px.png"
+                                            invoke="linkedinButtonAction"/>
+                            </row>
+                            <row id="row_5">
+                                <button id="changePasswordBtn"
+                                        icon="icons/change-pass.png"/>
+                            </row>
+                        </rows>
+                    </grid>
+                </groupBox>
+            </tab>
+            <tab id="tab_1"
+                 caption="msg://tabNotifi"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <groupBox id="groupBox_1"
+                          spacing="true"
+                          width="AUTO">
+                    <vbox id="vbox"
+                          spacing="true">
+                        <hbox id="hbox_2"
+                              spacing="true">
+                            <label id="label_6"
+                                   value="msg://telegramCode"/>
+                            <textField id="telegramCodeField"/>
+                        </hbox>
+                        <button id="button"
+                                align="TOP_RIGHT"
+                                caption="msg://addTelegramNotifi"
+                                invoke="generateCode"/>
+                    </vbox>
+                </groupBox>
+            </tab>
+            <tab id="bpmUserSubstitution"
+                 caption="msg://bpmUserSubstitution"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <filter id="filter"
+                        datasource="bpmUserSubstitutionsDs">
+                    <properties include=".*"/>
+                </filter>
+                <table id="bpmUserSubstitutionsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="substitutedUser" captionProperty="substitutedUser.fullName"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="bpmUserSubstitutionsDs"/>
+                    <buttonsPanel id="btnPanel">
+                        <button id="createBtn"
+                                action="bpmUserSubstitutionsTable.create"/>
+                        <button id="editBtn"
+                                action="bpmUserSubstitutionsTable.edit"/>
+                        <button id="removeBtn"
+                                action="bpmUserSubstitutionsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <hbox id="hbox_3"
+              spacing="true"/>
+        <vbox id="buttons"
+              margin="true,false,false,false">
+            <buttonsPanel id="buttonsPanel">
+                <button id="okBtn"
+                        icon="icons/ok.png"/>
+                <button id="cancelBtn"
+                        icon="icons/cancel.png"/>
+            </buttonsPanel>
+        </vbox>
+    </layout>
+</window>

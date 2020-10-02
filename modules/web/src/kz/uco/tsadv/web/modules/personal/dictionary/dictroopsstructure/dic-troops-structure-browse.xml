@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://DicTroopsStructureBrowse"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dictroopsstructure.DicTroopsStructureBrowse"
+        focusComponent="dicTroopsStructuresTable"
+        lookupComponent="dicTroopsStructuresTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dictroopsstructure">
+    <dsContext>
+        <groupDatasource id="dicTroopsStructuresDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicTroopsStructure"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicTroopsStructure e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicTroopsStructuresTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicTroopsStructuresTable"
+                datasource="dicTroopsStructuresDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicTroopsStructuresTable"
+                    multiselect="true"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicTroopsStructuresDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicTroopsStructuresTable.create"/>
+                <button id="editBtn"
+                        action="dicTroopsStructuresTable.edit"/>
+                <button id="removeBtn"
+                        action="dicTroopsStructuresTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.notallowedperson.NotAllowedPersonBrowse"
+        focusComponent="notAllowedPersonsTable"
+        lookupComponent="notAllowedPersonsTable"
+        messagesPack="kz.uco.tsadv.web.notallowedperson">
+    <dsContext>
+        <groupDatasource id="notAllowedPersonsDs"
+                         class="kz.uco.tsadv.entity.tb.NotAllowedPerson"
+                         view="notAllowedPerson-view">
+            <query>
+                <![CDATA[select e from tsadv$NotAllowedPerson e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="notAllowedPersonsTable" height="100%"
+            spacing="true">
+        <groupTable id="notAllowedPersonsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="notAllowed"/>
+                <column id="dispensaryConfirmation"/>
+                <column id="intoxicationType"/>
+            </columns>
+            <rows datasource="notAllowedPersonsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="notAllowedPersonsTable.create"/>
+                <button id="editBtn"
+                        action="notAllowedPersonsTable.edit"/>
+                <button id="removeBtn"
+                        action="notAllowedPersonsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

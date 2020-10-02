@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Position.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.position.PositionEditpos"
+        datasource="positionDs">
+    <dsContext>
+        <datasource id="positionDs"
+                    class="kz.uco.tsadv.modules.personal.model.PositionExt"
+                    view="position-view"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <table height="200px"
+               width="100%">
+            <columns>
+                <column id="positionName"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="fte"/>
+                <column id="maxPersons"/>
+                <column id="managerFlag"/>
+            </columns>
+            <rows datasource="positionDs"/>
+        </table>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

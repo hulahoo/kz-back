@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicpromotiontype.DicPromotionTypeBrowse"
+        focusComponent="dicPromotionTypesTable"
+        lookupComponent="dicPromotionTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicpromotiontype">
+    <dsContext>
+        <groupDatasource id="dicPromotionTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicPromotionType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPromotionType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicPromotionTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicPromotionTypesTable"
+                datasource="dicPromotionTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicPromotionTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicPromotionTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicPromotionTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicPromotionTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicPromotionTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

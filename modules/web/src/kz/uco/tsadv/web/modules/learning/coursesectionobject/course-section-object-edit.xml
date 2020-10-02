@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CourseSectionObject.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.coursesectionobject.CourseSectionObjectEdit"
+        datasource="courseSectionObjectDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="courseSectionObjectDs"
+                    class="kz.uco.tsadv.modules.learning.model.CourseSectionObject"
+                    view="courseSectionObject.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="courseSectionObjectDs">
+            <column width="250px">
+                <field property="objectType"/>
+                <field property="content"/>
+                <field property="test"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

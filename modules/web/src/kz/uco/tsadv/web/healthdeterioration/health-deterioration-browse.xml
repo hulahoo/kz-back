@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.healthdeterioration.HealthDeteriorationBrowse"
+        focusComponent="healthDeteriorationsTable"
+        lookupComponent="healthDeteriorationsTable"
+        messagesPack="kz.uco.tsadv.web.healthdeterioration">
+    <dsContext>
+        <groupDatasource id="healthDeteriorationsDs"
+                         class="kz.uco.tsadv.entity.tb.HealthDeterioration"
+                         view="healthDeterioration-view">
+            <query>
+                <![CDATA[select e from tsadv$HealthDeterioration e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="healthDeteriorationsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="healthDeteriorationsTable"
+                datasource="healthDeteriorationsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="healthDeteriorationsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"/>
+            </actions>
+            <columns>
+                <column id="date"/>
+                <column id="sickPerson"/>
+                <column id="managerPerson"/>
+                <column id="organization"
+                        captionProperty="organization.organization.organizationName"/>
+                <column id="result"/>
+                <column id="time"/>
+                <column id="startShift"/>
+                <column id="endShift"/>
+                <column id="preliminaryDiagnosis"/>
+                <column id="description"/>
+                <column id="reason"/>
+                <column id="sticknessStartDate"/>
+                <column id="sticknessEndDate"/>
+                <column id="finalDiagnosis"/>
+                <column id="resultDate"/>
+            </columns>
+            <rows datasource="healthDeteriorationsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="healthDeteriorationsTable.create"/>
+                <button id="editBtn"
+                        action="healthDeteriorationsTable.edit"/>
+                <button id="removeBtn"
+                        action="healthDeteriorationsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

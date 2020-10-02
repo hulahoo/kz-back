@@ -1,0 +1,5 @@
+create index idx_tsadv_my_team_view_on_person_group_id on tsadv_my_team_view(person_group_id);
+create index idx_tsadv_my_team_view_on_parent_person_group_id on tsadv_my_team_view(parent_person_group_id);
+create index tsadv_my_team_view_on_path on tsadv_my_team_view(path);
+CREATE index tsadv_my_team_view_on_id on tsadv_my_team_view(id);
+CREATE index tsadv_my_team_view_on_position_group_id on tsadv_my_team_view(position_group_id);

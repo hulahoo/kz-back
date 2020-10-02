@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.dicgoodscategory.DicGoodsCategoryEdit"
+        datasource="dicGoodsCategoryDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.dicgoodscategory">
+    <dsContext>
+        <datasource id="dicGoodsCategoryDs"
+                    class="kz.uco.tsadv.modules.recognition.dictionary.DicGoodsCategory"
+                    view="dicGoodsCategory.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup datasource="dicGoodsCategoryDs" border="visible"
+                    fieldCaptionWidth="170px">
+            <column width="450px">
+                <field property="code" width="200px"/>
+                <field property="parent" width="300px"/>
+            </column>
+        </fieldGroup>
+        <fieldGroup id="fieldGroup" datasource="dicGoodsCategoryDs" border="visible"
+                    caption="msg://kz.uco.base.entity.abstraction/AbstractDictionary.langValue"
+                    fieldCaptionWidth="170px">
+            <column width="450px">
+                <field property="langValue1"/>
+                <field property="langValue2"/>
+                <field property="langValue3"/>
+                <field property="langValue4"/>
+                <field property="langValue5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,2 @@
+alter table tsadv_internship_type rename to tsadv_internship_type__u96891 ;
+alter table tsadv_internship drop constraint FK_TSADV_INTERNSHIP_INTERNSHIP_TYPE ;

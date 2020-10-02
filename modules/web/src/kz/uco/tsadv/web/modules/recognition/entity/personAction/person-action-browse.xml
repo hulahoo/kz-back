@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personAction.PersonActionBrowse"
+        focusComponent="personActionsTable"
+        lookupComponent="personActionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personAction">
+    <dsContext>
+        <groupDatasource id="personActionsDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonAction"
+                         view="personAction-view">
+            <query>
+                <![CDATA[select e from tsadv$PersonAction e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personActionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personActionsTable"
+                datasource="personActionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personActionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="actionLang1"/>
+                <column id="actionType"/>
+                <column id="actionLang2"/>
+                <column id="actionLang3"/>
+                <column id="actionLang4" visible="false"/>
+                <column id="actionLang5" visible="false"/>
+                <column id="actorFullnameLang1"/>
+                <column id="actorFullnameLang2"/>
+                <column id="actorFullnameLang3"/>
+                <column id="actorFullnameLang4" visible="false"/>
+                <column id="actorFullnameLang5" visible="false"/>
+                <column id="toFullnameLang1"/>
+                <column id="toFullnameLang2"/>
+                <column id="toFullnameLang3"/>
+                <column id="toFullnameLang4" visible="false"/>
+                <column id="toFullnameLang5" visible="false"/>
+                <column id="actionDate"/>
+                <column id="comment"/>
+            </columns>
+            <rows datasource="personActionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personActionsTable.create"/>
+                <button id="editBtn"
+                        action="personActionsTable.edit"/>
+                <button id="removeBtn"
+                        action="personActionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

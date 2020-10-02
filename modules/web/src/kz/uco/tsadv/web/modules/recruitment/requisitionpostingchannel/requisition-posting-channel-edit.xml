@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://RequisitionPostingChannel.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.requisitionpostingchannel.RequisitionPostingChannelEdit"
+        datasource="requisitionPostingChannelDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="requisitionPostingChannelDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.RequisitionPostingChannel"
+                    view="requisitionPostingChannel.view"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="requisitionPostingChannelDs">
+            <column width="250px">
+                <field property="postingChannel"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.absencebalance.AbsenceBalanceEdit"
+        datasource="absenceBalanceDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.absencebalance">
+    <dsContext>
+        <datasource id="absenceBalanceDs"
+                    class="kz.uco.tsadv.modules.personal.model.AbsenceBalance"
+                    view="absenceBalance.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="absenceBalanceDs">
+            <column width="250px">
+                <field property="dateFrom"/>
+                <field property="dateTo"/>
+                <field id="balanceDays"
+                       property="balanceDays"
+                       caption="msg://overallBalanceDays"/>
+                <field property="additionalBalanceDays"/>
+                <field editable="false"
+                       property="daysSpent"/>
+                <field editable="false"
+                       property="daysLeft"/>
+                <field editable="false"
+                       property="extraDaysSpent"/>
+                <field editable="false"
+                       property="extraDaysLeft"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.ordermasterentityproperty.OrderMasterEntityPropertyEdit"
+        datasource="orderMasterEntityPropertyDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.ordermasterentityproperty">
+    <dsContext>
+        <datasource id="orderMasterEntityPropertyDs"
+                    class="kz.uco.tsadv.modules.personal.model.OrderMasterEntityProperty"
+                    view="orderMasterEntityProperty.edit"/>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="orderMasterEntityPropertyDs">
+            <column width="250px">
+                <field property="name" editable="false"/>
+                <field property="langName1"/>
+                <field property="langName2"/>
+                <field property="langName3"/>
+                <field property="langName4"/>
+                <field property="langName5"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

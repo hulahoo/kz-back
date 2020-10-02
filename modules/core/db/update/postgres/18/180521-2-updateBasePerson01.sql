@@ -1,0 +1,2 @@
+alter table BASE_PERSON add constraint FK_BASE_PERSON_CATEGORY foreign key (CATEGORY_ID) references SYS_CATEGORY(ID);
+create index IDX_BASE_PERSON_CATEGORY on BASE_PERSON (CATEGORY_ID);

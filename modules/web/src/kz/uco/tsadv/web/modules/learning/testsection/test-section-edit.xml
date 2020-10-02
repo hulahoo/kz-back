@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://TestSection.editorCaption"
+        class="kz.uco.tsadv.web.modules.learning.testsection.TestSectionEdit"
+        datasource="testSectionDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="testSectionDs"
+                    class="kz.uco.tsadv.modules.learning.model.TestSection"
+                    view="testSection.edit">
+            <collectionDatasource id="questionInSectionDs"
+                                  property="questions"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vBox"
+            spacing="true">
+        <vbox id="vBox"
+              expand="questionsBox">
+            <fieldGroup id="fieldGroup"
+                        datasource="testSectionDs">
+                <column id="column1"
+                        width="250px">
+                    <field id="sectionName"
+                           property="sectionName"/>
+                    <field id="questionOrder"
+                           property="questionOrder"/>
+                    <field id="questionBank"
+                           property="questionBank"/>
+                    <field id="questionPerPage"
+                           property="questionPerPage"/>
+                </column>
+                <column id="column2">
+                    <field id="answerOrder"
+                           property="answerOrder"/>
+                    <field id="dynamicLoad"
+                           property="dynamicLoad" caption="msg://dynamicLoad"/>
+                    <field id="generateCount"
+                           property="generateCount" caption="msg://generateCount"/>
+                    <field property="pointsPerQuestion"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="questionsBox"
+                      caption="msg://TestSection.questions">
+                <table id="questionsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="question.type"/>
+                        <column id="question.text"
+                                maxTextLength="140"/>
+                        <column id="question.score"/>
+                    </columns>
+                    <rows datasource="questionInSectionDs"/>
+                    <buttonsPanel id="buttonsPanel">
+                        <button id="addQuestion"
+                                caption="msg://kz.uco.tsadv.web.modules.performance.calibrationsession/table.btn.add"
+                                invoke="openQuestions"/>
+                        <button id="removeButton"
+                                action="questionsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

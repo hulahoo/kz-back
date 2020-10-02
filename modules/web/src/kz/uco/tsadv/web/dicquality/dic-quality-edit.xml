@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.dicquality.DicQualityEdit"
+        datasource="dicQualitiesDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.dicquality">
+    <dsContext>
+        <datasource id="dicQualitiesDs"
+                    class="kz.uco.tsadv.modules.recognition.dictionary.DicQuality"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <fieldGroup id="fieldGroup" border="visible"
+                        datasource="dicQualitiesDs">
+                <column>
+                    <field property="order" width="185px"/>
+                </column>
+                <column width="250px">
+                    <field property="code"/>
+                </column>
+                <column>
+                    <field property="startDate" width="AUTO"/>
+                </column>
+                <column>
+                    <field property="endDate" width="AUTO"/>
+                </column>
+            </fieldGroup>
+            <fieldGroup datasource="dicQualitiesDs" border="visible" width="80%" fieldCaptionWidth="225px">
+                <field property="langValue1" width="40%"/>
+                <field property="fullLangValue1" rows="4" width="100%"/>
+            </fieldGroup>
+
+            <fieldGroup datasource="dicQualitiesDs" border="visible" width="80%" fieldCaptionWidth="225px">
+                <field property="langValue2" width="40%"/>
+                <field property="fullLangValue2" rows="4" width="100%"/>
+            </fieldGroup>
+
+            <fieldGroup datasource="dicQualitiesDs" border="visible" width="80%" fieldCaptionWidth="225px">
+                <field property="langValue3" width="40%"/>
+                <field property="fullLangValue3" rows="4" width="100%"/>
+            </fieldGroup>
+
+            <fieldGroup datasource="dicQualitiesDs" border="visible" width="80%" fieldCaptionWidth="225px">
+                <field property="langValue4" width="40%"/>
+                <field property="fullLangValue4" rows="4" width="100%"/>
+            </fieldGroup>
+
+            <fieldGroup datasource="dicQualitiesDs" border="visible" width="80%" fieldCaptionWidth="225px">
+                <field property="langValue5" width="40%"/>
+                <field property="fullLangValue5" rows="4" width="100%"/>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

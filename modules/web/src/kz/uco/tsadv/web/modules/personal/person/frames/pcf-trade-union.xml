@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfTradeUnion"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tradeUnionsTable" width="100%" height="100%">
+        <table id="tradeUnionsTable" width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/excel.png"/>
+            </actions>
+            <columns>
+                <column id="dicTradeUnion"
+                        caption="msg://dicTradeUnion"/>
+                <column id="joingTradeUnion"
+                        caption="msg://joingTradeUnion"/>
+                <column id="dateTo"
+                        caption="msg://dateTo"/>
+            </columns>
+            <rows datasource="tradeUnionsDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createBtn"
+                        action="tradeUnionsTable.create"/>
+                <button id="editBtn"
+                        action="tradeUnionsTable.edit"/>
+                <button id="removeBtn"
+                        action="tradeUnionsTable.remove"/>
+                <button id="excelBtn"
+                        action="tradeUnionsTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.successor.SuccessorHistoryBrowse"
+        focusComponent="successorsTable"
+        lookupComponent="successorsTable"
+        messagesPack="kz.uco.tsadv.web.successor">
+    <dsContext>
+        <groupDatasource id="successorsDs"
+                         class="kz.uco.tsadv.modules.personal.model.Successor"
+                         view="successor.browse">
+            <query>
+                <![CDATA[select e from tsadv$Successor e 
+where e.succession.id = :param$successionId
+  and e.personGroup.id = :param$personGroupId
+ order by e.startDate desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="successorsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="successorsTable"
+                datasource="successorsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="successorsTable"
+                    width="100%">
+            <actions>
+                <action id="edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <action id="removeEntity"
+                        invoke="removeEntity"
+                        icon="REMOVE"
+                        caption="mainMsg://table.btn.empty"/>
+            </actions>
+            <columns>
+                <column id="personGroup"
+                        captionProperty="personGroup.fullName"/>
+                <column id="readinessLevel"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="note"/>
+            </columns>
+            <rows datasource="successorsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="editBtn"
+                        action="successorsTable.edit"/>
+                <button id="removeEntityBtn"
+                        action="successorsTable.removeEntity"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="actionsHBox"
+              spacing="true">
+            <button id="canselBtn"
+                    caption="msg://go.back"
+                    icon="font-icon:ARROW_LEFT"
+                    invoke="close"/>
+        </hbox>
+    </layout>
+</window>

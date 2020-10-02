@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfBeneficiary"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <table id="beneficiariesTable"
+               height="100%"
+               width="100%">
+            <actions>
+                <action id="create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"
+                        trackSelection="true"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/edit.png"/>
+                <action id="remove"
+                        trackSelection="true"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/remove.png"
+                        invoke="removeBeneficiary"/>
+                <action id="excel"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/excel.png"/>
+            </actions>
+            <columns>
+                <column id="personGroupChild.personFioWithEmployeeNumber"
+                        caption="msg://personFio"/>
+                <column id="relationshipType"
+                        caption="msg://RelationshipTypeBeneficiary"/>
+                <column id="dateFrom"
+                        caption="msg://dateFrom"/>
+                <column id="dateTo"
+                        caption="msg://dateTo2"/>
+                <column id="getAlimony"
+                        caption="msg://getAlimony"/>
+            </columns>
+            <rows datasource="beneficiariesDs"/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createBtn"
+                        action="beneficiariesTable.create"/>
+                <button id="editBtn"
+                        action="beneficiariesTable.edit"/>
+                <button id="removeBtn"
+                        action="beneficiariesTable.remove"/>
+                <button action="beneficiariesTable.excel"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.learning.learner.LearnerBrowse"
+        focusComponent="learnersTable"
+        lookupComponent="learnersTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.learner">
+    <dsContext>
+        <groupDatasource id="learnersDs"
+                         class="kz.uco.tsadv.modules.learning.model.Learner"
+                         view="learner-browse">
+            <query>
+                <![CDATA[
+                    select e
+                      from tsadv$Learner e
+                ]]>
+                <filter>
+                    <c> e.group.id = :param$learnerGroup </c>
+                </filter>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="800"
+                width="1100"/>
+    <layout expand="learnersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learnersTable"
+                datasource="learnersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learnersTable"
+                    multiselect="true"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="group"/>
+                <column id="personGroup.relevantPerson.fullNameCyrillic"/>
+            </columns>
+            <rows datasource="learnersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="learnersTable.create"/>
+                <button id="editBtn"
+                        action="learnersTable.edit"/>
+                <button id="removeBtn"
+                        action="learnersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

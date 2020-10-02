@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicpostingchannel.DicPostingChannelEdit"
+        datasource="dicPostingChannelDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicpostingchannel">
+    <dsContext>
+        <datasource id="dicPostingChannelDs"
+                    class="kz.uco.tsadv.modules.recruitment.dictionary.DicPostingChannel"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="dicPostingChannelDs">
+                <column width="250px">
+                    <field property="channalName"/>
+                    <field property="langValue1"/>
+                    <field property="description1"/>
+                    <field property="langValue2"/>
+                    <field property="description2"/>
+                    <field property="langValue3"/>
+                    <field property="description3"/>
+                    <field property="langValue4"/>
+                    <field property="description4"/>
+                    <field property="langValue5"/>
+                    <field property="description5"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field property="code"/>
+                    <field property="userName"/>
+                    <field property="password"/>
+                    <field property="connectionURL"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

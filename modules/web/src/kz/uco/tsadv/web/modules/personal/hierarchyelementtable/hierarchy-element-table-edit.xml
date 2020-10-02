@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://HierarchyElementTable.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.hierarchyelementtable.HierarchyElementTableEdit"
+        datasource="hierarchyElementDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="hierarchyElementDs"
+                    class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                    view="hierarchyElement.browse"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="hierarchyElementDs">
+            <column width="250px">
+                <field property="hierarchy"/>
+                <field property="parent"/>
+                <field property="elementType"/>
+                <field captionProperty="position"
+                       property="positionGroup"/>
+                <field captionProperty="organization"
+                       property="organizationGroup"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

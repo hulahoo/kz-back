@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://personMentor"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfPersonLearningHistory"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            width="100%">
+        <vbox id="vBox"
+              height="100%">
+            <hbox id="hBox"
+                  height="100%"
+                  margin="true,false,false,false"
+                  width="100%">
+                <dataGrid id="personLearningHistoryTable"
+                          datasource="personLearningHistoryDs"
+                          height="100%"
+                          width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="excel"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="course"
+                                property="course.name"/>
+                        <column id="learningType"
+                                property="learningType"/>
+                        <column id="startDate"
+                                property="startDate"/>
+                        <column id="endDate"
+                                property="endDate"/>
+                        <column id="status"
+                                property="status"/>
+                        <column id="incomplete"
+                                property="incomplete"/>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel">
+                        <button id="createBtn"
+                                action="personLearningHistoryTable.create"/>
+                        <button id="editBtn"
+                                action="personLearningHistoryTable.edit"/>
+                        <button id="removeBtn"
+                                action="personLearningHistoryTable.remove"/>
+                        <button id="excel"
+                                action="personLearningHistoryTable.excel"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </hbox>
+            <hbox caption="msg://learningExpense"
+                  height="100%"
+                  margin="true,false,false,false"
+                  width="100%">
+                <dataGrid id="learningExpenseTable"
+                          datasource="learningExpenseDs"
+                          height="100%"
+                          width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                enable="false"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="expenseType"
+                                property="expenseType"/>
+                        <column id="currency"
+                                property="currency"/>
+                        <column id="amount"
+                                property="amount"/>
+                    </columns>
+                    <buttonsPanel id="learningExpenseButtonsPanel">
+                        <button id="learningExpenseCreate"
+                                action="learningExpenseTable.create"/>
+                        <button action="learningExpenseTable.edit"/>
+                        <button action="learningExpenseTable.remove"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </hbox>
+        </vbox>
+    </layout>
+</window>

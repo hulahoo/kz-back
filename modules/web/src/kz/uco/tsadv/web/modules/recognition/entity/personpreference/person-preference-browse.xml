@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.personpreference.PersonPreferenceBrowse"
+        focusComponent="personPreferencesTable"
+        lookupComponent="personPreferencesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.personpreference">
+    <dsContext>
+        <groupDatasource id="personPreferencesDs"
+                         class="kz.uco.tsadv.modules.recognition.PersonPreference"
+                         maxResults="20"
+                         view="personPreference.edit">
+            <query>
+                <![CDATA[select e from tsadv$PersonPreference e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personPreferencesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personPreferencesTable"
+                datasource="personPreferencesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personPreferencesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <group>
+                    <column id="personGroup.fullName"
+                            caption="msg://kz.uco.tsadv.modules.recognition/PersonPreference.personGroup"/>
+                </group>
+                <column id="preferenceType"/>
+                <column id="description"/>
+                <column id="descriptionEn"/>
+                <column id="descriptionRu"/>
+            </columns>
+            <rows datasource="personPreferencesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="personPreferencesTable.create"/>
+                <button id="editBtn"
+                        action="personPreferencesTable.edit"/>
+                <button id="removeBtn"
+                        action="personPreferencesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

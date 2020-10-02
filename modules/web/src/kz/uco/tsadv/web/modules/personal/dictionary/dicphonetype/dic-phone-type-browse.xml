@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicPhoneType.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicphonetype.DicPhoneTypeBrowse"
+        focusComponent="dicPhoneTypesTable"
+        lookupComponent="dicPhoneTypesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicphonetype">
+    <dsContext>
+        <groupDatasource id="dicPhoneTypesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicPhoneType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicPhoneType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicPhoneTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicPhoneTypesTable"
+                datasource="dicPhoneTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicPhoneTypesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="dicPhoneTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicPhoneTypesTable.create"/>
+                <button id="editBtn"
+                        action="dicPhoneTypesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicPhoneTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

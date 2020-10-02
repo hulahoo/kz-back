@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicScheduleElementType.browseCaption"
+        class="kz.uco.tsadv.web.modules.timesheet.dictionary.dicscheduleelementtype.DicScheduleElementTypeBrowse"
+        focusComponent="dicScheduleElementTypesTable"
+        lookupComponent="dicScheduleElementTypesTable">
+    <dsContext>
+        <groupDatasource id="dicScheduleElementTypesDs"
+                         class="kz.uco.tsadv.modules.timesheet.dictionary.DicScheduleElementType"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicScheduleElementType e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicScheduleElementTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicScheduleElementTypesTable"
+                datasource="dicScheduleElementTypesDs">
+            <properties include=".*"/>
+        </filter>
+        <table id="dicScheduleElementTypesTable"
+               width="100%">
+            <actions>
+                <action id="create"
+                        icon="icons/plus-btn.png"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="code"/>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="description1"/>
+                <column id="description2"/>
+                <column id="description3"/>
+                <column id="description4"/>
+                <column id="description5"/>
+                <column id="shortName1"/>
+                <column id="shortName2"/>
+                <column id="shortName3"/>
+                <column id="shortName4"/>
+                <column id="shortName5"/>
+                <column id="timeFrom"/>
+                <column id="timeTo"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="displayOnTimecardEditScreen"/>
+            </columns>
+            <rows datasource="dicScheduleElementTypesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel">
+                <button id="createBtn"
+                        action="dicScheduleElementTypesTable.create"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="editBtn"
+                        action="dicScheduleElementTypesTable.edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="removeBtn"
+                        action="dicScheduleElementTypesTable.remove"
+                        caption="mainMsg://table.btn.empty"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

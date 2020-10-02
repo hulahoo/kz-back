@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicMaritalStatus.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicmaritalstatus.DicMaritalStatusBrowse"
+        focusComponent="dicMaritalStatusesTable"
+        lookupComponent="dicMaritalStatusesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary.dicmaritalstatus">
+    <dsContext>
+        <groupDatasource id="dicMaritalStatusesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicMaritalStatus e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicMaritalStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicMaritalStatusesTable"
+                datasource="dicMaritalStatusesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicMaritalStatusesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicMaritalStatusesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicMaritalStatusesTable.create"/>
+                <button id="editBtn"
+                        action="dicMaritalStatusesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicMaritalStatusesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

@@ -1,0 +1,1 @@
+alter table TSADV_GOODS_ORDER_DETAIL drop column RECOGNITION_PROVIDER_ID__U12610 cascade ;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CalendarHolidays.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.calendarholiday.CalendarHolidayEdit"
+        datasource="calendarHolidayDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="calendarHolidayDs"
+                    class="kz.uco.tsadv.modules.timesheet.model.CalendarHoliday"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="calendarHolidayDs">
+            <column width="250px">
+                <field property="name"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="dayType"/>
+                <field property="state"/>
+                <field property="transferStartDate"/>
+                <field property="transferEndDate"/>
+                <field dateFormat="MM.yyyy"
+                       property="actionDateFrom"
+                       resolution="MONTH"/>
+                <field dateFormat="MM.yyyy"
+                       property="actionDateTo"
+                       resolution="MONTH"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

@@ -1,0 +1,10 @@
+alter table tsadv_organization_structure drop constraint if exists tsadv_organization_structure_pk;
+alter table tsadv_organization_structure add constraint tsadv_organization_structure_pk primary key (id);
+alter table tsadv_organization_structure add constraint FK_TSADV_ORGANIZATION_STRUCTURE_HIERARCHY foreign key (HIERARCHY_ID) references BASE_HIERARCHY(ID);
+alter table tsadv_organization_structure add constraint FK_TSADV_ORGANIZATION_STRUCTURE_PARENT foreign key (PARENT_ID) references BASE_HIERARCHY_ELEMENT(ID);
+alter table tsadv_organization_structure add constraint FK_TSADV_ORGANIZATION_STRUCTURE_ORGANIZATION_GROUP foreign key (ORGANIZATION_GROUP_ID) references BASE_ORGANIZATION_GROUP(ID);
+alter table tsadv_organization_structure add constraint FK_TSADV_ORGANIZATION_STRUCTURE_PARENT_ORGANIZATION_GROUP foreign key (PARENT_ORGANIZATION_GROUP_ID) references BASE_ORGANIZATION_GROUP(ID);
+create index IDX_TSADV_ORGANIZATION_STRUCTURE_HIERARCHY on tsadv_organization_structure (HIERARCHY_ID);
+create index IDX_TSADV_ORGANIZATION_STRUCTURE_PARENT on tsadv_organization_structure (PARENT_ID);
+create index IDX_TSADV_ORGANIZATION_STRUCTURE_ORGANIZATION_GROUP on tsadv_organization_structure (ORGANIZATION_GROUP_ID);
+create index IDX_TSADV_ORGANIZATION_STRUCTURE_PARENT_ORGANIZATION_GROUP on tsadv_organization_structure (PARENT_ORGANIZATION_GROUP_ID);

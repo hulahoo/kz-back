@@ -1,0 +1,1 @@
+alter table TSADV_DIC_PROTECTION_EQUIPMENT drop column UNIT_OF_MEASURE_ID__U69318 cascade ;

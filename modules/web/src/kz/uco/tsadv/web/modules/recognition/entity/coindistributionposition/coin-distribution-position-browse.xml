@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.coindistributionposition.CoinDistributionPositionBrowse"
+        focusComponent="coinDistributionPositionsTable"
+        lookupComponent="coinDistributionPositionsTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.coindistributionposition">
+    <dsContext>
+        <groupDatasource id="coinDistributionPositionsDs"
+                         class="kz.uco.tsadv.modules.recognition.CoinDistributionPosition"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$CoinDistributionPosition e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="coinDistributionPositionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="coinDistributionPositionsTable"
+                datasource="coinDistributionPositionsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="coinDistributionPositionsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+            </columns>
+            <rows datasource="coinDistributionPositionsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="coinDistributionPositionsTable.create"/>
+                <button id="editBtn"
+                        action="coinDistributionPositionsTable.edit"/>
+                <button id="removeBtn"
+                        action="coinDistributionPositionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

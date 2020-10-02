@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Requisition methods</title>
+    <script src="jquery.min.js"></script>
+    <script src="config.js"></script>
+    <link rel="stylesheet" type="text/css" href="test-rest-api.css">
+</head>
+<body>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Lang:</td>
+            <td>
+                <input type="radio" name="lang" value="en">en</input>
+                <input type="radio" name="lang" value="ru" checked>ru</input>
+                <input type="radio" name="lang" value="kz">kz</input>
+            </td>
+            <td/>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <table>
+        <tr>
+            <td>Login:</td>
+            <td>
+                <input type="text" id="login" value="">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td>
+                <input type="password" id="password" value="123456">
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button"
+                       onclick="login()"
+                       value="LOGIN"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="token"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список вакансий. Авторизация не требуется.
+    </div>
+    <table>
+        <tr>
+            <td>Code:</td>
+            <td>
+                <input type="text" id="reqs_code"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Job:</td>
+            <td>
+                <input type="text" id="job"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Country:</td>
+            <td>
+                <div id="reqs_country_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td>
+                <div id="city_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td>
+                <div id="cat_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Start date:</td>
+            <td>
+                <input type="date" id="start_date" value="2017-09-01"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getRequisitions()" value="getRequisitions">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requisitions"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список вакансий. Авторизация требуется.
+    </div>
+    <table>
+        <tr>
+            <td>Code:</td>
+            <td>
+                <input type="text" id="requisition_code"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Job:</td>
+            <td>
+                <input type="text" id="requisition_job"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Country:</td>
+            <td>
+                <div id="requisition_country_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td>
+                <div id="requisition_city_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Category:</td>
+            <td>
+                <div id="requisition_cat_div"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Start date:</td>
+            <td>
+                <input type="date" id="requisition_start_date" value="2017-09-01"/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getRequisitionsByPerson()" value="getRequisitionsByPerson">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requisitions_label"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Детали выбранной вакансии. Авторизация не требуется.
+    </div>
+    <table>
+        <tr>
+            <td> * Requisition id:</td>
+            <td>
+                <input id="req" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getRequisition()" value="getRequisition">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requisition"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список запланированных интервью по выбранной вакансии, доступных для отклика пользователю.
+    </div>
+    <table>
+        <tr>
+            <td> * Requisition id:</td>
+            <td>
+                <input id="sch_int_req" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getScheduledInterviews()" value="getScheduledInterviews">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="scheduledInterviews"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Откликнуться на запланированное интервью.
+    </div>
+    <table>
+        <tr>
+            <td> * Interview id:</td>
+            <td>
+                <input id="interview" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="requestInterview()" value="requestInterview">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requestInterview"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список интервью пользователя.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getUserInterviews()" value="getUserInterviews">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="getUserInterviews"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Подтвердить свое участие в интервью со статусом "На согласовании".
+    </div>
+    <table>
+        <tr>
+            <td> * Interview id:</td>
+            <td>
+                <input id="approveInterviewId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="approveInterview()" value="approveInterview">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="approveInterview"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Отклонить интервью со статусом "На согласовании".
+    </div>
+    <table>
+        <tr>
+            <td> * Interview id:</td>
+            <td>
+                <input id="cancelInterviewId" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td> * Reason:</td>
+            <td>
+                <textarea id="reason"></textarea>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="cancelInterview()" value="cancelInterview">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="cancelInterview"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Получить список Источников.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getSources()" value="getSources">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="getSources"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Получить список статусов интервью.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getInterviewStatusEnum()" value="getInterviewStatusEnum">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="getInterviewStatusEnum"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Получить список статусов пердложения.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getOfferStatusEnum()" value="getOfferStatusEnum">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="getOfferStatusEnum"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Получить список статусов отклика.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getJobRequestStatusEnum()" value="getJobRequestStatusEnum">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="getJobRequestStatusEnum"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Откликнуться на вакансию.
+    </div>
+    <table>
+        <tr>
+            <td>Requisition id:</td>
+            <td>
+                <input id="req_req" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Source id:</td>
+            <td>
+                <input id="req_source" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Other source:</td>
+            <td>
+                <input id="req_other_source" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="requestRequisition()" value="requestRequisition">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="requestRequisition"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Проверить признак отклика на вакансию.
+    </div>
+    <table>
+        <tr>
+            <td>Requisition id:</td>
+            <td>
+                <input id="jr_req" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="statusJobRequest()" value="statusJobRequest">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="statusJobRequest"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Получить PreScreeningTest на вакансию.
+    </div>
+    <table>
+        <tr>
+            <td>Requisition id:</td>
+            <td>
+                <input id="preScreenReq" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="preScreenReqValue()" value="preScreenReqValue">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="preScreenReqValue"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Сохранить ответы PreScreeningTest.
+    </div>
+    <table>
+        <tr>
+            <td>PreScreenTest id:</td>
+            <td colspan="2">
+                <input id="preScreenTestId" type="text" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td>interviewStatus:</td>
+            <td colspan="2">
+                <input id="interviewStatus" type="text" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="preScreenTest()" value="preScreenTest">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="preScreenTest"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список откликов на вакансию пользователя.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getUserJobRequests()" value="getUserJobRequests">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="getUserJobRequests"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Список предложений
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getUserOffers()" value="getUserOffers">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="getUserOffers"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Принять предложение
+    </div>
+    <table>
+        <tr>
+            <td>Offer id:</td>
+            <td colspan="2">
+                <input id="approve_offer_id" type="text" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="approveUserOffer()" value="approveUserOffer">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="approveUserOffer"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Отклонить предложение
+    </div>
+    <table>
+        <tr>
+            <td>Offer id:</td>
+            <td colspan="2">
+                <input id="reject_offer_id" type="text" value=""/>
+            </td>
+        </tr>
+        <tr>
+            <td>Comment</td>
+            <td colspan="2">
+                <input id="offerComment" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="rejectUserOffer()" value="rejectUserOffer">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="rejectUserOffer"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Сохранить файл видео в отклике на вакансию. Для получения значения Video file id следует воспользоваться методом
+        uploadFile из <a href="test-file.html">test-file.html</a>.
+        Связка между вакансией и файлом отображается в списке getUserJobRequests.
+    </div>
+    <table>
+        <tr>
+            <td>Requisition id:</td>
+            <td>
+                <input id="save_video_req" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td>Video file id:</td>
+            <td>
+                <input id="save_video_file" type="text" value=""/>
+            </td>
+            <td/>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="saveVideoFile()" value="saveVideoFile">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="saveVideoFile"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Check video interview
+    </div>
+    <table>
+        <tr>
+            <td>
+                Requisition ID
+            </td>
+            <td>
+                <input type="text" id="requisitionId" value="7a8b7627-d124-9146-1c60-0b5491abf863">
+            </td>
+        </tr>
+ <!--       <tr>
+            <td>
+                User ID
+            </td>
+            <td>
+                <input type="text" id="userId" value="e430819c-2c98-e88f-b08e-9dc0c31af25c">
+            </td>
+        </tr>-->
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="checkVideoInterview()" value="check"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="showResultOnLabel"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        Check PreScreeningTest
+    </div>
+    <table>
+        <tr>
+            <td>
+                Requisition ID
+            </td>
+            <td>
+                <input type="text" id="requisitionId2" value="" />
+            </td>
+        </tr>
+       <!-- <tr>
+            <td>
+                User ID
+            </td>
+            <td>
+                <input type="text" id="userId2" value=""/>
+            </td>
+        </tr>-->
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="checkPrescreeningTest()" value="check"/>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="showPreScreeningResult"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="method">
+    <div class="description">
+        getAllObjectModel.
+    </div>
+    <table>
+        <tr>
+            <td colspan="3">
+                <input type="button" onclick="getAllObjectModel()" value="getAllObjectModel">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <label id="getAllObjectModel"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var access_token;
+
+    $().ready(function () {
+        fillSelects();
+    });
+
+    function login() {
+        var login = $("#login").val();
+        var password = $("#password").val();
+        var jsonResponse;
+
+        $.ajax(config.loginUrl + "?" + "grant_type=password&username=" + login + "&password=" + password,
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Basic " + btoa(config.clientSecret),
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+            .success(function (res) {
+                jsonResponse = res;
+                $('#token').text(JSON.stringify(jsonResponse));
+                access_token = res.access_token;
+
+                fillSelects();
+            });
+    }
+
+    function fillSelects() {
+        var lang = $("input[name=lang]:checked").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getCountries?lang=" + lang,
+            {
+                type: "GET",
+                /*headers: {
+                    "Authorization": "Bearer " + access_token
+                }*/
+            })
+            .success(function (res) {
+                var countries = JSON.parse(res);
+                var reqsInner = '';
+                countries.forEach(function (e) {
+                    reqsInner += ('<input onchange="fillCities();" type="checkbox" name="reqs_country" value="' + e.id + '">' + e.name + '</input>');
+                });
+
+                document.getElementById("reqs_country_div").innerHTML = reqsInner;
+            });
+
+        fillCities();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getRequisitionCategories?lang=" + lang,
+            {
+                type: "GET",
+                /*headers: {
+                    "Authorization": "Bearer " + access_token
+                }*/
+            })
+            .success(function (res) {
+                var categories = JSON.parse(res);
+                var inner = '';
+                categories.forEach(function (e) {
+                    inner += ('<input type="checkbox" name="reqs_cat" value="' + e.id + '">' + e.name + '</input>');
+                });
+
+                document.getElementById("cat_div").innerHTML = inner;
+            });
+    }
+
+    function fillCities() {
+        var lang = $("input[name=lang]:checked").val();
+
+        var country = $('input[name=reqs_country]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getCities?country=" + country + "&lang=" + lang,
+            {
+                type: "GET",
+                /*headers: {
+                    "Authorization": "Bearer " + access_token
+                }*/
+            })
+            .success(function (res) {
+                var cities = JSON.parse(res);
+                var inner = '';
+                cities.forEach(function (e) {
+                    inner += ('<input type="checkbox" name="reqs_city" value="' + e.id + '">' + e.name + '</input>');
+                });
+
+                document.getElementById("city_div").innerHTML = inner;
+            });
+    }
+
+    function getRequisitions() {
+        var country = $('input[name=reqs_country]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        var cat = $('input[name=reqs_cat]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        var city = $('input[name=reqs_city]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getRequisitions?code=" + $('#reqs_code').val() + "&job=" + $('#job').val() + "&country=" + country + "&city=" + city + "&category=" + cat + "&startDate=" + $('#start_date').val() + "&lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                /*headers: {
+                    "Authorization": "Bearer " + access_token
+                }*/
+            })
+            .success(function (res) {
+                $("#requisitions").text(res);
+            });
+    }
+
+    function getRequisitionsByPerson() {
+        var country = $('input[name=requisition_country]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        var cat = $('input[name=requisition_cat]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        var city = $('input[name=requisition_city]:checked').map(function () {
+            return this.value;
+        }).get().join(",");
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getRequisitionsByPerson?code=" + $('#reqs_code').val() + "&job=" + $('#job').val() + "&country=" + country + "&city=" + city + "&category=" + cat + "&startDate=" + $('#start_date').val() + "&lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#requisitions_label").text(res);
+            });
+    }
+
+    function getRequisition() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getRequisition?requisition=" + $('#req').val() + "&lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                /*headers: {
+                    "Authorization": "Bearer " + access_token
+                }*/
+            })
+            .success(function (res) {
+                $("#requisition").text(res);
+            });
+    }
+
+    function getScheduledInterviews() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getScheduledInterviews?requisition=" + $('#sch_int_req').val() + "&lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#scheduledInterviews").text(res);
+            });
+    }
+
+    function requestInterview() {
+        var data = {};
+        jQuery.extend(data, requestInterviewModel);
+        data.interview = $('#interview').val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/requestInterview",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#requestInterview").text(JSON.stringify(res));
+            });
+    }
+
+    function getAllObjectModel() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getAllObjectModel",
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                $("#getAllObjectModel").text(res);
+            });
+    }
+
+    function getSources() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getSources?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                $("#getSources").text(res);
+            });
+    }
+
+    function getInterviewStatusEnum() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getInterviewStatusEnum?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                $("#getInterviewStatusEnum").text(res);
+            });
+    }
+
+    function getOfferStatusEnum() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getOfferStatusEnum?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                $("#getOfferStatusEnum").text(res);
+            });
+    }
+
+    function getJobRequestStatusEnum() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getJobRequestStatusEnum?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+            })
+            .success(function (res) {
+                $("#getJobRequestStatusEnum").text(res);
+            });
+    }
+
+    function requestRequisition() {
+        var data = {};
+        jQuery.extend(data, jobRequestModel);
+        data.jobRequestInt.requisition = $('#req_req').val();
+        data.jobRequestInt.source = $('#req_source').val();
+        data.jobRequestInt.otherSource = $('#req_other_source').val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/requestRequisition",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#requestRequisition").text(JSON.stringify(res));
+            });
+    }
+
+    function statusJobRequest() {
+        var data = {};
+        jQuery.extend(data, requestRequisitionModel);
+        data.requisition = $('#jr_req').val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/hasJobRequestByUser",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#statusJobRequest").text(JSON.stringify(res));
+            });
+    }
+
+    function preScreenReqValue() {
+        var data = {};
+        jQuery.extend(data, requestRequisitionModel);
+        data.requisition = $('#preScreenReq').val();
+        data.lang = $("input[name=lang]:checked").val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/getPreScreenTest",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#preScreenReqValue").text(JSON.stringify(res));
+            });
+    }
+
+    function getUserInterviews() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUserInterviews?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#getUserInterviews").text(res);
+            });
+    }
+
+    function getUserJobRequests() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getUserJobRequests?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                }
+            })
+            .success(function (res) {
+                $("#getUserJobRequests").text(res);
+            });
+    }
+
+    function preScreenTest() {
+        var data = {};
+        jQuery.extend(data, interviewQuestionnaireModel);
+        data.interviewQuestionnaireInt.requisition = '147b800a-de3c-a004-3bfd-e42833336176';
+        data.interviewQuestionnaireInt.questionnaireId = '89728c7b-0ba3-ef1a-72dc-16822b87c263';
+        data.interviewQuestionnaireInt.interviewStatus = $('#interviewStatus').val();
+        data.interviewQuestionnaireInt.questions = [
+            {questionId: "64af3aec-15f3-a9d4-5c89-54d66f442b52", anotherAnswer: "111", type: "SINGLE"}
+          /*  {
+                questionId: "6dd5afea-1a5e-e599-35ed-a030f684b651", answers: [
+                    {answerId: "1adba6e8-52dd-5db9-e0e0-c680ed9e87cf", checked: "true"},
+                    {answerId: "a7ade3eb-bb31-acbe-7394-44e3d7ddb57c", checked: "true"}
+                ], type: "MULTI"
+            },
+            {
+                questionId: "5957b5e3-3009-f37f-7e5b-c53490d02ac2", answers: [
+                    {answerId: "0fd1f821-09ff-63fa-f4bb-3ee777486fe5", checked: "true"}
+                ], type: "SINGLE"
+            }*/
+        ];
+
+        $.ajax(config.appUrl + config.serviceUrl + "/addInterviewAnswer",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#preScreenTest").text(JSON.stringify(res));
+            });
+    }
+
+    function approveInterview() {
+        var data = {};
+        jQuery.extend(data, approveInterviewModel);
+        data.interview = $('#approveInterviewId').val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/approveInterview",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#approveInterview").text(JSON.stringify(res));
+            });
+    }
+
+    function cancelInterview() {
+        var data = {};
+        jQuery.extend(data, cancelInterviewModel);
+        data.interview = $('#cancelInterviewId').val();
+        data.reason = $('#reason').val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/cancelInterview",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#cancelInterview").text(JSON.stringify(res));
+            });
+    }
+
+    function getUserOffers() {
+        $.ajax(config.appUrl + config.serviceUrl + "/getOffers?lang=" + $("input[name=lang]:checked").val(),
+            {
+                type: "GET",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                }
+            })
+            .success(function (res) {
+                $('#getUserOffers').text(res);
+            })
+
+    }
+
+    function approveUserOffer() {
+        var data = {};
+        jQuery.extend(data, offerModel)
+        data.offer = $('#approve_offer_id').val();
+        $.ajax(config.appUrl + config.serviceUrl + "/approveUserOffer",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $('#approveUserOffer').text(JSON.stringify(res));
+            })
+    }
+
+    function rejectUserOffer() {
+        var data = {};
+        jQuery.extend(data, rejectOfferModel)
+        data.offerInt.offerId = $('#reject_offer_id').val();
+        data.offerInt.comment = $('#offerComment').val();
+        $.ajax(config.appUrl + config.serviceUrl + "/rejectUserOffer",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $('#rejectUserOffer').text(JSON.stringify(res));
+            })
+    }
+
+    function saveVideoFile() {
+        var data = {};
+        jQuery.extend(data, saveVideoFileModel);
+        data.requisition = $('#save_video_req').val();
+        data.videoFile = $('#save_video_file').val();
+
+        $.ajax(config.appUrl + config.serviceUrl + "/saveVideoFile",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token,
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#saveVideoFile").text(JSON.stringify(res));
+            });
+    }
+
+    /*]>*/
+    function checkVideoInterview() {
+//        var lang = $("input[name=lang]:checked").val();
+        var data = {};
+        jQuery.extend(data, candidateModel);
+        data.candidateInt.requisitionId = $("#requisitionId").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/checkVideoInterview",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#showResultOnLabel").text(JSON.stringify(res));
+            });
+    }
+    function checkPrescreeningTest() {
+        var data = {};
+        jQuery.extend(data, candidateModel);
+        data.candidateInt.requisitionId = $("#requisitionId2").val();
+        $.ajax(config.appUrl + config.serviceUrl + "/checkPrescreeningTest",
+            {
+                type: "POST",
+                headers: {
+                    "Authorization": "Bearer " + access_token
+                },
+                contentType: "application/json",
+                data: JSON.stringify(data)
+            })
+            .success(function (res) {
+                $("#showPreScreeningResult").text(JSON.stringify(res));
+            });
+    }
+</script>
+</body>
+</html>

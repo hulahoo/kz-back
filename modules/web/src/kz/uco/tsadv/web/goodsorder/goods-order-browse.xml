@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.goodsorder.GoodsOrderBrowse"
+        focusComponent="goodsOrdersTable"
+        lookupComponent="goodsOrdersTable"
+        messagesPack="kz.uco.tsadv.web.goodsorder">
+    <dsContext>
+        <groupDatasource id="goodsOrdersDs"
+                         class="kz.uco.tsadv.modules.recognition.shop.GoodsOrder"
+                         view="goodsOrder.edit"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$GoodsOrder e order by e.orderDate desc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="goodsOrdersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="goodsOrdersTable"
+                datasource="goodsOrdersDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="goodsOrdersTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="status"/>
+                <column id="totalSum"/>
+                <column id="orderNumber" link="true" linkInvoke="confirmGoodsOrder"/>
+                <column id="orderDate"/>
+                <column id="personGroup.fullName"/>
+            </columns>
+            <rows datasource="goodsOrdersDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="goodsOrdersTable.create"/>
+                <button id="editBtn"
+                        action="goodsOrdersTable.edit"/>
+                <button id="removeBtn"
+                        action="goodsOrdersTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

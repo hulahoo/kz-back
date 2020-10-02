@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Position.editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.position.PositionEdit"
+        datasource="positionDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="gradeGroupValueDs"
+                    class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"/>
+        <datasource id="positionDs"
+                    class="kz.uco.tsadv.modules.personal.model.PositionExt"
+                    view="position-view">
+            <datasource id="positionGroupDs"
+                        property="group">
+                <collectionDatasource id="assignmentsDs"
+                                      property="assignments"/>
+                <collectionDatasource id="surChargeDs"
+                                      property="surCharge"/>
+                <datasource id="analyticsDs" property="analytics"/>
+            </datasource>
+        </datasource>
+        <collectionDatasource id="posCompetenceElementsDs"
+                              class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
+                              view="competenceElement-view">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$CompetenceElement e
+                         where e.positionGroup.id = :ds$positionGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="casesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Case"
+                              view="_minimal">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$Case e
+                         where e.positionGroup.id = :ds$positionGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="flySurChargeDs"
+                              class="kz.uco.tsadv.modules.personal.model.FlySurCharge"
+                              view="flySurCharge-view">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$FlySurCharge e
+                         where e.positionGroupId.id = :ds$positionGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="flightTimeRateDs"
+                              class="kz.uco.tsadv.modules.personal.model.FlightTimeRate"
+                              view="flightTimeRate-view">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$FlightTimeRate e
+                         where e.positionGroupName.id = :ds$positionGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="goalsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PositionGroupGoalLink"
+                              view="positionGroupGoalLink.edit">
+            <query>
+                <![CDATA[
+                        select e
+                          from tsadv$PositionGroupGoalLink e
+                         where e.positionGroup.id = :ds$positionGroupDs.id
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="hierarchyElementsDs"
+                              class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                              view="hierarchyElement.parent">
+            <query>
+                <![CDATA[
+                        select e
+                          from base$HierarchyElementExt e
+                         where e.positionGroup.id = :ds$positionGroupDs
+                           and e.deleteTs is null
+                      order by e.hierarchy, e.startDate
+                        ]]>
+            </query>
+        </collectionDatasource>
+        <groupDatasource id="parentElementsGoalsDs"
+                         class="kz.uco.tsadv.modules.personal.model.ParentElementsGoal"
+                         refreshMode="NEVER"/>
+        <collectionDatasource id="organizationGroupExtsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.browse">
+            <query>
+                <![CDATA[select e from base$OrganizationGroupExt e 
+                join e.list l
+                where e.id = l.group.id
+                and :session$systemDate between
+                l.startDate and l.endDate]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="vacationConditionsDs"
+                              class="kz.uco.tsadv.modules.personal.model.VacationConditions"
+                              view="vacationConditions-view">
+            <query>
+                <![CDATA[select a
+                  from tsadv$VacationConditions a
+                 where a.positionGroup.id = :ds$positionDs.group.id
+                 order by a.startDate desc, a.endDate desc ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="calendarsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.Calendar"
+                              view="calendar.view">
+            <query>
+                <![CDATA[select e from tsadv$Calendar e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="offsetsDs"
+                              class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"
+                              view="standardOffset.view">
+            <query>
+                <![CDATA[select e from tsadv$StandardOffset e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="workingConditionsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicWorkingCondition"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicWorkingCondition e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="actualAssignmentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                              view="assignmanetExt.view.for.positionEdit">
+            <query>
+                <![CDATA[select e from base$AssignmentExt e
+                         where e.positionGroup.id = :ds$positionGroupDs
+                         and e.startDate <= :session$systemDate
+                         and e.assignmentStatus.code <> 'TERMINATED']]>
+            </query>
+        </collectionDatasource>
+        <groupDatasource id="allowableSchedulesDs"
+                         class="kz.uco.tsadv.modules.timesheet.model.AllowableScheduleForPosition"
+                         view="allowableScheduleForPosition-view">
+            <query>
+                <![CDATA[select e from tsadv$AllowableScheduleForPosition e
+                where e.positionGroup.id = :ds$positionGroupDs
+                and :session$systemDate between e.startDate and e.endDate]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="dicHrRolesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicHrRole"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicHrRole e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <actions>
+        <action id="windowCommit"
+                caption="msg://table.btn.save"
+                icon="theme://actions.Editor.Ok.icon"
+                invoke="windowCommit"/>
+    </actions>
+    <dialogMode height="100%"
+                width="100%"/>
+
+    <layout expand="tabSheet"
+            spacing="true">
+
+        <tabSheet id="tabSheet">
+            <tab id="tab1"
+                 caption="mainMsg://mainData"
+                 margin="true,true,true,false"
+                 spacing="true"
+                 expand="mainScrollBox">
+                <scrollBox id="mainScrollBox"
+                           height="AUTO"
+                           spacing="true">
+                    <hbox spacing="true">
+                        <label width="113px"/>
+                        <label value="msg://Position.fullNameCaption"
+                               width="397px"/>
+                        <label value="msg://Position.nameCaption"
+                               width="300px"/>
+                    </hbox>
+                    <hbox id="hbox1"
+                          spacing="true">
+                        <fieldGroup id="fieldGroup2"
+                                    datasource="positionDs">
+                            <column id="col1FieldGroup2"
+                                    fieldCaptionWidth="120px"
+                                    width="388px">
+                                <field id="positionFullNameLang1"
+                                       caption="msg://kz.uco.tsadv.web/lang1"
+                                       property="positionFullNameLang1"/>
+                                <field id="positionFullNameLang2"
+                                       caption="msg://kz.uco.tsadv.web/lang2"
+                                       property="positionFullNameLang2"/>
+                                <field id="positionFullNameLang3"
+                                       caption="msg://kz.uco.tsadv.web/lang3"
+                                       property="positionFullNameLang3"/>
+                            </column>
+                            <column width="300px">
+                                <field id="positionNameLang1"
+                                       property="positionNameLang1"/>
+                                <field id="positionNameLang2"
+                                       property="positionNameLang2"/>
+                                <field id="positionNameLang3"
+                                       property="positionNameLang3"/>
+                            </column>
+                        </fieldGroup>
+                    </hbox>
+                    <hbox id="hbox"
+                          spacing="true">
+                        <vbox id="mainVbox" spacing="true">
+
+                            <fieldGroup id="fieldGroup11" fieldCaptionWidth="120px">
+                                <field id="jobGroup"
+                                       captionProperty="job"
+                                       custom="true"
+                                       property="jobGroup"/>
+                            </fieldGroup>
+                            <fieldGroup id="fieldGroup"
+                                        datasource="positionDs">
+                                <column id="col1FieldGroup"
+                                        fieldCaptionWidth="120px"
+                                        width="300px">
+                                    <field id="baza"
+                                           property="baza"/>
+                                    <field id="costCenter"
+                                           property="costCenter"/>
+                                    <field id="extra"
+                                           property="extra"/>
+
+                                    <field id="organizationGroupExt"
+                                           captionProperty="organizationName"
+                                           optionsDatasource="organizationGroupExtsDs"
+                                           property="organizationGroupExt"
+                                           required="true"/>
+                                </column>
+                                <column id="col2FieldGroup"
+                                        fieldCaptionWidth="90px"
+                                        width="300px">
+                                    <field id="startDate"
+                                           property="startDate"/>
+                                    <field id="endDate"
+                                           property="endDate"/>
+                                    <field id="positionStatus"
+                                           property="positionStatus"
+                                           required="true"/>
+                                    <field id="fte"
+                                           property="fte"/>
+                                    <field id="maxPersons"
+                                           caption="msg://kz.uco.tsadv.modules.personal.model/Position.maxPersons"
+                                           property="maxPersons"/>
+                                    <field id="positionNameLang1"
+                                           property="positionNameLang1"
+                                           visible="false"/>
+                                    <field id="positionNameLang2"
+                                           property="positionNameLang2"
+                                           visible="false"/>
+                                    <field id="positionNameLang3"
+                                           property="positionNameLang3"
+                                           visible="false"/>
+                                </column>
+                            </fieldGroup>
+                        </vbox>
+
+
+                    </hbox>
+                    <label value="Дополнительная информация"/>
+                    <hbox id="addHbox"
+                          margin="true,false,false,false"
+                          spacing="true"
+                          stylename="border-top">
+                        <vbox id="addVBox" spacing="true">
+                            <fieldGroup datasource="positionDs" id="addFieldGroup1" width="520px">
+                                <column width="300px" fieldCaptionWidth="120px" id="addColumn">
+                                    <field id="gradeGroup"
+                                           captionProperty="grade"
+                                           property="gradeGroup"/>
+                                    <field id="gradeRule"
+                                           property="gradeRule"/>
+                                    <field id="location"
+                                           property="location"/>
+                                    <field id="payroll"
+                                           property="payroll"/>
+                                </column>
+                                <!--<column width="270px" id="addFieldGroup2">
+
+                                </column>-->
+
+                            </fieldGroup>
+                            <fieldGroup datasource="positionDs" width="520px">
+                                <column fieldCaptionWidth="250px">
+                                    <field property="managerFlag"/>
+                                    <field id="group.adminApprove"
+                                           property="group.adminApprove"
+                                           optionsDatasource="dicHrRolesDs"/>
+                                </column>
+                            </fieldGroup>
+                        </vbox>
+                        <vbox id="addVbox1"
+                              width="AUTO">
+                            <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/GradeRuleValue">
+                                <fieldGroup datasource="gradeGroupValueDs">
+                                    <column width="200px">
+                                        <field editable="false"
+                                               property="value"/>
+                                        <field editable="false"
+                                               property="min"/>
+                                        <field editable="false"
+                                               property="mid"/>
+                                        <field editable="false"
+                                               property="max"/>
+                                    </column>
+                                </fieldGroup>
+                            </groupBox>
+                        </vbox>
+                    </hbox>
+                </scrollBox>
+                <hbox id="windowActionsHBox"
+                      spacing="true"
+                      stylename="c-edit-window-actions"
+                >
+                    <button id="windowCommit" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
+                            caption="msg://table.btn.save"/>
+                    <button id="windowCommitHistory" caption="msg://table.btn.save.history"
+                            action="windowCommitHistory"/>
+                    <button id="windowClose" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
+                </hbox>
+            </tab>
+            <tab id="additional"
+                 caption="msg://edit.tab.additional"
+                 margin="true,true,true,false"
+                 spacing="true"
+                 expand="scrollBox">
+                <scrollBox id="scrollBox"
+                           height="100%"
+                           stylename="bt-scroll">
+                    <vbox id="additionalVBox"
+                          spacing="true">
+                        <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirements">
+                            <tabSheet id="jobReqTabSheet"
+                                      height="100%">
+                                <tab id="reqLang1"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang1"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea1"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang1"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="reqLang2"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang2"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea2"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang2"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="reqLang3"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang3"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea3"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang3"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="reqLang4"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang4"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea4"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang4"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="reqLang5"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.candidateRequirementsLang5"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea5"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="candidateRequirementsLang5"
+                                                  width="100%"/>
+                                </tab>
+                            </tabSheet>
+                        </groupBox>
+                        <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescription">
+                            <tabSheet id="jobDescTabSheet"
+                                      height="100%">
+                                <tab id="descLang1"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang1"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea6"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang1"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="descLang2"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang2"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea7"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang2"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="descLang3"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang3"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea8"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang3"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="descLang4"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang4"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea9"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang4"
+                                                  width="100%"/>
+                                </tab>
+                                <tab id="descLang5"
+                                     caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobDescriptionLang5"
+                                     margin="true,true,false,false">
+                                    <richTextArea id="jobRichTextArea10"
+                                                  datasource="positionDs"
+                                                  height="300px"
+                                                  property="jobDescriptionLang5"
+                                                  width="100%"/>
+                                </tab>
+                            </tabSheet>
+                        </groupBox>
+                    </vbox>
+                </scrollBox>
+                <hbox id="windowActionsHBox1"
+                      spacing="true"
+                      stylename="c-edit-window-actions"
+                >
+                    <button id="windowCommit1" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
+                            caption="msg://table.btn.save"/>
+                    <button id="windowCommitHistory1" caption="msg://table.btn.save.history"
+                            action="windowCommitHistory"/>
+                    <button id="windowClose1" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
+                </hbox>
+            </tab>
+            <tab id="tab2"
+                 caption="msg://Competences"
+                 margin="true,true,true,false">
+                <cssLayout id="layout2"
+                           height="100%"
+                           width="100%">
+                    <table id="competencePosTable"
+                           height="100%"
+                           sortable="false"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="competenceGroup.competence.competenceName"/>
+                            <column id="competenceGroup.competence.scale.scaleName"/>
+                            <column id="scaleLevel"/>
+                        </columns>
+                        <rows datasource="posCompetenceElementsDs"/>
+                        <buttonsPanel id="competencePosButtonsPanel">
+                            <button id="compCreateBtn"
+                                    action="competencePosTable.create"
+                                    caption="mainMsg://table.btn.create"/>
+                            <button id="compEditBtn"
+                                    action="competencePosTable.edit"
+                                    caption="mainMsg://table.btn.edit"/>
+                            <button id="compRemoveBtn"
+                                    action="competencePosTable.remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </buttonsPanel>
+                    </table>
+                </cssLayout>
+            </tab>
+            <tab id="tab3"
+                 caption="msg://Assignments"
+                 margin="true,true,true,false">
+                <cssLayout id="layout3"
+                           height="100%"
+                           width="100%">
+                    <table id="assignmentsTable"
+                           height="100%"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                        </actions>
+                        <columns>
+                            <column id="personGroup.person.userImage"
+                                    caption="msg://Photo"
+                                    generator="generateUserImageCell"
+                                    sortable="false"/>
+                            <column id="personGroup.person.fioWithEmployeeNumber"
+                                    link="true"
+                                    linkInvoke="redirectCard"/>
+                            <column id="personGroup.person.hireDate"/>
+                            <column id="startDate"/>
+                            <column id="endDate"
+                                    caption="msg://AssignEndDate"/>
+                        </columns>
+                        <rows datasource="actualAssignmentsDs"/>
+                    </table>
+                </cssLayout>
+            </tab>
+            <tab id="vacationConditionsTab"
+                 caption="msg://Position.vacationConditionsTab"
+                 expand="vacationConditionsTable"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="vacationConditionsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.create"
+                                invoke="createVacationConditions"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="excel"/>
+                    </actions>
+                    <columns>
+                        <column id="mainDaysNumber"/>
+                        <column id="additionalDays"/>
+                        <column id="vacationDurationType"/>
+                        <column id="daysType"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="vacationConditionsDs"/>
+                    <buttonsPanel>
+                        <button id="createButton"
+                                action="vacationConditionsTable.create"/>
+                        <button id="editButton"
+                                action="vacationConditionsTable.edit"/>
+                        <button id="removeButton"
+                                action="vacationConditionsTable.remove"/>
+                        <button action="vacationConditionsTable.excel"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="casesTab"
+                 caption="msg://Position.edit.casesTab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <frame id="caseFrame"
+                       height="100%"
+                       screen="caseFrame"/>
+            </tab>
+            <tab id="surCharges"
+                 caption="msg://SurCharge.tab"
+                 margin="true,false,false,false">
+                <table id="surChargeTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="name.langValue"
+                                caption="msg://SurCharge.col.name"/>
+                        <column id="period"/>
+                        <column id="type"/>
+                        <column id="value"
+                                caption="msg://SurCharge.col.percent"/>
+                        <column id="grossNet"/>
+                        <column id="currency"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                        <column id="reason"/>
+                    </columns>
+                    <rows datasource="surChargeDs"/>
+                    <buttonsPanel id="surChargeButtons">
+                        <button action="surChargeTable.create"
+                                caption="mainMsg://table.btn.create"/>
+                        <button action="surChargeTable.edit"
+                                caption="mainMsg://table.btn.edit"/>
+                        <button action="surChargeTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="flySurCharge"
+                 caption="msg://flySurCharge.tab"
+                 margin="true,false,false,false">
+                <table id="flySurChargeTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="assignmentGroupId.assignmentPersonFioWithEmployeeNumber"/>
+                        <column id="level"/>
+                        <column id="flyingHours"/>
+                        <column id="flyingSurcharge"/>
+                        <column id="bonus"/>
+                        <column id="ratePerHour"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                    </columns>
+                    <rows datasource="flySurChargeDs"/>
+                    <buttonsPanel id="flySurChargeButtons">
+                        <button action="flySurChargeTable.create"/>
+                        <button action="flySurChargeTable.edit"/>
+                        <button action="flySurChargeTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="flightTimeRate"
+                 caption="msg://flightTimeRate.tab"
+                 margin="true,false,false,false">
+                <table id="flightTimeRateTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="dicRateType"/>
+                        <column id="value"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                        <column id="hoursFrom"/>
+                        <column id="hoursTo"/>
+                    </columns>
+                    <rows datasource="flightTimeRateDs"/>
+                    <buttonsPanel id="flightTimeRateButtons">
+                        <button action="flightTimeRateTable.create"/>
+                        <button action="flightTimeRateTable.edit"/>
+                        <button action="flightTimeRateTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="parents"
+                 caption="msg://HierarchyElement.parents"
+                 margin="true,false,false,false">
+                <table id="hierarchyElementsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                        <action id="reassignElement"
+                                invoke="reassignElement"
+                                caption="msg://reassignButton"/>
+                        <action id="close"
+                                caption="msg://table.btn.close"
+                                icon="icons/close.png"
+                                invoke="close"/>
+                    </actions>
+                    <columns>
+                        <column id="hierarchy.hierarchyName"/>
+                        <column id="parent.elementType"/>
+                        <column id="parent"
+                                generator="generateParentName"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="hierarchyElementsDs"/>
+                    <buttonsPanel id="parentsButtons">
+                        <button id="createBtn"
+                                action="hierarchyElementsTable.create"/>
+                        <button id="editBtn"
+                                action="hierarchyElementsTable.edit"/>
+                        <button id="removeBtn"
+                                action="hierarchyElementsTable.remove"/>
+                        <button id="reassign"
+                                action="hierarchyElementsTable.reassignElement"/>
+                        <button id="closeBtn"
+                                action="hierarchyElementsTable.close"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="goals"
+                 caption="msg://Goal.browser"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="goalsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.create"
+                                icon="icons/create.png"
+                                invoke="onCreate"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.edit"
+                                icon="icons/edit.png"
+                                invoke="onEdit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="weight"/>
+                        <column id="goal.goalName"/>
+                        <column id="goal.successCriteria"/>
+                        <column id="goal.startDate"/>
+                        <column id="goal.endDate"/>
+                    </columns>
+                    <rows datasource="goalsDs"/>
+                    <buttonsPanel>
+                        <button action="goalsTable.create"/>
+                        <button action="goalsTable.edit"/>
+                        <button action="goalsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+                <groupTable height="100%"
+                            width="100%">
+                    <columns>
+                        <column id="elementType"/>
+                        <column id="elementName"/>
+                        <column id="goalName"/>
+                        <column id="goalWeight"/>
+                    </columns>
+                    <rows datasource="parentElementsGoalsDs"/>
+                </groupTable>
+            </tab>
+            <!--<tab id="analitycs"
+                 caption="msg://analitycs.tab"
+                 margin="true,false,false,false"
+                 spacing="true"
+                 visible="false">
+                <fieldGroup id="analytics"
+                            datasource="analyticsDs">
+                    <field id="calendar"
+                           captionProperty="calendar"
+                           optionsDatasource="calendarsDs"
+                           property="calendar"/>
+                    <field id="offset"
+                           captionProperty="offsetScheduleName"
+                           optionsDatasource="offsetsDs"
+                           property="offset"/>
+                    <field id="workingCondition"
+                           captionProperty="langValue"
+                           optionsDatasource="workingConditionsDs"
+                           property="workingCondition"/>
+                </fieldGroup>
+            </tab>-->
+            <tab id="schedules"
+                 caption="msg://schedules.tab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <groupTable id="schedulesTable"
+                            height="100%"
+                            multiselect="true"
+                            width="100%">
+                    <actions>
+                        <action id="create"
+                                icon="icons/plus-btn.png"
+                                openType="DIALOG"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="schedule"
+                                captionProperty="schedule.scheduleName"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="allowableSchedulesDs"/>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel">
+                        <button id="createBtn"
+                                action="schedulesTable.create"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button id="editBtn"
+                                action="schedulesTable.edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <button id="removeBtn"
+                                action="schedulesTable.remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </buttonsPanel>
+                </groupTable>
+            </tab>
+        </tabSheet>
+
+        <!--<hbox spacing="true" stylename="c-edit-window-actions">
+            <button id="windowCommit" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
+                    caption="msg://table.btn.save"/>
+            <button id="windowCommitHistory" caption="msg://table.btn.save.history"
+                    action="windowCommitHistory"/>
+            <button id="windowClose" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
+        </hbox>-->
+
+        <!--<frame id="windowActions"
+               screen="editExtWindowActions"/>-->
+    </layout>
+
+</window>

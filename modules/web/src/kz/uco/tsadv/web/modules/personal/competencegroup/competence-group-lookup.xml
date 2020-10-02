@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CompetenceGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.competencegroup.CompetenceGroupLookup"
+        focusComponent="competenceGroupsTable"
+        lookupComponent="competenceGroupsTable">
+    <dsContext>
+        <groupDatasource id="competenceGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.CompetenceGroup"
+                         view="competenceGroup.browse">
+            <query>
+                <![CDATA[select e
+                           from tsadv$CompetenceGroup e
+                           join e.list c
+                          where :session$systemDate between c.startDate and c.endDate
+                            and (coalesce(:param$rcAvailableFilter, FALSE) = FALSE OR c.isRcAvailable = TRUE) ]]>
+            </query>
+            <collectionDatasource id="listDs"
+                                  property="list"/>
+        </groupDatasource>
+        <collectionDatasource id="scalesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Scale"
+                              view="scale-view">
+            <query>
+                <![CDATA[select e
+                           from tsadv$Scale e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="competenceGroupsTable"
+            spacing="true">
+        <!--<groupBox caption="msg://CustomFilter"-->
+        <!--collapsable="true"-->
+        <!--collapsed="true">-->
+        <!--<vbox id="filterBox"/>-->
+        <!--</groupBox>-->
+        <filter id="filter"
+                applyTo="competenceGroupsTable"
+                datasource="competenceGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="competenceGroupsTable"
+                    multiselect="true"
+                    width="100%">
+            <columns>
+                <column id="competence"/>
+                <column id="competence.scale.scaleName"/>
+                <column id="downloadBtn"
+                        generator="getCompetenceGroupDownloadBtn"/>
+            </columns>
+            <rows datasource="competenceGroupsDs"/>
+            <rowsCount/>
+        </groupTable>
+    </layout>
+</window>

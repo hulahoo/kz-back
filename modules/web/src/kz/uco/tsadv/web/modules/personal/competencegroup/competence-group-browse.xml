@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://CompetenceGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.competencegroup.CompetenceGroupBrowse"
+        focusComponent="competenceGroupsTable"
+        lookupComponent="competenceGroupsTable">
+    <dsContext>
+        <groupDatasource id="competenceGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.CompetenceGroup"
+                         view="competenceGroup.browse">
+            <query>
+                <![CDATA[select e
+                           from tsadv$CompetenceGroup e
+                           join e.list c
+                          where :session$systemDate between c.startDate and c.endDate]]>
+            </query>
+            <collectionDatasource id="listDs"
+                                  property="list"/>
+        </groupDatasource>
+        <collectionDatasource id="scalesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Scale">
+            <query>
+                <![CDATA[select e
+                           from tsadv$Scale e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <filter id="filter"
+                applyTo="competenceGroupsTable"
+                datasource="competenceGroupsDs">
+            <properties include=".*"/>
+        </filter>
+        <split id="split"
+               orientation="vertical"
+               width="100%">
+            <groupTable id="competenceGroupsTable"
+                        height="100%"
+                        width="100%">
+                <actions>
+                    <action id="edit"
+                            caption="msg://table.btn.edit"
+                            icon="icons/edit.png"
+                            invoke="edit"
+                            shortcut="${TABLE_EDIT_SHORTCUT}"/>
+                    <action id="excel"/>
+                </actions>
+                <columns>
+                    <column id="competence"/>
+                    <column id="competence.scale.scaleName"/>
+                    <column id="competence.isRcAvailable"/>
+                    <column id="downloadBtn"
+                            generator="getCompetenceGroupDownloadBtn"/>
+                </columns>
+                <rows datasource="competenceGroupsDs"/>
+                <rowsCount/>
+                <buttonsPanel id="buttonsPanel"
+                              alwaysVisible="true">
+                    <button id="createButton"
+                            caption="msg://table.btn.create"
+                            icon="icons/add.png"
+                            invoke="openCompetence"/>
+                    <button id="editButton"
+                            action="competenceGroupsTable.edit"/>
+                    <button id="excelButton"
+                            action="competenceGroupsTable.excel"
+                            caption="msg://table.btn.excel"/>
+                </buttonsPanel>
+            </groupTable>
+            <groupBox id="historyGroupBox"
+                      caption="msg://historyBox"
+                      height="100%">
+                <table id="historyTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="edit"
+                                caption="msg://table.btn.edit"
+                                invoke="editHistory"/>
+                        <action id="remove"
+                                caption="msg://table.btn.remove"
+                                invoke="removeHistory"/>
+                        <action id="removeLate"
+                                caption="msg://table.btn.remove.late"
+                                invoke="removeHistories"/>
+                    </actions>
+                    <columns>
+                        <column id="competenceName"/>
+                        <column id="scale.scaleName"/>
+                        <column id="isRcAvailable"/>
+                        <column id="downloadBtn"
+                                generator="getCompetenceDownloadBtn"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="updatedBy"/>
+                        <column id="competeceType"/>
+                    </columns>
+                    <rows datasource="listDs"/>
+                </table>
+            </groupBox>
+        </split>
+    </layout>
+</window>

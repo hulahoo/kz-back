@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.personal.person.frames.PcfAssignmentMaster"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person.frames">
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" height="100%">
+        <scrollBox id="scrollBox"
+                   spacing="true" width="100%">
+            <fieldGroup id="fieldGroup"
+                        datasource="assignmentDs">
+                <column width="250px">
+                    <field property="personGroup">
+                        <textField property="personGroup.personFioWithEmployeeNumber" datasource="assignmentDs"
+                                   editable="false"/>
+                    </field>
+                    <field property="positionGroup" custom="true"/>
+                    <field property="organizationGroup" captionProperty="organization" editable="false"/>
+                    <field property="jobGroup" captionProperty="job" editable="false"/>
+                    <field property="gradeGroup" captionProperty="grade"/>
+                    <field property="primaryFlag"/>
+                    <field property="fte"/>
+                    <field property="location"/>
+                    <field property="assignDate" required="true"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                </column>
+            </fieldGroup>
+        </scrollBox>
+    </layout>
+</window>

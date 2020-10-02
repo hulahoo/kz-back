@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://HiringStepMember.editorCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.hiringstepmember.HiringStepMemberEdit"
+        datasource="hiringStepMemberDs"
+        focusComponent="fieldGroup">
+    <dsContext>
+        <datasource id="hiringStepMemberDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.HiringStepMember"
+                    view="hiringStepMember.view"/>
+        <collectionDatasource id="dicHiringMemberTypesDs"
+                              class="kz.uco.tsadv.modules.recruitment.dictionary.DicHiringMemberType"
+                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource">
+            <query>
+                <![CDATA[select e from tsadv$DicHiringMemberType e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                modal="true"
+                width="600"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <fieldGroup id="fieldGroup"
+                    datasource="hiringStepMemberDs">
+            <column width="250px">
+                <field optionsDatasource="dicHiringMemberTypesDs"
+                       property="hiringMemberType"/>
+                <field captionProperty="langValue"
+                       property="role"/>
+                <field captionProperty="personFioWithEmployeeNumber"
+                       property="userPersonGroup"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
+                <field property="mainInterviewer"/>
+            </column>
+        </fieldGroup>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

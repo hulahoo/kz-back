@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://OrderGroup.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.ordergroup.OrderGroupLookup"
+        focusComponent="orderGroupsTable"
+        lookupComponent="orderGroupsTable">
+    <dsContext>
+        <groupDatasource id="orderGroupsDs"
+                         class="kz.uco.tsadv.modules.personal.group.OrderGroup"
+                         view="orderGroup-view">
+            <query>
+                <![CDATA[select e from tsadv$OrderGroup e join e.list o]]>
+            </query>
+        </groupDatasource>
+        <collectionDatasource id="orderTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicOrderType">
+            <query>
+                <![CDATA[select e
+                           from tsadv$DicOrderType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="orderStatusesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicOrderStatus">
+            <query>
+                <![CDATA[select e
+                           from tsadv$DicOrderStatus e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="approverPersonsDs"
+                              view="personGroup.browse"
+                              class="kz.uco.tsadv.modules.personal.group.PersonGroupExt">
+            <query>
+                <![CDATA[select e
+                           from base$PersonGroupExt e
+                           join e.list p
+                          where :session$systemDate between p.startDate and p.endDate]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="orderGroupsTable"
+            spacing="true">
+        <groupBox caption="msg://CustomFilter"
+                  collapsed="true"
+                  collapsable="true">
+            <vbox id="filterBox"/>
+        </groupBox>
+        <groupTable id="orderGroupsTable"
+                    width="100%">
+            <columns>
+                <column id="order.orderType"/>
+                <column id="order.orderNumber"/>
+                <column id="order.orderDate"/>
+                <column id="order.orderStatus"/>
+                <column id="order.approverPersonGroup"
+                        captionProperty="order.approverPersonGroup.personFioWithEmployeeNumber"/>
+            </columns>
+            <rows datasource="orderGroupsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true"/>
+        </groupTable>
+    </layout>
+</window>

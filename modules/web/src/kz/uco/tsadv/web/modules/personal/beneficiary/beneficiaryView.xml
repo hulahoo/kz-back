@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.personal.beneficiary.BeneficiaryView"
+        datasource="beneficiaryDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.personal.beneficiary">
+    <dsContext>
+        <datasource id="beneficiaryDs"
+                    class="kz.uco.tsadv.modules.personal.model.Beneficiary"
+                    view="beneficiaryView">
+            <datasource id="personGroupChildDs"
+                        property="personGroupChild">
+                <datasource id="personDs"
+                            property="person"/>
+            </datasource>
+            <datasource id="personGroupParentDs"
+                        property="personGroupParent"/>
+        </datasource>
+        <collectionDatasource id="beneficiariesDs"
+                              class="kz.uco.tsadv.modules.personal.model.Beneficiary"
+                              view="beneficiaryView">
+            <query>
+                <![CDATA[select e from tsadv$Beneficiary e where e.personGroupParent.id = :ds$beneficiaryDs.personGroupChild.id
+]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="relationshipTypesDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType"
+                              view="dicRelationshipType-view">
+            <query>
+                <![CDATA[select e from tsadv$DicRelationshipType e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personDocumentsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonDocument"
+                              view="personDocument.card">
+            <query>
+                <![CDATA[select e from tsadv$PersonDocument e where e.personGroup.id = :ds$beneficiaryDs.personGroupChild.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="personContactsDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonContact"
+                              view="personContact.card">
+            <query>
+                <![CDATA[select e from tsadv$PersonContact e where e.personGroup.id = :ds$beneficiaryDs.personGroupChild.id]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox"
+            spacing="true">
+        <scrollBox id="scrollBox">
+            <hbox id="hbox1"
+                  spacing="true">
+                <label id="label"
+                       value="msg://Photo"
+                       width="100px"/>
+                <image id="userImage"
+                       align="MIDDLE_CENTER"
+                       height="100px"
+                       scaleMode="FILL"
+                       stylename="circle-image"
+                       width="100px"/>
+                <upload id="imageUpload"
+                        accept="*.jpg,*.png"
+                        align="MIDDLE_CENTER"
+                        clearButtonIcon="icons/item-remove.png"
+                        fileSizeLimit="1024000"
+                        showClearButton="true"
+                        uploadButtonIcon="icons/reports-template-upload.png"/>
+            </hbox>
+            <vbox id="vbox2"
+                  spacing="true">
+                <fieldGroup id="fieldGroup"
+                            datasource="beneficiaryDs"
+                            fieldCaptionWidth="170px">
+                    <column id="column1"
+                            width="250px">
+                        <field id="firstName"
+                               datasource="personDs"
+                               property="firstName"/>
+                        <field id="lastName"
+                               datasource="personDs"
+                               property="lastName"/>
+                        <field id="middleName"
+                               datasource="personDs"
+                               property="middleName"/>
+                        <field id="maritalStatus"
+                               datasource="personDs"
+                               property="maritalStatus"/>
+                        <field id="type"
+                               datasource="personDs"
+                               property="type"/>
+                        <field id="nationality"
+                               datasource="personDs"
+                               property="nationality"/>
+                        <field id="nationalIdentifier"
+                               datasource="personDs"
+                               maxLength="12"
+                               property="nationalIdentifier"/>
+                        <field id="dateOfBirth"
+                               datasource="personDs"
+                               property="dateOfBirth"/>
+                    </column>
+                    <column id="column2">
+                        <field id="firstNameLatin"
+                               datasource="personDs"
+                               required="true"
+                               property="firstNameLatin"/>
+                        <field id="lastNameLatin"
+                               required="true"
+                               datasource="personDs"
+                               property="lastNameLatin"/>
+                        <field id="middleNameLatin"
+                               datasource="personDs"
+                               property="middleNameLatin"/>
+                        <field id="employeeNumber"
+                               datasource="personDs"
+                               editable="false"
+                               property="employeeNumber"/>
+                        <field id="citizenship"
+                               datasource="personDs"
+                               property="citizenship"/>
+                        <field id="hireDate"
+                               datasource="personDs"
+                               property="hireDate"/>
+                        <field id="sex"
+                               datasource="personDs"
+                               property="sex"/>
+                    </column>
+                </fieldGroup>
+                <fieldGroup id="beneficiaryFieldGroup"
+                            datasource="beneficiaryDs"
+                            fieldCaptionWidth="170px">
+                    <column id="column1"
+                            width="250px">
+                        <field id="personGroupField"
+                               caption="msg://relationshipTypeBeneficiary"
+                               captionProperty="langValue"
+                               optionsDatasource="relationshipTypesDs"
+                               property="relationshipType"/>
+                        <field id="getAlimony"
+                               caption="msg://getAlimony"
+                               property="getAlimony"/>
+                    </column>
+                    <column id="column2">
+                        <field id="dateFrom"
+                               caption="msg://dateFrom"
+                               property="dateFrom"
+                               required="true"/>
+                        <field id="dateTo"
+                               caption="msg://dateTo"
+                               property="dateTo"/>
+                    </column>
+                </fieldGroup>
+            </vbox>
+            <tabSheet id="tabSheet">
+                <tab id="tab1"
+                     caption="msg://Contacts"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="personContactsTable"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="type"/>
+                            <column id="contactValue"/>
+                        </columns>
+                        <rows datasource="personContactsDs"/>
+                        <buttonsPanel margin="false,false,true,true">
+                            <button action="personContactsTable.create"/>
+                            <button action="personContactsTable.edit"/>
+                            <button action="personContactsTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="tab2"
+                     caption="msg://Documents"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="personDocumentsTable"
+                           width="100%">
+                        <actions>
+                            <action id="create"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="documentType"/>
+                            <column id="issueDate"/>
+                            <column id="expiredDate"/>
+                            <column id="issuedBy"/>
+                            <column id="description"/>
+                        </columns>
+                        <rows datasource="personDocumentsDs"/>
+                        <buttonsPanel margin="false,false,true,true">
+                            <button action="personDocumentsTable.create"/>
+                            <button action="personDocumentsTable.edit"/>
+                            <button action="personDocumentsTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </tab>
+                <tab id="tab3"
+                     caption="msg://Beneficiaries"
+                     margin="true,false,false,false"
+                     spacing="true">
+                    <table id="beneficiariesTable"
+                           width="100%">
+                        <columns>
+                            <column id="personGroupChild.personFioWithEmployeeNumber"/>
+                            <column id="relationshipType"
+                                    caption="msg://relationshipTypeBeneficiary"/>
+                        </columns>
+                        <rows datasource="beneficiariesDs"/>
+                    </table>
+                </tab>
+            </tabSheet>
+        </scrollBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

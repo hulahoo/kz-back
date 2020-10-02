@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.selfservice.Requisition.RequisitionSelfNewEdit"
+        datasource="requisitionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.selfservice.Requisition">
+    <dsContext>
+        <datasource id="requisitionDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                    view="requisition.for.self.new.edit"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet">
+            <tab id="tab1"
+                 caption="msg://tab1"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <scrollBox id="scrollBox"
+                           height="100%">
+                    <vbox id="vbox">
+                        <fieldGroup id="fieldGroup"
+                                    captionAlignment="TOP"
+                                    datasource="requisitionDs">
+                            <column id="col1"
+                                    width="500px">
+                                <field id="code"
+                                       editable="false"
+                                       property="code"/>
+                                <field id="requisitionStatus"
+                                       property="requisitionStatus"/>
+                                <field id="startDate"
+                                       caption="msg://startDate"
+                                       editable="false"
+                                       property="startDate"/>
+                                <field id="endDate"
+                                       caption="msg://endDate"
+                                       property="endDate"/>
+                                <field property="finalCollectDate"/>
+                                <field id="location"
+                                       property="location"/>
+                            </column>
+                            <column id="col2"
+                                    width="500px">
+                                <field id="positionGroup"
+                                       captionProperty="fullName"
+                                       property="positionGroup"
+                                       required="true"/>
+                                <field id="organizationGroup"
+                                       captionProperty="organizationName"
+                                       property="organizationGroup"
+                                       required="true"/>
+                                <field id="jobGroup"
+                                       captionProperty="jobName"
+                                       property="jobGroup"/>
+                                <field id="managerPersonGroup"
+                                       caption="msg://managerPersonGroup"
+                                       captionProperty="fullName"
+                                       editable="false"
+                                       property="managerPersonGroup"/>
+                                <field id="recruiterPersonGroup"
+                                       caption="msg://recruiterPersonGroup"
+                                       captionProperty="fullName"
+                                       property="recruiterPersonGroup"/>
+                                <field id="openedPositionsCount"/>
+                            </column>
+                        </fieldGroup>
+                        <groupBox id="groupBox"
+                                  caption="msg://groupBox"
+                                  height="600px"
+                                  width="1010px">
+                            <tabSheet id="tabSheet_1"
+                                      height="100%">
+                                <tab id="tab"
+                                     caption="msg://tab"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <fieldGroup id="fieldGroup_ru"
+                                                captionAlignment="TOP"
+                                                datasource="requisitionDs"
+                                                width="100%">
+                                        <column id="colNameForSiteLang1"
+                                                width="100%">
+                                            <field id="nameForSiteLang1"
+                                                   property="nameForSiteLang1"/>
+                                            <field id="descriptionLang1"
+                                                   property="descriptionLang1">
+                                                <richTextArea id="richTextAreaRu"
+                                                              datasource="requisitionDs"
+                                                              height="425px"
+                                                              property="descriptionLang1"/>
+                                            </field>
+                                        </column>
+                                    </fieldGroup>
+                                </tab>
+                                <tab id="tab_1"
+                                     caption="msg://tab_1"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <fieldGroup id="fieldGroup_kz"
+                                                captionAlignment="TOP"
+                                                datasource="requisitionDs"
+                                                width="100%">
+                                        <column id="colNameForSiteLang2"
+                                                width="100%">
+                                            <field id="nameForSiteLang2"
+                                                   property="nameForSiteLang2"/>
+                                            <field id="descriptionLang2"
+                                                   property="descriptionLang2">
+                                                <richTextArea id="richTextAreaKz"
+                                                              datasource="requisitionDs"
+                                                              height="425px"
+                                                              property="descriptionLang2"/>
+                                            </field>
+                                        </column>
+                                    </fieldGroup>
+                                </tab>
+                                <tab id="tab_2"
+                                     caption="msg://tab_2"
+                                     margin="true,false,false,false"
+                                     spacing="true">
+                                    <fieldGroup id="fieldGroup_en"
+                                                captionAlignment="TOP"
+                                                datasource="requisitionDs"
+                                                width="100%">
+                                        <column id="colNameForSiteLang3"
+                                                width="100%">
+                                            <field id="nameForSiteLang3"
+                                                   property="nameForSiteLang3"/>
+                                            <field id="descriptionLang3"
+                                                   property="descriptionLang3">
+                                                <richTextArea id="richTextAreaEn"
+                                                              datasource="requisitionDs"
+                                                              height="425px"
+                                                              property="descriptionLang3"/>
+                                            </field>
+                                        </column>
+                                    </fieldGroup>
+                                </tab>
+                            </tabSheet>
+                        </groupBox>
+                    </vbox>
+                </scrollBox>
+            </tab>
+        </tabSheet>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

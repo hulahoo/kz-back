@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.occupationalmedicine.OccupationalMedicineEdit"
+        datasource="occupationalMedicineDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.occupationalmedicine">
+    <dsContext>
+        <datasource id="occupationalMedicineDs"
+                    class="kz.uco.tsadv.entity.tb.OccupationalMedicine"
+                    view="occupationalMedicine-view">
+            <collectionDatasource id="controlDs"
+                                  property="control"/>
+            <collectionDatasource id="attachmentDs"
+                                  property="attachment"/>
+            <collectionDatasource id="eventDs"
+                                  property="event">
+                    <collectionDatasource id="attachmentDs1" property="attachment"/>
+            </collectionDatasource>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <vbox id="vbox"
+              spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="occupationalMedicineDs">
+                <column width="250px">
+                    <field captionProperty="organization"
+                           property="organization"/>
+                    <field property="entryDate"/>
+                </column>
+            </fieldGroup>
+            <frame id="windowActions"
+                   height="100%"
+                   screen="editWindowActions"/>
+        </vbox>
+        <tabSheet id="tabSheet">
+            <tab id="tab"
+                 caption="msg://tab"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="sanitaryRegulationsControlsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="totalControl"/>
+                        <column id="identifiedInconsistencies"/>
+                        <column id="eliminatedInconsistencies"/>
+                        <column id="controlType"/>
+                    </columns>
+                    <rows datasource="controlDs"/>
+                    <buttonsPanel>
+                        <button action="sanitaryRegulationsControlsTable.create"/>
+                        <button action="sanitaryRegulationsControlsTable.edit"/>
+                        <button action="sanitaryRegulationsControlsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tab_1"
+                 caption="msg://tab1"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="attachmentsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="attachmentType"/>
+                        <column id="attachment"/>
+                    </columns>
+                    <rows datasource="attachmentDs"/>
+                    <buttonsPanel>
+                        <button action="attachmentsTable.create"/>
+                        <button action="attachmentsTable.edit"/>
+                        <button action="attachmentsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="tab_2"
+                 caption="msg://tab2"
+                 margin="true,false,false,false"
+                 spacing="true">
+                <table id="eventTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/remove.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/edit.png"/>
+                    </actions>
+                    <columns>
+                        <column id="developedEvents"/>
+                        <column id="doneEvents"/>
+                    </columns>
+                    <rows datasource="eventDs"/>
+                    <buttonsPanel>
+                        <button action="eventTable.create"/>
+                        <button action="eventTable.edit"/>
+                        <button action="eventTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

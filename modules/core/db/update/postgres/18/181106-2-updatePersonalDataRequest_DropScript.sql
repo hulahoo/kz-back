@@ -1,0 +1,2 @@
+alter table TSADV_PERSONAL_DATA_REQUEST drop column PREVIOUS_LAST_NAME__U40234 cascade ;
+alter table TSADV_PERSONAL_DATA_REQUEST drop column PREVIOUS_FIRST_NAME__U15012 cascade ;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.importhistorylog.ImportHistoryLogBrowse"
+        focusComponent="importHistoryLogsTable"
+        lookupComponent="importHistoryLogsTable"
+        messagesPack="kz.uco.tsadv.web.importhistorylog">
+    <dsContext>
+        <groupDatasource id="importHistoryLogsDs"
+                         class="kz.uco.tsadv.modules.administration.importer.ImportHistoryLog"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$ImportHistoryLog e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="importHistoryLogsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="importHistoryLogsTable"
+                datasource="importHistoryLogsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="importHistoryLogsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="login"/>
+                <column id="message"
+                        maxTextLength="30"/>
+                <column id="stacktrace"
+                        maxTextLength="30"/>
+                <column id="params"
+                        maxTextLength="30"/>
+                <column id="success"/>
+                <column id="dateTime"/>
+                <column id="entitiesProcessed"/>
+                <column id="level"/>
+            </columns>
+            <rows datasource="importHistoryLogsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="importHistoryLogsTable.create"/>
+                <button id="editBtn"
+                        action="importHistoryLogsTable.edit"/>
+                <button id="removeBtn"
+                        action="importHistoryLogsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

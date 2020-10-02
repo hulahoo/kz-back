@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://caption"
+        class="kz.uco.tsadv.web.modules.learning.administration.ImportLearningData"
+        messagesPack="kz.uco.tsadv.web.modules.learning.administration">
+    <dsContext>
+        <collectionDatasource id="importLearningLogDs"
+                              class="kz.uco.tsadv.modules.learning.model.ImportLearningLog"
+                              view="importLearningLog.edit"
+                              maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$ImportLearningLog e order by e.loadingDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout width="100%" height="100%" expand="importLearningLogTable">
+        <table id="importLearningLogTable" width="100%">
+            <columns>
+                <column id="loadingDate"/>
+                <column id="processed"/>
+                <column id="success"/>
+                <column id="file" link="true" linkInvoke="downloadFile"/>
+                <column id="errorMessage" maxTextLength="60"/>
+            </columns>
+            <rows datasource="importLearningLogDs"/>
+            <rowsCount/>
+            <buttonsPanel>
+                <button caption="msg://qb.import.btn" invoke="importQuestionBankData"/>
+                <button caption="msg://test.import.btn" invoke="importTestData"/>
+            </buttonsPanel>
+        </table>
+    </layout>
+</window>

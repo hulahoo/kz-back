@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.recruitment.requisition.frames.ReqCompetence">
+    <dialogMode height="600"
+                width="800"/>
+    <layout height="100%"
+            spacing="true">
+        <dataGrid id="competencesTable"
+                  datasource="competencesDs"
+                  height="100%"
+                  width="100%">
+            <actions>
+                <action id="create"
+                        invoke="createCompetence"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="criticalness"
+                        property="criticalness"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="competencesButtonsPanel"
+                          alwaysVisible="true">
+                <button id="competencesCreateBtn"
+                        action="competencesTable.create"
+                        caption="mainMsg://table.btn.empty"
+                        icon="icons/plus-btn.png"/>
+                <button id="competencesEditBtn"
+                        action="competencesTable.edit"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="competencesRemoveBtn"
+                        action="competencesTable.remove"
+                        caption="mainMsg://table.btn.empty"/>
+                <button id="fillOrgCompetences"
+                        description="mainMsg://Requisition.btn.fill"
+                        icon="font-icon:COPY"
+                        invoke="fillOrgCompetences"/>
+            </buttonsPanel>
+        </dataGrid>
+    </layout>
+</window>

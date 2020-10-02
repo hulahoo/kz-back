@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.personalprotection.PersonalProtectionEditIssue"
+        datasource="personalProtectionDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.personalprotection">
+    <dsContext>
+        <datasource id="personalProtectionDs"
+                    class="kz.uco.tsadv.modules.personprotection.PersonalProtection"
+                    view="personalProtection.edit">
+            <datasource id="protectionEquipmentDs"
+                        property="protectionEquipment">
+                <datasource id="typeDs"
+                            property="type"/>
+                <datasource id="unitOfMeasureDs"
+                            property="unitOfMeasure"/>
+            </datasource>
+        </datasource>
+        <collectionDatasource id="DicProtectionEquipmentConditionDs"
+                              class="kz.uco.tsadv.modules.personprotection.dictionary.DicProtectionEquipmentCondition"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicProtectionEquipmentCondition e ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="windowActions"
+            spacing="true">
+        <groupBox id="groupBox"
+                  orientation="horizontal">
+            <fieldGroup id="fieldGroup"
+                        captionAlignment="TOP"
+                        datasource="personalProtectionDs"
+                        width="44%">
+                <column width="250px">
+                    <field property="protectionEquipment"/>
+                    <field datasource="typeDs"
+                           property="langValue"
+                           caption="msg://kz.uco.tsadv.modules.personprotection.dictionary/DicProtectionEquipment.type"/>
+                    <field property="dateOfIssue"/>
+                    <field optionsDatasource="DicProtectionEquipmentConditionDs"
+                           property="condition"/>
+                </column>
+                <column width="250px">
+                    <field property="quantity"/>
+                    <field datasource="unitOfMeasureDs"
+                           property="langValue1"
+                           editable="false"
+                           caption="msg://kz.uco.tsadv.modules.personprotection.dictionary/DicProtectionEquipment.unitOfMeasure"/>
+                    <field property="planChangeDate"/>
+                    <field property="isAcceptedByPerson"/>
+                </column>
+            </fieldGroup>
+        </groupBox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

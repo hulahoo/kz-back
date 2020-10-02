@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.modules.performance.matrix.ScrumBrowse">
+
+    <dsContext>
+        <collectionDatasource id="organizationGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
+                              view="organizationGroup.lookup">
+            <query>
+                <![CDATA[select e
+                         from base$OrganizationGroupExt e, tsadv$PositionStructure ps
+                         where e.id = ps.organizationGroup.id
+                         and :session$systemDate between ps.startDate and ps.endDate
+                         and ps.elementType = 1
+                         ]]>
+            </query>
+        </collectionDatasource>
+
+        <collectionDatasource id="positionGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                              view="positionGroup.filter">
+            <query>
+                <![CDATA[select e from base$PositionGroupExt e]]>
+            </query>
+        </collectionDatasource>
+
+        <collectionDatasource id="jobGroupsDs"
+                              class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                              view="jobGroup.browse">
+            <query>
+                <![CDATA[select e from tsadv$JobGroup e]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split">
+        <split id="split" width="100%" orientation="horizontal" maxSplitPosition="300px" stylename="scrum-board-split">
+            <groupBox caption="msg://Filter.caption" collapsable="true" stylename="scrum-filter-block">
+                <vbox id="scrumFilter" spacing="true">
+                    <cssLayout>
+                        <label value="msg://OrganizationStructure.filter"/>
+                        <lookupPickerField width="100%" optionsDatasource="organizationGroupsDs"
+                                           captionProperty="organization.organizationName"
+                                           id="organizationGroupLookupId"/>
+                    </cssLayout>
+
+                    <cssLayout>
+                        <label value="msg://PositionStructure.filter"/>
+                        <lookupPickerField width="100%" optionsDatasource="positionGroupsDs"
+                                           captionProperty="position.positionName"
+                                           id="positionGroupLookupId"/>
+                    </cssLayout>
+
+                    <cssLayout>
+                        <label value="msg://Jobs.filter"/>
+                        <lookupPickerField width="100%" optionsDatasource="jobGroupsDs"
+                                           captionProperty="job.jobName"
+                                           id="jobGroupLookupId"/>
+                    </cssLayout>
+                </vbox>
+            </groupBox>
+            <vbox width="100%" height="96%" expand="fieldGroup" spacing="false">
+                <fieldGroup id="fieldGroup"
+                            width="100%">
+                    <field id="scrumBoard" stylename="scrum-board-field"
+                           custom="true" width="100%"/>
+                </fieldGroup>
+                <hbox spacing="true" stylename="scrum-operation-buttons">
+                    <button caption="mainMsg://table.btn.save" invoke="save"/>
+                    <button caption="mainMsg://table.btn.cancel" invoke="cancel"/>
+                </hbox>
+            </vbox>
+        </split>
+    </layout>
+</window>

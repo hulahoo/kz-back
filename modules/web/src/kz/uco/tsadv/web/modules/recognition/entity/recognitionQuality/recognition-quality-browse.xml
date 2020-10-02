@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.recognitionQuality.RecognitionQualityBrowse"
+        focusComponent="recognitionQualitiesTable"
+        lookupComponent="recognitionQualitiesTable"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.recognitionQuality">
+    <dsContext>
+        <groupDatasource id="recognitionQualitiesDs"
+                         class="kz.uco.tsadv.modules.recognition.RecognitionQuality"
+                         view="recognitionQuality.edit">
+            <query>
+                <![CDATA[select e from tsadv$RecognitionQuality e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="recognitionQualitiesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="recognitionQualitiesTable"
+                datasource="recognitionQualitiesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="recognitionQualitiesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="recognition"/>
+                <column id="quality"/>
+                <column id="scanned"/>
+            </columns>
+            <rows datasource="recognitionQualitiesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="recognitionQualitiesTable.create"/>
+                <button id="editBtn"
+                        action="recognitionQualitiesTable.edit"/>
+                <button id="removeBtn"
+                        action="recognitionQualitiesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

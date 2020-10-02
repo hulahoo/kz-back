@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://Course.card"
+        class="kz.uco.tsadv.web.modules.learning.course.CourseCard">
+    <dsContext>
+        <datasource id="courseDs"
+                    class="kz.uco.tsadv.modules.learning.model.Course"
+                    view="course.edit" allowCommit="false">
+            <collectionDatasource id="competencesDs"
+                                  property="competences"/>
+        </datasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout>
+        <grid id="grid"
+              height="100%"
+              spacing="true"
+              width="100%">
+            <columns>
+                <column/>
+                <column flex="3.0"/>
+            </columns>
+            <rows>
+                <row>
+                    <cssLayout>
+                        <htmlBox id="courseCardLeftMenu"
+                                 template="course-card-menu"/>
+                    </cssLayout>
+                    <tabSheet id="tabSheet"
+                              height="100%"
+                              stylename="course-card-tabs">
+                        <tab id="info"
+                             caption="msg://course.card.about"
+                             margin="true">
+                            <scrollBox id="infoScroll"
+                                       height="100%"
+                                       stylename="course-info bt-scroll">
+                                <vbox id="courseBody"
+                                      height="100%" spacing="true">
+                                    <label datasource="courseDs"
+                                           height="100%"
+                                           htmlEnabled="true"
+                                           property="description"
+                                           width="100%"/>
+                                </vbox>
+                            </scrollBox>
+                        </tab>
+                        <tab id="competence"
+                             caption="msg://course.card.competence"
+                             lazy="true"
+                             margin="true">
+                            <table width="100%">
+                                <columns>
+                                    <column id="competenceGroup.competence.competenceName"/>
+                                    <column id="scaleLevel"/>
+                                </columns>
+                                <rows datasource="competencesDs"/>
+                            </table>
+                        </tab>
+                        <tab id="review"
+                             caption="msg://course.card.assess"
+                             expand="reviewScroll"
+                             margin="true">
+                            <scrollBox id="reviewScroll" stylename="bt-scroll">
+                                <vbox id="courseReviewVBox"/>
+                            </scrollBox>
+                            <hbox expand="gridCourseReviewCreate"
+                                  margin="true"
+                                  spacing="true"
+                                  stylename="cc-review-form"
+                                  width="100%">
+                                <grid id="gridCourseReviewCreate"
+                                      spacing="true">
+                                    <columns>
+                                        <column/>
+                                        <column flex="3.0"/>
+                                    </columns>
+                                    <rows>
+                                        <row>
+                                            <embedded id="personImage"
+                                                      height="100px"
+                                                      stylename="b-user-image-edit"
+                                                      width="100px"/>
+                                            <vbox id="reviewForm"
+                                                  spacing="true"/>
+                                        </row>
+                                    </rows>
+                                </grid>
+                            </hbox>
+                        </tab>
+                        <tab id="faq"
+                             caption="FAQ"
+                             expand="faqScroll"
+                             margin="true,false,false,false">
+                            <scrollBox id="faqScroll" stylename="bt-scroll">
+                                <vbox id="faqVBox"
+                                      spacing="true"/>
+                            </scrollBox>
+                        </tab>
+                        <tab id="preRequisition"
+                             caption="msg://course.card.preconditions"
+                             expand="preRequisitionScroll"
+                             margin="true,false,false,false">
+                            <scrollBox id="preRequisitionScroll"
+                                       height="100%"
+                                       stylename="bt-scroll">
+                                <flowBox id="preRequisitionCourse"
+                                         height="100%"
+                                         margin="false,false,false,true"
+                                         stylename="sl-flow-box sl-all-courses"
+                                         width="100%"/>
+                            </scrollBox>
+                        </tab>
+                    </tabSheet>
+                </row>
+            </rows>
+        </grid>
+    </layout>
+</window>

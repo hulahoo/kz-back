@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.selfservice.Requisition.RequisitionEdit"
+        datasource="requisitionDs"
+        messagesPack="kz.uco.tsadv.web.modules.selfservice.Requisition.RequisitionEdit">
+    <dsContext>
+        <datasource id="requisitionDs"
+                    class="kz.uco.tsadv.modules.recruitment.model.Requisition"
+                    view="requisition-for-selfservice-detail"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <scrollBox height="100%">
+            <vbox responsive="true"
+                  spacing="true">
+                <label id="label"
+                       datasource="requisitionDs"
+                       property="jobGroup.jobName"
+                       stylename="h1 bold"/>
+                <label datasource="requisitionDs"
+                       htmlEnabled="true"
+                       property="descriptionLang"
+                       width="100%"/>
+                <label stylename="h3 bold"
+                       value="msg://location"/>
+                <label id="label_1"
+                       datasource="requisitionDs"
+                       property="location"/>
+                <label stylename="h3 bold"
+                       value="msg://employmentType"/>
+                <label datasource="requisitionDs"
+                       property="employmentType"/>
+                <label stylename="h3 bold"
+                       value="msg://end-date"/>
+                <label datasource="requisitionDs"
+                       property="endDate"/>
+                <buttonsPanel>
+                    <button id="button"
+                            caption="msg://JobRequest"
+                            invoke="onButtonClick"/>
+                </buttonsPanel>
+            </vbox>
+        </scrollBox>
+    </layout>
+</window>

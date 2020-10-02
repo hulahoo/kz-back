@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.modules.recognition.entity.rcgfaq.RcgFaqEdit"
+        datasource="rcgFaqDs"
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.recognition.entity.rcgfaq">
+    <dsContext>
+        <datasource id="rcgFaqDs"
+                    class="kz.uco.tsadv.modules.recognition.RcgFaq"
+                    view="_local"/>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="wrapper"
+            height="100%"
+            spacing="true"
+            width="100%">
+        <vbox id="wrapper"
+              expand="tabSheet"
+              spacing="true"
+              width="100%">
+            <fieldGroup id="fieldGroup"
+                        datasource="rcgFaqDs"
+                        fieldCaptionWidth="200px"
+                        border="visible">
+                <column width="250px">
+                    <field property="order"/>
+                    <field property="code"/>
+                </column>
+            </fieldGroup>
+            <groupBox caption="msg://kz.uco.tsadv.modules.recognition/RcgFaq.title" collapsable="true">
+                <fieldGroup datasource="rcgFaqDs"
+                            fieldCaptionWidth="200px">
+                    <field property="titleLang1" width="500px"/>
+                    <field property="titleLang2" width="500px"/>
+                    <field property="titleLang3" width="500px"/>
+                    <field property="titleLang4" width="500px"/>
+                    <field property="titleLang5" width="500px"/>
+                </fieldGroup>
+            </groupBox>
+            <tabSheet id="tabSheet" width="100%">
+                <tab id="contentLang1" caption="msg://kz.uco.tsadv.modules.recognition/RcgFaq.contentLang1"
+                     margin="true,false,false,false">
+                    <richTextArea datasource="rcgFaqDs"
+                                  property="contentLang1"
+                                  width="100%"
+                                  height="100%"/>
+                </tab>
+                <tab id="contentLang2" caption="msg://kz.uco.tsadv.modules.recognition/RcgFaq.contentLang2"
+                     margin="true,false,false,false">
+                    <richTextArea datasource="rcgFaqDs"
+                                  property="contentLang2"
+                                  width="100%"
+                                  height="100%"/>
+                </tab>
+                <tab id="contentLang3" caption="msg://kz.uco.tsadv.modules.recognition/RcgFaq.contentLang3"
+                     margin="true,false,false,false">
+                    <richTextArea datasource="rcgFaqDs"
+                                  property="contentLang3"
+                                  width="100%"
+                                  height="100%"/>
+                </tab>
+                <tab id="contentLang4" caption="msg://kz.uco.tsadv.modules.recognition/RcgFaq.contentLang4"
+                     margin="true,false,false,false">
+                    <richTextArea datasource="rcgFaqDs"
+                                  property="contentLang4"
+                                  width="100%"
+                                  height="100%"/>
+                </tab>
+                <tab id="contentLang5" caption="msg://kz.uco.tsadv.modules.recognition/RcgFaq.contentLang5"
+                     margin="true,false,false,false">
+                    <richTextArea datasource="rcgFaqDs"
+                                  property="contentLang5"
+                                  width="100%"
+                                  height="100%"/>
+                </tab>
+            </tabSheet>
+        </vbox>
+        <frame id="windowActions"
+               screen="editWindowActions"/>
+    </layout>
+</window>

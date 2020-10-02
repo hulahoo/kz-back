@@ -1,0 +1,12 @@
+alter table TSADV_BUDGET_REQUEST_ITEM add column JAN_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column FEB_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column MAR_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column APR_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column MAY_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column JUN_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column JUL_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column AUG_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column SEP_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column OCT_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column NOV_VALUE double precision ;
+alter table TSADV_BUDGET_REQUEST_ITEM add column DEC_VALUE double precision ;

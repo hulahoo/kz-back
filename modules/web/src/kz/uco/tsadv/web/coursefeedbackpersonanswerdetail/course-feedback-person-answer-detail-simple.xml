@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://browseCaption"
+        class="kz.uco.tsadv.web.coursefeedbackpersonanswerdetail.CourseFeedbackPersonAnswerDetailSimple"
+        focusComponent="courseFeedbackPersonAnswerDetailsTable"
+        lookupComponent="courseFeedbackPersonAnswerDetailsTable"
+        messagesPack="kz.uco.tsadv.web.coursefeedbackpersonanswerdetail">
+    <dsContext>
+        <groupDatasource id="courseFeedbackPersonAnswerDetailsDs"
+                         class="kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswerDetail"
+                         view="courseFeedbackPersonAnswerDetail.edit"
+                         maxResults="20">
+            <query>
+                <![CDATA[select e from tsadv$CourseFeedbackPersonAnswerDetail e order by e.questionOrder asc]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseFeedbackPersonAnswerDetailsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="courseFeedbackPersonAnswerDetailsTable"
+                datasource="courseFeedbackPersonAnswerDetailsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="courseFeedbackPersonAnswerDetailsTable"
+                    width="100%">
+            <columns>
+                <column id="questionOrder"/>
+                <column id="question.questionLangValue"/>
+                <column id="answer" generator="generateAnswer"/>
+                <column id="score"/>
+            </columns>
+            <rowsCount/>
+            <rows datasource="courseFeedbackPersonAnswerDetailsDs"/>
+        </groupTable>
+    </layout>
+</window>

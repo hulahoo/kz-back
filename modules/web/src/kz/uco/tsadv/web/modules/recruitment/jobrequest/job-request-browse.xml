@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://JobRequest.browseCaption"
+        class="kz.uco.tsadv.web.modules.recruitment.jobrequest.JobRequestBrowse"
+        focusComponent="jobRequestsTable"
+        lookupComponent="jobRequestsTable">
+    <dsContext>
+        <groupDatasource id="jobRequestsDs"
+                         class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
+                         view="jobRequest.view">
+            <query>
+                <![CDATA[select e from tsadv$JobRequest e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="jobRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="jobRequestsTable"
+                datasource="jobRequestsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="jobRequestsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="requisition.code"/>
+                <column id="candidatePersonGroup.person.fullName"/>
+                <column id="requestDate"/>
+                <column id="requestStatus"/>
+                <column id="viewLater"/>
+            </columns>
+            <rows datasource="jobRequestsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="jobRequestsTable.create"/>
+                <button id="editBtn"
+                        action="jobRequestsTable.edit"/>
+                <button id="removeBtn"
+                        action="jobRequestsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

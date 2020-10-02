@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="mainMsg://DicDismissalStatus.browseCaption"
+        class="kz.uco.tsadv.web.modules.personal.dictionary.dicdismissalstatus.DicDismissalStatusBrowse"
+        focusComponent="dicDismissalStatusesTable"
+        lookupComponent="dicDismissalStatusesTable"
+        messagesPack="kz.uco.tsadv.web.modules.personal.dictionary">
+    <dsContext>
+        <groupDatasource id="dicDismissalStatusesDs"
+                         class="kz.uco.tsadv.modules.personal.dictionary.DicDismissalStatus"
+                         view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicDismissalStatus e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicDismissalStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicDismissalStatusesTable"
+                datasource="dicDismissalStatusesDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicDismissalStatusesTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rows datasource="dicDismissalStatusesDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="dicDismissalStatusesTable.create"/>
+                <button id="editBtn"
+                        action="dicDismissalStatusesTable.edit"/>
+                <button id="removeBtn"
+                        action="dicDismissalStatusesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

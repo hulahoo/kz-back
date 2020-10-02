@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://learning.path.browse"
+        class="kz.uco.tsadv.web.modules.learning.learningpath.LearningPathBrowse"
+        focusComponent="learningPathsTable"
+        lookupComponent="learningPathsTable">
+    <dsContext>
+        <groupDatasource id="learningPathsDs"
+                         class="kz.uco.tsadv.modules.learning.model.LearningPath"
+                         view="learningPath.browse">
+            <query>
+                <![CDATA[select e from tsadv$LearningPath e]]>
+            </query>
+        </groupDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="learningPathsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="learningPathsTable"
+                datasource="learningPathsDs">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="learningPathsTable"
+                    width="100%">
+            <actions>
+                <action id="create"/>
+                <action id="edit"/>
+                <action id="remove"/>
+                <action id="excel"/>
+            </actions>
+            <columns>
+                <column id="category" generator="generateCategoryImageCell" caption="msg://learning.path.category"/>
+                <column id="name"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rows datasource="learningPathsDs"/>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn"
+                        action="learningPathsTable.create"/>
+                <button id="editBtn"
+                        action="learningPathsTable.edit"/>
+                <button id="removeBtn"
+                        action="learningPathsTable.remove"/>
+                <button id="excel"
+                        action="learningPathsTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

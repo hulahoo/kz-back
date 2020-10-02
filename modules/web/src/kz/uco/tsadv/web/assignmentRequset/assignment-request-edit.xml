@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://editorCaption"
+        class="kz.uco.tsadv.web.assignmentRequset.AssignmentRequestEdit"
+        datasource="assignmentRequestDs"
+        focusComponent="fieldGroup1"
+        messagesPack="kz.uco.tsadv.web.assignmentRequset">
+    <dsContext>
+        <datasource id="assignmentRequestDs"
+                    class="kz.uco.tsadv.entity.AssignmentRequest"
+                    view="assignmentRequest-view"/>
+        <collectionDatasource id="procTasksDs"
+                              class="com.haulmont.bpm.entity.ProcTask"
+                              view="procTask-frame">
+            <query>
+                <![CDATA[select e from bpm$ProcTask e
+where e.procInstance.entity.entityId = :ds$assignmentRequestDs
+                       order by e.startDate]]>
+            </query>
+        </collectionDatasource>
+        <datasource id="assignmentExtDs"
+                    class="kz.uco.tsadv.modules.personal.model.AssignmentExt"/>
+        <collectionDatasource id="dicSalaryChangeReasonsDs"
+                              class="kz.uco.tsadv.modules.personal.dictionary.DicSalaryChangeReason"
+                              view="_local">
+            <query>
+                <![CDATA[select e from tsadv$DicSalaryChangeReason e]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="bpmRequestMessagesDs"
+                              class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
+                              view="bpmRequestMessage-view">
+            <query>
+                <![CDATA[select e from tsadv$BpmRequestMessage e
+                    where e.entityId = :ds$assignmentRequestDs
+                           and ( e.assignedUser.userExt.id = :session$user or e.assignedBy.userExt.id = :session$user )
+                    order by e.sendDate desc]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="100%"
+                width="1000"/>
+    <layout spacing="true"
+            expand="scrollBox">
+        <scrollBox id="scrollBox"
+                   spacing="true">
+            <groupBox id="dataGroup"
+                      spacing="true">
+                <fieldGroup id="fieldGroup1"
+                            datasource="assignmentRequestDs">
+                    <column width="250px">
+                        <field property="personGroup"
+                               required="true"
+                               visible="false"/>
+                    </column>
+                </fieldGroup>
+                <vbox id="headerVBox"
+                      spacing="true"
+                      width="500px">
+                    <hbox id="requestNumberHbox"
+                          expand="requestNumber"
+                          spacing="true"
+                          width="100%">
+                        <label value="msg://requestNumber"
+                               width="150px"/>
+                        <textField id="requestNumber"
+                                   datasource="assignmentRequestDs"
+                                   editable="false"
+                                   property="requestNumber"/>
+                    </hbox>
+                    <hbox id="statusHbox"
+                          expand="status"
+                          spacing="true"
+                          width="100%">
+                        <label value="msg://status"
+                               width="150px"/>
+                        <textField id="status"
+                                   datasource="assignmentRequestDs"
+                                   editable="false"
+                                   property="status"/>
+                    </hbox>
+                    <hbox id="person"
+                          expand="picker"
+                          spacing="true"
+                          width="100%">
+                        <label value="msg://personGroup"
+                               width="150px"/>
+                        <pickerField id="picker"
+                                     metaClass="tsadv$MyTeamNew"
+                                     captionProperty="fullName"
+                                     required="true"/>
+                    </hbox>
+                </vbox>
+                <grid id="grid"
+                      spacing="true"
+                      stylename="v-panel-caption"
+                      width="100%">
+                    <columns>
+                        <column flex="2.0"/>
+                        <column flex="10.0"/>
+                        <column flex="10.0"/>
+                        <column flex="0.2"/>
+                    </columns>
+                    <rows>
+                        <row id="typeH">
+                            <label/>
+                            <label id="old"
+                                   value="msg://oldValue"/>
+                            <label id="newD"
+                                   value="msg://newValue"/>
+                        </row>
+                        <row id="dateFromH">
+                            <label value="msg://dateFrom"/>
+                            <dateField id="oldDateFrom"
+                                       datasource="assignmentExtDs"
+                                       editable="false"
+                                       property="startDate"/>
+                            <dateField id="newDateFrom"
+                                       datasource="assignmentRequestDs"
+                                       property="dateFrom"
+                                       required="true"/>
+                        </row>
+                        <row id="substitutedEmployeeH">
+                            <label value="mainMsg://substitutedEmployee"/>
+                            <pickerField id="oldSubstitutedEmployee" width="100%"
+                                         datasource="assignmentExtDs"
+                                         editable="false"
+                                         captionProperty="personFioWithEmployeeNumber"
+                                         property="substituteEmployee"/>
+                            <pickerField id="pickerSubstitutedEmployee" width="100%"
+                                         datasource="assignmentRequestDs"
+                                         property="substitutedEmployee"
+                                         captionProperty="fioWithEmployeeNumber"/>
+                            <label id="labelSubstitutedEmployeeIcon"/>
+                        </row>
+                        <row id="positionH">
+                            <label value="msg://position"/>
+                            <pickerField id="oldPosition" width="100%"
+                                         datasource="assignmentExtDs"
+                                         editable="false"
+                                         captionProperty="fullName"
+                                         property="positionGroup">
+                                <actions>
+                                    <action id="clear"/>
+                                </actions>
+                            </pickerField>
+                            <pickerField id="newPosition"
+                                         width="100%"
+                                         captionProperty="fullName"
+                                         datasource="assignmentRequestDs"
+                                         property="positionGroup"
+                                         required="true"
+                                         requiredMessage="msg://requiredPosition"/>
+                            <label id="labelPositionIcon"/>
+                        </row>
+                        <row>
+                            <label id="actualPositionGroupLabel"
+                                   value="msg://actualPositionGroup"/>
+                            <label id="emptyLbl"/>
+                            <pickerField id="actualPositionGroup"
+                                         captionProperty="fullName"
+                                         datasource="assignmentRequestDs"
+                                         editable="false"
+                                         property="actualPositionGroup"
+                                         width="100%"/>
+                            <label id="emptyLbl2"/>
+                        </row>
+                        <row id="gradeH">
+                            <label value="msg://grade"/>
+                            <pickerField id="oldGrade" width="100%"
+                                         datasource="assignmentExtDs"
+                                         editable="false"
+                                         captionProperty="grade"
+                                         property="gradeGroup">
+                                <actions>
+                                    <action id="clear"/>
+                                </actions>
+                            </pickerField>
+                            <pickerField id="newGrade" width="100%"
+                                         captionProperty="grade"
+                                         datasource="assignmentRequestDs"
+                                         property="gradeGroup"
+                                         required="true"
+                                         editable="false">
+                                <actions>
+                                    <action id="clear"/>
+                                </actions>
+                            </pickerField>
+                            <label id="labelGradeIcon"/>
+                        </row>
+                        <row id="organizationH">
+                            <label value="msg://organization"/>
+                            <pickerField id="oldDepartment" width="100%"
+                                         datasource="assignmentExtDs"
+                                         editable="false"
+                                         captionProperty="organizationName"
+                                         property="organizationGroup">
+                                <actions>
+                                    <action id="clear"/>
+                                </actions>
+                            </pickerField>
+                            <pickerField id="organizationSs"
+                                         width="100%"
+                                         metaClass="tsadv$OrganizationSsView"
+                                         captionProperty="organizationName"
+                                         required="true"
+                                         requiredMessage="msg://requiredOrganization"/>
+                            <label id="labelOrganizationIcon"/>
+                        </row>
+                        <!--<row id="job">
+                            <label value="msg://job"/>
+                            <pickerField id="oldJob" width="100%"
+                                         datasource="assignmentExtDs"
+                                         editable="false"
+                                         captionProperty="jobName"
+                                         property="jobGroup">
+                                <actions>
+                                    <action id="clear"/>
+                                </actions>
+                            </pickerField>
+                            <pickerField id="newJob" width="100%"
+                                         captionProperty="jobName"
+                                         datasource="assignmentRequestDs"
+                                         property="jobGroup"
+                                         required="true">
+                                <actions>
+                                    <action id="lookup"/>
+                                    <action id="clear"/>
+                                </actions>
+                            </pickerField>
+                            <label id="labelJobIcon"/>
+                        </row>-->
+                    </rows>
+                </grid>
+                <fieldGroup id="fieldGroup2"
+                            datasource="assignmentRequestDs">
+                    <column width="250px">
+                        <field property="attachment"/>
+                    </column>
+                </fieldGroup>
+                <label value="msg://note"/>
+                <textArea id="note"
+                          datasource="assignmentRequestDs"
+                          property="note"
+                          rows="3"
+                          width="100%"/>
+            </groupBox>
+            <vbox id="bpmActorsVBox">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           width="100%">
+                        <columns>
+                            <column id="locName"
+                                    caption="msg://ProcActor.role"/>
+                            <column id="procActor.user"/>
+                            <column id="startDate"/>
+                            <column id="endDate"/>
+                            <column id="locOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                            <column id="comment"
+                                    maxTextLength="50"/>
+                        </columns>
+                        <rows datasource="procTasksDs"/>
+                    </table>
+                </groupBox>
+            </vbox>
+            <groupBox id="askQuestion"
+                      width="100%"
+                      caption="Вопросы и ответы"
+                      spacing="true"/>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button id="buttonOkId"
+                    caption="msg://save"
+                    invoke="save"/>
+            <button id="cancel"
+                    caption="msg://cancel"
+                    invoke="closeButton"/>
+            <button id="askQuestionBtn"
+                    caption="mainMsg://askQuestion"
+                    invoke="onAskQuestion"/>
+            <frame id="procActionsFrame"
+                   screen="procActionsFrame"
+                   width="AUTO"/>
+        </hbox>
+    </layout>
+</window>
