@@ -3,7 +3,7 @@ package kz.uco.tsadv.web.dicgoodscategory;
 import com.haulmont.cuba.gui.components.actions.RemoveAction;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.base.web.abstraction.AbstractDictionary68Browse;
+import kz.uco.base.web.abstraction.six.AbstractDictionaryBrowse;
 import kz.uco.tsadv.modules.recognition.dictionary.DicGoodsCategory;
 
 import javax.inject.Inject;
@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.UUID;
 
-public class DicGoodsCategoryBrowse extends AbstractDictionary68Browse<DicGoodsCategory> {
+public class DicGoodsCategoryBrowse extends AbstractDictionaryBrowse<DicGoodsCategory> {
 
     @Inject
     protected GroupDatasource<DicGoodsCategory, UUID> dicGoodsCategoriesDs;

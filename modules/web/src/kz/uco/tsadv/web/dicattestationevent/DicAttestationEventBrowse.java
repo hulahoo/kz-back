@@ -1,7 +1,7 @@
 package kz.uco.tsadv.web.dicattestationevent;
 
 import com.haulmont.cuba.gui.data.GroupDatasource;
-import kz.uco.base.web.abstraction.AbstractDictionaryBrowse;
+import kz.uco.base.web.abstraction.six.AbstractDictionaryBrowse;
 import kz.uco.tsadv.modules.learning.dictionary.DicAttestationEvent;
 
 import javax.inject.Inject;

@@ -49,8 +49,8 @@ dependencies {
     appComponent("com.haulmont.fts:fts-global:$cubaVersion")
     appComponent("com.haulmont.bpm:bpm-global:$cubaVersion")
     appComponent("com.haulmont.charts:charts-global:$cubaVersion")
-    appComponent("kz.uco.uactivity:uactivity-global:1.0.2.K-SNAPSHOT")
-    appComponent("kz.uco.base:base-global:1.0.60-SNAPSHOT")
+    appComponent("kz.uco.uactivity:uactivity-global:1.0.3.K-SNAPSHOT")
+    appComponent("kz.uco.base:base-global:1.0.65-SNAPSHOT")
     appComponent('com.haulmont.addon.restapi:restapi-global:7.1.1')
 }
 

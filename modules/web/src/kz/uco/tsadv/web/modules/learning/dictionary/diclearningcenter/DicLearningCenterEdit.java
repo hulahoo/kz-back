@@ -9,7 +9,7 @@ import com.haulmont.charts.gui.map.model.listeners.click.MarkerClickListener;
 import com.haulmont.charts.gui.map.model.listeners.drag.MarkerDragListener;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningCenter;
-import kz.uco.base.web.abstraction.AbstractDictionaryEditor;
+import kz.uco.base.web.abstraction.six.AbstractDictionaryEditor;
 
 import javax.inject.Inject;
 import java.util.Map;

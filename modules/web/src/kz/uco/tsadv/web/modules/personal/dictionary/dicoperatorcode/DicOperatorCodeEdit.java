@@ -4,7 +4,7 @@ import com.haulmont.cuba.gui.components.DateField;
 import com.haulmont.cuba.gui.components.FieldGroup;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicOperatorCode;
-import kz.uco.base.web.abstraction.AbstractDictionaryEditor;
+import kz.uco.base.web.abstraction.six.AbstractDictionaryEditor;
 
 import javax.inject.Inject;
 import javax.inject.Named;

@@ -1,7 +1,7 @@
 package kz.uco.tsadv.web.modules.performance.dictionary.dicparticipanttype;
 
 import kz.uco.tsadv.modules.performance.dictionary.DicParticipantType;
-import kz.uco.base.web.abstraction.AbstractDictionaryBrowse;
+import kz.uco.base.web.abstraction.six.AbstractDictionaryBrowse;
 
 public class DicParticipantTypeBrowse extends AbstractDictionaryBrowse<DicParticipantType> {
 }

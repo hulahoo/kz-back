@@ -4,7 +4,7 @@ import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import kz.uco.base.common.IMAGE_SIZE;
-import kz.uco.base.web.abstraction.AbstractDictionaryEditor;
+import kz.uco.base.web.abstraction.six.AbstractDictionaryEditor;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
