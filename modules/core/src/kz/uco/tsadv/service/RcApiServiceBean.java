@@ -2989,11 +2989,11 @@ public class RcApiServiceBean implements RcApiService {
             personDocument.setIssuedBy(personDocumentInt.getIssuedBy());
             personDocument.setDescription(personDocumentInt.getDescription());
             personDocument.setDocumentType(commonService.getEntity(DicDocumentType.class,
-                    "select e from tsadv$DicDocumentType e where e.legacyID = :legacyID",
-                    ParamsMap.of("legacyID", personDocumentInt.getDocumentType()),
+                    "select e from tsadv$DicDocumentType e where e.legacyId = :legacyId",
+                    ParamsMap.of("legacyId", personDocumentInt.getDocumentType()),
                     "_minimal")); //TODO: реализовать когда будет понятно в каком виде передают тип докумената
             personDocument.setPersonGroup(commonService.getEntity(PersonGroupExt.class,
-                    "select e.group from base$PersonExt e where e.legacyID = :legacyId",
+                    "select e.group from base$PersonExt e where e.legacyId = :legacyId",
                     ParamsMap.of("legacyId", personDocumentInt.getPersonLegacyId()),
                     "_minimal")); //TODO: реализовать когда будет понятно в каком виде передают тип докумената
             personDocument.setDocumentNumber(personDocumentInt.getDocumentNumber());
@@ -3016,17 +3016,17 @@ public class RcApiServiceBean implements RcApiService {
             Agreement agreement = metadata.create(Agreement.class);
             agreement.setAgreementNumber(agreementInt.getAgreementNumber());
             agreement.setAgreementType(commonService.getEntity(DicContractsType.class,
-                    "select e from tsadv$DicContractsType e where e.legacyID = :legacyID",
-                    ParamsMap.of("legacyID", agreementInt.getAgreementType()),
+                    "select e from tsadv$DicContractsType e where e.legacyId = :legacyId",
+                    ParamsMap.of("legacyId", agreementInt.getAgreementType()),
                     "_minimal"));
             agreement.setDateFrom(df.parse(agreementInt.getDateFrom()));
             agreement.setDateTo(df.parse(agreementInt.getDateTo()));
             agreement.setStatus(commonService.getEntity(DicAgreementStatus.class,
-                    "select e from tsadv$DicAgreementStatus e where e.legacyID = :legacyID",
-                    ParamsMap.of("legacyID", agreementInt.getStatus()),
+                    "select e from tsadv$DicAgreementStatus e where e.legacyId = :legacyId",
+                    ParamsMap.of("legacyId", agreementInt.getStatus()),
                     "_minimal"));
             agreement.setPersonGroup(commonService.getEntity(PersonGroupExt.class,
-                    "select e.group from base$PersonExt e where e.legacyID = :legacyId",
+                    "select e.group from base$PersonExt e where e.legacyId = :legacyId",
                     ParamsMap.of("legacyId", agreementInt.getPersonGroup()),
                     "_minimal"));
             dataManager.commit(agreement);

@@ -31,7 +31,7 @@
                     <field property="isSystemRecord"/>
                 </column>
                 <column width="250px">
-                    <field property="legacyID"
+                    <field property="legacyId"
                            caption="mainMsg://legacyId"/>
                     <field property="description1"/>
                     <field property="description2"/>

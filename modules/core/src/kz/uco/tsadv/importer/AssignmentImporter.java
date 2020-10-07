@@ -33,7 +33,7 @@ import java.util.*;
 public class AssignmentImporter extends XlsImporter {
     public static final String NAME = "tsadv_AssignmentImporter";
 
-    public static final String LEGACY_ID = "legacyID";
+    public static final String LEGACY_ID = "legacyId";
     public static final String START_DATE = "startDate";
     public static final String END_DATE = "endDate";
     public static final String ASSIGN_DATE = "assignDate";

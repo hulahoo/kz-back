@@ -19,7 +19,7 @@
             <fieldGroup id="fieldGroup"
                         datasource="dicRateTypeDs">
                 <column width="250px">
-                    <field property="legacyID"/>
+                    <field property="legacyId"/>
                     <field property="langValue1"/>
                     <field property="description1"/>
                     <field property="langValue2"/>

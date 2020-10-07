@@ -31,7 +31,7 @@
                 <action id="remove"/>
             </actions>
             <columns>
-                <column id="legacyID"/>
+                <column id="legacyId"/>
                 <column id="lookupType.id"/>
                 <column id="lookupTypeCode"/>
                 <column id="meaningLang1"/>

@@ -32,7 +32,7 @@
                     <field property="startDate"/>
                     <field property="endDate"/>
                     <field property="code"/>
-                    <field property="legacyID"/>
+                    <field property="legacyId"/>
                     <field property="isSystemRecord"/>
                 </column>
             </fieldGroup>

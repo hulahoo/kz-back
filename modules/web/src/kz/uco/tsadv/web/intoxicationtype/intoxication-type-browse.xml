@@ -44,7 +44,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
-                <column id="legacyID"/>
+                <column id="legacyId"/>
                 <column id="isSystemRecord"/>
             </columns>
             <rows datasource="intoxicationTypesDs"/>

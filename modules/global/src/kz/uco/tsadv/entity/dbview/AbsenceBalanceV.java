@@ -18,7 +18,7 @@ public class AbsenceBalanceV extends StandardEntity {
     protected PersonGroupExt personGroup;
 
     @Column(name = "LEGACY_ID")
-    protected String legacyID;
+    protected String legacyId;
 
     @Column(name = "OVERALL_BALANCE_DAYS")
     protected Integer overallBalanceDays;
@@ -52,12 +52,12 @@ public class AbsenceBalanceV extends StandardEntity {
     @Column(name = "LONG_ABSENCE_DAYS")
     protected Integer longAbsenceDays;
 
-    public void setLegacyID(String legacyID) {
-        this.legacyID = legacyID;
+    public void setLegacyID(String legacyId) {
+        this.legacyId = legacyId;
     }
 
     public String getLegacyID() {
-        return legacyID;
+        return legacyId;
     }
 
 

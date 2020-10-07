@@ -41,7 +41,7 @@
                 <column id="payroll"/>
                 <column id="positionStatus"/>
                 <column id="gradeRule"/>
-                <column id="legacyID"/>
+                <column id="legacyId"/>
             </columns>
             <rows datasource="positionsDs"/>
             <rowsCount/>

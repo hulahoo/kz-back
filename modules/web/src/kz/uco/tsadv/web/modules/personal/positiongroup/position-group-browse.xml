@@ -165,7 +165,7 @@
                         <column id="fte"/>
                         <column id="maxPersons"/>
                         <column id="positionStatus.langValue"/>
-                        <column id="legacyID"/>
+                        <column id="legacyId"/>
                     </columns>
                     <rows datasource="listDs"/>
                 </table>

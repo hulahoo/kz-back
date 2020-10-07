@@ -138,7 +138,7 @@
                         <column id="startDate"/>
                         <column id="endDate"/>
                         <column id="updatedBy"/>
-                        <column id="legacyID"/>
+                        <column id="legacyId"/>
                         <column id="internal"/>
                     </columns>
                     <rows datasource="listDs"/>

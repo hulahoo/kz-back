@@ -19,7 +19,7 @@
                     datasource="surChargeNameDs">
             <column width="250px">
                 <field property="code"/>
-                <field property="legacyID"/>
+                <field property="legacyId"/>
                 <field property="langValue1"/>
                 <field property="langValue2"/>
                 <field property="langValue3"/>

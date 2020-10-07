@@ -85,7 +85,7 @@
                                              spacing="true"/>
                                 </vbox>
                             </field>
-                            <field property="legacyID" caption="msg://legacyId"/>
+                            <field property="legacyId" caption="msg://legacyId"/>
                         </column>
                     </fieldGroup>
                     <fieldGroup border="visible"

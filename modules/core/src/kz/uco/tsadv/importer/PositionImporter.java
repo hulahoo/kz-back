@@ -38,7 +38,7 @@ public class PositionImporter extends XlsImporter {
 
     public static final String NAME = "tsadv_PositionImporter";
 
-    public static final String LEGACY_ID = "legacyID";
+    public static final String LEGACY_ID = "legacyId";
     public static final String START_DATE = "startDate";
     public static final String END_DATE = "endDate";
     public static final String POSITION_NAME_RU = "positionNameRu";

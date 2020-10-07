@@ -40,7 +40,7 @@
                 <column id="active"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
-                <column id="legacyID"
+                <column id="legacyId"
                         caption="mainMsg://legacyId"/>
             </columns>
             <rows datasource="dicProtectionEquipmentConditionsDs"/>

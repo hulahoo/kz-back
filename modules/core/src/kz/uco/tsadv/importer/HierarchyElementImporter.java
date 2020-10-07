@@ -41,7 +41,7 @@ public class HierarchyElementImporter extends XlsImporter {
     public static final String START_DATE = "startDate";
     public static final String END_DATE = "endDate";
     public static final String ELEMENT_TYPE = "elementType";
-    public static final String LEGACY_ID = "legacyID";
+    public static final String LEGACY_ID = "legacyId";
     public static final String PARENT_LEGACY_ID = "parentLegacyId";
 
     @Inject
@@ -98,7 +98,7 @@ public class HierarchyElementImporter extends XlsImporter {
             ElementType elementType = ElementType.fromId(XlsHelper.getParameterIntegerValue(values, ELEMENT_TYPE));
 
             if (elementType == null) {
-                throw new IllegalArgumentException(String.format("ElementType by legacyID: [%s] not found!", legacyId));
+                throw new IllegalArgumentException(String.format("ElementType by legacyId: [%s] not found!", legacyId));
             }
 
             parentElementType.put(legacyId, elementType.getId());
@@ -125,7 +125,7 @@ public class HierarchyElementImporter extends XlsImporter {
 
                         hierarchyElement.setOrganizationGroup(em.getReference(OrganizationGroupExt.class, organizationGroupId));
                     } catch (Exception ex) {
-                        log.warn(String.format("OrganizationGroup by legacyID: [%s] not found!", legacyId));
+                        log.warn(String.format("OrganizationGroup by legacyId: [%s] not found!", legacyId));
                     }
                     break;
                 }
@@ -138,7 +138,7 @@ public class HierarchyElementImporter extends XlsImporter {
 
                         hierarchyElement.setPositionGroup(em.getReference(PositionGroupExt.class, positionGroupId));
                     } catch (Exception ex) {
-                        log.warn(String.format("PositionGroup by legacyID: [%s] not found!", legacyId));
+                        log.warn(String.format("PositionGroup by legacyId: [%s] not found!", legacyId));
                     }
                     break;
             }
@@ -170,7 +170,7 @@ public class HierarchyElementImporter extends XlsImporter {
             }
 
             if (elementType == null) {
-                log.warn(String.format("Parent ElementType by legacyID: [%s] not found!", legacyId));
+                log.warn(String.format("Parent ElementType by legacyId: [%s] not found!", legacyId));
                 return null;
             }
         }

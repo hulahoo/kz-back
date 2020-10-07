@@ -147,9 +147,9 @@
                                            property="startDate"/>
                                     <field id="endDate"
                                            property="endDate"/>
-                                    <field id="legacyID"
+                                    <field id="legacyId"
                                            editable="false"
-                                           property="legacyID"
+                                           property="legacyId"
                                            visible="false"/>
                                 </column>
                             </fieldGroup>
