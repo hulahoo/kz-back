@@ -3,37 +3,37 @@
 @mixin kz_uco_tsadv-base-ext {
   @include base;
 
-  .book-name{
+  .book-name {
     font-size: medium;
     font-weight: bold;
     font-style: italic;
     color: black;
   }
 
-  .author-name{
+  .author-name {
     opacity: 75%;
     font-style: italic;
   }
 
-  .book-name-library{
+  .book-name-library {
     font-style: italic;
     font-weight: bold;
     font-size: large;
     color: black;
   }
 
-  .book-image{
+  .book-image {
     border-radius: 15px;
   }
 
-  .book-page-sides{
+  .book-page-sides {
     background-color: silver;
     opacity: 50%;
   }
 
-  .add_my_books{
-    background: -moz-linear-gradient(#FFED00, #FFD700,  #E6C619);
-    background: -webkit-gradient(linear, 0 0, 0  100%, from(#FFED00), to(#E6C619), color-stop(0.5, #FFD700));
+  .add_my_books {
+    background: -moz-linear-gradient(#FFED00, #FFD700, #E6C619);
+    background: -webkit-gradient(linear, 0 0, 0 100%, from(#FFED00), to(#E6C619), color-stop(0.5, #FFD700));
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00BBD6', endColorstr='#EBFFFF');
     padding: 3px 7px;
     color: #333;
@@ -43,8 +43,18 @@
     border: 1px solid #666;
   }
 
-  .book-info-main{
+  .book-info-main {
     background-color: #7abaff;
+  }
+
+  .remove-btn-style {
+    background: red;
+    color: white;
+  }
+
+  .create-btn-style {
+    background: #1b87e3;
+    color: white;
   }
 
 }

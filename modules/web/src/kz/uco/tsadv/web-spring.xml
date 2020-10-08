@@ -4,6 +4,9 @@
        xmlns:gui="http://schemas.haulmont.com/cuba/spring/cuba-gui.xsd">
     <!-- Annotation-based beans -->
     <context:component-scan base-package="kz.uco.tsadv"/>
+    <gui:screens base-packages="kz.uco.tsadv.web"/>
+    <gui:actions base-packages="kz.uco.tsadv.cuba.actions"/>
+
     <bean class="com.haulmont.cuba.web.sys.remoting.WebRemoteProxyBeanCreator">
         <property name="serverSelector"
                   ref="cuba_ServerSelector"/>
@@ -132,5 +135,10 @@
           class="kz.uco.tsadv.web.TsAdvBootstrapListener"/>
     <bean id="cuba_IconResolver"
           class="kz.uco.tsadv.components.ImageIconResolver"/>
-    <gui:screens base-packages="kz.uco.tsadv.web"/>
+    <bean id="cuba_RemoveAction"
+          class="kz.uco.tsadv.cuba.actions.cuba68.RemoveAction68TS"
+          scope="prototype"/>
+    <bean id="cuba_CreateAction"
+          class="kz.uco.tsadv.cuba.actions.cuba68.CreateAction68TS"
+          scope="prototype"/>
 </beans>
