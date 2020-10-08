@@ -63,6 +63,7 @@ public class RemoveAction68TS extends RemoveAction {
 
         String actionElementId = null;
 
+
         for (Element action : actions) {
             if (ACTION_ID.equals(action.attributeValue(isInstanceofAbstractWindow ? "id" : "type"))) {
                 actionElementId = action.attributeValue("id");
