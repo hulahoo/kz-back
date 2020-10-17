@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
@@ -17,6 +18,7 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.components.EmployeeCheckComponent;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -55,6 +57,8 @@ public class PersonalDataRequestShow extends AbstractWindow {
     @Inject
     protected Metadata metadata;
     @Inject
+    protected EmployeeCheckComponent employeeCheckComponent;
+    @Inject
     protected DataManager dataManager;
     @Inject
     protected Button editBtn;
@@ -74,13 +78,13 @@ public class PersonalDataRequestShow extends AbstractWindow {
     protected EditAction userContactEdit;
     @Inject
     protected TabSheet mainTab;
+    @Inject
+    protected Notifications notifications;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-
         initPerson();
-
         userContactFaceEdit.setWindowId("tsadv$BeneficiaryView");
 
         userContactCreate.setInitialValuesSupplier(() ->
@@ -120,6 +124,7 @@ public class PersonalDataRequestShow extends AbstractWindow {
         });
 
         setEnabledEditBtn();
+
     }
 
     protected void initPerson() {
