@@ -3,10 +3,12 @@ package kz.uco.tsadv.web.modules.personal.organizationgroup;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.filter.Op;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.gui.screen.OpenMode;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
 import kz.uco.base.service.common.CommonService;
@@ -54,6 +56,8 @@ public class OrganizationGroupBrowse extends AbstractLookup {
     protected Filter organizationGroupsFilter;
     @Inject
     private CommonService commonService;
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -160,9 +164,17 @@ public class OrganizationGroupBrowse extends AbstractLookup {
     }
 
     protected void openOrganizationEditor(OrganizationExt organization, Map<String, Object> params) {
-        OrganizationEdit organizationEdit = (OrganizationEdit) openEditor("base$Organization.edit", organization, WindowManager.OpenType.THIS_TAB, params);
-        organizationEdit.addCloseListener(actionId ->
-                organizationGroupsDs.refresh());
+        OrganizationEdit organizationEdit = (OrganizationEdit) screenBuilders.editor(OrganizationExt.class, this)
+                .editEntity(organization)
+                .withLaunchMode(OpenMode.THIS_TAB)
+                .build()
+                .show();
+        organizationEdit.addAfterCloseListener(actionId ->{
+            organizationGroupsDs.refresh();
+        });
+//        OrganizationEdit organizationEdit = (OrganizationEdit) openEditor("base$Organization.edit", organization, WindowManager.OpenType.THIS_TAB, params);
+//        organizationEdit.addCloseListener(actionId ->
+//                organizationGroupsDs.refresh());
     }
 
     public void editHistory() {

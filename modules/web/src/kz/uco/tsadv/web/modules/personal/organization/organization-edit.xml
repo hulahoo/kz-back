@@ -66,7 +66,7 @@
                 <![CDATA[
                         select e
                           from base$HierarchyElementExt e
-                         where e.organizationGroup.id = :ds$orgGroupDs
+                         where e.organizationGroup.id = :ds$orgGroupDs.id
                            and e.deleteTs is null
                       order by e.hierarchy, e.startDate
                         ]]>

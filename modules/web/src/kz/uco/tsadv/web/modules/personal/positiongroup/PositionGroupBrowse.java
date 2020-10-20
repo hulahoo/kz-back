@@ -7,12 +7,14 @@ import com.haulmont.chile.core.datatypes.impl.IntegerDatatype;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.filter.Op;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.gui.screen.OpenMode;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.base.service.common.CommonService;
@@ -81,6 +83,8 @@ public class PositionGroupBrowse extends AbstractLookup {
     protected Object selectedHierarchy;
     @WindowParam
     protected Object openedFromAssignmentHistoryEdit;
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -326,15 +330,29 @@ public class PositionGroupBrowse extends AbstractLookup {
     }
 
     protected void openPositionEditor(PositionExt position, Map<String, Object> params) {
-        PositionEdit positionEdit = (PositionEdit) openEditor("base$Position.edit", position, WindowManager.OpenType.THIS_TAB, params);
-        positionEdit.addCloseWithCommitListener(() -> {
-            PositionGroupExt positionGroupExt = ((PositionExt) positionEdit.getItem()).getGroup();
-            positionGroupsDs.refresh();
-            positionGroupsTable.repaint();
-            if (positionGroupsDs.containsItem(positionGroupExt.getUuid())) {
-                positionGroupsTable.setSelected(positionGroupExt);
-            }
-        });
+        screenBuilders.editor(PositionExt.class, this)
+                .editEntity(position)
+                .withLaunchMode(OpenMode.THIS_TAB)
+                .withInitializer(e -> {
+                    PositionGroupExt positionGroupExt = position.getGroup();
+                    positionGroupsDs.refresh();
+                    positionGroupsTable.repaint();
+                    if (positionGroupsDs.containsItem(positionGroupExt.getUuid())) {
+                        positionGroupsTable.setSelected(positionGroupExt);
+                    }
+                })
+                .build()
+                .show();
+
+//        PositionEdit positionEdit = (PositionEdit) openEditor("base$Position.edit", position, WindowManager.OpenType.THIS_TAB, params);
+//        positionEdit.addCloseWithCommitListener(() -> {
+//            PositionGroupExt positionGroupExt = ((PositionExt) positionEdit.getItem()).getGroup();
+//            positionGroupsDs.refresh();
+//            positionGroupsTable.repaint();
+//            if (positionGroupsDs.containsItem(positionGroupExt.getUuid())) {
+//                positionGroupsTable.setSelected(positionGroupExt);
+//            }
+//        });
     }
 
     public void editHistory() {

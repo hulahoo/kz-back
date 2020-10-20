@@ -34,14 +34,16 @@ public class RemoveAction68TS extends RemoveAction {
     protected void initStyle(ListComponent target) {
         if (target instanceof HasButtonsPanel) {
             ButtonsPanel buttonsPanel = ((HasButtonsPanel) target).getButtonsPanel();
-            Collection<Component> components = buttonsPanel.getComponents();
-            if (components != null) {
-                for (Component component : components) {
-                    if (component instanceof Button) {
-                        Button button = (Button) component;
-                        if (isButtonAction(target, button) && StringUtils.isEmpty(button.getStyleName())) {
-                            button.addStyleName("remove-btn-style");
-                            button.addStyleName("border-none");
+            if (buttonsPanel != null){
+                Collection<Component> components = buttonsPanel.getComponents();
+                if (components != null) {
+                    for (Component component : components) {
+                        if (component instanceof Button) {
+                            Button button = (Button) component;
+                            if (isButtonAction(target, button) && StringUtils.isEmpty(button.getStyleName())) {
+                                button.addStyleName("remove-btn-style");
+                                button.addStyleName("border-none");
+                            }
                         }
                     }
                 }
@@ -72,10 +74,14 @@ public class RemoveAction68TS extends RemoveAction {
 
         if (buttonsPanel != null) {
             for (Element btnElement : buttonsPanel) {
-                String action = btnElement.attributeValue("action");
-                if (Objects.equals(button.getId(), btnElement.attributeValue("id"))
-                        && action.equals(target.getId() + "." + actionElementId)) {
-                    return true;
+                if (btnElement != null){
+                    String action = btnElement.attributeValue("action");
+                    if(btnElement==null || action==null || actionElementId== null || target== null )
+                        continue;
+                    if (Objects.equals(button.getId(), btnElement.attributeValue("id"))
+                            && action.equals(target.getId() + "." + actionElementId)) {
+                        return true;
+                    }
                 }
             }
         }
