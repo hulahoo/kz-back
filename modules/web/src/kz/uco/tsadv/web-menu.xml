@@ -598,7 +598,7 @@
         <item id="sys$ScheduledTask.browse"/>
         <item id="entityRestore"/>
         <item id="entityInspector.browse"/>
-        <item id="appProperties"/>
+        <item id="extAppProperties" screen="tsadv_ExtAppPropertyEntity.browse"/>
         <item id="jmxConsole"/>
         <separator/>
         <item id="entityLog"/>

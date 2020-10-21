@@ -562,5 +562,6 @@
         <class>kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile</class>
         <class>kz.uco.tsadv.lms.entity.LmsSlider</class>
         <class>kz.uco.tsadv.lms.entity.LmsSliderImage</class>
+        <class>kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription</class>
     </persistence-unit>
 </persistence>
