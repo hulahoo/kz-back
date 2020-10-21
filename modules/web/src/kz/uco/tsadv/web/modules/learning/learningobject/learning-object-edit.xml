@@ -30,7 +30,7 @@
                                visible="false"/>
                         <field id="html"
                                property="html">
-                            <textArea id="htmlText"
+                            <resizableTextArea id="htmlText"
                                       datasource="learningObjectDs"
                                       property="html"
                                       height="500px"
