@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://extAppPropertyEntityBrowse.caption"
+        extends="/com/haulmont/cuba/gui/app/core/appproperties/appproperties-browse.xml"
+        class="kz.uco.tsadv.web.screens.extapppropertyentity.ExtAppPropertyEntityBrowse"
+        messagesPack="kz.uco.tsadv.web.screens.extapppropertyentity">
+    <dsContext>
+        <hierarchicalDatasource id="paramsDs"
+                                class="kz.uco.tsadv.modules.administration.appproperty.ExtAppPropertyEntity"
+                                view="extAppPropertyEntity-view"
+                                hierarchyProperty="extParent"
+                                allowCommit="false"
+                                datasourceClass="kz.uco.tsadv.datasource.ExtAppPropertiesDatasource">
+        </hierarchicalDatasource>
+    </dsContext>
+
+    <dialogMode height="theme://cuba.gui.dialogSize.height.medium"
+                width="theme://cuba.gui.dialogSize.width.medium"
+                resizable="true"/>
+    <layout expand="paramsTable" spacing="true">
+        <treeTable id="paramsTable" editable="false" multiselect="true" width="100%">
+            <actions>
+                <action id="editValue" invoke="editValue" enable="false"
+                        caption="mainMsg://actions.Edit" icon="EDIT_ACTION"/>
+            </actions>
+            <columns>
+                <column id="name" caption="msg://name"/>
+                <column id="displayedCurrentValue" caption="msg://currentValue"/>
+                <column id="updateTs" caption="msg://lastUpdatedAt"/>
+                <column id="updatedBy" caption="msg://lastUpdatedBy"/>
+                <column id="description.value" caption="msg://description"/>
+            </columns>
+        </treeTable>
+    </layout>
+</window>

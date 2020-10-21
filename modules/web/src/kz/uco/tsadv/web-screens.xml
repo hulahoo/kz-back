@@ -2274,4 +2274,8 @@
             template="kz/uco/tsadv/web/lmsslider/lms-slider-edit.xml"/>
     <screen id="tsadv$LmsSliderImage.edit"
             template="kz/uco/tsadv/web/lmssliderimage/lms-slider-image-edit.xml"/>
+    <screen id="tsadv_ExtAppPropertyEntity.browse"
+            template="kz/uco/tsadv/web/screens/extapppropertyentity/ext-app-property-entity-browse.xml"/>
+    <screen id="tsadv_ExtAppPropertyEntity.edit"
+            template="kz/uco/tsadv/web/screens/extapppropertyentity/ext-app-property-entity-edit.xml"/>
 </screen-config>
