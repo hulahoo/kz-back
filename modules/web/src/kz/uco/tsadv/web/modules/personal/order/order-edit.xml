@@ -51,7 +51,7 @@
                               view="procTask-frame">
             <query>
                 <![CDATA[select e from bpm$ProcTask e, bpm$ProcInstance pi
-                          where pi.entity.entityId = :ds$orderDs
+                          where pi.entity.entityId = :ds$orderDs.id
                             and e.procInstance.id = pi.id
                        order by e.createTs]]>
             </query>
