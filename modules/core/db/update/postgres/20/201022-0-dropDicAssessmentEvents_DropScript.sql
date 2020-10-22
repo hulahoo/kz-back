@@ -1,0 +1,1 @@
+drop table if exists TSADV_DIC_ASSESSMENT_EVENTS__U31818 cascade ;

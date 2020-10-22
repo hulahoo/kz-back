@@ -6,6 +6,8 @@ import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.entity.Role;
 import com.haulmont.cuba.security.entity.User;
+import com.haulmont.cuba.security.global.UserSession;
+import kz.uco.base.common.StaticVariable;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +87,15 @@ public class UserServiceBean implements UserService {
         loadContext.setQuery(query);
         loadContext.setView(View.LOCAL);
         return dataManager.loadList(loadContext);
+    }
+
+    @Override
+    public boolean isEmployee() {
+        UserSession session = userSessionSource.getUserSession();
+        Object userPersonGroupIdAttribute = session.getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+        if (userPersonGroupIdAttribute != null)
+            return true;
+        return false;
     }
 
     private User getCurrentUser() {

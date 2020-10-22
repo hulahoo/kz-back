@@ -95,5 +95,6 @@
         <class>kz.uco.tsadv.modules.recognition.feedback.RcgFeedbackPageInfo</class>
         <class>kz.uco.tsadv.modules.recognition.feedback.RcgFeedbackCommentPojo</class>
         <class>kz.uco.tsadv.api.QRCodeInt</class>
+        <class>kz.uco.tsadv.modules.administration.appproperty.ExtAppPropertyEntity</class>
     </metadata-model>
 </metadata>

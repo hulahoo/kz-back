@@ -1,0 +1,1 @@
+alter table tsadv_dic_assessment_result rename to TSADV_DIC_ASSESSMENT_RESULT__U88058 ;

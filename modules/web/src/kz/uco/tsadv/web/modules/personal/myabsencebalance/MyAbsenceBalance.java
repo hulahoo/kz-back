@@ -16,7 +16,6 @@ import com.haulmont.reports.gui.ReportGuiManager;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.shared.Person;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.exceptions.ItemNotFoundException;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -52,11 +51,6 @@ public class MyAbsenceBalance extends AbstractWindow {
 
     @Override
     public void init(Map<String, Object> params) {
-        personGroup = userSession.getAttribute(StaticVariable.USER_PERSON_GROUP);
-        if (personGroup == null) {
-            throw new ItemNotFoundException("There is no personGroup for user");
-        }
-
         list = absenceBalanceService.getAllVacationConditionsList(userSession.getAttribute(StaticVariable.POSITION_GROUP_ID));
     }
 

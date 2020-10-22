@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        caption="msg://extAppPropertyEntityEdit.caption"
+        class="kz.uco.tsadv.web.screens.extapppropertyentity.ExtAppPropertyEntityEdit"
+        datasource="extAppPropertyEntityDs"
+        extends="/com/haulmont/cuba/gui/app/core/appproperties/appproperties-edit.xml"
+        messagesPack="kz.uco.tsadv.web.screens.extapppropertyentity">
+    <actions>
+        <action id="okAction" primary="true" shortcut="Ctrl-Enter" invoke="ok"/>
+    </actions>
+    <dsContext>
+        <datasource id="appPropertyDs"
+                    class="kz.uco.tsadv.modules.administration.appproperty.ExtAppPropertyEntity"
+                    view="_local"
+                    allowCommit="false">
+        </datasource>
+    </dsContext>
+    <layout spacing="true">
+        <fieldGroup id="fieldGroup" datasource="appPropertyDs" width="100%">
+            <column width="100%">
+                <field id="description.value" caption="msg://description" box.expandRatio="2"/>
+            </column>
+        </fieldGroup>
+    </layout>
+</window>

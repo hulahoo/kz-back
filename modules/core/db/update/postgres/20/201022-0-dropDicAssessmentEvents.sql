@@ -1,0 +1,1 @@
+alter table tsadv_dic_assessment_events rename to TSADV_DIC_ASSESSMENT_EVENTS__U31818 ;

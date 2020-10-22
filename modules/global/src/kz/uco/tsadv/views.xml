@@ -21165,4 +21165,11 @@
         <property name="image"
                   view="_minimal"/>
     </view>
+    <view entity="tsadv_AppPropertyEntityDescription" name="appPropertyEntityDescription-view" extends="_local"/>
+    <view entity="tsadv_ExtAppPropertyEntity" name="extAppPropertyEntity-view" extends="_local">
+        <property name="extParent" view="_minimal"/>
+        <property name="description" view="_minimal">
+            <property name="appPropertyName"/>
+        </property>
+    </view>
 </views>

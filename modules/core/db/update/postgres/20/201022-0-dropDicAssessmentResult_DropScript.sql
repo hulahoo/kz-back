@@ -1,0 +1,1 @@
+drop table if exists TSADV_DIC_ASSESSMENT_RESULT__U88058 cascade ;

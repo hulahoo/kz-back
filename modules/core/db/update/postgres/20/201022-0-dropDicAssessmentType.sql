@@ -1,0 +1,1 @@
+alter table tsadv_dic_assessment_type rename to TSADV_DIC_ASSESSMENT_TYPE__U33552 ;

@@ -1,0 +1,1 @@
+drop table if exists TSADV_DIC_ASSESSMENT_TYPE__U33552 cascade ;

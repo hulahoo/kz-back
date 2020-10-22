@@ -14,6 +14,8 @@ public interface UserService {
 
     boolean hasAnyRole(String... roleNames);
 
+    boolean isEmployee();
+
     List<Role> loadUserRoles();
 
     List<Role> loadUserRoles(String... roleNames);
