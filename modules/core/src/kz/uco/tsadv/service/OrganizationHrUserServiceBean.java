@@ -51,12 +51,8 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 "  on ss.id = s.assignment_status_id " +
                 "  and ss.code = 'ACTIVE' " +
                 "  and ss.delete_ts is null " +
-                " join tsadv_hr_user_role ur " +
-                "  on ur.user_id = e.user_id " +
-                "  and ur.delete_ts is null  " +
-                "  and current_date between ur.date_from and ur.date_to " +
                 " join tsadv_dic_hr_role r  " +
-                "  on r.id = ur.role_id " +
+                "  on r.id = e.hr_role_id " +
                 "  and r.delete_ts is null  " +
                 "  and r.code = ?2 " +
                 "where e.delete_ts is null  " +
@@ -144,7 +140,7 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
     @Override
     public List<DicHrRole> getDicHrRoles(UUID userId) {
         return persistence.callInTransaction(em ->
-                em.createQuery("select e.role from tsadv$HrUserRole e " +
+                em.createQuery("select e.hrRole from tsadv$OrganizationHrUser e " +
                         "  where e.user.id = :userId " +
                         "        and :date between e.dateFrom and e.dateTo", DicHrRole.class)
                         .setParameter("userId", userId)

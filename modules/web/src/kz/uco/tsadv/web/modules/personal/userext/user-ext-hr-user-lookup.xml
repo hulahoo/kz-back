@@ -10,16 +10,14 @@
                          view="user.browse"
                          cacheable="false">
 
-            <!--            <query>-->
-            <!--                <![CDATA[select e from tsadv$HrUserRole ur-->
-            <!--                        join base$UserExt e on e = ur.user-->
-            <!--                        where e not in :param$excludedUsers-->
-            <!--                        and :session$systemDate between ur.dateFrom and ur.dateTo-->
-            <!--                         ]]>-->
-            <!--            </query>-->
             <query>
-                <![CDATA[select e from base$UserExt e ]]>
+                <![CDATA[select e from tsadv$HrUserRole ur
+                        join base$UserExt e on e = ur.user
+                        where e not in :param$excludedUsers
+                        and :session$systemDate between ur.dateFrom and ur.dateTo
+                         ]]>
             </query>
+
             <!--<query>
                 <![CDATA[select e
                            from base$UserExt e, tsadv$HrUserRole ur
