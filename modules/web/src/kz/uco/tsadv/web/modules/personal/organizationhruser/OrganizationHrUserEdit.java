@@ -13,6 +13,7 @@ import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,16 @@ public class OrganizationHrUserEdit extends AbstractEditor<OrganizationHrUser> {
                 "tsadv$UserExt.hrUserLookup",
                 WindowManager.OpenType.DIALOG,
                 getParamsMapToPath(params, "excludedUsers"));
+    }
+
+    @Override
+    protected void initNewItem(OrganizationHrUser item) {
+        final int LAST_YEAR = 8099;
+        final int LAST_MONTH = 11;
+        final int LAST_DATE = 31;
+        super.initNewItem(item);
+        item.setDateFrom(new Date());
+        item.setDateTo(new Date(LAST_YEAR, LAST_MONTH, LAST_DATE));
     }
 
     private Map<String, Object> getParamsMapToPath(Map<String, Object> params, String... keys) {

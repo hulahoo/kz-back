@@ -5,9 +5,11 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @NamePattern("%s|id")
@@ -20,6 +22,11 @@ public class OrganizationHrUser extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ORGANIZATION_GROUP_ID")
     protected OrganizationGroupExt organizationGroup;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "HR_ROLE_ID")
+    private DicHrRole hrRole;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -39,6 +46,14 @@ public class OrganizationHrUser extends AbstractParentEntity {
 
     @Column(name = "COUNTER")
     protected Integer counter;
+
+    public DicHrRole getHrRole() {
+        return hrRole;
+    }
+
+    public void setHrRole(DicHrRole hrRole) {
+        this.hrRole = hrRole;
+    }
 
     public void setCounter(Integer counter) {
         this.counter = counter;

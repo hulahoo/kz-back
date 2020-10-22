@@ -195,7 +195,14 @@
             </tab>
             <tab id="tab3"
                  caption="msg://OrganizationHrUsers"
-                 margin="true,true,true,false">
+                 margin="true,true,true,false"
+                 expand="orgHrUsersTable"
+                 spacing="true">
+                <filter id="hrUsersFilter"
+                        applyTo="orgHrUsersTable"
+                        datasource="orgHrUsersDs">
+                    <properties include=".*"/>
+                </filter>
                 <table id="orgHrUsersTable"
                        height="100%"
                        width="100%">
@@ -209,9 +216,9 @@
                         <column id="fio"
                                 caption="msg://kz.uco.tsadv.web.modules.recruitment.interview/Person.fullname"
                                 generator="getPersonFio"/>
-                        <column id="role"
-                                caption="msg://kz.uco.tsadv.modules.personal.model/HrUserRole.role"
-                                generator="generateRolesList"/>
+                        <column id="hrRole"
+                                caption="msg://kz.uco.tsadv.modules.personal.model/HrUserRole.role"/>
+                        <!--                                generator="generateRolesList"/>-->
                         <column id="dateFrom"/>
                         <column id="dateTo"/>
                         <column id="counter"/>

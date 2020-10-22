@@ -6251,6 +6251,7 @@ create table TSADV_ORGANIZATION_HR_USER (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     ORGANIZATION_GROUP_ID uuid not null,
+    HR_ROLE_ID uuid not null,
     USER_ID uuid,
     DATE_FROM date not null,
     DATE_TO date not null,

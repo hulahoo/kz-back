@@ -19,7 +19,9 @@
             <column width="250px">
                 <field property="user"
                        required="true"
-                        />
+                />
+                <field property="hrRole"
+                       required="true"/>
                 <field property="dateFrom"/>
                 <field property="dateTo"/>
                 <field property="counter"/>
