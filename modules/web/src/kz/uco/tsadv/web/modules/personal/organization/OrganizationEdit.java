@@ -252,26 +252,6 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
         return label;
     }
 
-    public Component generateRolesList(Entity entity) {
-        Label label = componentsFactory.createComponent(Label.class);
-        List<String> userRoles;
-        if (!(userRoles = getUserRoles((OrganizationHrUser) entity)).isEmpty()) {
-            if (userRoles.size() == 1) {
-                label.setValue(userRoles.get(0));
-            } else {
-                StringBuilder sb = new StringBuilder();
-                for (String role : userRoles) {
-                    sb.append(role);
-                    sb.append(", ");
-                }
-                String rolesList = sb.toString();
-                rolesList = rolesList.substring(0, rolesList.lastIndexOf(","));
-                label.setValue(rolesList);
-            }
-        }
-        return label;
-    }
-
     protected List<String> getUserRoles(OrganizationHrUser user) {
         List<String> result = new ArrayList<>();
         if (user != null && user.getUser() != null) {

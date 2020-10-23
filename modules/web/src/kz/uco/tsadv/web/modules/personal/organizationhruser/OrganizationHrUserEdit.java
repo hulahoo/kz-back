@@ -8,6 +8,7 @@ import com.haulmont.cuba.gui.components.FieldGroup;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.components.ValidationErrors;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
 
@@ -36,12 +37,9 @@ public class OrganizationHrUserEdit extends AbstractEditor<OrganizationHrUser> {
 
     @Override
     protected void initNewItem(OrganizationHrUser item) {
-        final int LAST_YEAR = 8099;
-        final int LAST_MONTH = 11;
-        final int LAST_DATE = 31;
         super.initNewItem(item);
         item.setDateFrom(new Date());
-        item.setDateTo(new Date(LAST_YEAR, LAST_MONTH, LAST_DATE));
+        item.setDateTo(CommonUtils.getEndOfTime());
     }
 
     private Map<String, Object> getParamsMapToPath(Map<String, Object> params, String... keys) {
