@@ -51,7 +51,7 @@ public class PersonGroupExt extends PersonGroup {
     @MetaProperty(related = "list")
     protected PersonExt person;
 
-    @OneToOne(mappedBy = "group", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected PersonExt relevantPerson; // Текущее (для момента в машине времени) лицо
 
     @Composition
@@ -117,6 +117,7 @@ public class PersonGroupExt extends PersonGroup {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "personGroup")
     protected List<Dismissal> dismissals;
+
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "personGroup")
@@ -286,6 +287,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty
+    @Transient
     public Long getTotalExperience() {
         Long dateDiff = 0L; //TODO Сделать поле startDate в сущности Assignment обязательным или проверить на null
         Date curDate = new Date();
@@ -498,6 +500,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty(related = "list")
+    @Transient
     public String getPersonFioWithEmployeeNumber() {
         return getPerson() != null ? getPerson().getFioWithEmployeeNumber() : null;
     }
@@ -507,6 +510,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty(related = "assessments")
+    @Transient
     public Assessment getActiveAssessment() {
         if (getAssessments() != null) {
             if (PersistenceHelper.isLoaded(this, "assessments") && !getAssessments().isEmpty()) {
@@ -518,6 +522,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty(related = "assignments")
+    @Transient
     public AssignmentExt getCurrentAssignment() {
         if (PersistenceHelper.isLoaded(this, "assignments") && getAssignments() != null && !getAssignments().isEmpty()) {
             return getAssignments().stream()
@@ -533,6 +538,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty(related = "assignments")
+    @Transient
     public AssignmentExt getCurrentAssignmentWithSuspendedAndTerminatedStatus() {
         if (PersistenceHelper.isLoaded(this, "assignments") && getAssignments() != null && !getAssignments().isEmpty()) {
             return getAssignments().stream()
@@ -550,6 +556,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty(related = "assignments")
+    @Transient
     public AssignmentExt getCurrentAssignmentWithSuspendedStatus() {
         if (PersistenceHelper.isLoaded(this, "assignments") && getAssignments() != null && !getAssignments().isEmpty()) {
             return getAssignments().stream()
@@ -566,6 +573,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty(related = "assignments")
+    @Transient
     public AssignmentExt getPrimaryAssignment() {
         if (PersistenceHelper.isLoaded(this, "assignments") && getAssignments() != null && !getAssignments().isEmpty()) {
             return getAssignments().stream()
@@ -603,6 +611,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty
+    @Transient
     public String getFullName() {
         PersonExt person = getPerson();
         if (person != null) {
@@ -612,6 +621,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty
+    @Transient
     public String getFirstLastName() {
         PersonExt person = getPerson();
         if (person != null) {
@@ -621,6 +631,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty
+    @Transient
     public String getFioWithEmployeeNumber() {
         PersonExt person = getPerson();
         if (person != null) {
@@ -630,6 +641,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty(related = "list")
+    @Transient
     public String getPersonLatinFioWithEmployeeNumber() {
         return getPerson() != null ? getPerson().getFullNameLatin() : null;
     }
@@ -639,6 +651,7 @@ public class PersonGroupExt extends PersonGroup {
     }
 
     @MetaProperty(related = "list")
+    @Transient
     public String getPersonFirstLastNameLatin() {
         return getPerson() != null ? getPerson().getFistLastNameLatin() : null;
     }

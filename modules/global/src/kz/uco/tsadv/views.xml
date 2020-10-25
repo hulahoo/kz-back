@@ -21173,4 +21173,7 @@
             <property name="appPropertyName"/>
         </property>
     </view>
+    <view entity="tsadv$UserExt" name="tsadvUserExt-view" extends="user.edit">
+        <property name="personGroup" view="_minimal"/>
+    </view>
 </views>

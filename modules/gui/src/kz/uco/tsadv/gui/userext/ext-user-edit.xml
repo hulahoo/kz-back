@@ -4,6 +4,9 @@
         extends="/kz/uco/base/gui/userext/ext-user-edit.xml"
         messagesPack="kz.uco.tsadv.gui.userext"
         xmlns:ext="http://schemas.haulmont.com/cuba/window-ext.xsd">
+    <dsContext>
+        <datasource id="userDs" class="kz.uco.tsadv.modules.administration.TsadvUserExt" view="tsadvUserExt-view"/>
+    </dsContext>
     <layout expand="vSplit">
         <groupBox id="propertiesBox">
             <grid id="propertiesGrid"
@@ -16,11 +19,7 @@
                         <fieldGroup id="fieldGroupRight"
                                     width="100%">
                             <column width="100%">
-                                <field id="personGroupField"
-                                       caption="msg://kz.uco.tsadv.modules.personal.model/Person.personGroup">
-                                    <pickerField id="pickerPersonGroup" metaClass="base$PersonGroupExt"
-                                                 captionProperty="person"/>
-                                </field>
+                                <field caption="msg://person" property="personGroup"/>
                                 <field property="changePasswordAtNextLogon"
                                        ext:index="6"/>
                             </column>

@@ -14899,3 +14899,18 @@ create table TSADV_APP_PROPERTY_ENTITY_DESCRIPTION (
     primary key (ID)
 )^
 -- end TSADV_APP_PROPERTY_ENTITY_DESCRIPTION
+-- begin SEC_USER
+alter table SEC_USER add column PERSON_GROUP_ID uuid ^
+alter table SEC_USER add column IMAGE_ID uuid ^
+alter table SEC_USER add column ATS_CODE varchar(255) ^
+alter table SEC_USER add column INNER_NUMBER varchar(255) ^
+alter table SEC_USER add column AVAILABILITY boolean ^
+update SEC_USER set AVAILABILITY = false where AVAILABILITY is null ^
+alter table SEC_USER alter column AVAILABILITY set not null ^
+alter table SEC_USER add column MOBILE_PHONE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CODE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CHAT_ID varchar(255) ^
+alter table SEC_USER add column PASSWORD_CHANGE_DATE date ^
+alter table SEC_USER add column SHORT_NAME varchar(100) ^
+alter table SEC_USER add column FULL_NAME varchar(100) ^
+-- end SEC_USER

@@ -1672,5 +1672,8 @@
         <entity class="kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.administration.TsadvUserExt">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
