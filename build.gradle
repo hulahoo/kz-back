@@ -243,8 +243,8 @@ task restart(dependsOn: ['stop', ":${modulePrefix}-core:deploy", ":${modulePrefi
 apply from: 'extra.gradle'
 
 task buildWar(type: CubaWarBuilding) {
-    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
+//    webXmlPath = 'modules/web/web/WEB-INF/single-war-web.xml'
     appProperties = ['cuba.automaticDatabaseUpdate': false]
-    singleWar = true
+    singleWar = false
     appHome = '${app.home}'
 }
