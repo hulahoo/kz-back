@@ -58,8 +58,6 @@ public class ExtAppPropertyEntityEdit extends AbstractWindow {
     @Inject
     private UiComponents uiComponents;
 
-    private boolean newDescription = false;
-
     @SuppressWarnings("deprecation")
     @Override
     public void init(Map<String, Object> params) {
@@ -69,7 +67,6 @@ public class ExtAppPropertyEntityEdit extends AbstractWindow {
         if (item.getDescription() == null) {
             AppPropertyEntityDescription description = dataManager.create(AppPropertyEntityDescription.class);
             description.setAppPropertyName(item.getName());
-            newDescription = true;
             item.setDescription(description);
         }
 
@@ -166,7 +163,6 @@ public class ExtAppPropertyEntityEdit extends AbstractWindow {
     }
 
     private Component createDescriptionField(String initialValue) {
-        final int ROWS_COUNT = 5;
         TextArea textArea = uiComponents.create(TextArea.class);
         textArea.setSizeAuto();
         try {
