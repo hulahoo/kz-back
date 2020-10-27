@@ -28,7 +28,7 @@
                 <column id="displayedCurrentValue" caption="msg://currentValue"/>
                 <column id="updateTs" caption="msg://lastUpdatedAt"/>
                 <column id="updatedBy" caption="msg://lastUpdatedBy"/>
-                <column id="description.value" caption="msg://description"/>
+                <column id="descriptionLink" caption="msg://description" maxTextLength="5"/>
             </columns>
         </treeTable>
     </layout>

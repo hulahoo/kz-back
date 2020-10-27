@@ -75,7 +75,9 @@ public class ExtAppPropertyEntityEdit extends AbstractWindow {
 
         Datatype datatype = item.getEnumValues() != null ?
                 datatypeRegistry.getNN(String.class) : datatypeRegistry.get(item.getDataTypeName());
-
+        fieldGroup.addCustomField("description", (datasource, propertyId) -> {
+            return createDescriptionField(item.getDescription().getValue());
+        });
         fieldGroup.addCustomField("currentValue", (datasource, propertyId) -> {
             if (item.getOverridden()) {
                 TextField<String> textField = uiComponents.create(TextField.NAME);
@@ -161,5 +163,20 @@ public class ExtAppPropertyEntityEdit extends AbstractWindow {
             appPropertyDs.getItem().setCurrentValue(e.getValue());
         });
         return lookupField;
+    }
+
+    private Component createDescriptionField(String initialValue) {
+        final int ROWS_COUNT = 5;
+        TextArea textArea = uiComponents.create(TextArea.class);
+        textArea.setSizeAuto();
+        try {
+            textArea.setValue(initialValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        textArea.addTextChangeListener(e -> {
+            appPropertyDs.getItem().getDescription().setValue(e.getText());
+        });
+        return textArea;
     }
 }
