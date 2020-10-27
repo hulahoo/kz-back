@@ -56,7 +56,7 @@
                 </actions>
                 <columns>
                     <column id="jobName"
-                            caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobName"
+                            caption="dsd"
                             captionProperty="jobName"/>
                     <column id="job.instructionName"
                             link="true"

@@ -73,9 +73,11 @@ public class RemoveAction68TS extends RemoveAction {
         if (buttonsPanel != null) {
             for (Element btnElement : buttonsPanel) {
                 String action = btnElement.attributeValue("action");
-                if (Objects.equals(button.getId(), btnElement.attributeValue("id"))
-                        && action.equals(target.getId() + "." + actionElementId)) {
-                    return true;
+                if (target != null && btnElement != null && button != null && actionElementId != null && action != null) {
+                    if (Objects.equals(button.getId(), btnElement.attributeValue("id"))
+                            && action.equals(target.getId() + "." + actionElementId)) {
+                        return true;
+                    }
                 }
             }
         }

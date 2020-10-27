@@ -2710,6 +2710,7 @@
         <property name="cases"
                   view="_minimal">
         </property>
+        <property name="jobName"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.OrderGroup"
           name="orderGroup-view">
@@ -8180,6 +8181,11 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="jobNameLang1"/>
+        <property name="jobNameLang2"/>
+        <property name="jobNameLang3"/>
+        <property name="jobNameLang4"/>
+        <property name="jobNameLang5"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Grade"
           extends="_local"
