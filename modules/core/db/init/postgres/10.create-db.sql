@@ -3574,6 +3574,14 @@ create table TSADV_JOB_GROUP (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
+    JOB_NAME_LANG1 varchar(1000),
+    JOB_NAME_LANG2 varchar(1000),
+    JOB_NAME_LANG3 varchar(1000),
+    JOB_NAME_LANG4 varchar(1000),
+    JOB_NAME_LANG5 varchar(1000),
+    EMPLOYEE_CATEGORY_ID uuid,
+    JOB_CATEGORY_ID uuid,
+    --
     primary key (ID)
 )^
 -- end TSADV_JOB_GROUP

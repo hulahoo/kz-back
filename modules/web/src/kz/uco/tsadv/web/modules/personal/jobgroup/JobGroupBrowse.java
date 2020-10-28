@@ -194,7 +194,7 @@ public class JobGroupBrowse extends AbstractLookup {
             @Override
             public void windowClosedWithCommitAction() {
                 JobGroup jobGroupEdited = jobEdit.getItem().getGroup();
-                //jobGroupsDs.refresh();
+                jobGroupsDs.refresh();
                 jobGroupsTable.repaint();
                 try {
                     jobGroupsTable.setSelected(jobGroupEdited);

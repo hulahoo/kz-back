@@ -22,7 +22,7 @@
         <param-name>appPropertiesConfigCore</param-name>
         <param-value>classpath:kz/uco/tsadv/app.properties
             /WEB-INF/local.app.properties
-            "file:${catalina.base}/conf/tsadv/local.app.properties"</param-value>
+            "file:${catalina.base}/conf/tsadv-core/local.app.properties"</param-value>
     </context-param>
     <!--Application components-->
     <context-param>
