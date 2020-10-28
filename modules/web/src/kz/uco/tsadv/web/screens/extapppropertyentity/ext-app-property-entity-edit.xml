@@ -18,7 +18,7 @@
     <layout spacing="true">
         <fieldGroup id="fieldGroup" datasource="appPropertyDs" width="100%">
             <column width="100%">
-                <field id="description.value" caption="msg://description" box.expandRatio="2"/>
+                <field id="description" caption="msg://description" custom="true"/>
             </column>
         </fieldGroup>
     </layout>

@@ -58,8 +58,6 @@ public class ExtAppPropertyEntityEdit extends AbstractWindow {
     @Inject
     private UiComponents uiComponents;
 
-    private boolean newDescription = false;
-
     @SuppressWarnings("deprecation")
     @Override
     public void init(Map<String, Object> params) {
@@ -69,13 +67,14 @@ public class ExtAppPropertyEntityEdit extends AbstractWindow {
         if (item.getDescription() == null) {
             AppPropertyEntityDescription description = dataManager.create(AppPropertyEntityDescription.class);
             description.setAppPropertyName(item.getName());
-            newDescription = true;
             item.setDescription(description);
         }
 
         Datatype datatype = item.getEnumValues() != null ?
                 datatypeRegistry.getNN(String.class) : datatypeRegistry.get(item.getDataTypeName());
-
+        fieldGroup.addCustomField("description", (datasource, propertyId) -> {
+            return createDescriptionField(item.getDescription().getValue());
+        });
         fieldGroup.addCustomField("currentValue", (datasource, propertyId) -> {
             if (item.getOverridden()) {
                 TextField<String> textField = uiComponents.create(TextField.NAME);
@@ -161,5 +160,19 @@ public class ExtAppPropertyEntityEdit extends AbstractWindow {
             appPropertyDs.getItem().setCurrentValue(e.getValue());
         });
         return lookupField;
+    }
+
+    private Component createDescriptionField(String initialValue) {
+        TextArea textArea = uiComponents.create(TextArea.class);
+        textArea.setSizeAuto();
+        try {
+            textArea.setValue(initialValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        textArea.addTextChangeListener(e -> {
+            appPropertyDs.getItem().getDescription().setValue(e.getText());
+        });
+        return textArea;
     }
 }

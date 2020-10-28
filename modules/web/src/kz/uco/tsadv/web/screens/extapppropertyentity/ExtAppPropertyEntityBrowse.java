@@ -2,10 +2,12 @@ package kz.uco.tsadv.web.screens.extapppropertyentity;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.config.AppPropertyEntity;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.RefreshAction;
 import com.haulmont.cuba.gui.settings.Settings;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.datasource.ExtAppPropertiesDatasource;
 import kz.uco.tsadv.modules.administration.appproperty.ExtAppPropertyEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -32,9 +34,12 @@ public class ExtAppPropertyEntityBrowse extends AbstractLookup {
     private TextField<String> searchField;
     @Inject
     private HBoxLayout hintBox;
-
+    @Inject
+    private ExtAppPropertiesConfig extAppPropertiesConfig;
 
     private ExtAppPropertyEntity lastSelected;
+    @Inject
+    private UiComponents uiComponents;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -44,8 +49,24 @@ public class ExtAppPropertyEntityBrowse extends AbstractLookup {
             exportBtn.setEnabled(enabled);
         });
         paramsTable.setItemClickAction(editValueAction);
-
         paramsTable.sort("name", Table.SortDirection.ASCENDING);
+
+        paramsTable.addGeneratedColumn("descriptionLink", entity -> {
+            if (entity.getDescription() == null) {
+                return null;
+            }
+            PopupView descriptionPopupView = uiComponents.create(PopupView.class);
+            descriptionPopupView.setMinimizedValue(entity.getDescription().getValue().substring(0, extAppPropertiesConfig.getPopupMinimizedViewMaxLength()) + "..");
+            TextArea textArea = uiComponents.create(TextArea.class);
+            textArea.setEditable(false);
+            textArea.setWidth(extAppPropertiesConfig.getPopupContentWidth());
+            textArea.setHeight(extAppPropertiesConfig.getPopupContentHeight());
+            textArea.setValue(entity.getDescription().getValue());
+            descriptionPopupView.setPopupContent(textArea);
+            descriptionPopupView.setHideOnMouseOut(extAppPropertiesConfig.getPopupHideOnMouseOut());
+            return descriptionPopupView;
+        });
+
 
         searchField.addValueChangeListener(e -> {
             paramsDs.refresh(ParamsMap.of("name", e.getValue()));
