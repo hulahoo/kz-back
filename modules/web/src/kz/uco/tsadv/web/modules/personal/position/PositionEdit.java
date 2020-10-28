@@ -3,6 +3,7 @@ package kz.uco.tsadv.web.modules.personal.position;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
@@ -150,6 +151,8 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected Action hierarchyElementsTableClose;
     @Named("hierarchyElementsTable.reassignElement")
     protected Action hierarchyElementsTableReassignElement;
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     @Override
     protected FieldGroup getStartEndDateFieldGroup() {
@@ -293,7 +296,9 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         });
         fteField.addValueChangeListener(e -> {
             if (fteField.getValue() != null) {
-                maxPersonsField.setValue(fteField.getValue());
+                Double d = (Double) fteField.getValue();
+                Integer val =  d.intValue();
+                maxPersonsField.setValue(val);
             }
         });
         createAnalyticsIfNotExist();
@@ -365,6 +370,8 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
                 getItem().setJobGroup((JobGroup) o);
             }
         }, WindowManager.OpenType.THIS_TAB, params);
+
+//        jobGroupBrowse.addAfterCloseListener(actionId -> positionDs.refresh());
 //        jobGroupBrowse.addCloseListener(actionId -> positionDs.refresh());
     }
 
