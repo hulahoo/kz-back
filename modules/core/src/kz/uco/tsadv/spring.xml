@@ -27,4 +27,6 @@
 
     <bean id="cuba_Persistence" class="kz.uco.tsadv.beans.PersistenceImpl"/>
 
+    <bean id="cuba_EclipseLinkDescriptorEventListener" class="kz.uco.tsadv.beans.EclipseLinkDescriptorEventListener"/>
+
 </beans>
