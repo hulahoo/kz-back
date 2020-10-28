@@ -9,6 +9,7 @@ import com.haulmont.cuba.gui.components.actions.RefreshAction;
 import com.haulmont.cuba.gui.settings.Settings;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.datasource.ExtAppPropertiesDatasource;
+import kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription;
 import kz.uco.tsadv.modules.administration.appproperty.ExtAppPropertyEntity;
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,11 +53,20 @@ public class ExtAppPropertyEntityBrowse extends AbstractLookup {
         paramsTable.sort("name", Table.SortDirection.ASCENDING);
 
         paramsTable.addGeneratedColumn("descriptionLink", entity -> {
-            if (entity.getDescription() == null) {
+            AppPropertyEntityDescription description = entity.getDescription();
+            if (description == null)
                 return null;
-            }
+            String descriptionValue = description.getValue();
+            if (descriptionValue == null || descriptionValue.isEmpty())
+                return null;
             PopupView descriptionPopupView = uiComponents.create(PopupView.class);
-            descriptionPopupView.setMinimizedValue(entity.getDescription().getValue().substring(0, extAppPropertiesConfig.getPopupMinimizedViewMaxLength()) + "..");
+            int minimizedViewMaxLength = extAppPropertiesConfig.getPopupMinimizedViewMaxLength();
+
+            if (descriptionValue.length() > minimizedViewMaxLength) {
+                descriptionPopupView.setMinimizedValue(descriptionValue.substring(0, extAppPropertiesConfig.getPopupMinimizedViewMaxLength()) + "..");
+            } else {
+                descriptionPopupView.setMinimizedValue(descriptionValue);
+            }
             TextArea textArea = uiComponents.create(TextArea.class);
             textArea.setEditable(false);
             textArea.setWidth(extAppPropertiesConfig.getPopupContentWidth());
@@ -64,6 +74,7 @@ public class ExtAppPropertyEntityBrowse extends AbstractLookup {
             textArea.setValue(entity.getDescription().getValue());
             descriptionPopupView.setPopupContent(textArea);
             descriptionPopupView.setHideOnMouseOut(extAppPropertiesConfig.getPopupHideOnMouseOut());
+
             return descriptionPopupView;
         });
 
