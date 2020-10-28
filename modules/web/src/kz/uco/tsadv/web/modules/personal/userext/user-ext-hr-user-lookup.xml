@@ -11,21 +11,8 @@
                          cacheable="false">
 
             <query>
-                <![CDATA[select e from tsadv$HrUserRole ur
-                        join base$UserExt e on e = ur.user
-                        where e not in :param$excludedUsers
-                        and :session$systemDate between ur.dateFrom and ur.dateTo
-                         ]]>
+                <![CDATA[select e from base$UserExt e ]]>
             </query>
-
-            <!--<query>
-                <![CDATA[select e
-                           from base$UserExt e, tsadv$HrUserRole ur
-                          where e.id = ur.user.id
-                            and e not in :param$excludedUsers
-                         ]]>
-            </query>-->
-            <!--and :session$systemDate between ur.dateFrom and ur.dateTo-->
         </groupDatasource>
     </dsContext>
     <dialogMode height="600"
