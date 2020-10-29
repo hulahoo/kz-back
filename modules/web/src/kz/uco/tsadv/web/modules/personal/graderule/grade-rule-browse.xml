@@ -18,7 +18,7 @@
             <query>
                 <![CDATA[select e
                            from tsadv$GradeRuleValueGroup e join e.list grv
-                          where grv.gradeRule.id = :ds$gradeRulesDs
+                          where grv.gradeRule.id = :ds$gradeRulesDs.id
                             and :session$systemDate between grv.startDate and grv.endDate
                         ]]>
             </query>

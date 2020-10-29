@@ -330,12 +330,12 @@ public class PositionGroupBrowse extends AbstractLookup {
     }
 
     protected void openPositionEditor(PositionExt position, Map<String, Object> params) {
-        screenBuilders.editor(PositionExt.class, this)
+        PositionEdit positionEdit = (PositionEdit) screenBuilders.editor(PositionExt.class, this)
                 .editEntity(position)
                 .withLaunchMode(OpenMode.THIS_TAB)
                 .withInitializer(e -> {
                     PositionGroupExt positionGroupExt = position.getGroup();
-                    positionGroupsDs.refresh();
+//                    positionGroupsDs.refresh();
                     positionGroupsTable.repaint();
                     if (positionGroupsDs.containsItem(positionGroupExt.getUuid())) {
                         positionGroupsTable.setSelected(positionGroupExt);
@@ -343,6 +343,9 @@ public class PositionGroupBrowse extends AbstractLookup {
                 })
                 .build()
                 .show();
+        positionEdit.addAfterCloseListener(actionId -> {
+           positionGroupsDs.refresh();
+        });
 
 //        PositionEdit positionEdit = (PositionEdit) openEditor("base$Position.edit", position, WindowManager.OpenType.THIS_TAB, params);
 //        positionEdit.addCloseWithCommitListener(() -> {
