@@ -3336,16 +3336,6 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="writeHistory"/>
-        <property name="legacyId"/>
-        <property name="organizationNameLang1"/>
-        <property name="organizationNameLang2"/>
-        <property name="organizationNameLang3"/>
-        <property name="organizationNameLang4"/>
-        <property name="organizationNameLang5"/>
-        <property name="internal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
           extends="_local"

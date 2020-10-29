@@ -104,8 +104,6 @@
                             caption="msg://table.btn.create"
                             icon="icons/add.png"
                             invoke="create"/>
-                    <button id="editBtn"
-                            action="organizationGroupsTable.edit"/>
                     <button action="organizationGroupsTable.orgAnalytics"/>
                     <button id="excelBtn"
                             action="organizationGroupsTable.excel"
@@ -129,6 +127,12 @@
                                 caption="msg://table.btn.remove.late"
                                 invoke="removeHistories"/>
                     </actions>
+                    <buttonsPanel id="historyButtonsPanel"
+                                  alwaysVisible="true">
+                        <button id="editBtn"
+                                action="historyTable.edit"/>
+                    </buttonsPanel>
+
                     <columns>
                         <column id="organizationName"/>
                         <column id="type.langValue"/>

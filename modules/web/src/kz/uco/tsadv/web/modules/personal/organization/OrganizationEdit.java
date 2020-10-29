@@ -164,6 +164,8 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
             item.setPayroll(payroll);
         }
 
+        setDatesEditable(true);
+
         item.setWriteHistory(false);
         item.setInternal(true);
     }
@@ -175,6 +177,9 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
             setTabsVisibility(false);
         } else {
             setTabsVisibility(true);
+        }
+        if (isFirst()) {
+            fieldGroup.getField("startDate").setEditable(true);
         }
     }
 
@@ -269,6 +274,22 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
             }
         }
         return result;
+    }
+
+    protected boolean isFirst() {
+        OrganizationExt item = getItem();
+        return item == item
+                .getGroup()
+                .getList()
+                .stream()
+                .min((firstOrganization, secondOrganization) ->
+                        firstOrganization.getStartDate().before(secondOrganization.getStartDate()) ? -1 : 1)
+                .get();
+    }
+
+    private void setDatesEditable(boolean editable) {
+        fieldGroup.getField("startDate").setEditable(editable);
+        fieldGroup.getField("endDate").setEditable(editable);
     }
 
     public void close() {
