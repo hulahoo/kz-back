@@ -283,7 +283,7 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
                 .getList()
                 .stream()
                 .min((firstOrganization, secondOrganization) ->
-                        firstOrganization.getCreateTs().before(secondOrganization.getCreateTs()) ? -1 : 1)
+                        firstOrganization.getStartDate().before(secondOrganization.getStartDate()) ? -1 : 1)
                 .get();
     }
 
