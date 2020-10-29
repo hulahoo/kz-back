@@ -51,7 +51,22 @@ public class JobChangedListener {
                 jobGroup.setJobNameLang5(job.getJobNameLang5());
                 txDataManager.save(jobGroup);
             }
+        }
 
+        if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+            Job job = txDataManager.load(entityId).view("job.edit").one();
+            JobGroup jobGroup = txDataManager.load(JobGroup.class)
+                    .query("select j from tsadv$JobGroup j where j.id = :id")
+                    .parameter("id", job.getGroup().getId())
+                    .view("jobGroup.browse")
+                    .one();
+
+            jobGroup.setJobNameLang1(job.getJobNameLang1());
+            jobGroup.setJobNameLang2(job.getJobNameLang2());
+            jobGroup.setJobNameLang3(job.getJobNameLang3());
+            jobGroup.setJobNameLang4(job.getJobNameLang4());
+            jobGroup.setJobNameLang5(job.getJobNameLang5());
+            txDataManager.save(jobGroup);
         }
     }
 }
