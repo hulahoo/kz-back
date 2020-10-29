@@ -236,44 +236,44 @@ public class JobGroup extends AbstractGroup {
     }
 
     //To display a name instead of an id in the lookup and tables #Timur Tashmatov
-//    @MetaProperty(related = "list")
-//    public String getJobName() {
-//        job = job != null ? job : getJob();
-//        if (job == null) {
-//            return "";
-//        }
-//        return job.getJobName();
-//    }
-
+    @MetaProperty(related = "list")
     public String getJobName() {
-        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
-        String language = userSessionSource.getLocale().getLanguage();
-        String jobOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
-
-        if (jobOrder != null){
-            List<String> langs = Arrays.asList(jobOrder.split(";"));
-            switch (langs.indexOf(language)){
-                case 0:{
-                    return jobNameLang1;
-                }
-                case 1:{
-                    return jobNameLang2;
-                }
-                case 2:{
-                    return jobNameLang3;
-                }
-                case 3:{
-                    return jobNameLang4;
-                }
-                case 4:{
-                    return jobNameLang5;
-                }
-                default:
-                    return jobNameLang1;
-            }
+        job = job != null ? job : getJob();
+        if (job == null) {
+            return "";
         }
-        return jobNameLang1;
+        return job.getJobName();
     }
+
+//    public String getJobName() {
+//        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+//        String language = userSessionSource.getLocale().getLanguage();
+//        String jobOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+//
+//        if (jobOrder != null){
+//            List<String> langs = Arrays.asList(jobOrder.split(";"));
+//            switch (langs.indexOf(language)){
+//                case 0:{
+//                    return jobNameLang1;
+//                }
+//                case 1:{
+//                    return jobNameLang2;
+//                }
+//                case 2:{
+//                    return jobNameLang3;
+//                }
+//                case 3:{
+//                    return jobNameLang4;
+//                }
+//                case 4:{
+//                    return jobNameLang5;
+//                }
+//                default:
+//                    return jobNameLang1;
+//            }
+//        }
+//        return jobNameLang1;
+//    }
 
     public void setJobName(String jobName) {
         this.jobName = jobName;
