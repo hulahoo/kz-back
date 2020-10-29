@@ -177,9 +177,9 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
             setTabsVisibility(false);
         } else {
             setTabsVisibility(true);
-        }
-        if (isFirst()) {
-            fieldGroup.getField("startDate").setEditable(true);
+            if (isFirst()) {
+                fieldGroup.getField("startDate").setEditable(true);
+            }
         }
     }
 
