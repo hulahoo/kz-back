@@ -16,7 +16,7 @@
                                 property="person"/>
                 </datasource>
                 <datasource id="positionGroupDs"
-                            property="positionGroup">
+                            property="positionGroup" >
                     <datasource id="positionDs"
                                 property="position"/>
                 </datasource>

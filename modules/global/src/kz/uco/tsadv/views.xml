@@ -1504,7 +1504,18 @@
                   view="_minimal"/>
         <property name="positionFullName"/>
         <property name="organizationGroupExt"
-                  view="organizationGroup.browse">
+                  view="_minimal">
+            <property name="list"
+                      view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+            <property name="organization"
+                      view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+            <property name="organizationName"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.OrganizationExt"
@@ -5759,7 +5770,7 @@
                 </property>
             </property>
             <property name="organizationGroup"
-                      view="_minimal">
+                      view="_local">
                 <property name="list"
                           view="_minimal">
                     <property name="startDate"/>
@@ -5775,7 +5786,7 @@
                     <property name="legacyId"/>
                 </property>
                 <property name="analytics"
-                          view="_minimal">
+                          view="_local">
                     <property name="calendar"
                               view="_minimal">
                         <property name="calendar"/>
@@ -5788,11 +5799,14 @@
                 </property>
             </property>
             <property name="positionGroup"
-                      view="_minimal">
+                      view="_local">
                 <property name="list"
                           view="_local">
                     <property name="costCenter"
                               view="_minimal"/>
+                    <property name="organizationGroupExt" view="_local">
+                        <property name="analytics" view="_local"/>
+                    </property>
                 </property>
                 <property name="position"
                           view="_minimal">
@@ -5804,6 +5818,7 @@
                     <property name="costCenter"
                               view="_minimal"/>
                     <property name="legacyId"/>
+                    <property name="organizationGroupExt" view="_local"/>
                 </property>
                 <property name="analytics"
                           view="_minimal">
@@ -5817,6 +5832,7 @@
                         </property>
                     </property>
                 </property>
+
             </property>
             <property name="startDate"/>
             <property name="endDate"/>
@@ -5890,13 +5906,20 @@
                               view="_minimal"/>
                 </property>
                 <property name="analytics"
-                          view="_minimal">
+                          view="_local">
                     <property name="calendar"
-                              view="_minimal"/>
+                              view="_minimal">
+                        <property name="calendar"/>
+                        <property name="orgAnalytics"
+                                  view="_minimal">
+                            <property name="calendar"
+                                      view="_minimal"/>
+                        </property>
+                    </property>
                 </property>
             </property>
             <property name="positionGroup"
-                      view="_minimal">
+                      view="_local">
                 <property name="list"
                           view="_local">
                     <property name="gradeGroup"
@@ -5906,6 +5929,7 @@
                     </property>
                     <property name="costCenter"
                               view="_minimal"/>
+                    <property name="organizationGroupExt" view="_local"/>
                 </property>
                 <property name="position"
                           view="position-view">

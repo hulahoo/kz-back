@@ -209,6 +209,7 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
             org = false;
             OrganizationGroupExt organizationGroupExt = (OrganizationGroupExt) organizationGroup.getValue();
             if (organizationGroupExt != null) {
+
                 calendarField.setEditable(true);
                 if (organizationGroupExt.getAnalytics() != null) {
                     calendarField.setValue(organizationGroupExt.getAnalytics().getCalendar());

@@ -33,7 +33,7 @@
             <query>
                 <![CDATA[select e
                           from tsadv$RequisitionPostingChannel e
-                         where e.requisition.id = :ds$requisitionDs]]>
+                         where e.requisition.id = :ds$requisitionDs.id]]>
             </query>
         </groupDatasource>
         <groupDatasource id="membersDs"

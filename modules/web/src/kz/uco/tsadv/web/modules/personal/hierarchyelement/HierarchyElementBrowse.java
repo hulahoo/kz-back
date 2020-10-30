@@ -12,6 +12,7 @@ import com.haulmont.cuba.gui.data.DataSupplier;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.HierarchicalDatasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
+import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.theme.ThemeConstantsManager;
 import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.haulmont.cuba.web.gui.components.WebFieldGroup;
@@ -133,11 +134,39 @@ public class HierarchyElementBrowse extends AbstractLookup {
                         assignmentsDs.excludeItem(excludeItem);
             }
         });
+//        com.vaadin.v7.ui.Tree vaadinTree = tree.unwrap(com.vaadin.v7.ui.Tree.class);
 
-        com.vaadin.v7.ui.Tree vaadinTree = tree.unwrap(com.vaadin.v7.ui.Tree.class);
 
-        vaadinTree.addItemClickListener((ItemClickEvent.ItemClickListener) itemClickEvent -> {
-            HierarchyElementExt hierarchyElement = (HierarchyElementExt) tree.getDatasource().getItem(itemClickEvent.getItemId());
+
+        hierarchyElementsDs.addItemChangeListener(e -> openFrame(e.getItem()));
+
+        tree.addStyleName("b-tree");
+        tree.setIconProvider(new ListComponent.IconProvider<HierarchyElementExt>() {
+            @Nullable
+            @Override
+            public String getItemIcon(HierarchyElementExt entity) {
+                switch (entity.getElementType()) {
+                    case ORGANIZATION:
+                        return "font-icon:BANK";
+                    case POSITION:
+                        return "font-icon:BRIEFCASE";
+                    default:
+                        return "font-icon:USER";
+                }
+            }
+        });
+
+        organizationFrame.setHierarchyElementBrowse(this);
+        positionFrame.setHierarchyElementBrowse(this);
+
+        CubaHorizontalSplitPanel vSplitPanel = (CubaHorizontalSplitPanel) WebComponentsHelper.unwrap(splitter);
+
+        vSplitPanel.addSplitterClickListener((AbstractSplitPanel.SplitterClickListener) event -> vSplitPanel.setSplitPosition(vSplitPanel.getSplitPosition() > 0 ? 0 : 300));
+    }
+
+    @Subscribe("tree")
+    protected void onTreeSelection(Tree.SelectionEvent itemClickEvent){
+            HierarchyElementExt hierarchyElement = (HierarchyElementExt) itemClickEvent.getSelected().stream().findFirst().orElse(null);// tree.getDatasource().getItem(itemClickEvent.getItemId());
             if (positionDs.getItem() != null) {
                 if (positionDs.getItem().getGroup() != null) {
                     if (orgAnalyticsBetweenDs.getItem() != null) {
@@ -214,7 +243,7 @@ public class HierarchyElementBrowse extends AbstractLookup {
                 }
             }
             if (getDsContext().isModified()) {
-                vaadinTree.setSelectable(false);
+                tree.setSelectionMode(Tree.SelectionMode.NONE);
 
                 showOptionDialog(messages.getMainMessage("closeUnsaved.caption"),
                         messages.getMainMessage("saveUnsaved"),
@@ -225,7 +254,7 @@ public class HierarchyElementBrowse extends AbstractLookup {
                                         .withHandler(event -> {
 
                                     save(null);
-                                    vaadinTree.setSelectable(true);
+                                    tree.setSelectionMode(Tree.SelectionMode.SINGLE);
                                     tree.setSelected(hierarchyElement);
                                     hierarchyElementsDs.setItem(hierarchyElement);
                                 }),
@@ -234,7 +263,7 @@ public class HierarchyElementBrowse extends AbstractLookup {
                                         .withCaption(messages.getMainMessage("closeUnsaved.discard"))
                                         .withHandler(event -> {
 
-                                    vaadinTree.setSelectable(true);
+                                    tree.setSelectionMode(Tree.SelectionMode.SINGLE);
                                     tree.setSelected(hierarchyElement);
                                     hierarchyElementsDs.setItem(hierarchyElement);
                                 }),
@@ -244,32 +273,7 @@ public class HierarchyElementBrowse extends AbstractLookup {
                 tree.setSelected(hierarchyElement);
                 hierarchyElementsDs.setItem(hierarchyElement);
             }
-        });
 
-        hierarchyElementsDs.addItemChangeListener(e -> openFrame(e.getItem()));
-
-        tree.addStyleName("b-tree");
-        tree.setIconProvider(new ListComponent.IconProvider<HierarchyElementExt>() {
-            @Nullable
-            @Override
-            public String getItemIcon(HierarchyElementExt entity) {
-                switch (entity.getElementType()) {
-                    case ORGANIZATION:
-                        return "font-icon:BANK";
-                    case POSITION:
-                        return "font-icon:BRIEFCASE";
-                    default:
-                        return "font-icon:USER";
-                }
-            }
-        });
-
-        organizationFrame.setHierarchyElementBrowse(this);
-        positionFrame.setHierarchyElementBrowse(this);
-
-        CubaHorizontalSplitPanel vSplitPanel = (CubaHorizontalSplitPanel) WebComponentsHelper.unwrap(splitter);
-
-        vSplitPanel.addSplitterClickListener((AbstractSplitPanel.SplitterClickListener) event -> vSplitPanel.setSplitPosition(vSplitPanel.getSplitPosition() > 0 ? 0 : 300));
     }
 
     protected void openFrame(HierarchyElementExt element) {
