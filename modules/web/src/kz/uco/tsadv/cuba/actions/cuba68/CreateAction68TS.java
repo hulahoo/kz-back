@@ -75,15 +75,14 @@ public class CreateAction68TS extends CreateAction {
 
         if (buttonsPanel != null) {
             for (Element btnElement : buttonsPanel) {
-                if (btnElement != null){
-                    String action = btnElement.attributeValue("action");
-                    if(btnElement==null || action==null || actionElementId== null || target== null )
-                        continue;
+                String action = btnElement.attributeValue("action");
+                if (target != null && btnElement != null && button != null && actionElementId != null && action != null) {
                     if (Objects.equals(button.getId(), btnElement.attributeValue("id"))
                             && action.equals(target.getId() + "." + actionElementId)) {
                         return true;
                     }
                 }
+
             }
         }
         return false;

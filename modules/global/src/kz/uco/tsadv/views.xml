@@ -2710,7 +2710,7 @@
         <property name="cases"
                   view="_minimal">
         </property>
-        <property name="jobName"/>
+        <property name="jobNameDefault"/>
         <property name="jobNameLang1"/>
         <property name="jobNameLang2"/>
         <property name="jobNameLang3"/>

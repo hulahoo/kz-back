@@ -55,9 +55,9 @@
                     <action id="excel"/>
                 </actions>
                 <columns>
-                    <column id="jobNameLang1"
+                    <column id="jobNameDefault"
                             caption="msg://kz.uco.tsadv.modules.personal.model/Job.jobName"
-                            captionProperty="jobNameLang1"/>
+                            captionProperty="jobNameDefault"/>
                     <column id="job.instructionName"
                             link="true"
                             linkInvoke="downloadInstruction"/>

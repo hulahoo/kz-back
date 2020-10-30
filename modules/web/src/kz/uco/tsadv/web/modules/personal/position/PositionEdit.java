@@ -808,7 +808,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
             jobGroupPickerField.addClearAction();
         }
         jobGroupPickerField.setCaptionMode(CaptionMode.PROPERTY);
-        jobGroupPickerField.setCaptionProperty("jobName");
+        jobGroupPickerField.setCaptionProperty("jobNameDefault");
         //
         jobGroupPickerField.setCaption("Должность");
         jobGroupConfig.setComponent(jobGroupPickerField);
