@@ -4,6 +4,7 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Configuration;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
 import kz.uco.base.service.common.CommonService;
@@ -25,7 +26,10 @@ import kz.uco.tsadv.modules.recruitment.config.CalcEndTrialPeriod;
 import kz.uco.tsadv.modules.recruitment.enums.HS_Periods;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.service.*;
+import kz.uco.tsadv.web.modules.recruitment.rcquestion.RcQuestionEdit;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,6 +37,9 @@ import java.util.Calendar;
 import java.util.*;
 
 public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
+
+    private static final Logger log = LoggerFactory.getLogger(Receptionassignment.class);
+
     protected PersonExt person;
     protected PersonGroupExt personGroup;
     protected AssignmentExt assignment;
@@ -53,11 +60,11 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
     @Named("fieldGroup.hireDate")
     protected DateField<Date> hireDate;
     @Named("fieldGroup.positionName")
-    protected PickerField<Entity> positionName;
+    protected PickerField<PositionGroupExt> positionNameField;
     @Named("fieldGroup.jobGroup")
     protected PickerField jobGroup;
     @Named("fieldGroup.organizationGroup")
-    protected PickerField organizationGroup;
+    protected PickerField organizationGroupField;
     @Named("fieldGroup.durationProbationPeriod")
     protected TextField<Integer> durationProbationPeriod;
     @Named("fieldGroup.unit")
@@ -127,7 +134,7 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
         assignment.setPersonGroup(personGroup);
         assignment.setGroup(item);
         item.setAssignment(assignment);
-        organizationGroup.removeAction("open");
+        organizationGroupField.removeAction("open");
         jobGroup.removeAction("open");
         calendarField.setEditable(false);
         assignment.setDurationProbationPeriod(employeeConfig.getDurarationProbationPeriod());
@@ -153,6 +160,34 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
         gradeGroup.addLookupAction();
         gradeGroup.addClearAction();
 
+        organizationGroupField.removeAction(PickerField.LookupAction.NAME);
+        PickerField.LookupAction lookupAction = new PickerField.LookupAction(organizationGroupField) {
+            public OrganizationGroupExt transformValueFromLookupWindow(Entity valueFromLookupWindow) {
+                return (OrganizationGroupExt) dataManager.reload(valueFromLookupWindow, "organizationGroupExt-receptionAssignment");
+            }
+        };
+        organizationGroupField.addAction(lookupAction);
+        lookupAction.setLookupScreen("organization-tree");
+        lookupAction.setLookupScreenOpenType(WindowManager.OpenType.DIALOG);
+
+        organizationGroupField.removeAction(PickerField.ClearAction.NAME);
+        organizationGroupField.addClearAction();
+
+        positionNameField.removeAction(PickerField.LookupAction.NAME);
+        PickerField.LookupAction lookupAction1 = new PickerField.LookupAction(positionNameField) {
+            public PositionGroupExt transformValueFromLookupWindow(Entity valueFromLookupWindow) {
+                return (PositionGroupExt) dataManager.reload(valueFromLookupWindow, "positionExt-receptionAssignment");
+            }
+        };
+
+        positionNameField.addAction(lookupAction1);
+        lookupAction1.setLookupScreen("base$PositionGroup.browse");
+        lookupAction1.setLookupScreenOpenType(WindowManager.OpenType.DIALOG);
+
+        positionNameField.removeAction(PickerField.ClearAction.NAME);
+        positionNameField.addClearAction();
+
+
         employeeNumber.addValueChangeListener(e -> {
             if (e.getValue() == null || e.getValue().equals("")) {
                 employeeNumber.setValue(employeeNum);
@@ -173,22 +208,25 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
                 getItem().getAssignment().getPersonGroup().getPerson().setStartDate(((Date) e.getValue()));
             }
         });
-        organizationGroup.addAction(new PickerField.LookupAction(organizationGroup) {
+        organizationGroupField.addAction(new PickerField.LookupAction(organizationGroupField) {
             @Override
             public Entity transformValueFromLookupWindow(Entity valueFromLookupWindow) {
                 return dataManager.reload(valueFromLookupWindow, "organizationGroupExt-view-for-requisition");
             }
         });
-        positionName.addValueChangeListener(e -> {
-            if (positionName.getValue() != null) {
+        positionNameField.addValueChangeListener(e -> {
+            if (positionNameField.getValue() != null) {
                 org = true;
                 job = true;
                 Map<Integer, Object> map = new HashMap<>();
-                map.put(1, ((PositionGroupExt) positionName.getValue()).getId());
-                OrganizationGroupExt organizationGroups = ((PositionGroupExt) e.getValue()).getPosition().getOrganizationGroupExt();
-                organizationGroup.setValue(organizationGroups);
-                jobGroup.setValue(((PositionGroupExt) positionName.getValue()).getPosition().getJobGroup());
-                PositionExt position = ((PositionGroupExt) positionName.getValue()).getPosition();
+                map.put(1, ((PositionGroupExt) positionNameField.getValue()).getId());
+                if (e.getValue() == null) {
+                    log.warn("PositionGroup is null in ValueChangeListener");
+                }
+                OrganizationGroupExt organizationGroups = e.getValue().getPosition().getOrganizationGroupExt();
+                organizationGroupField.setValue(organizationGroups);
+                jobGroup.setValue(((PositionGroupExt) positionNameField.getValue()).getPosition().getJobGroup());
+                PositionExt position = ((PositionGroupExt) positionNameField.getValue()).getPosition();
                 gradeGroup.setValue(position != null ? position.getGradeGroup() : null);
                 getItem().getAssignment().setLocation(position != null ? position.getLocation() : null);
                 getItem().getAssignment().setFte(1.0);
@@ -202,12 +240,12 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
                 }
             }
         });
-        organizationGroup.addValueChangeListener(e -> {
+        organizationGroupField.addValueChangeListener(e -> {
             if ((job == false) && (org == false)) {
-                positionName.setValue(null);
+                positionNameField.setValue(null);
             }
             org = false;
-            OrganizationGroupExt organizationGroupExt = (OrganizationGroupExt) organizationGroup.getValue();
+            OrganizationGroupExt organizationGroupExt = (OrganizationGroupExt) organizationGroupField.getValue();
             if (organizationGroupExt != null) {
 
                 calendarField.setEditable(true);
@@ -228,7 +266,7 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
 
         jobGroup.addValueChangeListener(e -> {
             if ((job == false) && (org == false)) {
-                positionName.setValue(null);
+                positionNameField.setValue(null);
             }
             job = false;
 
