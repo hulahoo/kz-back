@@ -32,14 +32,16 @@ public class CreateAction68TS extends CreateAction {
     protected void initStyle(ListComponent target) {
         if (target instanceof HasButtonsPanel) {
             ButtonsPanel buttonsPanel = ((HasButtonsPanel) target).getButtonsPanel();
-            Collection<Component> components = buttonsPanel.getComponents();
-            if (components != null) {
-                for (Component component : components) {
-                    if (component instanceof Button) {
-                        Button button = (Button) component;
-                        if (isButtonAction(target, button) && StringUtils.isEmpty(button.getStyleName())) {
-                            button.addStyleName("create-btn-style");
-                            button.addStyleName("border-none");
+            if (buttonsPanel != null) {
+                Collection<Component> components = buttonsPanel.getComponents();
+                if (components != null) {
+                    for (Component component : components) {
+                        if (component instanceof Button) {
+                            Button button = (Button) component;
+                            if (isButtonAction(target, button) && StringUtils.isEmpty(button.getStyleName())) {
+                                button.addStyleName("create-btn-style");
+                                button.addStyleName("border-none");
+                            }
                         }
                     }
                 }

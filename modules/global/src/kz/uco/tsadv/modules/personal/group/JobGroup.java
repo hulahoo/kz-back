@@ -31,7 +31,7 @@ public class JobGroup extends AbstractGroup {
 
     @Transient
     @MetaProperty(related = {"jobNameLang1", "jobNameLang2", "jobNameLang3", "jobNameLang4", "jobNameLang5"})
-    protected String jobName;
+    protected String jobNameDefault;
 
     @Column(name = "JOB_NAME_LANG1", length = 1000)
     private String jobNameLang1;
@@ -245,37 +245,37 @@ public class JobGroup extends AbstractGroup {
         return job.getJobName();
     }
 
-//    public String getJobName() {
-//        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
-//        String language = userSessionSource.getLocale().getLanguage();
-//        String jobOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
-//
-//        if (jobOrder != null){
-//            List<String> langs = Arrays.asList(jobOrder.split(";"));
-//            switch (langs.indexOf(language)){
-//                case 0:{
-//                    return jobNameLang1;
-//                }
-//                case 1:{
-//                    return jobNameLang2;
-//                }
-//                case 2:{
-//                    return jobNameLang3;
-//                }
-//                case 3:{
-//                    return jobNameLang4;
-//                }
-//                case 4:{
-//                    return jobNameLang5;
-//                }
-//                default:
-//                    return jobNameLang1;
-//            }
-//        }
-//        return jobNameLang1;
-//    }
+    public String getJobNameDefault() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String jobOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
 
-    public void setJobName(String jobName) {
-        this.jobName = jobName;
+        if (jobOrder != null){
+            List<String> langs = Arrays.asList(jobOrder.split(";"));
+            switch (langs.indexOf(language)){
+                case 0:{
+                    return jobNameLang1;
+                }
+                case 1:{
+                    return jobNameLang2;
+                }
+                case 2:{
+                    return jobNameLang3;
+                }
+                case 3:{
+                    return jobNameLang4;
+                }
+                case 4:{
+                    return jobNameLang5;
+                }
+                default:
+                    return jobNameLang1;
+            }
+        }
+        return jobNameLang1;
+    }
+
+    public void setJobNameDefault(String jobNameDefault) {
+        this.jobNameDefault = jobNameDefault;
     }
 }

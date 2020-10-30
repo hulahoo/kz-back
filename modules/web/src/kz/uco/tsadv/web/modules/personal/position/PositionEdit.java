@@ -293,7 +293,9 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         });
         fteField.addValueChangeListener(e -> {
             if (fteField.getValue() != null) {
-                maxPersonsField.setValue(fteField.getValue());
+                Double d = (Double) fteField.getValue();
+                Integer val =  d.intValue();
+                maxPersonsField.setValue(val);
             }
         });
         createAnalyticsIfNotExist();
@@ -801,7 +803,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
             jobGroupPickerField.addClearAction();
         }
         jobGroupPickerField.setCaptionMode(CaptionMode.PROPERTY);
-        jobGroupPickerField.setCaptionProperty("jobName");
+        jobGroupPickerField.setCaptionProperty("jobNameDefault");
         //
         jobGroupPickerField.setCaption("Должность");
         jobGroupConfig.setComponent(jobGroupPickerField);
