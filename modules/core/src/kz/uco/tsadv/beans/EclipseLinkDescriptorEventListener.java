@@ -11,14 +11,16 @@ public class EclipseLinkDescriptorEventListener extends com.haulmont.cuba.core.s
     @Override
     public void prePersist(DescriptorEvent event) {
         Entity entity = (Entity) event.getObject();
-        if ((entity instanceof AbstractTimeBasedEntity)
-                && ((AbstractTimeBasedEntity) entity).getEndDate().before(BaseCommonUtils.getSystemDate())) {
-            if (!justDeleted((SoftDelete) entity)) {
-                Updatable updatable = (Updatable) event.getObject();
-                updatable.setUpdatedBy(auditInfoProvider.getCurrentUserLogin());
-                updatable.setUpdateTs(timeSource.currentTimestamp());
+        if (entity instanceof AbstractTimeBasedEntity) {
+            AbstractTimeBasedEntity abstractTimeBasedEntity = (AbstractTimeBasedEntity) entity;
+            if (abstractTimeBasedEntity.getEndDate() == null && abstractTimeBasedEntity.getEndDate().before(BaseCommonUtils.getSystemDate())) {
+                if (!justDeleted((SoftDelete) entity)) {
+                    Updatable updatable = (Updatable) event.getObject();
+                    updatable.setUpdatedBy(auditInfoProvider.getCurrentUserLogin());
+                    updatable.setUpdateTs(timeSource.currentTimestamp());
+                }
+                return;
             }
-            return;
         }
         super.prePersist(event);
     }
