@@ -1,7 +1,9 @@
 @import "../kz.uco.base/base";
+@import "../../havana/havana";
 
 @mixin kz_uco_tsadv-base-ext {
   @include base;
+  @include havana;
 
   .book-name {
     font-size: medium;
