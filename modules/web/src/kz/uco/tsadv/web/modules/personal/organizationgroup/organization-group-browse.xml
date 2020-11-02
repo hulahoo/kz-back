@@ -12,8 +12,7 @@
             <query>
                 <![CDATA[select e
                            from base$OrganizationGroupExt e
-                           join e.list o
-                          where :session$systemDate between o.startDate and o.endDate]]>
+                           ]]>
             </query>
             <collectionDatasource id="listDs"
                                   property="list"/>
