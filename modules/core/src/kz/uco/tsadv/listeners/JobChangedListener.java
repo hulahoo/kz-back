@@ -33,16 +33,17 @@ public class JobChangedListener {
     public void beforeCommit(EntityChangedEvent<Job, UUID> event) {
         Id<Job, UUID> entityId = event.getEntityId();
 
+        Job job = txDataManager.load(entityId).view("job.edit").one();
+
+        JobGroup jobGroup = txDataManager.load(JobGroup.class)
+                .query("select j from tsadv$JobGroup j where j.id = :id")
+                .parameter("id", job.getGroup().getId())
+                .view("jobGroup.browse")
+                .one();
+
         if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-            Job job = txDataManager.load(entityId).view("job.edit").one();
             if (job.getEndDate().compareTo(BaseCommonUtils.getSystemDate()) >= 0
                     && job.getStartDate().compareTo(BaseCommonUtils.getSystemDate()) <= 0){
-
-                JobGroup jobGroup = txDataManager.load(JobGroup.class)
-                        .query("select j from tsadv$JobGroup j where j.id = :id")
-                        .parameter("id", job.getGroup().getId())
-                        .view("jobGroup.browse")
-                        .one();
 
                 jobGroup.setJobNameLang1(job.getJobNameLang1());
                 jobGroup.setJobNameLang2(job.getJobNameLang2());
@@ -54,13 +55,6 @@ public class JobChangedListener {
         }
 
         if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            Job job = txDataManager.load(entityId).view("job.edit").one();
-            JobGroup jobGroup = txDataManager.load(JobGroup.class)
-                    .query("select j from tsadv$JobGroup j where j.id = :id")
-                    .parameter("id", job.getGroup().getId())
-                    .view("jobGroup.browse")
-                    .one();
-
             jobGroup.setJobNameLang1(job.getJobNameLang1());
             jobGroup.setJobNameLang2(job.getJobNameLang2());
             jobGroup.setJobNameLang3(job.getJobNameLang3());

@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|id")
+@NamePattern("%s|jobNameDefault")
 @Table(name = "TSADV_JOB_GROUP")
 @Entity(name = "tsadv$JobGroup")
 public class JobGroup extends AbstractGroup {
