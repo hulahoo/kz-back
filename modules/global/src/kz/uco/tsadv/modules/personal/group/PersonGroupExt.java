@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 
 @Listeners("tsadv_PersonGroupListener")
-@NamePattern("%s|id")
+@NamePattern("%s %s|id, list")
 @Extends(PersonGroup.class)
 @Entity(name = "base$PersonGroupExt")
 @Customizer(PersonGroupExtDescriptorCustomizer.class)

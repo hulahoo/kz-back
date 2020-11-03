@@ -13,11 +13,9 @@ import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.enums.RuleStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
-import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
-import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
+import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.personal.model.AbsenceBalance;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
@@ -26,7 +24,6 @@ import kz.uco.tsadv.modules.recruitment.config.CalcEndTrialPeriod;
 import kz.uco.tsadv.modules.recruitment.enums.HS_Periods;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.service.*;
-import kz.uco.tsadv.web.modules.recruitment.rcquestion.RcQuestionEdit;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,25 +59,25 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
     @Named("fieldGroup.positionName")
     protected PickerField<PositionGroupExt> positionNameField;
     @Named("fieldGroup.jobGroup")
-    protected PickerField jobGroup;
+    protected PickerField<JobGroup> jobGroup;
     @Named("fieldGroup.organizationGroup")
-    protected PickerField organizationGroupField;
+    protected PickerField<OrganizationGroupExt> organizationGroupField;
     @Named("fieldGroup.durationProbationPeriod")
     protected TextField<Integer> durationProbationPeriod;
     @Named("fieldGroup.unit")
     protected LookupField unit;
     @Named("fieldGroup.probationEndDate")
-    protected DateField probationEndDate;
+    protected DateField<Date> probationEndDate;
     @Named("fieldGroup.gradeGroup")
-    protected PickerField gradeGroup;
-    @Named("fieldGroup.location")
-    protected PickerField location;
+    protected PickerField<GradeGroup> gradeGroup;
+//    @Named("fieldGroup.location")
+//    protected PickerField location;
     @Named("fieldGroup.calendar")
-    protected PickerField calendarField;
+    protected PickerField<kz.uco.tsadv.modules.timesheet.model.Calendar> calendarField;
     @Named("fieldGroup.employeeNumber")
     protected TextField<String> employeeNumber;
     @Named("fieldGroup.costCenter")
-    protected PickerField costCenter;
+    protected PickerField<DicCostCenter> costCenter;
     @Named("fieldGroup.assignmentNumber")
     protected TextField<String> assignmentNumberField;
     @Inject
@@ -168,10 +165,11 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
         };
         organizationGroupField.addAction(lookupAction);
         lookupAction.setLookupScreen("organization-tree");
-        lookupAction.setLookupScreenOpenType(WindowManager.OpenType.DIALOG);
+        lookupAction.setLookupScreenOpenType(WindowManager.OpenType.THIS_TAB);
 
         organizationGroupField.removeAction(PickerField.ClearAction.NAME);
         organizationGroupField.addClearAction();
+
 
         positionNameField.removeAction(PickerField.LookupAction.NAME);
         PickerField.LookupAction lookupAction1 = new PickerField.LookupAction(positionNameField) {
@@ -182,10 +180,24 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
 
         positionNameField.addAction(lookupAction1);
         lookupAction1.setLookupScreen("base$PositionGroup.browse");
-        lookupAction1.setLookupScreenOpenType(WindowManager.OpenType.DIALOG);
+        lookupAction1.setLookupScreenOpenType(WindowManager.OpenType.THIS_TAB);
 
         positionNameField.removeAction(PickerField.ClearAction.NAME);
         positionNameField.addClearAction();
+
+
+//        gradeGroup.removeAction(PickerField.LookupAction.NAME);
+//        PickerField.LookupAction lookupAction2 = new PickerField.LookupAction(gradeGroup) {
+//            public GradeGroup transformValueFromLookupWindow(Entity valueFromLookupWindow) {
+//                return (GradeGroup) dataManager.reload(valueFromLookupWindow, "gradeGroup-receptionAssignment");
+//            }
+//        };
+//
+//        gradeGroup.addAction(lookupAction2);
+//        lookupAction2.setLookupScreen("tsadv$Grade.browse");
+//        lookupAction2.setLookupScreenOpenType(WindowManager.OpenType.THIS_TAB);
+//        gradeGroup.removeAction(PickerField.ClearAction.NAME);
+//        gradeGroup.addClearAction();
 
 
         employeeNumber.addValueChangeListener(e -> {
@@ -205,13 +217,13 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
             getItem().getAssignment().setAssignDate(hireDate.getValue());
             if (getItem() != null && getItem().getAssignment() != null
                     && getItem().getAssignment().getPersonGroup() != null && getItem().getAssignment().getPersonGroup().getPerson() != null) {
-                getItem().getAssignment().getPersonGroup().getPerson().setStartDate(((Date) e.getValue()));
+                getItem().getAssignment().getPersonGroup().getPerson().setStartDate(( e.getValue()));
             }
         });
         organizationGroupField.addAction(new PickerField.LookupAction(organizationGroupField) {
             @Override
-            public Entity transformValueFromLookupWindow(Entity valueFromLookupWindow) {
-                return dataManager.reload(valueFromLookupWindow, "organizationGroupExt-view-for-requisition");
+            public OrganizationGroupExt transformValueFromLookupWindow(Entity valueFromLookupWindow) {
+                return (OrganizationGroupExt) dataManager.reload(valueFromLookupWindow, "organizationGroupExt-view-for-requisition");
             }
         });
         positionNameField.addValueChangeListener(e -> {
@@ -219,14 +231,14 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
                 org = true;
                 job = true;
                 Map<Integer, Object> map = new HashMap<>();
-                map.put(1, ((PositionGroupExt) positionNameField.getValue()).getId());
+                map.put(1, ( positionNameField.getValue()).getId());
                 if (e.getValue() == null) {
                     log.warn("PositionGroup is null in ValueChangeListener");
                 }
                 OrganizationGroupExt organizationGroups = e.getValue().getPosition().getOrganizationGroupExt();
                 organizationGroupField.setValue(organizationGroups);
-                jobGroup.setValue(((PositionGroupExt) positionNameField.getValue()).getPosition().getJobGroup());
-                PositionExt position = ((PositionGroupExt) positionNameField.getValue()).getPosition();
+                jobGroup.setValue(( positionNameField.getValue()).getPosition().getJobGroup());
+                PositionExt position = positionNameField.getValue().getPosition();
                 gradeGroup.setValue(position != null ? position.getGradeGroup() : null);
                 getItem().getAssignment().setLocation(position != null ? position.getLocation() : null);
                 getItem().getAssignment().setFte(1.0);
@@ -245,9 +257,8 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
                 positionNameField.setValue(null);
             }
             org = false;
-            OrganizationGroupExt organizationGroupExt = (OrganizationGroupExt) organizationGroupField.getValue();
+            OrganizationGroupExt organizationGroupExt =  organizationGroupField.getValue();
             if (organizationGroupExt != null) {
-
                 calendarField.setEditable(true);
                 if (organizationGroupExt.getAnalytics() != null) {
                     calendarField.setValue(organizationGroupExt.getAnalytics().getCalendar());
@@ -306,7 +317,7 @@ public class Receptionassignment extends AbstractEditor<AssignmentGroupExt> {
     public void ready() {
         super.ready();
         employeeNumber.addValueChangeListener(e -> {
-            String employeeNumber = (String) e.getValue();
+            String employeeNumber =  e.getValue();
             String assignmentNumber = assignmentNumberField.getValue();
             if (!StringUtils.isBlank(employeeNumber) && !StringUtils.isBlank(assignmentNumber)) {
                 String assignmentNumberSecondPart = assignmentNumber.split("-")[1];

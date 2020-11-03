@@ -22,7 +22,7 @@ import kz.uco.tsadv.modules.performance.dictionary.DicAssessmentStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentCategory;
 
 @Listeners("tsadv_AssignmentExtListener")
-@NamePattern("%s %s %s|id,personGroup,positionGroup")
+@NamePattern("%s %s %s %s %s |id,personGroup,positionGroup, organizationGroup, jobGroup")
 @Extends(Assignment.class)
 @Entity(name = "base$AssignmentExt")
 public class AssignmentExt extends Assignment {
