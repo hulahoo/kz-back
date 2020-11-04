@@ -100,16 +100,17 @@
                           alwaysVisible="true">
                 <button id="createBtn"
                         action="personGroupsTable.createCandidate"
-                        icon="images/button_icons/candidate-16px.png"/>
+                        icon="images/button_icons/candidate-16px.png"
+                        caption="msg://createCandidate"/>
                 <button action="personGroupsTable.createStudent"
-                        icon="images/button_icons/student-16px.png"/>
+                        icon="images/button_icons/student-16px.png"
+                        caption="msg://createStudent"/>
                 <button id="editBtn"
                         action="personGroupsTable.editCandidate"
-                        caption="mainMsg://table.btn.empty"
-                        icon="theme://actions.Edit.icon"/>
+                        icon="theme://actions.Edit.icon"
+                        caption="mainMsg://editBtn"/>
                 <button id="removeBtn"
-                        action="personGroupsTable.remove"
-                        caption="mainMsg://table.btn.empty"/>
+                        action="personGroupsTable.remove"/>
             </buttonsPanel>
         </groupTable>
     </layout>
