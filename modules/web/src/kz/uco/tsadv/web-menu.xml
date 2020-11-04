@@ -563,7 +563,7 @@
         </menu>
     </menu>
     <menu id="reports"
-          icon="icons/reports-print.png">
+          icon="PRINT">
         <item id="report$Report.browse"/>
         <item id="report$ReportGroup.browse"/>
         <item id="report$Report.run"/>
