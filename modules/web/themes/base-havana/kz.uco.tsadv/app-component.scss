@@ -1,0 +1,6 @@
+@import "base-havana-ext";
+@import "base-havana-ext-defaults";
+
+@mixin kz_uco_tsadv {
+  @include kz_uco_tsadv-base-havana-ext;
+}
