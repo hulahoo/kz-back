@@ -119,7 +119,9 @@ where e.personGroup.id = :ds$personGroupDs]]>
                                         clearButtonIcon="icons/item-remove.png"
                                         fileSizeLimit="1024000"
                                         showClearButton="true"
-                                        uploadButtonIcon="icons/reports-template-upload.png"/>
+                                        uploadButtonIcon="icons/reports-template-upload.png"
+                                        clearButtonCaption="msg://imageClear"
+                                        uploadButtonCaption="msg://imageUpload"/>
                             </hbox>
                             <fieldGroup id="fieldGroup"
                                         datasource="personDs"
