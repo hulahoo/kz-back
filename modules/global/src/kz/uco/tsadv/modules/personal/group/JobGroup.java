@@ -18,14 +18,14 @@ import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.recruitment.model.RcJobGroup;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|jobNameDefault")
+
 @Table(name = "TSADV_JOB_GROUP")
 @Entity(name = "tsadv$JobGroup")
+@NamePattern("%s|jobName")
 public class JobGroup extends AbstractGroup {
     private static final long serialVersionUID = 5049424103149725592L;
 
@@ -237,6 +237,7 @@ public class JobGroup extends AbstractGroup {
 
     //To display a name instead of an id in the lookup and tables #Timur Tashmatov
     @MetaProperty(related = "list")
+    @Transient
     public String getJobName() {
         job = job != null ? job : getJob();
         if (job == null) {

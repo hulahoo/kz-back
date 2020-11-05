@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Listeners("tsadv_PositionExtListener")
-@NamePattern("%s|positionFullName")
 @Extends(Position.class)
 @Entity(name = "base$PositionExt")
+@NamePattern("%s|positionName")
 public class PositionExt extends Position {
     private static final long serialVersionUID = 4443208303116319103L;
 
@@ -119,6 +119,7 @@ public class PositionExt extends Position {
 
     @SuppressWarnings("all")
     @MetaProperty(related = "positionFullNameLang1")
+    @Transient
     public String getPositionNameLang1Reducted() {
         if (positionFullNameLang1.length() > 48) {
             return positionFullNameLang1.substring(0, 48) + " ...";
@@ -129,6 +130,7 @@ public class PositionExt extends Position {
 
     @SuppressWarnings("all")
     @MetaProperty(related = "positionFullNameLang2")
+    @Transient
     public String getPositionNameLang2Reducted() {
         if (positionFullNameLang2.length() > 48) {
             return positionFullNameLang2.substring(0, 48) + " ...";
@@ -139,6 +141,7 @@ public class PositionExt extends Position {
 
     @SuppressWarnings("all")
     @MetaProperty(related = "positionFullNameLang3")
+    @Transient
     public String getPositionNameLang3Reducted() {
         if (positionFullNameLang3.length() > 48) {
             return positionFullNameLang3.substring(0, 48) + " ...";

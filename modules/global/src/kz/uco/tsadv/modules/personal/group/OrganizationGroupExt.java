@@ -18,7 +18,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|id")
+@NamePattern("%s|organizationName")
 @Extends(OrganizationGroup.class)
 @Entity(name = "base$OrganizationGroupExt")
 @Customizer(OrganizationGroupExtDescriptorCustomizer.class)
@@ -58,6 +58,7 @@ public class OrganizationGroupExt extends OrganizationGroup {
             inverseJoinColumns = @JoinColumn(name = "PERFORMANCE_PLAN_ID"))
     @ManyToMany
     protected List<PerformancePlan> performancePlans;
+
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "organizationGroup")
@@ -67,9 +68,8 @@ public class OrganizationGroupExt extends OrganizationGroup {
     @JoinColumn(name = "ANALYTICS_ID")
     protected OrgAnalytics analytics;
 
-    @OneToOne(mappedBy = "group", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected OrganizationExt relevantOrganization; // Текущее (для момента в машине времени) подразделение
-
 
 
     public OrganizationExt getRelevantOrganization() {
@@ -168,6 +168,7 @@ public class OrganizationGroupExt extends OrganizationGroup {
 
     // Для отображения имени вместо id в lookup и таблицах #FelixKamalov
     @MetaProperty(related = "list")
+    @Transient
     public String getOrganizationName() {
         OrganizationExt organizationWithName = getOrganization();
         if (organizationWithName == null) {

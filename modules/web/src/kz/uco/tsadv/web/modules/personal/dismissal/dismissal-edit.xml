@@ -28,7 +28,7 @@
             <query>
                 <![CDATA[select e.group from base$AssignmentExt e
                 join e.assignmentStatus ass
-                where e.personGroup.id = :ds$dismissalDs.personGroup
+                where e.personGroup.id = :ds$dismissalDs.personGroup.id
                 and ass.code = 'ACTIVE'
                 ]]>
             </query>

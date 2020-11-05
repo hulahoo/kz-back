@@ -6,6 +6,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.UserSessionSource;
@@ -26,6 +27,7 @@ import javax.validation.constraints.NotNull;
 @NamePattern("%s|jobName")
 @Table(name = "TSADV_JOB")
 @Entity(name = "tsadv$Job")
+@PublishEntityChangedEvents
 public class Job extends AbstractTimeBasedEntity {
     private static final long serialVersionUID = 6955673680071474408L;
 

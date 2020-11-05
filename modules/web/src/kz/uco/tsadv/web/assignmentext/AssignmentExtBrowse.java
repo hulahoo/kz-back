@@ -38,9 +38,11 @@ public class AssignmentExtBrowse extends AbstractLookup {
     }
 
     private void openAssignmentEditor(AssignmentExt assignment, Map<String, Object> params) {
-        AssignmentHistoryEdit assignmentHistoryEdit = (AssignmentHistoryEdit) openEditor("base$Assignment.historyEdit", assignment, WindowManager.OpenType.THIS_TAB, params);
-        assignmentHistoryEdit.addCloseListener(actionId -> assignmentsDs.refresh());
-        assignmentHistoryEdit.addCloseWithCommitListener(() -> assignmentsDs.refresh());
+        if (assignment != null && params != null) {
+            AssignmentHistoryEdit assignmentHistoryEdit = (AssignmentHistoryEdit) openEditor("base$Assignment.historyEdit", assignment, WindowManager.OpenType.THIS_TAB, params);
+            assignmentHistoryEdit.addCloseListener(actionId -> assignmentsDs.refresh());
+            assignmentHistoryEdit.addCloseWithCommitListener(() -> assignmentsDs.refresh());
+        }
     }
 
     public void removeHistory() {

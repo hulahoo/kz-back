@@ -18,7 +18,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|id")
+@NamePattern("%s|positionName")
 @Extends(PositionGroup.class)
 @Entity(name = "base$PositionGroupExt")
 public class PositionGroupExt extends PositionGroup {
@@ -205,6 +205,7 @@ public class PositionGroupExt extends PositionGroup {
 
     // Для отображения имени вместо id в lookup и таблицах #Timur Tashmatov
     @MetaProperty(related = "list")
+    @Transient
     public String getPositionName() {
         PositionExt positionExtWithName = getPosition();
         if (positionExtWithName == null) {
@@ -221,6 +222,7 @@ public class PositionGroupExt extends PositionGroup {
     }
 
     @MetaProperty(related = "list")
+    @Transient
     public String getFullName() {
         PositionExt positionExtWithName = getPosition();
         if (positionExtWithName == null) {

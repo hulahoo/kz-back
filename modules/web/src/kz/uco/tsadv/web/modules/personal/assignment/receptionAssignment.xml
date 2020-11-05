@@ -97,7 +97,6 @@
                        property="assignment.positionGroup"
                        required="true"/>
                 <field id="gradeGroup"
-                       captionProperty="grade"
                        property="assignment.gradeGroup"/>
                 <field id="organizationGroup"
                        captionProperty="organizationName"
@@ -105,7 +104,7 @@
                        required="true"/>
                 <field id="jobGroup"
                        caption="msg://jobName"
-                       captionProperty="jobName"
+                       captionProperty="jobNameDefault"
                        property="assignment.jobGroup"
                        required="true"/>
                 <field id="costCenter"
