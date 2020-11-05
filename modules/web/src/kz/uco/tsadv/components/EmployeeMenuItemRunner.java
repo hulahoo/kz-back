@@ -14,6 +14,7 @@ import org.dom4j.Attribute;
 import org.dom4j.Element;
 
 public class EmployeeMenuItemRunner implements MenuItemRunnable {
+
     @Override
     public void run(FrameOwner origin, MenuItem menuItem) {
         UserService userService = AppBeans.get(UserService.class);
@@ -25,7 +26,7 @@ public class EmployeeMenuItemRunner implements MenuItemRunnable {
         }
     }
 
-    private String getScreenId(Element currentElement) {
+    protected String getScreenId(Element currentElement) {
         Attribute menuItemIdAttribute = currentElement.attribute("id");
         Element[] paramsList = currentElement.elements("param")
                 .stream()
@@ -49,7 +50,7 @@ public class EmployeeMenuItemRunner implements MenuItemRunnable {
         }
     }
 
-    private OpenMode getScreenOpenType(Element currentElement) {
+    protected OpenMode getScreenOpenType(Element currentElement) {
         Attribute openTypeAttribute = currentElement.attribute("openType");
         if (openTypeAttribute != null) {
             return OpenMode.valueOf(openTypeAttribute.getValue());
@@ -57,7 +58,7 @@ public class EmployeeMenuItemRunner implements MenuItemRunnable {
         return null;
     }
 
-    private void buildScreenAndShow(FrameOwner origin, String screenId, OpenMode openMode) {
+    protected void buildScreenAndShow(FrameOwner origin, String screenId, OpenMode openMode) {
         ScreenBuilders screenBuilders = AppBeans.get(ScreenBuilders.class);
         ScreenBuilder builder = screenBuilders.screen(origin)
                 .withScreenId(screenId);
