@@ -8,8 +8,12 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.dictionary.DicLocation;
+import kz.uco.base.entity.dictionary.DicOrgType;
 import kz.uco.base.entity.shared.OrganizationGroup;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
+import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
+import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import org.eclipse.persistence.annotations.Customizer;
@@ -29,6 +33,48 @@ public class OrganizationGroupExt extends OrganizationGroup {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "group")
     protected List<OrganizationExt> list;
+
+    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_COST_CENTER_LINK",
+            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "DIC_COST_CENTER_ID"))
+    @ManyToMany
+    private List<DicCostCenter> costCenter;
+
+    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_PAYROLL_LINK",
+            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "DIC_PAYROLL_ID"))
+    @ManyToMany
+    private List<DicPayroll> payroll;
+
+    @Column(name = "IS_INTERNAL")
+    private Boolean is_internal;
+
+    @Column(name = "ORGANIZATION_NAME_LANG1", length = 1000)
+    private String organizationNameLang1;
+
+    @Column(name = "ORGANIZATION_NAME_LANG2", length = 1000)
+    private String organizationNameLang2;
+
+    @Column(name = "ORGANIZATION_NAME_LANG3", length = 1000)
+    private String organizationNameLang3;
+
+    @Column(name = "ORGANIZATION_NAME_LANG4", length = 1000)
+    private String organizationNameLang4;
+
+    @Column(name = "ORGANIZATION_NAME_LANG5", length = 1000)
+    private String organizationNameLang5;
+
+    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_LOCATION_LINK",
+            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "DIC_LOCATION_ID"))
+    @ManyToMany
+    private List<DicLocation> location;
+
+    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_ORG_TYPE_LINK",
+            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "DIC_ORG_TYPE_ID"))
+    @ManyToMany
+    private List<DicOrgType> organizationType;
 
     @OneToMany(mappedBy = "organizationGroupExt")
     protected List<PositionExt> position;
@@ -70,6 +116,86 @@ public class OrganizationGroupExt extends OrganizationGroup {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected OrganizationExt relevantOrganization; // Текущее (для момента в машине времени) подразделение
+
+    public Boolean getIs_internal() {
+        return is_internal;
+    }
+
+    public void setIs_internal(Boolean is_internal) {
+        this.is_internal = is_internal;
+    }
+
+    public List<DicPayroll> getPayroll() {
+        return payroll;
+    }
+
+    public void setPayroll(List<DicPayroll> payroll) {
+        this.payroll = payroll;
+    }
+
+    public List<DicCostCenter> getCostCenter() {
+        return costCenter;
+    }
+
+    public void setCostCenter(List<DicCostCenter> costCenter) {
+        this.costCenter = costCenter;
+    }
+
+    public List<DicOrgType> getOrganizationType() {
+        return organizationType;
+    }
+
+    public void setOrganizationType(List<DicOrgType> organizationType) {
+        this.organizationType = organizationType;
+    }
+
+    public List<DicLocation> getLocation() {
+        return location;
+    }
+
+    public void setLocation(List<DicLocation> location) {
+        this.location = location;
+    }
+
+    public String getOrganizationNameLang5() {
+        return organizationNameLang5;
+    }
+
+    public void setOrganizationNameLang5(String organizationNameLang5) {
+        this.organizationNameLang5 = organizationNameLang5;
+    }
+
+    public String getOrganizationNameLang4() {
+        return organizationNameLang4;
+    }
+
+    public void setOrganizationNameLang4(String organizationNameLang4) {
+        this.organizationNameLang4 = organizationNameLang4;
+    }
+
+    public String getOrganizationNameLang3() {
+        return organizationNameLang3;
+    }
+
+    public void setOrganizationNameLang3(String organizationNameLang3) {
+        this.organizationNameLang3 = organizationNameLang3;
+    }
+
+    public String getOrganizationNameLang2() {
+        return organizationNameLang2;
+    }
+
+    public void setOrganizationNameLang2(String organizationNameLang2) {
+        this.organizationNameLang2 = organizationNameLang2;
+    }
+
+    public String getOrganizationNameLang1() {
+        return organizationNameLang1;
+    }
+
+    public void setOrganizationNameLang1(String organizationNameLang1) {
+        this.organizationNameLang1 = organizationNameLang1;
+    }
 
 
     public OrganizationExt getRelevantOrganization() {
