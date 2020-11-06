@@ -12,6 +12,7 @@ import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
 import kz.uco.base.entity.shared.OrganizationGroup;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
+import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.model.*;
@@ -19,6 +20,7 @@ import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import org.eclipse.persistence.annotations.Customizer;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +35,11 @@ public class OrganizationGroupExt extends OrganizationGroup {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "group")
     protected List<OrganizationExt> list;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "COMPANY_ID")
+    private DicCompany company;
 
     @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_COST_CENTER_LINK",
             joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
@@ -116,6 +123,14 @@ public class OrganizationGroupExt extends OrganizationGroup {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected OrganizationExt relevantOrganization; // Текущее (для момента в машине времени) подразделение
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
 
     public Boolean getIs_internal() {
         return is_internal;
