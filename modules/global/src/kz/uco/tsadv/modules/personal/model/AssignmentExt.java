@@ -2,13 +2,12 @@ package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.annotation.Extends;
-import com.haulmont.cuba.core.entity.annotation.Lookup;
-import com.haulmont.cuba.core.entity.annotation.LookupType;
-import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
+import com.haulmont.cuba.core.entity.annotation.*;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.shared.Assignment;
+import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentCategory;
 import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.recruitment.enums.HS_Periods;
 
@@ -16,13 +15,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
-import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
-import kz.uco.tsadv.modules.performance.dictionary.DicAssessmentStatus;
-import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentCategory;
 
 @Listeners("tsadv_AssignmentExtListener")
-@NamePattern("%s %s %s %s %s |id,personGroup,positionGroup, organizationGroup, jobGroup")
+@NamePattern("%s %s %s %s|id,organizationGroup,jobGroup,group")
 @Extends(Assignment.class)
 @Entity(name = "base$AssignmentExt")
 public class AssignmentExt extends Assignment {

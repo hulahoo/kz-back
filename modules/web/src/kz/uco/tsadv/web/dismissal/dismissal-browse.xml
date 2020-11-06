@@ -9,7 +9,7 @@
                               view="dismissal.card">
             <query>
                 <![CDATA[select e from tsadv$Dismissal e
-where e.personGroup.id = :param$personGroup]]>
+where e.personGroup.id = :param$personGroup.id]]>
             </query>
         </collectionDatasource>
 

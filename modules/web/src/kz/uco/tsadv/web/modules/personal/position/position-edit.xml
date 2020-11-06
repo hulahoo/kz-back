@@ -281,7 +281,6 @@
                             <fieldGroup datasource="positionDs" id="addFieldGroup1" width="520px">
                                 <column width="300px" fieldCaptionWidth="120px" id="addColumn">
                                     <field id="gradeGroup"
-                                           captionProperty="grade"
                                            property="gradeGroup"/>
                                     <field id="gradeRule"
                                            property="gradeRule"/>
