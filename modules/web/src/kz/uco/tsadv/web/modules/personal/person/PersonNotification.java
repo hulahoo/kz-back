@@ -12,9 +12,10 @@ import com.haulmont.cuba.gui.components.OptionsGroup;
 import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.components.actions.RemoveAction;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.web.AppUI;
 import kz.uco.base.entity.core.notification.SendingNotification;
 import kz.uco.base.web.init.App;
-import kz.uco.tsadv.web.screens.ExtAppMainWindow;
+import kz.uco.base.web.root.BaseMainScreen;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -95,7 +96,6 @@ public class PersonNotification extends AbstractWindow {
 
     private void updateCounters() {
         App app = AppBeans.get(App.NAME);
-        ExtAppMainWindow extAppMainWindow = (ExtAppMainWindow) app.getTopLevelWindow();
-        extAppMainWindow.updateCounters();
+        ((BaseMainScreen) AppUI.getCurrent().getTopLevelWindow()).updateCounters();
     }
 }
