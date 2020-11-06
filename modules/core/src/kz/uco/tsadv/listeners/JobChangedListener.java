@@ -8,7 +8,9 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
+import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.model.Job;
+import kz.uco.tsadv.modules.personal.model.OrganizationExt;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -45,22 +47,24 @@ public class JobChangedListener {
             if (job.getEndDate().compareTo(BaseCommonUtils.getSystemDate()) >= 0
                     && job.getStartDate().compareTo(BaseCommonUtils.getSystemDate()) <= 0){
 
-                jobGroup.setJobNameLang1(job.getJobNameLang1());
-                jobGroup.setJobNameLang2(job.getJobNameLang2());
-                jobGroup.setJobNameLang3(job.getJobNameLang3());
-                jobGroup.setJobNameLang4(job.getJobNameLang4());
-                jobGroup.setJobNameLang5(job.getJobNameLang5());
-                txDataManager.save(jobGroup);
+                saveJobGroupNames(jobGroup, job);
             }
         }
 
         if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            jobGroup.setJobNameLang1(job.getJobNameLang1());
-            jobGroup.setJobNameLang2(job.getJobNameLang2());
-            jobGroup.setJobNameLang3(job.getJobNameLang3());
-            jobGroup.setJobNameLang4(job.getJobNameLang4());
-            jobGroup.setJobNameLang5(job.getJobNameLang5());
-            txDataManager.save(jobGroup);
+            saveJobGroupNames(jobGroup, job);
         }
+    }
+
+
+    public void saveJobGroupNames(JobGroup jobGroup, Job job) {
+
+        jobGroup.setJobNameLang1(job.getJobNameLang1());
+        jobGroup.setJobNameLang2(job.getJobNameLang2());
+        jobGroup.setJobNameLang3(job.getJobNameLang3());
+        jobGroup.setJobNameLang4(job.getJobNameLang4());
+        jobGroup.setJobNameLang5(job.getJobNameLang5());
+
+        txDataManager.save(jobGroup);
     }
 }
