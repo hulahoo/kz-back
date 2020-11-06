@@ -18078,118 +18078,6 @@
             <property name="legacyId"/>
         </property>
     </view>
-    <view class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
-          extends="_local"
-          name="personGroupExtFullName.view">
-        <property name="list"
-                  view="_minimal">
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-    </view>
-    <view class="kz.uco.tsadv.modules.personal.model.Absence"
-          extends="absence.view"
-          name="absence.viewForNotify">
-        <property name="personGroup"
-                  view="_minimal">
-            <property name="currentAssignment"
-                      view="_local">
-                <property name="positionGroup"
-                          view="_local">
-                </property>
-            </property>
-            <property name="list"
-                      view="_local"/>
-            <property name="fullName"/>
-            <property name="person"
-                      view="_local"/>
-        </property>
-    </view>
-    <view class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
-          extends="_local"
-          name="jobRequest-for-new">
-        <property name="candidatePersonGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="type"
-                          view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
-            </property>
-            <property name="person"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="type"
-                          view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
-            </property>
-            <property name="fullName"/>
-        </property>
-        <property name="interviews"
-                  view="_minimal">
-            <property name="requisitionHiringStep"
-                      view="_minimal">
-                <property name="order"/>
-                <property name="hiringStep"
-                          view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="type"/>
-                </property>
-            </property>
-            <property name="interviewStatus"/>
-        </property>
-        <property name="requisition"
-                  view="_minimal">
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="hiringSteps"
-                      view="_minimal">
-                <property name="requisition"
-                          view="_minimal"/>
-                <property name="hiringStep"
-                          view="_minimal">
-                    <property name="type"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
-                <property name="order"/>
-            </property>
-            <property name="organizationGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="organizationNameLang1"/>
-                    <property name="organizationNameLang2"/>
-                    <property name="organizationNameLang3"/>
-                    <property name="organizationNameLang4"/>
-                    <property name="organizationNameLang5"/>
-                </property>
-                <property name="organizationName"/>
-            </property>
-        </property>
-    </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.RequisitionHiringStep"
           extends="_local"
           name="requisition-hiring-step-for-filter">
@@ -18594,20 +18482,6 @@
         <property name="employee"/>
         <property name="manager"/>
         <property name="trainer"/>
-    </view>
-    <view class="kz.uco.tsadv.entity.generator.GeneratorEmployeeNumberDefiner"
-          extends="_local"
-          name="generatorEmployeeNumberDefiner-view">
-        <property name="generatorEmployeeNumber"
-                  view="_minimal">
-            <property name="name"/>
-            <property name="prefix"/>
-            <property name="suffix"/>
-        </property>
-        <property name="personType"
-                  view="_minimal">
-            <property name="code"/>
-        </property>
     </view>
     <view class="kz.uco.tsadv.entity.TimecardHierarchy"
           extends="_local"
@@ -19542,16 +19416,6 @@
         <property name="jobRequests"
                   view="_minimal"/>
     </view>
-    <view class="kz.uco.tsadv.entity.MyTeamNew"
-          extends="_local"
-          name="myTeamNew-view">
-        <property name="parent"
-                  view="_minimal">
-            <property name="personGroupId"/>
-            <property name="parent"
-                      view="_minimal"/>
-        </property>
-    </view>
     <view class="kz.uco.tsadv.modules.personal.model.OrganizationStructure"
           extends="_minimal"
           name="organizationStructure.for.orgService">
@@ -19560,16 +19424,6 @@
         <property name="pathOrgName1"/>
         <property name="startDate"/>
         <property name="endDate"/>
-    </view>
-    <view class="kz.uco.tsadv.entity.MyTeamNew"
-          extends="_local"
-          name="myTeamNew-view">
-        <property name="parent"
-                  view="_minimal">
-            <property name="personGroupId"/>
-            <property name="parent"
-                      view="_minimal"/>
-        </property>
     </view>
     <view class="kz.uco.tsadv.entity.MyTeamNew"
           extends="_local"
