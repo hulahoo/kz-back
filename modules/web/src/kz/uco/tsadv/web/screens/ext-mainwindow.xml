@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        caption="mainMsg://application.caption"
-        class="kz.uco.tsadv.web.screens.ExtAppMainWindow"
-        extends="kz/uco/base/web/template/ext-mainwindow.xml"
-        messagesPack="kz.uco.base.web">
-    <layout/>
-</window>

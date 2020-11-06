@@ -37,23 +37,25 @@ public class OrganizationExtChangedListener {
             if (organization.getEndDate().compareTo(BaseCommonUtils.getSystemDate()) >= 0
                     && organization.getStartDate().compareTo(BaseCommonUtils.getSystemDate()) <= 0){
 
-                organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang1());
-                organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang2());
-                organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang3());
-                organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang4());
-                organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang5());
-                txDataManager.save(organizationGroup);
+                saveOrganizationGroupNames(organizationGroup,organization);
             }
         }
 
         if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang1());
-            organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang2());
-            organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang3());
-            organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang4());
-            organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang5());
-            txDataManager.save(organizationGroup);
+            saveOrganizationGroupNames(organizationGroup,organization);
         }
 
+    }
+
+
+    public void saveOrganizationGroupNames(OrganizationGroupExt organizationGroup, OrganizationExt organization) {
+
+        organizationGroup.setOrganizationNameLang1(organization.getOrganizationNameLang1());
+        organizationGroup.setOrganizationNameLang2(organization.getOrganizationNameLang2());
+        organizationGroup.setOrganizationNameLang3(organization.getOrganizationNameLang3());
+        organizationGroup.setOrganizationNameLang4(organization.getOrganizationNameLang4());
+        organizationGroup.setOrganizationNameLang5(organization.getOrganizationNameLang5());
+
+        txDataManager.save(organizationGroup);
     }
 }

@@ -117,8 +117,6 @@
             template="/kz/uco/tsadv/web/modules/performance/assessmenttemplate/assessment-template-browse.xml"/>
     <screen id="tsadv$AssessmentTemplate.edit"
             template="/kz/uco/tsadv/web/modules/performance/assessmenttemplate/assessment-template-edit.xml"/>
-    <screen id="mainWindow"
-            template="/kz/uco/tsadv/web/screens/ext-mainwindow.xml"/>
     <screen id="base$DicOrgType.browse"
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicorgtype/dic-org-type-browse.xml"/>
     <screen id="base$DicOrgType.edit"
