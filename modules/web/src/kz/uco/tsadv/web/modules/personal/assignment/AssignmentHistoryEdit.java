@@ -91,12 +91,17 @@ public class AssignmentHistoryEdit extends AbstractHrEditor<AssignmentExt> {
     private EmployeeConfig employeeConfig;
     @Inject
     protected OrderNumberService orderNumberService;
+    @Inject
+    private Frame windowActions;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
         if (params.containsKey("fromHistory")) {
-            getComponent("windowCommitHistory").setVisible(false);
+            if (windowActions.getAction("windowCommitHistory") != null) {
+                windowActions.getAction("windowCommitHistory").setVisible(false);
+            }
+//          getComponent("windowCommitHistory").setVisible(false);
         }
         personGroup.removeAction(PickerField.OpenAction.NAME);
         personGroup.removeAction(PickerField.ClearAction.NAME);
@@ -105,27 +110,27 @@ public class AssignmentHistoryEdit extends AbstractHrEditor<AssignmentExt> {
         gradeGroup.removeAction(PickerField.OpenAction.NAME);
         location.removeAction(PickerField.OpenAction.NAME);
 
-        FieldGroup.FieldConfig positionGroupConfig = fieldGroup.getField("positionGroup");
-        PickerField positionGroup = componentsFactory.createComponent(PickerField.class);
-        positionGroup.setDatasource(assignmentDs, positionGroupConfig.getProperty());
-        if (!editHistory)
-            positionGroup.addAction(new AbstractAction("customLookup") {
-                @Override
-                public void actionPerform(Component component) {
-                    openPositionStructureBrowse();
-                }
-
-                @Override
-                public String getIcon() {
-                    return "font-icon:ELLIPSIS_H";
-                }
-            });
-        else
-            positionGroup.setEditable(false);
-        positionGroup.setWidth("100%");
-        positionGroup.setCaptionMode(CaptionMode.PROPERTY);
-        positionGroup.setCaptionProperty("position");
-        positionGroupConfig.setComponent(positionGroup);
+//        FieldGroup.FieldConfig positionGroupConfig = fieldGroup.getField("positionGroup");
+//        PickerField positionGroup = componentsFactory.createComponent(PickerField.class);
+//        positionGroup.setDatasource(assignmentDs, positionGroupConfig.getProperty());
+//        if (!editHistory)
+//            positionGroup.addAction(new AbstractAction("customLookup") {
+//                @Override
+//                public void actionPerform(Component component) {
+//                    openPositionStructureBrowse();
+//                }
+//
+//                @Override
+//                public String getIcon() {
+//                    return "font-icon:ELLIPSIS_H";
+//                }
+//            });
+//        else
+//            positionGroup.setEditable(false);
+//        positionGroup.setWidth("100%");
+//        positionGroup.setCaptionMode(CaptionMode.PROPERTY);
+//        positionGroup.setCaptionProperty("position");
+//        positionGroupConfig.setComponent(positionGroup);
         if (params.containsKey("transfer")) {
             transfer = true;
         }

@@ -56,12 +56,12 @@
                                editable="false"
                                property="personGroup"
                                required="true"/>
-                        <field custom="true"
-                               property="positionGroup"/>
-                        <field captionProperty="organization"
+                        <field
+                               property="positionGroup" />
+                        <field
                                editable="false"
                                property="organizationGroup"/>
-                        <field captionProperty="job"
+                        <field
                                editable="false"
                                property="jobGroup"/>
                         <field property="startDate"/>

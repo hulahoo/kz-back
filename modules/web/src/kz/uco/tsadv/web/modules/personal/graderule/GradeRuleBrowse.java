@@ -242,8 +242,8 @@ public class GradeRuleBrowse extends AbstractLookup {
                 " SELECT e" +
                         " FROM tsadv$GradeRuleValueGroup e" +
                         " JOIN e.list grv" +
-                        " WHERE grv.gradeGroup.id = :custom$gradeGroupId" +
-                        " AND grv.gradeRule.id = :ds$gradeRulesDs" +
+                        " WHERE grv.gradeGroup.id = :custom$gradeGroupId.id" +
+                        " AND grv.gradeRule.id = :ds$gradeRulesDs.id" +
                         " AND :session$systemDate BETWEEN grv.startDate AND grv.endDate");
         Map<String, Object> map = new HashMap<>();
         map.put("gradeGroupId", gradeGroup.getId());

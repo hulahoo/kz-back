@@ -4,6 +4,7 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.shared.Organization;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
@@ -11,6 +12,7 @@ import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
 import javax.persistence.*;
 
+@PublishEntityChangedEvents
 @Listeners("tsadv_OrganizationListener")
 @NamePattern("%s|organizationName")
 @Extends(Organization.class)
@@ -35,6 +37,7 @@ public class OrganizationExt extends Organization {
 
     @SuppressWarnings("all")
     @MetaProperty(related = "organizationNameLang1")
+    @Transient
     public String getOrganizationNameLang1Reducted() {
         if (organizationNameLang1 != null) {
             if (organizationNameLang1.length() > 25) {
@@ -49,6 +52,7 @@ public class OrganizationExt extends Organization {
 
     @SuppressWarnings("all")
     @MetaProperty(related = "organizationNameLang2")
+    @Transient
     public String getOrganizationNameLang2Reducted() {
         if (organizationNameLang2 != null) {
             if (organizationNameLang2.length() > 25) {
@@ -63,6 +67,7 @@ public class OrganizationExt extends Organization {
 
     @SuppressWarnings("all")
     @MetaProperty(related = "organizationNameLang3")
+    @Transient
     public String getOrganizationNameLang3Reducted() {
         if (organizationNameLang3 != null) {
             if (organizationNameLang3.length() > 25) {
@@ -77,6 +82,7 @@ public class OrganizationExt extends Organization {
 
     @SuppressWarnings("all")
     @MetaProperty(related = "organizationNameLang4")
+    @Transient
     public String getOrganizationNameLang4Reducted() {
         if (organizationNameLang4 != null) {
             if (organizationNameLang4.length() > 25) {
@@ -91,6 +97,7 @@ public class OrganizationExt extends Organization {
 
     @SuppressWarnings("all")
     @MetaProperty(related = "organizationNameLang5")
+    @Transient
     public String getOrganizationNameLang5Reducted() {
         if (organizationNameLang5 != null) {
             if (organizationNameLang5.length() > 25) {
