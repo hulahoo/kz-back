@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @Component
-public class EmployeNumberOf implements Consumer<PersonExt>{
+public class EmployeeNumberOf implements Consumer<PersonExt>{
 
     @Inject
     private CommonService commonService;
