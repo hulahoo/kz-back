@@ -15,7 +15,7 @@
                               class="kz.uco.tsadv.modules.timesheet.model.CalendarHoliday"
                               view="calendarHoliday.view">
             <query>
-                <![CDATA[select e from tsadv$CalendarHoliday e where e.calendar.id = :ds$calendarsDs]]>
+                <![CDATA[select e from tsadv$CalendarHoliday e where e.calendar.id = :ds$calendarsDs.id]]>
             </query>
         </collectionDatasource>
     </dsContext>
