@@ -1264,7 +1264,7 @@
                   view="_minimal">
             <property name="jobGroup"
                       view="_minimal">
-                <property name="jobName"/>
+                <property name="jobNameDefault"/>
             </property>
         </property>
         <property name="candidatePersonGroup"
@@ -1333,7 +1333,7 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
         <property name="gradeGroup">
             <property name="list"
@@ -5343,7 +5343,7 @@
                 <property name="job"
                           view="_local">
                 </property>
-                <property name="jobName"/>
+                <property name="jobNameDefault"/>
             </property>
         </property>
         <property name="positionTest"
@@ -5416,7 +5416,7 @@
                 <property name="list"
                           view="_local">
                 </property>
-                <property name="jobName"/>
+                <property name="jobNameDefault"/>
                 <property name="job"
                           view="_local">
                 </property>
@@ -12952,7 +12952,7 @@
           name="requisition-for-selfservice-browse">
         <property name="jobGroup"
                   view="_minimal">
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
         <property name="location"
                   view="_minimal">
@@ -12969,7 +12969,7 @@
         <property name="endDate"/>
         <property name="jobGroup"
                   view="_minimal">
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
         <property name="location"
                   view="_minimal"/>
@@ -13273,7 +13273,7 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
-                <property name="jobName"/>
+                <property name="jobNameDefault"/>
             </property>
         </property>
     </view>
@@ -13284,7 +13284,7 @@
                   view="_local">
             <property name="jobGroup"
                       view="_minimal">
-                <property name="jobName"/>
+                <property name="jobNameDefault"/>
             </property>
         </property>
         <property name="position"
@@ -13705,7 +13705,7 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.PersonExt"
@@ -14859,7 +14859,7 @@
                   view="_minimal">
             <property name="list"
                       view="_minimal"/>
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
         <property name="personalProtectionEquipment"
                   view="_local"/>
@@ -15195,7 +15195,7 @@
                   view="_minimal">
             <property name="list"
                       view="_minimal"/>
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.PositionTest"
@@ -15387,7 +15387,7 @@
                       view="_local">
                 <property name="jobName"/>
             </property>
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
             <property name="deleteTs"/>
         </property>
     </view>
@@ -17139,7 +17139,7 @@
                         <property name="jobNameLang4"/>
                         <property name="jobNameLang5"/>
                     </property>
-                    <property name="jobName"/>
+                    <property name="jobNameDefault"/>
                 </property>
                 <property name="assignmentStatus"
                           view="_minimal">
@@ -17174,7 +17174,7 @@
                         <property name="jobNameLang4"/>
                         <property name="jobNameLang5"/>
                     </property>
-                    <property name="jobName"/>
+                    <property name="jobNameDefault"/>
                 </property>
                 <property name="startDate"/>
                 <property name="endDate"/>
@@ -18018,7 +18018,7 @@
         </property>
         <property name="jobGroup"
                   view="_minimal">
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
             <property name="list"
                       view="_minimal">
                 <property name="jobNameLang1"/>
@@ -18458,7 +18458,7 @@
         </property>
         <property name="jobGroup"
                   view="_minimal">
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
         <property name="currency"
                   view="_minimal">
@@ -18945,7 +18945,7 @@
                 <property name="jobNameLang5"/>
                 <property name="legacyId"/>
             </property>
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
         <property name="attachment"
                   view="_minimal"/>
@@ -19396,7 +19396,7 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
         <property name="recruiterPersonGroup"
                   view="_minimal">
@@ -19471,7 +19471,7 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
-            <property name="jobName"/>
+            <property name="jobNameDefault"/>
         </property>
         <property name="managerPersonGroup"
                   view="_minimal">
