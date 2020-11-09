@@ -26,7 +26,6 @@ public class OrganizationExt extends Organization {
     @JoinColumn(name = "GROUP_ID")
     protected OrganizationGroupExt group;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "COMPANY_ID")
     private DicCompany company;
