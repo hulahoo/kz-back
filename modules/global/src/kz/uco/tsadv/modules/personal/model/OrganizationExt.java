@@ -12,7 +12,6 @@ import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @PublishEntityChangedEvents
 @Listeners("tsadv_OrganizationListener")
@@ -26,7 +25,7 @@ public class OrganizationExt extends Organization {
     @JoinColumn(name = "GROUP_ID")
     protected OrganizationGroupExt group;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_ID")
     private DicCompany company;
 
