@@ -3288,6 +3288,16 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
+        <property name="company"
+                  view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
         <property name="group"
                   view="_minimal">
             <property name="list"

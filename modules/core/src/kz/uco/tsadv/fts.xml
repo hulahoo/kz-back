@@ -1675,5 +1675,8 @@
         <entity class="kz.uco.tsadv.modules.administration.TsadvUserExt">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCompany">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
