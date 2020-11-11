@@ -502,11 +502,6 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public AssignmentExt getAssignment(UUID personGroupId, String view) {
         LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
-        return getAssignment(loadContext, personGroupId, view);
-    }
-
-    @Override
-    public AssignmentExt getAssignment(LoadContext<AssignmentExt> loadContext, UUID personGroupId, String view) {
         loadContext.setQuery(LoadContext.createQuery(
                 "select e from base$AssignmentExt e " +
                         "where :sysDate between e.startDate and e.endDate " +
