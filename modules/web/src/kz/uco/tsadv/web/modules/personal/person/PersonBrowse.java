@@ -132,7 +132,7 @@ public class PersonBrowse extends AbstractLookup {
         AssignmentExt assignment = employeeService.getAssignment(person.getGroup().getId(), "assignment.card");
 
         if (assignment != null) {
-            openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+            openEditor("person-card", person.getGroup(), WindowManager.OpenType.THIS_TAB);
         } else {
             AbstractEditor noAssignmentEditor = openEditor("person-card-no-assignment",
                     person.getGroup(), WindowManager.OpenType.THIS_TAB);

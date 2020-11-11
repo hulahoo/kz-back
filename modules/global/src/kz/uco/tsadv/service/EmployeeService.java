@@ -2,6 +2,7 @@ package kz.uco.tsadv.service;
 
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.LoadContext;
 import kz.uco.base.entity.extend.UserExt;
 import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
@@ -12,7 +13,6 @@ import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
-import kz.uco.tsadv.modules.recognition.dictionary.DicGoodsCategory;
 
 import javax.annotation.Nullable;
 import java.util.Date;
@@ -78,6 +78,8 @@ public interface EmployeeService {
     OrganizationGroupExt getOrganizationGroupExtByPositionGroup(PositionGroupExt positionGroupExt, String viewName);
 
     AssignmentExt getAssignment(UUID personGroupId, String view);
+
+    AssignmentExt getAssignment(LoadContext<AssignmentExt> loadContext, UUID personGroupId, String view);
 
     PositionGroupExt getPositionGroupByAssignmentGroupId(UUID assignmentGroupId, String view);
 

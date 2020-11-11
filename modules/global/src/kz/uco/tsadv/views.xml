@@ -3816,6 +3816,9 @@
         </property>
         <property name="group"
                   view="_local">
+            <property name="punishment" view="_minimal"/>
+            <property name="awards" view="_minimal"/>
+            <property name="surCharge" view="_minimal"/>
             <property name="list"
                       view="_local">
                 <property name="positionGroup"
@@ -5974,7 +5977,7 @@
                   view="_minimal">
             <property name="calendar"
                       view="_minimal"/>
-        </property>"
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.GradeRuleValueGroup"
           extends="_local"
@@ -21080,5 +21083,30 @@
             <property name="legacyId"/>
         </property>
     </view>
-
+    <view entity="base$PersonGroupExt" name="personGroupExt.card" extends="_minimal">
+        <property name="person" view="_minimal"/>
+        <property name="list" view="_minimal"/>
+        <property name="personContacts" view="_minimal"/>
+        <property name="personDocuments" view="_minimal"/>
+        <property name="addresses" view="_minimal"/>
+        <property name="beneficiary" view="_minimal"/>
+        <property name="cases" view="_minimal"/>
+        <property name="militaryRank" view="_minimal"/>
+        <property name="disability" view="_minimal"/>
+        <property name="retirement" view="_minimal"/>
+        <property name="agreements" view="_minimal"/>
+        <property name="personExperience" view="_minimal"/>
+        <property name="jobRequests" view="_minimal"/>
+        <property name="dismissals" view="_minimal"/>
+        <property name="relocation" view="_minimal"/>
+        <property name="personEducation" view="_minimal"/>
+        <property name="competenceElements" view="_minimal"/>
+        <property name="assessments" view="_minimal"/>
+        <property name="successionPlanning" view="_minimal"/>
+        <property name="businessTrip" view="_minimal">
+            <property name="businessTripLines" view="_minimal">
+                <property name="businessTripCost" view="_minimal"/>
+            </property>
+        </property>
+    </view>
 </views>

@@ -215,7 +215,7 @@ public class PositionFrame extends AbstractFrame {
     }
 
     public void redirectCard(AssignmentExt assignment, String name) {
-        openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+        openEditor("person-card", assignment.getPersonGroup(), WindowManager.OpenType.THIS_TAB);
     }
 
     public Component generateUserImageCell(AssignmentExt entity) {

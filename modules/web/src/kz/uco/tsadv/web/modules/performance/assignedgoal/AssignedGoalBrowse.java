@@ -13,7 +13,9 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import com.haulmont.reports.entity.Report;
 import com.haulmont.reports.gui.ReportGuiManager;
+import kz.uco.base.common.StaticVariable;
 import kz.uco.base.common.WebCommonUtils;
+import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.performance.dictionary.DicPriority;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
@@ -23,10 +25,7 @@ import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
-import kz.uco.base.common.StaticVariable;
-import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.web.modules.personal.assignment.Filterframe;
-import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
@@ -196,7 +195,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
         personName.setAction(new BaseAction("redirect-card") {
             @Override
             public void actionPerform(Component component) {
-                openEditor("person-card", entity, WindowManager.OpenType.THIS_TAB);
+                openEditor("person-card", entity.getPersonGroup(), WindowManager.OpenType.THIS_TAB);
             }
         });
 
