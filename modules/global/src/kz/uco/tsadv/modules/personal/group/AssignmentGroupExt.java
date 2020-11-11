@@ -18,7 +18,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@NamePattern("%s|id")
+@NamePattern("%s|assignmentNumber")
 @Extends(AssignmentGroup.class)
 @Entity(name = "base$AssignmentGroupExt")
 @Customizer(AssignmentGroupExtDescriptorCustomizer.class)
@@ -50,7 +50,7 @@ public class AssignmentGroupExt extends AssignmentGroup {
     @MetaProperty(related = "list")
     protected AssignmentExt assignment;
 
-    @OneToOne(mappedBy = "group", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected AssignmentExt relevantAssignment; // Текущее (для момента в машине времени) назначение
 
     @Composition
@@ -162,6 +162,7 @@ public class AssignmentGroupExt extends AssignmentGroup {
     }
 
     @MetaProperty(related = "list")
+    @Transient
     public String getAssignmentPersonFioWithEmployeeNumber() {
         if (getAssignment() != null) {
             return getAssignment().getPersonGroup().getPersonFioWithEmployeeNumber();

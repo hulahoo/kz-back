@@ -17183,7 +17183,7 @@
         </property>
         <property name="ordAssignment">
             <property name="assignmentGroup"
-                      view="_minimal">
+                      view="_local">
                 <property name="list">
                     <property name="personGroup"
                               view="_minimal">
