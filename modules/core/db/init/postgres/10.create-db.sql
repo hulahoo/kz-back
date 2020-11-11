@@ -14556,10 +14556,14 @@ update BASE_PERSON set DTYPE = 'base$PersonExt' where DTYPE is null ^
 -- end BASE_PERSON
 -- begin BASE_ORGANIZATION
 alter table BASE_ORGANIZATION add column GROUP_ID uuid ^
+-- alter table BASE_ORGANIZATION add column COMPANY_ID uuid ^
+-- update BASE_ORGANIZATION set COMPANY_ID = <default_value> ^
+-- alter table BASE_ORGANIZATION alter column COMPANY_ID set not null ^
+alter table BASE_ORGANIZATION add column COMPANY_ID uuid not null ^
 alter table BASE_ORGANIZATION add column COST_CENTER_ID uuid ^
 alter table BASE_ORGANIZATION add column PAYROLL_ID uuid ^
 alter table BASE_ORGANIZATION add column INTERNAL boolean ^
-alter table BASE_ORGANIZATION add column DTYPE varchar(100) ^
+alter table BASE_ORGANIZATION add column DTYPE varchar(31) ^
 update BASE_ORGANIZATION set DTYPE = 'base$OrganizationExt' where DTYPE is null ^
 -- end BASE_ORGANIZATION
 -- begin BASE_POSITION
@@ -14630,8 +14634,19 @@ alter table BASE_ASSIGNMENT_GROUP add column DTYPE varchar(100) ^
 update BASE_ASSIGNMENT_GROUP set DTYPE = 'base$AssignmentGroupExt' where DTYPE is null ^
 -- end BASE_ASSIGNMENT_GROUP
 -- begin BASE_ORGANIZATION_GROUP
+alter table BASE_ORGANIZATION_GROUP add column COMPANY_ID uuid ^
+alter table BASE_ORGANIZATION_GROUP add column COST_CENTER_ID uuid ^
+alter table BASE_ORGANIZATION_GROUP add column PAYROLL_ID uuid ^
+alter table BASE_ORGANIZATION_GROUP add column IS_INTERNAL boolean ^
+alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG1 varchar(1000) ^
+alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG2 varchar(1000) ^
+alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG3 varchar(1000) ^
+alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG4 varchar(1000) ^
+alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG5 varchar(1000) ^
+alter table BASE_ORGANIZATION_GROUP add column LOCATION_ID uuid ^
+alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_TYPE_ID uuid ^
 alter table BASE_ORGANIZATION_GROUP add column ANALYTICS_ID uuid ^
-alter table BASE_ORGANIZATION_GROUP add column DTYPE varchar(100) ^
+alter table BASE_ORGANIZATION_GROUP add column DTYPE varchar(31) ^
 update BASE_ORGANIZATION_GROUP set DTYPE = 'base$OrganizationGroupExt' where DTYPE is null ^
 -- end BASE_ORGANIZATION_GROUP
 -- begin BASE_PERSON_GROUP
@@ -14889,108 +14904,6 @@ create table TSADV_LMS_SLIDER_IMAGE (
     primary key (ID)
 )^
 -- end TSADV_LMS_SLIDER_IMAGE
--- begin TSADV_DIC_ASSESSMENT_RESULT
-create table TSADV_DIC_ASSESSMENT_RESULT (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_RESULT
--- begin TSADV_DIC_ASSESSMENT_TYPE
-create table TSADV_DIC_ASSESSMENT_TYPE (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_TYPE
--- begin TSADV_DIC_ASSESSMENT_EVENTS
-create table TSADV_DIC_ASSESSMENT_EVENTS (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_EVENTS
 -- begin TSADV_APP_PROPERTY_ENTITY_DESCRIPTION
 create table TSADV_APP_PROPERTY_ENTITY_DESCRIPTION (
     ID uuid,
@@ -15012,3 +14925,37 @@ create table TSADV_APP_PROPERTY_ENTITY_DESCRIPTION (
 alter table SEC_USER add column PERSON_GROUP_ID uuid ^
 update SEC_USER set DTYPE='tsadv$UserExt' ^
 -- end SEC_USER
+-- begin TSADV_DIC_COMPANY
+create table TSADV_DIC_COMPANY (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_COMPANY

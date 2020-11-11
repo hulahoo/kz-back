@@ -1,7 +1,7 @@
 package kz.uco.tsadv.web.modules.personal.person;
 
 import com.haulmont.cuba.gui.WindowManager;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.AbstractLookup;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.service.EmployeeService;
@@ -16,7 +16,7 @@ public class PersonBrowseSiz extends AbstractLookup {
         AssignmentExt assignment = employeeService.getAssignment(person.getGroup().getId(), "assignment.card");
 
         if (assignment != null) {
-            openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+            openEditor("person-card", person.getGroup(), WindowManager.OpenType.THIS_TAB);
         } else {
             showNotification(getMessage("assignmentNull"));
         }

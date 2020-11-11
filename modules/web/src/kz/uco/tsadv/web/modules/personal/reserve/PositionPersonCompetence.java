@@ -18,24 +18,24 @@ import com.haulmont.cuba.web.gui.components.WebLookupPickerField;
 import com.haulmont.cuba.web.widgets.CubaHorizontalSplitPanel;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.AbstractSplitPanel;
-import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.shared.ElementType;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
-import kz.uco.base.common.StaticVariable;
+import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
 import kz.uco.tsadv.web.modules.personal.hierarchyelement.PersonPercentageDatasource;
 import kz.uco.tsadv.web.modules.personal.hierarchyelement.PositionPercentageDatasource;
-import kz.uco.tsadv.service.EmployeeService;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 /**
  * @author Adilbekov Yernar
@@ -320,7 +320,7 @@ public class PositionPersonCompetence extends AbstractWindow {
         }
 
         if (assignment != null) {
-            openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+            openEditor("person-card", assignment.getPersonGroup(), WindowManager.OpenType.THIS_TAB);
         } else {
             showNotification("Assignment is NULL!");
         }
@@ -334,7 +334,7 @@ public class PositionPersonCompetence extends AbstractWindow {
         if (personGroup != null) {
             AssignmentExt assignment = getAssignment(personGroup.getId());
             if (assignment != null) {
-                openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+                openEditor("person-card", personGroup, WindowManager.OpenType.THIS_TAB);
             } else {
                 showNotification("Assignment is NULL!");
             }

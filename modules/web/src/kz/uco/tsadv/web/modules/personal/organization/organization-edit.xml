@@ -143,6 +143,8 @@
                                            property="costCenter"/>
                                     <field id="payroll"
                                            property="payroll"/>
+                                    <field id="company"
+                                           property="company"/>
                                     <field id="startDate"
                                            property="startDate"/>
                                     <field id="endDate"

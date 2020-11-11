@@ -18,7 +18,6 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.components.EmployeeCheckComponent;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -56,8 +55,6 @@ public class PersonalDataRequestShow extends AbstractWindow {
     protected CollectionDatasource<Address, UUID> addressesDs;
     @Inject
     protected Metadata metadata;
-    @Inject
-    protected EmployeeCheckComponent employeeCheckComponent;
     @Inject
     protected DataManager dataManager;
     @Inject

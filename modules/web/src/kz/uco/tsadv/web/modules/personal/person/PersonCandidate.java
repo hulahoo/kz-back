@@ -1,6 +1,5 @@
 package kz.uco.tsadv.web.modules.personal.person;
 
-import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.WindowParam;
@@ -29,11 +28,9 @@ import kz.uco.tsadv.modules.recruitment.model.PersonAttachment;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
 import kz.uco.tsadv.web.modules.personal.person.candidateframes.CandidateJobRequest;
 import kz.uco.tsadv.web.modules.recruitment.jobrequest.UniqueFioDateException;
-import kz.uco.tsadv.web.modules.recruitment.jobrequest.UniqueIinException;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.*;
 
 @SuppressWarnings("all")
@@ -331,8 +328,6 @@ public class PersonCandidate extends AbstractHrEditor<PersonExt> {
     }
 
     protected void initImageUpload() {
-        imageUpload.setUploadButtonCaption("");
-        imageUpload.setClearButtonCaption("");
         imageUpload.addFileUploadSucceedListener(event -> {
             PersonExt person = getItem();
             if (person != null && imageUpload.getFileContent() != null) {

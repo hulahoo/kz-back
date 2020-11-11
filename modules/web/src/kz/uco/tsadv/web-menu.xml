@@ -180,103 +180,199 @@
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
           insertAfter="hr">
-        <item id="tsadv$ActivityBrowseNew"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
-        <item id="tsadv$PersonalDataRequest.show"
+        <item id="activityBrowseNew"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$ActivityBrowseNew"/>
+        </item>
+        <item id="personalDataRequestId"
               icon="font-icon:USER"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$PersonalDataRequest.show"/>
+        </item>
         <item id="recognition-window"
               icon="font-icon:USERS"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="recognition-window"/>
+        </item>
         <item id="recognition-window-feedback"
               icon="font-icon:COMMENTS"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
-        <item id="tsadv$AssignmentMyTeam.browse"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="recognition-window-feedback"/>
+        </item>
+        <item id="ssMyTeam"
               icon="font-icon:USERS"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
-        <item id="beautyTree"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$AssignmentMyTeam.browse"/>
+        </item>
+        <item id="hrBeautyTree"
               icon="font-icon:SITEMAP"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
-        <item id="tsadv$Absence.lookup"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="beautyTree"/>
+
+        </item>
+        <item id="ssAbsenceLookupId"
               icon="font-icon:CHILD"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
-        <item id="tsadv$myAbsenceBalance"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$Absence.lookup"/>
+        </item>
+        <item id="ssAbsenceBalance"
               icon="font-icon:CAB"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
-        <item id="tsadv$TransferRequest.browse"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$myAbsenceBalance"/>
+        </item>
+        <item id="ssTransferRequests"
               icon="icons/wf-exchange.png"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
-        <item id="tsadv$Salary.browse"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$TransferRequest.browse"/>
+        </item>
+        <item id="ssSalaries"
               icon="font-icon:MONEY"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$Salary.browse"/>
+        </item>
         <item id="timecard-self"
-              stylename="DIALOG"
+              openType="DIALOG"
               icon="CALENDAR"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner"/>
-        <item id="tsadv$PersonDocument.browse"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="timecard-self"/>
+        </item>
+        <item id="myDocuments"
               icon="BOOK"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$PersonDocument.browse"/>
             <param name="fromSelfService"
                    value="true"/>
         </item>
         <menu id="ssLearning"
               icon="font-icon:GRADUATION_CAP">
             <item id="ssLearningRequests"
-                  screen="tsadv$MyEnrollment.browse"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="tsadv$MyEnrollment.browse"/>
+            </item>
             <item id="ssSelfLearning"
-                  screen="self-learning"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="self-learning"/>
+            </item>
             <item id="ssAllCourses"
-                  screen="all-courses"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="all-courses"/>
+            </item>
             <item id="ssBudgetRequests"
-                  screen="tsadv$BudgetRequest.browse"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="tsadv$BudgetRequest.browse"/>
+            </item>
             <item id="courseSchedule"
-                  screen="course-schedule"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="course-schedule"/>
+            </item>
         </menu>
         <menu id="ssPerformanceManagement"
               icon="font-icon:BAR_CHART_O">
             <item id="ssPersonAssessment"
-                  screen="tsadv$AssessmentParticipant.browse"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="tsadv$AssessmentParticipant.browse"/>
+            </item>
             <item id="pmAssessmentsByPersons"
-                  screen="tsadv$AssignmentForManager.browse"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="tsadv$AssignmentForManager.browse"/>
+            </item>
             <item id="pmAssignedGoals"
-                  screen="tsadv$AssignedGoal.browse"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="tsadv$AssignedGoal.browse"/>
+            </item>
         </menu>
         <menu id="ssRecruitment"
               icon="font-icon:SEARCH">
             <item id="ssVacancyRequests"
-                  bean="tsadv_MethodsForMenuBean"
-                  beanMethod="openRequisition"/>
+                  class="kz.uco.tsadv.web.beans.VacancyRequestsMenuItemRunner"/>
             <item id="ssInterviews"
-                  screen="interview-browse-self"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="interview-timecard-selfbrowse-self"/>
+            </item>
             <item id="ssJobOffers"
-                  screen="offer-browse-self"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="offer-browse-self"/>
+            </item>
             <item id="ssJobRequestSelf"
-                  screen="tsadv$JobRequestSelf.browse"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="tsadv$JobRequestSelf.browse"/>
+            </item>
             <item id="ssPlannedInterview"
-                  screen="interview-browse-planned"/>
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="interview-browse-planned"/>
+            </item>
             <item id="ssJobOfferSelf"
-                  screen="tsadv$Offer.browse">
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="tsadv$Offer.browse"/>
                 <param name="myOffers"
                        value="true"/>
             </item>
-            <item screen="requisitionSelfService.browse"/>
+            <item id="requisitionSelfService.browse"
+                  class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+                <param name="screen"
+                       value="tsadv$BudgetRequest.browse"/>
+            </item>
         </menu>
-        <item icon="font-icon:BULLHORN"
-              screen="person-group-reviews"/>
+        <item id="person-group-reviews"
+              icon="font-icon:BULLHORN"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="person-group-reviews"/>
+        </item>
         <item id="calculationSheet"
               icon="BITCOIN"
               openType="DIALOG"
-              screen="calculationSheet"/>
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="calculationSheet"/>
+        </item>
         <item id="positionChangeRequestBrowse"
               icon="font-icon:EXCHANGE"
-              screen="tsadv$PositionChangeRequest.browse"/>
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$PositionChangeRequest.browse"/>
+        </item>
         <item id="AssignmentSalaryChange"
-              screen="tsadv$AssignmentSalaryChange"/>
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$AssignmentSalaryChange"/>
+        </item>
         <item id="MyDetails"
-              screen="MyDetails"/>
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="MyDetails"/>
+        </item>
         <item id="tsadv$BpmUserSubstitutionSs.browse"
               description="mainMsg://menu-config.tsadv$BpmUserSubstitutionSs.browse"
-              screen="tsadv$BpmUserSubstitutionSs.browse"/>
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv$BpmUserSubstitutionSs.browse"/>
+        </item>
     </menu>
     <menu id="kcTalents">
         <menu id="talentDictionaries">
@@ -563,7 +659,7 @@
         </menu>
     </menu>
     <menu id="reports"
-          icon="icons/reports-print.png">
+          icon="PRINT">
         <item id="report$Report.browse"/>
         <item id="report$ReportGroup.browse"/>
         <item id="report$Report.run"/>

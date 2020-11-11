@@ -84,7 +84,7 @@
             </actions>
             <columns>
                 <column id="budget">
-                    <aggregation strategyClass="kz.uco.tsadv.aggregation.StringAggregation"/>
+                    <aggregation strategyClass="kz.uco.tsadv.strategy.aggregation.StringAggregation"/>
                 </column>
                 <column id="calcCourseName"/>
                 <column id="learningType"/>

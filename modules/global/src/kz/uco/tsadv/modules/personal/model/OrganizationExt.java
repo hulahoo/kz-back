@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.shared.Organization;
+import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -25,6 +26,10 @@ public class OrganizationExt extends Organization {
     protected OrganizationGroupExt group;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    private DicCompany company;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COST_CENTER_ID")
     protected DicCostCenter costCenter;
 
@@ -34,6 +39,14 @@ public class OrganizationExt extends Organization {
 
     @Column(name = "INTERNAL")
     protected Boolean internal;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
 
     @SuppressWarnings("all")
     @MetaProperty(related = "organizationNameLang1")

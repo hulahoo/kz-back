@@ -17,6 +17,12 @@ import java.util.Objects;
 @ActionType(CreateAction.ID)
 public class CreateActionTS extends CreateActionExt {
 
+    public CreateActionTS() {
+    }
+
+    public CreateActionTS(String id) {
+        super(id);
+    }
     @Inject
     protected ScreenHelper screenHelper;
 

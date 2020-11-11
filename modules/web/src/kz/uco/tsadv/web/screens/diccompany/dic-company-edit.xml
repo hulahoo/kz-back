@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://dicCompanyEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.diccompany">
+    <data>
+        <instance id="dicCompanyDc"
+                  class="kz.uco.tsadv.modules.personal.dictionary.DicCompany"
+                  view="_local">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="dicCompanyDc">
+                <column width="350px">
+                    <textField id="codeField" property="code"/>
+                    <textField id="langValue1Field" property="langValue1"/>
+                    <textField id="langValue2Field" property="langValue2"/>
+                    <textField id="langValue3Field" property="langValue3"/>
+                    <textField id="langValue4Field" property="langValue4"/>
+                    <textField id="langValue5Field" property="langValue5"/>
+                    <dateField id="startDateField" property="startDate"/>
+                    <dateField id="endDateField" property="endDate"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

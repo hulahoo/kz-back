@@ -5,13 +5,17 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
 import kz.uco.base.entity.shared.OrganizationGroup;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
+import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.model.*;
@@ -19,6 +23,7 @@ import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import org.eclipse.persistence.annotations.Customizer;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -29,22 +34,27 @@ import java.util.List;
 public class OrganizationGroupExt extends OrganizationGroup {
     private static final long serialVersionUID = -5913796466452223229L;
 
+    @Transient
+    @MetaProperty(related = {"organizationNameLang1", "organizationNameLang2", "organizationNameLang3", "organizationNameLang4", "organizationNameLang5"})
+    protected String organizationName;
+
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "group")
     protected List<OrganizationExt> list;
 
-    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_COST_CENTER_LINK",
-            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DIC_COST_CENTER_ID"))
-    @ManyToMany
-    private List<DicCostCenter> costCenter;
 
-    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_PAYROLL_LINK",
-            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DIC_PAYROLL_ID"))
-    @ManyToMany
-    private List<DicPayroll> payroll;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    private DicCompany company;
+
+    @JoinColumn(name = "COST_CENTER_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DicCostCenter costCenter;
+
+    @JoinColumn(name = "PAYROLL_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DicPayroll payroll;
 
     @Column(name = "IS_INTERNAL")
     private Boolean is_internal;
@@ -64,17 +74,13 @@ public class OrganizationGroupExt extends OrganizationGroup {
     @Column(name = "ORGANIZATION_NAME_LANG5", length = 1000)
     private String organizationNameLang5;
 
-    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_LOCATION_LINK",
-            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DIC_LOCATION_ID"))
-    @ManyToMany
-    private List<DicLocation> location;
+    @JoinColumn(name = "LOCATION_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DicLocation location;
 
-    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_ORG_TYPE_LINK",
-            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DIC_ORG_TYPE_ID"))
-    @ManyToMany
-    private List<DicOrgType> organizationType;
+    @JoinColumn(name = "ORGANIZATION_TYPE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DicOrgType organizationType;
 
     @OneToMany(mappedBy = "organizationGroupExt")
     protected List<PositionExt> position;
@@ -117,44 +123,76 @@ public class OrganizationGroupExt extends OrganizationGroup {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected OrganizationExt relevantOrganization; // Текущее (для момента в машине времени) подразделение
 
+    public void setPayroll(DicPayroll payroll) {
+        this.payroll = payroll;
+    }
+
+    public DicPayroll getPayroll() {
+        return payroll;
+    }
+
+    public void setCostCenter(DicCostCenter costCenter) {
+        this.costCenter = costCenter;
+    }
+
+    public DicCostCenter getCostCenter() {
+        return costCenter;
+    }
+
+    public void setOrganizationType(DicOrgType organizationType) {
+        this.organizationType = organizationType;
+    }
+
+    public DicOrgType getOrganizationType() {
+        return organizationType;
+    }
+
+    public void setLocation(DicLocation location) {
+        this.location = location;
+    }
+
+    public DicLocation getLocation() {
+        return location;
+    }
+
+    public String getOrganizationName() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String organizationNameOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+        if (organizationNameOrder != null){
+            List<String> langs = Arrays.asList(organizationNameOrder.split(";"));
+            switch (langs.indexOf(language)){
+                case 0:
+                    return organizationNameLang1;
+                case 1:
+                    return organizationNameLang2;
+                case 2:
+                    return organizationNameLang3;
+                case 3:
+                    return organizationNameLang4;
+                case 4:
+                    return organizationNameLang5;
+                default:
+                    return organizationNameLang1;
+            }
+        }
+        return organizationNameLang1;
+    }
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
+
     public Boolean getIs_internal() {
         return is_internal;
     }
 
     public void setIs_internal(Boolean is_internal) {
         this.is_internal = is_internal;
-    }
-
-    public List<DicPayroll> getPayroll() {
-        return payroll;
-    }
-
-    public void setPayroll(List<DicPayroll> payroll) {
-        this.payroll = payroll;
-    }
-
-    public List<DicCostCenter> getCostCenter() {
-        return costCenter;
-    }
-
-    public void setCostCenter(List<DicCostCenter> costCenter) {
-        this.costCenter = costCenter;
-    }
-
-    public List<DicOrgType> getOrganizationType() {
-        return organizationType;
-    }
-
-    public void setOrganizationType(List<DicOrgType> organizationType) {
-        this.organizationType = organizationType;
-    }
-
-    public List<DicLocation> getLocation() {
-        return location;
-    }
-
-    public void setLocation(List<DicLocation> location) {
-        this.location = location;
     }
 
     public String getOrganizationNameLang5() {
@@ -293,20 +331,20 @@ public class OrganizationGroupExt extends OrganizationGroup {
     }
 
     // Для отображения имени вместо id в lookup и таблицах #FelixKamalov
-    @MetaProperty(related = "list")
-    @Transient
-    public String getOrganizationName() {
-        OrganizationExt organizationWithName = getOrganization();
-        if (organizationWithName == null) {
-            if (PersistenceHelper.isLoaded(this, "list") && list != null && !list.isEmpty()) {
-                for (OrganizationExt organizationExt : list) {
-                    if (organizationWithName == null || organizationWithName.getStartDate().before(organizationExt.getStartDate())) {
-                        organizationWithName = organizationExt;
-                    }
-                }
-            }
-        }
-        return organizationWithName == null ? "" : organizationWithName.getOrganizationName();
-    }
+//    @MetaProperty(related = "list")
+//    @Transient
+//    public String getOrganizationName() {
+//        OrganizationExt organizationWithName = getOrganization();
+//        if (organizationWithName == null) {
+//            if (PersistenceHelper.isLoaded(this, "list") && list != null && !list.isEmpty()) {
+//                for (OrganizationExt organizationExt : list) {
+//                    if (organizationWithName == null || organizationWithName.getStartDate().before(organizationExt.getStartDate())) {
+//                        organizationWithName = organizationExt;
+//                    }
+//                }
+//            }
+//        }
+//        return organizationWithName == null ? "" : organizationWithName.getOrganizationName();
+//    }
 
 }

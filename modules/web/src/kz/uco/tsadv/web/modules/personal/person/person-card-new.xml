@@ -2,8 +2,31 @@
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://PersonCard.caption"
         class="kz.uco.tsadv.web.modules.personal.person.PersonCardNew"
-        datasource="assignmentDs">
+        datasource="personGroupDs">
     <dsContext>
+        <!--        <datasource id="assignmentDs"-->
+        <!--                    class="kz.uco.tsadv.modules.personal.model.AssignmentExt"-->
+        <!--                    view="assignment.card">-->
+        <!--            <datasource id="assignmentGroupDs"-->
+        <!--                        property="group">-->
+        <!--                <collectionDatasource id="assignmentHistoryDs"-->
+        <!--                                      property="list"/>-->
+        <!--                <datasource id="orgAnalyticsDs"-->
+        <!--                            property="analytics"/>-->
+        <!--            </datasource>-->
+        <!--            <datasource id="personGroupDs"-->
+        <!--                        property="personGroup">-->
+        <!--                <datasource id="personDs"-->
+        <!--                            property="person"/>-->
+        <!--                &lt;!&ndash;<collectionDatasource id="personHistoryDs"-->
+        <!--                                      property="list"/>&ndash;&gt;-->
+        <!--            </datasource>-->
+        <!--        </datasource>-->
+        <datasource id="personGroupDs"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                    view="assignment.card.personGroup">
+            <datasource id="personDs" property="person"/>
+        </datasource>
         <datasource id="assignmentDs"
                     class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
                     view="assignment.card">
@@ -14,14 +37,8 @@
                 <datasource id="orgAnalyticsDs"
                             property="analytics"/>
             </datasource>
-            <datasource id="personGroupDs"
-                        property="personGroup">
-                <datasource id="personDs"
-                            property="person"/>
-                <!--<collectionDatasource id="personHistoryDs"
-                                      property="list"/>-->
-            </datasource>
         </datasource>
+
         <collectionDatasource id="personHistoryDs"
                               class="kz.uco.tsadv.modules.personal.model.PersonExt"
                               view="person-view">

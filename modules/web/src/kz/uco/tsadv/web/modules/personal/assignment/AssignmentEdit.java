@@ -8,7 +8,6 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.components.EmployeNumberOf;
 import kz.uco.tsadv.config.EmployeeConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus;
@@ -19,11 +18,9 @@ import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.personal.model.PositionExt;
-import kz.uco.tsadv.modules.personal.model.PositionStructure;
 import kz.uco.tsadv.modules.recruitment.config.CalcEndTrialPeriod;
 import kz.uco.tsadv.modules.recruitment.enums.HS_Periods;
 import kz.uco.tsadv.web.modules.recruitment.jobrequest.UniqueFioDateException;
-import kz.uco.tsadv.web.modules.recruitment.jobrequest.UniqueIinException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -83,8 +80,6 @@ public class AssignmentEdit extends AbstractEditor<AssignmentExt> {
     @Inject
     protected Configuration configuration;
     @Inject
-    protected EmployeNumberOf employeNumberOf;
-    @Inject
     protected EmployeeConfig employeeConfig;
 
 
@@ -95,9 +90,6 @@ public class AssignmentEdit extends AbstractEditor<AssignmentExt> {
         PersonGroupExt personGroup = metadata.create(PersonGroupExt.class);
         PersonExt person = metadata.create(PersonExt.class);
         person.setGroup(personGroup);
-        if(this.employeeConfig.getGenerateEmployeeNumber()){
-            this.employeNumberOf.accept(person);
-        }
         person.setHireDate(CommonUtils.getSystemDate());
         person.setStartDate(CommonUtils.getSystemDate());
         person.setEndDate(CommonUtils.getEndOfTime());
