@@ -3,30 +3,23 @@ package kz.uco.tsadv.web.modules.personal.assignment;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
-import com.haulmont.cuba.gui.components.Button;
-import com.haulmont.cuba.gui.components.Component;
-import com.haulmont.cuba.gui.components.GridLayout;
-import com.haulmont.cuba.gui.components.Image;
-import com.haulmont.cuba.gui.components.Label;
-import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
-import com.vaadin.ui.*;
 import kz.uco.base.common.WebCommonUtils;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.performance.dictionary.DicNineBoxLevel;
 import kz.uco.tsadv.modules.performance.model.NotPersistEntity;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
-import kz.uco.tsadv.web.modules.personal.common.Utils;
+import kz.uco.tsadv.service.PerformanceService;
 import kz.uco.tsadv.web.gui.components.WebFontRateStars;
 import kz.uco.tsadv.web.gui.components.WebRateStars;
+import kz.uco.tsadv.web.modules.personal.common.Utils;
 import kz.uco.tsadv.web.toolkit.ui.fontratestarscomponent.FontRateStarsComponent;
 import kz.uco.tsadv.web.toolkit.ui.ratestarscomponent.RateStarsComponent;
-import kz.uco.tsadv.service.PerformanceService;
 
 import javax.inject.Inject;
 import java.util.Collections;
@@ -108,7 +101,7 @@ public class AssignmentBrowseForManager extends AbstractLookup {
                         AssignmentExt assignment = commonService.getEntity(AssignmentExt.class, assignmentId);
 
                         if (assignment != null) {
-                            openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+                            openEditor("person-card", assignment.getPersonGroup(), WindowManager.OpenType.THIS_TAB);
                         } else {
                             showNotification("Assignment is NULL!");
                         }
@@ -258,7 +251,7 @@ public class AssignmentBrowseForManager extends AbstractLookup {
                         .setView("assignment.card");
                 AssignmentExt assignment = dataManager.load(loadContext);
                 if (assignment != null) {
-                    openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB, Collections.singletonMap("fromPersonsAssessments", null));
+                    openEditor("person-card", assignment.getPersonGroup(), WindowManager.OpenType.THIS_TAB, Collections.singletonMap("fromPersonsAssessments", null));
                 }
             }
         });

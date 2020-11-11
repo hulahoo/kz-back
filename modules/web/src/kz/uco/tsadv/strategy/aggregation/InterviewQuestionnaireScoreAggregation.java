@@ -1,4 +1,4 @@
-package kz.uco.tsadv.aggregation;
+package kz.uco.tsadv.strategy.aggregation;
 
 import com.haulmont.cuba.gui.data.aggregation.AggregationStrategy;
 import kz.uco.tsadv.modules.recruitment.enums.RcAnswerType;
@@ -22,11 +22,11 @@ public class InterviewQuestionnaireScoreAggregation implements AggregationStrate
         for (InterviewQuestion interviewQuestion : propertyValues) {
             if (interviewQuestion.getQuestion().getAnswerType() == RcAnswerType.MULTI) {
                 maxScore += interviewQuestion.getAnswers().stream().mapToDouble(InterviewAnswer::getWeight).filter(w -> w >= 0).sum();
-                score += interviewQuestion.getAnswers().stream().filter(answer -> answer != null && answer.getBooleanAnswer() != null && answer.getBooleanAnswer()).mapToDouble(a -> a.getWeight()).sum();
+                score += interviewQuestion.getAnswers().stream().filter(answer -> answer != null && answer.getBooleanAnswer() != null && answer.getBooleanAnswer()).mapToDouble(InterviewAnswer::getWeight).sum();
             }
             if (interviewQuestion.getQuestion().getAnswerType() == RcAnswerType.SINGLE) {
-                maxScore += interviewQuestion.getAnswers().stream().mapToDouble(InterviewAnswer::getWeight).max().orElseGet(() -> 0d);
-                score += interviewQuestion.getAnswers().stream().filter(answer -> answer != null && answer.getBooleanAnswer() != null && answer.getBooleanAnswer()).mapToDouble(a -> a.getWeight()).sum();
+                maxScore += interviewQuestion.getAnswers().stream().mapToDouble(InterviewAnswer::getWeight).max().orElse(0d);
+                score += interviewQuestion.getAnswers().stream().filter(answer -> answer != null && answer.getBooleanAnswer() != null && answer.getBooleanAnswer()).mapToDouble(InterviewAnswer::getWeight).sum();
             }
         }
 

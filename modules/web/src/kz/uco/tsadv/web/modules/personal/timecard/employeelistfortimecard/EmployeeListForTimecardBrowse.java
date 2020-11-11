@@ -88,7 +88,7 @@ public class EmployeeListForTimecardBrowse extends AbstractLookup {
         AssignmentExt assignment = employeeService.getAssignment(person.getGroup().getId(), "assignment.card");
 
         if (assignment != null) {
-            openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+            openEditor("person-card", assignment.getPersonGroup(), WindowManager.OpenType.THIS_TAB);
         } else {
             showNotification("Assignment is NULL!");
         }

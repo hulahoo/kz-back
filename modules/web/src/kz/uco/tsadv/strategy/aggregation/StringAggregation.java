@@ -1,4 +1,4 @@
-package kz.uco.tsadv.aggregation;
+package kz.uco.tsadv.strategy.aggregation;
 
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Messages;

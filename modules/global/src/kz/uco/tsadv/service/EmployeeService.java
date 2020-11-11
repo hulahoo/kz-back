@@ -12,7 +12,6 @@ import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
-import kz.uco.tsadv.modules.recognition.dictionary.DicGoodsCategory;
 
 import javax.annotation.Nullable;
 import java.util.Date;
