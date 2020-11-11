@@ -12,7 +12,7 @@
                               class="kz.uco.tsadv.modules.personal.model.BusinessTripLines"
                               view="businessTripLines-view">
             <query>
-                <![CDATA[select e from tsadv$BusinessTripLines e where e.businessTrip.id = :ds$businessTripDs]]>
+                <![CDATA[select e from tsadv$BusinessTripLines e where e.businessTrip = :ds$businessTripDs]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="businessTripCostDs"
@@ -20,7 +20,7 @@
                               class="kz.uco.tsadv.modules.personal.model.BusinessTripCost"
                               view="businessTripCost-view">
             <query>
-                <![CDATA[select e from tsadv$BusinessTripCost e where e.businessTripLines.id = :ds$businessTripLinesDs]]>
+                <![CDATA[select e from tsadv$BusinessTripCost e where e.businessTripLines = :ds$businessTripLinesDs]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="parentBusinessTripsDs"
