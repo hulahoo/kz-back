@@ -20,7 +20,6 @@ import kz.uco.base.common.WebCommonUtils;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.datasource.AbsenceBalanceDatasource;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.gui.components.AbstractHrEditor;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
@@ -42,7 +41,7 @@ import java.util.function.Predicate;
  */
 
 @SuppressWarnings("all")
-public class PersonCardNew extends AbstractHrEditor<AssignmentExt> {
+public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
 
     protected static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
