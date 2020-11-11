@@ -14634,16 +14634,17 @@ alter table BASE_ASSIGNMENT_GROUP add column DTYPE varchar(100) ^
 update BASE_ASSIGNMENT_GROUP set DTYPE = 'base$AssignmentGroupExt' where DTYPE is null ^
 -- end BASE_ASSIGNMENT_GROUP
 -- begin BASE_ORGANIZATION_GROUP
--- alter table BASE_ORGANIZATION_GROUP add column COMPANY_ID uuid ^
--- update BASE_ORGANIZATION_GROUP set COMPANY_ID = <default_value> ^
--- alter table BASE_ORGANIZATION_GROUP alter column COMPANY_ID set not null ^
-alter table BASE_ORGANIZATION_GROUP add column COMPANY_ID uuid not null ^
+alter table BASE_ORGANIZATION_GROUP add column COMPANY_ID uuid ^
+alter table BASE_ORGANIZATION_GROUP add column COST_CENTER_ID uuid ^
+alter table BASE_ORGANIZATION_GROUP add column PAYROLL_ID uuid ^
 alter table BASE_ORGANIZATION_GROUP add column IS_INTERNAL boolean ^
 alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG1 varchar(1000) ^
 alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG2 varchar(1000) ^
 alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG3 varchar(1000) ^
 alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG4 varchar(1000) ^
 alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG5 varchar(1000) ^
+alter table BASE_ORGANIZATION_GROUP add column LOCATION_ID uuid ^
+alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_TYPE_ID uuid ^
 alter table BASE_ORGANIZATION_GROUP add column ANALYTICS_ID uuid ^
 alter table BASE_ORGANIZATION_GROUP add column DTYPE varchar(31) ^
 update BASE_ORGANIZATION_GROUP set DTYPE = 'base$OrganizationGroupExt' where DTYPE is null ^
