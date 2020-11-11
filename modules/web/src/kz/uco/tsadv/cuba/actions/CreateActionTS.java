@@ -20,13 +20,6 @@ public class CreateActionTS extends CreateActionExt {
     @Inject
     protected ScreenHelper screenHelper;
 
-    public CreateActionTS() {
-    }
-
-    public CreateActionTS(String id) {
-        super(id);
-    }
-
     @Override
     public void actionPerform(Component component) {
         if (!hasSubscriptions(ActionPerformedEvent.class)) {

@@ -66,11 +66,6 @@ public class OrganizationGroupBrowse extends AbstractLookup {
         setupFilter();
     }
 
-    @Override
-    public void ready() {
-        super.ready();
-    }
-
     protected void setupFilter() {
         if (filterConfig.getOrganizationEnableCustomFilter()) {
             initFilterMap();
