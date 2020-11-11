@@ -23,7 +23,6 @@ import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import org.eclipse.persistence.annotations.Customizer;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -49,17 +48,13 @@ public class OrganizationGroupExt extends OrganizationGroup {
     @JoinColumn(name = "COMPANY_ID")
     private DicCompany company;
 
-    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_COST_CENTER_LINK",
-            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DIC_COST_CENTER_ID"))
-    @ManyToMany
-    private List<DicCostCenter> costCenter;
+    @JoinColumn(name = "COST_CENTER_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DicCostCenter costCenter;
 
-    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_PAYROLL_LINK",
-            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DIC_PAYROLL_ID"))
-    @ManyToMany
-    private List<DicPayroll> payroll;
+    @JoinColumn(name = "PAYROLL_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DicPayroll payroll;
 
     @Column(name = "IS_INTERNAL")
     private Boolean is_internal;
@@ -79,17 +74,13 @@ public class OrganizationGroupExt extends OrganizationGroup {
     @Column(name = "ORGANIZATION_NAME_LANG5", length = 1000)
     private String organizationNameLang5;
 
-    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_LOCATION_LINK",
-            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DIC_LOCATION_ID"))
-    @ManyToMany
-    private List<DicLocation> location;
+    @JoinColumn(name = "LOCATION_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DicLocation location;
 
-    @JoinTable(name = "TSADV_ORGANIZATION_GROUP_EXT_DIC_ORG_TYPE_LINK",
-            joinColumns = @JoinColumn(name = "ORGANIZATION_GROUP_EXT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DIC_ORG_TYPE_ID"))
-    @ManyToMany
-    private List<DicOrgType> organizationType;
+    @JoinColumn(name = "ORGANIZATION_TYPE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DicOrgType organizationType;
 
     @OneToMany(mappedBy = "organizationGroupExt")
     protected List<PositionExt> position;
@@ -132,6 +123,38 @@ public class OrganizationGroupExt extends OrganizationGroup {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected OrganizationExt relevantOrganization; // Текущее (для момента в машине времени) подразделение
 
+    public void setPayroll(DicPayroll payroll) {
+        this.payroll = payroll;
+    }
+
+    public DicPayroll getPayroll() {
+        return payroll;
+    }
+
+    public void setCostCenter(DicCostCenter costCenter) {
+        this.costCenter = costCenter;
+    }
+
+    public DicCostCenter getCostCenter() {
+        return costCenter;
+    }
+
+    public void setOrganizationType(DicOrgType organizationType) {
+        this.organizationType = organizationType;
+    }
+
+    public DicOrgType getOrganizationType() {
+        return organizationType;
+    }
+
+    public void setLocation(DicLocation location) {
+        this.location = location;
+    }
+
+    public DicLocation getLocation() {
+        return location;
+    }
+
     public String getOrganizationName() {
         UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
         String language = userSessionSource.getLocale().getLanguage();
@@ -170,38 +193,6 @@ public class OrganizationGroupExt extends OrganizationGroup {
 
     public void setIs_internal(Boolean is_internal) {
         this.is_internal = is_internal;
-    }
-
-    public List<DicPayroll> getPayroll() {
-        return payroll;
-    }
-
-    public void setPayroll(List<DicPayroll> payroll) {
-        this.payroll = payroll;
-    }
-
-    public List<DicCostCenter> getCostCenter() {
-        return costCenter;
-    }
-
-    public void setCostCenter(List<DicCostCenter> costCenter) {
-        this.costCenter = costCenter;
-    }
-
-    public List<DicOrgType> getOrganizationType() {
-        return organizationType;
-    }
-
-    public void setOrganizationType(List<DicOrgType> organizationType) {
-        this.organizationType = organizationType;
-    }
-
-    public List<DicLocation> getLocation() {
-        return location;
-    }
-
-    public void setLocation(List<DicLocation> location) {
-        this.location = location;
     }
 
     public String getOrganizationNameLang5() {
