@@ -5,8 +5,11 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
@@ -21,6 +24,7 @@ import org.eclipse.persistence.annotations.Customizer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +34,10 @@ import java.util.List;
 @Customizer(OrganizationGroupExtDescriptorCustomizer.class)
 public class OrganizationGroupExt extends OrganizationGroup {
     private static final long serialVersionUID = -5913796466452223229L;
+
+    @Transient
+    @MetaProperty(related = {"organizationNameLang1", "organizationNameLang2", "organizationNameLang3", "organizationNameLang4", "organizationNameLang5"})
+    protected String organizationName;
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
@@ -123,6 +131,30 @@ public class OrganizationGroupExt extends OrganizationGroup {
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected OrganizationExt relevantOrganization; // Текущее (для момента в машине времени) подразделение
+
+    public String getOrganizationName() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String organizationNameOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+        if (organizationNameOrder != null){
+            List<String> langs = Arrays.asList(organizationNameOrder.split(";"));
+            switch (langs.indexOf(language)){
+                case 0:
+                    return organizationNameLang1;
+                case 1:
+                    return organizationNameLang2;
+                case 2:
+                    return organizationNameLang3;
+                case 3:
+                    return organizationNameLang4;
+                case 4:
+                    return organizationNameLang5;
+                default:
+                    return organizationNameLang1;
+            }
+        }
+        return organizationNameLang1;
+    }
 
     public DicCompany getCompany() {
         return company;
@@ -308,20 +340,20 @@ public class OrganizationGroupExt extends OrganizationGroup {
     }
 
     // Для отображения имени вместо id в lookup и таблицах #FelixKamalov
-    @MetaProperty(related = "list")
-    @Transient
-    public String getOrganizationName() {
-        OrganizationExt organizationWithName = getOrganization();
-        if (organizationWithName == null) {
-            if (PersistenceHelper.isLoaded(this, "list") && list != null && !list.isEmpty()) {
-                for (OrganizationExt organizationExt : list) {
-                    if (organizationWithName == null || organizationWithName.getStartDate().before(organizationExt.getStartDate())) {
-                        organizationWithName = organizationExt;
-                    }
-                }
-            }
-        }
-        return organizationWithName == null ? "" : organizationWithName.getOrganizationName();
-    }
+//    @MetaProperty(related = "list")
+//    @Transient
+//    public String getOrganizationName() {
+//        OrganizationExt organizationWithName = getOrganization();
+//        if (organizationWithName == null) {
+//            if (PersistenceHelper.isLoaded(this, "list") && list != null && !list.isEmpty()) {
+//                for (OrganizationExt organizationExt : list) {
+//                    if (organizationWithName == null || organizationWithName.getStartDate().before(organizationExt.getStartDate())) {
+//                        organizationWithName = organizationExt;
+//                    }
+//                }
+//            }
+//        }
+//        return organizationWithName == null ? "" : organizationWithName.getOrganizationName();
+//    }
 
 }
