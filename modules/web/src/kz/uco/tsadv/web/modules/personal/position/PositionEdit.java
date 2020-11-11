@@ -350,7 +350,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     }
 
     public void redirectCard(AssignmentExt assignment, String name) {
-        openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+        openEditor("person-card", assignment.getPersonGroup(), WindowManager.OpenType.THIS_TAB);
     }
 
     public Component generateUserImageCell(AssignmentExt entity) {

@@ -20,7 +20,6 @@ import kz.uco.base.common.WebCommonUtils;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.datasource.AbsenceBalanceDatasource;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.gui.components.AbstractHrEditor;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
@@ -42,7 +41,7 @@ import java.util.function.Predicate;
  */
 
 @SuppressWarnings("all")
-public class PersonCardNew extends AbstractHrEditor<AssignmentExt> {
+public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
 
     protected static SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -118,47 +117,44 @@ public class PersonCardNew extends AbstractHrEditor<AssignmentExt> {
         initVisibleComponent();
         if (fromAssessment) tabSheet.setTab("profile");
         previewTab = tabSheet.getTab();
-//        tabSheet.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
-//            @Override
-//            public void selectedTabChanged(TabSheet.SelectedTabChangeEvent event) {
-//                if (!setTabFromCode && getDsContext().isModified()) {
-//
-//                    showOptionDialog(messages.getMainMessage("closeUnsaved.caption"),
-//                            messages.getMainMessage("saveUnsaved"),
-//                            MessageType.WARNING,
-//                            new Action[]{
-//                                    new DialogAction(DialogAction.Type.OK, Action.Status.PRIMARY)
-//                                            .withCaption(messages.getMainMessage("closeUnsaved.save"))
-//                                            .withHandler(e -> {
-//                                        commit();
-//                                        getDsContext().refresh();
-//                                        fillLeftLinks(event.getSelectedTab().getName());
-//                                        previewTab = tabSheet.getTab();
-//                                    }),
-//                                    new BaseAction("discard")
-//                                            .withIcon(AppBeans.get(ThemeConstantsManager.class).getThemeValue("actions.dialog.Cancel.icon"))
-//                                            .withCaption(messages.getMainMessage("closeUnsaved.discard"))
-//                                            .withHandler(e -> {
-//
-//                                        resetDsContext();
-//
-//                                        fillLeftLinks(event.getSelectedTab().getName());
-//                                        previewTab = tabSheet.getTab();
-//                                    }),
-//                                    new DialogAction(DialogAction.Type.CANCEL) {
-//                                        @Override
-//                                        public void actionPerform(Component component) {
-//                                            setTabFromCode = true;
-//                                            tabSheet.setTab(previewTab);
-//                                        }
-//                                    }
-//                            });
-//                } else {
-//                    fillLeftLinks(event.getSelectedTab().getName());
-//                    setTabFromCode = false;
-//                }
-//            }
-//        });
+        tabSheet.addSelectedTabChangeListener(event -> {
+            if (!setTabFromCode && getDsContext().isModified()) {
+
+                showOptionDialog(messages.getMainMessage("closeUnsaved.caption"),
+                        messages.getMainMessage("saveUnsaved"),
+                        MessageType.WARNING,
+                        new Action[]{
+                                new DialogAction(DialogAction.Type.OK, Action.Status.PRIMARY)
+                                        .withCaption(messages.getMainMessage("closeUnsaved.save"))
+                                        .withHandler(e -> {
+                                    commit();
+                                    getDsContext().refresh();
+                                    fillLeftLinks(event.getSelectedTab().getName());
+                                    previewTab = tabSheet.getTab();
+                                }),
+                                new BaseAction("discard")
+                                        .withIcon(AppBeans.get(ThemeConstantsManager.class).getThemeValue("actions.dialog.Cancel.icon"))
+                                        .withCaption(messages.getMainMessage("closeUnsaved.discard"))
+                                        .withHandler(e -> {
+
+                                    resetDsContext();
+
+                                    fillLeftLinks(event.getSelectedTab().getName());
+                                    previewTab = tabSheet.getTab();
+                                }),
+                                new DialogAction(DialogAction.Type.CANCEL) {
+                                    @Override
+                                    public void actionPerform(Component component) {
+                                        setTabFromCode = true;
+                                        tabSheet.setTab(previewTab);
+                                    }
+                                }
+                        });
+            } else {
+                fillLeftLinks(event.getSelectedTab().getName());
+                setTabFromCode = false;
+            }
+        });
         removeAction("windowClose");
         addAction(new BaseAction("windowClose") {
             @Override
@@ -204,6 +200,7 @@ public class PersonCardNew extends AbstractHrEditor<AssignmentExt> {
     @Override
     protected void postInit() {
         PersonExt person = personDs.getItem();
+        assignmentDs.setItem(employeeService.getAssignment(person.getGroup().getId(), "assignment.card"));
         fillLeftLinks(tabSheet.getTab().getName());
         initPersonLeftMenu(person);
         absenceBalancesVDs.setPersonGroupId(personGroupDs.getItem().getId());

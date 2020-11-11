@@ -208,7 +208,7 @@ public class StructurePerson extends AbstractLookup {
     }
 
     public void openPersonCard() {
-        openEditor("person-card", getAssignment(personExtDs.getItem().getGroup().getId()), WindowManager.OpenType.THIS_TAB);
+        openEditor("person-card", personExtDs.getItem().getGroup(), WindowManager.OpenType.THIS_TAB);
     }
 
     protected AssignmentExt getAssignment(UUID personGroupId) {

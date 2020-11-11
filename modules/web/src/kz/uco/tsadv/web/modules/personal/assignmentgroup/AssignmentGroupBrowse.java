@@ -352,7 +352,7 @@ public class AssignmentGroupBrowse extends AbstractLookup {
 
     public void redirectCard(AssignmentExt assignmentExt, String name) {
         assignmentExt = dataManager.reload(assignmentExt, "assignment.card");
-        openEditor("person-card", assignmentExt, WindowManager.OpenType.THIS_TAB);
+        openEditor("person-card", assignmentExt.getPersonGroup(), WindowManager.OpenType.THIS_TAB);
     }
 
     public Component generatePersonImageCell(AssignmentExt entity) {

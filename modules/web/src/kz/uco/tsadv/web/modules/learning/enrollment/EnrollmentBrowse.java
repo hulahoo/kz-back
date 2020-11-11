@@ -11,10 +11,10 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.learning.model.CourseSectionAttempt;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.service.CertificationService;
 
 import javax.inject.Inject;
@@ -74,7 +74,7 @@ public class EnrollmentBrowse extends AbstractLookup {
         if (personGroup != null) {
             AssignmentExt assignment = getAssignment(personGroup.getId());
             if (assignment != null) {
-                openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+                openEditor("person-card", personGroup, WindowManager.OpenType.THIS_TAB);
             } else {
                 showNotification("Assignment is NULL!");
             }

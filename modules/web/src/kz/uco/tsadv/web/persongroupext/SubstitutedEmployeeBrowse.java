@@ -16,7 +16,7 @@ public class SubstitutedEmployeeBrowse extends AbstractLookup {
         AssignmentExt primaryAssignment = item.getPrimaryAssignment();
         if (primaryAssignment != null) {
             primaryAssignment = dataManager.reload(primaryAssignment, "assignment.card");
-            openEditor("person-card", primaryAssignment, WindowManager.OpenType.THIS_TAB);
+            openEditor("person-card", item, WindowManager.OpenType.THIS_TAB);
         } else {
             showNotification("No active assignment!");
         }

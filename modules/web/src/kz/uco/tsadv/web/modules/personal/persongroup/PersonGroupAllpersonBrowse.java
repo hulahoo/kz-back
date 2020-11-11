@@ -80,7 +80,7 @@ public class PersonGroupAllpersonBrowse extends AbstractLookup {
         AssignmentExt assignment = getAssignment(personGroup.getId());
 
         if (assignment != null) {
-            openEditor("person-card", assignment, WindowManager.OpenType.THIS_TAB);
+            openEditor("person-card", personGroup, WindowManager.OpenType.THIS_TAB);
         } else {
             showNotification("Assignment is NULL!");
         }
