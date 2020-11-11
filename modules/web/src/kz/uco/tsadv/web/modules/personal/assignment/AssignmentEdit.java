@@ -8,7 +8,6 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.components.EmployeeNumberOf;
 import kz.uco.tsadv.config.EmployeeConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus;
@@ -81,8 +80,6 @@ public class AssignmentEdit extends AbstractEditor<AssignmentExt> {
     @Inject
     protected Configuration configuration;
     @Inject
-    protected EmployeeNumberOf employeeNumberOf;
-    @Inject
     protected EmployeeConfig employeeConfig;
 
 
@@ -93,9 +90,6 @@ public class AssignmentEdit extends AbstractEditor<AssignmentExt> {
         PersonGroupExt personGroup = metadata.create(PersonGroupExt.class);
         PersonExt person = metadata.create(PersonExt.class);
         person.setGroup(personGroup);
-        if(this.employeeConfig.getGenerateEmployeeNumber()){
-            this.employeeNumberOf.accept(person);
-        }
         person.setHireDate(CommonUtils.getSystemDate());
         person.setStartDate(CommonUtils.getSystemDate());
         person.setEndDate(CommonUtils.getEndOfTime());
