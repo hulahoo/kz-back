@@ -208,6 +208,20 @@ public class JobGroupBrowse extends AbstractLookup {
 
     public void editHistory() {
 //        Utils.editHistory(listDs.getItem(), jobGroupsDs.getItem().getList(), this, jobGroupsDs);
+
+        Job item = listDs.getItem();
+
+        List<Job> items = jobGroupsDs.getItem().getList();
+        items.sort((i1, i2) -> i1.getStartDate().before(i2.getStartDate()) ? -1 : 1);
+
+        if (item != null) {
+            Map<String, Object> paramsMap = new HashMap<>();
+            paramsMap.put("editHistory", Boolean.TRUE);
+            paramsMap.put("firstRow", items.indexOf(item) == 0);
+            paramsMap.put("lastRow", items.indexOf(item) == items.size() - 1);
+
+            openJobEditor(item, paramsMap);
+        }
     }
 
     public void removeHistory() {
