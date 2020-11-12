@@ -1,4 +1,4 @@
-package kz.uco.tsadv.exceptionHandler;
+package kz.uco.tsadv.exception.handler;
 
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.WindowManager;
