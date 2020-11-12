@@ -271,7 +271,7 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
         frames.put("compensation", new LinkedList<LinkWrapper>() {{
             add(new LinkWrapper("pcf-salary", "Salaries", "font-icon:ARCHIVE", true));
             add(new LinkWrapper("pcf-sur-charge", "PersonCard.sure.charges", "font-icon:ARROW_CIRCLE_UP"));
-            add(new LinkWrapper(null, "PersonCard.social.pay", "font-icon:CHAIN"));
+//            add(new LinkWrapper(null, "PersonCard.social.pay", "font-icon:CHAIN"));
         }});
 
         frames.put("profile", new LinkedList<LinkWrapper>() {{
@@ -293,9 +293,9 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
 
         frames.put("siz", new LinkedList<LinkWrapper>() {{
             add(new LinkWrapper("pcf-personal-protection", "ppe", "", true));
-            add(new LinkWrapper("", "", ""));
-            add(new LinkWrapper("", "", ""));
-            add(new LinkWrapper("", "", ""));
+//            add(new LinkWrapper("", "", ""));
+//            add(new LinkWrapper("", "", ""));
+//            add(new LinkWrapper("", "", ""));
         }});
     }
 

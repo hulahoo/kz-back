@@ -18,7 +18,7 @@
             <query>
                 <![CDATA[select e
                 from tsadv$Successor e
-                where e.succession.id = :ds$successionPlanningsDs
+                where e.succession = :ds$successionPlanningsDs
                 order by e.readinessLevel.code]]>
             </query>
         </groupDatasource>
