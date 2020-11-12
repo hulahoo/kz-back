@@ -150,12 +150,10 @@
                 <vbox id="cssLayout"
                       margin="false,false,false,true">
                     <frame id="organizationFrame"
-                           enable="false"
                            height="100%"
                            src="/kz/uco/tsadv/web/modules/personal/frames/organizations.xml"
                            visible="false"/>
                     <frame id="positionFrame"
-                           enable="false"
                            height="100%"
                            src="/kz/uco/tsadv/web/modules/personal/frames/positions.xml"
                            visible="false"/>
