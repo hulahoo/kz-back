@@ -46,7 +46,7 @@
                               class="kz.uco.tsadv.modules.recruitment.model.JobRequestHistory"
                               view="jobRequestHistory.view">
             <query>
-                <![CDATA[select e from tsadv$JobRequestHistory e where e.jobRequest.id = :ds$jobRequestsDs]]>
+                <![CDATA[select e from tsadv$JobRequestHistory e where e.jobRequest.id = :ds$jobRequestsDs.id]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="personReviewsDs"
