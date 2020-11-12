@@ -126,12 +126,14 @@
                                 caption="msg://table.btn.remove.late"
                                 invoke="removeHistories"/>
                     </actions>
-                    <buttonsPanel id="historyButtonsPanel"
-                                  alwaysVisible="true">
-                        <button id="editBtn"
+                    <buttonsPanel id="historyButtonsPanel" alwaysVisible="true">
+                        <button id="historyEditBtn"
                                 action="historyTable.edit"/>
+                        <button id="historyRemoveBtn"
+                                action="historyTable.remove"/>
+                        <button id="historyRemoveLateBtn"
+                                action="historyTable.removeLate"/>
                     </buttonsPanel>
-
                     <columns>
                         <column id="organizationName"/>
                         <column id="type.langValue"/>
