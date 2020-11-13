@@ -87,11 +87,14 @@
                     <actions>
                         <action id="edit"
                                 caption="msg://table.btn.edit"
+                                trackSelection="true"
                                 invoke="editHistory"/>
                         <action id="remove"
+                                trackSelection="true"
                                 caption="msg://table.btn.remove"
                                 invoke="removeHistory"/>
                         <action id="removeLate"
+                                trackSelection="true"
                                 caption="msg://table.btn.remove.late"
                                 invoke="removeHistories"/>
                     </actions>
@@ -103,6 +106,14 @@
                         <column id="updatedBy"/>
                     </columns>
                     <rows datasource="listDs"/>
+                    <buttonsPanel>
+                        <button id="editHistory"
+                                action="historyTable.edit"/>
+                        <button id="remove"
+                                action="historyTable.remove"/>
+                        <button id="removeLate"
+                                action="historyTable.removeLate"/>
+                    </buttonsPanel>
                 </table>
             </groupBox>
         </split>
