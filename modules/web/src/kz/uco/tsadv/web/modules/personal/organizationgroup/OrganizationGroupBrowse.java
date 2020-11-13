@@ -62,7 +62,6 @@ public class OrganizationGroupBrowse extends AbstractLookup {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-
         setupFilter();
     }
 
@@ -71,12 +70,12 @@ public class OrganizationGroupBrowse extends AbstractLookup {
             initFilterMap();
             customFilter = CustomFilter.init(organizationGroupsDs, organizationGroupsDs.getQuery(), filterMap);
             filterBox.add(customFilter.getFilterComponent());
-
         } else {
             groupBox.setVisible(false);
         }
         organizationGroupsFilter.setVisible(filterConfig.getOrganizationEnableCubaFilter());
     }
+
 
     protected void initFilterMap() {
         filterMap = new LinkedHashMap<>();
@@ -169,7 +168,7 @@ public class OrganizationGroupBrowse extends AbstractLookup {
                 .withLaunchMode(OpenMode.THIS_TAB)
                 .build()
                 .show();
-        organizationEdit.addAfterCloseListener(actionId ->{
+        organizationEdit.addAfterCloseListener(actionId -> {
             organizationGroupsDs.refresh();
         });
 //        OrganizationEdit organizationEdit = (OrganizationEdit) openEditor("base$Organization.edit", organization, WindowManager.OpenType.THIS_TAB, params);
@@ -281,4 +280,5 @@ public class OrganizationGroupBrowse extends AbstractLookup {
         AbstractEditor abstractEditor = openEditor(orgAnalytics, WindowManager.OpenType.THIS_TAB, ParamsMap.empty());
         abstractEditor.addCloseWithCommitListener(() -> organizationGroupsDs.refresh());
     }
+
 }
