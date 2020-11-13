@@ -18,7 +18,6 @@ import com.haulmont.reports.entity.Report;
 import com.haulmont.reports.gui.ReportGuiManager;
 import kz.uco.base.common.WebCommonUtils;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.datasource.AbsenceBalanceDatasource;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
@@ -35,6 +34,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+
+//import kz.uco.tsadv.datasource.AbsenceBalanceDatasource;
 
 /**
  * @author Adilbekov Yernar
@@ -78,8 +79,8 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
     @Inject
     protected Datasource<PersonExt> personDs;
 
-    @Inject
-    protected AbsenceBalanceDatasource absenceBalancesVDs;
+    //    @Inject
+//    protected AbsenceBalanceDatasource absenceBalancesVDs;
     @Inject
     protected DataSupplier dataSupplier;
 
@@ -203,7 +204,7 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
         assignmentDs.setItem(employeeService.getAssignment(person.getGroup().getId(), "assignment.card"));
         fillLeftLinks(tabSheet.getTab().getName());
         initPersonLeftMenu(person);
-        absenceBalancesVDs.setPersonGroupId(personGroupDs.getItem().getId());
+//        absenceBalancesVDs.setPersonGroupId(personGroupDs.getItem().getId());
     }
 
     @Override
