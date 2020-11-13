@@ -51,14 +51,6 @@ public class OrganizationGroupBrowse extends AbstractLookup {
 
     protected CustomFilter customFilter;
     @Inject
-    private Table<OrganizationExt> historyTable;
-    @Inject
-    private Button historyEditBtn;
-    @Inject
-    private Button historyRemoveBtn;
-    @Inject
-    private Button historyRemoveLateBtn;
-    @Inject
     protected GroupBoxLayout groupBox;
     @Inject
     protected Filter organizationGroupsFilter;
@@ -71,20 +63,6 @@ public class OrganizationGroupBrowse extends AbstractLookup {
     public void init(Map<String, Object> params) {
         super.init(params);
         setupFilter();
-    }
-
-    @Override
-    public void ready() {
-        super.ready();
-        setupEditAndDeleteButtons();
-    }
-
-    protected void setupEditAndDeleteButtons() {
-        setEditAnDeleteEnabled(false);
-        historyTable.addSelectionListener(selected -> {
-            boolean hasSelected = historyTable.getSelected().size() != 0;
-            setEditAnDeleteEnabled(hasSelected);
-        });
     }
 
     protected void setupFilter() {
@@ -303,9 +281,4 @@ public class OrganizationGroupBrowse extends AbstractLookup {
         abstractEditor.addCloseWithCommitListener(() -> organizationGroupsDs.refresh());
     }
 
-    public void setEditAnDeleteEnabled(boolean enabled) {
-        historyEditBtn.setEnabled(enabled);
-        historyRemoveBtn.setEnabled(enabled);
-        historyRemoveLateBtn.setEnabled(enabled);
-    }
 }

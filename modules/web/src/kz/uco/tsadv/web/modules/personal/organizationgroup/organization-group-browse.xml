@@ -118,13 +118,16 @@
                     <actions>
                         <action id="edit"
                                 caption="msg://table.btn.edit"
-                                invoke="editHistory"/>
+                                invoke="editHistory"
+                                trackSelection="true"/>
                         <action id="remove"
                                 caption="msg://table.btn.remove"
-                                invoke="removeHistory"/>
+                                invoke="removeHistory"
+                                trackSelection="true"/>
                         <action id="removeLate"
                                 caption="msg://table.btn.remove.late"
-                                invoke="removeHistories"/>
+                                invoke="removeHistories"
+                                trackSelection="true"/>
                     </actions>
                     <buttonsPanel id="historyButtonsPanel" alwaysVisible="true">
                         <button id="historyEditBtn"
