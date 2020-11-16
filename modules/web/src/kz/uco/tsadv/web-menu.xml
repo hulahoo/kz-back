@@ -767,6 +767,7 @@
         <item id="logWindow"/>
         <separator/>
         <item id="sec$ScreenHistory.browse"/>
+        <item id="helium_ThemeSettingsScreen"/>
     </menu>
     <menu id="TBandOT"
           icon="font-icon:CUBES">
