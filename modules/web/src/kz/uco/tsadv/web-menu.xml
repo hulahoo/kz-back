@@ -719,6 +719,7 @@
         <item screen="security"/>
         <item screen="tsadv$BpmUserSubstitution.browse"/>
         <item screen="tsadv$LmsSlider.browse"/>
+        <item screen="emailtemplates$EmailTemplate.browse"/>
     </menu>
     <menu id="application-uactivity"
           insertBefore="administration">
