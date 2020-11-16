@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://personGroupExtEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.persongroupext">
+    <data>
+        <instance id="personGroupDc"
+                  class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                  view="personGroupExt.card">
+            <loader id="personGroupDl"/>
+            <instance id="personDc" property="person"/>
+            <collection id="personHistoryDc" property="list"/>
+            <collection id="contactsDc" property="personContacts"/>
+            <collection id="personDocumentsDc" property="personDocuments"/>
+            <collection id="addressesDc" property="addresses"/>
+            <collection id="beneficiariesDc" property="beneficiary"/>
+            <collection id="casesDc" property="cases"/>
+            <collection id="militaryRankDc" property="militaryRank"/>
+            <collection id="disabilityDc" property="disability"/>
+            <collection id="retirementDc" property="retirement"/>
+            <collection id="agreementsDc" property="agreements"/>
+            <collection id="personExperienceDc" property="personExperience"/>
+            <collection id="jobRequestsDc" property="jobRequests"/>
+            <collection id="dismissalsDc" property="dismissals"/>
+            <collection id="relocationDc" property="relocation"/>
+            <collection id="personEducationDc" property="personEducation"/>
+            <collection id="competencePersonDc" property="competenceElements"/>
+            <collection id="assessmentsDc" property="assessments"/>
+            <collection id="successionPlanningsDc" property="successionPlanning"/>
+            <collection id="businessTripDc" property="businessTrip">
+                <collection id="businessTripLinesDc"
+                            property="businessTripLines">
+                    <collection id="businessTripCostDc"
+                                property="businessTripCost"/>
+                </collection>
+            </collection>
+        </instance>
+        <instance id="assignmentDc" class="kz.uco.tsadv.modules.personal.model.AssignmentExt" view="assignment.card">
+            <loader id="assignmentDl">
+                <query>
+                    <![CDATA[select e from base$AssignmentExt e
+                        where :session$systemDate between e.startDate and e.endDate
+                        and e.personGroup = :container_personGroupDc
+                        and e.primaryFlag = true
+                        and e.assignmentStatus.code in ('ACTIVE','SUSPENDED')]]>
+                </query>
+            </loader>
+            <instance id="assignmentGroupDc" property="group">
+                <collection id="assignmentHistoryDc" property="list"/>
+                <collection id="flySurChargeDc" property="flySurCharge"/>
+                <collection id="punishmentDc" property="punishment"/>
+                <collection id="awardsDc" property="awards"/>
+                <collection id="salaryDc" property="salaries"/>
+                <collection id="surChargeDc" property="surCharge"/>
+                <instance id="orgAnalyticsDc" property="analytics"/>
+            </instance>
+        </instance>
+        <collection id="competenceChartEntitiesDc"
+                    class="kz.uco.tsadv.global.entity.CompetenceChartEntity"/>
+        <collection id="salaryChartEntitiesDc"
+                    class="kz.uco.tsadv.global.entity.SalaryChartEntity"/>
+        <collection id="absencesDc"
+                    class="kz.uco.tsadv.modules.personal.model.Absence"
+                    view="absence.view">
+            <loader id="absencesDl">
+                <query>
+                    <![CDATA[select e from tsadv$Absence e
+                        where e.personGroup = :container_personGroupDc
+                            and e.dateFrom >= (select coalesce(p.hireDate, p.startDate) from base$PersonExt p
+                                                where p.group = :container_personGroupDc
+                                                    and :session$systemDate between p.startDate and p.endDate)
+                                                    and (0 = (select count(d.dismissalDate) from tsadv$Dismissal d
+                                                where d.personGroup = :container_personGroupDc
+                                                    and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                                where a.personGroup = :container_personGroupDc
+                                                                                    and :session$systemDate between a.startDate and a.endDate
+                                                                                    and a.primaryFlag = true))
+                            or e.dateFrom <= (select d.dismissalDate from tsadv$Dismissal d
+                                          where d.personGroup = :container_personGroupDc
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                        where a.personGroup = :container_personGroupDc
+                                                                            and :session$systemDate between a.startDate and a.endDate
+                                                                            and a.primaryFlag = true)))
+                        order by e.dateFrom desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="absenceBalancesDc"
+                    class="kz.uco.tsadv.modules.personal.model.AbsenceBalance"
+                    view="absenceBalance.view">
+            <loader id="absenceBalancesDl">
+                <query>
+                    <![CDATA[select e from tsadv$AbsenceBalance e
+                    where e.personGroup = :container_personGroupDc
+                      and e.dateFrom >= (select p.hireDate from base$PersonExt p
+                                           where p.group = :container_personGroupDc
+                                             and :session$systemDate between p.startDate and p.endDate)
+                      and (0 = (select count(d.dismissalDate) from tsadv$Dismissal d
+                                          where d.personGroup = :container_personGroupDc
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup = :container_personGroupDc
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true))
+                          or e.dateFrom <= (select d.dismissalDate from tsadv$Dismissal d
+                                          where d.personGroup = :container_personGroupDc
+                                            and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
+                                                                         where a.personGroup = :container_personGroupDc
+                                                                           and :session$systemDate between a.startDate and a.endDate
+                                                                           and a.primaryFlag = true)))
+                    order by e.dateFrom asc]]>
+                </query>
+            </loader>
+        </collection>
+<!--        <collection id="absenceBalancesVDc"-->
+<!--                    class="kz.uco.tsadv.entity.dbview.AbsenceBalanceV">-->
+<!--            <loader id="absenceBalancesVDl"/>-->
+<!--        </collection>-->
+        <collection id="tradeUnionsDc"
+                    class="kz.uco.tsadv.modules.personal.model.TradeUnion"
+                    view="tradeUnionOnPersonCard">
+            <loader id="tradeUnionsDl">
+                <query>
+                    <![CDATA[select e from tsadv$TradeUnion e where e.personGroup = :container_personGroupDc
+                      order by e.joingTradeUnion desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personMentorsDc"
+                    class="kz.uco.tsadv.modules.personal.model.PersonMentor"
+                    view="personMentor.edit">
+            <loader id="personMentorsDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonMentor e where e.personGroup = :container_personGroupDc
+                      order by e.startDate desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personLearningHistoryDc"
+                    class="kz.uco.tsadv.modules.personal.model.PersonLearningHistory"
+                    view="personLearningHistory.edit">
+            <loader id="personLearningHistoryDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonLearningHistory e where e.personGroup = :container_personGroupDc
+                              order by e.startDate desc]]>
+                </query>
+            </loader>
+            <collection id="learningExpenseDc" property="learningExpense"/>
+        </collection>
+        <collection id="personLearningContractDc"
+                    class="kz.uco.tsadv.modules.learning.model.PersonLearningContract"
+                    view="personLearningContract.edit">
+            <loader id="personLearningContractDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonLearningContract e where e.personGroup = :container_personGroupDc
+                              order by e.contractDate desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="successorsDc"
+                    class="kz.uco.tsadv.modules.personal.model.Successor"
+                    view="successor-view">
+            <loader id="successorsDl">
+                <query>
+                    <![CDATA[select e from tsadv$Successor e where e.personGroup = :container_personGroupDc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="enrollmentsApprovedDc"
+                    class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                    view="enrollmentPersonCard">
+            <loader id="enrollmentsApprovedDl">
+                <query>
+                    <![CDATA[select e from tsadv$Enrollment e
+                    where e.personGroup = :container_personGroupDc and
+                    e.status in (3,5) order by e.status]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="courseSectionAttemptsDc"
+                    class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
+                    view="courseSectionAttempt.browse">
+            <loader id="courseSectionAttemptsDl">
+                <query>
+                    <![CDATA[select e
+                from tsadv$CourseSectionAttempt e
+                where e.enrollment.id = :enrollmentApprovedId
+                order by e.attemptDate desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="calendarsDc"
+                    class="kz.uco.tsadv.modules.timesheet.model.Calendar"
+                    view="calendar.view">
+            <loader id="calendarsDl">
+                <query>
+                    <![CDATA[select e from tsadv$Calendar e
+                          order by e.startDate desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="standardOffsetsDc"
+                    class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"
+                    view="standardOffset.view">
+            <loader id="standardOffsetsDl">
+                <query>
+                    <![CDATA[select e from tsadv$StandardOffset e
+                          order by e.startDate desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicWorkingConditionsDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicWorkingCondition"
+                    view="_local">
+            <loader id="dicWorkingConditionsDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicWorkingCondition e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicSexDc"
+                    class="kz.uco.base.entity.dictionary.DicSex">
+            <loader id="dicSexDl">
+                <query>
+                    <![CDATA[select e from base$DicSex e
+                                      ]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personalProtectionDc"
+                    class="kz.uco.tsadv.modules.personprotection.PersonalProtection"
+                    view="personalProtection.edit">
+            <loader>
+                <query>
+                    <![CDATA[select e from tsadv$PersonalProtection e where e.employee = :container_personGroupDc
+                   and e.status = 'ISSUED_BY'
+                          order by e.dateOfIssue desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personQualificationsDc"
+                    class="kz.uco.tsadv.entity.tb.PersonQualification"
+                    view="personQualification-view">
+            <loader>
+                <query>
+                    <![CDATA[select e from tsadv$PersonQualification e where e.personGroup = :container_personGroupDc
+                    order by e.startDate desc]]>
+                </query>
+            </loader>
+        </collection>
+
+
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true">
+<!--            <refresh loader="personGroupDl" param="personGroupId"-->
+<!--                     onContainerItemChanged="personGroupDc"/>-->
+<!--            <refresh loader="courseSectionAttemptsDl" param="enrollmentApprovedId"-->
+<!--                     onContainerItemChanged="enrollmentsApprovedDc"/>-->
+        </dataLoadCoordinator>
+    </facets>
+    <layout height="100%"
+            spacing="true"
+            width="100%">
+        <grid id="grid"
+              height="100%"
+              spacing="true"
+              width="100%">
+            <columns>
+                <column/>
+                <column flex="3.0"/>
+            </columns>
+            <rows>
+                <row>
+                    <cssLayout>
+                        <htmlBox id="personCardLeftMenu"
+                                 template="person-card-menu">
+                            <vbox id="leftLinks"/>
+                        </htmlBox>
+                    </cssLayout>
+                    <vbox expand="personCardContent"
+                          height="100%"
+                          spacing="true">
+                        <tabSheet id="tabSheet">
+                            <tab id="mainData"
+                                 caption="msg://PersonCard.tab.mainData"
+                                 icon="font-icon:USER"/>
+                            <tab id="assignment"
+                                 caption="msg://PersonCard.tab.assignment"
+                                 icon="icons/paste.png"/>
+                            <tab id="compensation"
+                                 caption="msg://PersonCard.tab.compensation"
+                                 icon="font-icon:MONEY"/>
+                            <tab id="profile"
+                                 caption="msg://PersonCard.tab.profile"
+                                 icon="font-icon:ARCHIVE"/>
+                            <tab id="timeManage"
+                                 caption="msg://PersonCard.tab.timeManage"
+                                 icon="font-icon:CALENDAR_CHECK_O"/>
+                            <tab id="siz"
+                                 caption="msg://siz"/>
+                        </tabSheet>
+                        <vbox id="personCardContent"/>
+                    </vbox>
+                </row>
+            </rows>
+        </grid>
+    </layout>
+</window>

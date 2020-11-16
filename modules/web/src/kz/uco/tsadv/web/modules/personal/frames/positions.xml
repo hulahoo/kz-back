@@ -88,7 +88,7 @@
                                    editable="false"/>
 
                             <field id="jobGroup"
-                                   captionProperty="job"
+                                   captionProperty="jobNameDefault"
                                    property="jobGroup"
                                    editable="false"/>
 
