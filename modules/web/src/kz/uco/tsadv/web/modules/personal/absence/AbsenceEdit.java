@@ -4,6 +4,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Category;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
@@ -89,6 +90,10 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
     @Inject
     protected FieldGroup additionalFields, fieldGroup, fieldGroup1;
     //    @WindowParam(name="assignmentDs", required = true)
+    @Inject
+    protected TextField vacationDurationTypeLbl;
+
+    @WindowParam(name = "assignmentDs")
     protected Datasource<AssignmentExt> assignmentDs;
     protected SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 
@@ -99,14 +104,13 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
     protected UUID assignmentGroupId;
     protected PersonGroupExt personGroup;
     protected Integer previousAbsenceDays;
-    @Inject
-    protected TextField vacationDurationTypeLbl;
+//    @Inject
+//    protected TextField vacationDurationTypeLbl;
 
     @Override
     public void init(Map<String, Object> params) {
 
         super.init(params);
-        assignmentDs = (Datasource) params.get("assignmentDs");
         dateFrom.setEditable(false);
         dateTo.setEditable(false);
         intersectingAbsenceBalances = new ArrayList<>();
@@ -249,7 +253,7 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
                         "   and a.primaryFlag = 'TRUE' " +
                         "   and :sysDate between v.startDate and v.endDate " +
                         " order by v.startDate desc ",
-                ParamsMap.of("groupId", assignmentDs.getItem().getGroup().getId(),
+                ParamsMap.of("groupId", getAssignmentGroupId(),
                         "sysDate", Optional.ofNullable(getItem().getDateFrom()).orElse(CommonUtils.getSystemDate())),
                 View.LOCAL);
 
@@ -258,6 +262,13 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
                 .filter(Objects::nonNull)
                 .findAny()
                 .orElse(VacationDurationType.CALENDAR);
+    }
+
+    protected UUID getAssignmentGroupId() {
+        return assignmentGroupId != null ? assignmentGroupId
+                : assignmentDs != null && assignmentDs.getItem() != null ? assignmentDs.getItem().getGroup().getId()
+                : personGroup != null ? employeeService.getAssignmentGroupByPersonGroup(personGroup).getId()
+                : null;
     }
 
     @Nullable
