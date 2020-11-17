@@ -394,7 +394,7 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
         if (person.getCitizenship() != null)
             userInfoSb.append(addUserInfoTr(getMessage("Person.citizenship"), person.getCitizenship().getLangValue()));
 
-        userInfoSb.append(addUserInfoTr(String.format(getMessage("Person.absenceDays"), new SimpleDateFormat("dd.MM.yyyy").format(CommonUtils.getSystemDate())), String.valueOf(absenceBalanceService.getCurrentAbsenceDays(personGroupDs.getItem()))));
+//        userInfoSb.append(addUserInfoTr(String.format(getMessage("Person.absenceDays"), new SimpleDateFormat("dd.MM.yyyy").format(CommonUtils.getSystemDate())), String.valueOf(absenceBalanceService.getCurrentAbsenceDays(personGroupDs.getItem()))));
         userInfoSb.append(addUserInfoTr(getMessage("totalExperience"), String.valueOf(employeeService.getTotalExperience(person.getGroup().getId(), CommonUtils.getSystemDate()))));
         userInfoSb.append(addUserInfoTr(getMessage("experienceInCompany"), String.valueOf(employeeService.getExperienceInCompany(person.getGroup().getId(), CommonUtils.getSystemDate()))));
 
