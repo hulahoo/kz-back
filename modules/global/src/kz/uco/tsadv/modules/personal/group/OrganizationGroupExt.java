@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
 import kz.uco.base.entity.shared.OrganizationGroup;
@@ -26,7 +27,7 @@ import java.util.List;
 @Extends(OrganizationGroup.class)
 @Entity(name = "base$OrganizationGroupExt")
 @Customizer(OrganizationGroupExtDescriptorCustomizer.class)
-public class OrganizationGroupExt extends OrganizationGroup {
+public class OrganizationGroupExt extends OrganizationGroup implements IEntityGroup<OrganizationExt> {
     private static final long serialVersionUID = -5913796466452223229L;
 
     @Composition

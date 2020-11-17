@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 
 @Table(name = "TSADV_VACATION_CONDITIONS")
 @Entity(name = "tsadv$VacationConditions")
-public class VacationConditions extends AbstractTimeBasedEntity {
+public class VacationConditions extends AbstractTimeBasedEntity implements IGroupedEntity<VacationConditionsGroup> {
     private static final long serialVersionUID = -5188752310403632523L;
 
     @Column(name = "ADDITIONAL_DAYS", nullable = false)

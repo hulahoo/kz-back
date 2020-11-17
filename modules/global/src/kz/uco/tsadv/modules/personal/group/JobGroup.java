@@ -11,6 +11,7 @@ import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.AbstractGroup;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory;
 import kz.uco.tsadv.modules.personal.dictionary.DicJobCategory;
@@ -25,8 +26,8 @@ import java.util.List;
 
 @Table(name = "TSADV_JOB_GROUP")
 @Entity(name = "tsadv$JobGroup")
-@NamePattern("%s|jobName")
-public class JobGroup extends AbstractGroup {
+@NamePattern("%s|jobNameDefault")
+public class JobGroup extends AbstractGroup implements IEntityGroup<Job> {
     private static final long serialVersionUID = 5049424103149725592L;
 
     @Transient

@@ -5,6 +5,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.base.entity.shared.Organization;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
@@ -17,7 +18,7 @@ import javax.persistence.*;
 @NamePattern("%s|organizationName")
 @Extends(Organization.class)
 @Entity(name = "base$OrganizationExt")
-public class OrganizationExt extends Organization {
+public class OrganizationExt extends Organization implements IGroupedEntity<OrganizationGroupExt> {
     private static final long serialVersionUID = 5012598590706050601L;
 
     @ManyToOne(fetch = FetchType.LAZY)

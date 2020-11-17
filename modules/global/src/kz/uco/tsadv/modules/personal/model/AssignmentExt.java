@@ -4,6 +4,7 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.*;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.base.entity.shared.Assignment;
 import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentCategory;
 import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus;
@@ -20,7 +21,7 @@ import java.util.List;
 @NamePattern("%s %s %s %s|id,organizationGroup,jobGroup,group")
 @Extends(Assignment.class)
 @Entity(name = "base$AssignmentExt")
-public class AssignmentExt extends Assignment {
+public class AssignmentExt extends Assignment implements IGroupedEntity<AssignmentGroupExt> {
     private static final long serialVersionUID = -6247874875200340151L;
 
     @OnDeleteInverse(DeletePolicy.DENY)

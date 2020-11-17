@@ -6,8 +6,9 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
-import kz.uco.base.entity.abstraction.AbstractGroup;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.abstraction.AbstractGroup;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.tsadv.modules.personal.model.Order;
 
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ import java.util.List;
 @NamePattern("%s|id")
 @Table(name = "TSADV_ORDER_GROUP")
 @Entity(name = "tsadv$OrderGroup")
-public class OrderGroup extends AbstractGroup {
+public class OrderGroup extends AbstractGroup implements IEntityGroup<Order> {
     private static final long serialVersionUID = -6296245116811060798L;
 
     @Composition
