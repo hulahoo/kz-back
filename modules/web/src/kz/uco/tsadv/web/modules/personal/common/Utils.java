@@ -12,12 +12,13 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.DsContext;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.gui.components.AbstractHrEditor;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
-import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
-import kz.uco.tsadv.gui.components.AbstractHrEditor;
 
 import java.io.ByteArrayInputStream;
 import java.util.*;
@@ -166,7 +167,7 @@ public class Utils {
         }
     }
 
-    public static <T extends AbstractTimeBasedEntity, C extends AbstractFrame, E extends AbstractHrEditor<T>> void
+    public static <T extends AbstractTimeBasedEntity & IGroupedEntity, C extends AbstractFrame, E extends AbstractHrEditor<T>> void
     editHistory(T timeBaseEntity, List<T> timeBaseEntityList, C controller, CollectionDatasource groupDs) {
         timeBaseEntityList.sort((i1, i2) -> i1.getStartDate().before(i2.getStartDate()) ? -1 : 1);
 

@@ -16,7 +16,7 @@ import java.util.UUID;
 /**
  * @author Adilbekov Yernar
  */
-public class AbstractHrEditor<T extends AbstractTimeBasedEntity> extends AbstractEditor<T> {
+public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity> extends AbstractEditor<T> {
 
     @Resource(name = "windowActions.windowCommitHistory")
     protected Button windowCommitHistory;
@@ -42,8 +42,8 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity> extends Abstrac
                     if (PersistenceHelper.isNew(getItem())) {
                         getItem().setWriteHistory(Boolean.TRUE);
                     } else if (IGroupedEntity.class.isAssignableFrom(getItem().getClass())) {
-                        IGroupedEntity item = (IGroupedEntity) getItem();
-                        UUID latestId = ((AbstractTimeBasedEntity) groupedEntityService.getLatest(item.getGroup())).getId();
+                        IGroupedEntity item = getItem();
+                        UUID latestId = groupedEntityService.getLatest(item.getGroup()).getId();
                         UUID currentItemId = getItem().getId();
                         if (latestId.equals(currentItemId)) {
                             getItem().setWriteHistory(Boolean.TRUE);
@@ -67,18 +67,18 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity> extends Abstrac
         FieldGroup.FieldConfig startDateConfig = startEndDateFieldGroup.getField("startDate");
         if (startDateConfig != null) {
             if (!PersistenceHelper.isNew(getItem())) {
-                IGroupedEntity groupedEntity = (IGroupedEntity) getItem();
+                IGroupedEntity groupedEntity = getItem();
                 startDateConfig.setEditable(true);
-                IGroupedEntity previousEntity = null;
-                IGroupedEntity nextEntity = null;
+                AbstractTimeBasedEntity previousEntity = null;
+                AbstractTimeBasedEntity nextEntity = null;
                 try {
-                    previousEntity = groupedEntityService.getPreviousByStartDate(groupedEntity.getGroup(), groupedEntity);
-                    nextEntity = groupedEntityService.getNextByStartDate(groupedEntity.getGroup(), groupedEntity);
+                    previousEntity = groupedEntityService.getPreviousByStartDate(groupedEntity.getGroup(), getItem());
+                    nextEntity = groupedEntityService.getNextByStartDate(groupedEntity.getGroup(), getItem());
                 } catch (IllegalArgumentException ex) {
                     ex.printStackTrace();
                 }
                 if (previousEntity != null) {
-                    AbstractTimeBasedEntity finalPreviousEntity = (AbstractTimeBasedEntity) previousEntity;
+                    AbstractTimeBasedEntity finalPreviousEntity = previousEntity;
                     startDateConfig.addValidator(value -> {
                         if (((Date) value).before(finalPreviousEntity.getStartDate())) {
                             throw new ValidationException("Start date must be greater than previous entity's start date from this group.");
@@ -86,7 +86,7 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity> extends Abstrac
                     });
                 }
                 if (nextEntity != null) {
-                    AbstractTimeBasedEntity finalNextEntity = (AbstractTimeBasedEntity) nextEntity;
+                    AbstractTimeBasedEntity finalNextEntity = nextEntity;
                     startDateConfig.addValidator(value -> {
                         if (((Date) value).after(finalNextEntity.getStartDate())) {
                             throw new ValidationException("Start date must be lower than next entity's start date from this group.");
@@ -142,17 +142,6 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity> extends Abstrac
             windowCommitHistory.setVisible(!PersistenceHelper.isNew(getItem()) && !editHistory);
         }
     }
-
-//    protected T isFirst() {
-//        T item = getItem();
-//        return item == item
-//                .getGroup()
-//                .getList()
-//                .stream()
-//                .min((firstOrganization, secondOrganization) ->
-//                        firstOrganization.getStartDate().before(secondOrganization.getStartDate()) ? -1 : 1)
-//                .get();
-//    }
 
     protected FieldGroup getStartEndDateFieldGroup() {
         return null;
