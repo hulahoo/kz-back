@@ -6,8 +6,8 @@ import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.entity.Role;
 import com.haulmont.cuba.security.entity.User;
-import com.haulmont.cuba.security.global.UserSession;
-import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.shared.PersonGroup;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -89,16 +89,30 @@ public class UserServiceBean implements UserService {
         return dataManager.loadList(loadContext);
     }
 
+
     @Override
     public boolean isEmployee() {
-        UserSession session = userSessionSource.getUserSession();
-        Object userPersonGroupIdAttribute = session.getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
-        if (userPersonGroupIdAttribute != null)
+        PersonGroup userPersonGroup = getPersonGroup();
+        if (userPersonGroup != null)
             return true;
         return false;
     }
 
-    private User getCurrentUser() {
+    protected User getCurrentUser() {
         return userSessionSource.getUserSession().getUser();
     }
+
+    protected PersonGroupExt getPersonGroup() {
+        LoadContext<PersonGroupExt> loadContext = LoadContext.create(PersonGroupExt.class);
+        LoadContext.Query query = LoadContext.createQuery(
+                "select user.personGroup " +
+                        "from tsadv$UserExt user " +
+                        "where user.id = :userId ");
+        query.setParameter("userId", getCurrentUser().getId());
+
+        loadContext.setQuery(query);
+        loadContext.setView(View.LOCAL);
+        return dataManager.load(loadContext);
+    }
+
 }
