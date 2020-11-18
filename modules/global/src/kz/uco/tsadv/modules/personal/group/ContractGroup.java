@@ -6,6 +6,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractGroup;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.tsadv.modules.personal.model.Contract;
 
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import java.util.List;
 @NamePattern("%s|id")
 @Table(name = "TSADV_CONTRACT_GROUP")
 @Entity(name = "tsadv$ContractGroup")
-public class ContractGroup extends AbstractGroup {
+public class ContractGroup extends AbstractGroup implements IEntityGroup<Contract> {
     private static final long serialVersionUID = 290963597767923537L;
 
     @Composition

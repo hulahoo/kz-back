@@ -12,12 +12,13 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicOrderReason;
 import kz.uco.tsadv.modules.personal.dictionary.DicOrderStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicOrderType;
 import kz.uco.tsadv.modules.personal.group.OrderGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -27,7 +28,7 @@ import java.util.List;
 @NamePattern("#getCaption|orderType,orderNumber,orderDate")
 @Table(name = "TSADV_ORDER")
 @Entity(name = "tsadv$Order")
-public class Order extends AbstractTimeBasedEntity {
+public class Order extends AbstractTimeBasedEntity implements IGroupedEntity<OrderGroup> {
     private static final long serialVersionUID = -4619528381745503842L;
 
     @Column(name = "ORDER_NUMBER", nullable = false)

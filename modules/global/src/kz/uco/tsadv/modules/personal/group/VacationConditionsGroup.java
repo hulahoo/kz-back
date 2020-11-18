@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.AbstractGroup;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.tsadv.modules.personal.model.VacationConditions;
 
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ import java.util.List;
 @Table(name = "TSADV_VACATION_CONDITIONS_GROUP")
 @Entity(name = "tsadv$VacationConditionsGroup")
 @Deprecated
-public class VacationConditionsGroup extends AbstractGroup {
+public class VacationConditionsGroup extends AbstractGroup implements IEntityGroup<VacationConditions> {
     private static final long serialVersionUID = 8570238650840302282L;
 
     @Composition

@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.base.entity.shared.PositionGroup;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
@@ -21,7 +22,7 @@ import java.util.List;
 @NamePattern("%s|positionName")
 @Extends(PositionGroup.class)
 @Entity(name = "base$PositionGroupExt")
-public class PositionGroupExt extends PositionGroup {
+public class PositionGroupExt extends PositionGroup implements IEntityGroup<PositionExt> {
     private static final long serialVersionUID = -8784610299705796841L;
 
     @Composition

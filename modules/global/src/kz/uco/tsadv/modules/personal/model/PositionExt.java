@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.base.entity.shared.Position;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory;
@@ -27,7 +28,7 @@ import java.util.Optional;
 @Extends(Position.class)
 @Entity(name = "base$PositionExt")
 @NamePattern("%s|positionName")
-public class PositionExt extends Position {
+public class PositionExt extends Position implements IGroupedEntity<PositionGroupExt> {
     private static final long serialVersionUID = 4443208303116319103L;
 
     @ManyToOne(fetch = FetchType.LAZY)

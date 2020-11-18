@@ -6,9 +6,10 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
-import kz.uco.tsadv.modules.personal.model.GradeRuleValue;
-import kz.uco.base.entity.abstraction.AbstractGroup;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.abstraction.AbstractGroup;
+import kz.uco.base.entity.abstraction.IEntityGroup;
+import kz.uco.tsadv.modules.personal.model.GradeRuleValue;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -19,7 +20,7 @@ import java.util.List;
 @NamePattern("%s|id")
 @Table(name = "TSADV_GRADE_RULE_VALUE_GROUP")
 @Entity(name = "tsadv$GradeRuleValueGroup")
-public class GradeRuleValueGroup extends AbstractGroup {
+public class GradeRuleValueGroup extends AbstractGroup implements IEntityGroup<GradeRuleValue> {
     private static final long serialVersionUID = -2069927748519273478L;
 
     @Composition

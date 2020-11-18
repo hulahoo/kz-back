@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
@@ -10,14 +11,12 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.sys.AppContext;
-import kz.uco.tsadv.modules.personal.group.CompetenceGroup;
-import kz.uco.tsadv.modules.personal.model.*;
-import kz.uco.tsadv.modules.personal.model.Scale;
 import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
+import kz.uco.tsadv.modules.personal.dictionary.DicCompetenceType;
+import kz.uco.tsadv.modules.personal.group.CompetenceGroup;
 
 import javax.persistence.*;
-import kz.uco.tsadv.modules.personal.dictionary.DicCompetenceType;
-import com.haulmont.chile.core.annotations.MetaProperty;
 import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.List;
 @NamePattern("%s|competenceName")
 @Table(name = "TSADV_COMPETENCE")
 @Entity(name = "tsadv$Competence")
-public class Competence extends AbstractTimeBasedEntity {
+public class Competence extends AbstractTimeBasedEntity implements IGroupedEntity<CompetenceGroup> {
     private static final long serialVersionUID = 2235194058271165645L;
 
 

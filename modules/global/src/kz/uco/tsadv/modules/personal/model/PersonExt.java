@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.entity.Category;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.*;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.base.entity.shared.Person;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
@@ -26,7 +27,7 @@ import static kz.uco.base.common.Null.isNotEmpty;
 @NamePattern("%s %s %s |lastName,firstName,middleName,employeeNumber")
 @Extends(Person.class)
 @Entity(name = "base$PersonExt")
-public class PersonExt extends Person implements Categorized {
+public class PersonExt extends Person implements Categorized, IGroupedEntity<PersonGroupExt> {
     private static final long serialVersionUID = -6341957289240331481L;
 
     @Transient

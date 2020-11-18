@@ -1,14 +1,15 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import kz.uco.tsadv.modules.personal.group.GlobalValueGroup;
 import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
+import kz.uco.tsadv.modules.personal.group.GlobalValueGroup;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_GLOBAL_VALUE")
 @Entity(name = "tsadv$GlobalValue")
-public class GlobalValue extends AbstractTimeBasedEntity {
+public class GlobalValue extends AbstractTimeBasedEntity implements IGroupedEntity<GlobalValueGroup> {
     private static final long serialVersionUID = 263611082528099665L;
 
     @Column(name = "NAME")
