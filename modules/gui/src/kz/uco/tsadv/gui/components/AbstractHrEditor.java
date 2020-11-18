@@ -98,7 +98,7 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
                 if (value != null && getItem().getEndDate() != null) {
                     Date startDate = (Date) value;
                     if (startDate.after(getItem().getEndDate()))
-                        throw new ValidationException(getMessage("AbstractHrEditor.startDate.validatorMsg"));
+                        throw new ValidationException(getMessage("AbstractHrEditor.startDate.validatorMsg.startDateBiggerThanEndDate"));
                 }
             });
         } else {
@@ -116,7 +116,7 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
                 if (value != null && getItem().getStartDate() != null) {
                     Date endDate = (Date) value;
                     if (endDate.before(getItem().getStartDate()))
-                        throw new ValidationException(getMessage("AbstractHrEditor.endDate.validatorMsg"));
+                        throw new ValidationException(getMessage("AbstractHrEditor.endDate.validatorMsg.endDateEarlierThanStartDate"));
                 }
             });
         } else {
