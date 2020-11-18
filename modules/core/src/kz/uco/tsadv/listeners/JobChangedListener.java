@@ -33,26 +33,29 @@ public class JobChangedListener {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<Job, UUID> event) {
-        Id<Job, UUID> entityId = event.getEntityId();
 
-        Job job = txDataManager.load(entityId).view("job.edit").one();
+        if (!event.getType().equals(EntityChangedEvent.Type.DELETED)) {
+            Id<Job, UUID> entityId = event.getEntityId();
 
-        JobGroup jobGroup = txDataManager.load(JobGroup.class)
-                .query("select j from tsadv$JobGroup j where j.id = :id")
-                .parameter("id", job.getGroup().getId())
-                .view("jobGroup.browse")
-                .one();
+            Job job = txDataManager.load(entityId).view("job.edit").one();
 
-        if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-            if (job.getEndDate().compareTo(BaseCommonUtils.getSystemDate()) >= 0
-                    && job.getStartDate().compareTo(BaseCommonUtils.getSystemDate()) <= 0){
+            JobGroup jobGroup = txDataManager.load(JobGroup.class)
+                    .query("select j from tsadv$JobGroup j where j.id = :id")
+                    .parameter("id", job.getGroup().getId())
+                    .view("jobGroup.browse")
+                    .one();
 
+            if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+                if (job.getEndDate().compareTo(BaseCommonUtils.getSystemDate()) >= 0
+                        && job.getStartDate().compareTo(BaseCommonUtils.getSystemDate()) <= 0){
+
+                    saveJobGroupNames(jobGroup, job);
+                }
+            }
+
+            if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
                 saveJobGroupNames(jobGroup, job);
             }
-        }
-
-        if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            saveJobGroupNames(jobGroup, job);
         }
     }
 
