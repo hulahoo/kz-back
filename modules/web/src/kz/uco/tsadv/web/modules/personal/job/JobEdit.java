@@ -165,40 +165,41 @@ public class JobEdit extends AbstractHrEditor<Job> {
     public void ready() {
         super.ready();
 
-        windowCommitHistory.setAction(new BaseAction("windowCommitHistoryNew") {
-            @Override
-            public void actionPerform(Component component) {
-                if (getItem() != null) {
-                    getItem().setWriteHistory(Boolean.TRUE);
-                    if (isJobNameChanged()) {
-                        showOptionDialog("",
-                                getMessage("PositionNameChangeMessage"),
-                                MessageType.WARNING,
-                                new Action[]{
-                                        new DialogAction(DialogAction.Type.YES, Status.PRIMARY)
-                                                .withHandler(event1 -> {
-                                            activePositionChange = true;
-                                            commitAndClose();
-                                        }),
-                                        new DialogAction(DialogAction.Type.NO, Status.PRIMARY)
-                                                .withHandler(event1 -> {
-                                            activePositionChange = false;
-                                            commitAndClose();
-                                        }),
-                                        new DialogAction(DialogAction.Type.CANCEL)
-                                                .withHandler(event1 -> {
-                                            Utils.resetDsContext(getDsContext());
-                                            close(CLOSE_ACTION_ID);
-                                        })
-                                });
-                    } else {
-                        activePositionChange = false;
-                        commitAndClose();
+        if(windowCommitHistory != null) {
+            windowCommitHistory.setAction(new BaseAction("windowCommitHistoryNew") {
+                @Override
+                public void actionPerform(Component component) {
+                    if (getItem() != null) {
+                        getItem().setWriteHistory(Boolean.TRUE);
+                        if (isJobNameChanged()) {
+                            showOptionDialog("",
+                                    getMessage("PositionNameChangeMessage"),
+                                    MessageType.WARNING,
+                                    new Action[]{
+                                            new DialogAction(DialogAction.Type.YES, Status.PRIMARY)
+                                                    .withHandler(event1 -> {
+                                                activePositionChange = true;
+                                                commitAndClose();
+                                            }),
+                                            new DialogAction(DialogAction.Type.NO, Status.PRIMARY)
+                                                    .withHandler(event1 -> {
+                                                activePositionChange = false;
+                                                commitAndClose();
+                                            }),
+                                            new DialogAction(DialogAction.Type.CANCEL)
+                                                    .withHandler(event1 -> {
+                                                Utils.resetDsContext(getDsContext());
+                                                close(CLOSE_ACTION_ID);
+                                            })
+                                    });
+                        } else {
+                            activePositionChange = false;
+                            commitAndClose();
+                        }
                     }
                 }
-            }
-        });
-
+            });
+        }
         getDsContext().addBeforeCommitListener(this::beforeCommitListener);
     }
 
