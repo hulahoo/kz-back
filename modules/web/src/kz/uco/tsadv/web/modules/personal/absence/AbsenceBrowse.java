@@ -53,12 +53,16 @@ public class AbsenceBrowse extends EditableFrame {
                 removedItems.stream().findFirst().ifPresent(removedItem -> callRefreshPersonBalanceSqlFunction(((Absence) removedItem).getPersonGroup().getId().toString())));
         createAction.setWindowParamsSupplier(() -> ParamsMap.of("assignmentDs", assignmentDs));
         createAction.setEditorCloseListener(actionId -> {
-            absenceBalancesVDs.refresh();
+            if (absenceBalancesVDs != null) {
+                absenceBalancesVDs.refresh();
+            }
             absencesDs.refresh();
         });
         editAction.setWindowParamsSupplier(() -> ParamsMap.of("assignmentDs", assignmentDs));
         editAction.setEditorCloseListener(actionId -> {
-            absenceBalancesVDs.refresh();
+            if (absenceBalancesVDs != null) {
+                absenceBalancesVDs.refresh();
+            }
             absencesDs.refresh();
         });
     }
