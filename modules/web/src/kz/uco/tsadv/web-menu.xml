@@ -183,13 +183,13 @@
         <item id="activityBrowseNew"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
             <param name="screen"
-                   value="tsadv$ActivityBrowseNew"/>
+                   value="tsadv$ActivityBrowseNew.tasks"/>
         </item>
         <item id="personalDataRequestId"
               icon="font-icon:USER"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
             <param name="screen"
-                   value="tsadv$PersonalDataRequest.show"/>
+                   value="tsadv$PersonalDataRequestId.show"/>
         </item>
         <item id="recognition-window"
               icon="font-icon:USERS"
@@ -213,7 +213,7 @@
               icon="font-icon:SITEMAP"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
             <param name="screen"
-                   value="beautyTree"/>
+                   value="hrBeautyTree"/>
 
         </item>
         <item id="ssAbsenceLookupId"
