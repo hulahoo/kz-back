@@ -6,8 +6,9 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
-import kz.uco.base.entity.abstraction.AbstractGroup;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.abstraction.AbstractGroup;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.tsadv.modules.personal.model.Competence;
 
 import javax.persistence.Entity;
@@ -19,7 +20,7 @@ import java.util.List;
 @NamePattern("%s|id")
 @Table(name = "TSADV_COMPETENCE_GROUP")
 @Entity(name = "tsadv$CompetenceGroup")
-public class CompetenceGroup extends AbstractGroup {
+public class CompetenceGroup extends AbstractGroup implements IEntityGroup<Competence> {
     private static final long serialVersionUID = 6888189997981508678L;
 
     @Composition

@@ -11,24 +11,23 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.sys.AppContext;
-import kz.uco.tsadv.modules.personal.model.InfoSalaryMarket;
 import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory;
 import kz.uco.tsadv.modules.personal.dictionary.DicJobCategory;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
-import javax.validation.constraints.NotNull;
 
 @Listeners("tsadv_JobListener")
 @NamePattern("%s|jobName")
 @Table(name = "TSADV_JOB")
 @Entity(name = "tsadv$Job")
 @PublishEntityChangedEvents
-public class Job extends AbstractTimeBasedEntity {
+public class Job extends AbstractTimeBasedEntity implements IGroupedEntity<JobGroup> {
     private static final long serialVersionUID = 6955673680071474408L;
 
     @Transient

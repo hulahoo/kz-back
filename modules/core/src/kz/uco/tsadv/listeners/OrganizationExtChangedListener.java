@@ -23,26 +23,29 @@ public class OrganizationExtChangedListener {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<OrganizationExt, UUID> event) {
-        Id<OrganizationExt, UUID> entityId = event.getEntityId();
 
-        OrganizationExt organization = txDataManager.load(entityId).view("organization.edit").one();
+        if (!event.getType().equals(EntityChangedEvent.Type.DELETED)) {
+            Id<OrganizationExt, UUID> entityId = event.getEntityId();
 
-        OrganizationGroupExt organizationGroup = txDataManager.load(OrganizationGroupExt.class)
-                .query("select j from base$OrganizationGroupExt j where j.id = :id")
-                .parameter("id", organization.getGroup().getId())
-                .view("organizationGroup.browse")
-                .one();
+            OrganizationExt organization = txDataManager.load(entityId).view("organization.edit").one();
 
-        if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-            if (organization.getEndDate().compareTo(BaseCommonUtils.getSystemDate()) >= 0
-                    && organization.getStartDate().compareTo(BaseCommonUtils.getSystemDate()) <= 0){
+            OrganizationGroupExt organizationGroup = txDataManager.load(OrganizationGroupExt.class)
+                    .query("select j from base$OrganizationGroupExt j where j.id = :id")
+                    .parameter("id", organization.getGroup().getId())
+                    .view("organizationGroup.browse")
+                    .one();
 
+            if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+                if (organization.getEndDate().compareTo(BaseCommonUtils.getSystemDate()) >= 0
+                        && organization.getStartDate().compareTo(BaseCommonUtils.getSystemDate()) <= 0){
+
+                    saveOrganizationGroupNames(organizationGroup,organization);
+                }
+            }
+
+            if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
                 saveOrganizationGroupNames(organizationGroup,organization);
             }
-        }
-
-        if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            saveOrganizationGroupNames(organizationGroup,organization);
         }
 
     }

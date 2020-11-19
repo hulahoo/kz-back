@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.base.entity.shared.AssignmentGroup;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
@@ -22,7 +23,7 @@ import java.util.List;
 @Extends(AssignmentGroup.class)
 @Entity(name = "base$AssignmentGroupExt")
 @Customizer(AssignmentGroupExtDescriptorCustomizer.class)
-public class AssignmentGroupExt extends AssignmentGroup {
+public class AssignmentGroupExt extends AssignmentGroup implements IEntityGroup<AssignmentExt> {
     private static final long serialVersionUID = -7133025890951691620L;
 
     @OrderBy("startDate DESC")

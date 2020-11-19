@@ -66,10 +66,7 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
     @Override
     public List<AbsenceBalanceV> getAbsenceBalance(UUID personGroupId, Date date) {
         return persistence.callInTransaction(em ->
-                em.createNativeQuery("select * " +
-                        "from bal.hr_absence_balance " +
-                        "where person_group_id = #persongroupId " +
-                        "and #date between date_from and date_to ", AbsenceBalanceV.class)
+                em.createNativeQuery("select * from bal.get_hr_absence_balance(#persongroupId, #date)", AbsenceBalanceV.class)
                         .setParameter("persongroupId", personGroupId)
                         .setParameter("date", date)
                         .getResultList());

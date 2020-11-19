@@ -32,9 +32,21 @@
         <groupTable id="personsTable"
                     width="100%">
             <actions>
+                <action id="transfer"
+                        caption="msg://transfer"
+                        invoke="transfer"
+                        trackSelection="true"/>
                 <action id="dismissal"
                         caption="msg://dismissal"
                         invoke="dismissal"
+                        trackSelection="true"/>
+                <action id="combination"
+                        invoke="combination"
+                        caption="msg://combination"
+                        trackSelection="true"/>
+                <action id="absence"
+                        invoke="absence"
+                        caption="msg://absence"
                         trackSelection="true"/>
             </actions>
             <columns>
@@ -75,16 +87,13 @@
                 <button caption="msg://createpersongroupbrowse"
                         invoke="createAssignment"/>
                 <button id="transfer"
-                        caption="msg://transfer"
-                        invoke="transfer"/>
+                        action="personsTable.transfer"/>
                 <button id="combination"
-                        caption="msg://combination"
-                        invoke="combination"/>
+                        action="personsTable.combination"/>
                 <button id="dismissal"
                         action="personsTable.dismissal"/>
                 <button id="absence"
-                        caption="msg://absence"
-                        invoke="absence"/>
+                        action="personsTable.absence"/>
             </buttonsPanel>
         </groupTable>
     </layout>

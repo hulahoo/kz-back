@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.AbstractGroup;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.tsadv.modules.personal.model.Grade;
 
 import javax.persistence.Entity;
@@ -20,7 +21,7 @@ import java.util.List;
 @NamePattern("%s|grade")
 @Table(name = "TSADV_GRADE_GROUP")
 @Entity(name = "tsadv$GradeGroup")
-public class GradeGroup extends AbstractGroup {
+public class GradeGroup extends AbstractGroup implements IEntityGroup<Grade> {
     private static final long serialVersionUID = 6379263328021886090L;
 
     @Composition

@@ -5,6 +5,7 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractGroup;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.tsadv.modules.personal.model.GlobalValue;
 
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Table(name = "TSADV_GLOBAL_VALUE_GROUP")
 @Entity(name = "tsadv$GlobalValueGroup")
-public class GlobalValueGroup extends AbstractGroup {
+public class GlobalValueGroup extends AbstractGroup implements IEntityGroup<GlobalValue> {
     private static final long serialVersionUID = -6263914923344683153L;
 
     @Composition

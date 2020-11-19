@@ -1,9 +1,8 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
-import kz.uco.tsadv.modules.personal.model.*;
-import kz.uco.tsadv.modules.personal.model.GradeRule;
 import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
+import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.GradeRuleValueGroup;
 
@@ -13,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @NamePattern(" %s %s %s %s|max,mid,min,value")
 @Table(name = "TSADV_GRADE_RULE_VALUE")
 @Entity(name = "tsadv$GradeRuleValue")
-public class GradeRuleValue extends AbstractTimeBasedEntity {
+public class GradeRuleValue extends AbstractTimeBasedEntity implements IGroupedEntity<GradeRuleValueGroup> {
     private static final long serialVersionUID = -9024440342051976704L;
 
     @Column(name = "VALUE_")

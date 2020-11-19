@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.abstraction.IEntityGroup;
 import kz.uco.base.entity.shared.PersonGroup;
 import kz.uco.tsadv.modules.learning.model.Attestation;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
@@ -24,11 +25,11 @@ import java.util.Date;
 import java.util.List;
 
 @Listeners("tsadv_PersonGroupListener")
-@NamePattern("%s %s|id,list")
+@NamePattern("%s|person")
 @Extends(PersonGroup.class)
 @Entity(name = "base$PersonGroupExt")
 @Customizer(PersonGroupExtDescriptorCustomizer.class)
-public class PersonGroupExt extends PersonGroup {
+public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonExt> {
     private static final long serialVersionUID = -6026637722093200432L;
 
     @Composition
