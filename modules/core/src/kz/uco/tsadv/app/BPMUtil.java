@@ -13,11 +13,11 @@ import kz.uco.base.common.StaticVariable;
 import kz.uco.base.common.exceptions.SmsException;
 import kz.uco.base.entity.abstraction.AbstractDictionary;
 import kz.uco.base.entity.core.notification.SendingNotification;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.base.service.SmsService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicApprovalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicDismissalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicOrderStatus;
@@ -505,7 +505,7 @@ public class BPMUtil {
                 processRuntimeManager.getTaskAssigneeList(bpmProcInstanceId, "approver").stream().forEach(a -> {
                     SendingNotification sendingNotification = sendNotification("offer.approver.notification", a, templateParams);
                     activityService.createActivity(
-                            getUserByKey("userExt.id", UUID.fromString(a)),
+                            getUserByKey("id", UUID.fromString(a)),
                             employeeService.getSystemUser(),
                             commonService.getEntity(ActivityType.class, "OFFER_APPROVE"),
                             StatusEnum.active,
@@ -577,7 +577,7 @@ public class BPMUtil {
                         processRuntimeManager.getTaskAssigneeList(bpmProcInstanceId, "businessPartner").stream().forEach(a -> {
                             sendNotification("offer.approver.notification", a, templateParams);
                             activityService.createActivity(
-                                    getUserByKey("userExt.id", UUID.fromString(a)),
+                                    getUserByKey("id", UUID.fromString(a)),
                                     employeeService.getSystemUser(),
                                     commonService.getEntity(ActivityType.class, "OFFER_APPROVE"),
                                     StatusEnum.active,
@@ -823,7 +823,7 @@ public class BPMUtil {
 
 
     private void sendEmail(String userId, String caption, String template, Map<String, Serializable> templateParams) {
-        UserExt u = getUserByKey("userExt.id", UUID.fromString(userId));
+        UserExt u = getUserByKey("id", UUID.fromString(userId));
 
         if (u != null && u.getEmail() != null) {
             EmailInfo emailInfo = new EmailInfo(
@@ -898,7 +898,7 @@ public class BPMUtil {
         UserExt u = null;
         EntityManager em = persistence.getEntityManager();
         TypedQuery<UserExt> tq = em.createQuery("select e " +
-                " from base$UserExt e, base$AssignmentExt a, tsadv$PositionStructure ps, tsadv$PositionStructure psm " +
+                " from tsadv$UserExt e, base$AssignmentExt a, tsadv$PositionStructure ps, tsadv$PositionStructure psm " +
                 " where ps.positionGroup.id = :positionGroupId" +
                 " and ps.positionGroupPath like concat('%', concat(psm.positionGroup.id, '%')) " +
                 " and :systemDate between ps.startDate and ps.endDate " +
@@ -931,9 +931,8 @@ public class BPMUtil {
     }
 
     private UserExt getUserByKey(String keyName, Object keyValue) {
-        UserExt u = commonService.getEntity(UserExt.class, String.format("select e from base$UserExt e " +
-                "join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                "where u.%s = :keyValue", keyName), Collections.singletonMap("keyValue", keyValue), "user.edit");
+        UserExt u = commonService.getEntity(UserExt.class, String.format("select e from tsadv$UserExt e " +
+                "where e.%s = :keyValue", keyName), Collections.singletonMap("keyValue", keyValue), "user.edit");
         return u;
     }
 
@@ -968,7 +967,7 @@ public class BPMUtil {
     }
 
     private void sendSms(String userId, String template, Map<String, Serializable> templateParams) {
-        UserExt u = getUserByKey("userExt.id", UUID.fromString(userId));
+        UserExt u = getUserByKey("id", UUID.fromString(userId));
         if (u != null && u.getMobilePhone() != null) {
             try {
                 smsService.sendSmsAsync(u.getMobilePhone(),
@@ -981,7 +980,7 @@ public class BPMUtil {
     }
 
     private SendingNotification sendNotification(String notificationCode, String userId, Map<String, Object> templateParams, EmailAttachment... emailAttachments) {
-        UserExt user = getUserByKey("userExt.id", UUID.fromString(userId));
+        UserExt user = getUserByKey("id", UUID.fromString(userId));
         if (templateParams != null)
             templateParams.put("user", user);
         return notificationSender.sendParametrizedNotification(notificationCode, user, templateParams, emailAttachments);
@@ -996,18 +995,17 @@ public class BPMUtil {
                 List<UserExt> candidateList = null;
                 userList = commonService.getEntities(UserExt.class,
                         "select e " +
-                                "    from base$UserExt e, tsadv$Requisition r " +
-                                " join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                                "   where u.personGroup.id = r.recruiterPersonGroup.id " +
-                                "     and r.id = :requisitionId ",
+                                "    from tsadvUserExt e, tsadv$Requisition r " +
+                                "   where e.personGroup.id = r.recruiterPersonGroup.id " +
+                                "     and r.id = :requisitionId " +
+                                "",
                         Collections.singletonMap("requisitionId", offer.getJobRequest().getRequisition().getId()),
                         "user.browse");
 
                 candidateList = commonService.getEntities(UserExt.class,
                         "select e " +
-                                "    from base$UserExt e, tsadv$Requisition r, tsadv$JobRequest j" +
-                                " join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                                "   where u.personGroup.id = j.candidatePersonGroup.id " +
+                                "    from tsadv$UserExt e, tsadv$Requisition r, tsadv$JobRequest j" +
+                                "    where e.personGroup.id = j.candidatePersonGroup.id " +
                                 " and j.requisition.id = r.id " +
                                 "     and r.id = :requisitionId ",
                         Collections.singletonMap("requisitionId", offer.getJobRequest().getRequisition().getId()),
@@ -1050,7 +1048,7 @@ public class BPMUtil {
                     templateParams.put("positionNameRu", offer.getJobRequest().getRequisition().getPositionGroup() == null ? "" : offer.getJobRequest().getRequisition().getPositionGroup().getPosition().getPositionName());
                 }
 
-                UserExt user = getUserByKey("userExt.id", UUID.fromString(userId));
+                UserExt user = getUserByKey("id", UUID.fromString(userId));
                 if (templateParams != null)
                     templateParams.put("user", user);
                 sendingNotification = notificationSender.sendParametrizedNotification(notificationCode, user, templateParams, emailAttachments);
@@ -1202,7 +1200,7 @@ public class BPMUtil {
             sendNotification("absenceRequset.approver.notification", a, templateParams);
             activityService.doneActivity(entityId, "ABSENCE_REQUEST_APPROVE");
             activityService.createActivity(
-                    getUserByKey("userExt.id", UUID.fromString(a)),
+                    getUserByKey("id", UUID.fromString(a)),
                     employeeService.getSystemUser(),
                     commonService.getEntity(ActivityType.class, "ABSENCE_REQUEST_APPROVE"),
                     StatusEnum.active,

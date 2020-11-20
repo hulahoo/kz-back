@@ -292,7 +292,7 @@ public class BpmServiceBean implements BpmService {
                         id = list.get(i + 1);
                 }
             }
-            return getUserByKey("userExt.id", UUID.fromString(id));
+            return getUserByKey("id", UUID.fromString(id));
         }
         return null;
     }
@@ -1382,7 +1382,7 @@ public class BpmServiceBean implements BpmService {
 
         updateEntityStatus(entityName, entityId, requestStatus);
 
-        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
+        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
 
         if (userExt != null)
             sendUserNotification(userExt, bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit"),
@@ -1847,9 +1847,8 @@ public class BpmServiceBean implements BpmService {
     }
 
     protected UserExt getUserByKey(String keyName, Object keyValue) {
-        return commonService.getEntity(UserExt.class, String.format("select e from base$UserExt e " +
-                "join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                "where u.%s = :keyValue", keyName), Collections.singletonMap("keyValue", keyValue), "user.edit");
+        return commonService.getEntity(UserExt.class, String.format("select e from tsadv$UserExt e " +
+                "where e.%s = :keyValue", keyName), Collections.singletonMap("keyValue", keyValue), "user.edit");
     }
 
     protected String getGradeName(GradeGroup gradeGroup, Date date) {

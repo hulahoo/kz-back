@@ -32,7 +32,6 @@ public class LearnerGroupComplexEdit extends AbstractLookup {
             "base$PersonGroupExt.for.enrollment.browse";    // +
 //                "base$PersonGroupExt.lookup.for.attestation";   // +
 //                "base$PersonGroup.browse";  // -
-//                "tsadv$UserExtPersonGroup.browse";    // -
 
 
     @Inject

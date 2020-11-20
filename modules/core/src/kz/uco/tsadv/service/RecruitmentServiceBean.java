@@ -5,7 +5,10 @@ import com.haulmont.cuba.core.*;
 import com.haulmont.cuba.core.app.UniqueNumbersAPI;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
+import kz.uco.base.service.NotificationService;
+import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
@@ -13,9 +16,6 @@ import kz.uco.tsadv.modules.recruitment.config.RecruitmentConfig;
 import kz.uco.tsadv.modules.recruitment.enums.JobRequestStatus;
 import kz.uco.tsadv.modules.recruitment.enums.RequisitionStatus;
 import kz.uco.tsadv.modules.recruitment.model.*;
-import kz.uco.base.entity.extend.UserExt;
-import kz.uco.base.service.NotificationService;
-import kz.uco.base.service.common.CommonService;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
@@ -518,9 +518,8 @@ public class RecruitmentServiceBean implements RecruitmentService {
 //        loadContext.setQuery(LoadContext.createQuery("select e from tsadv$UserExt e where e.personGroup.id = :pgId")
 //                .setParameter("pgId", personGroupId));
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from base$UserExt e " +
-                        " join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                        "where u.personGroup.id = :pgId");
+                "select e from tsadv$UserExt e " +
+                        "where e.personGroup.id = :pgId");
         query.setParameter("pgId", personGroupId);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");
@@ -530,7 +529,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
     protected UserExt getUserExtByLogin(String login) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from base$UserExt e where e.login = :login");
+                "select e from tsadv$UserExt e where e.login = :login");
         query.setParameter("login", login);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");

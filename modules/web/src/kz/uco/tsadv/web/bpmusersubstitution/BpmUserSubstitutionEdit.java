@@ -3,10 +3,10 @@ package kz.uco.tsadv.web.bpmusersubstitution;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.gui.components.*;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.BpmUserSubstitution;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.service.BpmUserSubstitutionService;
 import org.springframework.util.StringUtils;
 

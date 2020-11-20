@@ -9,9 +9,9 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
 import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 import kz.uco.tsadv.modules.recruitment.enums.RequisitionStatus;
 import kz.uco.tsadv.modules.recruitment.model.*;
@@ -86,9 +86,8 @@ public class RequisitionListener implements AfterUpdateEntityListener<Requisitio
                     params.put("requisition", entity);
 
                     UserExt recruiterUser = commonService.getEntity(UserExt.class,
-                            "select e from base$UserExt e " +
-                                    " join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                                    "where u.personGroup.id = :personGroupId",
+                            "select e from tsadv$UserExt e " +
+                                    "where e.personGroup.id = :personGroupId",
                             Collections.singletonMap("personGroupId", entity.getRecruiterPersonGroup().getId()),
                             "user.browse");
 
@@ -100,7 +99,7 @@ public class RequisitionListener implements AfterUpdateEntityListener<Requisitio
 
                     for (OrganizationHrUser hrUser : employeeService.getHrUsers(entity.getOrganizationGroup().getId(), "RECRUITING_MANAGER")) {
                         UserExt recruiterManagerUser = commonService.getEntity(UserExt.class,
-                                "select e from base$UserExt e where e.id = :userId",
+                                "select e from tsadv$UserExt e where e.id = :userId",
                                 Collections.singletonMap("userId", hrUser.getUser().getId()),
                                 "user.browse");
                         params.put("user", recruiterManagerUser);

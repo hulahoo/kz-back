@@ -1,0 +1,1 @@
+alter table tsadv_user_ext_person_group rename to TSADV_USER_EXT_PERSON_GROUP__U23857 ;

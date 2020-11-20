@@ -20,10 +20,10 @@ import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
 import kz.uco.base.entity.core.notification.NotificationTemplate;
 import kz.uco.base.entity.core.notification.SendingNotification;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -487,9 +487,9 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
 
 //        Utils.customizeLookup(jobGroupConfig.getComponent(), null, WindowManager.OpenType.DIALOG, null);
         Map<String, Object> map = new HashMap<>();
-        map.put("roleCode", " and (e.id in (select up.personGroup.id  " +
-                "                       from tsadv$HrUserRole r, tsadv$UserExtPersonGroup up" +
-                "                      where up.userExt.id = r.user.id" +
+        map.put("roleCode", " and (e.id in (select u.personGroup.id  " +
+                "                       from tsadv$HrUserRole r, tsadv$UserExt u" +
+                "                      where u.id = r.user.id" +
                 "                        and r.role.code = 'RECRUITING_SPECIALIST'" +
                 "                        and :session$systemDate between r.dateFrom and r.dateTo))");
 
@@ -1763,7 +1763,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
     protected UserExt getUserExt(UUID personGroupId) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e.userExt from tsadv$UserExtPersonGroup e where e.personGroup.id = :pgId");
+                "select e from tsadv$UserExt e where e.personGroup.id = :pgId");
         query.setParameter("pgId", personGroupId);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");
@@ -1773,7 +1773,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
     protected UserExt getUserExtByLogin(String login) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from base$UserExt e where LOWER(e.login) = :login ");
+                "select e from tsadv$UserExt e where LOWER(e.login) = :login ");
         query.setParameter("login", login != null ? login.toLowerCase() : null);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");

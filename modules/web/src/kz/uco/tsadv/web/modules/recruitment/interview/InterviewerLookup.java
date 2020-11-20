@@ -3,12 +3,12 @@ package kz.uco.tsadv.web.modules.recruitment.interview;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.data.GroupDatasource;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.web.modules.personal.common.Utils;
-import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.recruitment.model.HiringStepMember;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.recruitment.model.HiringStepMember;
 import kz.uco.tsadv.service.EmployeeService;
+import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -53,8 +53,8 @@ public class InterviewerLookup extends AbstractLookup {
                         params.put("roleCode", hiringStepMember.getRole().getCode());
                         String qureyString = "select pg from base$PersonGroupExt pg " +
                                 " where pg.id in (select e1.personGroup.id " +
-                                "   from tsadv$UserExtPersonGroup e1 " +
-                                "   join tsadv$OrganizationHrUser e on e.user.id = e1.userExt.id " +
+                                "   from tsadv$User e1 " +
+                                "   join tsadv$OrganizationHrUser e on e.user.id = e1.id " +
                                 "  where e.organizationGroup.id = :param$organizationGroupId " +
                                 "    and e.deleteTs is null " +
                                 "    and :param$systemDate between e.dateFrom and e.dateTo" +

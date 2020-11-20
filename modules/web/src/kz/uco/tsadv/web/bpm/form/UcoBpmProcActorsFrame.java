@@ -14,11 +14,10 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.entity.User;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.StaticVariable;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -365,19 +364,19 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
 
     public Component generatePicker(ProcActor procActor) {
         PickerField pickerField = componentsFactory.createComponent(PickerField.class);
-        pickerField.setMetaClass(metadata.getClass(UserExtPersonGroup.class));
+        pickerField.setMetaClass(metadata.getClass(UserExt.class));
         pickerField.setWidth("100%");
         pickerField.setCaptionMode(CaptionMode.PROPERTY);
         pickerField.setCaptionProperty("fullName");
         pickerField.setRequired(true);
         PickerField.LookupAction lookupAction = pickerField.addLookupAction();
-        lookupAction.setLookupScreen("tsadv$UserExtPersonGroup.browse");
+        lookupAction.setLookupScreen("tsadv$UserExt.browse");
         lookupAction.setLookupScreenParamsSupplier(() -> ParamsMap.of("EMPLOYEE", true));
         lookupAction.setAfterLookupSelectionHandler(items -> {
             if (!CollectionUtils.isEmpty(items)) {
-                UserExtPersonGroup userExtPersonGroup = (UserExtPersonGroup) items.iterator().next();
-                if (!isContainUser(userExtPersonGroup.getUserExt())) {
-                    procActor.setUser(userExtPersonGroup.getUserExt());
+                UserExt userExt = (UserExt) items.iterator().next();
+                if (!isContainUser(userExt)) {
+                    procActor.setUser(userExt);
                 } else {
                     pickerField.setValue(null);
                     showNotification(messages.getMessage(UcoBpmProcActorsFrame.class, "alreadyAddedUser"));
@@ -385,9 +384,7 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
             }
         });
         if (procActor.getUser() != null) {
-            pickerField.setValue(commonService.getEntity(UserExtPersonGroup.class,
-                    "select e from tsadv$UserExtPersonGroup e where e.userExt.id = :userId",
-                    ParamsMap.of("userId", procActor.getUser().getId()), "userExtPersonGroup.edit"));
+            pickerField.setValue(procActor.getUser());
             if (notEditableUsers.contains(procActor.getUser())) {
                 pickerField.setEditable(false);
             }

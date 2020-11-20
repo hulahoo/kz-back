@@ -139,7 +139,7 @@ public class PersonGroupBrowse extends AbstractLookup {
         if (params.containsKey("executePersonGroup")) {
             personGroupsDs.setQuery("select e " +
                     " from base$PersonGroupExt e " +
-                    "   left join tsadv$UserExtPersonGroup u " +
+                    "   left join tsadv$UserExt u " +
                     "       on u.personGroup = e " +
                     "  join e.list p " +
                     " where :session$systemDate between p.startDate and p.endDate\n" +

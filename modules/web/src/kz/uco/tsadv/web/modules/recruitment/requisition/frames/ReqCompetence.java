@@ -11,6 +11,8 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import com.haulmont.cuba.web.gui.components.renderers.WebComponentRenderer;
+import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.CompetenceGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -20,8 +22,6 @@ import kz.uco.tsadv.modules.personal.model.ScaleLevel;
 import kz.uco.tsadv.modules.recruitment.enums.CompetenceCriticalness;
 import kz.uco.tsadv.modules.recruitment.model.Requisition;
 import kz.uco.tsadv.modules.recruitment.model.RequisitionCompetence;
-import kz.uco.base.entity.extend.UserExt;
-import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
@@ -147,12 +147,11 @@ public class ReqCompetence extends AbstractFrame {
         //скрывает панель кнопок для руководителя
         Map<String, Object> map = new HashMap<>();
         map.put("userSessionID", userSession.getUser().getId());
-        map.put("userSessionManagerID", requisitionDs.getItem().getManagerPersonGroup()!=null?
-                requisitionDs.getItem().getManagerPersonGroup().getId():null);
-        String query = "SELECT e FROM base$UserExt e " +
-                "join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                "JOIN base$PersonGroupExt t ON t.id = u.personGroup.id " +
-                "where e.id = :userSessionID AND u.personGroup.id = :userSessionManagerID";
+        map.put("userSessionManagerID", requisitionDs.getItem().getManagerPersonGroup() != null ?
+                requisitionDs.getItem().getManagerPersonGroup().getId() : null);
+        String query = "SELECT e FROM tsadv$UserExt e " +
+                "JOIN base$PersonGroupExt t ON t.id = e.personGroup.id " +
+                "where e.id = :userSessionID AND e.personGroup.id = :userSessionManagerID";
         List<UserExt> extList = commonService.getEntities(UserExt.class, query, map, null);
         ButtonsPanel panel = (ButtonsPanel) getComponent("competencesButtonsPanel");
         if (extList.size() > 0) {

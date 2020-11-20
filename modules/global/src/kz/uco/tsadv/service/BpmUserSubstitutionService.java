@@ -1,8 +1,8 @@
 package kz.uco.tsadv.service;
 
 
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.tsadv.entity.tb.BpmUserSubstitution;
+import kz.uco.tsadv.modules.administration.UserExt;
 
 import java.util.Date;
 import java.util.List;

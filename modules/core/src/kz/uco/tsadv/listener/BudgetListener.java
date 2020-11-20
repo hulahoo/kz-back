@@ -4,10 +4,10 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.PersistenceTools;
 import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
 import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.learning.model.Budget;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Case;
@@ -62,10 +62,9 @@ public class BudgetListener implements AfterInsertEntityListener<Budget>, AfterU
 
 
         for (UserExt user : commonService.getEntities(UserExt.class,
-                "   select e from base$UserExt e, tsadv$PositionStructure ps, base$AssignmentExt a, tsadv$UserExtPersonGroup pg " +
-                        "              where e.id = pg.userExt.id " +
-                        "              and a.positionGroup.id = ps.positionGroup.id " +
-                        "              and pg.personGroup.id = a.personGroup.id " +
+                "   select e from tsadv$UserExt e, tsadv$PositionStructure ps, base$AssignmentExt a " +
+                        "              where a.positionGroup.id = ps.positionGroup.id " +
+                        "              and e.personGroup.id = a.personGroup.id " +
                         "              and :sysdate between ps.startDate and ps.endDate " +
                         "              and :sysdate between a.startDate and a.endDate " +
                         "              and ps.managerFlag = TRUE ",

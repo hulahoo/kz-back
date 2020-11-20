@@ -5,11 +5,10 @@ import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.model.HrUserRole;
-import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

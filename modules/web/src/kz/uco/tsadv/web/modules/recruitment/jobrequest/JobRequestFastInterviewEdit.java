@@ -1,6 +1,5 @@
 package kz.uco.tsadv.web.modules.recruitment.jobrequest;
 
-import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
@@ -8,25 +7,25 @@ import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.entity.dictionary.DicLocation;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.personal.group.JobGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.recruitment.config.RecruitmentConfig;
 import kz.uco.tsadv.modules.recruitment.dictionary.DicInterviewReason;
 import kz.uco.tsadv.modules.recruitment.dictionary.DicJobRequestReason;
 import kz.uco.tsadv.modules.recruitment.enums.InterviewStatus;
 import kz.uco.tsadv.modules.recruitment.enums.JobRequestStatus;
-import kz.uco.tsadv.modules.recruitment.model.*;
+import kz.uco.tsadv.modules.recruitment.model.Interview;
+import kz.uco.tsadv.modules.recruitment.model.JobRequest;
+import kz.uco.tsadv.modules.recruitment.model.Requisition;
+import kz.uco.tsadv.modules.recruitment.model.RequisitionHiringStep;
 import kz.uco.tsadv.service.EmployeeService;
-import org.springframework.security.access.method.P;
 
 import javax.inject.Inject;
-import java.util.*;
 import java.util.Calendar;
+import java.util.*;
 
 import static java.lang.Math.toIntExact;
 

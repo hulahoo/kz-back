@@ -6,12 +6,12 @@
         lookupComponent="userExtsTable">
     <dsContext>
         <groupDatasource id="userExtsDs"
-                         class="kz.uco.base.entity.extend.UserExt"
+                         class="kz.uco.tsadv.modules.administration.UserExt"
                          view="user.browse"
                          cacheable="false">
 
             <query>
-                <![CDATA[select e from base$UserExt e ]]>
+                <![CDATA[select e from tsadv$UserExt e ]]>
             </query>
         </groupDatasource>
     </dsContext>

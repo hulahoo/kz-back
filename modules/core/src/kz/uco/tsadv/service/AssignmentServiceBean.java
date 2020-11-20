@@ -131,7 +131,7 @@ public class AssignmentServiceBean implements AssignmentService {
                 UUID managerId = employeeService.getImmediateSupervisorByPersonGroup(assignmentExt.getPersonGroup().getId());
                 UserExt manager = commonService.getEntity(UserExt.class,
                         " select e from tsadv$UserExt e where e.personGroup.id = :managerId ",
-                        ParamsMap.of("managerId", managerId), "userExtPersonGroup.edit");
+                        ParamsMap.of("managerId", managerId), "userExt.edit");
                 if (Objects.nonNull(manager)) {
                     PersonExt employee = employeeService.getPersonByPersonGroup(assignmentExt.getPersonGroup().getId(), CommonUtils.getSystemDate(), "person-edit");
 

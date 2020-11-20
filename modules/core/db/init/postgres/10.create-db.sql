@@ -9003,26 +9003,7 @@ create table TSADV_ANALYTICS (
     primary key (ID)
 )^
 -- end TSADV_ANALYTICS
--- begin TSADV_USER_EXT_PERSON_GROUP
-create table TSADV_USER_EXT_PERSON_GROUP (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    --
-    USER_EXT_ID uuid not null,
-    PERSON_GROUP_ID uuid not null,
-    --
-    primary key (ID)
-)^
--- end TSADV_USER_EXT_PERSON_GROUP
+
 -- begin TSADV_ORGANIZATION_PROPERTIES
 create table TSADV_ORGANIZATION_PROPERTIES (
     ID uuid,

@@ -151,7 +151,7 @@ public class EmployeeServiceBean implements EmployeeService {
                             "  and current_date between p.start_date and p.end_date " +
                             ") " +
                             "SELECT " +
-                            "   u.user_ext_id " +
+                            "   su.id " +
                             "FROM nodes n " +
                             "join base_position_group pg " +
                             "   on n.path like concat('%', concat(pg.id, '%')) " +
@@ -164,10 +164,8 @@ public class EmployeeServiceBean implements EmployeeService {
                             "join tsadv_dic_assignment_status das " +
                             "   on das.id=a.assignment_status_id " +
                             "   and das.code='ACTIVE' " +
-                            "join tsadv_user_ext_person_group u " +
-                            "   on u.person_group_id=a.person_group_id " +
                             "join sec_user su " +
-                            "   on su.id = u.user_ext_id " +
+                            "   on su.person_group_id=a.person_group_id " +
                             "where n.path like ?1 " +
                             "   and a.position_group_id <> ?2 " +
                             "order by n1.level desc");
@@ -383,7 +381,7 @@ public class EmployeeServiceBean implements EmployeeService {
         if (view != null && viewRepository.getView(UserExt.class, view) == null) {
             view = null;
         }
-        return commonService.getEntity(UserExt.class, "select e from base$UserExt e where e.login = :userLogin",
+        return commonService.getEntity(UserExt.class, "select e from tsadv$UserExt e where e.login = :userLogin",
                 Collections.singletonMap("userLogin", login), view);
     }
 
@@ -1725,7 +1723,7 @@ public class EmployeeServiceBean implements EmployeeService {
                             " n1.level, " +
                             "  pg.id position_group_id, " +
                             "  a.person_group_id, " +
-                            "  u.user_ext_id, " +
+                            "  su.id, " +
                             "  per.id, " +
                             "  per.first_name, " +
                             "  per.last_name, " +
@@ -1743,10 +1741,8 @@ public class EmployeeServiceBean implements EmployeeService {
                             "  join tsadv_dic_assignment_status das " +
                             "  on das.id=a.assignment_status_id " +
                             "  and das.code='ACTIVE' " +
-                            "  left join tsadv_user_ext_person_group u " +
-                            "  on u.person_group_id=a.person_group_id " +
                             "  left join sec_user su " +
-                            "  on su.id = u.user_ext_id " +
+                            "  on su.person_group_id=a.person_group_id " +
                             "  join base_person per " +
                             "  on per.group_id=a.person_group_id " +
                             "  and current_date between a.start_date and a.end_date " +

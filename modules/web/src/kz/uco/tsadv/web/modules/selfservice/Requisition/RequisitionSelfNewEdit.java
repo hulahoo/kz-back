@@ -55,7 +55,7 @@ public class RequisitionSelfNewEdit<T extends Requisition> extends AbstractEdito
             item.setCode(String.format("R%07d", uniqueNumbersService.getNextNumber("requisitionCode")));
         }
         currentPersonGroup = commonService.getEntity(PersonGroupExt.class,
-                "select e.personGroup from tsadv$UserExtPersonGroup e where e.userExt.id = :userId",
+                "select e.personGroup from tsadv$UserExt e where e.id = :userId",
                 ParamsMap.of("userId", userSession.getUser().getId()), "personGroupExt.for.requisition.edit");
         item.setManagerPersonGroup(currentPersonGroup);
         item.setOpenedPositionsCount(1.0);

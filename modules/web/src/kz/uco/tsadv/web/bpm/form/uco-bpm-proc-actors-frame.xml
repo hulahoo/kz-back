@@ -15,7 +15,7 @@
         <collectionDatasource id="usersDs"
                               maxResults="0">
             <query>
-                <![CDATA[select up.userExt from tsadv$UserExtPersonGroup up]]>
+                <![CDATA[select user from tsadv$UserExt user]]>
             </query>
         </collectionDatasource>
     </dsContext>

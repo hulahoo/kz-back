@@ -2,7 +2,7 @@ package kz.uco.tsadv.service;
 
 
 import com.haulmont.cuba.core.global.View;
-import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 

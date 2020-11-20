@@ -17,14 +17,14 @@ import com.haulmont.reports.app.service.ReportService;
 import com.haulmont.reports.entity.Report;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.core.notification.SendingNotification;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.Book;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.lms.factory.*;
-import kz.uco.tsadv.lms.pojo.*;
 import kz.uco.tsadv.lms.pojo.AnswerPojo;
 import kz.uco.tsadv.lms.pojo.QuestionPojo;
+import kz.uco.tsadv.lms.pojo.*;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.learning.enums.ContentType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
@@ -45,8 +45,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static kz.uco.base.common.Null.emptyReplace;
 
 @Service(LmsService.NAME)
 public class LmsServiceBean implements LmsService {
@@ -631,7 +629,7 @@ public class LmsServiceBean implements LmsService {
         }
         LoadContext<UserExt> lc = LoadContext.create(UserExt.class);
         lc.setView("user.edit");
-        lc.setQueryString("select u from base$UserExt u where u.loginLowerCase = :login and (u.active = true or u.active is null)")
+        lc.setQueryString("select u from tsadv$UserExt u where u.loginLowerCase = :login and (u.active = true or u.active is null)")
                 .setParameter("login", userLogin);
         UserExt targetUser = dataManager.load(lc);
         if (targetUser == null) {

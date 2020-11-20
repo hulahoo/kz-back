@@ -11867,49 +11867,6 @@
         <property name="udo"
                   view="_local"/>
     </view>
-    <view class="kz.uco.tsadv.global.entity.UserExtPersonGroup"
-          extends="_local"
-          name="userExtPersonGroup.edit">
-        <property name="userExt"
-                  view="_minimal">
-            <property name="image"
-                      view="_minimal"/>
-            <property name="fullName"/>
-            <property name="firstName"/>
-            <property name="lastName"/>
-            <property name="middleName"/>
-            <property name="mobilePhone"/>
-            <property name="telegramChatId"/>
-            <property name="email"/>
-            <property name="language"/>
-        </property>
-        <property name="personGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="image"
-                          view="_minimal"/>
-                <property name="firstNameLatin"/>
-                <property name="middleNameLatin"/>
-                <property name="lastNameLatin"/>
-            </property>
-            <property name="person"
-                      view="_minimal">
-                <property name="image"
-                          view="_minimal"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="firstNameLatin"/>
-                <property name="middleNameLatin"/>
-                <property name="lastNameLatin"/>
-            </property>
-            <property name="fioWithEmployeeNumber"/>
-            <property name="personLatinFioWithEmployeeNumber"/>
-        </property>
-        <property name="fullName"/>
-    </view>
     <view class="kz.uco.tsadv.modules.personal.model.OrganizationProperties"
           extends="_local"
           name="organizationProperties-view">
@@ -16767,14 +16724,6 @@
         <property name="scaleLevel"
                   view="_local"/>
     </view>
-    <view class="kz.uco.tsadv.global.entity.UserExtPersonGroup"
-          extends="_local"
-          name="userExtPersonGroup-for-jobRequest">
-        <property name="userExt"
-                  view="user.browse"/>
-        <property name="personGroup"
-                  view="_minimal"/>
-    </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
           extends="_local"
           name="jobRequest-for-count">
@@ -20777,7 +20726,31 @@
             <property name="nationalIdentifier"/>
         </property>
     </view>
-    <view class="kz.uco.base.entity.extend.UserExt"
+    <view class="kz.uco.tsadv.modules.administration.UserExt"
+          extends="user.browse"
+          name="user.browse">
+        <property name="image"
+                  view="_minimal">
+            <property name="size"/>
+        </property>
+    </view>
+    <view class="kz.uco.tsadv.modules.administration.UserExt"
+          extends="user.edit"
+          name="user.edit">
+        <property name="image"
+                  view="_local">
+        </property>
+        <property name="addressBookEntries"
+                  view="_local">
+            <property name="user"
+                      view="_minimal"/>
+        </property>
+        <property name="availability"/>
+        <property name="innerNumber"/>
+        <property name="atsCode"/>
+        <property name="personGroup" view="personGroupExt.edit"/>
+    </view>
+    <view class="kz.uco.tsadv.modules.administration.UserExt"
           extends="_minimal"
           name="user.roles">
         <property name="userRoles"

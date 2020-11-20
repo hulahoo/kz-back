@@ -6,15 +6,15 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.cuba.security.global.UserSession;
+import kz.uco.base.common.StaticVariable;
+import kz.uco.base.service.common.CommonService;
+import kz.uco.base.web.components.CustomFilter;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.recruitment.enums.InterviewStatus;
 import kz.uco.tsadv.modules.recruitment.model.HiringStep;
 import kz.uco.tsadv.modules.recruitment.model.Interview;
-import kz.uco.base.common.StaticVariable;
-import kz.uco.base.service.common.CommonService;
-import kz.uco.base.web.components.CustomFilter;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -96,8 +96,8 @@ public class InterviewBrowse extends AbstractLookup {
         PersonExt person = commonService.getEntity(PersonExt.class,
                 "SELECT p " +
                         "FROM base$PersonExt p " +
-                        "join tsadv$UserExtPersonGroup upg ON p.group.id = upg.personGroup.id " +
-                        " where upg.userExt.id = :userId " +
+                        "join tsadv$UserExt user ON p.group.id = user.personGroup.id " +
+                        " where user.id = :userId " +
                         " and :sysDate between p.startDate and p.endDate ",
                 map,
                 "person-view");

@@ -1,9 +1,7 @@
 package kz.uco.tsadv.modules.recruitment.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
-import kz.uco.tsadv.modules.recruitment.model.*;
-import kz.uco.tsadv.modules.recruitment.model.JobRequest;
-import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.administration.UserExt;
 
 import javax.persistence.*;
 

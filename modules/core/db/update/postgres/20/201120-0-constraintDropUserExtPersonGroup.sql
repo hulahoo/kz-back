@@ -1,0 +1,2 @@
+alter table tsadv_bpm_request_message drop constraint FK_TSADV_BPM_REQUEST_MESSAGE_ASSIGNED_BY ;
+alter table tsadv_bpm_request_message drop constraint FK_TSADV_BPM_REQUEST_MESSAGE_ASSIGNED_USER ;

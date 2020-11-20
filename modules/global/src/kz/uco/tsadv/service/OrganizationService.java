@@ -1,8 +1,8 @@
 package kz.uco.tsadv.service;
 
 
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.tsadv.global.entity.OrganizationTree;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
