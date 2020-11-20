@@ -13,7 +13,7 @@
                               view="procTask-frame">
             <query>
                 <![CDATA[select e from bpm$ProcTask e
-                          where e.procInstance.entity.entityId = :ds$absenceRequestDs
+                          where e.procInstance.entity.entityId = :ds$absenceRequestDs.id
                        order by e.startDate]]>
             </query>
         </collectionDatasource>
