@@ -1522,3 +1522,6 @@ insert into BASE_DIC_UNIT_OF_MEASURE ( id, "version", create_ts, created_by, lan
 -----base_dic_language
 insert into base_dic_language ( id, "version", create_ts, created_by, lang_value1, description1, lang_value2, description2, lang_value3, description3, code,is_system_record, active, is_default, order_) values (newid(), 1, current_date, 'INSTALL', 'Русский', null, 'Русский', null, 'Russian', null, 'RU', true, true, false, '1');
 insert into base_dic_language ( id, "version", create_ts, created_by, lang_value1, description1, lang_value2, description2, lang_value3, description3, code,is_system_record, active, is_default, order_) values (newid(), 1, current_date, 'INSTALL', 'Казахский', null, 'Казахский', null, 'Kazakh', null, 'KZ', true, true, false, '2');
+
+-- alter table
+CREATE SEQUENCE NumberSequenceSS START WITH 1 INCREMENT BY 1;
