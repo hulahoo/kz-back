@@ -5,7 +5,6 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.GroupBoxLayout;
 import com.haulmont.cuba.gui.components.SplitPanel;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
 
 import javax.inject.Inject;
 import java.util.Map;
@@ -26,8 +25,6 @@ public class ExtUserEditor extends kz.uco.base.gui.userext.ExtUserEditor {
 
     @Inject
     protected Metadata metadata;
-
-    private UserExtPersonGroup oldUserExtPersonGroup = null;
 
     @Inject
     protected CommonService commonService;

@@ -20,7 +20,7 @@
                          width="100%"
                          requiredMessage="msg://requiredUser"
                          captionProperty="fullName"
-                         metaClass="tsadv$UserExtPersonGroup"/>
+                         metaClass="tsadv$UserExt"/>
         </hbox>
         <hbox id="substitutedUser" spacing="true" width="700px">
             <label value="mainMsg://substitutedUser"/>
@@ -29,7 +29,7 @@
                          required="true"
                          width="100%"
                          requiredMessage="msg://requiredSubstitutedUser"
-                         metaClass="tsadv$UserExtPersonGroup"/>
+                         metaClass="tsadv$UserExt"/>
         </hbox>
         <hbox spacing="true" id="sDate" width="700px">
             <label value="msg://startDate"/>

@@ -8,7 +8,7 @@ import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.notification.NotificationSender;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.Dismissal;
@@ -129,16 +129,15 @@ public class AssignmentServiceBean implements AssignmentService {
         for (AssignmentExt assignmentExt : list) {
             try {
                 UUID managerId = employeeService.getImmediateSupervisorByPersonGroup(assignmentExt.getPersonGroup().getId());
-                UserExtPersonGroup manager = commonService.getEntity(UserExtPersonGroup.class,
-                        " select e from tsadv$UserExtPersonGroup e where e.personGroup.id = :managerId ",
+                UserExt manager = commonService.getEntity(UserExt.class,
+                        " select e from tsadv$UserExt e where e.personGroup.id = :managerId ",
                         ParamsMap.of("managerId", managerId), "userExtPersonGroup.edit");
-
                 if (Objects.nonNull(manager)) {
                     PersonExt employee = employeeService.getPersonByPersonGroup(assignmentExt.getPersonGroup().getId(), CommonUtils.getSystemDate(), "person-edit");
 
                     Map<String, Object> param = new HashMap<>();
-                    param.put("managerRu", Optional.ofNullable(manager.getFullName("ru")).orElse(""));
-                    param.put("managerEn", Optional.ofNullable(manager.getFullName("en")).orElse(""));
+                    param.put("managerRu", Optional.ofNullable(manager.getPersonGroup().getPerson() != null ? manager.getPersonGroup().getPerson().getFullName() : manager.getFullName()).orElse(""));
+                    param.put("managerEn", Optional.ofNullable(manager.getPersonGroup().getPerson() != null ? manager.getPersonGroup().getPerson().getFullNameLatin() : manager.getFullName()).orElse(""));
 
                     param.put("employeeRu", Optional.ofNullable(employee.getFullNameLatin("ru")).orElse(""));
                     param.put("employeeEn", Optional.ofNullable(employee.getFullNameLatin("en")).orElse(""));
@@ -151,7 +150,7 @@ public class AssignmentServiceBean implements AssignmentService {
                     param.put("temporaryEndDate", dateFormat.format(assignmentExt.getTemporaryEndDate()));
 
                     activityService.createActivity(
-                            manager.getUserExt(),
+                            manager,
                             null,
                             commonService.getEntity(ActivityType.class, "NOTIFICATION"),
                             StatusEnum.active,
@@ -163,7 +162,7 @@ public class AssignmentServiceBean implements AssignmentService {
                             null,
                             "assignment.notify.temporaryEndDate",
                             param);
-                    notificationSender.sendParametrizedNotification("assignment.notify.temporaryEndDate", manager.getUserExt(), param);
+                    notificationSender.sendParametrizedNotification("assignment.notify.temporaryEndDate", manager, param);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

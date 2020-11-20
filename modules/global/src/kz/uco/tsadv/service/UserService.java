@@ -2,6 +2,8 @@ package kz.uco.tsadv.service;
 
 
 import com.haulmont.cuba.security.entity.Role;
+import com.haulmont.cuba.security.entity.User;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import java.util.List;
 
@@ -19,4 +21,8 @@ public interface UserService {
     List<Role> loadUserRoles();
 
     List<Role> loadUserRoles(String... roleNames);
+
+    PersonGroupExt getPersonGroup(User user);
+
+    PersonGroupExt getPersonGroup(User user, String view);
 }

@@ -39,8 +39,8 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
         qParams.put(2, roleCode);
 
         List listId = commonService.emNativeQueryResultList("select e.id from tsadv_organization_hr_user e  " +
-                " join tsadv_user_ext_person_group p  " +
-                "  on e.user_id = p.user_ext_id " +
+                " join sec_user p  " +
+                "  on e.user_id = p.id " +
                 "  and p.delete_ts is null  " +
                 " join base_assignment s  " +
                 "  on s.person_group_id = p.person_group_id " +

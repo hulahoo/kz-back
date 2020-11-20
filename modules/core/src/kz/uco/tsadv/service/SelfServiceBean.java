@@ -2,13 +2,13 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.Persistence;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.NotificationConfig;
 import kz.uco.tsadv.entity.dbview.OrganizationSsView;
 import kz.uco.tsadv.entity.dbview.PositionSsView;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonDocument;

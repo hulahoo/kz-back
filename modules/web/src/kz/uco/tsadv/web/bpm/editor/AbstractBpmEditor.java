@@ -25,7 +25,7 @@ import kz.uco.tsadv.entity.AssignmentSalaryRequest;
 import kz.uco.tsadv.entity.dbview.ProcInstanceV;
 import kz.uco.tsadv.entity.tb.TemporaryTranslationRequest;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.BpmRequestMessage;
 import kz.uco.tsadv.modules.personal.model.PositionChangeRequest;
@@ -279,8 +279,8 @@ public abstract class AbstractBpmEditor<T extends StandardEntity> extends Abstra
     }
 
     protected boolean isVisibleAnswerBtn(BpmRequestMessage bpmRequestMessage) {
-        return userSession.getUser().equals(bpmRequestMessage.getAssignedBy().getUserExt())
-                || userSession.getUser().equals(bpmRequestMessage.getAssignedUser().getUserExt());
+        return userSession.getUser().equals(bpmRequestMessage.getAssignedBy())
+                || userSession.getUser().equals(bpmRequestMessage.getAssignedUser());
     }
 
     protected Label createMessageLabel(BpmRequestMessage bpmRequestMessage) {
@@ -332,8 +332,8 @@ public abstract class AbstractBpmEditor<T extends StandardEntity> extends Abstra
         Image image = componentsFactory.createComponent(Image.class);
         image.setStyleName("bpm-message-img");
         image.setId("personImage");
-        if (bpmRequestMessage.getAssignedBy().getUserExt().getImage() != null)
-            image.setSource(FileDescriptorResource.class).setFileDescriptor(bpmRequestMessage.getAssignedBy().getUserExt().getImage());
+        if (bpmRequestMessage.getAssignedBy().getImage() != null)
+            image.setSource(FileDescriptorResource.class).setFileDescriptor(bpmRequestMessage.getAssignedBy().getImage());
         else
             image.setSource(ThemeResource.class).setPath(StaticVariable.DEFAULT_USER_IMAGE_PATH);
         return image;
@@ -354,7 +354,7 @@ public abstract class AbstractBpmEditor<T extends StandardEntity> extends Abstra
     }
 
     protected boolean isDeletableMessage(BpmRequestMessage bpmRequestMessage) {
-        return userSession.getUser().equals(bpmRequestMessage.getAssignedBy().getUserExt())
+        return userSession.getUser().equals(bpmRequestMessage.getAssignedBy())
                 && bpmRequestMessageList.stream().noneMatch(item -> bpmRequestMessage.equals(item.getParent()));
     }
 
@@ -431,8 +431,8 @@ public abstract class AbstractBpmEditor<T extends StandardEntity> extends Abstra
     }
 
     protected void afterStartProcessListener() {
-        UserExtPersonGroup sendTo = bpmUtils.getActiveTaskUser(procActionsFrame.getProcInstance().getId(), "userExtPersonGroup.edit");
-        closeWithMessage(String.format(messages.getMainMessage("startProcessNotification"), (sendTo != null ? sendTo.getFullName() : "")));
+        UserExt sendTo = bpmUtils.getActiveTaskUser(procActionsFrame.getProcInstance().getId(), "userExt.edit");
+        closeWithMessage(String.format(messages.getMainMessage("startProcessNotification"), (sendTo != null ? sendTo.getPersonGroup().getPerson().getFullName() : "")));
     }
 
     protected boolean beforeStartProcessPredicate() {

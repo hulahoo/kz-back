@@ -4,7 +4,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 

@@ -9,7 +9,7 @@ import com.haulmont.cuba.gui.components.PickerField;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.model.BpmRequestMessage;
 
 import javax.annotation.Nonnull;
@@ -84,24 +84,24 @@ public class BpmRequestMessageEdit extends AbstractEditor<BpmRequestMessage> {
         });
     }
 
-    private boolean isNotApprover(UserExtPersonGroup assignedUser) {
-        return assignedUser != null && assignedUser.getUserExt() != null
-                && commonService.getCount(UserExtPersonGroup.class,
-                "select e from tsadv$UserExtPersonGroup e " +
-                        "   join bpm$ProcActor a on a.user.id = e.userExt.id " +
+    private boolean isNotApprover(UserExt assignedUser) {
+        return assignedUser != null
+                && commonService.getCount(UserExt.class,
+                "select e from tsadv$UserExt e " +
+                        "   join bpm$ProcActor a on a.user.id = e.id " +
                         "   where a.procInstance.id = :procInstanceId " +
-                        "   and e.userExt.id = :userId ",
+                        "   and e.id = :userId ",
                 ParamsMap.of("procInstanceId", procInstanceId,
-                        "userId", assignedUser.getUserExt().getId())) > 0;
+                        "userId", assignedUser.getId())) > 0;
     }
 
     @Nonnull
-    protected UserExtPersonGroup getSessionUser() {
-        UserExtPersonGroup userExtPersonGroup = commonService.getEntity(UserExtPersonGroup.class,
-                "select e from tsadv$UserExtPersonGroup e where e.userExt.id = :userId",
+    protected UserExt getSessionUser() {
+        UserExt userExt = commonService.getEntity(UserExt.class,
+                "select e from tsadv$UserExt e where e.id = :userId",
                 ParamsMap.of("userId", userSession.getUser().getId()),
-                "userExtPersonGroup.edit");
-        if (userExtPersonGroup == null) throw new ItemNotFoundException("user.do.not.have.person");
-        return userExtPersonGroup;
+                "userExt.edit");
+        if (userExt.getPersonGroup() == null) throw new ItemNotFoundException("user.do.not.have.person");
+        return userExt;
     }
 }

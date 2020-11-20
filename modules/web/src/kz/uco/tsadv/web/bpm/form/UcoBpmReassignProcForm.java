@@ -7,7 +7,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.components.PickerField;
 import com.haulmont.cuba.gui.components.ValidationException;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.service.BpmService;
 
 import javax.inject.Inject;
@@ -59,6 +59,6 @@ public class UcoBpmReassignProcForm extends StandardProcForm {
 
     protected void addingReassignUserToProcActor() {
         ProcActor currentProcActor = dataManager.reload(procTask.getProcActor(), "procActor-procTaskCreation");
-        bpmService.commitReassignProcActor(procTask, currentProcActor, procActorsDs.getItems(), ((UserExtPersonGroup) reassignUser.getValue()).getUserExt());
+        bpmService.commitReassignProcActor(procTask, currentProcActor, procActorsDs.getItems(), ((UserExt) reassignUser.getValue()));
     }
 }

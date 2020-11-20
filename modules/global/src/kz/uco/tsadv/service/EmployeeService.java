@@ -2,7 +2,7 @@ package kz.uco.tsadv.service;
 
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;

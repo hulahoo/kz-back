@@ -92,27 +92,34 @@ public class UserServiceBean implements UserService {
 
     @Override
     public boolean isEmployee() {
-        PersonGroup userPersonGroup = getPersonGroup();
+        PersonGroup userPersonGroup = getPersonGroup(getCurrentUser());
         if (userPersonGroup != null)
             return true;
         return false;
+    }
+
+    @Override
+    public PersonGroupExt getPersonGroup(User user) {
+        return getPersonGroup(user, "_local");
+    }
+
+    @Override
+    public PersonGroupExt getPersonGroup(User user, String view) {
+        LoadContext<PersonGroupExt> loadContext = LoadContext.create(PersonGroupExt.class);
+        LoadContext.Query query = LoadContext.createQuery(
+                "select user.personGroup " +
+                        "from tsadv$UserExt user " +
+                        "where user.id = :userId ");
+        query.setParameter("userId", user.getId());
+
+        loadContext.setQuery(query);
+        loadContext.setView(view);
+        return dataManager.load(loadContext);
     }
 
     protected User getCurrentUser() {
         return userSessionSource.getUserSession().getUser();
     }
 
-    protected PersonGroupExt getPersonGroup() {
-        LoadContext<PersonGroupExt> loadContext = LoadContext.create(PersonGroupExt.class);
-        LoadContext.Query query = LoadContext.createQuery(
-                "select user.personGroup " +
-                        "from tsadv$UserExt user " +
-                        "where user.id = :userId ");
-        query.setParameter("userId", getCurrentUser().getId());
-
-        loadContext.setQuery(query);
-        loadContext.setView(View.LOCAL);
-        return dataManager.load(loadContext);
-    }
 
 }

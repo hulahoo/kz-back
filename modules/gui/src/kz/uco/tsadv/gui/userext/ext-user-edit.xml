@@ -5,7 +5,7 @@
         messagesPack="kz.uco.tsadv.gui.userext"
         xmlns:ext="http://schemas.haulmont.com/cuba/window-ext.xsd">
     <dsContext>
-        <datasource id="userDs" class="kz.uco.tsadv.modules.administration.TsadvUserExt" view="tsadvUserExt-view"/>
+        <datasource id="userDs" class="kz.uco.tsadv.modules.administration.UserExt" view="tsadvUserExt-view"/>
     </dsContext>
     <layout expand="vSplit">
         <groupBox id="propertiesBox">

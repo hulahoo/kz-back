@@ -20,7 +20,7 @@
         <pickerField id="reassignUser"
                      captionProperty="fullName"
                      ext:index="5"
-                     metaClass="tsadv$UserExtPersonGroup"
+                     metaClass="tsadv$UserExt"
                      required="true"
                      requiredMessage="msg://requiredUser"
                      width="100%"/>
