@@ -10,8 +10,8 @@ import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.core.global.Events;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.WindowParam;
-import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.Timer;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.components.actions.EditAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
@@ -21,11 +21,10 @@ import com.vaadin.ui.AbstractSplitPanel;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.abstraction.AbstractDictionary;
 import kz.uco.base.entity.abstraction.AbstractGroup;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.entity.FieldChangeEntity;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.recruitment.config.DisplayAllEmployees;
 import kz.uco.tsadv.modules.recruitment.enums.RequisitionStatus;
 import kz.uco.tsadv.modules.recruitment.enums.RequisitionType;
 import kz.uco.tsadv.modules.recruitment.model.Requisition;
@@ -131,7 +130,7 @@ public class RequisitionEdit extends RequisitionCommonEdit {
         map.put("code", "RECRUITING_MANAGER");
         map.put("systemDate", CommonUtils.getSystemDate());
         String query = "SELECT su " +
-                "FROM base$UserExt su " +
+                "FROM tsadv$UserExt su " +
                 "JOIN tsadv$HrUserRole hrRule ON su.id = hrRule.user.id " +/*
                 "JOIN tsadv$DicHrRole dicRule ON dicRule.id = hrRule.role.id " +*/
                 "WHERE hrRule.role.code = :code " +

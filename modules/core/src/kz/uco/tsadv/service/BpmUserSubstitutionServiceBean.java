@@ -2,13 +2,16 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.tsadv.entity.tb.BpmUserSubstitution;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.UUID;
 
 @Service(BpmUserSubstitutionService.NAME)
 public class BpmUserSubstitutionServiceBean implements BpmUserSubstitutionService {

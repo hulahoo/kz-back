@@ -1,7 +1,7 @@
 package kz.uco.tsadv.service;
 
 
-import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.learning.model.*;
 
 import java.util.List;

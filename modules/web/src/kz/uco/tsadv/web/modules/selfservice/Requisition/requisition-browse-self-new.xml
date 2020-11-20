@@ -11,9 +11,9 @@
                               view="requisition.for.self.new">
             <query>
                 <![CDATA[select e from tsadv$Requisition e
-join tsadv$UserExtPersonGroup up
-on up.personGroup.id = e.managerPersonGroup.id
-where  up.userExt.id = :session$userId
+join tsadv$UserExt u
+on u.personGroup.id = e.managerPersonGroup.id
+where  u.id = :session$userId
 ]]>
             </query>
         </collectionDatasource>

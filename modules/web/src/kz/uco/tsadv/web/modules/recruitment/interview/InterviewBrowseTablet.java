@@ -9,16 +9,16 @@ import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import kz.uco.base.service.NotificationService;
+import kz.uco.base.service.common.CommonService;
+import kz.uco.base.web.components.CustomFilter;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.recruitment.dictionary.DicJobRequestReason;
+import kz.uco.tsadv.modules.recruitment.enums.InterviewStatus;
 import kz.uco.tsadv.modules.recruitment.enums.JobRequestStatus;
 import kz.uco.tsadv.modules.recruitment.model.*;
-import kz.uco.base.entity.extend.UserExt;
-import kz.uco.tsadv.modules.recruitment.enums.InterviewStatus;
-import kz.uco.base.web.components.CustomFilter;
-import kz.uco.base.service.common.CommonService;
-import kz.uco.base.service.NotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -185,7 +185,7 @@ public class InterviewBrowseTablet extends AbstractWindow {
     private void sendNotification(Interview interview, boolean success) {
         try {
             UserExt candidateUser = commonService.getEntity(UserExt.class,
-                    "select e.userExt from tsadv$UserExtPersonGroup e " +
+                    "select e from tsadv$UserExt e " +
                             "where e.personGroup.id = (select jr.candidatePersonGroup.id from tsadv$JobRequest jr where jr.id = :jrId)",
                     Collections.singletonMap("jrId", interview.getJobRequest().getId()),
                     "user.browse");

@@ -330,7 +330,6 @@
         <class>kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule</class>
         <class>kz.uco.tsadv.modules.personal.model.MilitaryForm</class>
         <class>kz.uco.tsadv.modules.personal.model.Analytics</class>
-        <class>kz.uco.tsadv.global.entity.UserExtPersonGroup</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationProperties</class>
         <class>kz.uco.tsadv.modules.recruitment.dictionary.DicSource</class>
         <class>kz.uco.tsadv.modules.personal.model.OrderMasterEntityProperty</class>

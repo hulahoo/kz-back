@@ -26,13 +26,13 @@
                 <![CDATA[select e.requestNumber,'assignment' as name,
  e.personGroup.id, e.dateFrom, e.status 
 from tsadv$AssignmentRequest e
-where e.createdBy in ( select a.login from base$UserExt a
+where e.createdBy in ( select a.login from tsadv$UserExt a
                       where a.id = :session$userId )
 union
 select asr.requestNumber,'assignmentSalary' as name,
  asr.personGroup.id, asr.dateFrom, asr.status
 from tsadv$AssignmentSalaryRequest asr
-where asr.createdBy in ( select au.login from base$UserExt au
+where asr.createdBy in ( select au.login from tsadv$UserExt au
                       where au.id = :session$userId )
 union
 select sr.requestNumber,'salaryRequest' as name,
@@ -41,13 +41,13 @@ from tsadv$SalaryRequest sr
 join sr.assignmentGroup.list l
 where sr.createTs between l.startDate and l.endDate
     and l.primaryFlag = 'TRUE'
-    and sr.createdBy in ( select aus.login from base$UserExt aus
+    and sr.createdBy in ( select aus.login from tsadv$UserExt aus
                       where aus.id = :session$userId )
 union
 select e.requestNumber,'temporaryTranslation' as name,
  e.personGroup.id, e.startDate, e.status
 from tsadv$TemporaryTranslationRequest e
-where e.createdBy in ( select a.login from base$UserExt a
+where e.createdBy in ( select a.login from tsadv$UserExt a
                       where a.id = :session$userId )]]>
             </query>
             <properties>

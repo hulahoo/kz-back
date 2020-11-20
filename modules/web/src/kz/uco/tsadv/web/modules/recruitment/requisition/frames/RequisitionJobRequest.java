@@ -3264,7 +3264,7 @@ public class RequisitionJobRequest extends AbstractFrame {
     protected UserExt getUserExtByLogin(String login) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from base$UserExt e where e.login = :login");
+                "select e from tsadv$UserExt e where e.login = :login");
         query.setParameter("login", login);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");

@@ -12,7 +12,7 @@
                          view="positionChangeRequest.edit">
             <query>
                 <![CDATA[select e from tsadv$PositionChangeRequest e
-where e.createdBy in ( select a.login from base$UserExt a where a.id = :session$userId  )
+where e.createdBy in ( select a.login from tsadv$UserExt a where a.id = :session$userId  )
 order by e.requestDate desc, e.createTs desc]]>
             </query>
         </groupDatasource>

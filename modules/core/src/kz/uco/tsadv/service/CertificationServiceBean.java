@@ -7,14 +7,13 @@ import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
+import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.learning.enums.CertificationPeriod;
 import kz.uco.tsadv.modules.learning.enums.CertificationStatus;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.CertificationEnrollment;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
-import kz.uco.base.entity.extend.UserExt;
-import kz.uco.base.notification.NotificationSenderAPI;
-import kz.uco.tsadv.service.CertificationService;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 

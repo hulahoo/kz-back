@@ -14,10 +14,10 @@ import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
@@ -677,9 +677,8 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
             case "interview.planned.mainInterviewer.notification":
                 userList = commonService.getEntities(UserExt.class,
                         "select e " +
-                                "    from base$UserExt e " +
-                                " join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                                "   where u.personGroup.id = :mainInterviewerPersonGroupId ",
+                                "    from tsadv$UserExt e " +
+                                "   where e.personGroup.id = :mainInterviewerPersonGroupId ",
                         Collections.singletonMap("mainInterviewerPersonGroupId", interview.getMainInterviewerPersonGroup().getId()),
                         "user.browse");
                 params.put("interview", getItem());
@@ -691,9 +690,8 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
             case "interview.candidate.approve.notification":
                 userList = commonService.getEntities(UserExt.class,
                         "select e " +
-                                "    from base$UserExt e " +
-                                " join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                                "   where u.personGroup.id = :candidatePersonGroupId",
+                                "    from tsadv$UserExt e " +
+                                "   where e.personGroup.id = :candidatePersonGroupId",
                         Collections.singletonMap("candidatePersonGroupId", interview.getJobRequest().getCandidatePersonGroup().getId()),
                         "user.browse");
                 if (isSystemNotificationAllow) {

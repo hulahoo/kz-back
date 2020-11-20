@@ -16,9 +16,9 @@ import com.haulmont.reports.gui.ReportGuiManager;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCurrency;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.recruitment.enums.OfferStatus;
 import kz.uco.tsadv.modules.recruitment.model.Offer;
@@ -374,9 +374,8 @@ public class OfferEdit extends AbstractEditor<Offer> {
                     mapReqId, "personGroup.browse"));
 
             UserExt user = commonService.getEntity(UserExt.class,
-                    "select e from sec$User e " +
-                            "join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                            "where u.personGroup.id = :keyValue",
+                    "select e from tsadv$UserExt e " +
+                            "where e.personGroup.id = :keyValue",
                     map,
                     "user.edit");
             Map<String, Object> params = new HashMap<>();

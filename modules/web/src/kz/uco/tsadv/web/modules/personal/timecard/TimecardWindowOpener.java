@@ -7,7 +7,7 @@ import com.haulmont.cuba.gui.WindowManagerProvider;
 import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.security.global.UserSession;
 import com.vaadin.server.Page;
-import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.service.OrganizationService;
 
 import java.net.MalformedURLException;

@@ -3,9 +3,9 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.LoadContext;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.entity.shared.PersonGroup;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.recognition.*;

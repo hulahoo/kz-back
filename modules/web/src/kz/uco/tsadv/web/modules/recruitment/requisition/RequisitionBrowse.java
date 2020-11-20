@@ -2,14 +2,16 @@ package kz.uco.tsadv.web.modules.recruitment.requisition;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.global.Configuration;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.filter.Op;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
 import com.haulmont.cuba.gui.components.actions.EditAction;
-import com.haulmont.cuba.gui.components.actions.RemoveAction;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
@@ -244,8 +246,8 @@ public class RequisitionBrowse extends AbstractLookup {
         PersonExt person = commonService.getEntity(PersonExt.class,
                 "SELECT p " +
                         "FROM base$PersonExt p " +
-                        "join tsadv$UserExtPersonGroup upg ON p.group.id = upg.personGroup.id " +
-                        "where upg.userExt.id = :userId " +
+                        "join tsadv$UserExt user ON p.group.id = user.personGroup.id " +
+                        "where user.id = :userId " +
                         "and :sysDate between p.startDate and p.endDate",
                 map,
                 "person-view");

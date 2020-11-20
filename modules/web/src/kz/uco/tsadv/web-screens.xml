@@ -2022,8 +2022,6 @@
             template="kz/uco/tsadv/web/dicprotectionequipmentphoto/dic-protection-equipment-photo-edit.xml"/>
     <screen id="tsadv$JobGroup.browse.new"
             template="/kz/uco/tsadv/web/modules/personal/jobgroup/job-group-browse-new.xml"/>
-    <screen id="tsadv$UserExtPersonGroup.browse"
-            template="kz/uco/tsadv/web/userextpersongroup/user-ext-person-group-browse.xml"/>
     <screen id="base$Person.browse.siz"
             template="/kz/uco/tsadv/web/modules/personal/person/person-browse-siz.xml"/>
     <screen id="pcf-personal-protection"

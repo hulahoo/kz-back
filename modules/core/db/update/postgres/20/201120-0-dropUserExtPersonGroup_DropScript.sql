@@ -1,0 +1,1 @@
+drop table if exists TSADV_USER_EXT_PERSON_GROUP__U23857 cascade ;

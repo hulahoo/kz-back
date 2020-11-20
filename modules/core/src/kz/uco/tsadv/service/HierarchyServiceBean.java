@@ -9,10 +9,10 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.core.global.ViewRepository;
 import kz.uco.base.common.BaseCommonUtils;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 import org.springframework.stereotype.Service;
@@ -224,9 +224,8 @@ public class HierarchyServiceBean implements HierarchyService {
         return commonService.getEntities(UserExt.class,
                 "" +
                         "select e " +
-                        "  from base$UserExt e " +
-                        "  join tsadv$UserExtPersonGroup upg on e.id = upg.userExt.id " +
-                        " where upg.personGroup.id in (" +
+                        "  from tsadv$UserExt e " +
+                        " where e.personGroup.id in (" +
                         "          select ae.personGroup.id " +
                         "            from base$AssignmentExt ae " +
                         "           where ae.assignmentStatus.code = 'ACTIVE' " +

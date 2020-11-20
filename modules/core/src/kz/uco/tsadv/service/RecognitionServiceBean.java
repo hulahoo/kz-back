@@ -17,7 +17,6 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.StaticVariable;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.entity.shared.PersonGroup;
 import kz.uco.base.service.GoogleTranslateService;
 import kz.uco.base.service.NotificationService;
@@ -27,6 +26,7 @@ import kz.uco.tsadv.api.QRCodeInt;
 import kz.uco.tsadv.config.RecognitionConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.entity.*;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -613,7 +613,7 @@ public class RecognitionServiceBean implements RecognitionService {
                             "   n1.level, " +
                             "   pg.id position_group_id, " +
                             "   a.person_group_id, " +
-                            "   u.user_ext_id, " +
+                            "   su.id, " +
                             "   per.id, " +
                             "   per.first_name, " +
                             "   per.last_name, " +
@@ -631,10 +631,8 @@ public class RecognitionServiceBean implements RecognitionService {
                             "join tsadv_dic_assignment_status das " +
                             "   on das.id=a.assignment_status_id " +
                             "   and das.code='ACTIVE' " +
-                            "join tsadv_user_ext_person_group u " +
-                            "   on u.person_group_id=a.person_group_id " +
                             "join sec_user su " +
-                            "   on su.id = u.user_ext_id " +
+                            "   on su.person_group_id=a.person_group_id " +
                             "join base_person per " +
                             "   on per.group_id=a.person_group_id " +
                             "   and current_date between a.start_date and a.end_date " +
@@ -1665,8 +1663,7 @@ public class RecognitionServiceBean implements RecognitionService {
                     "                   on ppp.group_id = t.parent_person_group_id and " +
                     "                      ?1 between ppp.start_date and ppp.end_date " +
                     "         join base_hierarchy h on h.id = t.hierarchy_id and h.delete_ts is null" +
-                    "         inner join tsadv_user_ext_person_group ue ON ue.person_group_id = t.person_group_id " +
-                    "        inner join sec_user ON sec_user.id = ue.user_ext_id " +
+                    "        inner join sec_user ON sec_user.person_group_id = t.person_group_id " +
                     "where %s %s", parentFilter[0], parentFilter[1], hierarchyFilter));
             query.setParameter(1, CommonUtils.getSystemDate());
             query.setParameter(2, personGroupId);
@@ -5637,8 +5634,7 @@ public class RecognitionServiceBean implements RecognitionService {
                     "                   on ppp.group_id = t.parent_person_group_id and " +
                     "                      ?2 between ppp.start_date and ppp.end_date " +
                     "         join base_hierarchy h on h.id = t.hierarchy_id and h.delete_ts is null " +
-                    "         inner join tsadv_user_ext_person_group ue ON ue.person_group_id = t.person_group_id " +
-                    "        inner join sec_user ON sec_user.id = ue.user_ext_id " +
+                    "        inner join sec_user ON sec_user.person_group_id = t.person_group_id " +
                     "WHERE t.parent_person_group_id = ?1 %s) AND status = 'ON_APPROVAL'", hierarchyFilter));
             query.setParameter(1, currentPersonGroup.getId());
             query.setParameter(2, CommonUtils.getSystemDate());

@@ -13,10 +13,10 @@ import com.haulmont.cuba.web.gui.components.renderers.WebComponentRenderer;
 import com.haulmont.reports.entity.Report;
 import com.haulmont.reports.exception.ReportingException;
 import com.haulmont.reports.gui.ReportGuiManager;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.administration.enums.RuleStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -485,9 +485,8 @@ public class JobrequestNew extends AbstractWindow {
     protected UserExt getUserExt(UUID personGroupId) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from base$UserExt e " +
-                        " join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                        "where u.personGroup.id = :pgId");
+                "select e from tsadv$UserExt e " +
+                        "where e.personGroup.id = :pgId");
         query.setParameter("pgId", personGroupId);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");

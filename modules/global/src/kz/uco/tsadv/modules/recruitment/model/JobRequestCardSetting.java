@@ -1,14 +1,9 @@
 package kz.uco.tsadv.modules.recruitment.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.tsadv.modules.administration.UserExt;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import kz.uco.base.entity.extend.UserExt;
+import javax.persistence.*;
 
 @Table(name = "TSADV_JOB_REQUEST_CARD_SETTING")
 @Entity(name = "tsadv$JobRequestCardSetting")

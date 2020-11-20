@@ -941,7 +941,7 @@ public class RcApiServiceBean implements RcApiService {
             errorMessages.add("Login is required!");
         else {
             List<UserExt> users = commonService.getEntities(UserExt.class,
-                    "select e from base$UserExt e where LOWER(e.login) = :login",
+                    "select e from tsadv$UserExt e where LOWER(e.login) = :login",
                     Collections.singletonMap("login", user.getLogin().toLowerCase()), View.LOCAL);
             if (users != null && !users.isEmpty())
                 errorMessages.add("User with this login already exists!");
@@ -956,7 +956,7 @@ public class RcApiServiceBean implements RcApiService {
             try {
                 map.put("email", user.getEmail());
                 UserExt userExt = commonService.getEntity(UserExt.class,
-                        "select e from base$UserExt e where e.email = :email ",
+                        "select e from tsadv$UserExt e where e.email = :email ",
                         map,
                         "user.edit");
                 if (userExt != null) {
@@ -1427,8 +1427,7 @@ public class RcApiServiceBean implements RcApiService {
                 "            addr.city as cityName" +
                 "       from sec_user u " +
                 " cross join params par" +
-                "       join tsadv_user_ext_person_group up on up.user_ext_id = u.id" +
-                "       join BASE_PERSON p on (p.group_id = up.person_group_id)" +
+                "       join BASE_PERSON p on (p.group_id = u.person_group_id)" +
                 "  left join BASE_DIC_SEX s on (s.id = p.sex_id)" +
                 "  left join tsadv_dic_nationality n on (n.id = p.nationality_id)" +
                 "  left join tsadv_dic_citizenship c on (c.id = p.citizenship_id)" +
@@ -1437,7 +1436,7 @@ public class RcApiServiceBean implements RcApiService {
                 "               join tsadv_dic_address_type adt on addr2.address_type_id = adt.id " +
                 "                   and adt.code='RESIDENCE'" +
                 "                   and ?3 between addr2.start_date and addr2.end_date ) addr " +
-                "       on addr.person_group_id = up.person_group_id " +
+                "       on addr.person_group_id = u.person_group_id " +
                 " where u.id = ?2 " +
                 "   and ?3 between p.start_date and p.end_date " +
                 "   and u.delete_ts is null" +
@@ -1619,9 +1618,9 @@ public class RcApiServiceBean implements RcApiService {
             params.put("systemDate", CommonUtils.getSystemDate());
 
             PersonExt p = commonService.getEntity(PersonExt.class, "select e " +
-                            " from base$PersonExt e, tsadv$UserExtPersonGroup u " +
-                            " where u.userExt.id = :userId " +
-                            " and e.group.id = u.personGroup.id " +
+                            " from tsadv$PersonExt e " +
+                            " where e.id = :userId " +
+                            " and e.group.id = e.personGroup.id " +
                             " and :systemDate between e.startDate and e.endDate ",
                     params,
                     "person.full"
@@ -1650,9 +1649,8 @@ public class RcApiServiceBean implements RcApiService {
         queryParams.put(3, requisition);
 
         String query = "with params as (select upper(?1) as lang, " +
-                "                              up.person_group_id as candidate_person_group_id" +
+                "                              u.person_group_id as candidate_person_group_id" +
                 "                         from sec_user u" +
-                "                         join tsadv_user_ext_person_group up on up.user_ext_id = u.id" +
                 "                        where u.id = ?2)" +
                 "     select i.id," +
                 "            hs.step_name as hiring_step," +
@@ -2114,9 +2112,8 @@ public class RcApiServiceBean implements RcApiService {
     protected UserExt getUserExt(UUID personGroupId) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from base$UserExt e " +
-                        " join tsadv$UserExtPersonGroup u on u.userExt.id = e.id " +
-                        "where u.personGroup.id = :pgId");
+                "select e from tsadv$UserExt e " +
+                        "where e.personGroup.id = :pgId");
         query.setParameter("pgId", personGroupId);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");
@@ -2165,7 +2162,7 @@ public class RcApiServiceBean implements RcApiService {
     protected UserExt getUserExtByLogin(String login) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from base$UserExt e where e.login = :login");
+                "select e from tsadv$UserExt e where e.login = :login");
         query.setParameter("login", login);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");
@@ -2203,9 +2200,8 @@ public class RcApiServiceBean implements RcApiService {
                 jobRequest.setRequestStatus(JobRequestStatus.INTERVIEW);
 
                 List<UserExt> mainInterviewerUsers = commonService.getEntities(UserExt.class,
-                        "select e from base$UserExt e" +
-                                " join tsadv$UserExtPersonGroup up on up.userExt.id = e.id" +
-                                " where up.personGroup.id = :mainInterviewerPersonGroupId",
+                        "select e from tsadv$UserExt e" +
+                                " where e.personGroup.id = :mainInterviewerPersonGroupId",
                         Collections.singletonMap("mainInterviewerPersonGroupId", interview.getMainInterviewerPersonGroup().getId()),
                         "user.browse");
 
@@ -2307,7 +2303,7 @@ public class RcApiServiceBean implements RcApiService {
         } else {
             try {
                 UserExt user = commonService.getEntity(UserExt.class,
-                        "select e from base$UserExt e where e.id = :id",
+                        "select e from tsadv$UserExt e where e.id = :id",
                         Collections.singletonMap("id", userSessionSource.getUserSession().getUser().getId()),
                         "user.edit");
 
@@ -2315,7 +2311,7 @@ public class RcApiServiceBean implements RcApiService {
                 map.put("email", userInt.getEmail());
                 map.put("itemId", user.getId());
                 UserExt userExt = commonService.getEntity(UserExt.class,
-                        "select e from base$UserExt e where e.email = :email " +
+                        "select e from tsadv$UserExt e where e.email = :email " +
                                 "   and e.id <> :itemId",
                         map,
                         "user.edit");
@@ -2381,7 +2377,7 @@ public class RcApiServiceBean implements RcApiService {
 
         try {
             UserExt user = commonService.getEntity(UserExt.class,
-                    "select e from base$UserExt e where e.id = :id",
+                    "select e from tsadv$UserExt e where e.id = :id",
                     Collections.singletonMap("id", userSessionSource.getUserSession().getUser().getId()),
                     "user.edit");
 

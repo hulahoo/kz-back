@@ -2,21 +2,20 @@ package kz.uco.tsadv.listener;
 
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.PersistenceTools;
+import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
+import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
 import kz.uco.base.notification.NotificationSenderAPI;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.learning.model.BudgetRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
+
+import javax.inject.Inject;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
-
-import kz.uco.tsadv.modules.learning.model.BudgetRequest;
-import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
-
-import javax.inject.Inject;
 
 @Component("tsadv_BudgetRequestListener")
 public class BudgetRequestListener implements AfterInsertEntityListener<BudgetRequest>, AfterUpdateEntityListener<BudgetRequest> {
@@ -56,7 +55,7 @@ public class BudgetRequestListener implements AfterInsertEntityListener<BudgetRe
 
         for (UserExt user : commonService.getEntities(UserExt.class,
                 "select e " +
-                        "    from base$UserExt e " +
+                        "    from tsadv$UserExt e " +
                         "   where e.personGroup.id = :initiatorPersonGroupId ",
                 userParams,
                 "user.browse")) {
