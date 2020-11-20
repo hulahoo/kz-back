@@ -26,12 +26,11 @@ import com.haulmont.reports.gui.ReportGuiManager;
 import com.vaadin.server.Page;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.common.WebCommonUtils;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.filter.StoreStyleFilter;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.administration.enums.RuleStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
@@ -70,7 +69,7 @@ public class RequisitionJobRequest extends AbstractFrame {
     protected static SimpleDateFormat dateFormat;
     protected static SimpleDateFormat periodFormat;
     private boolean ignoreCheckBoxValueCHange;
-    protected List<UserExtPersonGroup> userExtPersonGroup;
+    protected List<UserExt> userExtList;
     protected List<Offer> offers;
     protected List<JobRequest> allJobRequests;
     protected List<InterviewQuestionnaire> allInterviewQuestionnaire;
@@ -3212,18 +3211,18 @@ public class RequisitionJobRequest extends AbstractFrame {
     }
 
     protected UserExt getUserExt(UUID personGroupId) {
-        if (userExtPersonGroup != null && userExtPersonGroup.size() > 0) {
-            for (UserExtPersonGroup extPersonGroup : userExtPersonGroup) {
+        if (userExtList != null && userExtList.size() > 0) {
+            for (UserExt extPersonGroup : userExtList) {
                 if (extPersonGroup.getPersonGroup().getId().equals(personGroupId)) {
-                    return extPersonGroup.getUserExt();
+                    return extPersonGroup;
                 }
             }
         } else {
             loadLists();
-            if (userExtPersonGroup != null && userExtPersonGroup.size() > 0) {
-                for (UserExtPersonGroup extPersonGroup : userExtPersonGroup) {
+            if (userExtList != null && userExtList.size() > 0) {
+                for (UserExt extPersonGroup : userExtList) {
                     if (extPersonGroup.getPersonGroup().getId().equals(personGroupId)) {
-                        return extPersonGroup.getUserExt();
+                        return extPersonGroup;
                     }
                 }
             } else {
@@ -3240,11 +3239,11 @@ public class RequisitionJobRequest extends AbstractFrame {
         List<UUID> jrId = jobRequestsDs.getItems().stream().map(jobRequest ->
                 jobRequest.getId()
         ).collect(Collectors.toList());
-        userExtPersonGroup = commonService.getEntities(UserExtPersonGroup.class,
-                "select e from tsadv$UserExtPersonGroup e " +
-                        " where e.personGroup.id in :personGroupIs",
-                ParamsMap.of("personGroupIs", personGroupId),
-                "userExtPersonGroup-for-jobRequest");
+        userExtList = commonService.getEntities(UserExt.class,
+                "select e from tsadv$UserExt e " +
+                        " where e.personGroup.id in :personGroupId",
+                ParamsMap.of("personGroupId", personGroupId),
+                "userExt.edit");
         offers = commonService.getEntities(Offer.class, "select e from tsadv$Offer e " +
                 " where e.jobRequest.id in :personGroupId ", ParamsMap.of("personGroupId",
                 personGroupId), "offer.browse");

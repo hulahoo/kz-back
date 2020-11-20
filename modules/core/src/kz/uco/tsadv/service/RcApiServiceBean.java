@@ -22,7 +22,6 @@ import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCity;
 import kz.uco.base.entity.dictionary.DicCountry;
 import kz.uco.base.entity.dictionary.DicSex;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.entity.shared.PersonGroup;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
@@ -30,7 +29,7 @@ import kz.uco.tsadv.api.*;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.common.EnableDraftStatusInterview;
 import kz.uco.tsadv.global.dictionary.DicNationality;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.learning.dictionary.DicEducationDegree;
 import kz.uco.tsadv.modules.learning.dictionary.DicEducationLevel;
 import kz.uco.tsadv.modules.personal.dictionary.*;
@@ -984,6 +983,9 @@ public class RcApiServiceBean implements RcApiService {
             try {
                 UserExt userExt = metadata.create(UserExt.class);
                 userExt.setLogin(user.getLogin());
+                PersonGroupExt personGroup = metadata.create(PersonGroupExt.class);
+                dataManager.commit(personGroup);
+
 
                 userExt.setLanguage(user.getLanguage());
 
@@ -1001,14 +1003,9 @@ public class RcApiServiceBean implements RcApiService {
                 userExt.setFirstName(user.getPerson().getFirstName());
                 userExt.setLastName(user.getPerson().getLastName());
                 userExt.setMiddleName(user.getPerson().getMiddleName());
+                userExt.setPersonGroup(personGroup);
 
-                PersonGroupExt personGroup = metadata.create(PersonGroupExt.class);
-                dataManager.commit(personGroup);
                 PersonExt person = metadata.create(PersonExt.class);
-
-                UserExtPersonGroup userExtPersonGroup = metadata.create(UserExtPersonGroup.class); //TODO: personGroup test it
-                userExtPersonGroup.setUserExt(userExt);
-                userExtPersonGroup.setPersonGroup(personGroup);
 
                 person.setGroup(personGroup);
                 person.setStartDate(CommonUtils.getSystemDate());
@@ -1046,10 +1043,10 @@ public class RcApiServiceBean implements RcApiService {
                     person.setMaritalStatus(commonService.getEntity(DicMaritalStatus.class, user.getPerson().getMaritalStatus()/*UUID.fromString(user.getPerson().getMaritalStatus())*/));
 
                 List<Entity> commitInstances = new ArrayList<>();
-//                commitInstances.add(personGroup);
+
+                commitInstances.add(personGroup);
                 commitInstances.add(person);
                 commitInstances.add(userExt);
-                commitInstances.add(userExtPersonGroup);
                 commitInstances.add(userRole);
 
                 Address address = registerAddress(result, user.getPerson().getCityName(), personGroup);

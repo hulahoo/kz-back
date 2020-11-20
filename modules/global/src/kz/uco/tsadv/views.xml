@@ -19768,10 +19768,10 @@
           extends="_local"
           name="bpmRequestMessage-view">
         <property name="assignedUser"
-                  view="userExtPersonGroup.edit">
+                  view="userExt.edit">
         </property>
         <property name="assignedBy"
-                  view="userExtPersonGroup.edit">
+                  view="userExt.edit">
         </property>
         <property name="parent"
                   view="_minimal">
@@ -21108,5 +21108,42 @@
                 <property name="businessTripCost" view="_minimal"/>
             </property>
         </property>
+    </view>
+    <view entity="tsadv$UserExt" name="userExt.edit" extends="_minimal">
+        <property name="image"
+                  view="_minimal"/>
+        <property name="fullName"/>
+        <property name="firstName"/>
+        <property name="lastName"/>
+        <property name="middleName"/>
+        <property name="mobilePhone"/>
+        <property name="telegramChatId"/>
+        <property name="email"/>
+        <property name="language"/>
+        <property name="personGroup" view="personGroupExt.edit"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt.edit" extends="_minimal">
+        <property name="list"
+                  view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="image"
+                      view="_minimal"/>
+            <property name="firstNameLatin"/>
+            <property name="middleNameLatin"/>
+            <property name="lastNameLatin"/>
+        </property>
+        <property name="person"
+                  view="_minimal">
+            <property name="image"
+                      view="_minimal"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="firstNameLatin"/>
+            <property name="middleNameLatin"/>
+            <property name="lastNameLatin"/>
+        </property>
+        <property name="fioWithEmployeeNumber"/>
+        <property name="personLatinFioWithEmployeeNumber"/>
     </view>
 </views>

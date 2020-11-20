@@ -22,7 +22,6 @@ import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
 import kz.uco.base.entity.core.notification.SendingNotification;
 import kz.uco.base.entity.dictionary.DicCurrency;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
@@ -34,7 +33,7 @@ import kz.uco.tsadv.entity.dbview.ProcInstanceV;
 import kz.uco.tsadv.entity.tb.TemporaryTranslationRequest;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicSalaryChangeReason;
 import kz.uco.tsadv.modules.personal.enums.GrossNet;
@@ -174,10 +173,10 @@ public class BpmServiceBean implements BpmService {
     public void doneActivity(UUID bpmProcInstanceId) {
         ProcInstance procInstance = findById(ProcInstance.class, bpmProcInstanceId, "procInstance-start");
 
-        UserExtPersonGroup activeTaskUser = bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExtPersonGroup.edit");
+        UserExt activeTaskUser = bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit");
 
         Assert.notNull(activeTaskUser, String.format("bpmProcInstance[%s]: active user not found!", bpmProcInstanceId));
-        UUID userId = activeTaskUser.getUserExt().getId();
+        UUID userId = activeTaskUser.getId();
 
         UUID entityId = (UUID) Objects.requireNonNull(procInstance).getObjectEntityId();
         String entityName = procInstance.getEntityName();
@@ -247,8 +246,7 @@ public class BpmServiceBean implements BpmService {
     public void notify(UUID entityId, String entityName, UUID bpmProcInstanceId, String role, String emailTemplateCode, String notificationTemplateCode) {
         EntityManager em = persistence.getEntityManager();
 
-        UserExtPersonGroup userExtPersonGroup = bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExtPersonGroup.edit");
-        UserExt userExt = userExtPersonGroup != null ? userExtPersonGroup.getUserExt() : null;
+        UserExt userExt = bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit");
 
         UserExt notifyUser = getNextUser(userExt, bpmProcInstanceId, role);
         if (notifyUser == null) {
@@ -259,10 +257,7 @@ public class BpmServiceBean implements BpmService {
         notifyUser = idBpmUserSubstitution != null ? em.find(UserExt.class, UUID.fromString(idBpmUserSubstitution), View.MINIMAL) : notifyUser;
 
         if (userExt == null) {
-            UserExtPersonGroup startedBy = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
-            if (startedBy != null) {
-                userExt = startedBy.getUserExt();
-            }
+            userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
         }
 
         sendUserNotification(notifyUser, userExt, entityId, bpmProcInstanceId,
@@ -413,8 +408,8 @@ public class BpmServiceBean implements BpmService {
     }
 
     protected Map<String, Object> getParams(Map<String, Object> params, String templateCode, UUID entityId, UUID bpmProcInstanceId) {
-        UserExtPersonGroup startedByUser = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
-        UserExtPersonGroup lastUser = bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExtPersonGroup.edit");
+        UserExt startedByUser = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
+        UserExt lastUser = bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         PersonGroupExt personGroupExt;
 
@@ -424,7 +419,7 @@ public class BpmServiceBean implements BpmService {
                 .stream().filter(p -> !PersistenceHelper.isNew(p)).max(Comparator.comparing(ProcTask::getStartDate)).orElse(null);
 
         ProcActor procActor = procTask != null && procTask.getProcActor() != null ? em.reload(procTask.getProcActor(), "procActor-edit") : null;
-        UserExtPersonGroup nextApprover = procActor != null ? getNextApprover(procActor) : null;
+        UserExt nextApprover = procActor != null ? getNextApprover(procActor) : null;
 
         switch (templateCode) {
             case "absence.notify.initiator":
@@ -595,17 +590,17 @@ public class BpmServiceBean implements BpmService {
 
         params.putIfAbsent("statusTypeRu", getTypeStatus(procTask, "ru"));
         params.putIfAbsent("statusTypeEn", getTypeStatus(procTask, "en"));
-        params.putIfAbsent("initiatorFioRu", startedByUser != null ? startedByUser.getFullName("ru") : "");
-        params.putIfAbsent("initiatorFioEn", startedByUser != null ? startedByUser.getFullName("en") : "");
-        params.putIfAbsent("lastUserRu", lastUser != null ? lastUser.getFullName("ru") : "");
-        params.putIfAbsent("lastUserEn", lastUser != null ? lastUser.getFullName("en") : "");
+        params.putIfAbsent("initiatorFioRu", startedByUser != null ? startedByUser.getPersonGroup().getPerson().getFullName() : "");
+        params.putIfAbsent("initiatorFioEn", startedByUser != null ? startedByUser.getPersonGroup() != null ? startedByUser.getPersonGroup().getPerson().getFullNameLatin() : startedByUser.getFullName() : "");
+        params.putIfAbsent("lastUserRu", lastUser != null ? lastUser.getPersonGroup() != null ? lastUser.getPersonGroup().getPerson().getFullName() : lastUser.getFullName() : "");
+        params.putIfAbsent("lastUserEn", lastUser != null ? lastUser.getPersonGroup() != null ? lastUser.getPersonGroup().getPerson().getFullNameLatin() : lastUser.getFullName() : "");
         params.putIfAbsent("approveTableRu", getTableTask("ru", bpmProcInstanceId, true));
         params.putIfAbsent("approveTableEn", getTableTask("en", bpmProcInstanceId, true));
         params.putIfAbsent("approveTableNonCommentRu", getTableTask("ru", bpmProcInstanceId, false));
         params.putIfAbsent("approveTableNonCommentEn", getTableTask("en", bpmProcInstanceId, false));
 
-        params.putIfAbsent("nextApproverRu", nextApprover != null && (procTask == null || !procTask.getOutcome().equals("reject")) ? "Следующий утверждающий : " + nextApprover.getFullName("ru") : "");
-        params.putIfAbsent("nextApproverEn", nextApprover != null && (procTask == null || !procTask.getOutcome().equals("reject")) ? "Next approver : " + nextApprover.getFullName("en") : "");
+        params.putIfAbsent("nextApproverRu", nextApprover != null && (procTask == null || !procTask.getOutcome().equals("reject")) ? "Следующий утверждающий : " + nextApprover.getPersonGroup() != null ? nextApprover.getPersonGroup().getPerson().getFullName() : nextApprover.getFullName() : "");
+        params.putIfAbsent("nextApproverEn", nextApprover != null && (procTask == null || !procTask.getOutcome().equals("reject")) ? "Next approver : " + nextApprover.getPersonGroup() != null ? nextApprover.getPersonGroup().getPerson().getFullNameLatin() : nextApprover.getFullName() : "");
 
         params.putIfAbsent("comment", procTask != null ? procTask.getComment() != null ? procTask.getComment() : " " : " ");
         return params;
@@ -613,39 +608,39 @@ public class BpmServiceBean implements BpmService {
 
 
     @Nullable
-    public UserExtPersonGroup getNextApprover(ProcActor procActor) {
-        UserExtPersonGroup nextApprover;
+    public UserExt getNextApprover(ProcActor procActor) {
+        UserExt nextApprover;
         try (Transaction transaction = persistence.getTransaction()) {
             EntityManager em = persistence.getEntityManager();
             nextApprover = em.createQuery(" select u from bpm$ProcActor e " +
-                    "   join tsadv$UserExtPersonGroup u on u.userExt.id = e.user.id " +
+                    "   join tsadv$UserExt u on u.id = e.user.id " +
                     " where e.procInstance.id = :procInstanceId " +
                     "   and e.procRole.id = :procRoleId " +
                     "   and e.order > :order " +
-                    " order by e.order ", UserExtPersonGroup.class)
+                    " order by e.order ", UserExt.class)
                     .setParameter("procInstanceId", procActor.getProcInstance().getId())
                     .setParameter("procRoleId", procActor.getProcRole().getId())
                     .setParameter("order", procActor.getOrder())
-                    .setViewName("userExtPersonGroup.edit")
+                    .setViewName("userExt.edit")
                     .getFirstResult();
             if (nextApprover == null) {
                 nextApprover = em.createQuery(" select u from bpm$ProcActor e " +
                         " join e.procRole r on r.order > :procRoleOrder " +
-                        " join tsadv$UserExtPersonGroup u on u.userExt.id = e.user.id " +
+                        " join tsadv$UserExt u on u.id = e.user.id " +
                         " where e.procInstance.id = :procInstanceId " +
-                        " order by r.order, e.order ", UserExtPersonGroup.class)
+                        " order by r.order, e.order ", UserExt.class)
                         .setParameter("procInstanceId", procActor.getProcInstance().getId())
                         .setParameter("procRoleOrder", procActor.getProcRole().getOrder())
-                        .setViewName("userExtPersonGroup.edit")
+                        .setViewName("userExt.edit")
                         .getFirstResult();
             }
             if (nextApprover != null) {
-                String idBpmUserSubstitution = bpmUserSubstitutionService.getCurrentBpmUserSubstitution(nextApprover.getUserExt(), false);
+                String idBpmUserSubstitution = bpmUserSubstitutionService.getCurrentBpmUserSubstitution(nextApprover, false);
                 if (idBpmUserSubstitution != null) {
-                    nextApprover = em.createQuery(" select u from tsadv$UserExtPersonGroup u " +
-                            "where u.userExt.id = :userId", UserExtPersonGroup.class)
+                    nextApprover = em.createQuery(" select u from tsadv$UserExt u " +
+                            "where u.id = :userId", UserExt.class)
                             .setParameter("userId", UUID.fromString(idBpmUserSubstitution))
-                            .setViewName("userExtPersonGroup.edit")
+                            .setViewName("userExt.edit")
                             .getFirstResult();
                 }
             }
@@ -671,7 +666,7 @@ public class BpmServiceBean implements BpmService {
         return "";
     }
 
-    protected String createTableAbsence(AbsenceRequest absenceRequest, String lang, UserExtPersonGroup startedByUser) {
+    protected String createTableAbsence(AbsenceRequest absenceRequest, String lang, UserExt startedByUser) {
         StrBuilder strBuilder = new StrBuilder();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         boolean isRussian = !lang.equals("en");
@@ -683,7 +678,7 @@ public class BpmServiceBean implements BpmService {
                 .append("</tr>")
                 .append("<tr class=\"color\" >")
                 .append("<td>").append(isRussian ? "Работник" : "Employee").append("</td>")
-                .append("<td>").append(startedByUser != null ? startedByUser.getFullName(lang) : "").append("</td>")
+                .append("<td>").append(startedByUser != null ? startedByUser.getPersonGroup() != null ? lang.equals("ru") ? startedByUser.getPersonGroup().getPerson().getFullName() : startedByUser.getPersonGroup().getPerson().getFullNameLatin() : startedByUser.getFullName() : "").append("</td>")
                 .append("</tr>")
                 .append("<tr>")
                 .append("<td>").append(isRussian ? "Тип отсутствия" : "Type of absence").append("</td>")
@@ -1308,9 +1303,9 @@ public class BpmServiceBean implements BpmService {
 
     @Override
     public void sendNotifyToInitiator(UUID entityId, UUID bpmProcInstanceId, String emailTemplateCode, String template) {
-        UserExtPersonGroup userExtPersonGroup = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
-        if (userExtPersonGroup != null)
-            sendUserNotification(userExtPersonGroup.getUserExt(), userSessionSource.getUserSession().getUser(), entityId, bpmProcInstanceId,
+        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
+        if (userExt != null)
+            sendUserNotification(userExt, userSessionSource.getUserSession().getUser(), entityId, bpmProcInstanceId,
                     "NOTIFICATION", emailTemplateCode, template);
     }
 
@@ -1367,7 +1362,7 @@ public class BpmServiceBean implements BpmService {
             }
         }
         if (userExt != null && StringUtils.isNotBlank(emailTemplateCode) && StringUtils.isNotBlank(notificationTemplateCode)) {
-            sendUserNotification(userExt, bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExtPersonGroup.edit").getUserExt(), entityId, bpmProcInstanceId,
+            sendUserNotification(userExt, bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit"), entityId, bpmProcInstanceId,
                     "NOTIFICATION", emailTemplateCode, notificationTemplateCode);
         }
 
@@ -1387,10 +1382,10 @@ public class BpmServiceBean implements BpmService {
 
         updateEntityStatus(entityName, entityId, requestStatus);
 
-        UserExtPersonGroup userExtPersonGroup = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
+        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
 
-        if (userExtPersonGroup != null)
-            sendUserNotification(userExtPersonGroup.getUserExt(), bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExtPersonGroup.edit").getUserExt(),
+        if (userExt != null)
+            sendUserNotification(userExt, bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit"),
                     entityId, bpmProcInstanceId, "NOTIFICATION", emailTemplateCode, notificationTemplateCode);
     }
 
@@ -1442,8 +1437,8 @@ public class BpmServiceBean implements BpmService {
 
         em.merge(assignmentExt);
 
-        UserExtPersonGroup userExtPersonGroup = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
-        return userExtPersonGroup != null ? userExtPersonGroup.getUserExt() : null;
+        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
+        return userExt;
     }
 
     protected UserExt approveAssignmentSalary(UUID entityId, EntityManager em, UUID bpmProcInstanceId, DicRequestStatus requestStatus) {
@@ -1482,8 +1477,8 @@ public class BpmServiceBean implements BpmService {
 
         em.merge(assignmentSalaryRequest);
 
-        UserExtPersonGroup userExtPersonGroup = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
-        return userExtPersonGroup != null ? userExtPersonGroup.getUserExt() : null;
+        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
+        return userExt;
     }
 
     protected AssignmentExt getAssignment(List<AssignmentExt> assignments, Date dateFrom) {
@@ -1553,8 +1548,8 @@ public class BpmServiceBean implements BpmService {
         em.merge(assignmentRequest);
         handleNewEntity(assignmentExt, bpmProcInstanceId);
 
-        UserExtPersonGroup userExtPersonGroup = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
-        return userExtPersonGroup != null ? userExtPersonGroup.getUserExt() : null;
+        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
+        return userExt;
     }
 
     protected void assignmentSave(EntityManager em,
@@ -1696,8 +1691,8 @@ public class BpmServiceBean implements BpmService {
         Objects.requireNonNull(positionChangeRequest).setStatus(requestStatus);
         em.persist(positionChangeRequest);
 
-        UserExtPersonGroup userExtPersonGroup = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
-        return userExtPersonGroup != null ? userExtPersonGroup.getUserExt() : null;
+        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
+        return userExt;
     }
 
     protected UserExt approveSalary(UUID entityId, EntityManager em, UUID bpmProcInstanceId, DicRequestStatus requestStatus) {
@@ -1719,8 +1714,8 @@ public class BpmServiceBean implements BpmService {
         em.merge(salaryRequest);
         handleNewEntity(salary, bpmProcInstanceId);
 
-        UserExtPersonGroup userExtPersonGroup = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExtPersonGroup.edit");
-        return userExtPersonGroup != null ? userExtPersonGroup.getUserExt() : null;
+        UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
+        return userExt;
     }
 
     protected UserExt approveAddressRequest(UUID entityId, EntityManager em, DicRequestStatus requestStatus) {
@@ -2091,12 +2086,12 @@ public class BpmServiceBean implements BpmService {
     @Nonnull
     @Override
     public Activity bpmRequestAskAnswerNotification(@Nonnull BpmRequestMessage bpmRequestMessage) {
-        UserExt userExt = bpmRequestMessage.getAssignedUser().getUserExt();
+        UserExt userExt = bpmRequestMessage.getAssignedUser();
         if (StringUtils.isBlank(userExt.getEmail())) throw new ItemNotFoundException("email /not.found");
         Map<String, Object> param = new HashMap<>();
         param.put("requestNumber", bpmRequestMessage.getEntityRequestNumber());
-        param.put("fioRu", bpmRequestMessage.getAssignedBy().getFullName("ru"));
-        param.put("fioEn", bpmRequestMessage.getAssignedBy().getFullName("en"));
+        param.put("fioRu", bpmRequestMessage.getAssignedBy().getPersonGroup() != null ? bpmRequestMessage.getAssignedBy().getPersonGroup().getPerson().getFullName() : bpmRequestMessage.getAssignedBy().getFullName());
+        param.put("fioEn", bpmRequestMessage.getAssignedBy().getPersonGroup() != null ? bpmRequestMessage.getAssignedBy().getPersonGroup().getPerson().getFullNameLatin() : bpmRequestMessage.getAssignedBy().getFullName());
         param.put("askAnswerTextRu", bpmRequestMessage.getParent() == null ? "запросил информацию по заявке" : "ответил на запрос информации по заявке");
         param.put("askAnswerTextEn", bpmRequestMessage.getParent() == null ? "requested information on request" : "responded to a request for information on request");
         param.put("typeRu", bpmRequestMessage.getParent() == null ? "задал" : "ответил на");
@@ -2128,8 +2123,8 @@ public class BpmServiceBean implements BpmService {
                 : "NOTIFICATION";
 
         Activity activity = activityService.createActivity(
-                bpmRequestMessage.getAssignedUser().getUserExt(),
-                bpmRequestMessage.getAssignedBy().getUserExt(),
+                bpmRequestMessage.getAssignedUser(),
+                bpmRequestMessage.getAssignedBy(),
                 commonService.getEntity(ActivityType.class, activityTypeCode),
                 StatusEnum.active,
                 "description",
@@ -2153,7 +2148,7 @@ public class BpmServiceBean implements BpmService {
                 "select e from uactivity$Activity e " +
                         "   where e.assignedUser.id = :userId" +
                         "           and e.referenceId = :entityId ",
-                ParamsMap.of("userId", bpmRequestMessage.getAssignedUser().getUserExt().getId(),
+                ParamsMap.of("userId", bpmRequestMessage.getAssignedUser().getId(),
                         "entityId", bpmRequestMessage.getEntityId())) > 0;
     }
 
@@ -2303,7 +2298,7 @@ public class BpmServiceBean implements BpmService {
 
     protected String createTableAbsence(UUID entityId, UUID procInstanceId, String lang) {
         AbsenceRequest absenceRequest = commonService.getEntity(AbsenceRequest.class, entityId, "absenceRequest.view");
-        UserExtPersonGroup startedByUser = bpmUtils.getCreatedBy(procInstanceId, "userExtPersonGroup.edit");
+        UserExt startedByUser = bpmUtils.getCreatedBy(procInstanceId, "userExt.edit");
         return createTableAbsence(absenceRequest, lang, startedByUser);
     }
 

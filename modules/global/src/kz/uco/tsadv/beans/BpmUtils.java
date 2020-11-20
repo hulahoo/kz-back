@@ -5,7 +5,7 @@ import com.haulmont.bpm.entity.*;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.bpm.BpmRolesDefiner;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -42,11 +42,11 @@ public class BpmUtils {
      * !!!! Do not change {@link CommonService#getEntity(Class, String, Map, String)} to {@link CommonService#emQueryFirstResult(Class, String, Map, String)} !!!!
      */
     @Nullable
-    public UserExtPersonGroup getActiveTaskUser(@Nonnull UUID bpmProcInstanceId, @Nullable String viewName) {
-        return commonService.getEntity(UserExtPersonGroup.class, "select u " +
+    public UserExt getActiveTaskUser(@Nonnull UUID bpmProcInstanceId, @Nullable String viewName) {
+        return commonService.getEntity(UserExt.class, "select u " +
                         " from bpm$ProcTask e " +
-                        " join tsadv$UserExtPersonGroup u" +
-                        " on u.userExt.id = e.procActor.user.id" +
+                        " join tsadv$UserExt u" +
+                        " on u.id = e.procActor.user.id" +
                         " and e.procInstance.id = :id " +
                         "  where e.endDate is null  ",
                 ParamsMap.of("id", bpmProcInstanceId), viewName != null ? viewName : View.LOCAL);
@@ -62,10 +62,10 @@ public class BpmUtils {
     }
 
     @Nullable
-    public UserExtPersonGroup getCreatedBy(@Nonnull UUID bpmProcInstanceId, @Nullable String viewName) {
-        List<UserExtPersonGroup> list = commonService.getEntities(UserExtPersonGroup.class,
-                " select e from tsadv$UserExtPersonGroup e join bpm$ProcInstance a " +
-                        " on a.createdBy = e.userExt.login where a.id = :id ",
+    public UserExt getCreatedBy(@Nonnull UUID bpmProcInstanceId, @Nullable String viewName) {
+        List<UserExt> list = commonService.getEntities(UserExt.class,
+                " select e from tsadv$UserExt e join bpm$ProcInstance a " +
+                        " on a.createdBy = e.login where a.id = :id ",
                 ParamsMap.of("id", bpmProcInstanceId), viewName != null ? viewName : View.LOCAL);
         return list.isEmpty() ? null : list.get(0);
     }

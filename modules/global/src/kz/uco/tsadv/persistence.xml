@@ -563,7 +563,7 @@
         <class>kz.uco.tsadv.lms.entity.LmsSlider</class>
         <class>kz.uco.tsadv.lms.entity.LmsSliderImage</class>
         <class>kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription</class>
-        <class>kz.uco.tsadv.modules.administration.TsadvUserExt</class>
+        <class>kz.uco.tsadv.modules.administration.UserExt</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCompany</class>
     </persistence-unit>
 </persistence>

@@ -7,13 +7,11 @@ import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.BpmUserSubstitution;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
 import kz.uco.tsadv.service.BpmUserSubstitutionService;
 import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class BpmUserSubstitutionEdit extends AbstractEditor<BpmUserSubstitution> {
@@ -43,23 +41,15 @@ public class BpmUserSubstitutionEdit extends AbstractEditor<BpmUserSubstitution>
         substitutedUserPickerField.getLookupAction().setLookupScreenParamsSupplier(() -> ParamsMap.of("EMPLOYEE", true));
         userPickerField.getLookupAction().setLookupScreenParamsSupplier(() -> ParamsMap.of("EMPLOYEE", true));
 
-        substitutedUserPickerField.addValueChangeListener(e -> getItem().setSubstitutedUser(e.getValue() != null ? ((UserExtPersonGroup) e.getValue()).getUserExt() : null));
-        userPickerField.addValueChangeListener(e -> getItem().setUser(e.getValue() != null ? ((UserExtPersonGroup) e.getValue()).getUserExt() : null));
+        substitutedUserPickerField.addValueChangeListener(e -> getItem().setSubstitutedUser(e.getValue() != null ? (UserExt) e.getValue() : null));
+        userPickerField.addValueChangeListener(e -> getItem().setUser(e.getValue() != null ? (UserExt) e.getValue() : null));
     }
 
     @Override
     public void ready() {
         super.ready();
-        userPickerField.setValue(getItem().getUser() != null ? getUserExtPersonGroup(getItem().getUser()) : null);
-        substitutedUserPickerField.setValue(getItem().getSubstitutedUser() != null ? getUserExtPersonGroup(getItem().getSubstitutedUser()) : null);
-    }
-
-    protected UserExtPersonGroup getUserExtPersonGroup(UserExt userExt) {
-        List<UserExtPersonGroup> list = commonService.getEntities(UserExtPersonGroup.class,
-                " select e from tsadv$UserExtPersonGroup e where e.userExt.id = :userId ",
-                ParamsMap.of("userId", userExt.getId())
-                , "userExtPersonGroup.edit");
-        return list.isEmpty() ? null : list.get(0);
+        userPickerField.setValue(getItem().getUser());
+        substitutedUserPickerField.setValue(getItem().getSubstitutedUser());
     }
 
     @Override

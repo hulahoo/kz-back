@@ -9,14 +9,13 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicLocation;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.IncludeExternalExperienceConfig;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.config.RecognitionConfig;
 import kz.uco.tsadv.entity.dbview.MyTeam;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.enums.MatrixType;
@@ -459,13 +458,13 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public PersonGroupExt getPersonGroupByUserId(UUID userId) {
         return persistence.callInTransaction(em -> {
-            Query query = em.createQuery("select e " +
-                    "from tsadv$UserExtPersonGroup e " +
-                    "where e.userExt.id = :uId")
+            Query query = em.createQuery("select e.personGroup " +
+                    "from tsadv$UserExt e " +
+                    "where e.id = :uId")
                     .setParameter("uId", userId);
-            query.setView(UserExtPersonGroup.class, "userExtPersonGroup.edit");
+            query.setView(PersonGroupExt.class, "personGroupExt.edit");
             List list = query.getResultList();
-            return list.isEmpty() ? null : ((UserExtPersonGroup) list.get(0)).getPersonGroup();
+            return list.isEmpty() ? null : (PersonGroupExt) list.get(0);
         });
     }
 
@@ -477,7 +476,7 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public UserExt getUserExtByPersonGroupId(UUID personGroupId, String viewName) {
         return persistence.callInTransaction(em -> {
-            Query query = em.createQuery("select e.userExt from tsadv$UserExtPersonGroup e where e.personGroup.id = :personGroupId")
+            Query query = em.createQuery("select e from tsadv$UserExt e where e.personGroup.id = :personGroupId")
                     .setParameter("personGroupId", personGroupId);
             query.setView(UserExt.class, viewName != null ? viewName : View.MINIMAL);
             List list = query.getResultList();
@@ -1823,7 +1822,7 @@ public class EmployeeServiceBean implements EmployeeService {
                         "SELECT " +
                                 "  p.position_group_id, " +
                                 "  a.person_group_id, " +
-                                "  upg.user_ext_id " +
+                                "  user.id " +
                                 "FROM base_hierarchy_element p " +
                                 "  JOIN base_hierarchy h " +
                                 "    ON h.id = p.hierarchy_id " +
@@ -1834,9 +1833,9 @@ public class EmployeeServiceBean implements EmployeeService {
                                 "       AND a.delete_ts IS NULL " +
                                 "       AND a.primary_flag = TRUE " +
                                 "       AND current_date BETWEEN a.start_date AND a.end_date " +
-                                "  LEFT JOIN tsadv_user_ext_person_group upg " +
-                                "    ON upg.person_group_id = a.person_group_id " +
-                                "       AND upg.delete_ts IS NULL " +
+                                "  LEFT JOIN sec_user user " +
+                                "    ON user.person_group_id = a.person_group_id " +
+                                "       AND user.delete_ts IS NULL " +
                                 "  JOIN base_hierarchy_element he2 " +
                                 "    ON he2.parent_id = p.id " +
                                 "       AND he2.hierarchy_id = h.id " +

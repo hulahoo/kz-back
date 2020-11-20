@@ -9,12 +9,11 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.beans.BpmUtils;
 import kz.uco.tsadv.config.BpmRequestConfig;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.bpm.BpmRolesDefiner;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
@@ -283,8 +282,8 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
         String dbName = metadata.getTools().getDatabaseTable(metadata.getClass(procInstance.getEntityName()));
 
         if (dbName != null && dbName.equalsIgnoreCase("TSADV_POSITION_CHANGE_REQUEST")) {
-            UserExtPersonGroup userExtPersonGroup = bpmUtils.getCreatedBy(procInstance.getId(), "userExtPersonGroup.edit");
-            if (userExtPersonGroup != null && isRole(userExtPersonGroup, "HR_BUSINESS_PARTNER")) {
+            UserExt userExt = bpmUtils.getCreatedBy(procInstance.getId(), "userExt.edit");
+            if (userExt != null && isRole(userExt, "HR_BUSINESS_PARTNER")) {
                 List<BpmRolesLink> newList = new ArrayList<>();
                 for (BpmRolesLink bpmRolesLink : bpmRolesLinks) {
                     if (bpmRolesLink.getHrRole().getCode().toUpperCase().matches("^(HR_VP|.*SPECIALIST.*)$")) {
@@ -298,10 +297,10 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
         return bpmRolesLinks;
     }
 
-    protected boolean isRole(@Nonnull UserExtPersonGroup userExtPersonGroup, String role) {
+    protected boolean isRole(@Nonnull UserExt userExt, String role) {
         Map<Integer, Object> param = new HashMap<>();
         param.put(1, role);
-        param.put(2, userExtPersonGroup.getUserExt().getId());
+        param.put(2, userExt.getId());
         return commonService.getCount(" select count(*) from tsadv_hr_user_role hu " +
                 "join tsadv_dic_hr_role r " +
                 " on r.id = hu.role_id " +

@@ -1,13 +1,12 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.bpm.entity.ProcActor;
+import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.bpm.entity.ProcTask;
-import com.haulmont.bpm.entity.*;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.security.entity.User;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.tsadv.entity.dbview.ActivityTask;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -65,7 +64,7 @@ public interface BpmService {
 
     boolean hasActor(UUID bpmProcInstanceId, String role);
 
-    UserExtPersonGroup getNextApprover(ProcActor procActor);
+    UserExt getNextApprover(ProcActor procActor);
 
     @Deprecated
     void doneActivity(UUID entityId, String activityCode);

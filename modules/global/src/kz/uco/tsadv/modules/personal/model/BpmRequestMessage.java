@@ -1,25 +1,15 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import com.haulmont.bpm.entity.ProcInstance;
+import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
+import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.uactivity.entity.Activity;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
-import com.haulmont.cuba.core.entity.annotation.Listeners;
-import kz.uco.base.entity.extend.UserExt;
-import kz.uco.uactivity.entity.StatusEnum;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import com.haulmont.bpm.entity.ProcInstance;
-import kz.uco.tsadv.global.entity.UserExtPersonGroup;
-import javax.persistence.OneToOne;
-import kz.uco.uactivity.entity.Activity;
 
 @Table(name = "TSADV_BPM_REQUEST_MESSAGE")
 @Listeners("tsadv_BpmRequestMessageListener")
@@ -47,11 +37,11 @@ public class BpmRequestMessage extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNED_USER_ID")
-    protected UserExtPersonGroup assignedUser;
+    protected UserExt assignedUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNED_BY_ID")
-    protected UserExtPersonGroup assignedBy;
+    protected UserExt assignedBy;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -80,19 +70,19 @@ public class BpmRequestMessage extends StandardEntity {
         return activity;
     }
 
-    public UserExtPersonGroup getAssignedUser() {
+    public UserExt getAssignedUser() {
         return assignedUser;
     }
 
-    public void setAssignedUser(UserExtPersonGroup assignedUser) {
+    public void setAssignedUser(UserExt assignedUser) {
         this.assignedUser = assignedUser;
     }
 
-    public UserExtPersonGroup getAssignedBy() {
+    public UserExt getAssignedBy() {
         return assignedBy;
     }
 
-    public void setAssignedBy(UserExtPersonGroup assignedBy) {
+    public void setAssignedBy(UserExt assignedBy) {
         this.assignedBy = assignedBy;
     }
 
