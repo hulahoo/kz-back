@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * @author Adilbekov Yernar
@@ -43,10 +42,12 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
                         getItem().setWriteHistory(Boolean.TRUE);
                     } else if (IGroupedEntity.class.isAssignableFrom(getItem().getClass())) {
                         IGroupedEntity item = getItem();
-                        UUID latestId = groupedEntityService.getLatest(item.getGroup()).getId();
-                        UUID currentItemId = getItem().getId();
-                        if (latestId.equals(currentItemId)) {
-                            getItem().setWriteHistory(Boolean.TRUE);
+                        AbstractTimeBasedEntity latest = groupedEntityService.getLatest(item.getGroup());
+                        AbstractTimeBasedEntity currentItem = getItem();
+                        if (latest.getId().equals(currentItem.getId())) {
+                            if (latest.getStartDate().after(currentItem.getStartDate())) {
+                                getItem().setWriteHistory(Boolean.TRUE);
+                            }
                         }
                     }
                     commitAndClose();
@@ -81,7 +82,7 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
                     AbstractTimeBasedEntity finalPreviousEntity = previousEntity;
                     startDateConfig.addValidator(value -> {
                         if (((Date) value).before(finalPreviousEntity.getStartDate())) {
-                            throw new ValidationException("Start date must be greater than previous entity's start date from this group.");
+                            throw new ValidationException(getMessage("AbstractHrEditor.endDate.validatorMsg.startDateEarlierThanPreviousStartDate"));
                         }
                     });
                 }
@@ -89,7 +90,7 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
                     AbstractTimeBasedEntity finalNextEntity = nextEntity;
                     startDateConfig.addValidator(value -> {
                         if (((Date) value).after(finalNextEntity.getStartDate())) {
-                            throw new ValidationException("Start date must be lower than next entity's start date from this group.");
+                            throw new ValidationException(getMessage("AbstractHrEditor.endDate.validatorMsg.startDateBiggerThanNextStartDate"));
                         }
                     });
                 }
