@@ -9,17 +9,20 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.entity.dictionary.DicCurrency;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.config.EmployeeConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.enums.GrossNet;
 import kz.uco.tsadv.modules.personal.enums.SalaryType;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.Salary;
 import kz.uco.tsadv.service.SalariesPeriodChangerService;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SalaryEdit extends AbstractEditor<Salary> {
 
@@ -78,6 +81,17 @@ public class SalaryEdit extends AbstractEditor<Salary> {
                 Date endDate = (Date) value;
                 if (endDate.before(getItem().getStartDate()))
                     throw new ValidationException(getMessage("AbstractHrEditor.endDate.validatorMsg"));
+            }
+        });
+        assignmentGroup.addAction(new PickerField.LookupAction(assignmentGroup) {
+            @Override
+            public Entity transformValueFromLookupWindow(Entity valueFromLookupWindow) {
+                AssignmentExt assignmentExt = (AssignmentExt) valueFromLookupWindow;
+                if (assignmentExt != null) {
+                    return dataManager.reload(assignmentExt.getGroup(),
+                            "assignmentGroupExt-with-employee-number");
+                }
+                return null;
             }
         });
 
