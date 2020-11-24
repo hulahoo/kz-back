@@ -8,6 +8,7 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.HierarchicalDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
+import com.vaadin.event.ExpandEvent;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.components.MyTeamComponent;
 import kz.uco.tsadv.config.PositionStructureConfig;
@@ -94,14 +95,15 @@ public class StructurePerson extends AbstractLookup {
     @Override
     public void ready() {
         super.ready();
-        tree.unwrap(com.vaadin.v7.ui.Tree.class).addExpandListener(this::onExpand);
+        tree.unwrap(com.vaadin.ui.Tree.class).addExpandListener(this::itemExpand);
+        tree.expandTree();
         searchField.addEnterPressListener(e -> searchBtn());
         teamDs.addItemChangeListener(this::itemChangeListener);
     }
 
-    public void onExpand(com.vaadin.v7.ui.Tree.ExpandEvent expandEvent) {
+    public void itemExpand(ExpandEvent event) {
         if (pathParent != null) return;
-        myTeamComponent.onExpand(expandEvent, teamDs);
+        myTeamComponent.onExpand(event, teamDs);
     }
 
     protected void itemChangeListener(Datasource.ItemChangeEvent<MyTeamNew> event) {
@@ -221,4 +223,6 @@ public class StructurePerson extends AbstractLookup {
                         "sysDate", CommonUtils.getSystemDate()),
                 "assignment.card");
     }
+
+
 }

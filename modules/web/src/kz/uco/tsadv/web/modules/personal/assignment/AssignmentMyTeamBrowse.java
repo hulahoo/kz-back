@@ -108,7 +108,7 @@ public class AssignmentMyTeamBrowse extends AbstractLookup {
     public void ready() {
         super.ready();
 
-        assignmentsTable.unwrap(com.vaadin.v7.ui.TreeTable.class).addExpandListener(event -> myTeamComponent.onExpand(event, teamDs));
+        assignmentsTable.unwrap(com.vaadin.ui.TreeGrid.class).addExpandListener(event -> myTeamComponent.onExpand(event, teamDs));
         searchTextField.addEnterPressListener(e -> searchBtn());
         searchTextField.addTextChangeListener(e -> ((Button) getComponentNN("searchBtn"))
                 .setIcon(StringUtils.isNotBlank(e.getText()) && e.getText().equals(searchText)
