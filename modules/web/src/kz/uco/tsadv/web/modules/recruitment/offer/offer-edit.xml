@@ -27,9 +27,9 @@
                               class="com.haulmont.bpm.entity.ProcTask"
                               view="procTask-frame">
             <query>
-                <![CDATA[select e from bpm$ProcTask e, bpm$ProcInstance pi
-                          where pi.entity.entityId = :ds$offerDs
-                            and e.procInstance.id = pi.id
+                <![CDATA[select e from bpm$ProcTask e
+                 join bpm$ProcInstance pi on e.procInstance.id = pi.id
+                          where pi.entity.entityId = :ds$offerDs.id
                        order by e.createTs]]>
             </query>
         </collectionDatasource>
