@@ -3,6 +3,7 @@ package kz.uco.tsadv.service;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
+import com.haulmont.cuba.core.app.UniqueNumbersService;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.service.common.CommonService;
@@ -25,6 +26,8 @@ import java.util.stream.Collectors;
 @Service(EmployeeNumberService.NAME)
 public class EmployeeNumberServiceBean implements EmployeeNumberService {
 
+    public static final String NumberSequenceSS = "NumberSequenceSS";
+
     private static final List<Class> listClassWithRequestNumber =
             Arrays.asList(PositionChangeRequest.class,
                     AssignmentRequest.class,
@@ -36,13 +39,16 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
                     AbsenceRequest.class);
 
     @Inject
-    private CommonService commonService;
+    protected CommonService commonService;
 
     @Inject
-    private Persistence persistence;
+    protected Persistence persistence;
 
     @Inject
-    private Metadata metadata;
+    protected Metadata metadata;
+
+    @Inject
+    protected UniqueNumbersService uniqueNumbersService;
 
     @Override
     public String generateEmployeeNumber(DicPersonType type) {
@@ -182,10 +188,8 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
 
     @Override
     public Long generateNextRequestNumber() {
-        return persistence.callInTransaction(em -> {
-            Query requestNum = em.createNativeQuery("select nextval('NumberSequenceSS')");
-            return (Long) requestNum.getSingleResult();
-        });
+        return persistence.callInTransaction(em ->
+                uniqueNumbersService.getNextNumber(NumberSequenceSS));
     }
 
     @Override
@@ -203,7 +207,7 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
         });
     }
 
-    private String getQuery(boolean needCheckId) {
+    protected String getQuery(boolean needCheckId) {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("select ");
         for (int i = 0; i < listClassWithRequestNumber.size(); i++) {
@@ -223,7 +227,7 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
         if (StringUtils.isBlank(employeeNumber)) return employeeNumber;
         int length = employeeNumber.length();
         switch (length) {
-            case 1:{
+            case 1: {
                 return "000" + employeeNumber;
             }
             case 2: {

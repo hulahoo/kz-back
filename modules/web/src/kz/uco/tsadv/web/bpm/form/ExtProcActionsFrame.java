@@ -79,7 +79,7 @@ public class ExtProcActionsFrame extends ProcActionsFrame {
         ctx.setQueryString("select pt from bpm$ProcTask pt " +
                 "where pt.procInstance.id = :procInstance " +
                 "and pt.endDate is null")
-                .setParameter("procInstance", procInstance);
+                .setParameter("procInstance", procInstance.getId());
         ctx.setView("procTask-complete");
         List<ProcTask> result = dataManager.loadList(ctx);
         return result.isEmpty() ? null : result.get(0);

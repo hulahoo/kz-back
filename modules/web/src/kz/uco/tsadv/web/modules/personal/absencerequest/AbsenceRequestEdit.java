@@ -86,7 +86,7 @@ public class AbsenceRequestEdit<T extends AbsenceRequest> extends AbstractBpmEdi
                     && "RJ".equals(((DicAbsenceType) e.getValue()).getCode());
             distanceWorkingConfirmBox.setVisible(visible);
 
-            vacationDurationTypeLbl.setValue(getVacationDurationType());
+            vacationDurationTypeLbl.setValue(getVacationDurationType().getId());
         });
         distanceWorkingConfirm.addValueChangeListener(e -> {
             if (approveBtn != null) approveBtn.setEnabled(Boolean.TRUE.equals(e.getValue()));
@@ -289,7 +289,7 @@ public class AbsenceRequestEdit<T extends AbsenceRequest> extends AbstractBpmEdi
         absenceRequestDs.addItemPropertyChangeListener(e -> {
             if ("dateFrom".equals(e.getProperty())) {
                 dateToField.setRangeStart(getItem().getDateFrom());
-                vacationDurationTypeLbl.setValue(getVacationDurationType());
+                vacationDurationTypeLbl.setValue(getVacationDurationType().getId());
             }
             if ("dateTo".equals(e.getProperty()))
                 dateFromField.setRangeEnd(getItem().getDateTo());
@@ -315,7 +315,7 @@ public class AbsenceRequestEdit<T extends AbsenceRequest> extends AbstractBpmEdi
             }
         });
 
-        vacationDurationTypeLbl.setValue(getVacationDurationType());
+        vacationDurationTypeLbl.setValue(getVacationDurationType().getId());
         fieldGroup.getFieldNN("vacationDurationType")
                 .setVisible(getItem().getType() != null && "ANNUAL".equals(getItem().getType().getCode()));
     }
