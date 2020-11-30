@@ -183,13 +183,13 @@
         <item id="activityBrowseNew"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
             <param name="screen"
-                   value="tsadv$ActivityBrowseNew.tasks"/>
+                   value="tsadv$ActivityBrowseNew"/>
         </item>
         <item id="personalDataRequestId"
               icon="font-icon:USER"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
             <param name="screen"
-                   value="tsadv$PersonalDataRequestId.show"/>
+                   value="tsadv$PersonalDataRequest.show"/>
         </item>
         <item id="recognition-window"
               icon="font-icon:USERS"
@@ -213,7 +213,7 @@
               icon="font-icon:SITEMAP"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
             <param name="screen"
-                   value="hrBeautyTree"/>
+                   value="beautyTree"/>
 
         </item>
         <item id="ssAbsenceLookupId"
@@ -719,6 +719,7 @@
         <item screen="security"/>
         <item screen="tsadv$BpmUserSubstitution.browse"/>
         <item screen="tsadv$LmsSlider.browse"/>
+        <item screen="emailtemplates$EmailTemplate.browse"/>
     </menu>
     <menu id="application-uactivity"
           insertBefore="administration">
@@ -767,6 +768,7 @@
         <item id="logWindow"/>
         <separator/>
         <item id="sec$ScreenHistory.browse"/>
+        <item id="helium_ThemeSettingsScreen"/>
     </menu>
     <menu id="TBandOT"
           icon="font-icon:CUBES">
