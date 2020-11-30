@@ -134,4 +134,7 @@
           class="kz.uco.tsadv.web.TsAdvBootstrapListener"/>
     <bean id="cuba_IconResolver"
           class="kz.uco.tsadv.components.ImageIconResolver"/>
+    <bean class="kz.uco.base.web.init.App"
+          name="cuba_App"
+          scope="vaadin"/>
 </beans>

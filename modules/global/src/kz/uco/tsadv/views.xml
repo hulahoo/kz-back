@@ -2723,11 +2723,10 @@
                   view="_minimal">
         </property>
         <property name="jobNameDefault"/>
-        <property name="jobNameLang1"/>
-        <property name="jobNameLang2"/>
-        <property name="jobNameLang3"/>
-        <property name="jobNameLang4"/>
-        <property name="jobNameLang5"/>
+        <property name="job" view="_minimal">
+            <property name="employeeCategory" view="_minimal"/>
+        </property>
+        <property name="employeeCategory" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.OrderGroup"
           name="orderGroup-view">
@@ -7404,9 +7403,6 @@
             </property>
             <property name="recruiterPersonGroup"
                       view="_minimal">
-                <property name="list"
-                          view="_local">
-                </property>
             </property>
         </property>
         <property name="candidatePersonGroup">
@@ -7442,11 +7438,6 @@
                 <property name="dateOfBirth"/>
                 <property name="sex"
                           view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
                     <property name="startDate"/>
                     <property name="endDate"/>
                     <property name="code"/>
@@ -7559,11 +7550,6 @@
                 <property name="dateOfBirth"/>
                 <property name="sex"
                           view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
                     <property name="startDate"/>
                     <property name="endDate"/>
                     <property name="code"/>
@@ -7613,20 +7599,15 @@
                           view="_minimal">
                     <property name="list"
                               view="_minimal">
-                        <property name="id"/>
-                        <property name="deleteTs"/>
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
                     <property name="person"
                               view="_minimal">
-                        <property name="id"/>
-                        <property name="deleteTs"/>
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
                     <property name="fullName"/>
-                    <property name="deleteTs"/>
                 </property>
             </property>
         </property>
@@ -8110,6 +8091,7 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
                 <property name="writeHistory"/>
+                <property name="employeeCategory" view="_minimal"/>
             </property>
             <property name="legacyId"/>
         </property>
@@ -8143,11 +8125,6 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
-        <property name="jobNameLang1"/>
-        <property name="jobNameLang2"/>
-        <property name="jobNameLang3"/>
-        <property name="jobNameLang4"/>
-        <property name="jobNameLang5"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Grade"
           extends="_local"
@@ -8937,6 +8914,7 @@
           name="job.instruction">
         <property name="instruction"/>
         <property name="instructionName"/>
+        <property name="employeeCategory" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.InfoSalaryMarket"
           extends="_local"
@@ -13322,6 +13300,7 @@
             <property name="jobDescriptionLang3"/>
             <property name="jobDescriptionLang4"/>
             <property name="jobDescriptionLang5"/>
+            <property name="employeeCategory" view="_minimal"/>
         </property>
         <property name="job"
                   view="_minimal">
@@ -13335,6 +13314,7 @@
             <property name="jobDescriptionLang3"/>
             <property name="jobDescriptionLang4"/>
             <property name="jobDescriptionLang5"/>
+            <property name="employeeCategory" view="_minimal"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
@@ -16829,6 +16809,9 @@
           name="job.view">
         <property name="startDate"/>
         <property name="endDate"/>
+        <property name="employeeCategory" view="_minimal"/>
+        <property name="group" view="_minimal">
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.dictionary.DicPayroll"
           extends="_minimal"

@@ -13,6 +13,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -67,12 +68,12 @@ public class XlsHelper {
         }
 
         switch (cell.getCellType()) {
-            case Cell.CELL_TYPE_BLANK:
+            case BLANK:
                 return null;
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 String formattedCellValue = cell.getStringCellValue().replace(String.valueOf(NON_BREAKING_SPACE), " ").trim();
                 return formattedCellValue.isEmpty() ? null : formattedCellValue;
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 if (isDateCell(cell)) {
                     return cell.getDateCellValue();
                 }
@@ -89,7 +90,7 @@ public class XlsHelper {
                         return value;
                     }
                 }
-            case Cell.CELL_TYPE_FORMULA:
+            case FORMULA:
                 return getFormulaCellValue(cell);
             default:
                 throw new IllegalStateException(String.format("Cell type '%s' is not supported", cell.getCellType()));
@@ -112,9 +113,9 @@ public class XlsHelper {
             return "Formula error";
         }
         switch (cell.getCachedFormulaResultType()) {
-            case Cell.CELL_TYPE_NUMERIC:
+            case NUMERIC:
                 return cell.getNumericCellValue();
-            case Cell.CELL_TYPE_STRING:
+            case STRING:
                 if (formattedCellValue.isEmpty())
                     return null;
                 return formattedCellValue;
@@ -125,11 +126,11 @@ public class XlsHelper {
 
     @Nullable
     public static Object getCellValue(Cell cell, Boolean forceToString) throws Exception {
-        if (cell == null || cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+        if (cell == null || cell.getCellType() == CellType.BLANK) {
             return null;
         }
 
-        cell.setCellType(Cell.CELL_TYPE_STRING);
+        cell.setCellType(CellType.STRING);
         return cell.getStringCellValue().replace(String.valueOf(NON_BREAKING_SPACE), " ").trim();
     }
 
