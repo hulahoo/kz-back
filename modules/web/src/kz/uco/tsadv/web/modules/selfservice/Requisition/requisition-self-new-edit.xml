@@ -50,7 +50,7 @@
                                        property="positionGroup"
                                        required="true"/>
                                 <field id="organizationGroup"
-                                       captionProperty="organizationName"
+                                       captionProperty="organization.organizationName"
                                        property="organizationGroup"
                                        required="true"/>
                                 <field id="jobGroup"

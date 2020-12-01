@@ -13301,6 +13301,8 @@
             <property name="jobDescriptionLang4"/>
             <property name="jobDescriptionLang5"/>
             <property name="employeeCategory" view="_minimal"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
         </property>
         <property name="job"
                   view="_minimal">
