@@ -46,7 +46,6 @@ cuba {
 dependencies {
     appComponent("com.haulmont.reports:reports-global:$cubaVersion")
     appComponent("com.haulmont.fts:fts-global:$cubaVersion")
-    appComponent("com.haulmont.bpm:bpm-global:$cubaVersion")
     appComponent("com.haulmont.charts:charts-global:$cubaVersion")
     appComponent("kz.uco.uactivity:uactivity-global:1.1.0-SNAPSHOT")
     appComponent("kz.uco.base:base-global:1.1.1-SNAPSHOT")

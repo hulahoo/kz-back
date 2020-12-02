@@ -13,7 +13,7 @@
                                   allowCommit="false"
                                   property="attachments"/>
         </datasource>
-        <collectionDatasource id="procTasksDs"
+        <!--<collectionDatasource id="procTasksDs"
                               allowCommit="false"
                               class="com.haulmont.bpm.entity.ProcTask"
                               view="procTask-frame">
@@ -22,7 +22,7 @@
 where e.procInstance.entity.entityId = :ds$personalDataRequestDs.id
                        order by e.startDate]]>
             </query>
-        </collectionDatasource>
+        </collectionDatasource>-->
         <collectionDatasource id="bpmRequestMessagesDs"
                               class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
                               view="bpmRequestMessage-view">
@@ -72,7 +72,7 @@ where e.procInstance.entity.entityId = :ds$personalDataRequestDs.id
                    height="100%"
                    width="100%">
                 <columns>
-                    <column id="name" caption="mainMsg://attachment.FileName" generator="generatorName"/>
+<!--                    <column id="name" caption="mainMsg://attachment.FileName" generator="generatorName"/>-->
                 </columns>
                 <rows datasource="attachmentsDs"/>
             </table>
@@ -105,11 +105,11 @@ where e.procInstance.entity.entityId = :ds$personalDataRequestDs.id
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
-            <button caption="msg://cancel"
+            <!--<button caption="msg://cancel"
                     invoke="closeButton"/>
             <button id="askQuestionBtn"
                     caption="mainMsg://askQuestion"
-                    invoke="onAskQuestion"/>
+                    invoke="onAskQuestion"/>-->
             <frame id="procActionsFrame"
                    screen="procActionsFrame"
                    width="AUTO"/>

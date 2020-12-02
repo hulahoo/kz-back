@@ -1,7 +1,7 @@
 package kz.uco.tsadv.web.personaldatarequest;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.entity.ProcInstance;
+//import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
@@ -33,7 +33,7 @@ import java.util.UUID;
 
 public class PersonalDataRequestShow extends AbstractWindow {
 
-    @Inject
+    /*@Inject
     protected Datasource<PersonExt> personDs;
     @Inject
     protected DatesService datesService;
@@ -348,5 +348,5 @@ public class PersonalDataRequestShow extends AbstractWindow {
             procInstancesDs.refresh();
             setEnabledEditBtn();
         });
-    }
+    }*/
 }

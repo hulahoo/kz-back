@@ -1,7 +1,7 @@
 package kz.uco.tsadv.web.absence;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.entity.ProcInstance;
+//import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
@@ -27,14 +27,14 @@ import java.util.UUID;
 
 public class AbsenceLookup extends AbstractLookup {
 
-    @Inject
+    /*@Inject
     protected EmployeeService employeeService;
     @Inject
     protected ComponentsFactory componentsFactory;
     @Inject
     protected CommonService commonService;
-    @Inject
-    protected CollectionDatasource<ProcInstance, UUID> procInstancesDs;
+    *//*@Inject
+    protected CollectionDatasource<ProcInstance, UUID> procInstancesDs;*//*
     @Inject
     protected UserSession userSession;
     @Inject
@@ -83,14 +83,14 @@ public class AbsenceLookup extends AbstractLookup {
         abstractWindow.addCloseListener(actionId -> procInstancesDs.refresh());
     }
 
-    public Component generateStatusCell(ProcInstance entity) {
+    *//*public Component generateStatusCell(ProcInstance entity) {
         Label label = componentsFactory.createComponent(Label.class);
         AbsenceRequest absenceRequest = (AbsenceRequest) getEntity(entity);
         if(absenceRequest !=null ) {
             label.setValue(absenceRequest.getStatus());
         }
         return label;
-    }
+    }*//*
 
     public Component generateEntityNameCell(ProcInstance entity) {
         LinkButton linkButton = componentsFactory.createComponent(LinkButton.class);
@@ -117,6 +117,6 @@ public class AbsenceLookup extends AbstractLookup {
 
     public void onBalanceBtnClick() {
         openWindow("tsadv$myAbsenceBalance", WindowManager.OpenType.THIS_TAB);
-    }
+    }*/
 
 }

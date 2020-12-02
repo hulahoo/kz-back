@@ -1,7 +1,7 @@
 package kz.uco.tsadv.beans;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.entity.*;
+//import com.haulmont.bpm.entity.*;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.service.common.CommonService;
@@ -52,14 +52,14 @@ public class BpmUtils {
                 ParamsMap.of("id", bpmProcInstanceId), viewName != null ? viewName : View.LOCAL);
     }
 
-    @Nullable
+    /*@Nullable
     public ProcTask getActiveProcTask(@Nonnull UUID bpmProcInstanceId, @Nullable String viewName) {
         return commonService.emQueryFirstResult(ProcTask.class, "select e " +
                         " from bpm$ProcTask e " +
                         "where e.procInstance.id = :procInstanceId " +
                         "  and e.endDate is null ",
                 ParamsMap.of("procInstanceId", bpmProcInstanceId), viewName != null ? viewName : View.LOCAL);
-    }
+    }*/
 
     @Nullable
     public UserExt getCreatedBy(@Nonnull UUID bpmProcInstanceId, @Nullable String viewName) {
@@ -70,21 +70,21 @@ public class BpmUtils {
         return list.isEmpty() ? null : list.get(0);
     }
 
-    public List<ProcActor> getProcActors(@Nonnull ProcInstance procInstance, @Nullable String viewName) {
+    /*public List<ProcActor> getProcActors(@Nonnull ProcInstance procInstance, @Nullable String viewName) {
         return commonService.getEntities(ProcActor.class,
                 " select e from bpm$ProcActor e where e.procInstance.id = :procInstance",
                 ParamsMap.of("procInstance", procInstance.getId()), viewName != null ? viewName : View.LOCAL);
-    }
+    }*/
 
-    public List<ProcTask> getProcTaskList(@Nonnull UUID bpmProcInstanceId, @Nullable String viewName) {
+    /*public List<ProcTask> getProcTaskList(@Nonnull UUID bpmProcInstanceId, @Nullable String viewName) {
         return commonService.emQueryResultList(ProcTask.class,
                 "select e from bpm$ProcTask e " +
                         " where e.procInstance.id = :id " +
                         "   order by e.startDate ",
                 ParamsMap.of("id", bpmProcInstanceId), viewName);
-    }
+    }*/
 
-    @Nonnull
+    /*@Nonnull
     public ProcInstance getOrCreateProcInstance(@Nonnull ProcDefinition procDefinition, @Nonnull Entity entity) {
         ProcInstance procInstance = findProcInstance(procDefinition, entity);
         if (procInstance == null) {
@@ -94,9 +94,9 @@ public class BpmUtils {
             procInstance.setEntityName(entity.getMetaClass().getName());
         }
         return procInstance;
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     public ProcInstance findProcInstance(@Nonnull ProcDefinition procDefinition, @Nonnull Entity entity) {
         String referenceIdPropertyName = referenceToEntitySupport.getReferenceIdPropertyName(entity.getMetaClass());
         LoadContext<ProcInstance> ctx = LoadContext.create(ProcInstance.class).setView("procInstance-start");
@@ -106,9 +106,9 @@ public class BpmUtils {
                 .setParameter("entityId", referenceToEntitySupport.getReferenceId(entity));
         List<ProcInstance> list = dataManager.loadList(ctx);
         return list.isEmpty() ? null : list.get(0);
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     public List<BpmRolesLink> getBpmRolesLinks(@Nonnull PositionGroupExt positionGroupExt, @Nonnull ProcModel model, @Nullable String viewName) {
         List<BpmRolesLink> res = commonService.getEntities(BpmRolesLink.class,
                 " select e from tsadv$BpmRolesLink e " +
@@ -119,21 +119,21 @@ public class BpmUtils {
                 viewName != null ? viewName : View.LOCAL);
         BpmRolesDefiner definer = res.isEmpty() ? this.getBpmRolesDefiner(model, "bpmRolesDefiner-view") : null;
         return res.isEmpty() && definer != null ? definer.getLinks() : res;
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     public BpmRolesDefiner getBpmRolesDefiner(@Nonnull ProcModel procModel, @Nullable String viewName) {
         List<BpmRolesDefiner> list = commonService.getEntities(BpmRolesDefiner.class, "select e from tsadv$BpmRolesDefiner e where e.procModel.id = :procModelId",
                 ParamsMap.of("procModelId", procModel.getId()), viewName != null ? viewName : View.LOCAL);
         return list.isEmpty() ? null : list.get(0);
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     public ProcDefinition getProcDefinition(@Nonnull Entity entity, @Nonnull String processName) {
         return getProcDefinition(entity, processName, null);
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     public ProcDefinition getProcDefinition(@Nonnull Entity entity, @Nonnull String processName, @Nullable String viewName) {
         String referenceIdPropertyName = referenceToEntitySupport.getReferenceIdPropertyName(entity.getMetaClass());
         List<ProcDefinition> list = commonService.getEntities(ProcDefinition.class,
@@ -148,18 +148,18 @@ public class BpmUtils {
                         "entityName", entity.getMetaClass().getName()), viewName != null ? viewName : View.LOCAL);
 
         return list.isEmpty() ? getActiveProcDefinition(processName, viewName) : list.get(0);
-    }
+    }*/
 
-    @Nullable
+    /*@Nullable
     public ProcDefinition getActiveProcDefinition(@Nonnull String processName, @Nullable String viewName) {
         List<ProcDefinition> list = commonService.getEntities(ProcDefinition.class,
                 "select pd from bpm$ProcDefinition pd " +
                         "where pd.active = 'TRUE' and pd.model.name = :name order by pd.deploymentDate desc",
                 ParamsMap.of("name", processName), viewName != null ? viewName : View.LOCAL);
         return list.isEmpty() ? null : list.get(0);
-    }
+    }*/
 
-    public ProcTask createInitiatorTask(ProcInstance procInstance) {
+    /*public ProcTask createInitiatorTask(ProcInstance procInstance) {
         ProcTask initiatorTask = metadata.create(ProcTask.class);
         ProcActor procActor = metadata.create(ProcActor.class);
         procActor.setUser(procInstance.getStartedBy());
@@ -170,5 +170,5 @@ public class BpmUtils {
         initiatorTask.setOutcome("launch.process");
         initiatorTask.setName("initiator");
         return initiatorTask;
-    }
+    }*/
 }

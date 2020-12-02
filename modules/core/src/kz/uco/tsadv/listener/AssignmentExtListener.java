@@ -45,7 +45,7 @@ public class AssignmentExtListener implements
 
     @Override
     public void onAfterUpdate(AssignmentExt entity, Connection connection) {
-        if (persistence.getTools().isDirty(entity, "organizationGroup"))
+        /*if (persistence.getTools().isDirty(entity, "organizationGroup"))
             AppBeans.get(BpmService.class).notifyManagersAboutAccessInf(entity.getStartDate(),
                     entity.getPersonGroup(),
                     entity.getOrganizationGroup(),
@@ -63,6 +63,6 @@ public class AssignmentExtListener implements
                     throw new IntegrationException(e.getMessage());
                 }
             }
-        }
+        }*/
     }
 }

@@ -1,8 +1,8 @@
 package kz.uco.tsadv.web.bpm.form;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.entity.ProcActor;
-import com.haulmont.bpm.gui.form.standard.StandardProcForm;
+//import com.haulmont.bpm.entity.ProcActor;
+//import com.haulmont.bpm.gui.form.standard.StandardProcForm;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.components.PickerField;
 import com.haulmont.cuba.gui.components.ValidationException;
@@ -14,8 +14,8 @@ import javax.inject.Inject;
 import java.util.Map;
 import java.util.UUID;
 
-public class UcoBpmReassignProcForm extends StandardProcForm {
-    @Inject
+public class UcoBpmReassignProcForm /*extends StandardProcForm*/ {
+    /*@Inject
     private PickerField reassignUser;
     @Inject
     private CollectionDatasource<ProcActor, UUID> procActorsDs;
@@ -60,5 +60,5 @@ public class UcoBpmReassignProcForm extends StandardProcForm {
     protected void addingReassignUserToProcActor() {
         ProcActor currentProcActor = dataManager.reload(procTask.getProcActor(), "procActor-procTaskCreation");
         bpmService.commitReassignProcActor(procTask, currentProcActor, procActorsDs.getItems(), ((UserExt) reassignUser.getValue()));
-    }
+    }*/
 }

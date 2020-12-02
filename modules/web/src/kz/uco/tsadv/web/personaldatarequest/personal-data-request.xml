@@ -45,7 +45,7 @@ where e.personGroup.id = :ds$personDs.group.id
 and :session$systemDate between e.startDate and e.endDate]]>
             </query>
         </collectionDatasource>
-        <collectionDatasource id="procInstancesDs"
+        <!--<collectionDatasource id="procInstancesDs"
                               class="com.haulmont.bpm.entity.ProcInstance"
                               view="procInstance-browse">
             <query>
@@ -55,7 +55,7 @@ where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p
     or e.entity.entityId in ( select a.id from tsadv$AddressRequest a 
                               where a.personGroup.id = :session$userPersonGroupId)]]>
             </query>
-        </collectionDatasource>
+        </collectionDatasource>-->
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -73,9 +73,9 @@ where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p
                               height="100%">
                         <vbox id="userInfo"
                               spacing="true">
-                            <button id="editBtn"
+                            <!--<button id="editBtn"
                                     icon="icons/edit.png"
-                                    invoke="onEditBtnClick"/>
+                                    invoke="onEditBtnClick"/>-->
                             <fieldGroup id="fieldGroup"
                                         datasource="personDs"
                                         width="100%">
@@ -164,12 +164,12 @@ where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p
                                             <column id="personGroupChild.fullName"/>
                                             <column id="relationshipType.langValue"
                                                     caption="msg://relationshipType"/>
-                                            <column id="email"
+                                            <!--<column id="email"
                                                     caption="msg://email"
                                                     generator="generateEmailCell"/>
                                             <column id="phoneNumber"
                                                     caption="msg://phone"
-                                                    generator="generatePhoneNumberCell"/>
+                                                    generator="generatePhoneNumberCell"/>-->
                                         </columns>
                                         <rows datasource="beneficiariesDs"/>
                                         <buttonsPanel>
@@ -200,13 +200,13 @@ where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p
                             </columns>
                             <rows datasource="addressesDs"/>
                             <buttonsPanel id="addressBtn">
-                                <button id="addBtn"
+                                <!--<button id="addBtn"
                                         icon="icons/plus-btn.png"
                                         invoke="onAddressCreateBtn"/>
                                 <button id="editAddressBtn"
                                         enable="false"
                                         invoke="onAddressEditBtn"
-                                        icon="icons/edit.png"/>
+                                        icon="icons/edit.png"/>-->
                             </buttonsPanel>
                         </table>
                     </groupBox>
@@ -223,11 +223,11 @@ where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p
                     <columns>
                         <column id="startDate"/>
                         <column id="endDate"/>
-                        <column id="entityName"
+                        <!--<column id="entityName"
                                 generator="generateEntityNameCell"/>
                         <column id="status"
                                 caption="msg://status"
-                                generator="generateStatusCell"/>
+                                generator="generateStatusCell"/>-->
                     </columns>
                     <rows datasource="procInstancesDs"/>
                     <rowsCount/>

@@ -1,6 +1,6 @@
 package kz.uco.tsadv.web.modules.personal.persondocument;
 
-import com.haulmont.bpm.gui.procactions.ProcActionsFrame;
+//import com.haulmont.bpm.gui.procactions.ProcActionsFrame;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractEditor;
@@ -39,8 +39,8 @@ public class PersonDocumentEdit extends AbstractEditor<PersonDocument> {
     @Inject
     protected UserSession userSession;
 
-    @Inject
-    protected ProcActionsFrame procActionsFrame;
+//    @Inject
+//    protected ProcActionsFrame procActionsFrame;
     @Inject
     protected Datasource<PersonDocument> personDocumentDs;
     protected boolean isFromSelfService;
@@ -94,7 +94,7 @@ public class PersonDocumentEdit extends AbstractEditor<PersonDocument> {
     }
 
     private void initProcActionsFrame() {
-        procActionsFrame.initializer()
+        /*procActionsFrame.initializer()
                 .setBeforeStartProcessPredicate(this::commit)
                 .setAfterStartProcessListener(() -> {
                     showNotification(getMessage("PersonDocumentApproval.processStarted"), NotificationType.HUMANIZED);
@@ -110,7 +110,7 @@ public class PersonDocumentEdit extends AbstractEditor<PersonDocument> {
                     close(COMMIT_ACTION_ID);
 
                 })
-                .init(PROCESS_CODE, getItem());
+                .init(PROCESS_CODE, getItem());*/
     }
 
     @Override

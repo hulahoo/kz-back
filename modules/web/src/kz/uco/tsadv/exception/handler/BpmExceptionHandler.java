@@ -1,6 +1,6 @@
 package kz.uco.tsadv.exception.handler;
 
-import com.haulmont.bpm.exception.BpmException;
+//import com.haulmont.bpm.exception.BpmException;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.Frame;
@@ -16,9 +16,9 @@ public class BpmExceptionHandler extends AbstractGenericExceptionHandler {
     @Inject
     private Messages messages;
 
-    public BpmExceptionHandler() {
+    /*public BpmExceptionHandler() {
         super(BpmException.class.getName());
-    }
+    }*/
 
     @Override
     protected void doHandle(String className, String message, @Nullable Throwable throwable, WindowManager windowManager) {

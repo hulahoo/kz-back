@@ -24,7 +24,7 @@ import java.util.List;
 
 public class PositionChangeRequestEdit<T extends PositionChangeRequest> extends AbstractBpmEditor<T> {
 
-    public static final String PROCESS_NAME = "positionRequest";
+    /*public static final String PROCESS_NAME = "positionRequest";
     protected boolean readOnly;
 
     @Inject
@@ -224,5 +224,5 @@ public class PositionChangeRequestEdit<T extends PositionChangeRequest> extends 
     protected String getProcessName() {
         return PROCESS_NAME;
     }
-
+*/
 }

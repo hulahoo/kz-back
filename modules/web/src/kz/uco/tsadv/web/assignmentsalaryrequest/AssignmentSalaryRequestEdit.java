@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 
 public class AssignmentSalaryRequestEdit<T extends AssignmentSalaryRequest> extends AbstractBpmEditor<T> {
 
-    public static final String PROCESS_NAME = "assignmentSalaryRequest";
+    /*public static final String PROCESS_NAME = "assignmentSalaryRequest";
     protected boolean isAmountChange = false;
     protected boolean readOnly = true;
     protected PositionGroupExt positionGroupExt;
@@ -58,9 +58,9 @@ public class AssignmentSalaryRequestEdit<T extends AssignmentSalaryRequest> exte
     @Inject
     protected TextField<Object> newAmount, newPercent, oldAmount;
     @Inject
-    protected LookupField<Object> /*newCurrency,*/ newNetGross, newSalaryType;
-    /*    @Inject
-        protected PickerField newJob;*/
+    protected LookupField<Object> *//*newCurrency,*//* newNetGross, newSalaryType;
+    *//*    @Inject
+        protected PickerField newJob;*//*
 
     @Override
     public void init(Map<String, Object> params) {
@@ -98,10 +98,10 @@ public class AssignmentSalaryRequestEdit<T extends AssignmentSalaryRequest> exte
         ((PickerField<Entity>) grid.getComponentNN("oldDepartment")).addValueChangeListener(e -> ((Label) grid.getComponentNN("labelOrganizationIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), organizationSs.getValue() != null ? ((OrganizationSsView) organizationSs.getValue()).getOrganizationGroup() : null))));
 
-        /*newJob.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
+        *//*newJob.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), assignmentExtDs.getItem() != null ? assignmentExtDs.getItem().getJobGroup() : null))));
         ((PickerField<Entity>) grid.getComponentNN("oldJob")).addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
-                .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newJob.getValue()))));*/
+                .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newJob.getValue()))));*//*
 
         newSalaryType.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelSalaryTypeIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), salaryDs.getItem() != null ? salaryDs.getItem().getType() : null))));
@@ -120,10 +120,10 @@ public class AssignmentSalaryRequestEdit<T extends AssignmentSalaryRequest> exte
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newNetGross.getValue()))));
 
 
-        /*newCurrency.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelCurrencyIcon"))
+        *//*newCurrency.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelCurrencyIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), salaryDs.getItem() != null ? salaryDs.getItem().getCurrency() : null))));
         ((LookupField) grid.getComponentNN("oldCurrency")).addValueChangeListener(e -> ((Label) grid.getComponentNN("labelCurrencyIcon"))
-                .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newCurrency.getValue()))));*/
+                .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newCurrency.getValue()))));*//*
 
     }
 
@@ -136,8 +136,8 @@ public class AssignmentSalaryRequestEdit<T extends AssignmentSalaryRequest> exte
         groupsComponent.addLookupActionPositionGroup(positionSs, this, "dateFrom")
                 .setLookupScreenParamsSupplier(getParams("pos"));
 
-        /*groupsComponent.addLookupActionJobGroup(newJob, this, "dateFrom")
-                .setLookupScreenParamsSupplier(getParams("job"));*/
+        *//*groupsComponent.addLookupActionJobGroup(newJob, this, "dateFrom")
+                .setLookupScreenParamsSupplier(getParams("job"));*//*
 
         PickerField.LookupAction lookupAction = picker.addLookupAction();
         lookupAction.setLookupScreen("tsadv$AssignmentMyTeam.browse");
@@ -346,9 +346,9 @@ public class AssignmentSalaryRequestEdit<T extends AssignmentSalaryRequest> exte
             if (organizationSs.getValue() != null && !type.equals("org") && ((OrganizationSsView) organizationSs.getValue()).getOrganizationGroup() != null) {
                 params.put("orgGroupId", ((OrganizationSsView) organizationSs.getValue()).getOrganizationGroup().getId());
             }
-            /*if (newJob.getValue() != null && !type.equals("job")) {
+            *//*if (newJob.getValue() != null && !type.equals("job")) {
                 params.put("jobGroupId", ((JobGroup) newJob.getValue()).getId());
-            }*/
+            }*//*
             if (positionSs.getValue() != null && !type.equals("pos")) {
                 PositionGroupExt positionGroupExt = (PositionGroupExt) positionSs.getValue();
                 PositionExt position = positionGroupExt.getPositionInDate(getItem().getDateFrom());
@@ -527,5 +527,5 @@ public class AssignmentSalaryRequestEdit<T extends AssignmentSalaryRequest> exte
     @Override
     protected String getProcessName() {
         return PROCESS_NAME;
-    }
+    }*/
 }

@@ -1,6 +1,6 @@
 package kz.uco.tsadv.web.bpm.form;
 
-import com.haulmont.bpm.gui.form.standard.StandardProcForm;
+//import com.haulmont.bpm.gui.form.standard.StandardProcForm;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.AppBeans;
@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class UcoBpmStartProcForm extends StandardProcForm {
+public class UcoBpmStartProcForm /*extends StandardProcForm */{
 
-    protected boolean reassignVisible;
+    /*protected boolean reassignVisible;
     protected boolean commentVisible;
 
     @Inject
@@ -120,5 +120,5 @@ public class UcoBpmStartProcForm extends StandardProcForm {
         if (procActorsFrame instanceof UcoBpmProcActorsFrame) {
             ((UcoBpmProcActorsFrame) procActorsFrame).postValidate(errors);
         }
-    }
+    }*/
 }

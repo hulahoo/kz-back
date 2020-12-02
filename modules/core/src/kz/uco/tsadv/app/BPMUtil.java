@@ -1,9 +1,9 @@
 package kz.uco.tsadv.app;
 
-import com.haulmont.bpm.core.ProcessRuntimeManager;
-import com.haulmont.bpm.entity.ProcActor;
-import com.haulmont.bpm.entity.ProcInstance;
-import com.haulmont.bpm.entity.ProcRole;
+//import com.haulmont.bpm.core.ProcessRuntimeManager;
+//import com.haulmont.bpm.entity.ProcActor;
+//import com.haulmont.bpm.entity.ProcInstance;
+//import com.haulmont.bpm.entity.ProcRole;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.*;
 import com.haulmont.cuba.core.app.EmailService;
@@ -61,8 +61,8 @@ public class BPMUtil {
     @Inject
     private Persistence persistence;
 
-    @Inject
-    private ProcessRuntimeManager processRuntimeManager;
+//    @Inject
+//    private ProcessRuntimeManager processRuntimeManager;
 
     @Inject
     protected EmailService emailService;
@@ -88,11 +88,11 @@ public class BPMUtil {
     @Inject
     private ActivityService activityService;
 
-    public boolean hasPerson(UUID bpmProcInstanceId, String role, String isCorrect) {
+    /*public boolean hasPerson(UUID bpmProcInstanceId, String role, String isCorrect) {
         return !processRuntimeManager.getTaskAssigneeList(bpmProcInstanceId, role).isEmpty() == "true".equals(isCorrect);
-    }
+    }*/
 
-    public void interviewApproval(UUID entityId, UUID bpmProcInstanceId, String action) {
+    /*public void interviewApproval(UUID entityId, UUID bpmProcInstanceId, String action) {
         EntityManager em = persistence.getEntityManager();
         Interview interview = em.find(Interview.class, entityId, "interview.full");
         ProcInstance procInstance = em.find(ProcInstance.class, bpmProcInstanceId);
@@ -138,7 +138,7 @@ public class BPMUtil {
                 updateInterviewStatus(entityId, InterviewStatus.CANCELLED);
                 break;
         }
-    }
+    }*/
 
     private void updateInterviewStatus(UUID entityId, InterviewStatus status) {
         try (Transaction tx = persistence.getTransaction()) {
@@ -156,7 +156,7 @@ public class BPMUtil {
         }
     }
 
-    public void orderApproval(UUID entityId, UUID bpmProcInstanceId, String action) {
+    /*public void orderApproval(UUID entityId, UUID bpmProcInstanceId, String action) {
         EntityManager em = persistence.getEntityManager();
         Order order = em.find(Order.class, entityId, "order-view");
         ProcInstance procInstance = em.find(ProcInstance.class, bpmProcInstanceId);
@@ -210,9 +210,9 @@ public class BPMUtil {
                 break;
         }
 
-    }
+    }*/
 
-    public void transferRequestApproval(UUID entityId, UUID bpmProcInstanceId, String action) {
+    /*public void transferRequestApproval(UUID entityId, UUID bpmProcInstanceId, String action) {
         EntityManager em = persistence.getEntityManager();
         TransferRequest transferRequest = em.find(TransferRequest.class, entityId, "transferRequest.edit");
         ProcInstance procInstance = em.find(ProcInstance.class, bpmProcInstanceId);
@@ -299,13 +299,13 @@ public class BPMUtil {
                 break;
         }
 
-    }
+    }*/
 
-    public void personEntityApproval(UUID entityId, UUID bpmProcInstanceId, String action) {
+    /*public void personEntityApproval(UUID entityId, UUID bpmProcInstanceId, String action) {
         EntityManager em = persistence.getEntityManager();
         ProcInstance procInstance = em.find(ProcInstance.class, bpmProcInstanceId);
         MetaClass entityMetaClass = metadata.getSession().getClassNN(procInstance.getEntityName());
-        Entity<UUID> entity = null; /*(Entity<UUID>) em.find(entityMetaClass.getJavaClass(), entityId, new View(entityMetaClass.getJavaClass()).addProperty("personGroup"));*/
+        Entity<UUID> entity = null; *//*(Entity<UUID>) em.find(entityMetaClass.getJavaClass(), entityId, new View(entityMetaClass.getJavaClass()).addProperty("personGroup"));*//*
 
         if (entityMetaClass.getProperty("personGroup") != null) {
             switch (procInstance.getEntityName()) {
@@ -392,7 +392,7 @@ public class BPMUtil {
             }
         }
 
-    }
+    }*/
 
     public boolean isNeedBusinessPartnerApprove(UUID entityId, String direction) {
         EntityManager em = persistence.getEntityManager();
@@ -408,7 +408,7 @@ public class BPMUtil {
         return partnersList.size() > 0 == "true".equals(direction);
     }
 
-    public void offerApproval(UUID entityId, UUID bpmProcInstanceId, String action) throws ParseException {
+    /*public void offerApproval(UUID entityId, UUID bpmProcInstanceId, String action) throws ParseException {
         EntityManager em = persistence.getEntityManager();
         Offer offer = em.find(Offer.class, entityId, "offer.bpm");
         ProcInstance procInstance = em.find(ProcInstance.class, bpmProcInstanceId);
@@ -605,10 +605,10 @@ public class BPMUtil {
 //                        templateParams.put("recruiterName", offer.getJobRequest().getRequisition().getRecruiterPersonGroup().getList().get(0) != null
 //                                ? offer.getJobRequest().getRequisition().getRecruiterPersonGroup().getList().get(0).getFullName() : "");
 
-                        /*templateParams.put("positionName",
+                        *//*templateParams.put("positionName",
                                 offer.getJobRequest().getRequisition().getPositionGroup() == null
                                         ? offer.getJobRequest().getRequisition().getJobGroup().getJob().getJobName()
-                                        : offer.getJobRequest().getRequisition().getPositionGroup().getPosition().getPositionName());*/
+                                        : offer.getJobRequest().getRequisition().getPositionGroup().getPosition().getPositionName());*//*
                 templateParams.put("requisitionCode", offer.getJobRequest().getRequisition().getCode());
                 SendingNotification sendingNotification = sendNotificationWithOffer(offer, "offer.hrManager.reject.notification",
                         getUserByKey("personGroup.id",
@@ -636,7 +636,7 @@ public class BPMUtil {
             default:
                 break;
         }
-    }
+    }*/
 
     private void approveOffer(Offer offer, Map<String, Object> templateParams, OfferHistory offerHistory) {
         updateOfferStatus(offer, OfferStatus.APPROVED);
@@ -839,7 +839,7 @@ public class BPMUtil {
 
     }
 
-    public Boolean checkFlow(UUID entityId, UUID bpmProcInstanceId, String condition) {
+    /*public Boolean checkFlow(UUID entityId, UUID bpmProcInstanceId, String condition) {
         switch (condition) {
             case "transferRequestApproval_hasManager":
                 EntityManager em = persistence.getEntityManager();
@@ -848,7 +848,7 @@ public class BPMUtil {
             default:
                 return false;
         }
-    }
+    }*/
 
     private void updateApprovalStatus(Entity entity, String statusCode) {
         try (Transaction tx = persistence.getTransaction()) {
@@ -1181,7 +1181,7 @@ public class BPMUtil {
         return null;
     }
 
-    public void sendNotificationForApproval(UUID entityId, UUID bpmProcInstanceId, String role) {
+    /*public void sendNotificationForApproval(UUID entityId, UUID bpmProcInstanceId, String role) {
         EntityManager em = persistence.getEntityManager();
 
         AbsenceRequest absenceRequest = em.find(AbsenceRequest.class, entityId, "absenceRequest.view");
@@ -1214,6 +1214,6 @@ public class BPMUtil {
                     templateParams);
         });
 
-    }
+    }*/
 
 }

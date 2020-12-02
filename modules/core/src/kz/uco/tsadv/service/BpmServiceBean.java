@@ -1,13 +1,13 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.core.ProcessRuntimeManager;
+/*import com.haulmont.bpm.core.ProcessRuntimeManager;
 import com.haulmont.bpm.entity.ProcActor;
 import com.haulmont.bpm.entity.ProcDefinition;
 import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.bpm.entity.ProcTask;
 import com.haulmont.bpm.service.ProcessMessagesService;
-import com.haulmont.bpm.service.ProcessRuntimeService;
+import com.haulmont.bpm.service.ProcessRuntimeService;*/
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.chile.core.model.MetaProperty;
 import com.haulmont.cuba.core.EntityManager;
@@ -46,8 +46,8 @@ import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.entity.WindowProperty;
 import kz.uco.uactivity.service.ActivityService;
-import org.activiti.engine.RuntimeService;
-import org.activiti.engine.delegate.event.ActivitiEvent;
+//import org.activiti.engine.RuntimeService;
+//import org.activiti.engine.delegate.event.ActivitiEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrBuilder;
 import org.apache.commons.lang3.time.DateUtils;
@@ -65,8 +65,8 @@ import java.util.stream.Collectors;
 @Service(BpmService.NAME)
 public class BpmServiceBean implements BpmService {
 
-    @Inject
-    protected ProcessRuntimeManager processRuntimeManager;
+    /*@Inject
+    protected ProcessRuntimeManager processRuntimeManager;*//*
     @Inject
     protected Persistence persistence;
     @Inject
@@ -93,10 +93,10 @@ public class BpmServiceBean implements BpmService {
     protected BpmUtils bpmUtils;
     @Inject
     protected BpmUserSubstitutionService bpmUserSubstitutionService;
-    @Inject
+    *//*@Inject
     protected ProcessMessagesService processMessagesService;
     @Inject
-    protected RuntimeService runtimeService;
+    protected RuntimeService runtimeService;*//*
     @Inject
     protected CallStoredFunctionService callStoredFunctionService;
     @Inject
@@ -109,12 +109,12 @@ public class BpmServiceBean implements BpmService {
     protected GlobalConfig globalConfig;
     @Inject
     protected NotificationService notificationService;
-    @Inject
-    protected ProcessRuntimeService processRuntimeService;
+    *//*@Inject
+    protected ProcessRuntimeService processRuntimeService;*//*
     @Inject
     protected BpmProcActorsService bpmProcActorsService;
 
-    @Override
+    *//*@Override
     public void startBpmProcess(@Nonnull Entity entity, @Nonnull String processName, @Nonnull PersonGroupExt personGroupExt,
                                 PositionGroupExt positionGroupExt, OrganizationGroupExt organizationGroupExt) {
 
@@ -155,7 +155,7 @@ public class BpmServiceBean implements BpmService {
                 .orElseThrow(() -> new RuntimeException("Error"));
 
         processRuntimeService.startProcess(committedProcInstance, "", new HashMap<>());
-    }
+    }*//*
 
     @Override
     @Deprecated
@@ -169,7 +169,7 @@ public class BpmServiceBean implements BpmService {
         }
     }
 
-    @Override
+    *//*@Override
     public void doneActivity(UUID bpmProcInstanceId) {
         ProcInstance procInstance = findById(ProcInstance.class, bpmProcInstanceId, "procInstance-start");
 
@@ -182,7 +182,7 @@ public class BpmServiceBean implements BpmService {
         String entityName = procInstance.getEntityName();
 
         doneActivity(entityId, getActivityCodeFromTableName(entityId, entityName), userId);
-    }
+    }*//*
 
     protected void doneActivity(UUID entityId, String activityCode, UUID userId) {
         List<Activity> activityList = getActivityList(entityId, activityCode, userId);
@@ -212,7 +212,7 @@ public class BpmServiceBean implements BpmService {
         return dataManager.loadList(loadContext);
     }
 
-    /**
+    *//**
      * For call method in map {@link RuntimeService#getVariableLocal(String, String)} have to contain key "assignee"
      * <p>
      * To calling use {@link ActivitiEvent} with type {@link org.activiti.engine.delegate.event.ActivitiEventType#TASK_CREATED}
@@ -222,8 +222,8 @@ public class BpmServiceBean implements BpmService {
      * @param emailTemplateCode        Code of template that sending to email
      * @param notificationTemplateCode Code of template that sending to bell
      * @see com.haulmont.bpm.core.engine.listener.BpmActivitiListener#onEvent(ActivitiEvent)
-     */
-    public void notifyAssignee(UUID bpmProcInstanceId, UUID bpmProcTaskId, String emailTemplateCode, String notificationTemplateCode) {
+     *//*
+    *//*public void notifyAssignee(UUID bpmProcInstanceId, UUID bpmProcTaskId, String emailTemplateCode, String notificationTemplateCode) {
         ProcInstance procInstance = reloadById(ProcInstance.class, bpmProcInstanceId, "procInstance-start");
         ProcTask procTask = reloadById(ProcTask.class, bpmProcTaskId, "procTask-frame-extended");
 
@@ -235,14 +235,20 @@ public class BpmServiceBean implements BpmService {
         sendUserNotification(notifyUser, assignedBy, (UUID) Objects.requireNonNull(procInstance).getObjectEntityId(),
                 bpmProcInstanceId, getActivityCodeFromTableName((UUID) procInstance.getObjectEntityId(), procInstance.getEntityName()),
                 emailTemplateCode, notificationTemplateCode);
-    }
+    }*//*
 
     @Deprecated
     public void notify(UUID entityId, String entityName, UUID bpmProcInstanceId, String role, String emailTemplateCode) {
-        this.notify(entityId, entityName, bpmProcInstanceId, role, emailTemplateCode, emailTemplateCode);
+//        this.notify(entityId, entityName, bpmProcInstanceId, role, emailTemplateCode, emailTemplateCode);
     }
 
-    @Deprecated
+    @Override
+    public void sendNotifyToInitiator(UUID entityId, UUID bpmProcInstanceId, String emailTemplateCode,
+                                      String template) {
+
+    }
+
+    *//*@Deprecated
     public void notify(UUID entityId, String entityName, UUID bpmProcInstanceId, String role, String emailTemplateCode, String notificationTemplateCode) {
         EntityManager em = persistence.getEntityManager();
 
@@ -263,7 +269,7 @@ public class BpmServiceBean implements BpmService {
         sendUserNotification(notifyUser, userExt, entityId, bpmProcInstanceId,
                 getActivityCodeFromTableName(entityId, entityName),
                 emailTemplateCode, notificationTemplateCode);
-    }
+    }*//*
 
     protected String getActivityCodeFromTableName(UUID entityId, String entityName) {
         StringBuilder builder = new StringBuilder();
@@ -281,7 +287,7 @@ public class BpmServiceBean implements BpmService {
         return builder.toString();
     }
 
-    @Deprecated
+    *//*@Deprecated
     protected UserExt getNextUser(UserExt userExt, UUID bpmProcInstanceId, String role) {
         List<String> list = processRuntimeManager.getTaskAssigneeList(bpmProcInstanceId, role);
         if (list.size() > 0) {
@@ -295,14 +301,14 @@ public class BpmServiceBean implements BpmService {
             return getUserByKey("id", UUID.fromString(id));
         }
         return null;
-    }
+    }*//*
 
-    @Override
+    *//*@Override
     public boolean hasActor(UUID bpmProcInstanceId, String role) {
         return !processRuntimeManager.getTaskAssigneeList(bpmProcInstanceId, role).isEmpty();
-    }
+    }*//*
 
-    @Override
+    *//*@Override
     public void sendUserNotification(User assignedUser, User assignedBy, UUID entityId, UUID bpmProcInstanceId, String activityCode, String emailTemplateCode, String notificationTemplateCode) {
         HashMap<String, Object> emailParams = new HashMap<>();
         HashMap<String, Object> notificationParams;
@@ -357,9 +363,9 @@ public class BpmServiceBean implements BpmService {
         emailParams.put("requestUrlRu", String.format(tagA, "Открыть заявку"));
         emailParams.put("requestUrlEn", String.format(tagA, "Open request"));
         sendNotification(emailTemplateCode, (UserExt) assignedUser, emailParams);
-    }
+    }*//*
 
-    protected String getTagHtmlA(String requestUrl, ProcInstance instance) {
+    *//*protected String getTagHtmlA(String requestUrl, ProcInstance instance) {
         if (requestUrl == null) return "";
         MetaClass metaClass = metadata.getClass(instance.getEntityName());
 
@@ -375,7 +381,7 @@ public class BpmServiceBean implements BpmService {
         if (property == null) return "";
         Entity entity = commonService.getEntity(metaClass.getJavaClass(), instance.getEntity().getEntityId(), View.LOCAL);
         return "<a href=\"" + requestUrl + "\" target=\"_blank\">%s " + entity.getValue(property) + "</a>";
-    }
+    }*//*
 
     //todo нужно переносить на commonService
     @Nullable
@@ -407,7 +413,7 @@ public class BpmServiceBean implements BpmService {
         return entity;
     }
 
-    protected Map<String, Object> getParams(Map<String, Object> params, String templateCode, UUID entityId, UUID bpmProcInstanceId) {
+    *//*protected Map<String, Object> getParams(Map<String, Object> params, String templateCode, UUID entityId, UUID bpmProcInstanceId) {
         UserExt startedByUser = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
         UserExt lastUser = bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit");
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -604,10 +610,10 @@ public class BpmServiceBean implements BpmService {
 
         params.putIfAbsent("comment", procTask != null ? procTask.getComment() != null ? procTask.getComment() : " " : " ");
         return params;
-    }
+    }*//*
 
 
-    @Nullable
+    *//*@Nullable
     public UserExt getNextApprover(ProcActor procActor) {
         UserExt nextApprover;
         try (Transaction transaction = persistence.getTransaction()) {
@@ -647,10 +653,10 @@ public class BpmServiceBean implements BpmService {
             transaction.commit();
         }
         return nextApprover;
-    }
+    }*//*
 
 
-    protected String getTypeStatus(ProcTask procTask, String lang) {
+    *//*protected String getTypeStatus(ProcTask procTask, String lang) {
         if (procTask == null || procTask.getOutcome() == null) return "";
         switch (procTask.getOutcome()) {
             case "reassign": {
@@ -664,7 +670,7 @@ public class BpmServiceBean implements BpmService {
             }
         }
         return "";
-    }
+    }*//*
 
     protected String createTableAbsence(AbsenceRequest absenceRequest, String lang, UserExt startedByUser) {
         StrBuilder strBuilder = new StrBuilder();
@@ -734,7 +740,7 @@ public class BpmServiceBean implements BpmService {
         return null;
     }
 
-    protected String getTableTask(String lang, UUID bpmProcInstanceId, boolean comment) {
+    *//*protected String getTableTask(String lang, UUID bpmProcInstanceId, boolean comment) {
         StrBuilder strBuilder = new StrBuilder();
         strBuilder.setNullText("");
         boolean isRussian = StringUtils.isBlank(lang) || !lang.equals("en");
@@ -757,9 +763,9 @@ public class BpmServiceBean implements BpmService {
         }
         getEndTable(strBuilder);
         return taskList.isEmpty() ? "" : strBuilder.toString();
-    }
+    }*//*
 
-    protected StrBuilder createTaskLine(StrBuilder strBuilder, ProcTask task, String lang, String trClass, boolean comment) {
+    *//*protected StrBuilder createTaskLine(StrBuilder strBuilder, ProcTask task, String lang, String trClass, boolean comment) {
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         ProcActor procActor = task.getProcActor();
         Locale locale = Locale.forLanguageTag(lang);
@@ -786,7 +792,7 @@ public class BpmServiceBean implements BpmService {
         }
         strBuilder.append("</tr>");
         return strBuilder;
-    }
+    }*//*
 
     protected String createTable(String lang, UUID entityId, String templateCode) {
         StrBuilder strBuilder = new StrBuilder();
@@ -1027,7 +1033,7 @@ public class BpmServiceBean implements BpmService {
                 .append(getImgTag(Objects.equals(assignmentExt != null ? assignmentExt.getOrganizationGroup() : null, assignmentSalaryRequest.getOrganizationGroup())))
                 .append("</td> </tr> ")
                 .append(" <tr> <td>")
-                /*.append(lang.equalsIgnoreCase("ru") ? "Должность" : "Job")
+                *//*.append(lang.equalsIgnoreCase("ru") ? "Должность" : "Job")
                 .append("</td> <td>")
                 .append(assignmentExt != null ? getJobName(assignmentExt.getJobGroup(), assignmentExt.getStartDate(), lang) : "")
                 .append("</td> <td>")
@@ -1035,7 +1041,7 @@ public class BpmServiceBean implements BpmService {
                 .append("</td> <td>")
                 .append(getImgTag(Objects.equals(assignmentExt != null ? assignmentExt.getJobGroup() : null, assignmentSalaryRequest.getJobGroup())))
                 .append("</td> </tr> ")
-                .append("<tr> <td>")*/
+                .append("<tr> <td>")*//*
                 .append(lang.equalsIgnoreCase("ru") ? "Название штатной единицы" : "Position")
                 .append("</td> <td>")
                 .append(assignmentExt != null ? getPositionName(assignmentExt.getPositionGroup(), assignmentExt.getStartDate(), lang) : "")
@@ -1301,13 +1307,13 @@ public class BpmServiceBean implements BpmService {
         em.merge(entity);
     }
 
-    @Override
+    *//*@Override
     public void sendNotifyToInitiator(UUID entityId, UUID bpmProcInstanceId, String emailTemplateCode, String template) {
         UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
         if (userExt != null)
             sendUserNotification(userExt, userSessionSource.getUserSession().getUser(), entityId, bpmProcInstanceId,
                     "NOTIFICATION", emailTemplateCode, template);
-    }
+    }*//*
 
     @Override
     public void approve(UUID entityId, String entityName, UUID bpmProcInstanceId) {
@@ -1315,7 +1321,7 @@ public class BpmServiceBean implements BpmService {
         updateEntityStatus(entityName, entityId, requestStatus);
     }
 
-    @Override
+    *//*@Override
     public void approve(UUID entityId, String entityName, UUID bpmProcInstanceId, String emailTemplateCode, String notificationTemplateCode) {
         EntityManager em = persistence.getEntityManager();
         DicRequestStatus requestStatus = commonService.getEntity(DicRequestStatus.class, "APPROVED");
@@ -1366,7 +1372,7 @@ public class BpmServiceBean implements BpmService {
                     "NOTIFICATION", emailTemplateCode, notificationTemplateCode);
         }
 
-    }
+    }*//*
 
     private void callRefreshPersonBalanceSqlFunction() {
 
@@ -1385,8 +1391,8 @@ public class BpmServiceBean implements BpmService {
         UserExt userExt = bpmUtils.getCreatedBy(bpmProcInstanceId, "userExt.edit");
 
         if (userExt != null)
-            sendUserNotification(userExt, bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit"),
-                    entityId, bpmProcInstanceId, "NOTIFICATION", emailTemplateCode, notificationTemplateCode);
+            *//*sendUserNotification(userExt, bpmUtils.getActiveTaskUser(bpmProcInstanceId, "userExt.edit"),
+                    entityId, bpmProcInstanceId, "NOTIFICATION", emailTemplateCode, notificationTemplateCode);*//*
     }
 
     protected UserExt approveTemporaryTranslation(UUID entityId, EntityManager em, UUID bpmProcInstanceId, DicRequestStatus requestStatus) {
@@ -1896,15 +1902,15 @@ public class BpmServiceBean implements BpmService {
         return "";
     }
 
-    /**
+    *//**
      * Create procActor with order = currentProcActor.getOrder() + 1
      *
      * @param currentProcTask  Current ProcTask
      * @param currentProcActor Current ProcActor
      * @param items            Collection of procActors (all list ProcActors where current ProcRole(in currentProcActor) equals list.get(i).procRole )
      * @param userExt          Reassign user
-     */
-    public void commitReassignProcActor(ProcTask currentProcTask, ProcActor currentProcActor, Collection<ProcActor> items, UserExt userExt) {
+     *//*
+    *//*public void commitReassignProcActor(ProcTask currentProcTask, ProcActor currentProcActor, Collection<ProcActor> items, UserExt userExt) {
         List<ProcActor> actorList = items.stream().filter(procActor -> procActor.getProcRole().equals(currentProcActor.getProcRole()))
                 .sorted(Comparator.comparing(ProcActor::getOrder))
                 .collect(Collectors.toList());
@@ -1935,23 +1941,23 @@ public class BpmServiceBean implements BpmService {
             runtimeService.setVariableLocal(currentProcTask.getActExecutionId(), "nrOfCompletedInstances", order);
             transaction.commit();
         }
-    }
+    }*//*
 
-    protected ProcActor createNextProcActor(ProcActor procActor, UserExt userExt) {
+    *//*protected ProcActor createNextProcActor(ProcActor procActor, UserExt userExt) {
         ProcActor newProcActor = metadata.create(ProcActor.class);
         newProcActor.setProcRole(procActor.getProcRole());
         newProcActor.setProcInstance(procActor.getProcInstance());
         newProcActor.setOrder(procActor.getOrder() + 1);
         newProcActor.setUser(userExt);
         return newProcActor;
-    }
+    }*//*
 
 
-    /**
+    *//**
      * @param date   date
      * @param status status
      * @return date - 1 if  {@link DicRequestStatus#getCode()} equals one of the APPROVED|CANCELLED|CANCELED else date
-     */
+     *//*
     @Override
     public Date getDate(Date date, DicRequestStatus status) {
         if (date == null) {
@@ -2009,7 +2015,7 @@ public class BpmServiceBean implements BpmService {
             tableEn.append("<table>").append("<tr  class=\"tableHeader\" ><td>Request type</td><td>Details</td><td>Request link</td></tr>");
 
             for (int i = 0; i < tasks.size(); i++) {
-                addToTableExpiredTasks(tasks.get(i), tableRu, tableEn, i);
+//                addToTableExpiredTasks(tasks.get(i), tableRu, tableEn, i);
             }
 
             tableRu.append("</table>");
@@ -2018,7 +2024,7 @@ public class BpmServiceBean implements BpmService {
         }
     }
 
-    protected void addToTableExpiredTasks(ActivityTask activityTask, StrBuilder tableRu, StrBuilder tableEn, int i) {
+    *//*protected void addToTableExpiredTasks(ActivityTask activityTask, StrBuilder tableRu, StrBuilder tableEn, int i) {
         Activity activity = activityTask.getActivity();
         String tagA = "<a href=\"" + getRequestUrl(activity, null) + "\" target=\"_blank\">" + activityTask.getOrderCode() + "</a>";
         tableRu.append("<tr").append(i % 2 == 0 ? "" : " class=\"color\"").append(">")
@@ -2032,7 +2038,7 @@ public class BpmServiceBean implements BpmService {
                 .append("<td class=\"center\">").append(tagA)
 
                 .append("</td>").append("</tr>");
-    }
+    }*//*
 
     private void notifyAboutExpiredTasks(User user, Map<String, Object> params) {
         notificationService.sendNotification("bpm.request.notify.expired.tasks",
@@ -2041,7 +2047,7 @@ public class BpmServiceBean implements BpmService {
                 user.getLanguage());
     }
 
-    @Nullable
+    *//*@Nullable
     @Override
     public String getRequestUrl(Activity activity, @Nullable ProcInstance procInstance) {
         if (!"NOTIFICATION".equals(activity.getType().getCode())) {
@@ -2058,7 +2064,7 @@ public class BpmServiceBean implements BpmService {
                     "&item=" + procInstance.getEntityName() + "-" + procInstance.getEntity().getEntityId();
         }
         return null;
-    }
+    }*//*
 
     protected String getEditorScreenId(String entityName, UUID entityId) {
         List<WindowProperty> windowProperties = commonService.getEntities(WindowProperty.class,
@@ -2082,7 +2088,7 @@ public class BpmServiceBean implements BpmService {
         return null;
     }
 
-    @Nonnull
+    *//*@Nonnull
     @Override
     public Activity bpmRequestAskAnswerNotification(@Nonnull BpmRequestMessage bpmRequestMessage) {
         UserExt userExt = bpmRequestMessage.getAssignedUser();
@@ -2140,7 +2146,7 @@ public class BpmServiceBean implements BpmService {
                 param,
                 userExt.getLanguage());
         return activity;
-    }
+    }*//*
 
     protected boolean isActivityCreated(BpmRequestMessage bpmRequestMessage) {
         return commonService.getCount(Activity.class,
@@ -2300,5 +2306,5 @@ public class BpmServiceBean implements BpmService {
         UserExt startedByUser = bpmUtils.getCreatedBy(procInstanceId, "userExt.edit");
         return createTableAbsence(absenceRequest, lang, startedByUser);
     }
-
+*/
 }

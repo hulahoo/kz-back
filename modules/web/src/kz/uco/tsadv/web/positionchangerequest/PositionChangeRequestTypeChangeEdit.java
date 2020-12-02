@@ -25,11 +25,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
-import static kz.uco.tsadv.web.positionchangerequest.PositionChangeRequestEdit.PROCESS_NAME;
+//import static kz.uco.tsadv.web.positionchangerequest.PositionChangeRequestEdit.PROCESS_NAME;
 
 public class PositionChangeRequestTypeChangeEdit<T extends PositionChangeRequest> extends AbstractBpmEditor<T> {
 
-    protected PositionGroupExt parentPositionGroup;
+    /*protected PositionGroupExt parentPositionGroup;
     protected PositionExt currentPositionExt;
     protected Job job;
 
@@ -342,5 +342,5 @@ public class PositionChangeRequestTypeChangeEdit<T extends PositionChangeRequest
     @Override
     protected String getProcessName() {
         return PROCESS_NAME;
-    }
+    }*/
 }

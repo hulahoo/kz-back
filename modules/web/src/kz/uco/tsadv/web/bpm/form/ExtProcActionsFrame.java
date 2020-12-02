@@ -1,12 +1,12 @@
 package kz.uco.tsadv.web.bpm.form;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.entity.ProcActor;
+/*import com.haulmont.bpm.entity.ProcActor;
 import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.bpm.entity.ProcTask;
 import com.haulmont.bpm.form.ProcFormDefinition;
 import com.haulmont.bpm.gui.action.CompleteProcTaskAction;
-import com.haulmont.bpm.gui.procactions.ProcActionsFrame;
+import com.haulmont.bpm.gui.procactions.ProcActionsFrame;*/
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.LoadContext;
@@ -20,9 +20,9 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 
-public class ExtProcActionsFrame extends ProcActionsFrame {
+public class ExtProcActionsFrame /*extends ProcActionsFrame*/ {
 
-    @Inject
+    /*@Inject
     private UserSession userSession;
 
     @Override
@@ -83,5 +83,5 @@ public class ExtProcActionsFrame extends ProcActionsFrame {
         ctx.setView("procTask-complete");
         List<ProcTask> result = dataManager.loadList(ctx);
         return result.isEmpty() ? null : result.get(0);
-    }
+    }*/
 }

@@ -26,7 +26,7 @@ import java.util.*;
 
 public class SalaryRequestEdit<T extends SalaryRequest> extends AbstractBpmEditor<T> {
 
-    public static final String PROCESS_NAME = "salaryRequestApproval";
+    /*public static final String PROCESS_NAME = "salaryRequestApproval";
     protected boolean isAmountChange = false;
     protected boolean readOnly = true;
 
@@ -327,5 +327,5 @@ public class SalaryRequestEdit<T extends SalaryRequest> extends AbstractBpmEdito
     @Override
     protected String getProcessName() {
         return PROCESS_NAME;
-    }
+    }*/
 }

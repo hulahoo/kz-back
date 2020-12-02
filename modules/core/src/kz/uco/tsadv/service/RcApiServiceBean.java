@@ -3,7 +3,7 @@ package kz.uco.tsadv.service;
 import com.google.gson.Gson;
 import com.haulmont.addon.restapi.rest.ServerTokenStore;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.entity.ProcTask;
+//import com.haulmont.bpm.entity.ProcTask;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
@@ -2460,7 +2460,7 @@ public class RcApiServiceBean implements RcApiService {
         return toJsonList(entityList);
     }
 
-    public BaseResult approveUserOffer(UUID offer) {
+    /*public BaseResult approveUserOffer(UUID offer) {
         BaseResult result = new BaseResult();
         ArrayList<String> errorMessages = new ArrayList<>();
         Map<String, Object> queryParams = new HashMap<>();
@@ -2516,9 +2516,9 @@ public class RcApiServiceBean implements RcApiService {
         result.setSuccess(true);
         result.setErrorMessage(null);
         return result;
-    }
+    }*/
 
-    public BaseResult rejectUserOffer(OfferInt offerInt) {
+    /*public BaseResult rejectUserOffer(OfferInt offerInt) {
         BaseResult result = new BaseResult();
         ArrayList<String> errorMessages = new ArrayList<>();
         PersonGroupExt personGroup = getUserPersonGroup();
@@ -2575,7 +2575,7 @@ public class RcApiServiceBean implements RcApiService {
         result.setSuccess(true);
         result.setErrorMessage(null);
         return result;
-    }
+    }*/
 
     @Override
     public BaseResult updatePerson(PersonInt personInt) {

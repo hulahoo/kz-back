@@ -12,7 +12,7 @@
         <datasource id="positionGroupExtDs"
                     class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"/>
 
-        <collectionDatasource id="procTasksDs"
+        <!--<collectionDatasource id="procTasksDs"
                               class="com.haulmont.bpm.entity.ProcTask"
                               view="procTask-frame">
             <query>
@@ -20,7 +20,7 @@
 where e.procInstance.entity.entityId = :ds$positionChangeRequestDs
                        order by e.startDate]]>
             </query>
-        </collectionDatasource>
+        </collectionDatasource>-->
         <collectionDatasource id="bpmRequestMessagesDs"
                               class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
                               view="bpmRequestMessage-view">

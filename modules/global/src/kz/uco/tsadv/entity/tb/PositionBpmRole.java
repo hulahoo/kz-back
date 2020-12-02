@@ -3,7 +3,7 @@ package kz.uco.tsadv.entity.tb;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.haulmont.bpm.entity.ProcModel;
+//import com.haulmont.bpm.entity.ProcModel;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -26,9 +26,9 @@ public class PositionBpmRole extends StandardEntity {
     @JoinColumn(name = "POSITION_GROUP_ID")
     protected PositionGroupExt positionGroup;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROC_MODEL_ID")
-    protected ProcModel procModel;
+    protected ProcModel procModel;*/
 
     @OneToMany(mappedBy = "positionBpmRole")
     protected List<BpmRolesLink> bpmRolesLink;
@@ -51,13 +51,13 @@ public class PositionBpmRole extends StandardEntity {
     }
 
 
-    public void setProcModel(ProcModel procModel) {
+    /*public void setProcModel(ProcModel procModel) {
         this.procModel = procModel;
     }
 
     public ProcModel getProcModel() {
         return procModel;
-    }
+    }*/
 
 
 }

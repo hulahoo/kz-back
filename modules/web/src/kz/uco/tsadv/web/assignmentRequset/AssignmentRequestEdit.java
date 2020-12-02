@@ -31,7 +31,7 @@ import java.util.*;
 import java.util.function.Supplier;
 
 public class AssignmentRequestEdit<T extends AssignmentRequest> extends AbstractBpmEditor<T> {
-    public static final String PROCESS_NAME = "assignmentRequest";
+    /*public static final String PROCESS_NAME = "assignmentRequest";
 
     @Inject
     protected AssignmentSalaryService assignmentSalaryService;
@@ -53,8 +53,8 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
     protected ResizableTextArea note;
     @Inject
     protected Button buttonOkId;
-    /*    @Inject
-        protected PickerField newJob;*/
+    *//*    @Inject
+        protected PickerField newJob;*//*
 
     @Override
     protected void initIconListeners() {
@@ -76,10 +76,10 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
         ((PickerField<Entity>) grid.getComponentNN("oldGrade")).addValueChangeListener(e -> ((Label) grid.getComponentNN("labelGradeIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newGrade.getValue()))));
 
-        /*newJob.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
+        *//*newJob.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), assignmentExtDs.getItem() != null ? assignmentExtDs.getItem().getJobGroup() : null))));
         ((PickerField) grid.getComponentNN("oldJob")).addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
-                .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newJob.getValue()))));*/
+                .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newJob.getValue()))));*//*
 
         organizationSs.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelOrganizationIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue() != null ? ((OrganizationSsView) e.getValue()).getOrganizationGroup() : null,
@@ -104,8 +104,8 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
         groupsComponent.addLookupActionGradeGroup(newGrade, this, "dateFrom")
                 .setLookupScreenParamsSupplier(() -> ParamsMap.of("date", getItem().getDateFrom()));
 
-        /*groupsComponent.addLookupActionJobGroup(newJob, this, "dateFrom")
-                .setLookupScreenParamsSupplier(getParams("job"));*/
+        *//*groupsComponent.addLookupActionJobGroup(newJob, this, "dateFrom")
+                .setLookupScreenParamsSupplier(getParams("job"));*//*
 
         groupsComponent.addLookupActionPositionGroup(newPosition, this, "dateFrom")
                 .setLookupScreenParamsSupplier(getParams("pos"));
@@ -150,9 +150,9 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
             if (organizationSs.getValue() != null && !type.equals("org") && ((OrganizationSsView) organizationSs.getValue()).getOrganizationGroup() != null) {
                 params.put("orgGroupId", ((OrganizationSsView) organizationSs.getValue()).getOrganizationGroup().getId());
             }
-            /*if (newJob.getValue() != null && !type.equals("job")) {
+            *//*if (newJob.getValue() != null && !type.equals("job")) {
                 params.put("jobGroupId", ((JobGroup) newJob.getValue()).getId());
-            }*/
+            }*//*
             if (newPosition.getValue() != null && !type.equals("pos")) {
                 PositionGroupExt positionGroupExt = (PositionGroupExt) newPosition.getValue();
                 PositionExt position = positionGroupExt != null && getItem().getDateFrom() != null ?
@@ -314,7 +314,7 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
 
     @Override
     protected void overrideProcActionComponents(Component component) {
-        if (component instanceof VBoxLayout) {
+        *//*if (component instanceof VBoxLayout) {
             Collection<Component> vBoxComp = ((VBoxLayout) component).getComponents();
             changeSettingsProcActionBtn(vBoxComp);
             procActionsFrame.remove(component);
@@ -333,14 +333,14 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
                 }
                 procActionButtonHBox.add(component1);
             });
-        }
+        }*//*
     }
 
     protected Action getNewApproveAction(Button button, Action oldAction) {
         return new BaseAction("openWarningWindow") {
             @Override
             public void actionPerform(Component component) {
-                AbstractEditor abstractEditor = openEditor("base$PositionGroupExt.edit",
+                *//*AbstractEditor abstractEditor = openEditor("base$PositionGroupExt.edit",
                         metadata.create(PositionGroupExt.class),
                         WindowManager.OpenType.DIALOG,
                         ParamsMap.empty());
@@ -351,7 +351,7 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
                         getDsContext().commit();
                         oldAction.actionPerform(button);
                     }
-                });
+                });*//*
             }
         };
     }
@@ -373,5 +373,5 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
     @Override
     protected String getProcessName() {
         return PROCESS_NAME;
-    }
+    }*/
 }

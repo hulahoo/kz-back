@@ -9,7 +9,7 @@
         <datasource id="positionChangeRequestDs"
                     class="kz.uco.tsadv.modules.personal.model.PositionChangeRequest"
                     view="positionChangeRequest.edit"/>
-        <collectionDatasource id="procTasksDs"
+        <!--<collectionDatasource id="procTasksDs"
                               class="com.haulmont.bpm.entity.ProcTask"
                               view="procTask-frame">
             <query>
@@ -17,7 +17,7 @@
 where e.procInstance.entity.entityId = :ds$positionChangeRequestDs
                        order by e.startDate]]>
             </query>
-        </collectionDatasource>
+        </collectionDatasource>-->
         <collectionDatasource id="bpmRequestMessagesDs"
                               class="kz.uco.tsadv.modules.personal.model.BpmRequestMessage"
                               view="bpmRequestMessage-view">
@@ -130,11 +130,11 @@ where e.procInstance.entity.entityId = :ds$positionChangeRequestDs
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
-            <button caption="msg://cancel"
+            <!--<button caption="msg://cancel"
                     invoke="closeButton"/>
             <button id="askQuestionBtn"
                     caption="mainMsg://askQuestion"
-                    invoke="onAskQuestion"/>
+                    invoke="onAskQuestion"/>-->
             <frame id="procActionsFrame"
                    screen="procActionsFrame"
                    width="AUTO"/>

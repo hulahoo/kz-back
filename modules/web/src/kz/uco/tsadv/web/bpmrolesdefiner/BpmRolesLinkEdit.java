@@ -1,6 +1,6 @@
 package kz.uco.tsadv.web.bpmrolesdefiner;
 
-import com.haulmont.bpm.entity.ProcRole;
+//import com.haulmont.bpm.entity.ProcRole;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.FieldGroup;
@@ -37,11 +37,11 @@ public class BpmRolesLinkEdit extends AbstractEditor<BpmRolesLink> {
     @Override
     public void ready() {
         super.ready();
-        bpmRoleField.addValueChangeListener(e -> {
+        /*bpmRoleField.addValueChangeListener(e -> {
             if (e.getValue() != null && ((ProcRole) e.getValue()).getCode().equalsIgnoreCase("admin_approve")) {
                 showNotification(messages.getMessage(this.getClass(), "admin.approve"), NotificationType.TRAY);
                 bpmRoleField.setValue(null);
             }
-        });
+        });*/
     }
 }

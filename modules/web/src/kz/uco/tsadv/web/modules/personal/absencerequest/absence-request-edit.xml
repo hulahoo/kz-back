@@ -8,7 +8,7 @@
         <datasource id="absenceRequestDs"
                     class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
                     view="absenceRequest.view"/>
-        <collectionDatasource id="procTasksDs"
+        <!--<collectionDatasource id="procTasksDs"
                               class="com.haulmont.bpm.entity.ProcTask"
                               view="procTask-frame">
             <query>
@@ -16,7 +16,7 @@
                           where e.procInstance.entity.entityId = :ds$absenceRequestDs.id
                        order by e.startDate]]>
             </query>
-        </collectionDatasource>
+        </collectionDatasource>-->
         <collectionDatasource id="dicAbsenceTypesDs"
                               class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
                               view="dicAbsenceType.view">
@@ -131,12 +131,12 @@ order by e.order desc]]>
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
-            <button id="buttonCancelId"
+            <!--<button id="buttonCancelId"
                     caption="msg://cancel"
                     invoke="closeButton"/>
             <button id="askQuestionBtn"
                     caption="mainMsg://askQuestion"
-                    invoke="onAskQuestion"/>
+                    invoke="onAskQuestion"/>-->
             <frame id="procActionsFrame"
                    screen="procActionsFrame"
                    width="AUTO"/>

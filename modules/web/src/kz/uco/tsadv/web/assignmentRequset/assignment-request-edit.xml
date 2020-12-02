@@ -3,21 +3,21 @@
         caption="msg://editorCaption"
         class="kz.uco.tsadv.web.assignmentRequset.AssignmentRequestEdit"
         datasource="assignmentRequestDs"
-        focusComponent="fieldGroup1"
-        messagesPack="kz.uco.tsadv.web.assignmentRequset">
+
+        messagesPack="kz.uco.tsadv.web.assignmentRequset"> <!--focusComponent="fieldGroup1"-->
     <dsContext>
         <datasource id="assignmentRequestDs"
                     class="kz.uco.tsadv.entity.AssignmentRequest"
                     view="assignmentRequest-view"/>
-        <collectionDatasource id="procTasksDs"
-                              class="com.haulmont.bpm.entity.ProcTask"
-                              view="procTask-frame">
-            <query>
-                <![CDATA[select e from bpm$ProcTask e
-where e.procInstance.entity.entityId = :ds$assignmentRequestDs
-                       order by e.startDate]]>
-            </query>
-        </collectionDatasource>
+<!--        <collectionDatasource id="procTasksDs"-->
+<!--                              class="com.haulmont.bpm.entity.ProcTask"-->
+<!--                              view="procTask-frame">-->
+<!--            <query>-->
+<!--                <![CDATA[select e from bpm$ProcTask e-->
+<!--where e.procInstance.entity.entityId = :ds$assignmentRequestDs-->
+<!--                       order by e.startDate]]>-->
+<!--            </query>-->
+<!--        </collectionDatasource>-->
         <datasource id="assignmentExtDs"
                     class="kz.uco.tsadv.modules.personal.model.AssignmentExt"/>
         <collectionDatasource id="dicSalaryChangeReasonsDs"
@@ -41,8 +41,8 @@ where e.procInstance.entity.entityId = :ds$assignmentRequestDs
     <dialogMode height="100%"
                 width="1000"/>
     <layout spacing="true"
-            expand="scrollBox">
-        <scrollBox id="scrollBox"
+            > <!--expand="scrollBox"-->
+        <!--<scrollBox id="scrollBox"
                    spacing="true">
             <groupBox id="dataGroup"
                       spacing="true">
@@ -207,7 +207,7 @@ where e.procInstance.entity.entityId = :ds$assignmentRequestDs
                                          requiredMessage="msg://requiredOrganization"/>
                             <label id="labelOrganizationIcon"/>
                         </row>
-                        <!--<row id="job">
+                        &lt;!&ndash;<row id="job">
                             <label value="msg://job"/>
                             <pickerField id="oldJob" width="100%"
                                          datasource="assignmentExtDs"
@@ -229,7 +229,7 @@ where e.procInstance.entity.entityId = :ds$assignmentRequestDs
                                 </actions>
                             </pickerField>
                             <label id="labelJobIcon"/>
-                        </row>-->
+                        </row>&ndash;&gt;
                     </rows>
                 </grid>
                 <fieldGroup id="fieldGroup2"
@@ -287,6 +287,6 @@ where e.procInstance.entity.entityId = :ds$assignmentRequestDs
             <frame id="procActionsFrame"
                    screen="procActionsFrame"
                    width="AUTO"/>
-        </hbox>
+        </hbox>-->
     </layout>
 </window>

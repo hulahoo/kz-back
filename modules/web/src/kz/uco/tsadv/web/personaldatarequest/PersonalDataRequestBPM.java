@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public class PersonalDataRequestBPM<T extends PersonalDataRequest> extends AbstractBpmEditor<T> {
 
-    public static final String PROCESS_NAME = "personalData";
+    /*public static final String PROCESS_NAME = "personalData";
 
     @Inject
     protected ComponentsFactory componentsFactory;
@@ -58,21 +58,21 @@ public class PersonalDataRequestBPM<T extends PersonalDataRequest> extends Abstr
         final PersonExt person = employeeService.getPersonByPersonGroup(item.getPersonGroup().getId(),
                 bpmService.getDate(item.getUpdateTs() != null ? item.getUpdateTs() : item.getCreateTs(), item.getStatus()), "person.full");
 
-        /** FIO */
+        *//** FIO *//*
         if (isChanged(person.getFirstName(), item.getFirstName()))
             draw(person.getFirstName(), item.getFirstName(), "FirstName");
         if (isChanged(person.getMiddleName(), item.getMiddleName()))
             draw(person.getMiddleName(), item.getMiddleName(), "MiddleName");
         if (isChanged(person.getLastName(), item.getLastName()))
             draw(person.getLastName(), item.getLastName(), "LastName");
-        /** FIO Latin*/
+        *//** FIO Latin*//*
         if (isChanged(person.getFirstNameLatin(), item.getFirstNameLatin()))
             draw(person.getFirstNameLatin(), item.getFirstNameLatin(), "FirstNameLatin");
         if (isChanged(person.getMiddleNameLatin(), item.getMiddleNameLatin()))
             draw(person.getMiddleNameLatin(), item.getMiddleNameLatin(), "MiddleNameLatin");
         if (isChanged(person.getLastNameLatin(), item.getLastNameLatin()))
             draw(person.getLastNameLatin(), item.getLastNameLatin(), "LastNameLatin");
-        /** birth_date and marital_status */
+        *//** birth_date and marital_status *//*
         if (isChanged(person.getDateOfBirth(), item.getDateOfBirth()))
             draw(person.getDateOfBirth(), item.getDateOfBirth(), "DateOfBirth");
         if (isChanged(person.getMaritalStatus(), item.getMaritalStatus()))
@@ -125,5 +125,5 @@ public class PersonalDataRequestBPM<T extends PersonalDataRequest> extends Abstr
             }
         });
         return linkButton;
-    }
+    }*/
 }

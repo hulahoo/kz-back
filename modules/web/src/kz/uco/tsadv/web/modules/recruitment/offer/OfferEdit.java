@@ -1,9 +1,9 @@
 package kz.uco.tsadv.web.modules.recruitment.offer;
 
-import com.haulmont.bpm.entity.ProcActor;
+/*import com.haulmont.bpm.entity.ProcActor;
 import com.haulmont.bpm.entity.ProcTask;
 import com.haulmont.bpm.gui.procactions.ProcActionsFrame;
-import com.haulmont.bpm.service.ProcessRuntimeService;
+import com.haulmont.bpm.service.ProcessRuntimeService;*/
 import com.haulmont.cuba.core.app.EmailService;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
@@ -63,12 +63,12 @@ public class OfferEdit extends AbstractEditor<Offer> {
     protected FileDescriptor fileDescriptor;
     @Inject
     protected DataManager dataManager;
-    @Inject
-    protected ProcActionsFrame procActionsFrame;
+    /*@Inject
+    protected ProcActionsFrame procActionsFrame;*/
     @Inject
     protected UserSession userSession;
-    @Inject
-    protected ProcessRuntimeService processRuntimeService;
+    /*@Inject
+    protected ProcessRuntimeService processRuntimeService;*/
 
     @Named("fieldGroup.proposedStartDateId")
     protected DateField<Date> proposedStartDateField;
@@ -81,8 +81,8 @@ public class OfferEdit extends AbstractEditor<Offer> {
     protected CollectionDatasource<OfferHistory, UUID> historyDs;
     @Inject
     protected CommonService commonService;
-    @Inject
-    protected CollectionDatasource<ProcTask, UUID> procTasksDs;
+    /*@Inject
+    protected CollectionDatasource<ProcTask, UUID> procTasksDs;*/
     protected boolean fromMyOffer;
     @Inject
     protected HBoxLayout procActionsBox;
@@ -109,7 +109,7 @@ public class OfferEdit extends AbstractEditor<Offer> {
     @Override
     public void ready() {
         super.ready();
-        procActionsFrame.remove(procActionsFrame.getComponent("noActionsAvailableLbl"));
+        /*procActionsFrame.remove(procActionsFrame.getComponent("noActionsAvailableLbl"));
         procActionsFrame.remove(procActionsFrame.getComponent("taskInfoGrid"));
         Collection<Component> procActionFrameComp = procActionsFrame.getComponents();
         procActionFrameComp.forEach(component -> {
@@ -122,7 +122,7 @@ public class OfferEdit extends AbstractEditor<Offer> {
                 });
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -155,9 +155,9 @@ public class OfferEdit extends AbstractEditor<Offer> {
                                         null))));
         fieldGroup.setEditable(getItem().getStatus().equals(OfferStatus.DRAFT));
         initProcActionsFrame();
-        for (Component component : procActionsFrame.getComponents()) {
+        /*for (Component component : procActionsFrame.getComponents()) {
             component.setWidth(null);
-        }
+        }*/
         proposedStartDateField.addValueChangeListener(e -> {
 
             proposedStartDateFieldListener(e);
@@ -239,100 +239,100 @@ public class OfferEdit extends AbstractEditor<Offer> {
 
 
     protected void initProcActionsFrame() {
-        procActionsFrame.initializer()
-                .setBeforeStartProcessPredicate(this::commit)
-                .setAfterStartProcessListener(() -> {
-                    close(COMMIT_ACTION_ID);
-                    Map<String, Object> queryParams = new HashMap<>();
-                    queryParams.put("hrManagerTask", "hrManagerTask");
-                    queryParams.put("procInstanceId", procActionsFrame.getProcInstance().getId());
-                    ProcTask procTask = commonService.getEntity(ProcTask.class, "select e " +
-                                    " from bpm$ProcTask e " +
-                                    "where e.procInstance.id = :procInstanceId" +
-                                    "  and e.name = :hrManagerTask",
-                            queryParams, null);
-
-
-                    showNotification(businessRuleService.getBusinessRuleMessage("offerSendToApprove"), NotificationType.TRAY);
-                    if (procTask != null) {
-                        processRuntimeService.completeProcTask(procTask, "onAgreement", null, new HashMap<>());
-                    }
-
-                    Offer offer = offerDs.getItem();
-                    openEditor("tsadv$Offer.edit", offer, WindowManager.OpenType.THIS_TAB, getParentDs());
-                })
-                .setBeforeCompleteTaskPredicate(() -> {
-                    ProcTask procTask = commonService.getEntity(ProcTask.class, "select e " +
-                                    " from bpm$ProcTask e " +
-                                    "where e.procInstance.id = :procInstanceId" +
-                                    "  and e.createTs = (select max(t.createTs) " +
-                                    "                      from bpm$ProcTask t " +
-                                    "                     where t.procInstance.id = :procInstanceId" +
-                                    "                       and t.outcome is not null)",
-                            Collections.singletonMap("procInstanceId",
-                                    procActionsFrame.getProcInstance().getId()), null);
-                    if (procTask != null && "approve".equals(procTask.getOutcome())) {
-                        getReportFileDescriptor();
-                        dataManager.commit(fileDescriptor);
-                        getItem().setFile(fileDescriptor);
-                    }
-                    return commit();
-                })
-
-                .setAfterClaimTaskListener(() -> {
-                    initProcActionsFrame();
-                    procTasksDs.refresh();
-                })
-                .setAfterCompleteTaskListener(() -> {
-                    ProcTask procTask = commonService.getEntity(ProcTask.class, "select e " +
-                                    " from bpm$ProcTask e " +
-                                    "where e.procInstance.id = :procInstanceId" +
-                                    "  and e.createTs = (select max(t.createTs) " +
-                                    "                      from bpm$ProcTask t " +
-                                    "                     where t.procInstance.id = :procInstanceId" +
-                                    "                       and t.outcome is not null)",
-                            Collections.singletonMap("procInstanceId",
-                                    procActionsFrame.getProcInstance().getId()), null);
-                    if (procTask != null && "reject".equals(procTask.getOutcome())) {
-                        if (offerHistory == null) {
-                            offerHistory = metadata.create(OfferHistory.class);
-                        }
-                        offerHistory.setChangedBy(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP));
-                        offerHistory.setOffer(offerDs.getItem());
-                        offerHistory.setStatus(OfferStatus.DRAFT);
-                        offerHistory.setDeclineReason(procTask.getComment());
-                        offerHistory.setStatusChangeDate(new Date());
-                        dataManager.commit(offerHistory);
-                        showNotification(getMessage("offer.send.to.rework"), NotificationType.TRAY);
-                    } else if (procTask != null && "approve".equals(procTask.getOutcome())) {
-                        Map<String, Object> map = new HashMap<>();
-                        map.put("procInstanceId", procActionsFrame.getProcInstance().getId());
-                        map.put("businessPartner", "businessPartner");
-                        List<ProcActor> procActorList = commonService.getEntities(ProcActor.class,
-                                "select e from bpm$ProcActor e " +
-                                        "where e.procInstance.id = :procInstanceId " +
-                                        "and e.procRole.code = :businessPartner", map, null);
-                        if (procActorList.size() == 0) {
-                            if (offerDs.getItem().getNeedBuisnessPartnerApprove()) {
-                                showNotification(getMessage("bpm.offerAprove.error.noBusinessPartner"), NotificationType.WARNING);
-                            } else {
-                                showNotification(businessRuleService.getBusinessRuleMessage("offerSendCandidate"));
-                            }
-                        } else {
-                            if (procTask.getProcActor() != null) {
-                                if ("approver".equals(procTask.getProcActor().getProcRole())) {
-                                    showNotification(getMessage("offer.save.and.send.to.business.partner"));
-                                } else {
-                                    showNotification(getMessage("offer.save.and.send.to.candidate"));
-                                }
-                            } else {
-                                showNotification(getMessage("bpm.error.task.has.not.proc.actor"), NotificationType.WARNING);
-                            }
-                        }
-                    }
-                    close(COMMIT_ACTION_ID);
-                })
-                .init("offerApproval", getItem());
+//        procActionsFrame.initializer()
+//                .setBeforeStartProcessPredicate(this::commit)
+//                .setAfterStartProcessListener(() -> {
+//                    close(COMMIT_ACTION_ID);
+//                    Map<String, Object> queryParams = new HashMap<>();
+//                    queryParams.put("hrManagerTask", "hrManagerTask");
+//                    queryParams.put("procInstanceId", procActionsFrame.getProcInstance().getId());
+//                    ProcTask procTask = commonService.getEntity(ProcTask.class, "select e " +
+//                                    " from bpm$ProcTask e " +
+//                                    "where e.procInstance.id = :procInstanceId" +
+//                                    "  and e.name = :hrManagerTask",
+//                            queryParams, null);
+//
+//
+//                    showNotification(businessRuleService.getBusinessRuleMessage("offerSendToApprove"), NotificationType.TRAY);
+//                    if (procTask != null) {
+//                        processRuntimeService.completeProcTask(procTask, "onAgreement", null, new HashMap<>());
+//                    }
+//
+//                    Offer offer = offerDs.getItem();
+//                    openEditor("tsadv$Offer.edit", offer, WindowManager.OpenType.THIS_TAB, getParentDs());
+//                })
+//                .setBeforeCompleteTaskPredicate(() -> {
+//                    ProcTask procTask = commonService.getEntity(ProcTask.class, "select e " +
+//                                    " from bpm$ProcTask e " +
+//                                    "where e.procInstance.id = :procInstanceId" +
+//                                    "  and e.createTs = (select max(t.createTs) " +
+//                                    "                      from bpm$ProcTask t " +
+//                                    "                     where t.procInstance.id = :procInstanceId" +
+//                                    "                       and t.outcome is not null)",
+//                            Collections.singletonMap("procInstanceId",
+//                                    procActionsFrame.getProcInstance().getId()), null);
+//                    if (procTask != null && "approve".equals(procTask.getOutcome())) {
+//                        getReportFileDescriptor();
+//                        dataManager.commit(fileDescriptor);
+//                        getItem().setFile(fileDescriptor);
+//                    }
+//                    return commit();
+//                })
+//
+//                .setAfterClaimTaskListener(() -> {
+//                    initProcActionsFrame();
+//                    procTasksDs.refresh();
+//                })
+//                .setAfterCompleteTaskListener(() -> {
+//                    ProcTask procTask = commonService.getEntity(ProcTask.class, "select e " +
+//                                    " from bpm$ProcTask e " +
+//                                    "where e.procInstance.id = :procInstanceId" +
+//                                    "  and e.createTs = (select max(t.createTs) " +
+//                                    "                      from bpm$ProcTask t " +
+//                                    "                     where t.procInstance.id = :procInstanceId" +
+//                                    "                       and t.outcome is not null)",
+//                            Collections.singletonMap("procInstanceId",
+//                                    procActionsFrame.getProcInstance().getId()), null);
+//                    if (procTask != null && "reject".equals(procTask.getOutcome())) {
+//                        if (offerHistory == null) {
+//                            offerHistory = metadata.create(OfferHistory.class);
+//                        }
+//                        offerHistory.setChangedBy(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP));
+//                        offerHistory.setOffer(offerDs.getItem());
+//                        offerHistory.setStatus(OfferStatus.DRAFT);
+//                        offerHistory.setDeclineReason(procTask.getComment());
+//                        offerHistory.setStatusChangeDate(new Date());
+//                        dataManager.commit(offerHistory);
+//                        showNotification(getMessage("offer.send.to.rework"), NotificationType.TRAY);
+//                    } else if (procTask != null && "approve".equals(procTask.getOutcome())) {
+//                        Map<String, Object> map = new HashMap<>();
+//                        map.put("procInstanceId", procActionsFrame.getProcInstance().getId());
+//                        map.put("businessPartner", "businessPartner");
+//                        List<ProcActor> procActorList = commonService.getEntities(ProcActor.class,
+//                                "select e from bpm$ProcActor e " +
+//                                        "where e.procInstance.id = :procInstanceId " +
+//                                        "and e.procRole.code = :businessPartner", map, null);
+//                        if (procActorList.size() == 0) {
+//                            if (offerDs.getItem().getNeedBuisnessPartnerApprove()) {
+//                                showNotification(getMessage("bpm.offerAprove.error.noBusinessPartner"), NotificationType.WARNING);
+//                            } else {
+//                                showNotification(businessRuleService.getBusinessRuleMessage("offerSendCandidate"));
+//                            }
+//                        } else {
+//                            if (procTask.getProcActor() != null) {
+//                                if ("approver".equals(procTask.getProcActor().getProcRole())) {
+//                                    showNotification(getMessage("offer.save.and.send.to.business.partner"));
+//                                } else {
+//                                    showNotification(getMessage("offer.save.and.send.to.candidate"));
+//                                }
+//                            } else {
+//                                showNotification(getMessage("bpm.error.task.has.not.proc.actor"), NotificationType.WARNING);
+//                            }
+//                        }
+//                    }
+//                    close(COMMIT_ACTION_ID);
+//                })
+//                .init("offerApproval", getItem());
     }
 
     @Override

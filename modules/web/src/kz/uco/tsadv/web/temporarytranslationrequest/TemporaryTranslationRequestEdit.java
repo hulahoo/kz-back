@@ -35,7 +35,7 @@ import java.util.function.Supplier;
 public class TemporaryTranslationRequestEdit<T extends TemporaryTranslationRequest> extends AbstractBpmEditor<T> {
     public static final String PROCESS_NAME = "temporaryTranslationRequest";
 
-    @Inject
+    /*@Inject
     protected SelfService selfService;
     @Inject
     protected EmployeeService employeeService;
@@ -53,8 +53,8 @@ public class TemporaryTranslationRequestEdit<T extends TemporaryTranslationReque
     protected DateField<Date> oldDateFrom, newDateFrom, newDateEnd;
     @Inject
     protected ResizableTextArea reason;
-    /*@Inject
-    protected PickerField newJob;*/
+    *//*@Inject
+    protected PickerField newJob;*//*
 
     @Override
     protected void initIconListeners() {
@@ -76,10 +76,10 @@ public class TemporaryTranslationRequestEdit<T extends TemporaryTranslationReque
         ((PickerField<Entity>) grid.getComponentNN("oldGrade")).addValueChangeListener(e -> ((Label) grid.getComponentNN("labelGradeIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newGrade.getValue()))));
 
-        /*newJob.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
+        *//*newJob.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), assignmentExtDs.getItem() != null ? assignmentExtDs.getItem().getJobGroup() : null))));
         ((PickerField) grid.getComponentNN("oldJob")).addValueChangeListener(e -> ((Label) grid.getComponentNN("labelJobIcon"))
-                .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newJob.getValue()))));*/
+                .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue(), newJob.getValue()))));*//*
 
         organizationSs.addValueChangeListener(e -> ((Label) grid.getComponentNN("labelOrganizationIcon"))
                 .setIcon(groupsComponent.getChangedIcon(!Objects.equals(e.getValue() != null ? ((OrganizationSsView) e.getValue()).getOrganizationGroup() : null,
@@ -103,8 +103,8 @@ public class TemporaryTranslationRequestEdit<T extends TemporaryTranslationReque
         groupsComponent.addLookupActionGradeGroup(newGrade, this, "startDate")
                 .setLookupScreenParamsSupplier(() -> ParamsMap.of("date", getItem().getStartDate()));
 
-        /*groupsComponent.addLookupActionJobGroup(newJob, this, "startDate")
-                .setLookupScreenParamsSupplier(getParams("job"));*/
+        *//*groupsComponent.addLookupActionJobGroup(newJob, this, "startDate")
+                .setLookupScreenParamsSupplier(getParams("job"));*//*
 
         groupsComponent.addLookupActionPositionGroup(newPosition, this, "startDate")
                 .setLookupScreenParamsSupplier(getParams("pos"));
@@ -150,9 +150,9 @@ public class TemporaryTranslationRequestEdit<T extends TemporaryTranslationReque
             if (organizationSs.getValue() != null && !type.equalsIgnoreCase("org") && ((OrganizationSsView) organizationSs.getValue()).getOrganizationGroup() != null) {
                 params.put("orgGroupId", ((OrganizationSsView) organizationSs.getValue()).getOrganizationGroup().getId());
             }
-            /*if (newJob.getValue() != null && !type.equalsIgnoreCase("job")) {
+            *//*if (newJob.getValue() != null && !type.equalsIgnoreCase("job")) {
                 params.put("jobGroupId", ((JobGroup) newJob.getValue()).getId());
-            }*/
+            }*//*
             if (newPosition.getValue() != null && !type.equals("pos") && getItem().getStartDate() != null) {
                 PositionGroupExt positionGroupExt = (PositionGroupExt) newPosition.getValue();
                 PositionExt position = positionGroupExt.getPositionInDate(getItem().getStartDate());
@@ -398,5 +398,5 @@ public class TemporaryTranslationRequestEdit<T extends TemporaryTranslationReque
     @Override
     protected String getProcessName() {
         return PROCESS_NAME;
-    }
+    }*/
 }

@@ -11,7 +11,7 @@
                     view="assignmentSalaryRequest-view"/>
         <datasource id="assignmentExtDs"
                     class="kz.uco.tsadv.modules.personal.model.AssignmentExt"/>
-        <collectionDatasource id="procTasksDs"
+        <!--<collectionDatasource id="procTasksDs"
                               class="com.haulmont.bpm.entity.ProcTask"
                               view="procTask-frame">
             <query>
@@ -19,7 +19,7 @@
 where e.procInstance.entity.entityId = :ds$assignmentSalaryRequestDs
                        order by e.startDate]]>
             </query>
-        </collectionDatasource>
+        </collectionDatasource>-->
         <collectionDatasource id="dicSalaryChangeReasonsDs"
                               class="kz.uco.tsadv.modules.personal.dictionary.DicSalaryChangeReason">
             <query>
@@ -140,25 +140,25 @@ where e.procInstance.entity.entityId = :ds$assignmentSalaryRequestDs
                         </row>
                         <row id="substitutedEmployeeH">
                             <label value="mainMsg://substitutedEmployee"/>
-                            <pickerField id="oldSubstitutedEmployee" width="100%"
+                            <!--<pickerField id="oldSubstitutedEmployee" width="100%"
                                          datasource="assignmentExtDs"
                                          editable="false"
                                          captionProperty="personFioWithEmployeeNumber"
-                                         property="substituteEmployee"/>
-                            <pickerField id="pickerSubstitutedEmployee" width="100%"
+                                         property="substituteEmployee"/>-->
+                            <!--<pickerField id="pickerSubstitutedEmployee" width="100%"
                                          datasource="assignmentSalaryRequestDs"
                                          property="substitutedEmployee"
-                                         captionProperty="fioWithEmployeeNumber"/>
+                                         captionProperty="fioWithEmployeeNumber"/>-->
                             <label id="labelSubstitutedEmployeeIcon"/>
                         </row>
                         <row id="positionH">
                             <label value="msg://position"/>
-                            <pickerField id="oldPosition"
+                            <!--<pickerField id="oldPosition"
                                          captionProperty="fullName"
                                          datasource="assignmentExtDs"
                                          editable="false"
                                          property="positionGroup"
-                                         width="100%"/>
+                                         width="100%"/>-->
                             <pickerField id="positionSs"
                                          captionProperty="fullName"
                                          metaClass="base$PositionGroupExt"
@@ -171,17 +171,17 @@ where e.procInstance.entity.entityId = :ds$assignmentSalaryRequestDs
                             <label id="actualPositionGroupLabel"
                                    value="msg://actualPositionGroup"/>
                             <label id="emptyLbl"/>
-                            <pickerField id="actualPositionGroup"
+                            <!--<pickerField id="actualPositionGroup"
                                          captionProperty="fullName"
                                          datasource="assignmentSalaryRequestDs"
                                          editable="false"
                                          property="actualPositionGroup"
-                                         width="100%"/>
+                                         width="100%"/>-->
                             <label id="emptyLbl2"/>
                         </row>
                         <row id="gradeH">
                             <label value="msg://grade"/>
-                            <pickerField id="oldGrade"
+                            <!--<pickerField id="oldGrade"
                                          captionProperty="grade"
                                          datasource="assignmentExtDs"
                                          editable="false"
@@ -190,8 +190,8 @@ where e.procInstance.entity.entityId = :ds$assignmentSalaryRequestDs
                                 <actions>
                                     <action id="clear"/>
                                 </actions>
-                            </pickerField>
-                            <pickerField id="newGrade"
+                            </pickerField>-->
+                            <!--<pickerField id="newGrade"
                                          captionProperty="grade"
                                          datasource="assignmentSalaryRequestDs"
                                          property="gradeGroup"
@@ -201,12 +201,12 @@ where e.procInstance.entity.entityId = :ds$assignmentSalaryRequestDs
                                 <actions>
                                     <action id="clear"/>
                                 </actions>
-                            </pickerField>
+                            </pickerField>-->
                             <label id="labelGradeIcon"/>
                         </row>
                         <row id="organizationH">
                             <label value="msg://organization"/>
-                            <pickerField id="oldDepartment"
+                            <!--<pickerField id="oldDepartment"
                                          captionProperty="organizationName"
                                          datasource="assignmentExtDs"
                                          editable="false"
@@ -215,7 +215,7 @@ where e.procInstance.entity.entityId = :ds$assignmentSalaryRequestDs
                                 <actions>
                                     <action id="clear"/>
                                 </actions>
-                            </pickerField>
+                            </pickerField>-->
                             <pickerField id="organizationSs"
                                          captionProperty="organizationName"
                                          metaClass="tsadv$OrganizationSsView"
@@ -355,7 +355,7 @@ where e.procInstance.entity.entityId = :ds$assignmentSalaryRequestDs
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
-            <button id="buttonOkId"
+            <!--<button id="buttonOkId"
                     caption="msg://save"
                     invoke="save"/>
             <button id="cancel"
@@ -363,7 +363,7 @@ where e.procInstance.entity.entityId = :ds$assignmentSalaryRequestDs
                     invoke="closeButton"/>
             <button id="askQuestionBtn"
                     caption="mainMsg://askQuestion"
-                    invoke="onAskQuestion"/>
+                    invoke="onAskQuestion"/>-->
             <frame id="procActionsFrame"
                    screen="procActionsFrame"
                    width="AUTO"/>

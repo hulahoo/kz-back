@@ -1,9 +1,9 @@
 package kz.uco.tsadv.web.bpm.procactor;
 
-import com.haulmont.bpm.entity.ProcActor;
+/*import com.haulmont.bpm.entity.ProcActor;
 import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.bpm.entity.ProcRole;
-import com.haulmont.bpm.entity.ProcTask;
+import com.haulmont.bpm.entity.ProcTask;*/
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import com.haulmont.cuba.gui.components.Component;
@@ -25,7 +25,7 @@ import java.util.UUID;
 
 public class ProcActorBrowse extends AbstractLookup {
 
-    @Inject
+    /*@Inject
     protected CollectionDatasource<ProcTask, UUID> procTasksDs;
     @Inject
     protected CollectionDatasource<ProcActor, UUID> procActorsDs;
@@ -101,5 +101,5 @@ public class ProcActorBrowse extends AbstractLookup {
         return procTasksDs.getItems().stream()
                 .filter(procTask -> procTask.getProcActor().equals(entity))
                 .findFirst().orElse(null);
-    }
+    }*/
 }

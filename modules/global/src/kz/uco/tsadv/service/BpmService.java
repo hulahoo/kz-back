@@ -1,8 +1,8 @@
 package kz.uco.tsadv.service;
 
-import com.haulmont.bpm.entity.ProcActor;
-import com.haulmont.bpm.entity.ProcInstance;
-import com.haulmont.bpm.entity.ProcTask;
+//import com.haulmont.bpm.entity.ProcActor;
+//import com.haulmont.bpm.entity.ProcInstance;
+//import com.haulmont.bpm.entity.ProcTask;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.tsadv.entity.dbview.ActivityTask;
@@ -29,14 +29,14 @@ import java.util.UUID;
  */
 public interface BpmService {
     String NAME = "tsadv_BpmService";
-
-    /**
-     * @param entity         have to save in DB
-     * @param processName    bpm model name
-     * @param personGroupExt employee that start process
-     */
+    /**//*
+        /**
+         * @param entity         have to save in DB
+         * @param processName    bpm model name
+         * @param personGroupExt employee that start process
+         /
     void startBpmProcess(@Nonnull Entity entity, @Nonnull String processName, @Nonnull PersonGroupExt personGroupExt,
-                         PositionGroupExt positionGroupExt, OrganizationGroupExt organizationGroupExt);
+                         PositionGroupExt positionGroupExt, OrganizationGroupExt organizationGroupExt);*//*
 
     void start(UUID entityId, String entityName, UUID bpmProcInstanceId);
 
@@ -44,56 +44,56 @@ public interface BpmService {
 
     void approve(UUID entityId, String entityName, UUID bpmProcInstanceId);
 
-    @Deprecated
-    void approve(UUID entityId, String entityName, UUID bpmProcInstanceId, String emailTemplateCode, String notificationTemplateCode);
+    *//*@Deprecated
+    void approve(UUID entityId, String entityName, UUID bpmProcInstanceId, String emailTemplateCode, String notificationTemplateCode);*//*
 
     @Deprecated
     void reject(UUID entityId, String entityName, UUID bpmProcInstanceId, String emailTemplateCode, String notificationTemplateCode);
 
-    void notifyAssignee(UUID bpmProcInstanceId, UUID bpmProcTaskId, String emailTemplateCode, String notificationTemplateCode);
+//    void notifyAssignee(UUID bpmProcInstanceId, UUID bpmProcTaskId, String emailTemplateCode, String notificationTemplateCode);
 
     @Deprecated
     void notify(UUID entityId, String entityName, UUID bpmProcInstanceId, String role, String emailTemplateCode);
 
-    @Deprecated
-    void notify(UUID entityId, String entityName, UUID bpmProcInstanceId, String role, String emailTemplateCode, String notificationTemplateCode);
+    *//*@Deprecated
+    void notify(UUID entityId, String entityName, UUID bpmProcInstanceId, String role, String emailTemplateCode, String notificationTemplateCode);*//*
 
-    void sendUserNotification(User assignedUser, User assignedBy, UUID entityId, UUID bpmProcInstanceId, String activityCode, String emailTemplateCode, String notificationTemplateCode);
+//    void sendUserNotification(User assignedUser, User assignedBy, UUID entityId, UUID bpmProcInstanceId, String activityCode, String emailTemplateCode, String notificationTemplateCode);
 
     void sendNotifyToInitiator(UUID entityId, UUID bpmProcInstanceId, String emailTemplateCode, String template);
 
-    boolean hasActor(UUID bpmProcInstanceId, String role);
+//    boolean hasActor(UUID bpmProcInstanceId, String role);
 
-    UserExt getNextApprover(ProcActor procActor);
+//    UserExt getNextApprover(ProcActor procActor);
 
     @Deprecated
     void doneActivity(UUID entityId, String activityCode);
 
-    void doneActivity(UUID bpmProcInstanceId);
+//    void doneActivity(UUID bpmProcInstanceId);
 
-    /**
+    *//**
      * Create procActor with order = currentProcActor.getOrder() + 1
      *
      * @param currentProcTask  Current ProcTask
      * @param currentProcActor Current ProcActor
      * @param items            Collection of procActors (all list ProcActors where current ProcRole(in currentProcActor) equals list.get(i).procRole )
      * @param userExt          Reassign user
-     */
-    void commitReassignProcActor(ProcTask currentProcTask, ProcActor currentProcActor, Collection<ProcActor> items, UserExt userExt);
+     *//*
+//    void commitReassignProcActor(ProcTask currentProcTask, ProcActor currentProcActor, Collection<ProcActor> items, UserExt userExt);
 
-    /**
+    *//**
      * Called in bpm model
      *
      * @param absenceRequestId {@link AbsenceRequest#getId()}
      * @return true if {@link AbsenceRequest#getType()} is long else false
-     */
+     *//*
     boolean isAbsenceTypeLong(UUID absenceRequestId);
 
-    /**
+    *//**
      * @param date   date
      * @param status status
      * @return date - 1 if  {@link DicRequestStatus#getCode()} equals one of the APPROVED|CANCELLED|CANCELED else date
-     */
+     *//*
     Date getDate(Date date, DicRequestStatus status);
 
     boolean isExpiredTask(ActivityTask activityTask);
@@ -109,8 +109,8 @@ public interface BpmService {
 
     void schedulerNotifyManagersAboutAccessInf();
 
-    String getRequestUrl(Activity activity, ProcInstance procInstance);
+//    String getRequestUrl(Activity activity, ProcInstance procInstance);
 
     @Nonnull
-    Activity bpmRequestAskAnswerNotification(BpmRequestMessage bpmRequestMessage);
+    Activity bpmRequestAskAnswerNotification(BpmRequestMessage bpmRequestMessage);*/
 }

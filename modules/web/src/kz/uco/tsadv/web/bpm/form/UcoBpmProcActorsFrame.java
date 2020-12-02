@@ -1,10 +1,10 @@
 package kz.uco.tsadv.web.bpm.form;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.entity.ProcActor;
+/*import com.haulmont.bpm.entity.ProcActor;
 import com.haulmont.bpm.entity.ProcDefinition;
 import com.haulmont.bpm.entity.ProcRole;
-import com.haulmont.bpm.gui.procactor.ProcActorsFrame;
+import com.haulmont.bpm.gui.procactor.ProcActorsFrame;*/
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.*;
@@ -33,9 +33,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
 
-public class UcoBpmProcActorsFrame extends ProcActorsFrame {
+public class UcoBpmProcActorsFrame /*extends ProcActorsFrame */{
 
-    @Inject
+    /*@Inject
     protected BpmProcActorsService bpmProcActorsService;
     @Inject
     protected CollectionDatasource<User, UUID> usersDs;
@@ -105,7 +105,7 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
         Map<String, Object> paramGenerator = bpmProcActorsService.generateProcActors(procInstance, personGroupExt, positionGroupExt,
                 organizationGroupExt, new ArrayList<>(procRolesDs.getItems()), params);
 
-        /*List<BpmRolesLink> bpmRolesLinks = bpmService.getBpmRolesLinks(positionGroupExt, procDefinition.getModel());
+        *//*List<BpmRolesLink> bpmRolesLinks = bpmService.getBpmRolesLinks(positionGroupExt, procDefinition.getModel());
 
         if (bpmRolesLinks == null || bpmRolesLinks.isEmpty()) {
             throw new ItemNotFoundException(messages.getMessage(UcoBpmProcActorsFrame.class, "no.links.error"));
@@ -140,7 +140,7 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
 
         addPreActors(preUsers);
 
-        deleteSameUsers();*/
+        deleteSameUsers();*//*
 
         setParams(paramGenerator);
 
@@ -191,7 +191,7 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
         return (OrganizationGroupExt) (list.isEmpty() ? null : list.get(0));
     }
 
-   /* private List<BpmRolesLink> filterLinks(List<BpmRolesLink> bpmRolesLinks) {
+   *//* private List<BpmRolesLink> filterLinks(List<BpmRolesLink> bpmRolesLinks) {
         String dbName = metadata.getTools().getDatabaseTable(metadata.getClass(procInstance.getEntityName()));
 
         if (dbName != null && dbName.equalsIgnoreCase("TSADV_POSITION_CHANGE_REQUEST")
@@ -338,7 +338,7 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
             }
         }
         return null;
-    }*/
+    }*//*
 
     protected void notify(Map<DicHrRole, UUID> noUser, Map<DicHrRole, UserExt> noEmployee, StringBuilder strNotify) {
         noUser.forEach((hrRole, id) -> {
@@ -461,7 +461,7 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
         return true;
     }
 
-   /* protected void addUser(ProcRole role, UserExt
+   *//* protected void addUser(ProcRole role, UserExt
             userExt, Map<ProcRole, List<UserExt>> preUsers) {
         if (userExt != null) {
             preUsers.computeIfAbsent(role, k -> new ArrayList<>()).add(userExt);
@@ -485,13 +485,13 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
                 }
             });
         }
-    }*/
+    }*//*
 
-   /* protected Map<ProcRole, List<UserExt>> sortMap(Map<ProcRole, List<UserExt>> map) {
+   *//* protected Map<ProcRole, List<UserExt>> sortMap(Map<ProcRole, List<UserExt>> map) {
         Map<ProcRole, List<UserExt>> treeMap = new TreeMap<>(Comparator.comparingInt(ProcRole::getOrder));
         treeMap.putAll(map);
         return treeMap;
-    }*/
+    }*//*
 
     public void checkUsers(HashMap<String, Boolean> params) {
 
@@ -546,5 +546,5 @@ public class UcoBpmProcActorsFrame extends ProcActorsFrame {
     public void commit() {
         super.commit();
         currentHrUsers.forEach((hrRole, organizationHrUser) -> organizationHrUserService.setNextCounter(organizationHrUser, hrRole.getCode()));
-    }
+    }*/
 }

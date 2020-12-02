@@ -75,6 +75,6 @@ public class ProcInstanceVBrowse extends AbstractLookup {
     }
 
     public void showProcessParticipants() {
-        openWindow("bpm$ProcActor.browse", WindowManager.OpenType.DIALOG, ParamsMap.of("procInstance", procInstanceVsDs.getItem().getProcInstance()));
+//        openWindow("bpm$ProcActor.browse", WindowManager.OpenType.DIALOG, ParamsMap.of("procInstance", procInstanceVsDs.getItem().getProcInstance()));
     }
 }

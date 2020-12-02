@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 public class AddressRequestEdit<T extends AddressRequest> extends AbstractBpmEditor<T> {
 
-    public static final String PROCESS_NAME = "addressRequest";
+    /*public static final String PROCESS_NAME = "addressRequest";
 
     @Inject
     protected FieldGroup fieldGroup;
@@ -50,5 +50,5 @@ public class AddressRequestEdit<T extends AddressRequest> extends AbstractBpmEdi
     @Override
     protected String getProcessName() {
         return PROCESS_NAME;
-    }
+    }*/
 }

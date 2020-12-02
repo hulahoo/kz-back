@@ -1,7 +1,7 @@
 package kz.uco.tsadv.entity.dbview;
 
-import com.haulmont.bpm.entity.ProcDefinition;
-import com.haulmont.bpm.entity.ProcInstance;
+//import com.haulmont.bpm.entity.ProcDefinition;
+//import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
@@ -91,9 +91,9 @@ public class ProcInstanceV extends StandardEntity {
     @MetaProperty(related = {"detailEn", "detailRu"})
     protected String detail;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROC_DEFINITION_ID")
-    protected ProcDefinition procDefinition;
+    protected ProcDefinition procDefinition;*/
 
     public void setStartedByPersonGroup(PersonGroupExt startedByPersonGroup) {
         this.startedByPersonGroup = startedByPersonGroup;
@@ -104,12 +104,12 @@ public class ProcInstanceV extends StandardEntity {
     }
 
 
-    @MetaProperty(related = "id")
+    /*@MetaProperty(related = "id")
     public ProcInstance getProcInstance() {
         ProcInstance procInstance = AppBeans.get(Metadata.class).create(ProcInstance.class);
         procInstance.setId(this.id);
         return procInstance;
-    }
+    }*/
 
     public void setCancelled(Boolean cancelled) {
         this.cancelled = cancelled;
@@ -127,13 +127,13 @@ public class ProcInstanceV extends StandardEntity {
         return endDate;
     }
 
-    public void setProcDefinition(ProcDefinition procDefinition) {
+    /*public void setProcDefinition(ProcDefinition procDefinition) {
         this.procDefinition = procDefinition;
     }
 
     public ProcDefinition getProcDefinition() {
         return procDefinition;
-    }
+    }*/
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;

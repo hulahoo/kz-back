@@ -1,6 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import com.haulmont.bpm.entity.ProcInstance;
+//import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import kz.uco.tsadv.modules.administration.UserExt;
@@ -54,9 +54,9 @@ public class BpmRequestMessage extends StandardEntity {
     @Column(name = "SCREEN_NAME")
     protected String screenName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    /*@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROC_INSTANCE_ID")
-    protected ProcInstance procInstance;
+    protected ProcInstance procInstance;*/
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ACTIVITY_ID")
@@ -86,13 +86,13 @@ public class BpmRequestMessage extends StandardEntity {
         this.assignedBy = assignedBy;
     }
 
-    public void setProcInstance(ProcInstance procInstance) {
+    /*public void setProcInstance(ProcInstance procInstance) {
         this.procInstance = procInstance;
     }
 
     public ProcInstance getProcInstance() {
         return procInstance;
-    }
+    }*/
 
 
     public void setScreenName(String screenName) {

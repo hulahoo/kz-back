@@ -16,18 +16,18 @@ where e.personGroup.id = :session$userPersonGroupId
 order by e.dateFrom desc]]>
             </query>
         </groupDatasource>
-        <collectionDatasource id="procInstancesDs"
-                              class="com.haulmont.bpm.entity.ProcInstance"
-                              maxResults="20"
-                              view="procInstance-browse">
-            <query>
-                <![CDATA[select e from bpm$ProcInstance e
-where e.entity.entityId in ( select a.id from tsadv$AbsenceRequest a
-                     where a.assignmentGroup in ( select s.group from base$AssignmentExt s
-                                           where s.personGroup.id = :session$userPersonGroupId ) )
- order by e.createTs desc]]>
-            </query>
-        </collectionDatasource>
+<!--        <collectionDatasource id="procInstancesDs"-->
+<!--                              class="com.haulmont.bpm.entity.ProcInstance"-->
+<!--                              maxResults="20"-->
+<!--                              view="procInstance-browse">-->
+<!--            <query>-->
+<!--                <![CDATA[select e from bpm$ProcInstance e-->
+<!--where e.entity.entityId in ( select a.id from tsadv$AbsenceRequest a-->
+<!--                     where a.assignmentGroup in ( select s.group from base$AssignmentExt s-->
+<!--                                           where s.personGroup.id = :session$userPersonGroupId ) )-->
+<!-- order by e.createTs desc]]>-->
+<!--            </query>-->
+<!--        </collectionDatasource>-->
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -63,14 +63,14 @@ where e.entity.entityId in ( select a.id from tsadv$AbsenceRequest a
                             <rowsCount/>
                             <buttonsPanel id="buttonsPanel"
                                           alwaysVisible="true">
-                                <button id="addBtn"
-                                        icon="icons/plus-btn.png"
-                                        invoke="addAbsence"/>
+<!--                                <button id="addBtn"-->
+<!--                                        icon="icons/plus-btn.png"-->
+<!--                                        invoke="addAbsence"/>-->
                                 <button id="excelBtn"
                                         action="absencesTable.excel"/>
-                                <button id="balanceBtn"
-                                        caption="msg://balanceBnt"
-                                        invoke="onBalanceBtnClick"/>
+<!--                                <button id="balanceBtn"-->
+<!--                                        caption="msg://balanceBnt"-->
+<!--                                        invoke="onBalanceBtnClick"/>-->
                             </buttonsPanel>
                         </groupTable>
                     </groupBox>
@@ -87,11 +87,11 @@ where e.entity.entityId in ( select a.id from tsadv$AbsenceRequest a
                     <columns>
                         <column id="startDate"/>
                         <column id="endDate"/>
-                        <column id="entityName"
-                                generator="generateEntityNameCell"/>
-                        <column id="status"
+<!--                        <column id="entityName"-->
+<!--                                generator="generateEntityNameCell"/>-->
+                        <!--<column id="status"
                                 caption="msg://status"
-                                generator="generateStatusCell"/>
+                                generator="generateStatusCell"/>-->
                     </columns>
                     <rows datasource="procInstancesDs"/>
                 </table>

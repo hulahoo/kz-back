@@ -618,9 +618,9 @@ public interface RcApiService {
 
     String getOffers(String lang);
 
-    BaseResult approveUserOffer(UUID offer);
+//    BaseResult approveUserOffer(UUID offer);
 
-    BaseResult rejectUserOffer(OfferInt offerInt);
+//    BaseResult rejectUserOffer(OfferInt offerInt);
 
     BaseResult saveVideoFile(UUID requisition, UUID videoFile);
 

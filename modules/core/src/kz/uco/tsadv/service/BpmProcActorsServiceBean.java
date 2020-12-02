@@ -1,10 +1,10 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.bpm.entity.ProcActor;
-import com.haulmont.bpm.entity.ProcDefinition;
-import com.haulmont.bpm.entity.ProcInstance;
-import com.haulmont.bpm.entity.ProcRole;
+//import com.haulmont.bpm.entity.ProcActor;
+//import com.haulmont.bpm.entity.ProcDefinition;
+//import com.haulmont.bpm.entity.ProcInstance;
+//import com.haulmont.bpm.entity.ProcRole;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
@@ -50,7 +50,7 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
     @Inject
     protected OrganizationHrUserService organizationHrUserService;
 
-    @Override
+    /*@Override
     public Map<String, Object> generateProcActors(ProcInstance procInstance, PersonGroupExt personGroupExt,
                                                   PositionGroupExt positionGroupExt, OrganizationGroupExt organizationGroupExt,
                                                   Collection<ProcRole> procRoles, Map<String, Object> params) {
@@ -119,9 +119,9 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
         result.put("procActorsDs", procActorsDs); // list of procActors
 
         return result;
-    }
+    }*/
 
-    protected Collection<ProcActor> createProcActorsDs(Map<ProcRole, List<UserExt>> users, ProcInstance procInstance) {
+    /*protected Collection<ProcActor> createProcActorsDs(Map<ProcRole, List<UserExt>> users, ProcInstance procInstance) {
         users = sortMap(users);
 
         Collection<ProcActor> procActorsDs = new ArrayList<>();
@@ -139,9 +139,9 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
             });
         }
         return procActorsDs;
-    }
+    }*/
 
-    protected int getLastOrder(ProcRole procRole, Collection<ProcActor> procActorsDs) {
+    /*protected int getLastOrder(ProcRole procRole, Collection<ProcActor> procActorsDs) {
         int lastOrder = 0;
         for (ProcActor procActor : procActorsDs) {
             if (procRole.equals(procActor.getProcRole()) && procActor.getOrder() > lastOrder) {
@@ -149,22 +149,22 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
             }
         }
         return lastOrder;
-    }
+    }*/
 
-    protected Map<ProcRole, List<UserExt>> sortMap(Map<ProcRole, List<UserExt>> map) {
+    /*protected Map<ProcRole, List<UserExt>> sortMap(Map<ProcRole, List<UserExt>> map) {
         Map<ProcRole, List<UserExt>> treeMap = new TreeMap<>(Comparator.comparingInt(ProcRole::getOrder));
         treeMap.putAll(map);
         return treeMap;
-    }
+    }*/
 
-    private void deleteSameUsers(Collection<ProcActor> procActorsDs) {
+    /*private void deleteSameUsers(Collection<ProcActor> procActorsDs) {
         List<ProcActor> list = new ArrayList<>(procActorsDs);
         for (int i = 1; i < list.size(); i++) {
             if (Objects.equals(list.get(i).getUser(), list.get(i - 1).getUser())) {
                 procActorsDs.remove(list.get(i));
             }
         }
-    }
+    }*/
 
     /*@Deprecated
     protected boolean isNeedCounter(@Nonnull String code) {
@@ -175,7 +175,7 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
         if (isException) throw new ItemNotFoundException(message);
     }
 
-    protected void addHrOrganizationUsers(BpmRolesLink b, ProcInstance procInstance, HashMap<DicHrRole, OrganizationHrUser> currentHrUsers, boolean isNeedCounter,
+    /*protected void addHrOrganizationUsers(BpmRolesLink b, ProcInstance procInstance, HashMap<DicHrRole, OrganizationHrUser> currentHrUsers, boolean isNeedCounter,
                                           Map<ProcRole, List<UserExt>> preUsers, Map<DicHrRole, UserExt> noEmployee,
                                           Set<UserExt> notEditableUsers, UUID organizationGroupId) {
         List<OrganizationHrUser> hrUsers = new ArrayList<>();
@@ -210,7 +210,7 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
             }
         }
         throwItemNotFoundException(isNeedCounter && hrUsers.isEmpty(), b.getHrRole().getLangValue() + "/not.found");
-    }
+    }*/
 
     @Nullable
     protected UUID getDirectorId(@Nonnull PersonGroupExt personGroupExt) {
@@ -229,14 +229,14 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
         return null;
     }
 
-    protected void addUser(ProcRole role, UserExt
+    /*protected void addUser(ProcRole role, UserExt
             userExt, Map<ProcRole, List<UserExt>> preUsers) {
         if (userExt != null) {
             preUsers.computeIfAbsent(role, k -> new ArrayList<>()).add(userExt);
         }
-    }
+    }*/
 
-    protected boolean addDirectorOrManger(BpmRolesLink b, Map<ProcRole, List<UserExt>> preUsers, Map<DicHrRole,
+    /*protected boolean addDirectorOrManger(BpmRolesLink b, Map<ProcRole, List<UserExt>> preUsers, Map<DicHrRole,
             UUID> noUser, Set<UserExt> notEditableUsers, ProcInstance procInstance, PersonGroupExt personGroupExt,
                                           PositionGroupExt positionGroupExt) {
         boolean isDirector = b.getHrRole().getCode().equalsIgnoreCase("DIRECTOR");
@@ -260,9 +260,9 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
             return true;
         }
         return false;
-    }
+    }*/
 
-    protected List<BpmRolesLink> addingAdminApprove(List<BpmRolesLink> links, PositionGroupExt positionGroupExt, Collection<ProcRole> procRoles) {
+    /*protected List<BpmRolesLink> addingAdminApprove(List<BpmRolesLink> links, PositionGroupExt positionGroupExt, Collection<ProcRole> procRoles) {
         if (positionGroupExt == null) return links;
 
         ProcRole bpmRole = procRoles.stream().filter(procRole -> procRole.getCode().equalsIgnoreCase("admin_approve")).findFirst().orElse(null);
@@ -276,9 +276,9 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
             links.add(link);
         }
         return links;
-    }
+    }*/
 
-    private List<BpmRolesLink> filterLinks(List<BpmRolesLink> bpmRolesLinks, ProcInstance procInstance) {
+    /*private List<BpmRolesLink> filterLinks(List<BpmRolesLink> bpmRolesLinks, ProcInstance procInstance) {
         String dbName = metadata.getTools().getDatabaseTable(metadata.getClass(procInstance.getEntityName()));
 
         if (dbName != null && dbName.equalsIgnoreCase("TSADV_POSITION_CHANGE_REQUEST")) {
@@ -295,7 +295,7 @@ public class BpmProcActorsServiceBean implements BpmProcActorsService {
         }
 
         return bpmRolesLinks;
-    }
+    }*/
 
     protected boolean isRole(@Nonnull UserExt userExt, String role) {
         Map<Integer, Object> param = new HashMap<>();

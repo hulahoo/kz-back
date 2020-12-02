@@ -14,7 +14,7 @@
                 <![CDATA[select e from tsadv$DicSalaryChangeReason e]]>
             </query>
         </collectionDatasource>
-        <collectionDatasource id="procTasksDs"
+        <!--<collectionDatasource id="procTasksDs"
                               class="com.haulmont.bpm.entity.ProcTask"
                               view="procTask-frame">
             <query>
@@ -22,7 +22,7 @@
                               where e.procInstance.entity.entityId = :ds$salaryRequestDs
                               order by e.startDate]]>
             </query>
-        </collectionDatasource>
+        </collectionDatasource>-->
         <collectionDatasource id="dicCurrenciesDs"
                               class="kz.uco.base.entity.dictionary.DicCurrency">
             <query>
@@ -236,7 +236,7 @@
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
-            <button id="buttonOkId"
+            <!--<button id="buttonOkId"
                     caption="msg://save"
                     invoke="save"/>
             <button id="buttonCancelId"
@@ -247,7 +247,7 @@
                     invoke="onAskQuestion"/>
             <frame id="procActionsFrame"
                    screen="procActionsFrame"
-                   width="AUTO"/>
+                   width="AUTO"/>-->
         </hbox>
     </layout>
 </window>

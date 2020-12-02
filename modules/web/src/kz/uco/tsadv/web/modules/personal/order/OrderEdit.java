@@ -1,6 +1,6 @@
 package kz.uco.tsadv.web.modules.personal.order;
 
-import com.haulmont.bpm.gui.procactions.ProcActionsFrame;
+//import com.haulmont.bpm.gui.procactions.ProcActionsFrame;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
@@ -48,8 +48,8 @@ public class OrderEdit extends AbstractEditor<Order> {
     @Inject
     private DataManager dataManager;
 
-    @Inject
-    private ProcActionsFrame procActionsFrame;
+    /*@Inject
+    private ProcActionsFrame procActionsFrame;*/
 
     @Inject
     private FieldGroup fieldGroup;
@@ -131,7 +131,7 @@ public class OrderEdit extends AbstractEditor<Order> {
     }
 
     private void initProcActionsFrame() {
-        procActionsFrame.initializer()
+        /*procActionsFrame.initializer()
                 .setBeforeStartProcessPredicate(this::commit)
                 .setAfterStartProcessListener(() -> {
                     showNotification(getMessage("orderApproval.processStarted"), NotificationType.HUMANIZED);
@@ -144,7 +144,7 @@ public class OrderEdit extends AbstractEditor<Order> {
                     showNotification(getMessage("orderApproval.taskCompleted"), NotificationType.HUMANIZED);
                     close(COMMIT_ACTION_ID);
                 })
-                .init(PROCESS_CODE, getItem());
+                .init(PROCESS_CODE, getItem());*/
     }
 
     @Override

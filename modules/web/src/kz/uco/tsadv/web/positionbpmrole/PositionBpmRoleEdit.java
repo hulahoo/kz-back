@@ -32,17 +32,17 @@ public class PositionBpmRoleEdit extends AbstractEditor<PositionBpmRole> {
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
 
-        if (getItem().getPositionGroup() == null || getItem().getProcModel() == null) return;
+        /*if (getItem().getPositionGroup() == null || getItem().getProcModel() == null) return;
 
         if (positionBpmRoleService.isConstrain(getItem().getPositionGroup().getId(),
                 getItem().getProcModel().getName(), getItem().getId())) {
             errors.add(getMessage("constrain"));
-        }
+        }*/
     }
 
     @Override
     protected boolean postCommit(boolean committed, boolean close) {
-        List<BpmRolesLink> linkList = commonService.getEntities(BpmRolesLink.class,
+        /*List<BpmRolesLink> linkList = commonService.getEntities(BpmRolesLink.class,
                 "select e from tsadv$BpmRolesLink e where e.bpmRolesDefiner.procModel.name = :procModelName",
                 ParamsMap.of("procModelName", getItem().getProcModel().getName()), "bpmRolesLink-view");
 
@@ -56,7 +56,7 @@ public class PositionBpmRoleEdit extends AbstractEditor<PositionBpmRole> {
         }
         if (!commitInstances.isEmpty()) {
             dataManager.commit(new CommitContext(commitInstances));
-        }
+        }*/
         return super.postCommit(committed, close);
     }
 }

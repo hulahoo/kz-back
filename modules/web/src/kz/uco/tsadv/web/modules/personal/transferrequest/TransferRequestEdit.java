@@ -1,6 +1,6 @@
 package kz.uco.tsadv.web.modules.personal.transferrequest;
 
-import com.haulmont.bpm.gui.procactions.ProcActionsFrame;
+//import com.haulmont.bpm.gui.procactions.ProcActionsFrame;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.gui.WindowManager;
@@ -37,8 +37,8 @@ public class TransferRequestEdit extends AbstractEditor<TransferRequest> {
     @Inject
     private DataManager dataManager;
 
-    @Inject
-    private ProcActionsFrame procActionsFrame;
+//    @Inject
+//    private ProcActionsFrame procActionsFrame;
 
     @Inject
     private CommonService commonService;
@@ -149,23 +149,23 @@ public class TransferRequestEdit extends AbstractEditor<TransferRequest> {
     }
 
     private void initProcActionsFrame() {
-        procActionsFrame.initializer()
-                .setBeforeStartProcessPredicate(this::commit)
-                .setAfterStartProcessListener(() -> {
-                    showNotification(getMessage("transferRequestApproval.processStarted"), NotificationType.HUMANIZED);
-                    close(COMMIT_ACTION_ID);
-
-                })
-                .setAfterClaimTaskListener(() -> {
-                    this.commit();
-                    initProcActionsFrame();
-                })
-                .setBeforeCompleteTaskPredicate(this::commit)
-                .setAfterCompleteTaskListener(() -> {
-                    showNotification(getMessage("transferRequestApproval.taskCompleted"), NotificationType.HUMANIZED);
-                    close(COMMIT_ACTION_ID);
-                })
-                .init(PROCESS_CODE, getItem());
+//        procActionsFrame.initializer()
+//                .setBeforeStartProcessPredicate(this::commit)
+//                .setAfterStartProcessListener(() -> {
+//                    showNotification(getMessage("transferRequestApproval.processStarted"), NotificationType.HUMANIZED);
+//                    close(COMMIT_ACTION_ID);
+//
+//                })
+//                .setAfterClaimTaskListener(() -> {
+//                    this.commit();
+//                    initProcActionsFrame();
+//                })
+//                .setBeforeCompleteTaskPredicate(this::commit)
+//                .setAfterCompleteTaskListener(() -> {
+//                    showNotification(getMessage("transferRequestApproval.taskCompleted"), NotificationType.HUMANIZED);
+//                    close(COMMIT_ACTION_ID);
+//                })
+//                .init(PROCESS_CODE, getItem());
     }
 
 }

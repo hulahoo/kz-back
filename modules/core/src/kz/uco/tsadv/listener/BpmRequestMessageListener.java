@@ -16,8 +16,8 @@ public class BpmRequestMessageListener implements BeforeInsertEntityListener<Bpm
 
     @Override
     public void onBeforeInsert(BpmRequestMessage entity, EntityManager entityManager) {
-        Activity activity = AppBeans.get(BpmService.class).bpmRequestAskAnswerNotification(entity);
+        /*Activity activity = AppBeans.get(BpmService.class).bpmRequestAskAnswerNotification(entity);
         entity.setActivity(activity);
-        entityManager.merge(activity);
+        entityManager.merge(activity);*/
     }
 }
