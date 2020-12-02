@@ -72,9 +72,16 @@ public interface CommonConfig extends Config {
 
     void setScormPackageDomainURL(String domainURL);
 
+    @Property("common.scorm.defualtIndexHtmlUrl")
+    @Default("/res/index.html")
+    String getDefualtIndexHtmlUrl();
+
+    void setDefualtIndexHtmlUrl(String indexHtmlUrl);
+
     @Property("common.security.allowedUsersWithoutRoles")
     @Default("")
     String getAllowedUsersWithoutRoles();
+
     void setAllowedUsersWithoutRoles(String userList);
 
 }

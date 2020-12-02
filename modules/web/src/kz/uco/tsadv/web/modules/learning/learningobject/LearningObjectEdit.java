@@ -74,9 +74,10 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             if (ContentType.SCORM_ZIP.equals(learningObjectDs.getItem().getContentType())) {
                 Long count = commonService.getCount(LearningObject.class,
                         "select e from tsadv$LearningObject e where e.objectName = :objectName " +
-                                " and e.contentType = :scormZip",
-                        ParamsMap.of("objectName", learningObjectDs.getItem().getObjectName()
-                                , "scormZip", ContentType.SCORM_ZIP));
+                                " and e.contentType = :scormZip and e.id <> :id",
+                        ParamsMap.of("objectName", learningObjectDs.getItem().getObjectName(),
+                                "scormZip", ContentType.SCORM_ZIP,
+                                "id", learningObjectDs.getItem().getId()));
                 if (count > 0) {
                     throw new ValidationException(getMessage("scorm-is-exist"));
                 }
@@ -192,7 +193,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
         } else if (ContentType.SCORM_ZIP.equals(learningObjectDs.getItem().getContentType())) {
             urlField.setVisible(true);
             urlField.setRequired(false);
-            urlField.setEditable(false);
+//            urlField.setEditable(false);
             fileField.setVisible(true);
             fileField.setRequired(true);
             htmlText.setRequired(false);

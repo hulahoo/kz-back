@@ -173,10 +173,6 @@
         <item screen="tsadv$CoinDistributionPerson.browse"/>
         <item screen="tsadv$TalentProgramExceptions.browse"/>
     </menu>
-    <menu id="accessRead">
-        <item icon="font-icon:USERS"
-              screen="person-group-browse-ro"/>
-    </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
           insertAfter="hr">
@@ -374,17 +370,6 @@
                    value="tsadv$BpmUserSubstitutionSs.browse"/>
         </item>
     </menu>
-    <menu id="kcTalents">
-        <menu id="talentDictionaries">
-            <item screen="tsadv$DicTalentProgramStep.browse"/>
-            <item screen="tsadv$DicTalentProgramSkill.browse"/>
-            <item screen="tsadv$DicTalentProgramRequestStatus.browse"/>
-        </menu>
-        <item screen="tsadv$TalentProgram.browse"/>
-        <item screen="tsadv$TalentProgramRequest.browse"/>
-        <item id="tsadv$AllTalentProgramRequest.browse"
-              screen="tsadv$AllTalentProgramRequest.browse"/>
-    </menu>
     <menu id="performanceManagement"
           icon="font-icon:BAR_CHART_O"
           insertAfter="selfService">
@@ -442,8 +427,7 @@
             <item screen="tsadv$PersonQuestionnaire.browse"/>
             <item id="tsadv$PersonQuestionnaireForManager.browse"
                   screen="tsadv$PersonQuestionnaire.browse">
-                <param name="forManager"
-                       value="true"/>
+                <param name="forManager" value="true"/>
             </item>
         </menu>
         <item screen="tsadv$Trainer.browse"/>
@@ -538,8 +522,7 @@
                   screen="tsadv$BudgetRequest.hrBrowse"/>
             <item id="lrnRequestHierarchy"
                   screen="buildingsOrganization.budget">
-                <param name="frameName"
-                       value="tsadv$BudgetRequestHierarchy.browse"/>
+                <param name="frameName" value="tsadv$BudgetRequestHierarchy.browse"/>
             </item>
         </menu>
         <item id="lrnAttestation"
@@ -556,8 +539,7 @@
             <!--<item screen="tsadv$TrainerLearning.browse"/>-->
             <item id="lrnMyCourses"
                   screen="tsadv$Course.browse">
-                <param name="fromMyCourses"
-                       value="true"/>
+                <param name="fromMyCourses" value="true"/>
             </item>
             <item screen="tsadv$MyCourseSectionSession.browse"/>
         </menu>
@@ -634,59 +616,83 @@
         <item id="rcScheduledInterviews"
               screen="tsadv$ScheduledInterview.browse"/>
     </menu>
-    <menu id="succession-planning"
-          icon="font-icon:USER_SECRET"
-          insertBefore="reports">
-        <item id="ssSuccessionPlanning"
-              screen="tsadv$SuccessionPlanning.browse"/>
+    <menu id="accessRead">
+        <item screen="person-group-browse-ro" icon="font-icon:USERS"/>
+    </menu>
+    <menu id="kcTalents">
+        <menu id="talentDictionaries">
+            <item screen="tsadv$DicTalentProgramStep.browse"/>
+            <item screen="tsadv$DicTalentProgramSkill.browse"/>
+            <item screen="tsadv$DicTalentProgramRequestStatus.browse"/>
+        </menu>
+        <item screen="tsadv$TalentProgram.browse"/>
+        <item screen="tsadv$TalentProgramRequest.browse"/>
+        <item screen="tsadv$AllTalentProgramRequest.browse" id="tsadv$AllTalentProgramRequest.browse"/>
+    </menu>
+    <menu id="succession-planning" icon="font-icon:USER_SECRET" insertBefore="reports">
+        <item screen="tsadv$SuccessionPlanning.browse" id="ssSuccessionPlanning"/>
         <item screen="position-person-competence"/>
         <item screen="tsadv$Successor.browse"/>
-        <item id="ssPersonQuestionnaire.browse"
-              screen="tsadv$PersonQuestionnaire.browse"/>
+        <item screen="tsadv$PersonQuestionnaire.browse" id="ssPersonQuestionnaire.browse"/>
     </menu>
     <menu id="timesheets">
         <item screen="tsadv$Calendar.browse"/>
         <item screen="tsadv$Shift.browse"/>
         <item screen="tsadv$StandardSchedule.browse"/>
-        <!--<item screen="Absences"/>-->
         <item screen="tsadv$AssignmentSchedule.browse"/>
-        <item id="timecard"
-              class="kz.uco.tsadv.web.modules.personal.timecard.TimecardWindowOpener"/>
-        <item id="paidinternTimecard"
-              class="kz.uco.tsadv.web.modules.personal.timecard.PaidinternTimecardWindowOpener"/>
+        <item class="kz.uco.tsadv.web.modules.personal.timecard.TimecardWindowOpener" id="timecard"/>
+        <item class="kz.uco.tsadv.web.modules.personal.timecard.PaidinternTimecardWindowOpener"
+              id="paidinternTimecard"/>
         <menu id="tsDictionary">
             <item screen="tsadv$DicScheduleElementType.browse"/>
         </menu>
     </menu>
-    <menu id="reports"
-          icon="PRINT">
+    <menu id="reports" icon="PRINT">
         <item id="report$Report.browse"/>
         <item id="report$ReportGroup.browse"/>
         <item id="report$Report.run"/>
         <item id="report$showChart"/>
     </menu>
-    <menu id="bpm"
-          icon="font-icon:SPINNER">
+    <menu id="bpm" icon="font-icon:SPINNER">
         <item id="bpm$ProcModel.lookup"/>
         <item id="bpm$ProcDefinition.lookup"/>
         <item id="bpm$ProcInstance.lookup"/>
-        <item id="tsadv$ProcInstanceV.browse"
-              screen="tsadv$ProcInstanceV.browse"/>
+        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>
         <item id="bpm$ProcTask.lookup"/>
         <item id="bpm$ProcAttachmentType.lookup"/>
         <item id="stencilSetEditor"/>
         <item id="tsadv$BpmRolesDefiner.browse"/>
         <item screen="tsadv$PositionBpmRole.browse"/>
     </menu>
-    <menu id="administration"
-          icon="font-icon:COG">
+    <menu id="application-uactivity" insertBefore="administration">
+        <menu id="Tasks">
+            <item screen="uactivity$ActivityType.browse"/>
+            <item screen="uactivity$Priority.browse"/>
+            <menu id="Activity"/>
+        </menu>
+        <item screen="tsadv$ActivityBrowseNew" id="tsadv$ActivityBrowseNew.tasks">
+            <param name="openTab" value="tasksTab"/>
+        </item>
+        <item screen="tsadv$ActivityBrowseNew" id="tsadv$ActivityBrowseNew.notifications">
+            <param name="openTab" value="notificationsTab"/>
+        </item>
+        <item screen="uactivity$Activity.browse" id="AllActivities" openType="NEW_TAB">
+            <param name="user_filter" value="all"/>
+        </item>
+        <item screen="uactivity$Activity.browse" id="MyActivities" openType="NEW_TAB">
+            <param name="user_filter" value="myTasks"/>
+        </item>
+        <item screen="uactivity$Activity.browse" id="AssignedByMe" openType="NEW_TAB">
+            <param name="user_filter" value="assignedByMe"/>
+        </item>
+    </menu>
+    <menu id="administration" icon="font-icon:COG">
         <item id="sec$User.browse"/>
         <item id="sec$Group.browse"/>
         <item id="sec$Role.browse"/>
         <separator/>
         <item screen="base$Query.browse"/>
-        <item id="sys$Category.browse"
-              screen="sys$Category.browse"/>
+        <item screen="sys$Category.browse" id="sys$Category.browse"/>
         <item id="sec$UserSessionEntity.browse"/>
         <item id="sys$LockInfo.browse"/>
         <item id="sys$FileDescriptor.browse"/>
@@ -694,7 +700,7 @@
         <item id="sys$ScheduledTask.browse"/>
         <item id="entityRestore"/>
         <item id="entityInspector.browse"/>
-        <item id="extAppProperties" screen="tsadv_ExtAppPropertyEntity.browse"/>
+        <item screen="tsadv_ExtAppPropertyEntity.browse" id="extAppProperties"/>
         <item id="jmxConsole"/>
         <separator/>
         <item id="entityLog"/>
@@ -702,14 +708,11 @@
         <item id="screenProfiler"/>
         <item id="performanceStatistics"/>
         <separator/>
-        <item id="admNotifications"
-              screen="base$NotificationTemplate.browse"/>
+        <item screen="base$NotificationTemplate.browse" id="admNotifications"/>
         <item screen="tsadv$DicOperatorCode.browse"/>
-        <item id="admImportScenarios"
-              screen="tsadv$ImportScenario.browse"/>
+        <item screen="tsadv$ImportScenario.browse" id="admImportScenarios"/>
         <item screen="tsadv$ImportHistory.browse"/>
-        <item id="admImportLogs"
-              screen="tsadv$ImportLog.browse"/>
+        <item screen="tsadv$ImportLog.browse" id="admImportLogs"/>
         <item screen="tsadv$TelegramAnswer.browse"/>
         <item screen="base$HelpElement.browse"/>
         <item screen="tsadv$BusinessRule.browse"/>
@@ -721,47 +724,8 @@
         <item screen="tsadv$LmsSlider.browse"/>
         <item screen="emailtemplates$EmailTemplate.browse"/>
     </menu>
-    <menu id="application-uactivity"
-          insertBefore="administration">
-        <menu id="Tasks">
-            <item screen="uactivity$ActivityType.browse"/>
-            <item screen="uactivity$Priority.browse"/>
-            <menu id="Activity">
-            </menu>
-        </menu>
-        <item id="tsadv$ActivityBrowseNew.tasks"
-              screen="tsadv$ActivityBrowseNew">
-            <param name="openTab"
-                   value="tasksTab"/>
-        </item>
-        <item id="tsadv$ActivityBrowseNew.notifications"
-              screen="tsadv$ActivityBrowseNew">
-            <param name="openTab"
-                   value="notificationsTab"/>
-        </item>
-        <item id="AllActivities"
-              openType="NEW_TAB"
-              screen="uactivity$Activity.browse">
-            <param name="user_filter"
-                   value="all"/>
-        </item>
-        <item id="MyActivities"
-              openType="NEW_TAB"
-              screen="uactivity$Activity.browse">
-            <param name="user_filter"
-                   value="myTasks"/>
-        </item>
-        <item id="AssignedByMe"
-              openType="NEW_TAB"
-              screen="uactivity$Activity.browse">
-            <param name="user_filter"
-                   value="assignedByMe"/>
-        </item>
-    </menu>
-    <menu id="help"
-          icon="font-icon:QUESTION_CIRCLE">
-        <item id="aboutWindow"
-              openType="DIALOG"/>
+    <menu id="help" icon="font-icon:QUESTION_CIRCLE">
+        <item id="aboutWindow" openType="DIALOG"/>
         <item id="printDomain"/>
         <separator/>
         <item id="settings"/>
@@ -770,15 +734,12 @@
         <item id="sec$ScreenHistory.browse"/>
         <item id="helium_ThemeSettingsScreen"/>
     </menu>
-    <menu id="TBandOT"
-          icon="font-icon:CUBES">
+    <menu id="TBandOT" icon="font-icon:CUBES">
         <item screen="tsadv$WorkPlace.browse"/>
         <menu id="buildings">
             <item screen="tsadv$Buildings.browse"/>
-            <item id="buildingsOrg"
-                  screen="buildingsOrganization">
-                <param name="frameName"
-                       value="tsadv$Buildings.browse"/>
+            <item screen="buildingsOrganization" id="buildingsOrg">
+                <param name="frameName" value="tsadv$Buildings.browse"/>
             </item>
         </menu>
         <menu id="Incident">
@@ -795,15 +756,12 @@
         <menu id="Complexplan">
             <item screen="tsadv$SafetyPlanEvent.browse"/>
             <item screen="tsadv$SafetyEvent.browse"/>
-            <item id="safetyEventsOrg"
-                  screen="buildingsOrganization">
-                <param name="frameName"
-                       value="tsadv$AssignedEvent.browse"/>
+            <item screen="buildingsOrganization" id="safetyEventsOrg">
+                <param name="frameName" value="tsadv$AssignedEvent.browse"/>
             </item>
             <item screen="tsadv$AssignedEvent.browse"/>
         </menu>
-        <menu id="TBandOTDictionary"
-              icon="font-icon:BOOK">
+        <menu id="TBandOTDictionary" icon="font-icon:BOOK">
             <item screen="tsadv$AccidentPersonType.browse"/>
             <item screen="tsadv$StatusMsds.browse"/>
             <item screen="tsadv$ControlStage.browse"/>
@@ -848,15 +806,13 @@
         <item screen="tsadv$PersonalProtectionViolation.browse"/>
     </menu>
     <menu id="Recognition">
-        <menu id="Dictionary"
-              icon="font-icon:BOOK">
+        <menu id="Dictionary" icon="font-icon:BOOK">
             <item screen="tsadv$DicPersonPreferenceType.browse"/>
             <item screen="tsadv$DicActionLikeType.browse"/>
             <item screen="tsadv$DicQuality.browse"/>
             <item screen="tsadv$DicQuestionnaireType.browse"/>
             <item screen="tsadv$DicRecognitionType.browse"/>
             <item screen="tsadv$DicPersonAwardType.browse"/>
-            <!--<item screen="tsadv$Medal.browse"/>-->
             <item screen="tsadv$Banner.browse"/>
             <item screen="tsadv$DicDeliveryAddress.browse"/>
             <item screen="tsadv$DicRcgFeedbackType.browse"/>
@@ -893,8 +849,7 @@
             <item screen="tsadv$SelectedPersonAward.browse"/>
             <item screen="tsadv$PersonCoin.browse"/>
             <item screen="tsadv$PersonPoint.browse"/>
-            <item id="rcgRestPlayGround"
-                  screen="rcg-rest-playground"/>
+            <item screen="rcg-rest-playground" id="rcgRestPlayGround"/>
             <item screen="rcg-rest-playground"/>
             <item screen="tsadv$RecognitionLoginLog.browse"/>
         </menu>

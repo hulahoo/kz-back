@@ -246,7 +246,7 @@ public class LearningServiceBean implements LearningService {
                 }
             }
             file.delete();
-            result = commonConfig.getScormPackageDomainURL() + "/" + packageName + "/res/index.html";
+            result = commonConfig.getScormPackageDomainURL() + "/" + packageName + commonConfig.getDefualtIndexHtmlUrl();
         }
         return result;
     }
