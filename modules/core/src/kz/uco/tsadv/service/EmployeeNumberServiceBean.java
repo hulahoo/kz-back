@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service(EmployeeNumberService.NAME)
 public class EmployeeNumberServiceBean implements EmployeeNumberService {
 
-    public static final String NumberSequenceSS = "NumberSequenceSS";
+    public static final String BpmRequestNumber = "bpmRequestNumber";
 
     private static final List<Class> listClassWithRequestNumber =
             Arrays.asList(PositionChangeRequest.class,
@@ -189,7 +189,7 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
     @Override
     public Long generateNextRequestNumber() {
         return persistence.callInTransaction(em ->
-                uniqueNumbersService.getNextNumber(NumberSequenceSS));
+                uniqueNumbersService.getNextNumber(BpmRequestNumber));
     }
 
     @Override
