@@ -212,27 +212,27 @@ where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p
                     </groupBox>
                 </scrollBox>
             </tab>
-            <tab id="myRequests"
-                 caption="msg://myRequests"
-                 expand="procInstanse"
-                 margin="true,false,false,false"
-                 spacing="true">
-                <filter datasource="procInstancesDs"/>
-                <table id="procInstanse"
-                       width="100%">
-                    <columns>
-                        <column id="startDate"/>
-                        <column id="endDate"/>
-                        <!--<column id="entityName"
-                                generator="generateEntityNameCell"/>
-                        <column id="status"
-                                caption="msg://status"
-                                generator="generateStatusCell"/>-->
-                    </columns>
-                    <rows datasource="procInstancesDs"/>
-                    <rowsCount/>
-                </table>
-            </tab>
+<!--            <tab id="myRequests"-->
+<!--                 caption="msg://myRequests"-->
+<!--                 expand="procInstanse"-->
+<!--                 margin="true,false,false,false"-->
+<!--                 spacing="true">-->
+<!--                <filter datasource="procInstancesDs"/>-->
+<!--                <table id="procInstanse"-->
+<!--                       width="100%">-->
+<!--                    <columns>-->
+<!--                        <column id="startDate"/>-->
+<!--                        <column id="endDate"/>-->
+<!--                        &lt;!&ndash;<column id="entityName"-->
+<!--                                generator="generateEntityNameCell"/>-->
+<!--                        <column id="status"-->
+<!--                                caption="msg://status"-->
+<!--                                generator="generateStatusCell"/>&ndash;&gt;-->
+<!--                    </columns>-->
+<!--                    <rows datasource="procInstancesDs"/>-->
+<!--                    <rowsCount/>-->
+<!--                </table>-->
+<!--            </tab>-->
         </tabSheet>
     </layout>
 </window>

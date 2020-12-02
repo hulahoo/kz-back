@@ -12983,7 +12983,6 @@ create table TSADV_BPM_ROLES_LINK (
     DELETED_BY varchar(50),
     --
     BPM_ROLES_DEFINER_ID uuid,
-    BPM_ROLE_ID uuid not null,
     HR_ROLE_ID uuid not null,
     REQUIRED boolean not null,
     FIND_BY_COUNTER boolean not null,
@@ -13002,8 +13001,6 @@ create table TSADV_BPM_ROLES_DEFINER (
     UPDATED_BY varchar(50),
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
-    --
-    PROC_MODEL_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -13888,7 +13885,6 @@ create table TSADV_POSITION_BPM_ROLE (
     DELETED_BY varchar(50),
     --
     POSITION_GROUP_ID uuid,
-    PROC_MODEL_ID uuid,
     --
     primary key (ID)
 )^
@@ -14134,7 +14130,6 @@ create table TSADV_BPM_REQUEST_MESSAGE (
     PARENT_ID uuid,
     LVL integer,
     SCREEN_NAME varchar(255),
-    PROC_INSTANCE_ID uuid,
     ACTIVITY_ID uuid,
     --
     primary key (ID)

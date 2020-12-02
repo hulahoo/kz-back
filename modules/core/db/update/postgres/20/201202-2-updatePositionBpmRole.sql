@@ -1,0 +1,3 @@
+alter table TSADV_POSITION_BPM_ROLE rename column proc_model_id to proc_model_id__u40392 ;
+alter table TSADV_POSITION_BPM_ROLE drop constraint FK_TSADV_POSITION_BPM_ROLE_PROC_MODEL ;
+drop index IDX_TSADV_POSITION_BPM_ROLE_PROC_MODEL ;

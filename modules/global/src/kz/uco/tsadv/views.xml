@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <view class="com.haulmont.bpm.entity.ProcTask"
-          extends="procTask-frame"
-          name="procTask-frame-extended">
-        <property name="procActor">
-            <property name="procRole"
-                      view="_local">
-            </property>
-            <property name="user"
-                      view="_minimal">
-                <property name="firstName"/>
-                <property name="lastName"/>
-                <property name="middleName"/>
-            </property>
-        </property>
-    </view>
+<!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
+<!--          extends="procTask-frame"-->
+<!--          name="procTask-frame-extended">-->
+<!--        <property name="procActor">-->
+<!--            <property name="procRole"-->
+<!--                      view="_local">-->
+<!--            </property>-->
+<!--            <property name="user"-->
+<!--                      view="_minimal">-->
+<!--                <property name="firstName"/>-->
+<!--                <property name="lastName"/>-->
+<!--                <property name="middleName"/>-->
+<!--            </property>-->
+<!--        </property>-->
+<!--    </view>-->
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_minimal"
           name="assignment-for-talents">
@@ -34,7 +34,7 @@
                       view="_local"/>
         </property>
     </view>
-    <view entity="bpm$ProcActor"
+    <!--<view entity="bpm$ProcActor"
           extends="procActor-browse"
           name="procActor-browseLoc">
         <property name="procRole"
@@ -43,15 +43,15 @@
                   view="_local"/>
         <property name="procInstance"
                   view="_minimal"/>
-    </view>
-    <view entity="bpm$ProcActor"
+    </view>-->
+    <!--<view entity="bpm$ProcActor"
           extends="procActor-edit"
           name="procActor-edit">
         <property name="procRole"
                   view="_minimal">
             <property name="order"/>
         </property>
-    </view>
+    </view>-->
     <view class="kz.uco.tsadv.entity.tb.WorkPlace"
           extends="_minimal"
           name="workPlace-view">
@@ -15160,14 +15160,14 @@
             <property name="positionName"/>
         </property>
     </view>
-    <view class="com.haulmont.bpm.entity.ProcTask"
+    <!--<view class="com.haulmont.bpm.entity.ProcTask"
           extends="_local"
           name="procTask.viewForNotification">
         <property name="procActor">
             <property name="user"
                       view="user.edit"/>
         </property>
-    </view>
+    </view>-->
     <view class="kz.uco.tsadv.modules.learning.model.Enrollment"
           extends="_local"
           name="enrollment.single.for.course">
@@ -17197,11 +17197,11 @@
     <view class="kz.uco.tsadv.modules.bpm.BpmRolesLink"
           extends="_local"
           name="bpmRolesLink-view">
-        <property name="bpmRole"
+        <!--<property name="bpmRole"
                   view="_minimal">
             <property name="procDefinition"
                       view="_local"/>
-        </property>
+        </property>-->
         <property name="hrRole"
                   view="_minimal">
             <property name="langValue1"/>
@@ -17215,29 +17215,29 @@
         </property>
         <property name="bpmRolesDefiner"
                   view="_minimal">
-            <property name="procModel"
+            <!--<property name="procModel"
                       view="_minimal">
                 <property name="actModelId"/>
-            </property>
+            </property>-->
         </property>
         <property name="positionBpmRole"
                   view="_minimal">
-            <property name="procModel"
-                      view="_minimal"/>
+            <!--<property name="procModel"
+                      view="_minimal"/>-->
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"
           extends="_local"
           name="bpmRolesDefiner-view">
-        <property name="procModel"
+        <!--<property name="procModel"
                   view="_minimal">
             <property name="actModelId"/>
-        </property>
+        </property>-->
         <property name="links"
                   view="_local">
             <property name="bpmRolesDefiner"
                       view="_minimal"/>
-            <property name="bpmRole"
+            <!--<property name="bpmRole"
                       view="_minimal">
                 <property name="order"/>
                 <property name="locName"/>
@@ -17245,7 +17245,7 @@
                           view="_minimal">
                     <property name="actId"/>
                 </property>
-            </property>
+            </property>-->
             <property name="hrRole"
                       view="_minimal">
                 <property name="langValue1"/>
@@ -17259,11 +17259,11 @@
             </property>
         </property>
     </view>
-    <view class="com.haulmont.bpm.entity.ProcDefinition"
+    <!--<view class="com.haulmont.bpm.entity.ProcDefinition"
           name="procDefinition-with-model">
         <property name="model"
                   view="_minimal"/>
-    </view>
+    </view>-->
     <view class="kz.uco.tsadv.modules.personal.model.PersonalDataRequest"
           extends="_local"
           name="personalDataRequest-view"
@@ -19430,10 +19430,10 @@
             <property name="middleName"/>
         </property>
     </view>
-    <view class="com.haulmont.bpm.entity.ProcInstance"
+    <!--<view class="com.haulmont.bpm.entity.ProcInstance"
           extends="procInstance-start"
           name="procInstance-start"
-          systemProperties="true"/>
+          systemProperties="true"/>-->
     <view class="kz.uco.tsadv.modules.timesheet.model.WorkedHoursDetailed"
           extends="_local"
           name="workedHoursDetailed-with-type">
@@ -19453,16 +19453,16 @@
     <view class="kz.uco.tsadv.entity.tb.PositionBpmRole"
           extends="_local"
           name="positionBpmRole-view">
-        <property name="procModel"
-                  view="_minimal"/>
+<!--        <property name="procModel"-->
+<!--                  view="_minimal"/>-->
         <property name="bpmRolesLink"
                   view="_minimal">
-            <property name="bpmRole"
+            <!--<property name="bpmRole"
                       view="_minimal">
                 <property name="locName"/>
                 <property name="procDefinition"
                           view="_local"/>
-            </property>
+            </property>-->
             <property name="hrRole"
                       view="_minimal">
                 <property name="langValue1"/>
@@ -19714,8 +19714,8 @@
                 <property name="legacyId"/>
             </property>
         </property>
-        <property name="procInstance"
-                  view="_minimal"/>
+        <!--<property name="procInstance"
+                  view="_minimal"/>-->
         <property name="activity"
                   view="_minimal">
             <property name="status"/>
@@ -21081,27 +21081,27 @@
         <property name="personGroup" view="personGroupExt.edit"/>
     </view>
     <view entity="base$PersonGroupExt" name="personGroupExt.edit" extends="_minimal">
-        <property name="list"
-                  view="_minimal">
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="image"
-                      view="_minimal"/>
-            <property name="firstNameLatin"/>
-            <property name="middleNameLatin"/>
-            <property name="lastNameLatin"/>
-        </property>
-        <property name="person"
-                  view="_minimal">
-            <property name="image"
-                      view="_minimal"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="firstNameLatin"/>
-            <property name="middleNameLatin"/>
-            <property name="lastNameLatin"/>
-        </property>
-        <property name="fioWithEmployeeNumber"/>
-        <property name="personLatinFioWithEmployeeNumber"/>
+<!--        <property name="list"-->
+<!--                  view="_minimal">-->
+<!--            <property name="startDate"/>-->
+<!--            <property name="endDate"/>-->
+<!--            <property name="image"-->
+<!--                      view="_minimal"/>-->
+<!--            <property name="firstNameLatin"/>-->
+<!--            <property name="middleNameLatin"/>-->
+<!--            <property name="lastNameLatin"/>-->
+<!--        </property>-->
+<!--        <property name="person"-->
+<!--                  view="_minimal">-->
+<!--            <property name="image"-->
+<!--                      view="_minimal"/>-->
+<!--            <property name="startDate"/>-->
+<!--            <property name="endDate"/>-->
+<!--            <property name="firstNameLatin"/>-->
+<!--            <property name="middleNameLatin"/>-->
+<!--            <property name="lastNameLatin"/>-->
+<!--        </property>-->
+<!--        <property name="fioWithEmployeeNumber"/>-->
+<!--        <property name="personLatinFioWithEmployeeNumber"/>-->
     </view>
 </views>

@@ -76,7 +76,7 @@ order by e.dateFrom desc]]>
                     </groupBox>
                 </scrollBox>
             </tab>
-            <tab id="myRequests"
+            <!--<tab id="myRequests"
                  caption="msg://myRequests"
                  expand="procInstanse"
                  margin="true,false,false,false"
@@ -87,15 +87,15 @@ order by e.dateFrom desc]]>
                     <columns>
                         <column id="startDate"/>
                         <column id="endDate"/>
-<!--                        <column id="entityName"-->
-<!--                                generator="generateEntityNameCell"/>-->
-                        <!--<column id="status"
+&lt;!&ndash;                        <column id="entityName"&ndash;&gt;
+&lt;!&ndash;                                generator="generateEntityNameCell"/>&ndash;&gt;
+                        &lt;!&ndash;<column id="status"
                                 caption="msg://status"
-                                generator="generateStatusCell"/>-->
+                                generator="generateStatusCell"/>&ndash;&gt;
                     </columns>
                     <rows datasource="procInstancesDs"/>
                 </table>
-            </tab>
+            </tab>-->
         </tabSheet>
     </layout>
 </window>
