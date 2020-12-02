@@ -665,6 +665,19 @@
         <item id="report$Report.run"/>
         <item id="report$showChart"/>
     </menu>
+    <menu id="bproc"
+          insertBefore="administration">
+        <item screen="bproc_StartProcessScreen"/>
+        <item screen="bproc_MyTasks.browse"/>
+        <separator/>
+        <item screen="bproc_BpmnModelerScreen"/>
+        <item screen="bproc_ProcessDefinitionData.browse"/>
+        <item screen="bproc_ProcessInstanceData.browse"/>
+        <item screen="bproc_UserGroup.browse"/>
+        <item screen="bproc_AllTasks.browse"/>
+        <item screen="bproc_DmnDecisionTableBrowse"/>
+        <item screen="bproc_DecisionTableModelerScreen"/>
+    </menu>
     <menu id="bpm"
           icon="font-icon:SPINNER">
         <item id="bpm$ProcModel.lookup"/>
