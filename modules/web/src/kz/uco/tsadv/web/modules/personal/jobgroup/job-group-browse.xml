@@ -34,12 +34,6 @@
         <filter id="jobGroupsFilter"
                 applyTo="jobGroupsTable"
                 datasource="jobGroupsDs"/>
-        <groupBox id="groupBox"
-                  caption="msg://CustomFilter"
-                  collapsable="true"
-                  collapsed="true">
-            <vbox id="filterBox"/>
-        </groupBox>
         <split id="split"
                orientation="vertical"
                width="100%">
