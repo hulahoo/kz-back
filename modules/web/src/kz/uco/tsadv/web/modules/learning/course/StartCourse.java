@@ -132,7 +132,7 @@ public class StartCourse extends AbstractWindow {
 
     public void startSection() {
         if (selectedCourseSection != null) {
-            if ("knu".equals(commonConfig.getMainApp())) {
+            if (commonConfig.getScormEnabled()) {
                 LearningObject learningObjectKnu = null;
                 try {
                     learningObjectKnu = selectedCourseSection

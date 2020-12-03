@@ -31,7 +31,7 @@ public class LearningObjectBrowse extends AbstractLookup {
 
     @Override
     public void ready() {
-        if (!"knu".equals(commonConfig.getMainApp())) {
+        if (!commonConfig.getScormEnabled()) {
             List<Table.Column> removeColumn = new ArrayList<>();
             for (Table.Column column : learningObjectsTable.getColumns()) {
                 if ("contentType".equals(column.getId().toString())
