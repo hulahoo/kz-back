@@ -16,7 +16,6 @@ import kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.web.modules.filterconfig.FilterConfig;
-import kz.uco.tsadv.web.modules.personal.common.Utils;
 import kz.uco.tsadv.web.modules.personal.job.JobEdit;
 import kz.uco.tsadv.web.modules.recruitment.requisition.config.FullDicJobforManagerConig;
 
@@ -45,8 +44,8 @@ public class JobGroupBrowse extends AbstractLookup {
 
     @Inject
     protected CollectionDatasource<DicEmployeeCategory, UUID> employeeCategoriesDs;
-    @Inject
-    protected VBoxLayout filterBox;
+    //    @Inject
+//    protected VBoxLayout filterBox;
     protected Map<String, CustomFilter.Element> filterMap;
     protected CustomFilter customFilter;
     @Inject
@@ -58,8 +57,8 @@ public class JobGroupBrowse extends AbstractLookup {
     protected GroupTable<JobGroup> jobGroupsTable;
     @Inject
     protected Filter jobGroupsFilter;
-    @Inject
-    protected GroupBoxLayout groupBox;
+    //    @Inject
+//    protected GroupBoxLayout groupBox;
     @Inject
     private FilterConfig filterConfig;
 
@@ -105,6 +104,18 @@ public class JobGroupBrowse extends AbstractLookup {
                     "                                                           and :session$systemDate between p.startDate and p.endDate )) " +
                     "                           order by e.updateTs desc");
         }
+//
+//        if (filterConfig.getJobEnableCustomFilter()) {
+//            initFilterMap();
+//            groupBox.setVisible(true);
+//
+//            customFilter = CustomFilter.init(jobGroupsDs, jobGroupsDs.getQuery(), filterMap);
+//            filterBox.add(customFilter.getFilterComponent());
+//
+//        } else {
+//            groupBox.setVisible(false);
+//        }
+//        jobGroupsFilter.setVisible(!filterConfig.getJobEnableCubaFilter());
 
     }
 
@@ -144,16 +155,6 @@ public class JobGroupBrowse extends AbstractLookup {
                         .setOptions(Op.EQUAL, Op.NOT_EQUAL)
                         .setQueryFilter("j.employeeCategory.id ?")
         );
-        if (filterConfig.getJobEnableCustomFilter()) {
-            initFilterMap();
-
-            customFilter = CustomFilter.init(jobGroupsDs, jobGroupsDs.getQuery(), filterMap);
-            filterBox.add(customFilter.getFilterComponent());
-
-        } else {
-            groupBox.setVisible(false);
-        }
-        jobGroupsFilter.setVisible(filterConfig.getJobEnableCubaFilter());
     }
 
     public void openJob() {
