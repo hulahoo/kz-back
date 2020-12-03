@@ -46,13 +46,11 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
     protected LearningService learningService;
     @Named("fieldGroup.objectName")
     protected TextField objectNameField;
-    protected String mainApp;
 
 
     @Override
     public void ready() {
-        mainApp = commonConfig.getMainApp();
-        if ("knu".equals(mainApp)) {
+        if (commonConfig.getScormEnabled()) {
             fileField.addFileUploadSucceedListener(e -> {
                 if (ContentType.VIDEO.equals(learningObjectDs.getItem().getContentType())) {
                     videoService.startScheduler(learningObjectDs.getItem().getFile());
@@ -96,7 +94,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
         if (e.getProperty().equals("contentType")) {
             setVisibleField();
         }
-        if ("knu".equals(mainApp) && e.getProperty().equals("file")
+        if (commonConfig.getScormEnabled() && e.getProperty().equals("file")
                 && ContentType.SCORM_ZIP.equals(e.getDs().getItem().getContentType())) {
             if (e.getPrevValue() != null) {
                 learningService.deletePackage(((FileDescriptor) e.getPrevValue()).getName());

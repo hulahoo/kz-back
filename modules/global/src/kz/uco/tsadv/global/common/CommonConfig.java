@@ -43,7 +43,7 @@ public interface CommonConfig extends Config {
     @Default("")
     String getMainApp();
 
-    void setmainApp(String mainAppName);
+    void setMainApp(String mainAppName);
 
     @Property("common.videoconverter.converterPath")
     @Default("")
@@ -58,6 +58,12 @@ public interface CommonConfig extends Config {
 
     void setTempDirPath(String tempDirPath);
 
+
+    @Property("common.scorm.scormEnabled")
+    @DefaultBoolean(true)
+    Boolean getScormEnabled();
+
+    void setScormEnabled(Boolean enabled);
 
     @Property("common.scorm.scormPackageDirPath")
     @Default("")
