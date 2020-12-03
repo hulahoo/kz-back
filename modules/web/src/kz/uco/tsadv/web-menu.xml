@@ -514,7 +514,7 @@
             <!--screen="tsadv$PartyContactPerson.browse"/>-->
         </menu>
         <menu id="lrnBudget">
-            <item id="lrnBudget"
+            <item id="learnBudget"
                   screen="tsadv$Budget.browse"/>
             <item id="budgetHeader"
                   screen="tsadv$BudgetHeader.browse"/>
