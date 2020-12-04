@@ -102,7 +102,7 @@
                     <button id="createBtn"
                             caption="msg://table.btn.create"
                             icon="icons/add.png"
-                            invoke="create"/>
+                            invoke="openOrganization"/>
                     <button action="organizationGroupsTable.orgAnalytics"/>
                     <button id="excelBtn"
                             action="organizationGroupsTable.excel"
@@ -131,6 +131,8 @@
                     </actions>
                     <buttonsPanel id="historyButtonsPanel" alwaysVisible="true">
                         <button id="historyEditBtn"
+                                icon="icons/add.png"
+                                invoke="openOrganization"
                                 action="historyTable.edit"/>
                         <button id="historyRemoveBtn"
                                 action="historyTable.remove"/>

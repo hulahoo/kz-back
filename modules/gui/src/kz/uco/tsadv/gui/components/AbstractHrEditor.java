@@ -45,9 +45,9 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
                         AbstractTimeBasedEntity latest = groupedEntityService.getLatest(item.getGroup());
                         AbstractTimeBasedEntity currentItem = getItem();
                         if (latest.getId().equals(currentItem.getId())) {
-                            if (latest.getStartDate().after(currentItem.getStartDate())) {
                                 getItem().setWriteHistory(Boolean.TRUE);
-                            }
+                        }else {
+                            getItem().setWriteHistory(Boolean.FALSE);
                         }
                     }
                     commitAndClose();
@@ -64,9 +64,54 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
         setEntityValidation(screenParams);
     }
 
-    protected void setStartDateValidation(FieldGroup startEndDateFieldGroup) {
+//    protected void setStartDateValidation(FieldGroup startEndDateFieldGroup) {
+//        FieldGroup.FieldConfig startDateConfig = startEndDateFieldGroup.getField("startDate");
+//        if (startDateConfig != null) {
+//            if (!PersistenceHelper.isNew(getItem())) {
+//                IGroupedEntity groupedEntity = getItem();
+//                startDateConfig.setEditable(false);
+//                AbstractTimeBasedEntity previousEntity = null;
+//                AbstractTimeBasedEntity nextEntity = null;
+//                try {
+//                    previousEntity = groupedEntityService.getPreviousByStartDate(groupedEntity.getGroup(), getItem());
+//                    nextEntity = groupedEntityService.getNextByStartDate(groupedEntity.getGroup(), getItem());
+//                } catch (IllegalArgumentException ex) {
+//                    ex.printStackTrace();
+//                }
+//                if (previousEntity != null) {
+//                    AbstractTimeBasedEntity finalPreviousEntity = previousEntity;
+//                    startDateConfig.addValidator(value -> {
+//                        if (((Date) value).before(finalPreviousEntity.getStartDate())) {
+//                            throw new ValidationException(getMessage("AbstractHrEditor.endDate.validatorMsg.startDateEarlierThanPreviousStartDate"));
+//                        }
+//                    });
+//                }
+//                if (nextEntity != null) {
+//                    AbstractTimeBasedEntity finalNextEntity = nextEntity;
+//                    startDateConfig.addValidator(value -> {
+//                        if (((Date) value).after(finalNextEntity.getStartDate())) {
+//                            throw new ValidationException(getMessage("AbstractHrEditor.endDate.validatorMsg.startDateBiggerThanNextStartDate"));
+//                        }
+//                    });
+//                }
+//            }
+//            startDateConfig.addValidator(value -> {
+//                if (value != null && getItem().getEndDate() != null) {
+//                    Date startDate = (Date) value;
+//                    if (startDate.after(getItem().getEndDate()))
+//                        throw new ValidationException(getMessage("AbstractHrEditor.startDate.validatorMsg.startDateBiggerThanEndDate"));
+//                }
+//            });
+//        } else {
+//            if (startDateConfig != null) {
+//                startDateConfig.setEditable(true);
+//            }
+//        }
+//    }
+
+    protected void setStartDateValidation(Map<String, Object> params, FieldGroup startEndDateFieldGroup) {
         FieldGroup.FieldConfig startDateConfig = startEndDateFieldGroup.getField("startDate");
-        if (startDateConfig != null) {
+        if (params.containsKey("firstRow") && (Boolean) params.get("firstRow") && startDateConfig != null) {
             if (!PersistenceHelper.isNew(getItem())) {
                 IGroupedEntity groupedEntity = getItem();
                 startDateConfig.setEditable(true);
@@ -109,10 +154,10 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
         }
     }
 
-    protected void setEndDateValidation(Map<String, Object> params, FieldGroup startEndDateFieldGroup) {
+    protected void setEndDateValidation(FieldGroup startEndDateFieldGroup) {
         FieldGroup.FieldConfig endDateConfig = startEndDateFieldGroup.getField("endDate");
-        if (params.containsKey("lastRow") && (Boolean) params.get("lastRow") && endDateConfig != null) {
-            endDateConfig.setEditable(true);
+        if (endDateConfig != null) {
+            endDateConfig.setEditable(false);
             endDateConfig.addValidator(value -> {
                 if (value != null && getItem().getStartDate() != null) {
                     Date endDate = (Date) value;
@@ -120,18 +165,14 @@ public class AbstractHrEditor<T extends AbstractTimeBasedEntity & IGroupedEntity
                         throw new ValidationException(getMessage("AbstractHrEditor.endDate.validatorMsg.endDateEarlierThanStartDate"));
                 }
             });
-        } else {
-            if (endDateConfig != null) {
-                endDateConfig.setEditable(false);
-            }
         }
     }
 
     protected void setEntityValidation(Map<String, Object> params) {
         FieldGroup startEndDateFieldGroup = getStartEndDateFieldGroup();
         if (startEndDateFieldGroup != null) {
-            setStartDateValidation(startEndDateFieldGroup);
-            setEndDateValidation(params, startEndDateFieldGroup);
+            setStartDateValidation(params, startEndDateFieldGroup);
+            setEndDateValidation(startEndDateFieldGroup);
         }
     }
 
