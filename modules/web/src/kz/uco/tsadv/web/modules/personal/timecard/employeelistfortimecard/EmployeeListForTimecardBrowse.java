@@ -9,6 +9,7 @@ import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.OrganizationService;
 
@@ -28,6 +29,8 @@ public class EmployeeListForTimecardBrowse extends AbstractLookup {
     protected OrganizationService organizationService;
     @Inject
     protected GroupTable<PersonExt> personsTable;
+    @Inject
+    private AssignmentService assignmentService;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -85,7 +88,7 @@ public class EmployeeListForTimecardBrowse extends AbstractLookup {
     }
 
     public void redirectCard(PersonExt person, String name) {
-        AssignmentExt assignment = employeeService.getAssignment(person.getGroup().getId(), "assignment.card");
+        AssignmentExt assignment = assignmentService.getAssignment(person.getGroup().getId(), "assignment.card");
 
         if (assignment != null) {
             openEditor("person-card", assignment.getPersonGroup(), WindowManager.OpenType.THIS_TAB);

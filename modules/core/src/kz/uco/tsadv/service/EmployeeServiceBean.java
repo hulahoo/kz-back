@@ -497,21 +497,6 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public AssignmentExt getAssignment(UUID personGroupId, String view) {
-        LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
-        loadContext.setQuery(LoadContext.createQuery(
-                "select e from base$AssignmentExt e " +
-                        "where :sysDate between e.startDate and e.endDate " +
-                        "and e.personGroup.id = :personGroupId " +
-                        "and e.primaryFlag = true " +
-                        "and e.assignmentStatus.code in ('ACTIVE','SUSPENDED')")
-                .setParameter("personGroupId", personGroupId)
-                .setParameter("sysDate", CommonUtils.getSystemDate()))
-                .setView(view != null ? view : "_minimal");
-        return dataManager.load(loadContext);
-    }
-
-    @Override
     public PositionGroupExt getPositionGroupByAssignmentGroupId(UUID assignmentGroupId, String view) {
         LoadContext<PositionGroupExt> loadContext = LoadContext.create(PositionGroupExt.class);
         loadContext.setQuery(LoadContext.createQuery(
@@ -2395,4 +2380,5 @@ public class EmployeeServiceBean implements EmployeeService {
         }
         return map;
     }
+
 }

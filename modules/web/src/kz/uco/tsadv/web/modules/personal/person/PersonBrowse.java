@@ -19,6 +19,7 @@ import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.Dismissal;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.recruitment.enums.RequisitionStatus;
+import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.OrganizationService;
 import kz.uco.tsadv.web.modules.personal.assignment.Receptionassignment;
@@ -59,6 +60,8 @@ public class PersonBrowse extends AbstractLookup {
     private Button absence;
     @Inject
     private GroupTable<PersonExt> personsTable;
+    @Inject
+    private AssignmentService assignmentService;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -129,7 +132,7 @@ public class PersonBrowse extends AbstractLookup {
     }
 
     public void redirectCard(PersonExt person, String name) {
-        AssignmentExt assignment = employeeService.getAssignment(person.getGroup().getId(), "assignment.card");
+        AssignmentExt assignment = assignmentService.getAssignment(person.getGroup().getId(), "assignment.card");
 
         if (assignment != null) {
             openEditor("person-card", person.getGroup(), WindowManager.OpenType.THIS_TAB);
@@ -171,7 +174,7 @@ public class PersonBrowse extends AbstractLookup {
         Map params = new HashMap();
         params.put("transfer", null);
         openEditor("base$Assignment.historyEdit",
-                employeeService.getAssignment(personsDs.getItem().getGroup().getId(), "assignment.edit"),
+                assignmentService.getAssignment(personsDs.getItem().getGroup().getId(), "assignment.edit"),
                 WindowManager.OpenType.THIS_TAB,
                 params);
     }
@@ -204,7 +207,7 @@ public class PersonBrowse extends AbstractLookup {
                 dismissal,
                 WindowManager.OpenType.THIS_TAB);
         editor.addCloseWithCommitListener(() -> personsDs.refresh());*/
-        AssignmentExt assignment = employeeService.getAssignment(personsDs.getItem().getGroup().getId(), "assignment.card");
+        AssignmentExt assignment = assignmentService.getAssignment(personsDs.getItem().getGroup().getId(), "assignment.card");
         Window window = openWindow("tsadv$Dismissal.browse", WindowManager.OpenType.THIS_TAB,
                 ParamsMap.of("personGroup", personsDs.getItem().getGroup(),
                         "assignment", assignment,

@@ -4,6 +4,7 @@ import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.AbstractLookup;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeService;
 
 import javax.inject.Inject;
@@ -11,9 +12,11 @@ import javax.inject.Inject;
 public class PersonBrowseSiz extends AbstractLookup {
     @Inject
     private EmployeeService employeeService;
+    @Inject
+    private AssignmentService assignmentService;
 
     public void redirectCard(PersonExt person, String name) {
-        AssignmentExt assignment = employeeService.getAssignment(person.getGroup().getId(), "assignment.card");
+        AssignmentExt assignment = assignmentService.getAssignment(person.getGroup().getId(), "assignment.card");
 
         if (assignment != null) {
             openEditor("person-card", person.getGroup(), WindowManager.OpenType.THIS_TAB);

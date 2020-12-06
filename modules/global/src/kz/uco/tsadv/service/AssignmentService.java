@@ -5,11 +5,17 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.Dismissal;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Date;
 import java.util.UUID;
 
 public interface AssignmentService {
     String NAME = "tsadv_AssignmentService";
+
+    AssignmentExt getAssignment(UUID personGroupId, String view);
+
+    AssignmentExt getAssignment(@Nonnull String login, @Nullable String view);
 
     /**
      * Проверяет является ли назначение определенного сотрудника повторным.

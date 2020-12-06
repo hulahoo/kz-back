@@ -24,6 +24,7 @@ import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.service.AbsenceBalanceService;
+import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.web.modules.personal.person.frames.EditableFrame;
 
@@ -103,7 +104,8 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
     protected DataManager dataManager;
     @Inject
     protected AbsenceBalanceService absenceBalanceService;
-
+    @Inject
+    private AssignmentService assignmentService;
     protected String screenName;
     public boolean existingSalariesAreChanged;
 
@@ -201,7 +203,7 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
     @Override
     protected void postInit() {
         PersonExt person = personDs.getItem();
-        assignmentDs.setItem(employeeService.getAssignment(person.getGroup().getId(), "assignment.card"));
+        assignmentDs.setItem(assignmentService.getAssignment(person.getGroup().getId(), "assignment.card"));
         fillLeftLinks(tabSheet.getTab().getName());
         initPersonLeftMenu(person);
 //        absenceBalancesVDs.setPersonGroupId(personGroupDs.getItem().getId());

@@ -76,8 +76,6 @@ public interface EmployeeService {
 
     OrganizationGroupExt getOrganizationGroupExtByPositionGroup(PositionGroupExt positionGroupExt, String viewName);
 
-    AssignmentExt getAssignment(UUID personGroupId, String view);
-
     PositionGroupExt getPositionGroupByAssignmentGroupId(UUID assignmentGroupId, String view);
 
     PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, String view);

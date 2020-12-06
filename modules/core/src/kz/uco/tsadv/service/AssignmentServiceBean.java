@@ -3,6 +3,7 @@ package kz.uco.tsadv.service;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.ValueLoadContext;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.notification.NotificationSender;
@@ -20,6 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -41,6 +44,37 @@ public class AssignmentServiceBean implements AssignmentService {
     protected NotificationSender notificationSender;
     @Inject
     protected DataManager dataManager;
+
+    @Override
+    public AssignmentExt getAssignment(UUID personGroupId, String view) {
+        LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
+        loadContext.setQuery(LoadContext.createQuery(
+                "select e from base$AssignmentExt e " +
+                        "where :sysDate between e.startDate and e.endDate " +
+                        "and e.personGroup.id = :personGroupId " +
+                        "and e.primaryFlag = true " +
+                        "and e.assignmentStatus.code in ('ACTIVE','SUSPENDED')")
+                .setParameter("personGroupId", personGroupId)
+                .setParameter("sysDate", CommonUtils.getSystemDate()))
+                .setView(view != null ? view : "_minimal");
+        return dataManager.load(loadContext);
+    }
+
+    @Override
+    public AssignmentExt getAssignment(@Nonnull String login, @Nullable String view) {
+        LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
+        loadContext.setQuery(LoadContext.createQuery(
+                "select e from base$AssignmentExt e " +
+                        "     join tsadv$UserExt u on u.personGroup.id = e.personGroup.id" +
+                        "    where :sysDate between e.startDate and e.endDate " +
+                        "      and u.login = :login" +
+                        "      and e.primaryFlag = true " +
+                        "      and e.assignmentStatus.code in ('ACTIVE','SUSPENDED')")
+                .setParameter("login", login)
+                .setParameter("sysDate", CommonUtils.getSystemDate()))
+                .setView(view != null ? view : "_minimal");
+        return dataManager.load(loadContext);
+    }
 
     @Override
     public boolean isReHire(AssignmentExt currentAssignmentFirst) {

@@ -19,6 +19,7 @@ import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeService;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -49,6 +50,8 @@ public class CalculationSheet extends AbstractWindow {
     protected List<String> months;
     protected Date date;
     protected SimpleDateFormat format;
+    @Inject
+    private AssignmentService assignmentService;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -131,7 +134,7 @@ public class CalculationSheet extends AbstractWindow {
             return;
         }
 
-        AssignmentExt assignment = employeeService.getAssignment(personExt.getGroup().getId(), "assignment.edit");
+        AssignmentExt assignment = assignmentService.getAssignment(personExt.getGroup().getId(), "assignment.edit");
 
         if (assignment == null || assignment.getLegacyId() == null) {
             showNotification(getMessage("person.legacyId"), NotificationType.ERROR);
