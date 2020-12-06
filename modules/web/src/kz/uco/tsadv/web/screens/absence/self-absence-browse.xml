@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="absencesTable"
+        messagesPack="kz.uco.tsadv.web.screens.absence">
+    <data readOnly="true">
+        <collection id="absencesDc"
+                    class="kz.uco.tsadv.modules.personal.model.Absence"
+                    view="_local">
+            <loader id="absencesDl">
+                <query>
+                    <![CDATA[select e from tsadv$Absence e
+                              where e.personGroup.id = :session$userPersonGroupId
+                              order by e.dateFrom desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="tabSheet"
+            spacing="true">
+        <tabSheet id="tabSheet"
+                  height="100%">
+            <tab id="mainTab"
+                 caption="msg://myAbsences">
+                <table id="absencesTable"
+                       width="100%"
+                       dataContainer="absencesDc">
+                    <actions>
+                    </actions>
+                    <columns>
+                        <column id="notificationDate"/>
+                        <column id="orderNum"/>
+                        <column id="orderDate"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                        <column id="absenceDays"/>
+                        <column id="additionalDays"/>
+                        <column id="legacyId"/>
+                        <column id="periodStart"/>
+                        <column id="periodEnd"/>
+                        <column id="useInBalance"/>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="addBtn"
+                                icon="font-icon:PLUS"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.absencerequest">
+    <data>
+        <instance id="absenceRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
+                  view="_local">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="absenceRequestDc">
+                <column width="250px">
+                    <textField id="legacyIdField" property="legacyId"/>
+                    <textField id="organizationBinField" property="organizationBin"/>
+                    <textField id="integrationUserLoginField" property="integrationUserLogin"/>
+                    <textField id="requestNumberField" property="requestNumber"/>
+                    <dateField id="dateFromField" property="dateFrom"/>
+                    <dateField id="dateToField" property="dateTo"/>
+                    <textField id="absenceDaysField" property="absenceDays"/>
+                    <dateField id="requestDateField" property="requestDate"/>
+                    <textField id="commentField" property="comment"/>
+                    <checkBox id="distanceWorkingConfirmField" property="distanceWorkingConfirm"/>
+                    <textField id="requestNameField" property="requestName"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

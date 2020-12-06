@@ -10,6 +10,7 @@ import kz.uco.base.notification.NotificationSender;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.Dismissal;
@@ -74,6 +75,21 @@ public class AssignmentServiceBean implements AssignmentService {
                 .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView(view != null ? view : "_minimal");
         return dataManager.load(loadContext);
+    }
+
+    @Override
+    public AssignmentGroupExt getAssignmentGroup(@Nonnull String login, @Nullable String view) {
+        return dataManager.load(AssignmentGroupExt.class)
+                .query("select distinct e.group from base$AssignmentExt e " +
+                        "     join tsadv$UserExt u on u.personGroup.id = e.personGroup.id" +
+                        "    where :sysDate between e.startDate and e.endDate " +
+                        "      and u.login = :login" +
+                        "      and e.primaryFlag = true " +
+                        "      and e.assignmentStatus.code in ('ACTIVE','SUSPENDED')")
+                .parameter("login", login)
+                .parameter("sysDate", CommonUtils.getSystemDate())
+                .view(view != null ? view : "_minimal")
+                .optional().orElse(null);
     }
 
     @Override

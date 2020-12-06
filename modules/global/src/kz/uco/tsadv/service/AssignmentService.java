@@ -1,6 +1,7 @@
 package kz.uco.tsadv.service;
 
 
+import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.Dismissal;
@@ -16,6 +17,8 @@ public interface AssignmentService {
     AssignmentExt getAssignment(UUID personGroupId, String view);
 
     AssignmentExt getAssignment(@Nonnull String login, @Nullable String view);
+
+    AssignmentGroupExt getAssignmentGroup(@Nonnull String login, @Nullable String view);
 
     /**
      * Проверяет является ли назначение определенного сотрудника повторным.

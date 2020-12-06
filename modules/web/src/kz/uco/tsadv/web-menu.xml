@@ -373,6 +373,7 @@
             <param name="screen"
                    value="tsadv$BpmUserSubstitutionSs.browse"/>
         </item>
+        <item screen="tsadv$Absence.self.browse"/>
     </menu>
     <menu id="kcTalents">
         <menu id="talentDictionaries">
