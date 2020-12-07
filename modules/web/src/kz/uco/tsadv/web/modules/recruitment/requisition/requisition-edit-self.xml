@@ -149,7 +149,7 @@
                            width="100%">
                         <fieldGroup id="fieldGroup"
                                     datasource="requisitionDs"
-                                    width="548px">
+                                    width="558px">
                             <column width="250px">
                                 <field id="code"
                                        property="code"

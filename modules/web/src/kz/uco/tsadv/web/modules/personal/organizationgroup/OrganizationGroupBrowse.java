@@ -15,10 +15,13 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.base.web.components.CustomFilter;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
+import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
+import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.OrganizationExt;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.web.modules.filterconfig.FilterConfig;
+import kz.uco.tsadv.web.modules.personal.job.JobEdit;
 import kz.uco.tsadv.web.modules.personal.organization.OrganizationEdit;
 
 import javax.inject.Inject;
@@ -58,6 +61,8 @@ public class OrganizationGroupBrowse extends AbstractLookup {
     private CommonService commonService;
     @Inject
     protected ScreenBuilders screenBuilders;
+    @Inject
+    private GroupTable<OrganizationGroupExt> organizationGroupsTable;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -152,28 +157,38 @@ public class OrganizationGroupBrowse extends AbstractLookup {
         openOrganizationEditor(organizationExt, null);
     }
 
+    public void openOrganization() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("firstRow", Boolean.TRUE);
+        openOrganizationEditor(metadata.create(OrganizationExt.class), params);
+    }
+
     public void edit() {
         OrganizationGroupExt organizationGroup = organizationGroupsDs.getItem();
         if (organizationGroup != null) {
             OrganizationExt organization = organizationGroup.getOrganization();
             if (organization != null) {
-                openOrganizationEditor(organization, null);
+                Map<String, Object> params = new HashMap<>();
+                params.put("firstRow", Boolean.TRUE);
+                openOrganizationEditor(organization, params);
             }
         }
     }
 
     protected void openOrganizationEditor(OrganizationExt organization, Map<String, Object> params) {
-        OrganizationEdit organizationEdit = (OrganizationEdit) screenBuilders.editor(OrganizationExt.class, this)
-                .editEntity(organization)
-                .withLaunchMode(OpenMode.THIS_TAB)
-                .build()
-                .show();
-        organizationEdit.addAfterCloseListener(actionId -> {
-            organizationGroupsDs.refresh();
+        OrganizationEdit organizationEdit = (OrganizationEdit) openEditor("base$Organization.edit", organization, WindowManager.OpenType.THIS_TAB, params);
+        organizationEdit.addCloseWithCommitListener(new CloseWithCommitListener() {
+            @Override
+            public void windowClosedWithCommitAction() {
+                OrganizationGroupExt organizationGroup = organizationEdit.getItem().getGroup();
+                organizationGroupsDs.refresh();
+                organizationGroupsTable.repaint();
+                try {
+                    organizationGroupsTable.setSelected(organizationGroup);
+                } catch (IllegalStateException e) {
+                }
+            }
         });
-//        OrganizationEdit organizationEdit = (OrganizationEdit) openEditor("base$Organization.edit", organization, WindowManager.OpenType.THIS_TAB, params);
-//        organizationEdit.addCloseListener(actionId ->
-//                organizationGroupsDs.refresh());
     }
 
     public void editHistory() {
