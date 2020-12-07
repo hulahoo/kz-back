@@ -9,6 +9,7 @@ import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.mixins.SelfServiceMixin;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
@@ -24,7 +25,8 @@ import java.util.UUID;
 @UiDescriptor("self-absence-browse.xml")
 @LookupComponent("absencesTable")
 @LoadDataBeforeShow
-public class SelfAbsence extends StandardLookup<Absence> {
+public class SelfAbsence extends StandardLookup<Absence>
+        implements SelfServiceMixin {
     @Inject
     private UserSession userSession;
     @Inject
@@ -78,6 +80,14 @@ public class SelfAbsence extends StandardLookup<Absence> {
         screenBuilders.editor(AbsenceRequest.class, this)
                 .withScreenId("tsadv$AbsenceRequestNew.edit")
                 .editEntity(absenceRequest)
+                .build()
+                .show();
+    }
+
+    @Subscribe("balanceBtn")
+    public void onBalanceBtnClick(Button.ClickEvent event) {
+        screenBuilders.screen(this)
+                .withScreenId("tsadv$myAbsenceBalance")
                 .build()
                 .show();
     }

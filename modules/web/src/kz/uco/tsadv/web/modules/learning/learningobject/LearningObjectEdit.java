@@ -46,13 +46,11 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
     protected LearningService learningService;
     @Named("fieldGroup.objectName")
     protected TextField objectNameField;
-    protected String mainApp;
 
 
     @Override
     public void ready() {
-        mainApp = commonConfig.getMainApp();
-        if ("knu".equals(mainApp)) {
+        if (commonConfig.getScormEnabled()) {
             fileField.addFileUploadSucceedListener(e -> {
                 if (ContentType.VIDEO.equals(learningObjectDs.getItem().getContentType())) {
                     videoService.startScheduler(learningObjectDs.getItem().getFile());
@@ -74,9 +72,10 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             if (ContentType.SCORM_ZIP.equals(learningObjectDs.getItem().getContentType())) {
                 Long count = commonService.getCount(LearningObject.class,
                         "select e from tsadv$LearningObject e where e.objectName = :objectName " +
-                                " and e.contentType = :scormZip",
-                        ParamsMap.of("objectName", learningObjectDs.getItem().getObjectName()
-                                , "scormZip", ContentType.SCORM_ZIP));
+                                " and e.contentType = :scormZip and e.id <> :id",
+                        ParamsMap.of("objectName", learningObjectDs.getItem().getObjectName(),
+                                "scormZip", ContentType.SCORM_ZIP,
+                                "id", learningObjectDs.getItem().getId()));
                 if (count > 0) {
                     throw new ValidationException(getMessage("scorm-is-exist"));
                 }
@@ -95,7 +94,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
         if (e.getProperty().equals("contentType")) {
             setVisibleField();
         }
-        if ("knu".equals(mainApp) && e.getProperty().equals("file")
+        if (commonConfig.getScormEnabled() && e.getProperty().equals("file")
                 && ContentType.SCORM_ZIP.equals(e.getDs().getItem().getContentType())) {
             if (e.getPrevValue() != null) {
                 learningService.deletePackage(((FileDescriptor) e.getPrevValue()).getName());
@@ -192,7 +191,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
         } else if (ContentType.SCORM_ZIP.equals(learningObjectDs.getItem().getContentType())) {
             urlField.setVisible(true);
             urlField.setRequired(false);
-            urlField.setEditable(false);
+//            urlField.setEditable(false);
             fileField.setVisible(true);
             fileField.setRequired(true);
             htmlText.setRequired(false);

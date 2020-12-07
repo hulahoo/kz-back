@@ -51,6 +51,7 @@ public class MyAbsenceBalance extends AbstractWindow {
 
     @Override
     public void init(Map<String, Object> params) {
+        personGroup = userSession.getAttribute(StaticVariable.USER_PERSON_GROUP);
         list = absenceBalanceService.getAllVacationConditionsList(userSession.getAttribute(StaticVariable.POSITION_GROUP_ID));
     }
 

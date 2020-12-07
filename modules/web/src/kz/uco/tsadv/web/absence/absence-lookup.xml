@@ -50,7 +50,7 @@ order by e.dateFrom desc]]>
                         <groupTable id="absencesTable"
                                     width="100%">
                             <actions>
-                                <action id="excel"/>
+                                <action id="create"/>
                             </actions>
                             <columns>
                                 <column id="type"/>
@@ -67,7 +67,7 @@ order by e.dateFrom desc]]>
 <!--                                        icon="icons/plus-btn.png"-->
 <!--                                        invoke="addAbsence"/>-->
                                 <button id="excelBtn"
-                                        action="absencesTable.excel"/>
+                                        action="absencesTable.create"/>
 <!--                                <button id="balanceBtn"-->
 <!--                                        caption="msg://balanceBnt"-->
 <!--                                        invoke="onBalanceBtnClick"/>-->

@@ -81,6 +81,8 @@ public class StructurePerson extends AbstractLookup {
         tree.setStyleName("b-tree");
 
         initTeamDs();
+
+        tree.collapseTree();
     }
 
     protected String getValue(PersonExt personExt, String property, boolean isEng) {
@@ -96,7 +98,7 @@ public class StructurePerson extends AbstractLookup {
     public void ready() {
         super.ready();
         tree.unwrap(com.vaadin.ui.Tree.class).addExpandListener(this::itemExpand);
-        tree.expandTree();
+//        tree.expandTree();
         searchField.addEnterPressListener(e -> searchBtn());
         teamDs.addItemChangeListener(this::itemChangeListener);
     }

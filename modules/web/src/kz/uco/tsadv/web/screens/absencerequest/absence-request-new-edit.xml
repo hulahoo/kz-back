@@ -6,33 +6,64 @@
     <data>
         <instance id="absenceRequestDc"
                   class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
-                  view="_local">
+                  view="absenceRequest.view">
             <loader/>
         </instance>
+        <collection id="dicAbsenceTypesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
+                    view="dicAbsenceType.view">
+            <loader id="dicAbsenceTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicAbsenceType e
+                              where e.useInSelfService = 'TRUE'
+                              order by e.order desc]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="scrollBox" spacing="true">
         <scrollBox id="scrollBox" spacing="true">
-            <form id="form" dataContainer="absenceRequestDc">
-                <column width="250px">
-                    <textField id="legacyIdField" property="legacyId"/>
-                    <textField id="organizationBinField" property="organizationBin"/>
-                    <textField id="integrationUserLoginField" property="integrationUserLogin"/>
-                    <textField id="requestNumberField" property="requestNumber"/>
-                    <dateField id="dateFromField" property="dateFrom"/>
-                    <dateField id="dateToField" property="dateTo"/>
-                    <textField id="absenceDaysField" property="absenceDays"/>
-                    <dateField id="requestDateField" property="requestDate"/>
-                    <textField id="commentField" property="comment"/>
-                    <checkBox id="distanceWorkingConfirmField" property="distanceWorkingConfirm"/>
-                    <textField id="requestNameField" property="requestName"/>
-                </column>
-            </form>
+            <groupBox id="fieldGroupGroupBox"
+                      spacing="true"
+                      width="1000px">
+                <form id="form" dataContainer="absenceRequestDc" childrenCaptionWidth="200px">
+                    <column width="750px">
+                        <textField id="requestNumberField" property="requestNumber" editable="false"/>
+                        <textField id="statusField" property="status" editable="false"/>
+                        <lookupField required="true" property="type" optionsContainer="dicAbsenceTypesDc"/>
+                        <dateField id="dateFromField" property="dateFrom" required="true"/>
+                        <dateField id="dateToField" property="dateTo" required="true"/>
+                        <textField id="absenceDaysField" property="absenceDays" editable="false"/>
+                        <textField id="vacationDurationTypeField" caption="msg://vacationDurationType" editable="false"/>
+                        <dateField id="requestDateField" property="requestDate" editable="false"/>
+                        <field id="attachmentField" property="attachment" caption="msg://file"/>
+                        <textArea id="commentField" property="comment"/>
+                    </column>
+                </form>
+                <hbox id="distanceWorkingConfirmBox"
+                      expand="distanceWorkingConfirmLabel"
+                      height="100%"
+                      width="100%">
+                    <checkBox id="distanceWorkingConfirm"
+                              dataContainer="absenceRequestDc"
+                              property="distanceWorkingConfirm"/>
+                    <label id="distanceWorkingConfirmLabel"
+                           stylename="label-color-red"
+                           value="msg://kz.uco.tsadv.modules.personal.model/AbsenceRequest.distanceWorkingConfirm"/>
+                </hbox>
+            </groupBox>
         </scrollBox>
-        <hbox id="editActions" spacing="true">
-            <button action="windowCommitAndClose"/>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
             <button action="windowClose"/>
+            <!--<button id="askQuestionBtn"
+                    caption="mainMsg://askQuestion"
+                    invoke="onAskQuestion"/>-->
         </hbox>
     </layout>
 </window>

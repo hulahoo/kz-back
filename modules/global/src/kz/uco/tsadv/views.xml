@@ -5284,7 +5284,6 @@
         </property>
         <property name="attachment"
                   view="_minimal"/>
-        <property name="requestName"/>
         <property name="status"
                   view="_minimal">
             <property name="startDate"/>

@@ -154,9 +154,4 @@ public class AbsenceRequest extends AbstractParentEntity {
     public AssignmentGroupExt getAssignmentGroup() {
         return assignmentGroup;
     }
-
-    @MetaProperty(related = "dateFrom")
-    public String getRequestName() {
-        return String.format(AppBeans.get(Messages.class).getMainMessage("AbsenceRequest.name"), new SimpleDateFormat("dd.MM.yyyy").format(dateFrom));
-    }
 }

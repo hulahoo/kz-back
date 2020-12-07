@@ -22,7 +22,7 @@
             <query>
                 <![CDATA[select e
                           from tsadv$RequisitionCompetence e
-                         where e.requisition.id = :ds$requisitionDs]]>
+                         where e.requisition.id = :ds$requisitionDs.id]]>
             </query>
             <datasource id="competenceGroupDs"
                         property="competenceGroup"/>
@@ -42,7 +42,7 @@
             <query>
                 <![CDATA[select e
                           from tsadv$RequisitionMember e
-                         where e.requisition.id = :ds$requisitionDs]]>
+                         where e.requisition.id = :ds$requisitionDs.id]]>
             </query>
         </groupDatasource>
         <groupDatasource id="hiringStepsDs"
@@ -51,7 +51,7 @@
             <query>
                 <![CDATA[select e
                           from tsadv$RequisitionHiringStep e
-                         where e.requisition.id = :ds$requisitionDs
+                         where e.requisition.id = :ds$requisitionDs.id
                          order by e.order]]>
             </query>
         </groupDatasource>
@@ -66,7 +66,7 @@
                               class="kz.uco.tsadv.modules.recruitment.model.RequisitionQuestionnaire"
                               view="requisitionQuestionnaire.view">
             <query>
-                <![CDATA[select e from tsadv$RequisitionQuestionnaire e where e.requisition.id = :ds$requisitionDs]]>
+                <![CDATA[select e from tsadv$RequisitionQuestionnaire e where e.requisition.id = :ds$requisitionDs.id]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="jobRequestsDs"
@@ -79,7 +79,7 @@
                            from tsadv$JobRequest e
                            join e.candidatePersonGroup cpg
                            join cpg.list cp
-                          where e.requisition.id = :ds$requisitionDs
+                          where e.requisition.id = :ds$requisitionDs.id
                             and :session$systemDate between cp.startDate and cp.endDate
                             order by e.requestDate desc
                             ]]>
@@ -120,7 +120,7 @@
                               view="interview.view">
             <query>
                 <![CDATA[select e from tsadv$Interview e
-                where e.groupInterview.id = :ds$groupInterviewsDs
+                where e.groupInterview.id = :ds$groupInterviewsDs.id
                 order by e.createTs]]>
             </query>
         </collectionDatasource>
@@ -148,7 +148,7 @@
             <query>
                 <![CDATA[select e from tsadv$ScaleLevel e
 where e.scale.id = (select e2.scale.id from tsadv$Competence e2
-where e2.group.id = :ds$competenceGroupDs 
+where e2.group.id = :ds$competenceGroupDs.id
 and :session$systemDate between e2.startDate and e2.endDate)]]>
             </query>
         </collectionDatasource>
@@ -173,7 +173,7 @@ and :session$systemDate between e2.startDate and e2.endDate)]]>
     <timers>
         <timer autostart="true"
                delay="1"
-               onTimer="adjustRichTextAreas"/>
+               onTimer="adjustRichTextAreas" id="timer"/>
     </timers>
     <dialogMode height="600"
                 width="800"/>
