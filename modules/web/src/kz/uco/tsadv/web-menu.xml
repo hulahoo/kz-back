@@ -669,17 +669,17 @@
         <item screen="bproc_DmnDecisionTableBrowse"/>
         <item screen="bproc_DecisionTableModelerScreen"/>
     </menu>
-    <menu id="bpm" icon="font-icon:SPINNER">
-        <item id="bpm$ProcModel.lookup"/>
-        <item id="bpm$ProcDefinition.lookup"/>
-        <item id="bpm$ProcInstance.lookup"/>
-        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>
-        <item id="bpm$ProcTask.lookup"/>
-        <item id="bpm$ProcAttachmentType.lookup"/>
-        <item id="stencilSetEditor"/>
-        <item id="tsadv$BpmRolesDefiner.browse"/>
-        <item screen="tsadv$PositionBpmRole.browse"/>
-    </menu>
+    <!--    <menu id="bpm" icon="font-icon:SPINNER">-->
+    <!--        <item id="bpm$ProcModel.lookup"/>-->
+    <!--        <item id="bpm$ProcDefinition.lookup"/>-->
+    <!--        <item id="bpm$ProcInstance.lookup"/>-->
+    <!--        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>-->
+    <!--        <item id="bpm$ProcTask.lookup"/>-->
+    <!--        <item id="bpm$ProcAttachmentType.lookup"/>-->
+    <!--        <item id="stencilSetEditor"/>-->
+    <!--        <item id="tsadv$BpmRolesDefiner.browse"/>-->
+    <!--        <item screen="tsadv$PositionBpmRole.browse"/>-->
+    <!--    </menu>-->
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">
             <item screen="uactivity$ActivityType.browse"/>
@@ -739,6 +739,11 @@
         <item screen="tsadv$BpmUserSubstitution.browse"/>
         <item screen="tsadv$LmsSlider.browse"/>
         <item screen="emailtemplates$EmailTemplate.browse"/>
+        <menu id="data-import">
+            <item id="ddcdi$import-wizard"/>
+            <item id="ddcdi$ImportConfiguration.browse"/>
+            <item id="ddcdi$ImportExecution.browse"/>
+        </menu>
     </menu>
     <menu id="help" icon="font-icon:QUESTION_CIRCLE">
         <item id="aboutWindow" openType="DIALOG"/>
