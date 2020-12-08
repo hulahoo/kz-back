@@ -25,14 +25,6 @@ public interface FilterConfig extends Config {
     @DefaultBoolean(false)
     boolean getPositionEnableCustomFilter();
 
-    @Property("tal.hr.job.enableCubaFilter")
-    @DefaultBoolean(false)
-    boolean getJobEnableCubaFilter();
-
-    @Property("tal.hr.job.enableCustomFilter")
-    @DefaultBoolean(false)
-    boolean getJobEnableCustomFilter();
-
     @Property("tal.hr.employee.assignment.enableCubaFilter")
     @DefaultBoolean(false)
     boolean getAssignmentEnableCubaFilter();
