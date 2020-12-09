@@ -36,17 +36,21 @@ public class RequisitionJobRequestDatasource extends CustomCollectionDatasource<
         String tag = getLoggingTag("CDS");
         StopWatch sw = new Log4JStopWatch(tag, org.apache.log4j.Logger.getLogger(UIPerformanceLogger.class));
 
-        if (needLoading()) {
-            context = beforeLoadData(params);
-            if (context == null) {
-                return;
-            }
-            try {
-                final Collection<JobRequest> entities = getEntities(params);
+        if (params != null){
+            if (params.size() > 0){
+                if (needLoading()) {
+                    context = beforeLoadData(params);
+                    if (context == null) {
+                        return;
+                    }
+                    try {
+                        final Collection<JobRequest> entities = getEntities(params);
 
-                afterLoadData(params, context, entities);
-            } catch (Throwable e) {
-                dataLoadError = e;
+                        afterLoadData(params, context, entities);
+                    } catch (Throwable e) {
+                        dataLoadError = e;
+                    }
+                }
             }
         }
 

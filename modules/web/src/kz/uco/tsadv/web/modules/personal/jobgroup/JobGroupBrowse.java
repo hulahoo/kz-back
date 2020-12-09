@@ -3,7 +3,6 @@ package kz.uco.tsadv.web.modules.personal.jobgroup;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.filter.Op;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
@@ -16,12 +15,14 @@ import kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.web.modules.filterconfig.FilterConfig;
-import kz.uco.tsadv.web.modules.personal.common.Utils;
 import kz.uco.tsadv.web.modules.personal.job.JobEdit;
 import kz.uco.tsadv.web.modules.recruitment.requisition.config.FullDicJobforManagerConig;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class JobGroupBrowse extends AbstractLookup {
 
@@ -45,8 +46,6 @@ public class JobGroupBrowse extends AbstractLookup {
 
     @Inject
     protected CollectionDatasource<DicEmployeeCategory, UUID> employeeCategoriesDs;
-    @Inject
-    protected VBoxLayout filterBox;
     protected Map<String, CustomFilter.Element> filterMap;
     protected CustomFilter customFilter;
     @Inject
@@ -58,8 +57,6 @@ public class JobGroupBrowse extends AbstractLookup {
     protected GroupTable<JobGroup> jobGroupsTable;
     @Inject
     protected Filter jobGroupsFilter;
-    @Inject
-    protected GroupBoxLayout groupBox;
     @Inject
     private FilterConfig filterConfig;
 
@@ -105,55 +102,6 @@ public class JobGroupBrowse extends AbstractLookup {
                     "                                                           and :session$systemDate between p.startDate and p.endDate )) " +
                     "                           order by e.updateTs desc");
         }
-
-    }
-
-    protected void initFilterMap() {
-        filterMap = new LinkedHashMap<>();
-        filterMap.put("jobNameRu",
-                CustomFilter.Element
-                        .initElement()
-                        .setCaption(messages.getMessage("kz.uco.tsadv.modules.personal.model", "Job.jobNameRu"))
-                        .setComponentClass(TextField.class)
-                        .setOptions(Op.CONTAINS, Op.DOES_NOT_CONTAIN, Op.ENDS_WITH, Op.STARTS_WITH, Op.EQUAL, Op.NOT_EQUAL)
-                        .setQueryFilter("lower(j.jobNameLang1) ?")
-        );
-        filterMap.put("jobNameKz",
-                CustomFilter.Element
-                        .initElement()
-                        .setCaption(messages.getMessage("kz.uco.tsadv.modules.personal.model", "Job.jobNameKz"))
-                        .setComponentClass(TextField.class)
-                        .setOptions(Op.CONTAINS, Op.DOES_NOT_CONTAIN, Op.ENDS_WITH, Op.STARTS_WITH, Op.EQUAL, Op.NOT_EQUAL)
-                        .setQueryFilter("lower(j.jobNameLang2) ?")
-        );
-        filterMap.put("jobNameEn",
-                CustomFilter.Element
-                        .initElement()
-                        .setCaption(messages.getMessage("kz.uco.tsadv.modules.personal.model", "Job.jobNameEn"))
-                        .setComponentClass(TextField.class)
-                        .setOptions(Op.CONTAINS, Op.DOES_NOT_CONTAIN, Op.ENDS_WITH, Op.STARTS_WITH, Op.EQUAL, Op.NOT_EQUAL)
-                        .setQueryFilter("lower(j.jobNameLang3) ?")
-        );
-
-        filterMap.put("employeeCategory",
-                CustomFilter.Element
-                        .initElement()
-                        .setCaption(messages.getMessage("kz.uco.tsadv.modules.personal.dictionary", "DicEmployeeCategory"))
-                        .setComponentClass(LookupPickerField.class)
-                        .addComponentAttribute("optionsDatasource", employeeCategoriesDs)
-                        .setOptions(Op.EQUAL, Op.NOT_EQUAL)
-                        .setQueryFilter("j.employeeCategory.id ?")
-        );
-        if (filterConfig.getJobEnableCustomFilter()) {
-            initFilterMap();
-
-            customFilter = CustomFilter.init(jobGroupsDs, jobGroupsDs.getQuery(), filterMap);
-            filterBox.add(customFilter.getFilterComponent());
-
-        } else {
-            groupBox.setVisible(false);
-        }
-        jobGroupsFilter.setVisible(filterConfig.getJobEnableCubaFilter());
     }
 
     public void openJob() {
