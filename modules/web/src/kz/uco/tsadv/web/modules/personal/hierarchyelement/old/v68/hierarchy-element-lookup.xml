@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
         caption="msg://HierarchyElement.browseCaption"
-        class="kz.uco.tsadv.web.modules.personal.hierarchyelement.HierarchyElementLookup"
+        class="kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68.HierarchyElementLookup"
         focusComponent="hierarchyElementsTree"
         lookupComponent="hierarchyElementsTree">
     <dsContext>

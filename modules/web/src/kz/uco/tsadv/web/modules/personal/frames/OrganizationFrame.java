@@ -12,7 +12,7 @@ import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
-import kz.uco.tsadv.web.modules.personal.hierarchyelement.HierarchyElementBrowse;
+import kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68.HierarchyElementBrowse;
 import kz.uco.tsadv.web.modules.personal.organizationhruser.OrganizationHrUserEdit;
 
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package kz.uco.tsadv.web.modules.personal.hierarchyelement;
+package kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
@@ -242,7 +242,7 @@ public class HierarchyElementEdit extends AbstractEditor<HierarchyElementExt> {
     @Override
     protected boolean preCommit() {
         if (param.containsKey("openedForEdit")) {
-            getItem().setDoNotCopy(true);
+            getItem().setWriteHistory(true);
         }
         return super.preCommit();
     }

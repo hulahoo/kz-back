@@ -15,8 +15,6 @@
 
     <bean id="uactivity_ActivityListener" class="kz.uco.tsadv.listener.ExtActivityListener"/>
 
-    <bean id="base_HierarchyElementEntityListener" class="kz.uco.tsadv.beans.ExtHierarchyElementEntityListener"/>
-
     <bean id="base_SendingNotificationListener" class="kz.uco.tsadv.listener.ExtSendingNotificationListener"/>
 
     <bean id="tsadv_CalendarService" class="kz.uco.tsadv.service.CalendarServiceBean">

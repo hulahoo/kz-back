@@ -19,7 +19,7 @@ import kz.uco.tsadv.modules.personal.model.GradeRuleValue;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 import kz.uco.tsadv.modules.personal.model.PositionExt;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
-import kz.uco.tsadv.web.modules.personal.hierarchyelement.HierarchyElementBrowse;
+import kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68.HierarchyElementBrowse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

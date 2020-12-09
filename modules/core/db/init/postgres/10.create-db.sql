@@ -14648,6 +14648,8 @@ update BASE_PARTY set DTYPE = 'base$PartyExt' where DTYPE is null ^
 alter table BASE_HIERARCHY_ELEMENT add column POSITION_GROUP_ID uuid ^
 alter table BASE_HIERARCHY_ELEMENT add column ORGANIZATION_GROUP_ID uuid ^
 alter table BASE_HIERARCHY_ELEMENT add column PARENT_ID uuid ^
+alter table BASE_HIERARCHY_ELEMENT add column PARENT_GROUP_ID uuid ^
+alter table BASE_HIERARCHY_ELEMENT add column GROUP_ID uuid ^
 alter table BASE_HIERARCHY_ELEMENT add column DTYPE varchar(100) ^
 update BASE_HIERARCHY_ELEMENT set DTYPE = 'base$HierarchyElementExt' where DTYPE is null ^
 -- end BASE_HIERARCHY_ELEMENT
@@ -15037,3 +15039,20 @@ create table TSADV_DIC_ASSESSMENT_TYPE (
     primary key (ID)
 )^
 -- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_HIERARCHY_ELEMENT_GROUP
+create table TSADV_HIERARCHY_ELEMENT_GROUP (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    primary key (ID)
+)^
+-- end TSADV_HIERARCHY_ELEMENT_GROUP

@@ -1,4 +1,4 @@
-package kz.uco.tsadv.web.modules.personal.hierarchyelement;
+package kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68;
 
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.WindowParam;

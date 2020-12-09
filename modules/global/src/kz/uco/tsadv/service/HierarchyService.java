@@ -2,10 +2,13 @@ package kz.uco.tsadv.service;
 
 
 import com.haulmont.cuba.core.global.View;
+import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -17,8 +20,10 @@ public interface HierarchyService {
 
     Long hierarchyElementChildrenCount(UUID parentHierarchyElementId, UUID hierarchyId);
 
+    @Nullable
     UUID getHierarchyElementId(UUID positionGroupId, UUID hierarchyId);
 
+    @Nullable
     PositionGroupExt getParentPosition(PositionGroupExt positionGroupExt, String view);
 
     boolean isParent(UUID positionGroupId, UUID hierarchyId);
@@ -30,8 +35,14 @@ public interface HierarchyService {
     /**
      * Возвращает список пользователей руководителей для заданной штатной единицы в заданной иерархии
      */
-    List<UserExt> findManagerUsers(
-            UUID positionGroupId,
-            UUID hierarchyId
-    );
+    List<UserExt> findManagerUsers(UUID positionGroupId, UUID hierarchyId);
+
+    List<UUID> getHierarchyException();
+
+    List<HierarchyElementExt> getChildHierarchyElement(@Nonnull Hierarchy hierarchy, @Nullable HierarchyElementExt parent);
+
+    /**
+     * @return all found HierarchyElement with all parents and children
+     */
+    List<HierarchyElementExt> search(@Nonnull Hierarchy hierarchy, @Nonnull String searchText);
 }

@@ -564,5 +564,6 @@
         <class>kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription</class>
         <class>kz.uco.tsadv.modules.administration.UserExt</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCompany</class>
+        <class>kz.uco.tsadv.modules.personal.model.HierarchyElementGroup</class>
     </persistence-unit>
 </persistence>

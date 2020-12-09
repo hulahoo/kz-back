@@ -1,15 +1,12 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
-import com.haulmont.cuba.core.Transaction;
-import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.View;
-import com.haulmont.cuba.core.global.ViewRepository;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.shared.ElementType;
+import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.UserExt;
@@ -18,19 +15,14 @@ import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-@SuppressWarnings("all")
 @Service(HierarchyService.NAME)
 public class HierarchyServiceBean implements HierarchyService {
 
-    @Inject
-    private DataManager dataManager;
-    @Inject
-    private ViewRepository viewRepository;
     @Inject
     private Persistence persistence;
     @Inject
@@ -38,9 +30,30 @@ public class HierarchyServiceBean implements HierarchyService {
 
     @Override
     public List<HierarchyElementExt> loadPositionHierarchyElement(UUID hierarchyId, UUID parentHierarchyId, View view) {
+        String stringQuery = String.format(
+                "select he from base$HierarchyElementExt he " +
+                        "join he.hierarchy h " +
+                        "where he.elementType = :elementType " +
+                        "and he.parent.id = :parentId " +
+                        "and %s",
+                hierarchyId != null ?
+                        String.format("h.id = '%s'", hierarchyId.toString())
+                        : "h.primaryFlag = True");
+
+        return persistence.callInTransaction(em ->
+                em.createQuery(stringQuery, HierarchyElementExt.class)
+                        .setParameter("elementType", ElementType.POSITION.getId())
+                        .setParameter("parentId", parentHierarchyId)
+                        .setView(view)
+                        .getResultList());
+    }
+
+    @Override
+    public Long hierarchyElementChildrenCount(UUID parentHierarchyElementId, UUID hierarchyId) {
         return persistence.callInTransaction(em -> {
             Query query = em.createQuery(String.format(
-                    "select he from base$HierarchyElementExt he " +
+                    "select count(he) " +
+                            "from base$HierarchyElementExt he " +
                             "join he.hierarchy h " +
                             "where he.elementType = :elementType " +
                             "and he.parent.id = :parentId " +
@@ -48,76 +61,51 @@ public class HierarchyServiceBean implements HierarchyService {
                     hierarchyId != null ?
                             String.format("h.id = '%s'", hierarchyId.toString())
                             : "h.primaryFlag = True"));
+            query.setParameter("elementType", ElementType.POSITION.getId());
+            query.setParameter("parentId", parentHierarchyElementId);
+            return (Long) query.getSingleResult();
+        });
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings("ConstantConditions")
+    public UUID getHierarchyElementId(UUID positionGroupId, UUID hierarchyId) {
+        return persistence.callInTransaction(em -> {
+            Query query = em.createQuery(String.format(
+                    "select e.id from base$HierarchyElementExt e " +
+                            "join e.positionGroup p " +
+                            "join e.hierarchy h " +
+                            "where e.elementType = :elementType " +
+                            "and p.id = :positionGroupId " +
+                            "and %s",
+                    hierarchyId != null ?
+                            String.format("h.id = '%s'", hierarchyId.toString())
+                            : "h.primaryFlag = True"));
 
             query.setParameter("elementType", ElementType.POSITION.getId());
-            query.setParameter("parentId", parentHierarchyId);
-            query.setView(view);
-            return query.getResultList();
+            query.setParameter("positionGroupId", positionGroupId);
+            List list = query.getResultList();
+            return !list.isEmpty() ? (UUID) list.get(0) : null;
         });
     }
 
+    @Nullable
     @Override
-    public Long hierarchyElementChildrenCount(UUID parentHierarchyElementId, UUID hierarchyId) {
-        return persistence.callInTransaction(new Transaction.Callable<Long>() {
-            @Override
-            public Long call(EntityManager em) {
-                Query query = em.createQuery(String.format(
-                        "select count(he) " +
-                                "from base$HierarchyElementExt he " +
-                                "join he.hierarchy h " +
-                                "where he.elementType = :elementType " +
-                                "and he.parent.id = :parentId " +
-                                "and %s",
-                        hierarchyId != null ?
-                                String.format("h.id = '%s'", hierarchyId.toString())
-                                : "h.primaryFlag = True"));
-                query.setParameter("elementType", ElementType.POSITION.getId());
-                query.setParameter("parentId", parentHierarchyElementId);
-                return (Long) query.getSingleResult();
-            }
-        });
-    }
-
-    @Override
-    public UUID getHierarchyElementId(UUID positionGroupId, UUID hierarchyId) {
-        return persistence.callInTransaction(new Transaction.Callable<UUID>() {
-            @Override
-            public UUID call(EntityManager em) {
-                Query query = em.createQuery(String.format(
-                        "select e.id from base$HierarchyElementExt e " +
-                                "join e.positionGroup p " +
-                                "join e.hierarchy h " +
-                                "where e.elementType = :elementType " +
-                                "and p.id = :positionGroupId " +
-                                "and %s",
-                        hierarchyId != null ?
-                                String.format("h.id = '%s'", hierarchyId.toString())
-                                : "h.primaryFlag = True"));
-
-                query.setParameter("elementType", ElementType.POSITION.getId());
-                query.setParameter("positionGroupId", positionGroupId);
-                List list = query.getResultList();
-                return list != null && !list.isEmpty() ? (UUID) list.get(0) : null;
-            }
-        });
-    }
-
-    @Override
+    @SuppressWarnings("ConstantConditions")
     public PositionGroupExt getParentPosition(PositionGroupExt positionGroupExt, String view) {
-        return persistence.callInTransaction(em -> {
-            return em.createQuery(" select p.positionGroup from base$HierarchyElementExt e " +
-                            " join e.parent p " +
-                            "    on :date between p.startDate and p.endDate " +
-                            " where :date between e.startDate and e.endDate" +
-                            "   and e.elementType = :elementType  " +
-                            "   and e.positionGroup.id = :positionGroupId "
-                    , PositionGroupExt.class)
-                    .setParameter("date", CommonUtils.getSystemDate())
-                    .setParameter("positionGroupId", positionGroupExt.getId())
-                    .setParameter("elementType", ElementType.POSITION.getId())
-                    .setViewName(StringUtils.isEmpty(view) ? View.MINIMAL : view)
-                    .getFirstResult();
-        });
+        return persistence.callInTransaction(em ->
+                em.createQuery(" select p.positionGroup from base$HierarchyElementExt e " +
+                        " join e.parent p " +
+                        "    on :date between p.startDate and p.endDate " +
+                        " where :date between e.startDate and e.endDate" +
+                        "   and e.elementType = :elementType  " +
+                        "   and e.positionGroup.id = :positionGroupId ", PositionGroupExt.class)
+                        .setParameter("date", CommonUtils.getSystemDate())
+                        .setParameter("positionGroupId", positionGroupExt.getId())
+                        .setParameter("elementType", ElementType.POSITION.getId())
+                        .setViewName(StringUtils.isEmpty(view) ? View.MINIMAL : view)
+                        .getFirstResult());
     }
 
     @Override
@@ -171,12 +159,13 @@ public class HierarchyServiceBean implements HierarchyService {
                     .setParameter(1, CommonUtils.getSystemDate())
                     .setParameter(2, '%' + organizationGroupId.toString() + '%')
                     .setParameter(3, organizationGroupId);
-            List list = query.getResultList();
+            @SuppressWarnings("unchecked") List<UUID> list = query.getResultList();
             return list;
         });
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<UUID> getPositionGroupIdChild(UUID positionGroupId, Date date) {
         return persistence.callInTransaction(em ->
                 (List<UUID>) em.createNativeQuery("WITH RECURSIVE HierarchyPath AS ( " +
@@ -217,10 +206,7 @@ public class HierarchyServiceBean implements HierarchyService {
      * Возвращает список пользователей руководителей для заданной штатной единицы в заданной иерархии
      */
     @Override
-    public List<UserExt> findManagerUsers(
-            UUID positionGroupId,
-            UUID hierarchyId
-    ) {
+    public List<UserExt> findManagerUsers(UUID positionGroupId, UUID hierarchyId) {
         return commonService.getEntities(UserExt.class,
                 "" +
                         "select e " +
@@ -245,6 +231,78 @@ public class HierarchyServiceBean implements HierarchyService {
                         "timeMachineDate", BaseCommonUtils.getSystemDate()
                 ),
                 View.LOCAL);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<UUID> getHierarchyException() {
+        return persistence.callInTransaction(
+                em -> (List<UUID>) em.createNativeQuery("select * from get_hierarchy_exception(#systemDate)")
+                        .setParameter("systemDate", CommonUtils.getSystemDate())
+                        .getResultList());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<HierarchyElementExt> getChildHierarchyElement(@Nonnull Hierarchy hierarchy, @Nullable HierarchyElementExt parent) {
+        String sqlString = "select * from get_child_hierarchy_element(#hierarchyId, #parentId, #systemDate)";
+
+        Map<UUID, Boolean> idMap = new HashMap<>();
+
+        ((List<Object[]>) persistence.callInTransaction(em ->
+                em.createNativeQuery(sqlString)
+                        .setParameter("hierarchyId", hierarchy.getId())
+                        .setParameter("parentId", parent != null ? parent.getGroup().getId() : null)
+                        .setParameter("systemDate", CommonUtils.getSystemDate())
+                        .getResultList()))
+                .forEach(objects -> idMap.put((UUID) objects[0], Boolean.TRUE.equals(objects[1])));
+
+        List<HierarchyElementExt> hierarchyElementList = getHierarchyList(idMap.keySet());
+
+        hierarchyElementList.forEach(hierarchyElement -> hierarchyElement.setHasChild(idMap.get(hierarchyElement.getId())));
+
+        return hierarchyElementList;
+    }
+
+    protected List<HierarchyElementExt> getHierarchyList(Collection<UUID> uuidCollection) {
+        return commonService.getEntities(HierarchyElementExt.class,
+                "select e from base$HierarchyElementExt e where e.id in :idList",
+                ParamsMap.of("idList", uuidCollection),
+                "new.hierarchyElement.browse");
+    }
+
+    @Override
+    public List<HierarchyElementExt> search(@Nonnull Hierarchy hierarchy, @Nonnull String searchText) {
+        String sqlString = "select * from search_hierarchy_element(#hierarchyId, #searchText, #systemDate)";
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> list = persistence.callInTransaction(em ->
+                em.createNativeQuery(sqlString)
+                        .setParameter("hierarchyId", hierarchy.getId())
+                        .setParameter("searchText", searchText)
+                        .setParameter("systemDate", CommonUtils.getSystemDate())
+                        .getResultList());
+
+        List<UUID> idParentList = new ArrayList<>();
+
+        for (Object[] row : list) {
+            String fullParentId = (String) row[2];      //splitted by '|'
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(fullParentId)) {
+                for (String parentId : fullParentId.split("\\|")) {
+                    idParentList.add(UUID.fromString(parentId));
+                }
+            }
+
+            String fullChildId = (String) row[3];     //splitted by '|'
+
+            if (org.apache.commons.lang3.StringUtils.isNotBlank(fullChildId)) {
+                for (String parentId : fullChildId.split("\\|")) {
+                    idParentList.add(UUID.fromString(parentId));
+                }
+            }
+        }
+
+        return getHierarchyList(idParentList);
     }
 
 }

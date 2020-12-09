@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd">
+    <data>
+        <instance id="positionDc"
+                  class="kz.uco.tsadv.modules.personal.model.PositionExt"
+                  view="position-view"
+                  provided="true"/>
+        <instance id="gradeGroupValueDc"
+                  class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"/>
+    </data>
+    <layout>
+        <vbox id="vboxPos"
+              expand="layout1"
+              height="100%">
+            <scrollBox id="layout1"
+                       spacing="true">
+                <hbox spacing="true">
+                    <label width="113px"></label>
+                    <label width="397px"
+                           value="msg://kz.uco.tsadv.web.modules.personal.position/Position.fullNameCaption"/>
+                    <label width="300px" value="msg://kz.uco.tsadv.web.modules.personal.position/Position.nameCaption"/>
+                </hbox>
+
+                <hbox spacing="true" id="hbox1">
+                    <form dataContainer="positionDc" id="form" editable="false">
+                        <column width="120px">
+                            <label value="msg://kz.uco.tsadv.web/lang1"/>
+                            <label value="msg://kz.uco.tsadv.web/lang2"/>
+                            <label value="msg://kz.uco.tsadv.web/lang3"/>
+                        </column>
+                        <column width="380px" id="formColumnLink">
+                            <linkButton id="positionNameLang1Reducted"/>
+                            <linkButton id="positionNameLang2Reducted"/>
+                            <linkButton id="positionNameLang3Reducted"/>
+                        </column>
+                        <column width="300px">
+                            <textField id="positionNameLang1"
+                                       property="positionNameLang1"
+                                       caption=""/>
+                            <textField id="positionNameLang2"
+                                       property="positionNameLang2"
+                                       caption=""/>
+                            <textField id="positionNameLang3"
+                                       property="positionNameLang3"
+                                       caption=""/>
+                        </column>
+                    </form>
+                </hbox>
+
+                <hbox spacing="true" id="hbox">
+                    <form id="form2" dataContainer="positionDc" editable="false">
+                        <column id="col1FieldGroup"
+                                childrenCaptionWidth="120px"
+                                width="300px">
+                            <textField id="baza"
+                                       property="baza"/>
+                            <pickerField id="costCenter"
+                                         property="costCenter"/>
+                            <textField id="extra"
+                                       property="extra"/>
+                            <pickerField id="jobGroup"
+                                         captionProperty="jobNameDefault"
+                                         property="jobGroup"/>
+                            <pickerField id="organizationGroupExt"
+                                         captionProperty="organizationName"
+                                         property="organizationGroupExt"/>
+                        </column>
+                        <column id="col2FieldGroup"
+                                width="300px"
+                                childrenCaptionWidth="90px">
+                            <dateField id="startDate"
+                                       property="startDate"/>
+                            <dateField id="endDate"
+                                       property="endDate"/>
+                            <pickerField id="positionStatus"
+                                         property="positionStatus"/>
+                            <textField id="fte"
+                                       property="fte"/>
+                            <textField id="maxPersons"
+                                       property="maxPersons"
+                                       caption="msg://kz.uco.tsadv.modules.personal.model/Position.maxPersons"/>
+                        </column>
+                    </form>
+                </hbox>
+
+                <label value="Дополнительная информация"/>
+                <hbox stylename="border-top"
+                      width="AUTO"
+                      spacing="true"
+                      margin="true, false, false, false"
+                      id="addHbox">
+                    <vbox id="addVBox">
+                        <form id="addForm" dataContainer="positionDc" width="520px" editable="false">
+                            <column width="300px" childrenCaptionWidth="120px" id="addColumn">
+                                <textField id="gradeGroup"
+                                           property="gradeGroup.grade"/>
+                                <pickerField id="gradeRule"
+                                             property="gradeRule"/>
+                                <textField id="location"
+                                           property="location"/>
+                                <pickerField id="payroll"
+                                             property="payroll"/>
+                                <checkBox property="managerFlag"/>
+                            </column>
+                        </form>
+                    </vbox>
+                    <vbox id="addVbox1" width="auto">
+                        <groupBox caption="msg://kz.uco.tsadv.modules.personal.model/GradeRuleValue">
+                            <form dataContainer="gradeGroupValueDc" editable="false">
+                                <column width="200px">
+                                    <textField property="value"/>
+                                    <textField property="min"/>
+                                    <textField property="mid"/>
+                                    <textField property="max"/>
+                                </column>
+                            </form>
+                        </groupBox>
+                    </vbox>
+                </hbox>
+            </scrollBox>
+
+        </vbox>
+    </layout>
+</fragment>
+
