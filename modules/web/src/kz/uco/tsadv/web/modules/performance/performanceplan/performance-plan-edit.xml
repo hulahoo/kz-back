@@ -49,15 +49,14 @@
                 <fieldGroup id="fieldGroup"
                             datasource="performancePlanDs">
                     <column width="250px">
-                        <field property="performancePlanName"/>
-                        <field property="previousPlan"/>
-                        <field property="description"/>
-                        <field captionProperty="personFioWithEmployeeNumber"
+                        <field id="performancePlanName" property="performancePlanName"/>
+                        <field id="description" property="description"/>
+                        <field id="administratorPersonGroup" captionProperty="personFioWithEmployeeNumber"
                                property="administratorPersonGroup"/>
-                        <field property="startDate"/>
-                        <field property="endDate"/>
-                        <field property="accessibilityStartDate"/>
-                        <field property="accessibilityEndDate"/>
+                        <field id="startDate" property="startDate"/>
+                        <field id="endDate" property="endDate"/>
+                        <field id="accessibilityStartDate" property="accessibilityStartDate" required="true"/>
+                        <field id="accessibilityEndDate" property="accessibilityEndDate" required="true"/>
                     </column>
                 </fieldGroup>
             </tab>

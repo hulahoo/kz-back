@@ -31,11 +31,12 @@
             </actions>
             <columns>
                 <column id="performancePlanName"/>
-                <column id="previousPlan"/>
-                <column id="description"/>
-                <column id="administratorPersonGroup.personFioWithEmployeeNumber"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="accessibilityStartDate"/>
+                <column id="accessibilityEndDate"/>
+                <column id="administratorPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="description"/>
             </columns>
             <rows datasource="performancePlansDs"/>
             <rowsCount/>

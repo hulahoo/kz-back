@@ -3135,19 +3135,18 @@
     <view class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
           name="performancePlan.browse">
         <property name="performancePlanName"/>
-        <property name="previousPlan"
-                  view="_minimal"/>
+        <property name="previousPlan" view="_minimal"/>
         <property name="description"/>
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="administratorPersonGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
+        <property name="administratorPersonGroup" view="_minimal">
+            <property name="list" view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
         </property>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="accessibilityStartDate"/>
+        <property name="accessibilityEndDate"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
           name="performancePlan.edit">
