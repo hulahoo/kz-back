@@ -33,8 +33,7 @@ import java.util.UUID;
 /**
  * @author Adilbekov Yernar
  */
-
-//TODO поудалять всё лишнее
+@Deprecated
 public class PositionFrame extends AbstractFrame {
 
     private static final String IMAGE_CELL_HEIGHT = "50px";
