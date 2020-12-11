@@ -5,24 +5,10 @@ buildscript {
         maven {
             url 'http://apps.uco.kz/nexus/content/groups/uco-group/'
             credentials {
-                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'uco')
-                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : '!uco@')
+                username('uco')
+                password('!uco@')
             }
         }
-
-        maven {
-            url 'https://dl.bintray.com/cuba-platform/main'
-
-        }
-        
-        maven {
-            url 'https://cuba-platform.bintray.com/premium'
-            credentials {
-                username(rootProject.hasProperty('bintrayPremiumRepoUser') ? rootProject['bintrayPremiumRepoUser'] : System.getenv('CUBA_PREMIUM_USER'))
-                password(rootProject.hasProperty('premiumRepoPass') ? rootProject['premiumRepoPass'] : System.getenv('CUBA_PREMIUM_PASSWORD'))
-            }
-        }
-        jcenter()
     }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
