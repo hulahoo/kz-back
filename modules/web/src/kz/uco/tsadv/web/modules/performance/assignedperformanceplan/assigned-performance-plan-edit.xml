@@ -18,12 +18,12 @@
                     datasource="assignedPerformancePlanDs"
                     width="100%">
             <column width="300px">
-                <field captionProperty="performancePlanName"
-                       property="performancePlan"/>
-                <field captionProperty="person"
-                       property="assignedPerson"/>
-                <field captionProperty="person"
-                       property="assigned_by"/>
+                <field property="performancePlan"/>
+                <field property="assignedPerson"/>
+                <field property="assigned_by"/>
+                <field property="result"/>
+                <field property="status"/>
+                <field property="gzp"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

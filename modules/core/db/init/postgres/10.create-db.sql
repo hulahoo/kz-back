@@ -5221,8 +5221,11 @@ create table TSADV_ASSIGNED_PERFORMANCE_PLAN (
     DELETED_BY varchar(50),
     --
     PERFORMANCE_PLAN_ID uuid not null,
+    RESULT integer,
+    GZP integer,
     ASSIGNED_PERSON_ID uuid not null,
     ASSIGNED_BY_ID uuid not null,
+    STATUS varchar(50),
     --
     primary key (ID)
 )^
@@ -15056,3 +15059,42 @@ create table TSADV_HIERARCHY_ELEMENT_GROUP (
     primary key (ID)
 )^
 -- end TSADV_HIERARCHY_ELEMENT_GROUP
+-- begin TSADV_INSTRUCTIONS_KPI
+create table TSADV_INSTRUCTIONS_KPI (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    INSTRUCTION text,
+    PERFORMANCE_PLAN_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_INSTRUCTIONS_KPI
+-- begin TSADV_DIC_JOB_GROUP
+create table TSADV_DIC_JOB_GROUP (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    JOB_GROUP_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_JOB_GROUP

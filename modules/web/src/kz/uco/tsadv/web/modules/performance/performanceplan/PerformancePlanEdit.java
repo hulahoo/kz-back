@@ -1,9 +1,15 @@
 package kz.uco.tsadv.web.modules.performance.performanceplan;
 
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.components.AbstractEditor;
+import com.haulmont.cuba.gui.components.Button;
+import com.haulmont.cuba.gui.components.FieldGroup;
+import com.haulmont.cuba.gui.components.PickerField;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.screen.MessageBundle;
+import com.haulmont.cuba.gui.screen.OpenMode;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
 
 import javax.inject.Inject;
@@ -16,6 +22,24 @@ public class PerformancePlanEdit extends AbstractEditor<PerformancePlan> {
     protected MessageBundle messageBundle;
     @Inject
     protected Datasource<PerformancePlan> performancePlanDs;
+    @Inject
+    protected FieldGroup fieldGroup;
+    @Inject
+    protected Button assignedEdit;
+    @Inject
+    protected Screens screens;
+
+    @Override
+    protected void init(InitEvent initEvent) {
+        super.init(initEvent);
+        PickerField.LookupAction administratorPersonGroup = ((PickerField) fieldGroup
+                .getFieldNN("administratorPersonGroup").getComponentNN()).getLookupAction();
+        administratorPersonGroup.setLookupScreen("base$PersonGroup.browse");
+        administratorPersonGroup.setLookupScreenParamsSupplier(() ->
+                ParamsMap.of("administratorPersonGroup", true)
+        );
+
+    }
 
     @Override
     protected boolean preCommit() {
@@ -34,5 +58,9 @@ public class PerformancePlanEdit extends AbstractEditor<PerformancePlan> {
             return false;
         }
         return super.preCommit();
+    }
+
+    public void edit() {
+        screens.create("tsadv_AssignedPerformancePlanEdit.edit", OpenMode.THIS_TAB).show();
     }
 }

@@ -145,6 +145,19 @@ public class PersonGroupBrowse extends AbstractLookup {
                     " where :session$systemDate between p.startDate and p.endDate\n" +
                     " and u is null ");
         }
+        if (params.containsKey("administratorPersonGroup")) {
+            personGroupsDs.setQuery("select e " +
+                    " from base$PersonGroupExt e " +
+                    "   left join tsadv$UserExt u " +
+                    "       on u.personGroup = e " +
+                    "   left join sec$UserRole ur " +
+                    "       on ur.user = u " +
+                    "   left join sec$Role r " +
+                    "       on r = ur.role " +
+                    "  join e.list p " +
+                    " where :session$systemDate between p.startDate and p.endDate " +
+                    " and r.name = 'EMPLOYEE_SELF_SERVICE' ");
+        }
 
         if (personGroupConfig.getEnabledCustomFilter()) {
             customFilterGroupBox.setVisible(true);

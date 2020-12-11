@@ -1681,5 +1681,11 @@
         <entity class="kz.uco.tsadv.modules.personal.model.HierarchyElementGroup">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.performance.dictionary.DicJobGroup">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
