@@ -20,6 +20,8 @@ public interface AssignmentService {
 
     AssignmentGroupExt getAssignmentGroup(@Nonnull String login, @Nullable String view);
 
+    AssignmentGroupExt getAssignmentGroup(@Nonnull String login);
+
     /**
      * Проверяет является ли назначение определенного сотрудника повторным.
      *

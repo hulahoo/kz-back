@@ -13002,6 +13002,8 @@ create table TSADV_BPM_ROLES_DEFINER (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    PROCESS_DEFINITION_KEY varchar(255),
+    --
     primary key (ID)
 )^
 -- end TSADV_BPM_ROLES_DEFINER

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.bpm.bpmrolesdefiner">
+    <data>
+        <instance id="bpmRolesDefinerDc"
+                  class="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"
+                  view="bpmRolesDefiner-view">
+            <loader/>
+            <collection id="linksDc" property="links"/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="bpmRolesDefinerDc">
+            <column width="250px">
+                <textField id="processDefinitionKeyField" property="processDefinitionKey"/>
+            </column>
+        </form>
+        <groupBox id="linksBox" caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.links">
+            <table id="linksTable" dataContainer="linksDc" width="100%" height="200px">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="required"/>
+                    <column id="findByCounter"/>
+                    <column id="bpmRolesDefiner"/>
+                    <column id="hrRole"/>
+                </columns>
+                <buttonsPanel>
+                    <button action="linksTable.create"/>
+                    <button action="linksTable.edit"/>
+                    <button action="linksTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </groupBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

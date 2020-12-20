@@ -127,6 +127,7 @@
                        value="kz.uco.tsadv.service.VideoService"/>
                 <entry key="tsadv_LmsService"
                        value="kz.uco.tsadv.service.LmsService"/>
+                <entry key="tsadv_BprocUtilService" value="kz.uco.tsadv.service.BprocUtilService"/>
             </map>
         </property>
     </bean>

@@ -93,6 +93,11 @@ public class AssignmentServiceBean implements AssignmentService {
     }
 
     @Override
+    public AssignmentGroupExt getAssignmentGroup(@Nonnull String login) {
+        return getAssignmentGroup(login, null);
+    }
+
+    @Override
     public boolean isReHire(AssignmentExt currentAssignmentFirst) {
         List<Dismissal> dismissals = new ArrayList<>();
         String queryString = "SELECT e from tsadv$Dismissal e " +

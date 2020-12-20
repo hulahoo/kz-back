@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.bpm.bpmroleslink">
+    <data>
+        <instance id="bpmRolesLinkDc"
+                  class="kz.uco.tsadv.modules.bpm.BpmRolesLink"
+                  view="bpmRolesLink-view">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="bpmRolesLinkDc">
+            <column width="250px">
+                <pickerField id="bpmRolesDefinerField" property="bpmRolesDefiner">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <pickerField id="hrRoleField" property="hrRole">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <checkBox id="requiredField" property="required"/>
+                <checkBox id="findByCounterField" property="findByCounter"/>
+                <pickerField id="positionBpmRoleField" property="positionBpmRole">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

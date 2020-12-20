@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
+    <item screen="tsadv_RunProcessDialog" insertAfter="hr"/>
     <menu id="hr"
           icon="font-icon:FILE_TEXT"
           insertBefore="reports">
@@ -668,18 +669,8 @@
         <item screen="bproc_AllTasks.browse"/>
         <item screen="bproc_DmnDecisionTableBrowse"/>
         <item screen="bproc_DecisionTableModelerScreen"/>
+        <item screen="tsadv$BpmRolesDefiner.browse"/>
     </menu>
-    <!--    <menu id="bpm" icon="font-icon:SPINNER">-->
-    <!--        <item id="bpm$ProcModel.lookup"/>-->
-    <!--        <item id="bpm$ProcDefinition.lookup"/>-->
-    <!--        <item id="bpm$ProcInstance.lookup"/>-->
-    <!--        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>-->
-    <!--        <item id="bpm$ProcTask.lookup"/>-->
-    <!--        <item id="bpm$ProcAttachmentType.lookup"/>-->
-    <!--        <item id="stencilSetEditor"/>-->
-    <!--        <item id="tsadv$BpmRolesDefiner.browse"/>-->
-    <!--        <item screen="tsadv$PositionBpmRole.browse"/>-->
-    <!--    </menu>-->
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">
             <item screen="uactivity$ActivityType.browse"/>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://caption"
+        messagesPack="kz.uco.tsadv.web.screens.bpm.processforms">
+    <layout>
+        <textArea id="comment" caption="comment"/>
+        <button id="startProcessBtn" caption="msg://start.process"/>
+    </layout>
+</window>

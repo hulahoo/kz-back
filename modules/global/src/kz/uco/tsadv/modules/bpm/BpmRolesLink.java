@@ -1,13 +1,11 @@
 package kz.uco.tsadv.modules.bpm;
 
-//import com.haulmont.bpm.entity.ProcRole;
-import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.tsadv.entity.tb.PositionBpmRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import kz.uco.tsadv.entity.tb.PositionBpmRole;
 
 @Table(name = "TSADV_BPM_ROLES_LINK")
 @Entity(name = "tsadv$BpmRolesLink")
@@ -17,11 +15,6 @@ public class BpmRolesLink extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BPM_ROLES_DEFINER_ID")
     protected BpmRolesDefiner bpmRolesDefiner;
-
-    /*@NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "BPM_ROLE_ID")
-    protected ProcRole bpmRole;*/
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -75,15 +68,6 @@ public class BpmRolesLink extends StandardEntity {
     public BpmRolesDefiner getBpmRolesDefiner() {
         return bpmRolesDefiner;
     }
-
-
-    /*public void setBpmRole(ProcRole bpmRole) {
-        this.bpmRole = bpmRole;
-    }
-
-    public ProcRole getBpmRole() {
-        return bpmRole;
-    }*/
 
     public void setHrRole(DicHrRole hrRole) {
         this.hrRole = hrRole;

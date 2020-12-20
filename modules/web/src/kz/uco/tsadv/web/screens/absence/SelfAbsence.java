@@ -64,7 +64,7 @@ public class SelfAbsence extends StandardLookup<Absence>
                         " where e.assignmentGroup.id = :assignmentGroupId " +
                         "       and e.status.code = 'DRAFT' ")
                 .parameter("assignmentGroupId", assignmentGroup.getId())
-                .view("absenceRequest.view")
+                .view("absenceRequest.edit")
                 .list();
 
         if (list != null && !list.isEmpty()) {
