@@ -3135,43 +3135,76 @@
     <view class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
           name="performancePlan.browse">
         <property name="performancePlanName"/>
-        <property name="previousPlan"
-                  view="_minimal"/>
+        <property name="previousPlan" view="_minimal"/>
         <property name="description"/>
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="administratorPersonGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
+        <property name="administratorPersonGroup" view="_minimal">
+            <property name="list" view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
+                <property name="fioWithEmployeeNumber"/>
             </property>
+            <property name="assignments" view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="assignDate"/>
+            </property>
+            <property name="personExperience" view="_minimal"/>
+            <property name="personFioWithEmployeeNumber"/>
+            <property name="fioWithEmployeeNumber"/>
         </property>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="accessibilityStartDate"/>
+        <property name="accessibilityEndDate"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
           name="performancePlan.edit">
         <property name="performancePlanName"/>
-        <property name="previousPlan"
-                  view="_minimal"/>
+        <property name="previousPlan" view="_minimal"/>
         <property name="description"/>
+        <property name="administratorPersonGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+            <property name="assignments" view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="assignDate"/>
+            </property>
+            <property name="personExperience" view="_minimal"/>
+            <property name="personFioWithEmployeeNumber"/>
+            <property name="fioWithEmployeeNumber"/>
+        </property>
         <property name="startDate"/>
         <property name="endDate"/>
-        <property name="administratorPersonGroup"
-                  view="_minimal">
-            <property name="person"
-                      view="_minimal"/>
-            <property name="list"
-                      view="_minimal"/>
-        </property>
-        <property name="organizations"
-                  view="organizationGroup.browse"/>
-        <property name="positions"
-                  view="positionGroup.browse"/>
-        <property name="jobs"
-                  view="jobGroup.browse"/>
-        <property name="accessibilityEndDate"/>
+        <property name="organizations" view="organizationGroup.browse"/>
+        <property name="positions" view="positionGroup.browse"/>
+        <property name="jobs" view="jobGroup.browse"/>
         <property name="accessibilityStartDate"/>
+        <property name="accessibilityEndDate"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Scale"
           extends="_local"
@@ -6148,25 +6181,150 @@
     <view class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
           extends="_local"
           name="assignedPerformancePlan.browse">
-        <property name="performancePlan"
-                  view="_minimal"/>
-        <property name="assignedPerson"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
+        <property name="performancePlan" view="_minimal"/>
+        <property name="assignedPerson" view="_minimal">
+            <property name="list" view="_minimal"/>
+            <property name="assignments" view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="jobGroup" view="_minimal">
+                    <property name="jobNameLang1"/>
+                    <property name="jobNameLang2"/>
+                    <property name="jobNameLang3"/>
+                    <property name="jobNameLang4"/>
+                    <property name="jobNameLang5"/>
+                    <property name="list" view="_minimal">
+                        <property name="jobNameLang1"/>
+                        <property name="jobNameLang2"/>
+                        <property name="jobNameLang3"/>
+                        <property name="jobNameLang4"/>
+                        <property name="jobNameLang5"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                </property>
+                <property name="gradeGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="grade">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                </property>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="organizationNameLang1"/>
+                        <property name="organizationNameLang2"/>
+                        <property name="organizationNameLang3"/>
+                        <property name="organizationNameLang4"/>
+                        <property name="organizationNameLang5"/>
+                    </property>
+                    <property name="organizationNameLang1"/>
+                    <property name="organizationNameLang2"/>
+                    <property name="organizationNameLang3"/>
+                    <property name="organizationNameLang4"/>
+                    <property name="organizationNameLang5"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="positionGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="positionFullNameLang1"/>
+                        <property name="positionFullNameLang2"/>
+                        <property name="positionFullNameLang3"/>
+                        <property name="positionFullNameLang4"/>
+                        <property name="positionNameLang1"/>
+                        <property name="positionNameLang2"/>
+                        <property name="positionNameLang3"/>
+                        <property name="positionNameLang4"/>
+                        <property name="positionNameLang5"/>
+                    </property>
+                </property>
+                <property name="startDate"/>
+                <property name="endDate"/>
             </property>
-            <property name="person"
-                      view="_minimal">
+            <property name="personExperience" view="_minimal"/>
+            <property name="currentAssignment" view="_minimal">
+                <property name="jobGroup" view="_minimal">
+                    <property name="jobNameLang1"/>
+                    <property name="jobNameLang2"/>
+                    <property name="jobNameLang3"/>
+                    <property name="jobNameLang4"/>
+                    <property name="jobNameLang5"/>
+                    <property name="list" view="_minimal">
+                        <property name="jobNameLang1"/>
+                        <property name="jobNameLang2"/>
+                        <property name="jobNameLang3"/>
+                        <property name="jobNameLang4"/>
+                        <property name="jobNameLang5"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                </property>
+                <property name="gradeGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                </property>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="organizationNameLang1"/>
+                        <property name="organizationNameLang2"/>
+                        <property name="organizationNameLang3"/>
+                        <property name="organizationNameLang4"/>
+                        <property name="organizationNameLang5"/>
+                    </property>
+                </property>
+                <property name="positionGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="positionNameLang1"/>
+                        <property name="positionNameLang2"/>
+                        <property name="positionNameLang3"/>
+                        <property name="positionNameLang4"/>
+                        <property name="positionNameLang5"/>
+                    </property>
+                </property>
+                <property name="startDate"/>
+                <property name="endDate"/>
             </property>
         </property>
-        <property name="assigned_by"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
+        <property name="assigned_by" view="_minimal">
+            <property name="list" view="_minimal"/>
+            <property name="assignments" view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="assignDate"/>
             </property>
-            <property name="person"
-                      view="_minimal">
-            </property>
+            <property name="personExperience" view="_minimal"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.Requisition"
@@ -21134,6 +21292,30 @@
                   view="_local">
             <property name="hierarchy"
                       view="_minimal"/>
+        </property>
+    </view>
+    <view entity="tsadv_DicJobGroup" name="dicJobGroup.edit" extends="_local">
+        <property name="jobGroup" view="_minimal">
+            <property name="jobNameLang1"/>
+            <property name="jobNameLang2"/>
+            <property name="jobNameLang3"/>
+            <property name="jobNameLang4"/>
+            <property name="jobNameLang5"/>
+            <property name="list" view="_minimal">
+                <property name="jobNameLang1"/>
+                <property name="jobNameLang2"/>
+                <property name="jobNameLang3"/>
+                <property name="jobNameLang4"/>
+                <property name="jobNameLang5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+    </view>
+    <view entity="tsadv_InstructionsKpi" name="instructionsKpi.edit" extends="_local">
+        <property name="performancePlan" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
         </property>
     </view>
 </views>

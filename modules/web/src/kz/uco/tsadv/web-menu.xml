@@ -399,6 +399,7 @@
             <item id="pmDicPriority"
                   screen="tsadv$DicPriority.browse"/>
             <item screen="tsadv$DicQuestionnaireQuestionSection.browse"/>
+            <item screen="tsadv_DicJobGroup.browse"/>
         </menu>
         <menu id="pmCompetences">
             <item id="pmCompetenceGroups"

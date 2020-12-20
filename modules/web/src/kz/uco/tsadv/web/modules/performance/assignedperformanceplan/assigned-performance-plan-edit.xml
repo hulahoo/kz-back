@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
-        class="kz.uco.tsadv.web.modules.performance.assignedperformanceplan.AssignedPerformancePlanEdit"
-        datasource="assignedPerformancePlanDs"
-        focusComponent="fieldGroup"
+        focusComponent="form"
         messagesPack="kz.uco.tsadv.web.modules.performance.assignedperformanceplan">
-    <dsContext>
-        <datasource id="assignedPerformancePlanDs"
-                    class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
-                    view="assignedPerformancePlan.browse"/>
-    </dsContext>
+    <data>
+        <instance id="assignedPerformancePlanDc"
+                  class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
+                  view="assignedPerformancePlan.browse">
+            <loader id="assignedPerformancePlanDl"/>
+        </instance>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="windowActions"
             spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="assignedPerformancePlanDs"
-                    width="100%">
+        <form id="form"
+              dataContainer="assignedPerformancePlanDc"
+              width="100%">
             <column width="300px">
-                <field captionProperty="performancePlanName"
-                       property="performancePlan"/>
-                <field captionProperty="person"
-                       property="assignedPerson"/>
-                <field captionProperty="person"
-                       property="assigned_by"/>
+                <pickerField id="performancePlan" property="performancePlan">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <pickerField id="assignedPerson" property="assignedPerson">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <pickerField id="assignedBy" property="assigned_by">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <textField property="result"/>
+                <lookupField property="status"/>
+                <textField property="gzp"/>
             </column>
-        </fieldGroup>
-        <frame id="windowActions"
-               screen="editWindowActions"/>
+        </form>
+        <hbox id="windowActions" spacing="true" width="AUTO">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>

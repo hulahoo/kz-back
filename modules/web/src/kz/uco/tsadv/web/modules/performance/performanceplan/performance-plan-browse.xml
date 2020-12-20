@@ -1,43 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://performancePlan.browse"
-        class="kz.uco.tsadv.web.modules.performance.performanceplan.PerformancePlanBrowse"
         focusComponent="performancePlansTable"
-        lookupComponent="performancePlansTable">
-    <dsContext>
-        <groupDatasource id="performancePlansDs"
-                         class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
-                         view="performancePlan.browse">
-            <query>
-                <![CDATA[select e from tsadv$PerformancePlan e]]>
-            </query>
-        </groupDatasource>
-    </dsContext>
+        messagesPack="kz.uco.tsadv.web.modules.performance.performanceplan">
+    <data>
+        <collection id="performancePlansDc"
+                    class="kz.uco.tsadv.modules.performance.model.PerformancePlan"
+                    view="performancePlan.browse">
+            <loader id="performancePlansDl">
+                <query>
+                    <![CDATA[select e from tsadv$PerformancePlan e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="performancePlansTable"
             spacing="true">
         <filter id="filter"
                 applyTo="performancePlansTable"
-                datasource="performancePlansDs">
+                dataLoader="performancePlansDl">
             <properties include=".*"/>
         </filter>
         <groupTable id="performancePlansTable"
-                    width="100%">
+                    width="100%"
+                    dataContainer="performancePlansDc">
             <actions>
-                <action id="create"/>
-                <action id="edit"/>
-                <action id="remove"/>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
             </actions>
             <columns>
                 <column id="performancePlanName"/>
-                <column id="previousPlan"/>
-                <column id="description"/>
-                <column id="administratorPersonGroup.personFioWithEmployeeNumber"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="accessibilityStartDate"/>
+                <column id="accessibilityEndDate"/>
+                <column id="administratorPersonGroup.personFioWithEmployeeNumber"/>
+                <column id="description"/>
             </columns>
-            <rows datasource="performancePlansDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
