@@ -15,7 +15,7 @@
                         property="jobs"/>
             <loader id="performancePlanDl"/>
         </instance>
-         <collection id="assignedPerformancePlansDc"
+        <collection id="assignedPerformancePlansDc"
                     class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
                     view="assignedPerformancePlan.browse">
             <loader id="assignedPerformancePlansDl">
@@ -74,6 +74,7 @@
                         <action id="create" type="create"/>
                         <action id="edit" type="edit"/>
                         <action id="remove" type="remove"/>
+                        <action id="addMass" caption="msg://addMass"/>
                     </actions>
                     <columns>
                         <column id="assignedPerson"/>
@@ -90,6 +91,7 @@
                         <button id="assignedCreate" action="assignedPerformancePlanTable.create"/>
                         <button id="assignedEdit" action="assignedPerformancePlanTable.edit"/>
                         <button id="assignedRemove" action="assignedPerformancePlanTable.remove"/>
+                        <button id="assignedAddMass" action="assignedPerformancePlanTable.addMass"/>
                     </buttonsPanel>
                 </table>
             </tab>

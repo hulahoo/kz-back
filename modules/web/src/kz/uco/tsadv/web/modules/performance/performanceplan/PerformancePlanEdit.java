@@ -1,7 +1,9 @@
 package kz.uco.tsadv.web.modules.performance.performanceplan;
 
 import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
+import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
@@ -9,6 +11,7 @@ import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.performance.model.InstructionsKpi;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -31,6 +34,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected InstanceContainer<PerformancePlan> performancePlanDc;
     @Inject
     protected CollectionLoader<InstructionsKpi> instructionKpiDl;
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -50,10 +55,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         if (accessibilityStartDate != null && startDate != null && accessibilityStartDate.before(startDate)) {
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
+            event.preventCommit();
         }
         if (accessibilityEndDate != null && endDate != null && accessibilityEndDate.after(endDate)) {
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
+            event.preventCommit();
         }
+    }
+
+    @Subscribe("assignedPerformancePlanTable.addMass")
+    protected void onAssignedPerformancePlanTableAddMass(Action.ActionPerformedEvent event) {
+        screenBuilders.lookup(PersonGroupExt.class, this)
+                .withScreenId("base$Person.browse")
+                .build().show();
     }
 }
