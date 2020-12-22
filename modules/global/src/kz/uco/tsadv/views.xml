@@ -1511,7 +1511,7 @@
                 <property name="endDate"/>
             </property>
             <property name="organization"
-                      view="_minimal">
+                      view="_local">
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
