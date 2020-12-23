@@ -87,7 +87,7 @@ public class TeamMember extends AbstractEditor<PersonExt> {
         positionExperienceField.setValue(positionExperience);
         ageCounter.setValue(employeeService.calculateAge(personDs.getItem().getDateOfBirth()) +
                 " " + employeeService.getYearCases(employeeService.calculateAge(personDs.getItem().getDateOfBirth())));
-        vacationDaysLeftField.setValue(absenceBalanceService.getCurrentAbsenceDays(personDs.getItem().getGroup()));
+        vacationDaysLeftField.setValue(Integer.toString(absenceBalanceService.getCurrentAbsenceDays(personDs.getItem().getGroup())));
         if (userSessionSource.getLocale().getLanguage().equals("en")) {
             firstName.setDatasource(personDs, "firstNameLatin");
             middleName.setDatasource(personDs, "middleNameLatin");
@@ -105,7 +105,7 @@ public class TeamMember extends AbstractEditor<PersonExt> {
         Map<String, Object> map = new HashMap<>();
         map.put("personGroupId", getItem().getGroup().getId());
         map.put("systemDate", CommonUtils.getSystemDate());
-        return commonService.getEntity(AssignmentExt.class, queryString, map, "assignment.view");
+        return commonService.getEntity(AssignmentExt.class, queryString, map, "assignmentExt-teamMember");
     }
 
     public Component generateChangePercentValue(Salary element) {
