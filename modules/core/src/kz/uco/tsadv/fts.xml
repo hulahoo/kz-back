@@ -1687,5 +1687,8 @@
         <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.entity.VacationSchedule">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
