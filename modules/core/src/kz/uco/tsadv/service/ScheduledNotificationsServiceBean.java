@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service(ScheduledNotificationsService.NAME)
 public class ScheduledNotificationsServiceBean implements ScheduledNotificationsService {
@@ -32,8 +31,8 @@ public class ScheduledNotificationsServiceBean implements ScheduledNotifications
     public void automaticReminderApplyingVacationSchedule() {
 
         List<UserExt> userExtList = dataManager.load(UserExt.class)
-                .query("select e from base$UserExt e join e.userRoles r where  r.role.id = :roleId")
-                .parameter("roleId", UUID.fromString("850c2047-2ade-3d80-810e-e850063cfab8"))
+                .query("select e from base$UserExt e join e.userRoles r where  r.role.name = :roleId")
+                .parameter("roleId", "EMPLOYEE_SELF_SERVICE")
                 .view("userExt.edit")
                 .list();
 
