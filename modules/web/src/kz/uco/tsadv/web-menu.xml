@@ -112,6 +112,8 @@
             <item screen="tsadv$DicLearningHistoryStatus.browse"/>
             <item screen="tsadv$DicAssignmentCategory.browse"/>
             <item screen="tsadv$DicPersonQualificationType.browse"/>
+            <item screen="tsadv_AbsenceRequestStatus.browse"
+                  caption="mainMsg://menu_config.tsadv_AbsenceRequestStatus.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">

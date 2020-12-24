@@ -1690,5 +1690,11 @@
         <entity class="kz.uco.tsadv.entity.VacationSchedule">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.AbsenceRequestStatus">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

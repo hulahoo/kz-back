@@ -568,5 +568,7 @@
         <class>kz.uco.tsadv.modules.performance.dictionary.DicJobGroup</class>
         <class>kz.uco.tsadv.modules.performance.model.InstructionsKpi</class>
         <class>kz.uco.tsadv.entity.VacationSchedule</class>
+        <class>kz.uco.tsadv.entity.VacationScheduleRequest</class>
+        <class>kz.uco.tsadv.entity.AbsenceRequestStatus</class>
     </persistence-unit>
 </persistence>

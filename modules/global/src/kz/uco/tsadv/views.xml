@@ -1993,6 +1993,15 @@
             </property>
             <property name="list"
                       view="_local">
+                <property name="gradeGroup"
+                          view="_minimal">
+                    <property name="grade"
+                              view="_minimal"/>
+                    <property name="list"
+                              view="_minimal"/>
+                </property>
+                <property name="costCenter"
+                          view="_minimal"/>
             </property>
         </property>
         <property name="group"
@@ -17502,9 +17511,9 @@
                 <property name="positionGroup"
                           view="_minimal">
                     <property name="list"
-                              view="_minimal">
+                              view="_local">
                         <property name="gradeGroup"
-                                  view="_minimal">
+                                  view="_local">
                             <property name="grade"
                                       view="_minimal"/>
                         </property>
@@ -21317,5 +21326,8 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
+    </view>
+    <view entity="tsadv_VacationSchedule" name="vacation-view" extends="_local">
+        <property name="status" view="_local"/>
     </view>
 </views>

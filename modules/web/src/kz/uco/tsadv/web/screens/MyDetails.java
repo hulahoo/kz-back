@@ -1,6 +1,7 @@
 package kz.uco.tsadv.web.screens;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.AbstractWindow;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.Label;
@@ -10,6 +11,7 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
@@ -36,6 +38,8 @@ public class MyDetails extends AbstractWindow {
     private Datasource<PersonExt> personDs;
     @Inject
     private UserSession userSession;
+    @Inject
+    protected ScreenBuilders screenBuilders;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -101,5 +105,9 @@ public class MyDetails extends AbstractWindow {
 
     public void close() {
         close(CLOSE_ACTION_ID);
+    }
+
+    public void newVacationScheduleButton() {
+        screenBuilders.editor(VacationScheduleRequest.class, this).build().show();
     }
 }
