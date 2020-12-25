@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.assignedgoal">
+    <data>
+        <instance id="assignedGoalDc"
+                  class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
+                  view="assignedGoalForKpi">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <hbox id="hbox" spacing="true">
+                <form id="form" dataContainer="assignedGoalDc">
+                    <column width="250px">
+                        <pickerField id="assignedByPersonGroupField" caption="msg://chooseMentor"
+                                     property="assignedByPersonGroup">
+                            <actions>
+                                <action id="lookup" type="picker_lookup"/>
+                                <action id="clear" type="picker_clear"/>
+                            </actions>
+                        </pickerField>
+                        <pickerField id="goalField" property="goal" caption="msg://selectGoal">
+                            <actions>
+                                <action id="lookup" type="picker_lookup"/>
+                                <action id="clear" type="picker_clear"/>
+                            </actions>
+                        </pickerField>
+                        <textField id="goalStringField" property="goalString" caption="msg://goalEdit"/>
+                        <textField id="weightField" property="weight"/>
+                        <textField id="resultField" property="result"/>
+                    </column>
+                </form>
+                <form id="form2" dataContainer="assignedGoalDc">
+                    <textArea id="comment" property="successCritetia"
+                              caption="msg://comments"
+                              rows="9"/>
+                </form>
+            </hbox>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

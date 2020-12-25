@@ -519,7 +519,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
                 AssignedGoal agToDelete = assignedGoalsDs.getItems().stream().filter(assignedGoal ->  //search from ds list
                         assignedGoal.getGoal().getId().equals((UUID) o[2]) &&
                                 assignedGoal.getPersonGroup().getId().equals(assignment.getPersonGroup().getId()) &&
-                                assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem()) &&
+//                                assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem()) &&
                                 (((Integer) o[0] == 1 &&
                                         assignedGoal.getOrganizationGroup() != null &&
                                         assignedGoal.getOrganizationGroup().getId().equals((UUID) o[1])) ||
@@ -550,8 +550,9 @@ public class AssignedGoalBrowse extends AbstractLookup {
                         "and e.performancePlan.id = :performancePlanId", params2, null)*/
                 if (assignedGoalsDs.getItems().stream().filter(assignedGoal ->  //search from ds list
                         assignedGoal.getGoal().getId().equals((UUID) o[2]) &&
-                                assignedGoal.getPersonGroup().getId().equals(assignment.getPersonGroup().getId()) &&
-                                assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem()))
+                                assignedGoal.getPersonGroup().getId().equals(assignment.getPersonGroup().getId())
+//                                && assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem())
+                )
                         .findFirst().orElse(null) == null) {
                     AssignedGoal ag = metadata.create(AssignedGoal.class);
                     Goal g = commonService.getEntity(Goal.class, (UUID) o[2]);
@@ -568,7 +569,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
                     ag.setEndDate(performancePlansDs.getItem().getEndDate());
                     ag.setWeight((Integer) o[3]);
                     ag.setPriority(commonService.getEntity(DicPriority.class, "HIGH"));
-                    ag.setPerformancePlan(performancePlansDs.getItem());
+//                    ag.setPerformancePlan(performancePlansDs.getItem());
                     assignedGoalsDs.addItem(ag);
                 }
             }
