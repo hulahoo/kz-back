@@ -1696,5 +1696,14 @@
         <entity class="kz.uco.tsadv.entity.AbsenceRequestStatus">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCertificateType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

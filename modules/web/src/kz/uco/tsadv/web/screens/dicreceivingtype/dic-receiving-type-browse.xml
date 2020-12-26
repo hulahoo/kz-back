@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://dicReceivingTypeBrowse.caption"
+        focusComponent="dicReceivingTypesTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicreceivingtype">
+    <data readOnly="true">
+        <collection id="dicReceivingTypesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType">
+            <view extends="_local">
+                <property name="langValue"/>
+            </view>
+            <loader id="dicReceivingTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicReceivingType e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicReceivingTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicReceivingTypesTable"
+                dataLoader="dicReceivingTypesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicReceivingTypesTable"
+                    width="100%"
+                    dataContainer="dicReceivingTypesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue"/>
+                <column id="active"/>
+                <column id="code"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicReceivingTypesTable.create"/>
+                <button id="editBtn" action="dicReceivingTypesTable.edit"/>
+                <button id="removeBtn" action="dicReceivingTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

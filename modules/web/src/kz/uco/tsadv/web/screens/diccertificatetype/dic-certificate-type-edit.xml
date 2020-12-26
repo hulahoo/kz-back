@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://dicCertificateTypeEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.diccertificatetype">
+    <data>
+        <instance id="dicCertificateTypeDc"
+                  class="kz.uco.tsadv.modules.personal.dictionary.DicCertificateType">
+            <view extends="_local"/>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="dicCertificateTypeDc">
+                <column width="350px">
+                    <field property="legacyId"/>
+                    <field property="langValue1"/>
+                    <field property="description1"/>
+                    <field property="langValue2"/>
+                    <field property="description2"/>
+                    <field property="langValue3"/>
+                    <field property="description3"/>
+                    <field property="langValue4"/>
+                    <field property="description4"/>
+                    <field property="langValue5"/>
+                    <field property="description5"/>
+                    <field property="startDate"/>
+                    <field property="endDate"/>
+                    <field property="code"/>
+                    <field property="isSystemRecord"/>
+                    <field property="active"/>
+                    <field property="order"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

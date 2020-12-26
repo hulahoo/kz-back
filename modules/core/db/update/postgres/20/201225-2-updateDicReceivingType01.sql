@@ -1,0 +1,1 @@
+create unique index IDX_TSADV_DIC_RECEIVING_TYPE_UK_CODE on TSADV_DIC_RECEIVING_TYPE (CODE) where DELETE_TS is null ;

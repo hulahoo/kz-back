@@ -14978,8 +14978,6 @@ create table TSADV_DIC_COMPANY (
 )^
 -- end TSADV_DIC_COMPANY
 
-
-
 -- begin TSADV_HIERARCHY_ELEMENT_GROUP
 create table TSADV_HIERARCHY_ELEMENT_GROUP (
     ID uuid,
@@ -15107,7 +15105,7 @@ create table TSADV_VACATION_SCHEDULE_REQUEST (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
-    REQUEST_NUMBER integer not null,
+    REQUEST_NUMBER bigint not null,
     REQUEST_DATE date not null,
     PERSON_GROUP_ID uuid not null,
     STATUS_ID uuid not null,
@@ -15118,3 +15116,96 @@ create table TSADV_VACATION_SCHEDULE_REQUEST (
     primary key (ID)
 )^
 -- end TSADV_VACATION_SCHEDULE_REQUEST
+-- begin TSADV_DIC_CERTIFICATE_TYPE
+create table TSADV_DIC_CERTIFICATE_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_CERTIFICATE_TYPE
+-- begin TSADV_DIC_RECEIVING_TYPE
+create table TSADV_DIC_RECEIVING_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_RECEIVING_TYPE
+-- begin TSADV_CERTIFICATE_REQUEST
+create table TSADV_CERTIFICATE_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    REQUEST_NUMBER bigint not null,
+    REQUEST_DATE date not null,
+    PERSON_GROUP_ID uuid not null,
+    CRETIFICATE_TYPE_ID uuid not null,
+    RECEIVING_TYPE_ID uuid not null,
+    LANGUAGE_ID uuid not null,
+    SHOW_SALARY boolean not null,
+    NUMBER_OF_COPY integer not null,
+    FILE_ID uuid,
+    STATUS_ID uuid not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_CERTIFICATE_REQUEST
