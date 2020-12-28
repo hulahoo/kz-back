@@ -330,16 +330,16 @@
             </query>
         </collectionDatasource>
 
-<!--        <collectionDatasource id="absenceBalancesVDs"-->
-<!--                              class="kz.uco.tsadv.entity.dbview.AbsenceBalanceV"-->
-<!--                              view="absenceBalanceV.browse">-->
-<!--            <query>-->
-<!--                <![CDATA[select e from tsadv$AbsenceBalanceV e-->
-<!--                        where e.personGroup.id = :ds$personGroupDs.id-->
-<!--                        order by e.dateFrom desc-->
-<!--            ]]>-->
-<!--            </query>-->
-<!--        </collectionDatasource>-->
+        <collectionDatasource id="absenceBalancesVDs"
+                              class="kz.uco.tsadv.entity.dbview.AbsenceBalanceV"
+                              view="absenceBalanceV.browse">
+            <query>
+                <![CDATA[select e from tsadv$AbsenceBalanceV e
+                        where e.personGroup.id = :ds$personGroupDs.id
+                        order by e.dateFrom desc
+            ]]>
+            </query>
+        </collectionDatasource>
         <collectionDatasource id="courseSectionAttemptsDs"
                               class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
                               view="courseSectionAttempt.browse">
