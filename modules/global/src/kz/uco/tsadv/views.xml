@@ -13530,6 +13530,17 @@
     <view entity="base$PersonExt"
           name="person.browse">
         <property name="legacyId"/>
+        <property name="nationality" view="_local">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="nonresidentType" view="_local"/>
+        <property name="citizenship" view="_local"/>
         <property name="nationalIdentifier"/>
         <property name="dateOfBirth"/>
         <property name="sex"
