@@ -1,5 +1,6 @@
 package kz.uco.tsadv.web.screens.vacationschedulerequest;
 
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.components.DateField;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -8,6 +9,7 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.AbsenceRequestStatus;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
 
@@ -43,6 +45,8 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
     protected UserSession userSession;
     @Inject
     protected DateField<Date> endDateField;
+    @Inject
+    protected DataManager dataManager;
 
     @Subscribe
     protected void onAfterInit(AfterInitEvent event) {
@@ -80,18 +84,13 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
     protected void onAfterShow(AfterShowEvent event) {
         VacationScheduleRequest item = getEditedEntity();
         if (item.getStatus() == null || "DRAFT".equals(item.getStatus().getCode())) {
-            item.setRequestDate(timeSource.currentTimestamp());
+
         }
 
         if (item.getRequestNumber() == null) {
-            item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            item.setPersonGroup(employeeService.getPersonGroupByUserId(userSession.getUser().getId()));
-            item.setStatus(commonService.getEntity(AbsenceRequestStatus.class, "DRAFT"));
         }
 
     }
-
-
 
 
 }

@@ -107,7 +107,5 @@ public class MyDetails extends AbstractWindow {
         close(CLOSE_ACTION_ID);
     }
 
-    public void newVacationScheduleButton() {
-        screenBuilders.editor(VacationScheduleRequest.class, this).build().show();
-    }
+
 }

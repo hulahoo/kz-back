@@ -7,7 +7,8 @@
         <instance id="vacationScheduleRequestDc"
                   class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <view extends="_local">
-                <property name="personGroup" view="personGroup-view"/>
+                <property name="personGroup" view="_minimal">
+                </property>
                 <property name="status" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
@@ -27,7 +28,7 @@
             <column width="350px">
                 <textField id="requestNumberField" property="requestNumber" editable="false"/>
                 <dateField id="requestDateField" property="requestDate" editable="false"/>
-                <pickerField id="personGroupField" property="personGroup" editable="false"/>
+                <pickerField id="personGroupField" property="personGroup" editable="true"/>
                 <pickerField id="statusField" property="status" editable="false"/>
                 <dateField id="startDateField" property="startDate"/>
                 <dateField id="endDateField" property="endDate"/>

@@ -196,34 +196,6 @@ order by e.startDate desc]]>
                             invoke="close"/>
                 </vbox>
             </tab>
-            <tab id="vacationScheduleTab"
-                 caption="msg://kz.uco.tsadv.web/Vacations"
-                 margin="true">
-                <vbox id="vBox5"
-                      expand="vacationScheduleTable"
-                      height="100%"
-                      spacing="true">
-                    <frame src="kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
-                    <label value="msg://kz.uco.tsadv.web/Vacations"/>
-                    <button id="newVacationScheduleButton"
-                            caption="msg://newVacationScheduleButton"
-                            invoke="newVacationScheduleButton"/>
-                    <table id="vacationScheduleTable"
-                           sortable="false"
-                           width="100%">
-                        <columns>
-                            <column id="startDate"/>
-                            <column id="endDate"/>
-                            <column id="absenceDays"/>
-                            <column id="status"/>
-                        </columns>
-                        <rows datasource="vacationScheduleDs"/>
-                    </table>
-                    <button id="close5"
-                            caption="msg://table.btn.close"
-                            invoke="close"/>
-                </vbox>
-            </tab>
         </tabSheet>
     </layout>
 </window>
