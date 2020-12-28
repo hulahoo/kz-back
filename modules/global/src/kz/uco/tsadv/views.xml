@@ -1511,7 +1511,7 @@
                 <property name="endDate"/>
             </property>
             <property name="organization"
-                      view="_local">
+                      view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
@@ -19996,14 +19996,6 @@
             <property name="middleNameLatin"/>
             <property name="lastNameLatin"/>
         </property>
-        <property name="assignments"  view="assignment.edit">
-            <property name="assignmentStatus" view="_local"/>
-            <property name="organizationGroup" view="organizationGroup.browse"/>
-        </property>
-        <property name="currentAssignment" view="_minimal">
-            <property name="assignmentStatus" view="_local"/>
-            <property name="positionGroup" view="_minimal"/>
-        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_local"
@@ -21345,8 +21337,5 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
-    </view>
-    <view entity="tsadv_VacationSchedule" name="vacation-view" extends="_local">
-        <property name="status" view="_local"/>
     </view>
 </views>

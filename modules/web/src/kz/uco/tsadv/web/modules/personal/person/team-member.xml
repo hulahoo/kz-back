@@ -13,7 +13,7 @@
         </datasource>
         <datasource id="assignmentDs"
                     class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
-                    view="assignment.view"/>
+                    view="assignmentExt-teamMember"/>
         <collectionDatasource id="addressesDs"
                               class="kz.uco.tsadv.modules.personal.model.Address"
                               view="address.view">

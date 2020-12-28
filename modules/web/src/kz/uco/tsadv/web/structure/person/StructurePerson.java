@@ -103,9 +103,10 @@ public class StructurePerson extends AbstractLookup {
         teamDs.addItemChangeListener(this::itemChangeListener);
     }
 
-    public void itemExpand(ExpandEvent event) {
+    public void itemExpand( ExpandEvent<MyTeamNew>  event) {
         if (pathParent != null) return;
-        myTeamComponent.onExpand(event, teamDs);
+        com.vaadin.v7.ui.Tree.ExpandEvent expandEvent = new com.vaadin.v7.ui.Tree.ExpandEvent(event.getComponent(),event.getExpandedItem().getId());
+        myTeamComponent.onExpand(expandEvent, teamDs);
     }
 
     protected void itemChangeListener(Datasource.ItemChangeEvent<MyTeamNew> event) {
