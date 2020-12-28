@@ -90,7 +90,7 @@
         <groupDatasource id="parentElementsGoalsDs"
                          class="kz.uco.tsadv.modules.personal.model.ParentElementsGoal"
                          refreshMode="NEVER"/>
-        <collectionDatasource id="organizationGroupExtsDs"
+        <collectionDatasource id="organizationGroupExtDs"
                               class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
                               view="organizationGroup.browse">
             <query>
@@ -237,8 +237,8 @@
                                            property="extra"/>
 
                                     <field id="organizationGroupExt"
-                                           captionProperty="organizationName"
-                                           optionsDatasource="organizationGroupExtsDs"
+                                           captionProperty="organization.organizationName"
+                                           optionsDatasource="organizationGroupExtDs"
                                            property="organizationGroupExt"
                                            required="true"/>
                                 </column>
