@@ -7,10 +7,11 @@ import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Button;
+import com.haulmont.cuba.gui.components.TabSheet;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.entity.AbsenceRequestStatus;
+
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
@@ -53,6 +54,8 @@ public class SelfAbsence extends StandardLookup<Absence>
     private CommonService commonService;
     @Inject
     private ScreenBuilders screenBuilders;
+    @Inject
+    protected TabSheet vacationTabSheet;
 
     @Subscribe("addBtn")
     public void onAddBtnClick(Button.ClickEvent event) {
@@ -110,8 +113,9 @@ public class SelfAbsence extends StandardLookup<Absence>
                 "where e.id = :uId").parameter("uId", userSession.getUser().getId())
                 .view("personGroupExt-view")
                 .list().stream().findFirst().orElse(null));
-        item.setStatus(commonService.getEntity(AbsenceRequestStatus.class, "DRAFT"));
+        item.setStatus(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
 
         screenBuilders.editor(VacationScheduleRequest.class, this).editEntity(item).build().show();
+        vacationTabSheet.setSelectedTab("requestsTab");
     }
 }

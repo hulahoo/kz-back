@@ -4,10 +4,10 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
-import kz.uco.tsadv.entity.AbsenceRequestStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicCertificateType;
 import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
+import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -69,13 +69,13 @@ public class CertificateRequest extends StandardEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STATUS_ID")
-    private AbsenceRequestStatus status;
+    private DicRequestStatus status;
 
-    public AbsenceRequestStatus getStatus() {
+    public DicRequestStatus getStatus() {
         return status;
     }
 
-    public void setStatus(AbsenceRequestStatus status) {
+    public void setStatus(DicRequestStatus status) {
         this.status = status;
     }
 

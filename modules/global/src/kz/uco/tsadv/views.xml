@@ -21338,4 +21338,8 @@
     <view entity="tsadv_VacationSchedule" name="vacation-view" extends="_local">
         <property name="status" view="_local"/>
     </view>
+    <view entity="tsadv_VacationScheduleRequest" name="vacation-request-view" extends="_local">
+        <property name="status" view="_local"/>
+        <property name="personGroup" view="_local"/>
+    </view>
 </views>

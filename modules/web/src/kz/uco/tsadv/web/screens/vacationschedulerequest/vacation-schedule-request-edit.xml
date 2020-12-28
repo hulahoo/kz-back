@@ -30,8 +30,8 @@
                 <dateField id="requestDateField" property="requestDate" editable="false"/>
                 <pickerField id="personGroupField" property="personGroup" editable="true"/>
                 <pickerField id="statusField" property="status" editable="false"/>
-                <dateField id="startDateField" property="startDate"/>
-                <dateField id="endDateField" property="endDate"/>
+                <dateField id="startDateField" property="startDate" editable="false"/>
+                <dateField id="endDateField" property="endDate" editable="false"/>
                 <textField id="absenceDaysField" property="absenceDays" editable="false"/>
             </column>
         </form>

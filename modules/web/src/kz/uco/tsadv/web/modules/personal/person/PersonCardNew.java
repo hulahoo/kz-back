@@ -203,6 +203,10 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
 
     @Override
     protected void postInit() {
+        PersonExt person = personDs.getItem();
+        assignmentDs.setItem(assignmentService.getAssignment(person.getGroup().getId(), "assignment.card"));
+        fillLeftLinks(tabSheet.getTab().getName());
+        initPersonLeftMenu(person);
 //        absenceBalancesVDs.setPersonGroupId(personGroupDs.getItem().getId());
     }
 

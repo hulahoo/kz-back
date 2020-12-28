@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.entity.AbsenceRequestStatus;
+
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import kz.uco.tsadv.service.EmployeeNumberService;
@@ -46,7 +46,7 @@ public class CertificateRequestEdit extends StandardEditor<CertificateRequest> {
         if (item.getRequestNumber() == null) {
             item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
             item.setPersonGroup(employeeService.getPersonGroupByUserIdExtendedView(userSession.getUser().getId()));
-            item.setStatus(commonService.getEntity(AbsenceRequestStatus.class, "DRAFT"));
+            item.setStatus(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
             item.setShowSalary(false);
             item.setNumberOfCopy(1);
         }
