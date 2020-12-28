@@ -222,7 +222,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     "FROM base$AssignmentExt a " +
                     "   WHERE a.personGroup.id = ?1 " +
                     "      AND current_date BETWEEN a.startDate AND a.endDate" +
-                    "       and a.primaryFlag = true "+
+                    "       and a.primaryFlag = true " +
                     "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
                     .setParameter(1, personGroupExt.getId());
             query.setView(AssignmentGroupExt.class, View.MINIMAL);
@@ -461,6 +461,19 @@ public class EmployeeServiceBean implements EmployeeService {
                     "where e.id = :uId")
                     .setParameter("uId", userId);
             query.setView(PersonGroupExt.class, "personGroupExt.edit");
+            List list = query.getResultList();
+            return list.isEmpty() ? null : (PersonGroupExt) list.get(0);
+        });
+    }
+
+    @Override
+    public PersonGroupExt getPersonGroupByUserIdExtendedView(UUID userId) {
+        return persistence.callInTransaction(em -> {
+            Query query = em.createQuery("select e.personGroup " +
+                    "from tsadv$UserExt e " +
+                    "where e.id = :uId")
+                    .setParameter("uId", userId);
+            query.setView(PersonGroupExt.class, "personGroupExt-view");
             List list = query.getResultList();
             return list.isEmpty() ? null : (PersonGroupExt) list.get(0);
         });

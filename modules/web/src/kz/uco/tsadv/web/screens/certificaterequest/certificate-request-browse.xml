@@ -32,8 +32,6 @@
                     dataContainer="certificateRequestsDc">
             <actions>
                 <action id="create" type="create"/>
-                <action id="edit" type="edit"/>
-                <action id="remove" type="remove"/>
             </actions>
             <columns>
                 <column id="requestNumber"/>
@@ -45,8 +43,6 @@
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn" action="certificateRequestsTable.create"/>
-                <button id="editBtn" action="certificateRequestsTable.edit"/>
-                <button id="removeBtn" action="certificateRequestsTable.remove"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

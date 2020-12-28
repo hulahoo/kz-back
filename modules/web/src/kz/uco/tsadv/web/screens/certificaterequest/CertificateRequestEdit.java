@@ -45,7 +45,7 @@ public class CertificateRequestEdit extends StandardEditor<CertificateRequest> {
 
         if (item.getRequestNumber() == null) {
             item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            item.setPersonGroup(employeeService.getPersonGroupByUserId(userSession.getUser().getId()));
+            item.setPersonGroup(employeeService.getPersonGroupByUserIdExtendedView(userSession.getUser().getId()));
             item.setStatus(commonService.getEntity(AbsenceRequestStatus.class, "DRAFT"));
             item.setShowSalary(false);
             item.setNumberOfCopy(1);
