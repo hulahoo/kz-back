@@ -6,6 +6,7 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 
 import kz.uco.tsadv.entity.VacationScheduleRequest;
+import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
