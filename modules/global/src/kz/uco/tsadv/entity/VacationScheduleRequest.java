@@ -47,6 +47,7 @@ public class VacationScheduleRequest extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE")
     @NotNull
+    @Future
     private Date endDate;
 
     @Column(name = "ABSENCE_DAYS")

@@ -8,10 +8,10 @@ import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.TabSheet;
+import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
-
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
@@ -23,6 +23,7 @@ import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,6 +57,8 @@ public class SelfAbsence extends StandardLookup<Absence>
     private ScreenBuilders screenBuilders;
     @Inject
     protected TabSheet vacationTabSheet;
+    @Inject
+    protected CollectionLoader<VacationScheduleRequest> vacationScheduleRequestDl;
 
     @Subscribe("addBtn")
     public void onAddBtnClick(Button.ClickEvent event) {
@@ -103,9 +106,13 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .show();
     }
 
+
     public void newVacationScheduleButton() {
         VacationScheduleRequest item = dataManager.create(VacationScheduleRequest.class);
-        item.setRequestDate(timeSource.currentTimestamp());
+        Date today = timeSource.currentTimestamp();
+
+        item.setRequestDate(today);
+        item.setStartDate(today);
 
         item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
         item.setPersonGroup(dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
@@ -115,7 +122,13 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .list().stream().findFirst().orElse(null));
         item.setStatus(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
 
-        screenBuilders.editor(VacationScheduleRequest.class, this).editEntity(item).build().show();
-        vacationTabSheet.setSelectedTab("requestsTab");
+        screenBuilders.editor(VacationScheduleRequest.class, this)
+                .editEntity(item)
+                .build()
+                .show()
+                .addAfterCloseListener(afterCloseEvent -> {
+                    vacationScheduleRequestDl.load();
+                    vacationTabSheet.setSelectedTab("requestsTab");
+                });
     }
 }

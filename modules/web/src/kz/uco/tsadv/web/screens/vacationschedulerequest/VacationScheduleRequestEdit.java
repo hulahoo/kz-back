@@ -1,6 +1,7 @@
 package kz.uco.tsadv.web.screens.vacationschedulerequest;
 
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.components.DateField;
 import com.haulmont.cuba.gui.components.Form;
 import com.haulmont.cuba.gui.screen.*;
@@ -9,6 +10,8 @@ import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.TimesheetService;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -35,9 +38,16 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
     protected TimesheetService timesheetService;
     @Inject
     protected Form form;
+    @Inject
+    protected TimeSource timeSource;
 
     @Subscribe
     protected void onAfterInit(AfterInitEvent event) {
+        LocalDateTime ldt = LocalDateTime.ofInstant(timeSource.currentTimestamp().toInstant(), ZoneId.systemDefault());
+        Date out = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
+
+        startDateField.setRangeStart(out);
+        startDateField.setAutofill(true);
         startDateField.addValueChangeListener(dateValueChangeEvent -> {
             if (cantCalculateDays()) {
                 return;
@@ -57,7 +67,7 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         VacationScheduleRequest item = getEditedEntity();
-        if (item.getStatus()!=null && !"DRAFT".equals(item.getStatus().getCode())) {
+        if (item.getStatus() != null && !"DRAFT".equals(item.getStatus().getCode())) {
             form.setEditable(false);
             return;
         }
