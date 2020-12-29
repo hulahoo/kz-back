@@ -5,6 +5,7 @@ import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "TSADV_ASSIGNED_PERFORMANCE_PLAN")
 @Entity(name = "tsadv$AssignedPerformancePlan")
@@ -25,12 +26,36 @@ public class AssignedPerformancePlan extends StandardEntity {
     @JoinColumn(name = "ASSIGNED_PERSON_ID")
     protected PersonGroupExt assignedPerson;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNED_BY_ID")
     protected PersonGroupExt assigned_by;
 
     @Column(name = "STATUS")
     protected String status;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE")
+    protected Date startDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE")
+    protected Date endDate;
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
     public CardStatusEnum getStatus() {
         return status == null ? null : CardStatusEnum.fromId(status);

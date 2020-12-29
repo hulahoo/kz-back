@@ -15,7 +15,7 @@
                         property="jobs"/>
             <loader id="performancePlanDl"/>
         </instance>
-         <collection id="assignedPerformancePlansDc"
+        <collection id="assignedPerformancePlansDc"
                     class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
                     view="assignedPerformancePlan.browse">
             <loader id="assignedPerformancePlansDl">
@@ -49,6 +49,8 @@
                       dataContainer="performancePlanDc">
                     <column width="250px">
                         <textField id="performancePlanName" property="performancePlanName"/>
+                        <textField id="performancePlanNameKz" property="performancePlanNameKz"/>
+                        <textField id="performancePlanNameEn" property="performancePlanNameEn"/>
                         <textField id="description" property="description"/>
                         <pickerField id="administratorPersonGroup"
                                      captionProperty="personFioWithEmployeeNumber"
@@ -66,24 +68,31 @@
                 </form>
             </tab>
             <tab id="assignedPerformancePlan" caption="msg://assignedPerformancePlan"
+                 visible="false"
                  margin="true, false, false, false"
-                 spacing="true">
+                 spacing="true"
+                 expand="assignedPerformancePlanTable">
+                <filter id="filter"
+                        applyTo="assignedPerformancePlanTable"
+                        dataLoader="assignedPerformancePlansDl">
+                    <properties include=".*"/>
+                </filter>
                 <table id="assignedPerformancePlanTable" width="100%" height="100%"
                        dataContainer="assignedPerformancePlansDc">
                     <actions>
-                        <action id="create" type="create"/>
+                        <action id="create" type="create" caption="msg://addKpi"/>
                         <action id="edit" type="edit"/>
                         <action id="remove" type="remove"/>
                     </actions>
                     <columns>
                         <column id="assignedPerson"/>
                         <column id="assignedPerson.currentAssignment.organizationGroup"/>
-                        <column id="result"/>
-                        <column id="gzp"/>
                         <column id="assignedPerson.currentAssignment.positionGroup"/>
                         <column id="assignedPerson.currentAssignment.jobGroup"/>
                         <column id="assignedPerson.currentAssignment.gradeGroup"/>
                         <column id="assigned_by"/>
+                        <column id="result"/>
+                        <column id="gzp"/>
                         <column id="status"/>
                     </columns>
                     <buttonsPanel id="assignedPerformancePlanBtnPnl">
@@ -94,6 +103,7 @@
                 </table>
             </tab>
             <tab id="instruction" spacing="true" margin="true, false, false, false"
+                 visible="false"
                  caption="msg://instruction">
                 <table id="instructionTable" width="100%" height="100%" dataContainer="instructionKpiDc">
                     <actions>
@@ -114,6 +124,7 @@
         </tabSheet>
         <hbox id="windowActions" spacing="true" width="AUTO">
             <button action="windowCommitAndClose"/>
+            <button action="windowCommit"/>
             <button action="windowClose"/>
         </hbox>
     </layout>

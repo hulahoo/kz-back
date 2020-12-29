@@ -1,6 +1,11 @@
 package kz.uco.tsadv.web.modules.performance.assignedperformanceplan;
 
-import com.haulmont.cuba.gui.components.AbstractLookup;
+import com.haulmont.cuba.gui.screen.*;
+import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 
-public class AssignedPerformancePlanBrowse extends AbstractLookup {
+@UiController("tsadv$AssignedPerformancePlan.browse")
+@UiDescriptor("assigned-performance-plan-browse.xml")
+@LookupComponent("assignedPerformancePlansTable")
+@LoadDataBeforeShow
+public class AssignedPerformancePlanBrowse extends StandardLookup<AssignedPerformancePlan> {
 }

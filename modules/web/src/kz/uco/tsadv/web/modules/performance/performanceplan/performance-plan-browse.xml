@@ -9,7 +9,7 @@
                     view="performancePlan.browse">
             <loader id="performancePlansDl">
                 <query>
-                    <![CDATA[select e from tsadv$PerformancePlan e]]>
+                    <![CDATA[select e from tsadv$PerformancePlan e order by e.startDate DESC]]>
                 </query>
             </loader>
         </collection>
@@ -37,8 +37,6 @@
                 <column id="endDate"/>
                 <column id="accessibilityStartDate"/>
                 <column id="accessibilityEndDate"/>
-                <column id="administratorPersonGroup.personFioWithEmployeeNumber"/>
-                <column id="description"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
