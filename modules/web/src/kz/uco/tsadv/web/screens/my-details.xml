@@ -66,14 +66,6 @@ order by e.dateFrom desc]]>
 order by e.requestDate desc]]>
             </query>
         </collectionDatasource>
-        <collectionDatasource id="vacationScheduleDs"
-                              class="kz.uco.tsadv.entity.VacationSchedule"
-                              view="vacation-view">
-            <query>
-                <![CDATA[select e from tsadv_VacationSchedule e where e.personGroup.id = :session$userPersonGroupId
-order by e.startDate desc]]>
-            </query>
-        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>

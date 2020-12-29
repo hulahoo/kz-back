@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.screens.vacationschedulerequest;
 
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.components.DateField;
+import com.haulmont.cuba.gui.components.Form;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.service.EmployeeService;
@@ -32,9 +33,17 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
     protected EmployeeService employeeService;
     @Inject
     protected TimesheetService timesheetService;
+    @Inject
+    protected Form form;
 
     @Subscribe
     protected void onAfterInit(AfterInitEvent event) {
+        VacationScheduleRequest item = getEditedEntity();
+        if (item.getStatus()!=null && !"DRAFT".equals(item.getStatus().getCode())) {
+            form.setEditable(false);
+            return;
+        }
+
         startDateField.addValueChangeListener(dateValueChangeEvent -> {
             if (cantCalculateDays()) {
                 return;

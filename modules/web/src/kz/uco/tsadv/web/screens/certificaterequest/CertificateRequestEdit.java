@@ -1,11 +1,10 @@
 package kz.uco.tsadv.web.screens.certificaterequest;
 
 import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.gui.components.Form;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
-
-import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import kz.uco.tsadv.service.EmployeeNumberService;
@@ -53,8 +52,6 @@ public class CertificateRequestEdit extends StandardEditor<CertificateRequest> {
         }
 
     }
-
-
 
 
 }
