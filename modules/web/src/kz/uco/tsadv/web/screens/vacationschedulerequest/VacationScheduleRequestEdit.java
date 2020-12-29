@@ -38,12 +38,6 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
 
     @Subscribe
     protected void onAfterInit(AfterInitEvent event) {
-        VacationScheduleRequest item = getEditedEntity();
-        if (item.getStatus()!=null && !"DRAFT".equals(item.getStatus().getCode())) {
-            form.setEditable(false);
-            return;
-        }
-
         startDateField.addValueChangeListener(dateValueChangeEvent -> {
             if (cantCalculateDays()) {
                 return;
@@ -57,7 +51,18 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
             }
             calculateDays();
         });
+
     }
+
+    @Subscribe
+    protected void onBeforeShow(BeforeShowEvent event) {
+        VacationScheduleRequest item = getEditedEntity();
+        if (item.getStatus()!=null && !"DRAFT".equals(item.getStatus().getCode())) {
+            form.setEditable(false);
+            return;
+        }
+    }
+
 
     protected void calculateDays() {
         VacationScheduleRequest item = getEditedEntity();
