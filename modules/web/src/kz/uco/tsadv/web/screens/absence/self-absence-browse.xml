@@ -83,7 +83,7 @@
                  caption="msg://kz.uco.tsadv.web/Vacations"
                  margin="true">
                 <tabSheet id="vacationTabSheet">
-                    <tab id="schedulesTab" caption="msg://kz.uco.tsadv.web/Vacations">
+                    <tab id="schedulesTab" spacing="true" caption="msg://kz.uco.tsadv.web/Vacations">
                         <vbox id="vBox3"
                               expand="vacationScheduleTable"
                               height="100%"
@@ -105,7 +105,7 @@
                             </table>
                         </vbox>
                     </tab>
-                    <tab id="requestsTab" caption="msg://myRequests">
+                    <tab id="requestsTab" spacing="true" caption="msg://myRequests">
                         <vbox id="vBox3"
                               expand="vacationScheduleRequestTable"
                               height="100%"
@@ -114,12 +114,6 @@
                                    sortable="false"
                                    dataContainer="vacationScheduleRequestDc"
                                    width="100%">
-                                <actions>
-                                    <action id="view" type="view"/>
-                                </actions>
-                                <buttonsPanel>
-                                    <button action="vacationScheduleRequestTable.view"/>
-                                </buttonsPanel>
                                 <columns>
                                     <column id="startDate"/>
                                     <column id="endDate"/>
