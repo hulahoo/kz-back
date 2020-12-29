@@ -13530,6 +13530,17 @@
     <view entity="base$PersonExt"
           name="person.browse">
         <property name="legacyId"/>
+        <property name="nationality" view="_local">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="nonresidentType" view="_local"/>
+        <property name="citizenship" view="_local"/>
         <property name="nationalIdentifier"/>
         <property name="dateOfBirth"/>
         <property name="sex"
@@ -19985,14 +19996,6 @@
             <property name="middleNameLatin"/>
             <property name="lastNameLatin"/>
         </property>
-        <property name="assignments"  view="assignment.edit">
-            <property name="assignmentStatus" view="_local"/>
-            <property name="organizationGroup" view="organizationGroup.browse"/>
-        </property>
-        <property name="currentAssignment" view="_minimal">
-            <property name="assignmentStatus" view="_local"/>
-            <property name="positionGroup" view="_minimal"/>
-        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_local"
@@ -21334,9 +21337,6 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
-    </view>
-    <view entity="tsadv_VacationSchedule" name="vacation-view" extends="_local">
-        <property name="status" view="_local"/>
     </view>
     <view entity="tsadv_VacationScheduleRequest" name="vacation-request-view" extends="_local">
         <property name="status" view="_local"/>

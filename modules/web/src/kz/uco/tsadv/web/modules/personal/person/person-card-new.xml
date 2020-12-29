@@ -7,7 +7,6 @@
         <datasource id="personGroupDs"
                     class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
                     view="assignment.card.personGroup">
-            <datasource id="personDs" property="person"/>
         </datasource>
         <datasource id="assignmentDs"
                     class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
@@ -30,6 +29,10 @@
                           order by e.startDate desc]]>
             </query>
         </collectionDatasource>
+        <datasource id="personDs"
+                              class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                              view="person-view">
+        </datasource>
         <collectionDatasource id="personContactsDs"
                               class="kz.uco.tsadv.modules.personal.model.PersonContact"
                               view="personContact.card">
@@ -327,16 +330,16 @@
             </query>
         </collectionDatasource>
 
-<!--        <collectionDatasource id="absenceBalancesVDs"-->
-<!--                              class="kz.uco.tsadv.entity.dbview.AbsenceBalanceV"-->
-<!--                              view="absenceBalanceV.browse">-->
-<!--            <query>-->
-<!--                <![CDATA[select e from tsadv$AbsenceBalanceV e-->
-<!--                        where e.personGroup.id = :ds$personGroupDs.id-->
-<!--                        order by e.dateFrom desc-->
-<!--            ]]>-->
-<!--            </query>-->
-<!--        </collectionDatasource>-->
+        <collectionDatasource id="absenceBalancesVDs"
+                              class="kz.uco.tsadv.entity.dbview.AbsenceBalanceV"
+                              view="absenceBalanceV.browse">
+            <query>
+                <![CDATA[select e from tsadv$AbsenceBalanceV e
+                        where e.personGroup.id = :ds$personGroupDs.id
+                        order by e.dateFrom desc
+            ]]>
+            </query>
+        </collectionDatasource>
         <collectionDatasource id="courseSectionAttemptsDs"
                               class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
                               view="courseSectionAttempt.browse">

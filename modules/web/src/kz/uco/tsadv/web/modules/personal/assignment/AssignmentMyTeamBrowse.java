@@ -4,14 +4,12 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.WindowManager;
-import com.haulmont.cuba.gui.components.AbstractLookup;
-import com.haulmont.cuba.gui.components.Button;
-import com.haulmont.cuba.gui.components.TextField;
-import com.haulmont.cuba.gui.components.TreeTable;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.HierarchicalDatasource;
 import com.haulmont.cuba.security.global.UserSession;
 import com.haulmont.reports.entity.Report;
 import com.haulmont.reports.gui.ReportGuiManager;
+import com.vaadin.ui.TreeGrid;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.components.MyTeamComponent;
@@ -108,7 +106,7 @@ public class AssignmentMyTeamBrowse extends AbstractLookup {
     public void ready() {
         super.ready();
 
-        assignmentsTable.unwrap(com.vaadin.ui.TreeGrid.class).addExpandListener(event -> myTeamComponent.onExpand(event, teamDs));
+        assignmentsTable.unwrap(com.vaadin.v7.ui.TreeTable.class).addExpandListener(event -> myTeamComponent.onExpand(event, teamDs));
         searchTextField.addEnterPressListener(e -> searchBtn());
         searchTextField.addTextChangeListener(e -> ((Button) getComponentNN("searchBtn"))
                 .setIcon(StringUtils.isNotBlank(e.getText()) && e.getText().equals(searchText)
