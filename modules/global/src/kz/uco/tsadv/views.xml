@@ -13693,36 +13693,12 @@
             </property>
         </property>
         <property name="maritalStatus" view="_local"/>
-        <property name="type" view="_minimal">
-            <property name="legacyId"/>
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-        </property>
-        <property name="legacyId"/>
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="writeHistory"/>
-        <property name="image" view="_minimal"/>
         <property name="firstName"/>
         <property name="firstNameLatin"/>
         <property name="middleNameLatin"/>
         <property name="lastName"/>
         <property name="lastNameLatin"/>
         <property name="middleName"/>
-        <property name="hireDate"/>
-        <property name="nationalIdentifier"/>
-        <property name="dateOfBirth"/>
-        <property name="sex" view="_minimal">
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-        <property name="fioWithEmployeeNumber"/>
     </view>
     <view entity="base$PersonExt"
           name="person-for-search">
