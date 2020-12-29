@@ -344,8 +344,6 @@
             template="/kz/uco/tsadv/web/modules/performance/dictionary/dicpriority/dic-priority-browse.xml"/>
     <screen id="tsadv$DicPriority.edit"
             template="/kz/uco/tsadv/web/modules/performance/dictionary/dicpriority/dic-priority-edit.xml"/>
-    <screen id="tsadv$AssignedPerformancePlan.browse"
-            template="/kz/uco/tsadv/web/modules/performance/assignedperformanceplan/assigned-performance-plan-browse.xml"/>
     <screen id="tsadv$DicEmploymentType.browse"
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicemploymenttype/dic-employment-type-browse.xml"/>
     <screen id="tsadv$DicEmploymentType.edit"

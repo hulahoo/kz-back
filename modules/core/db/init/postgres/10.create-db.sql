@@ -3775,11 +3775,13 @@ create table TSADV_PERFORMANCE_PLAN (
     PERFORMANCE_PLAN_NAME varchar(240) not null,
     PREVIOUS_PLAN_ID uuid,
     DESCRIPTION varchar(2000),
-    ADMINISTRATOR_PERSON_GROUP_ID uuid not null,
+    ADMINISTRATOR_PERSON_GROUP_ID uuid,
     START_DATE date not null,
     END_DATE date not null,
     ACCESSIBILITY_START_DATE date,
     ACCESSIBILITY_END_DATE date,
+    PERFORMANCE_PLAN_NAME_KZ varchar(255),
+    PERFORMANCE_PLAN_NAME_EN varchar(255),
     --
     primary key (ID)
 )^
@@ -3798,21 +3800,26 @@ create table TSADV_ASSIGNED_GOAL (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
-    GOAL_ID uuid not null,
+    GOAL_ID uuid,
     PERSON_GROUP_ID uuid,
     ORGANIZATION_GROUP_ID uuid,
     POSITION_GROUP_ID uuid,
     JOB_GROUP_ID uuid,
     PARENT_GOAL_ID uuid,
-    TARGET_VALUE integer not null,
-    ACTUAL_VALUE integer not null,
+    TARGET_VALUE integer,
+    ACTUAL_VALUE integer,
     SUCCESS_CRITETIA varchar(2000),
-    ASSIGNED_BY_PERSON_GROUP_ID uuid not null,
-    START_DATE date not null,
-    END_DATE date not null,
+    ASSIGNED_BY_PERSON_GROUP_ID uuid,
+    START_DATE date,
+    END_DATE date,
     WEIGHT integer,
     PRIORITY_ID uuid,
-    PERFORMANCE_PLAN_ID uuid,
+    ASSIGNED_PERFORMANCE_PLAN_ID uuid,
+    CATEGORY_ID uuid,
+    GOAL_STRING varchar(255),
+    PARENT_ID uuid,
+    GOAL_TYPE varchar(50),
+    RESULT double precision,
     --
     primary key (ID)
 )^
@@ -5236,8 +5243,10 @@ create table TSADV_ASSIGNED_PERFORMANCE_PLAN (
     RESULT integer,
     GZP integer,
     ASSIGNED_PERSON_ID uuid not null,
-    ASSIGNED_BY_ID uuid not null,
+    ASSIGNED_BY_ID uuid,
     STATUS varchar(50),
+    START_DATE date,
+    END_DATE date,
     --
     primary key (ID)
 )^

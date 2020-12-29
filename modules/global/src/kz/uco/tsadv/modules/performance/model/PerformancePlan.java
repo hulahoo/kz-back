@@ -28,7 +28,7 @@ public class PerformancePlan extends AbstractParentEntity {
     protected String description;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADMINISTRATOR_PERSON_GROUP_ID")
     protected PersonGroupExt administratorPersonGroup;
 
@@ -66,6 +66,28 @@ public class PerformancePlan extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "ACCESSIBILITY_END_DATE")
     protected Date accessibilityEndDate;
+
+    @Column(name = "PERFORMANCE_PLAN_NAME_KZ")
+    protected String performancePlanNameKz;
+
+    @Column(name = "PERFORMANCE_PLAN_NAME_EN")
+    protected String performancePlanNameEn;
+
+    public String getPerformancePlanNameEn() {
+        return performancePlanNameEn;
+    }
+
+    public void setPerformancePlanNameEn(String performancePlanNameEn) {
+        this.performancePlanNameEn = performancePlanNameEn;
+    }
+
+    public String getPerformancePlanNameKz() {
+        return performancePlanNameKz;
+    }
+
+    public void setPerformancePlanNameKz(String performancePlanNameKz) {
+        this.performancePlanNameKz = performancePlanNameKz;
+    }
 
     public void setAccessibilityStartDate(Date accessibilityStartDate) {
         this.accessibilityStartDate = accessibilityStartDate;
