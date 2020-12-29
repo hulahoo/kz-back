@@ -1708,7 +1708,7 @@ public class EmployeeServiceBean implements EmployeeService {
                             " n1.level, " +
                             "  pg.id position_group_id, " +
                             "  a.person_group_id, " +
-                            "  u.user_ext_id, " +
+                            "  su.id, " +
                             "  per.id, " +
                             "  per.first_name, " +
                             "  per.last_name, " +
@@ -1726,10 +1726,8 @@ public class EmployeeServiceBean implements EmployeeService {
                             "  join tsadv_dic_assignment_status das " +
                             "  on das.id=a.assignment_status_id " +
                             "  and das.code='ACTIVE' " +
-                            "  left join tsadv_user_ext_person_group u " +
-                            "  on u.person_group_id=a.person_group_id " +
                             "  left join sec_user su " +
-                            "  on su.id = u.user_ext_id " +
+                            "  on su.person_group_id=a.person_group_id " +
                             "  join base_person per " +
                             "  on per.group_id=a.person_group_id " +
                             "  and current_date between a.start_date and a.end_date " +
@@ -1738,7 +1736,6 @@ public class EmployeeServiceBean implements EmployeeService {
                             "  and pg.delete_ts is null " +
                             "  and a.delete_ts is null " +
                             "  and das.delete_ts is null " +
-                            "  and u.delete_ts is null " +
                             "  and su.delete_ts is null " +
                             "  and per.delete_ts is null  " +
                             "  order by n1.level desc " + (showAll ? "" : "limit 1"));

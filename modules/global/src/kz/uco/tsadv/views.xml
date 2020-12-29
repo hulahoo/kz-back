@@ -4108,20 +4108,29 @@
     <view class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
           extends="_local"
           name="personGroup.browse">
-        <property name="list"
-                  view="personGroup.browse.person"/>
-        <property name="assignments"
-                  view="_local">
-            <property name="assignmentStatus"
-                      view="_minimal">
+        <property name="list" view="personGroup.browse.person"/>
+        <property name="assignments" view="_local">
+            <property name="assignmentStatus" view="_minimal">
                 <property name="code"/>
             </property>
-            <property name="organizationGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
-                    <property name="costCenter"
-                              view="_minimal"/>
+            <property name="jobGroup" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="jobNameLang1"/>
+                    <property name="jobNameLang2"/>
+                    <property name="jobNameLang3"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
+            </property>
+            <property name="gradeGroup" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
+            </property>
+            <property name="organizationGroup" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="costCenter" view="_minimal"/>
                     <property name="startDate"/>
                     <property name="endDate"/>
                     <property name="organizationNameLang1"/>
@@ -4130,27 +4139,10 @@
                     <property name="organizationNameLang5"/>
                 </property>
             </property>
-            <property name="jobGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
-                    <property name="jobNameLang1"/>
-                    <property name="jobNameLang2"/>
-                    <property name="jobNameLang3"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
+            <property name="positionGroup" view="_minimal">
+                <property name="list" view="_local"/>
             </property>
-            <property name="gradeGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
-            </property>
-            <property name="location"
-                      view="_minimal">
+            <property name="location" view="_minimal">
                 <property name="langValue1"/>
                 <property name="langValue2"/>
                 <property name="langValue3"/>
@@ -4160,13 +4152,8 @@
                 <property name="endDate"/>
                 <property name="code"/>
             </property>
-            <property name="positionGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_local">
-                </property>
-            </property>
         </property>
+        <property name="personExperience" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
           extends="_local"
@@ -21249,30 +21236,29 @@
         </property>
     </view>
     <view entity="base$PersonGroupExt" name="personGroupExt.card" extends="_minimal">
-        <property name="person" view="_minimal"/>
         <property name="list" view="_minimal"/>
+        <property name="retirement" view="_minimal"/>
+        <property name="disability" view="_minimal"/>
+        <property name="militaryRank" view="_minimal"/>
+        <property name="competenceElements" view="_minimal"/>
         <property name="personContacts" view="_minimal"/>
         <property name="personDocuments" view="_minimal"/>
-        <property name="addresses" view="_minimal"/>
-        <property name="beneficiary" view="_minimal"/>
-        <property name="cases" view="_minimal"/>
-        <property name="militaryRank" view="_minimal"/>
-        <property name="disability" view="_minimal"/>
-        <property name="retirement" view="_minimal"/>
-        <property name="agreements" view="_minimal"/>
+        <property name="assessments" view="_minimal"/>
+        <property name="personEducation" view="_minimal"/>
         <property name="personExperience" view="_minimal"/>
         <property name="jobRequests" view="_minimal"/>
-        <property name="dismissals" view="_minimal"/>
-        <property name="relocation" view="_minimal"/>
-        <property name="personEducation" view="_minimal"/>
-        <property name="competenceElements" view="_minimal"/>
-        <property name="assessments" view="_minimal"/>
         <property name="successionPlanning" view="_minimal"/>
         <property name="businessTrip" view="_minimal">
             <property name="businessTripLines" view="_minimal">
                 <property name="businessTripCost" view="_minimal"/>
             </property>
         </property>
+        <property name="agreements" view="_minimal"/>
+        <property name="dismissals" view="_minimal"/>
+        <property name="cases" view="_minimal"/>
+        <property name="addresses" view="_minimal"/>
+        <property name="relocation" view="_minimal"/>
+        <property name="beneficiary" view="_minimal"/>
     </view>
     <view entity="tsadv$UserExt" name="userExt.edit" extends="_minimal">
         <property name="image"

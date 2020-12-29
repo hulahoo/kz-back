@@ -9,6 +9,15 @@
                   view="assignedGoalForKpi">
             <loader/>
         </instance>
+        <collection id="personGroupDc"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                    view="personGroup.browse">
+            <loader id="personGroupDl">
+                <query>
+                    <![CDATA[select e from base$PersonGroupExt e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -17,13 +26,8 @@
             <hbox id="hbox" spacing="true">
                 <form id="form" dataContainer="assignedGoalDc">
                     <column width="250px">
-                        <pickerField id="assignedByPersonGroupField" caption="msg://chooseMentor"
-                                     property="assignedByPersonGroup">
-                            <actions>
-                                <action id="lookup" type="picker_lookup"/>
-                                <action id="clear" type="picker_clear"/>
-                            </actions>
-                        </pickerField>
+                        <lookupField id="assignedByPersonGroupField" caption="msg://chooseMentor"
+                                     property="assignedByPersonGroup" optionsContainer="personGroupDc"/>
                         <pickerField id="goalField" property="goal" caption="msg://selectGoal">
                             <actions>
                                 <action id="lookup" type="picker_lookup"/>

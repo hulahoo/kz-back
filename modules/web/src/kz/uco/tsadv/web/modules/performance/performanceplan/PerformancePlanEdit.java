@@ -15,6 +15,7 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
+import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.performance.model.InstructionsKpi;
@@ -70,6 +71,10 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected void onAfterShow(AfterShowEvent event) {
         if (PersistenceHelper.isNew(performancePlanDc.getItem())) {
             visibleTab(false);
+            performancePlanDc.getItem().setStartDate(BaseCommonUtils.getSystemDate());
+            performancePlanDc.getItem().setEndDate(BaseCommonUtils.getEndOfTime());
+            performancePlanDc.getItem().setAccessibilityStartDate(BaseCommonUtils.getSystemDate());
+            performancePlanDc.getItem().setAccessibilityEndDate(BaseCommonUtils.getEndOfTime());
         } else {
             visibleTab(true);
         }
