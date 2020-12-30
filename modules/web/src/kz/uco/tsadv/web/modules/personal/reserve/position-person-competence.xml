@@ -16,11 +16,11 @@
         <collectionDatasource id="personPercentagesDs"
                               allowCommit="false"
                               class="kz.uco.tsadv.modules.personal.model.PersonPercentage"
-                              datasourceClass="kz.uco.tsadv.web.modules.personal.hierarchyelement.PersonPercentageDatasource"/>
+                              datasourceClass="kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68.PersonPercentageDatasource"/>
         <collectionDatasource id="positionPercentagesDs"
                               allowCommit="false"
                               class="kz.uco.tsadv.modules.personal.model.PositionPercentage"
-                              datasourceClass="kz.uco.tsadv.web.modules.personal.hierarchyelement.PositionPercentageDatasource"/>
+                              datasourceClass="kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68.PositionPercentageDatasource"/>
         <collectionDatasource id="organizationGroupsDs"
                               class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
                               view="organizationGroup.lookup">

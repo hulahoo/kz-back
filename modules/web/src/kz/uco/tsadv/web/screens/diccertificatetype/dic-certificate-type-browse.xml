@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://dicCertificateTypeBrowse.caption"
+        focusComponent="dicCertificateTypesTable"
+        messagesPack="kz.uco.tsadv.web.screens.diccertificatetype">
+    <data readOnly="true">
+        <collection id="dicCertificateTypesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicCertificateType">
+            <view extends="_local"/>
+            <loader id="dicCertificateTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicCertificateType e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicCertificateTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicCertificateTypesTable"
+                dataLoader="dicCertificateTypesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicCertificateTypesTable"
+                    width="100%"
+                    dataContainer="dicCertificateTypesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue"/>
+                <column id="active"/>
+                <column id="code"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicCertificateTypesTable.create"/>
+                <button id="editBtn" action="dicCertificateTypesTable.edit"/>
+                <button id="removeBtn" action="dicCertificateTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

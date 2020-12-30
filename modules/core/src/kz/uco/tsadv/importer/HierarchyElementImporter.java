@@ -107,7 +107,7 @@ public class HierarchyElementImporter extends XlsImporter {
             if (hierarchyElement == null) {
                 hierarchyElement = metadata.create(HierarchyElementExt.class);
             } else {
-                hierarchyElement.setDoNotCopy(true);
+                hierarchyElement.setWriteHistory(true);
             }
 
             hierarchyElement.setHierarchy(commonService.getEntity(Hierarchy.class, hierarchyId));

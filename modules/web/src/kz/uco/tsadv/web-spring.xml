@@ -127,6 +127,8 @@
                        value="kz.uco.tsadv.service.VideoService"/>
                 <entry key="tsadv_LmsService"
                        value="kz.uco.tsadv.service.LmsService"/>
+                <entry key="tsadv_ScheduledNotificationsService"
+                       value="kz.uco.tsadv.service.ScheduledNotificationsService"/>
             </map>
         </property>
     </bean>

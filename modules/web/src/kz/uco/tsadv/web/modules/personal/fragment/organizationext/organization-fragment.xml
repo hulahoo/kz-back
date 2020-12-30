@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<fragment xmlns="http://schemas.haulmont.com/cuba/screen/fragment.xsd">
+    <data>
+        <instance id="organizationDc"
+                  class="kz.uco.tsadv.modules.personal.model.OrganizationExt"
+                  provided="true"
+                  view="organizations.browse">
+            <instance id="groupDc" property="group">
+                <collection id="organizationHistoryDc" property="list"/>
+            </instance>
+        </instance>
+    </data>
+    <layout>
+        <vbox id="vboxOrg"
+              expand="split"
+              height="100%">
+            <split id="split"
+                   orientation="vertical"
+                   width="100%">
+                <scrollBox id="organiztionFrameScrollBox1" height="100%">
+                    <cssLayout id="cssLayout"
+                               height="auto">
+                        <form id="form"
+                              editable="false"
+                              dataContainer="organizationDc">
+                            <column width="240px" childrenCaptionWidth="0px">
+                                <hbox>
+                                    <label width="150px"
+                                           value="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.organizationNameLang1Reducted"/>
+                                    <linkButton id="organizationNameLang1Reducted"/>
+                                </hbox>
+                                <hbox>
+                                    <label width="150px"
+                                           value="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.organizationNameLang2Reducted"/>
+                                    <linkButton id="organizationNameLang2Reducted"/>
+                                </hbox>
+                                <hbox>
+                                    <label width="150px"
+                                           value="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.organizationNameLang3Reducted"/>
+                                    <linkButton id="organizationNameLang3Reducted"/>
+                                </hbox>
+                                <hbox>
+                                    <label width="150px"
+                                           value="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.organizationNameLang4Reducted"/>
+                                    <linkButton id="organizationNameLang4Reducted"/>
+                                </hbox>
+                                <hbox>
+                                    <label width="150px"
+                                           value="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.organizationNameLang5Reducted"/>
+                                    <linkButton id="organizationNameLang5Reducted"/>
+                                </hbox>
+                                <hbox>
+                                    <label width="150px"
+                                           value="msg://kz.uco.tsadv.modules.personal.model/OrganizationExt.internal"/>
+                                    <checkBox property="internal" editable="false" caption=""/>
+                                </hbox>
+                            </column>
+                            <column width="240px">
+                                <pickerField property="location"/>
+                                <pickerField property="type"/>
+                                <pickerField property="costCenter"/>
+                                <pickerField property="payroll"/>
+                                <dateField property="startDate"/>
+                                <dateField property="endDate"/>
+                            </column>
+                        </form>
+                    </cssLayout>
+                </scrollBox>
+                <scrollBox id="organiztionFrameScrollBox2">
+                    <groupBox id="historyGroupBox"
+                              caption="msg://historyBox"
+                              height="100%">
+                        <table id="historyTable"
+                               height="100%"
+                               dataContainer="organizationHistoryDc"
+                               width="100%">
+                            <actions>
+                                <action id="excel"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/excel.png"/>
+                            </actions>
+                            <columns>
+                                <column id="organizationName"/>
+                                <column id="location.langValue"/>
+                                <column id="type.langValue"/>
+                                <column id="costCenter.langValue"/>
+                                <column id="payroll.langValue"/>
+                                <column id="startDate"/>
+                                <column id="endDate"/>
+                            </columns>
+                        </table>
+                    </groupBox>
+                </scrollBox>
+            </split>
+        </vbox>
+    </layout>
+</fragment>
+

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://certificateRequestBrowse.caption"
+        focusComponent="certificateRequestsTable"
+        messagesPack="kz.uco.tsadv.web.screens.certificaterequest">
+    <data readOnly="true">
+        <collection id="certificateRequestsDc"
+                    class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
+            <view extends="_local">
+                <property name="status" view="_local"/>
+                <property name="file" view="_local"/>
+            </view>
+            <loader id="certificateRequestsDl">
+                <query>
+                    <![CDATA[select e from tsadv_CertificateRequest e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="certificateRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="certificateRequestsTable"
+                dataLoader="certificateRequestsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="certificateRequestsTable"
+                    width="100%"
+                    dataContainer="certificateRequestsDc">
+            <actions>
+                <action id="create" type="create"/>
+            </actions>
+            <columns>
+                <column id="requestNumber"/>
+                <column id="requestDate"/>
+                <column id="status"/>
+                <column id="file"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="certificateRequestsTable.create"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

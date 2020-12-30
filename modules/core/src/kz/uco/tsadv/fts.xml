@@ -1678,6 +1678,30 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCompany">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.HierarchyElementGroup">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.dictionary.DicJobGroup">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.VacationSchedule">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCertificateType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
+            <include re=".*"/>
+        </entity>
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority">
             <include re=".*"/>
         </entity>

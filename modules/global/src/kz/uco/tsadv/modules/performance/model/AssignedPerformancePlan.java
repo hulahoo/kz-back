@@ -1,9 +1,11 @@
 package kz.uco.tsadv.modules.performance.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Table(name = "TSADV_ASSIGNED_PERFORMANCE_PLAN")
 @Entity(name = "tsadv$AssignedPerformancePlan")
@@ -14,13 +16,70 @@ public class AssignedPerformancePlan extends StandardEntity {
     @JoinColumn(name = "PERFORMANCE_PLAN_ID")
     protected PerformancePlan performancePlan;
 
+    @Column(name = "RESULT")
+    protected Integer result;
+
+    @Column(name = "GZP")
+    protected Integer gzp;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ASSIGNED_PERSON_ID")
     protected PersonGroupExt assignedPerson;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNED_BY_ID")
     protected PersonGroupExt assigned_by;
+
+    @Column(name = "STATUS")
+    protected String status;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE")
+    protected Date startDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE")
+    protected Date endDate;
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public CardStatusEnum getStatus() {
+        return status == null ? null : CardStatusEnum.fromId(status);
+    }
+
+    public void setStatus(CardStatusEnum status) {
+        this.status = status == null ? null : status.getId();
+    }
+
+    public Integer getGzp() {
+        return gzp;
+    }
+
+    public void setGzp(Integer gzp) {
+        this.gzp = gzp;
+    }
+
+    public Integer getResult() {
+        return result;
+    }
+
+    public void setResult(Integer result) {
+        this.result = result;
+    }
 
     public void setPerformancePlan(PerformancePlan performancePlan) {
         this.performancePlan = performancePlan;

@@ -178,7 +178,7 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
         } else {
             setTabsVisibility(true);
             if (isFirst()) {
-                fieldGroup.getField("startDate").setEditable(true);
+                fieldGroup.getFieldNN("startDate").setEditable(true);
             }
         }
     }
@@ -208,7 +208,7 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
 
     @Override
     protected boolean postCommit(boolean committed, boolean close) {
-        if (getItem().getGroup().getAnalytics() == null) {
+        if (getItem().getGroup()!= null && getItem().getGroup().getAnalytics() == null) {
             OrgAnalytics orgAnalytics = metadata.create(OrgAnalytics.class);
             orgAnalytics.setOrganizationGroup(getItem().getGroup());
             getItem().getGroup().setAnalytics(dataManager.commit(orgAnalytics));

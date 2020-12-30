@@ -1,0 +1,3 @@
+alter table tsadv_certificate_request drop constraint FK_TSADV_CERTIFICATE_REQUEST_STATUS ;
+alter table tsadv_vacation_schedule drop constraint FK_TSADV_VACATION_SCHEDULE_STATUS ;
+alter table tsadv_vacation_schedule_request drop constraint FK_TSADV_VACATION_SCHEDULE_REQUEST_STATUS ;

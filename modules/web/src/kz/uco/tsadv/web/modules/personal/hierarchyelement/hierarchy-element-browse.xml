@@ -1,128 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        caption="msg://HierarchyElement.browseCaption"
-        class="kz.uco.tsadv.web.modules.personal.hierarchyelement.HierarchyElementBrowse"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
         focusComponent="tree"
-        lookupComponent="tree">
+        messagesPack="kz.uco.tsadv.web.modules.personal.hierarchyelement">
+    <data readOnly="true">
+        <collection id="hierarchyElementDc"
+                    class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                    view="new.hierarchyElement.browse"/>
+        <collection id="hierarchiesDc"
+                    class="kz.uco.base.entity.shared.Hierarchy"
+                    view="hierarchy.view">
+            <loader id="hierarchiesDl">
+                <query>
+                    <![CDATA[select e from base$Hierarchy e order by e.primaryFlag desc]]>
+                </query>
+            </loader>
+        </collection>
 
-    <dsContext>
-        <hierarchicalDatasource id="hierarchyElementsDs"
-                                class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
-                                hierarchyProperty="parent"
-                                view="hierarchyElement.browse">
-            <query>
-                <![CDATA[select e
-                           from base$HierarchyElementExt e
-                          where :session$systemDate between e.startDate and e.endDate
-                            and e.hierarchy.id = :component$hierarchyLookup.id
-                          ]]>
-            </query>
-        </hierarchicalDatasource>
-        <datasource id="organizationDs"
-                    class="kz.uco.tsadv.modules.personal.model.OrganizationExt"
-                    view="organizations.browse">
-            <datasource id="orgGroupDs"
-                        property="group">
-                <collectionDatasource id="organizationHistoryDs"
-                                      property="list"/>
-                <collectionDatasource id="orgCompetenceElementsDs"
-                                      property="competenceElements"/>
-                <collectionDatasource id="orgHrUsersDs"
-                                      property="hrUsers"/>
-                <datasource id="orgAnalyticsOrganizationDs"
-                            property="analytics"/>
-            </datasource>
-        </datasource>
-        <datasource id="positionDs"
-                    class="kz.uco.tsadv.modules.personal.model.PositionExt"
-                    view="position-view">
-            <datasource id="positionGroupDs"
-                        property="group">
-                <collectionDatasource id="assignmentsDs"
-                                      property="assignments"/>
-                <collectionDatasource id="posCompetenceElementsDs"
-                                      property="competenceElements"/>
-                <collectionDatasource id="surChargeDs"
-                                      property="surCharge"/>
-                <datasource id="orgAnalyticsPositionDs"
-                            property="analytics"/>
-            </datasource>
-        </datasource>
-        <collectionDatasource id="hierarchiesDs"
-                              class="kz.uco.base.entity.shared.Hierarchy"
-                              view="hierarchy.view">
-            <query>
-                <![CDATA[select e from base$Hierarchy e order by e.primaryFlag desc]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="calendarsDs"
-                              class="kz.uco.tsadv.modules.timesheet.model.Calendar"
-                              view="calendar.view">
-            <query>
-                <![CDATA[select e from tsadv$Calendar e]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="standardOffsetsDs"
-                              class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"
-                              view="standardOffset.view">
-            <query>
-                <![CDATA[select e from tsadv$StandardOffset e]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="dicWorkingConditionsDs"
-                              class="kz.uco.tsadv.modules.personal.dictionary.DicWorkingCondition"
-                              view="_local">
-            <query>
-                <![CDATA[select e from tsadv$DicWorkingCondition e]]>
-            </query>
-        </collectionDatasource>
-        <datasource id="orgAnalyticsBetweenDs"
-                    class="kz.uco.tsadv.modules.timesheet.model.OrgAnalytics"
-                    view="orgAnalytics-view"/>
-    </dsContext>
-    <actions>
-        <action id="search"
-                invoke="searchForHierarchyElement"/>
-    </actions>
+        <instance id="positionDc"
+                  view="position-view"
+                  class="kz.uco.tsadv.modules.personal.model.PositionExt"/>
+        <instance id="organizationDc"
+                  class="kz.uco.tsadv.modules.personal.model.OrganizationExt"
+                  view="organizations.browse"/>
+    </data>
     <dialogMode height="600"
                 width="800"/>
-
-    <layout spacing="true">
+    <layout expand="splitter"
+            spacing="true">
         <split id="splitter"
-               height="100%"
                orientation="horizontal"
                pos="30"
                width="100%">
             <vbox expand="tree"
+                  spacing="true"
                   height="100%"
                   margin="false,true,false,false">
                 <lookupField id="hierarchyLookup"
                              align="MIDDLE_CENTER"
                              nullOptionVisible="false"
-                             optionsDatasource="hierarchiesDs"
-                             width="96%"/>
+                             captionProperty="hierarchyName"
+                             width="100%"
+                             optionsContainer="hierarchiesDc"/>
                 <hbox id="searchHbox"
                       spacing="true"
-                      margin="true"
                       width="100%"
                       expand="searchField">
                     <textField id="searchField"
-                               align="MIDDLE_CENTER" width="100%"/>
+                               align="MIDDLE_CENTER"/>
                     <button id="searchButton"
                             caption="msg://kz.uco.tsadv.web/table.btn.search"
-                            action="search" width="100px"/>
+                            invoke="search"
+                            width="100px"/>
                 </hbox>
                 <tree id="tree"
+                      stylename="b-tree"
+                      dataContainer="hierarchyElementDc"
+                      captionProperty="name"
+                      hierarchyProperty="parentFromGroup"
                       width="100%">
                     <actions>
                         <action id="edit"/>
                         <action id="close"
                                 caption="msg://table.btn.close"
-                                icon="icons/remove.png"
-                                invoke="close"/>
+                                icon="icons/remove.png"/>
                     </actions>
-                    <treechildren captionProperty="name"
-                                  datasource="hierarchyElementsDs"/>
                 </tree>
             </vbox>
             <vbox expand="cssLayout"
@@ -132,34 +74,19 @@
                 <hbox id="organizationButtons"
                       margin="false,false,true,false"
                       spacing="true">
-                    <button id="createChildOrganization"
-                            caption="msg://HierarchyElement.createChild"
-                            icon="icons/add.png"
-                            invoke="createOrganization"/>
-                    <button id="createSHE"
-                            caption="msg://HierarchyElement.createPosition"
-                            icon="icons/add.png"
-                            invoke="createPosition"/>
-                    <button id="closeOrg"
-                            action="tree.close"
-                            caption="msg://table.btn.close"/>
-                    <button id="report"
-                            caption="msg://createReportStaffSchedule"
-                            invoke="createReport"/>
                 </hbox>
                 <vbox id="cssLayout"
                       margin="false,false,false,true">
-                    <frame id="organizationFrame"
-                           height="100%"
-                           src="/kz/uco/tsadv/web/modules/personal/frames/organizations.xml"
-                           visible="false"/>
-                    <frame id="positionFrame"
-                           height="100%"
-                           src="/kz/uco/tsadv/web/modules/personal/frames/positions.xml"
-                           visible="false"/>
+                    <fragment id="organizationFragment"
+                              height="100%"
+                              visible="false"
+                              screen="tsadv_OrganizationFragment"/>
+                    <fragment id="positionFragment"
+                              height="100%"
+                              visible="false"
+                              screen="tsadv_PositionFragment"/>
                 </vbox>
             </vbox>
         </split>
     </layout>
-
 </window>
