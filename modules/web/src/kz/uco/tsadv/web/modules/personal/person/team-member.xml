@@ -160,7 +160,7 @@ order by e.startDate desc]]>
                             <column id="addressType"/>
                             <column id="address"
                                     caption="msg://addressLine"/>
-                            <column id="city"/>
+                            <column id="cityName"/>
                             <column id="country"/>
                         </columns>
                         <rows datasource="addressesDs"/>

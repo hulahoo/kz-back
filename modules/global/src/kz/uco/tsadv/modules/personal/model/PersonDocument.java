@@ -4,14 +4,15 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicApprovalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
+import kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
 
 import javax.persistence.*;
-import java.util.Date;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Table(name = "TSADV_PERSON_DOCUMENT")
 @Entity(name = "tsadv$PersonDocument")
@@ -23,11 +24,24 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     protected Date issueDate;
 
     @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE")
+    private Date startDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE")
+    private Date endDate;
+
+    @Temporal(TemporalType.DATE)
     @Column(name = "EXPIRED_DATE", nullable = false)
     protected Date expiredDate;
 
     @Column(name = "ISSUED_BY", length = 500)
     protected String issuedBy;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ISSUING_AUTHORITY_ID")
+    protected DicIssuingAuthority issuingAuthority;
 
     @Column(name = "DESCRIPTION", length = 2000)
     protected String description;
@@ -59,6 +73,30 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     protected FileDescriptor file;
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public DicIssuingAuthority getIssuingAuthority() {
+        return issuingAuthority;
+    }
+
+    public void setIssuingAuthority(DicIssuingAuthority issuingAuthority) {
+        this.issuingAuthority = issuingAuthority;
+    }
 
 
     public void setSeries(String series) {

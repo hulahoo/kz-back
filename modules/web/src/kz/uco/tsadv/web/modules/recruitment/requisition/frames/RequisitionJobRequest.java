@@ -1744,8 +1744,8 @@ public class RequisitionJobRequest extends AbstractFrame {
                     return false;
                 }
             }).findFirst().orElse(null);
-            if (address != null && address.getCity() != null) {
-                cityValue.setValue(address.getCity());
+            if (address != null && address.getCityName() != null) {
+                cityValue.setValue(address.getCityName());
             } else {
                 cityValue.setValue("");
             }
@@ -1768,7 +1768,7 @@ public class RequisitionJobRequest extends AbstractFrame {
                     if (addOrEdit.getIcon().equals("font-icon:PENCIL")) {
                         AbstractEditor fromRequisitionJobRequest = openEditor(addressToEditor, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                         fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCity());
+                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCityName());
                         });
                     } else if (addOrEdit.getIcon().equals("font-icon:PLUS")) {
                         Address addressNew = metadata.create(Address.class);
@@ -1779,7 +1779,7 @@ public class RequisitionJobRequest extends AbstractFrame {
                         addressNew.setEndDate(CommonUtils.getEndOfTime());
                         AbstractEditor fromRequisitionJobRequest = openEditor(addressNew, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                         fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCity());
+                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCityName());
                             addOrEdit.setIcon("font-icon:PENCIL");
                         });
                     }
@@ -1793,7 +1793,7 @@ public class RequisitionJobRequest extends AbstractFrame {
                         addressNew.setEndDate(CommonUtils.getEndOfTime());
                         AbstractEditor fromRequisitionJobRequest = openEditor(addressNew, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                         fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCity());
+                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCityName());
                             addOrEdit.setIcon("font-icon:PENCIL");
                             addressInner = (Address) fromRequisitionJobRequest.getItem();
                         });
@@ -1804,13 +1804,13 @@ public class RequisitionJobRequest extends AbstractFrame {
                             fromRequisitionJobRequest = openEditor(addressToEditor, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                             AbstractEditor finalFromRequisitionJobRequest = fromRequisitionJobRequest;
                             fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                                cityValue.setValue(((Address) finalFromRequisitionJobRequest.getItem()).getCity());
+                                cityValue.setValue(((Address) finalFromRequisitionJobRequest.getItem()).getCityName());
                             });
                         } else if (addressInner != null) {
                             fromRequisitionJobRequest = openEditor(addressInner, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                             AbstractEditor finalFromRequisitionJobRequest1 = fromRequisitionJobRequest;
                             fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                                cityValue.setValue(((Address) finalFromRequisitionJobRequest1.getItem()).getCity());
+                                cityValue.setValue(((Address) finalFromRequisitionJobRequest1.getItem()).getCityName());
                             });
                         }
                     }

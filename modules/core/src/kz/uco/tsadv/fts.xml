@@ -1678,5 +1678,35 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCompany">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonDocumentRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicFormStudy">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.model.PersonEducationRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkills">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkillsRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.tb.PersonQualificationRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.dictionary.DicIndustry">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.model.PersonExperienceRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.BeneficiaryRequest">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

@@ -78,6 +78,17 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     @Column(name = "FULL_NAME_NUMBER_CYRILLIC")
     protected String fullNameNumberCyrillic;
 
+    @Column(name = "BIRTH_PLACE", length = 2000)
+    private String birthPlace;
+
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+
+    public void setBirthPlace(String birthPlace) {
+        this.birthPlace = birthPlace;
+    }
+
     public void setFullNameNumberCyrillic(String fullNameNumberCyrillic) {
         this.fullNameNumberCyrillic = fullNameNumberCyrillic;
     }
@@ -186,6 +197,7 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     }
 
     @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin", "employeeNumber"})
+    @Transient
     public String getFioWithEmployeeNumberWithSortSupported() {
         StringBuilder builder = new StringBuilder(getFullName());
         if (employeeNumber != null) builder.append("(").append(employeeNumber).append(")");

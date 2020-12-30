@@ -194,7 +194,7 @@ where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p
                                 <column id="addressType"/>
                                 <column id="address"/>
                                 <column id="postalCode"/>
-                                <column id="city"/>
+                                <column id="cityName"/>
                                 <column id="startDate"/>
                                 <column id="endDate"/>
                             </columns>

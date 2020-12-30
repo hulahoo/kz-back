@@ -174,7 +174,7 @@ public class AddressEdit extends AbstractEditor<Address> {
                         "   and e.personGroup.id = :personGroupId " +
                         "   and e.startDate <= :endDate and e.endDate >= :startDate " +
                         "   and e.id <> :id",
-                ParamsMap.of("personGroupId", address.getPersonGroup(),
+                ParamsMap.of("personGroupId", address.getPersonGroup().getId(),
                         "typeId", address.getAddressType().getId(),
                         "startDate", address.getStartDate(),
                         "endDate", address.getEndDate(),

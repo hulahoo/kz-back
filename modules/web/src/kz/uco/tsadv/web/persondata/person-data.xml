@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://personData.caption"
+        messagesPack="kz.uco.tsadv.web.persondata">
+    <data>
+        <instance id="personExtDc" class="kz.uco.tsadv.modules.personal.model.PersonExt">
+            <view extends="_minimal">
+                <property name="group" view="_minimal">
+                    <property name="assignments" view="_minimal"/>
+                </property>
+                <property name="nationality" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="firstNameLatin"/>
+                <property name="lastNameLatin"/>
+                <property name="dateOfBirth"/>
+                <property name="sex" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="citizenship" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="nationalIdentifier"/>
+            </view>
+            <loader id="personExtDl"/>
+        </instance>
+        <collection id="sexesDc" class="kz.uco.base.entity.dictionary.DicSex" view="_minimal">
+            <loader id="sexesDl">
+                <query>
+                    <![CDATA[select e from base$DicSex e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personDocumentsForeignerDc" class="kz.uco.tsadv.modules.personal.model.PersonDocument">
+            <view extends="_minimal">
+                <property name="issueDate"/>
+                <property name="expiredDate"/>
+                <property name="issuingAuthority" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="documentType" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
+                <property name="personGroup" view="_minimal">
+                    <property name="person">
+                        <property name="firstName"/>
+                        <property name="lastName"/>
+                        <property name="middleName"/>
+                        <property name="employeeNumber"/>
+                    </property>
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="nationalIdentifier"/>
+                    </property>
+                </property>
+                <property name="documentNumber"/>
+                <property name="file" view="_minimal"/>
+            </view>
+            <loader id="personDocumentsForeignerDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonDocument e
+                    join base$PersonExt p on p.group.id = e.personGroup.id
+                    and p.startDate <= :session_systemDate
+                    and p.endDate >= :session_systemDate
+                    where e.documentType.foreigner = true
+                    and p = :container_personExtDc and :session_systemDate between e.startDate and e.endDate ]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personDocumentsDc" class="kz.uco.tsadv.modules.personal.model.PersonDocument">
+            <view extends="_minimal">
+                <property name="issueDate"/>
+                <property name="expiredDate"/>
+                <property name="issuingAuthority" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="documentType" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
+                <property name="personGroup" view="_minimal">
+                    <property name="person">
+                        <property name="firstName"/>
+                        <property name="lastName"/>
+                        <property name="middleName"/>
+                        <property name="employeeNumber"/>
+                    </property>
+                </property>
+                <property name="documentNumber"/>
+                <property name="file" view="_minimal"/>
+            </view>
+            <loader id="personDocumentsForeignerDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonDocument e where e.documentType.foreigner = false
+ and e.personGroup.id = :instance_personExtDc.group.id
+ and :session_systemDate between e.startDate and e.endDate]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personEducationsDc" class="kz.uco.tsadv.modules.recruitment.model.PersonEducation">
+            <view extends="_local">
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+                <property name="degree" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="level" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+            </view>
+            <loader id="personEducationsDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonEducation e
+                    where e.personGroup.id = :instance_personExtDc.group.id
+                    and :session_systemDate between e.startDateHistory and e.endDateHistory]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="improvingProfessionalSkillsesDc"
+                    class="kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkills">
+            <view extends="_local">
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+            </view>
+            <loader id="improvingProfessionalSkillsesDl">
+                <query>
+                    <![CDATA[select e from tsadv_ImprovingProfessionalSkills e
+                    where e.personGroup.id = :instance_personExtDc.group.id
+                    and :session_systemDate between e.startDateHistory and e.endDateHistory]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personQualificationsDc" class="kz.uco.tsadv.entity.tb.PersonQualification">
+            <view extends="_local"/>
+            <loader id="personQualificationsDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonQualification e
+                    where e.personGroup.id = :instance_personExtDc.group.id
+                    and :session_systemDate between e.startDateHistory and e.endDateHistory]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personExperiencesDc" class="kz.uco.tsadv.modules.recruitment.model.PersonExperience">
+            <view extends="_local">
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="primaryFlag"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+                <property name="industry" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
+            </view>
+            <loader id="personExperiencesDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonExperience e
+                    where e.personGroup.id = :instance_personExtDc.group.id
+                    and :session_systemDate between e.startDateHistory and e.endDateHistory]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="beneficiariesDc" class="kz.uco.tsadv.modules.personal.model.Beneficiary">
+            <view extends="_local">
+                <property name="relationshipType" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+            </view>
+            <loader id="beneficiariesDl">
+                <query>
+                    <![CDATA[select e from tsadv$Beneficiary e
+                    where e.personGroup.id = :instance_personExtDc.group.id
+                    and :session_systemDate between e.startDateHistory and e.endDateHistory]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="addressesDc" class="kz.uco.tsadv.modules.personal.model.Address">
+            <view extends="_local"/>
+            <loader id="addressesDl">
+                <query>
+                    <![CDATA[select e from tsadv$Address e
+                    join base$PersonExt p on p.group.id = e.personGroup.id
+                    and p.startDate <= :session_systemDate
+                    and p.endDate >= :session_systemDate
+                    where p = :container_personExtDc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="personContactsDc" class="kz.uco.tsadv.modules.personal.model.PersonContact">
+            <view extends="_local">
+                <property name="type" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+            </view>
+            <loader id="personContactsDl">
+                <query>
+                    <![CDATA[select e from tsadv$PersonContact e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout expand="tabSheet">
+        <tabSheet id="tabSheet">
+            <tab id="personalDataTab" caption="msg://personalData" expand="scroll">
+                <scrollBox id="scroll" width="100%">
+                    <vbox id="vbox" spacing="true">
+                        <groupBox id="personDataGroupBox" caption="msg://personDataGroupBox">
+                            <vbox>
+                                <groupBox id="notEditableGroupBox">
+                                    <buttonsPanel id="personDataButtonPanel">
+                                        <button id="personDataEdit" icon="PENCIL" invoke="personDataRequest"/>
+                                    </buttonsPanel>
+                                    <form id="personExtForm" dataContainer="personExtDc">
+                                        <column id="column1">
+                                            <textField id="lastNameField" property="lastName" editable="false"/>
+                                            <textField id="firstNameField" property="firstName" editable="false"/>
+                                            <textField id="middleNameField" property="middleName" editable="false"/>
+                                            <textField id="nationalIdentifierField" property="nationalIdentifier"
+                                                       editable="false"/>
+                                        </column>
+                                        <column id="column2">
+                                            <dateField id="dateOfBirthField" property="dateOfBirth" editable="false"/>
+                                            <lookupField id="sexField" optionsContainer="sexesDc" property="sex"
+                                                         editable="false"/>
+                                            <pickerField id="nationalityField" property="nationality" editable="false">
+                                                <actions>
+                                                    <action id="lookup" type="picker_lookup"/>
+                                                    <action id="clear" type="picker_clear"/>
+                                                </actions>
+                                            </pickerField>
+                                            <pickerField id="citizenshipField" property="citizenship" editable="false">
+                                                <actions>
+                                                    <action id="lookup" type="picker_lookup"/>
+                                                    <action id="clear" type="picker_clear"/>
+                                                </actions>
+                                            </pickerField>
+                                        </column>
+                                    </form>
+                                </groupBox>
+                                <groupBox id="editableGroupBox" spacing="true">
+                                    <form id="personExtFormEditable" dataContainer="personExtDc">
+                                        <column id="column1">
+                                            <textField id="lastNameLatinField" property="lastNameLatin"/>
+                                        </column>
+                                        <column id="column2">
+                                            <textField id="firstNameLatinField" property="firstNameLatin"/>
+                                        </column>
+                                    </form>
+                                    <buttonsPanel id="personDataEditableButtonPanel">
+                                        <button id="savePerson" caption="msg://savePerson" invoke="savePersonData"/>
+                                        <button id="savePersonWithHistory" caption="msg://savePersonWithHistory"
+                                                invoke="savePersonDataWithHistory"/>
+                                    </buttonsPanel>
+                                </groupBox>
+                            </vbox>
+                        </groupBox>
+                        <groupBox id="foreignerDocsGroupBox" caption="msg://foreignerDocsGroupBox">
+                            <table id="foreignerDocumentsTable" width="100%"
+                                   dataContainer="personDocumentsForeignerDc">
+                                <rowsCount/>
+                                <actions>
+                                    <action id="createForeignerRequest" type="create" invoke="createRequest"
+                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
+                                            primary="true"/>
+                                    <action id="editForeignerRequest" type="edit" trackSelection="true"
+                                            invoke="editRequest" caption="msg://editRequest" icon="PENCIL"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="foreignerDocumentsTableCreateBtn"
+                                            action="foreignerDocumentsTable.createForeignerRequest"/>
+                                    <button id="foreignerDocumentsTableEditBtn"
+                                            action="foreignerDocumentsTable.editForeignerRequest"/>
+                                </buttonsPanel>
+                                <columns>
+                                    <column id="documentType"/>
+                                    <column id="issueDate"/>
+                                    <column id="expiredDate"/>
+                                    <column id="documentNumber"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="personDocsGroupBox" caption="msg://personDocsGroupBox">
+                            <table id="personDocumentsTable" width="100%"
+                                   dataContainer="personDocumentsDc">
+                                <actions>
+                                    <action id="createRequest" type="create" invoke="createRequest"
+                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
+                                            primary="true"/>
+                                    <action id="editRequest" type="edit" trackSelection="true"
+                                            invoke="editRequest" caption="msg://editRequest" icon="PENCIL"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="personDocumentsTableCreateBtn"
+                                            action="personDocumentsTable.createRequest"/>
+                                    <button id="personDocumentsTableEditBtn"
+                                            action="personDocumentsTable.editRequest"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="documentType"/>
+                                    <column id="documentNumber"/>
+                                    <column id="issueDate"/>
+                                    <column id="expiredDate"/>
+                                    <column id="issuingAuthority"/>
+                                    <column id="personGroup.person.nationalIdentifier"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="personEducationGroupBox" caption="msg://personEducationGroupBox">
+                            <table id="personEducationTable" width="100%"
+                                   dataContainer="personEducationsDc">
+                                <actions>
+                                    <action id="createEducationRequest" type="create" invoke="createEducationRequest"
+                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
+                                            primary="true"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="personEducationTableCreateBtn"
+                                            action="personEducationTable.createEducationRequest"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="educationalEstablishment"/>
+                                    <column id="educationType"/>
+                                    <column id="specialization"/>
+                                    <column id="diplomaNumber"/>
+                                    <column id="faculty"/>
+                                    <column id="startYear"/>
+                                    <column id="endYear"/>
+                                    <column id="qualification"/>
+                                    <column id="formStudy"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="personImprovingProfSkillsGroupBox"
+                                  caption="msg://personImprovingProfSkillsGroupBox">
+                            <table id="personImprovingProfSkillsTable" width="100%"
+                                   dataContainer="improvingProfessionalSkillsesDc">
+                                <actions>
+                                    <action id="createImprovingProfSkillsRequest" type="create"
+                                            invoke="createImprovingProfSkillsRequest"
+                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
+                                            primary="true"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="personImprovingProfSkillsTableCreateBtn"
+                                            action="personImprovingProfSkillsTable.createImprovingProfSkillsRequest"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="specialty"/>
+                                    <column id="startDate"/>
+                                    <column id="endDate"/>
+                                    <column id="diploma"/>
+                                    <column id="issueDate"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="personQualificationGroupBox" caption="msg://personQualificationGroupBox">
+                            <table id="personQualificationTable" width="100%"
+                                   dataContainer="personQualificationsDc">
+                                <actions>
+                                    <action id="createQualificationRequest" type="create"
+                                            invoke="createQualificationRequest"
+                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
+                                            primary="true"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="personQualificationTableCreateBtn"
+                                            action="personQualificationTable.createQualificationRequest"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="educationalInstitutionName"/>
+                                    <column id="startDate"/>
+                                    <column id="endDate"/>
+                                    <column id="diploma"/>
+                                    <column id="issueDate"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="personExperiencesGroupBox" caption="msg://personExperiencesGroupBox">
+                            <table id="personExperiencesTable" width="100%"
+                                   dataContainer="personExperiencesDc">
+                                <actions>
+                                    <action id="createExperiencesRequest" type="create"
+                                            invoke="createExperiencesRequest"
+                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
+                                            primary="true"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="personExperiencesCreateBtn"
+                                            action="personExperiencesTable.createExperiencesRequest"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="company"/>
+                                    <column id="startMonth"/>
+                                    <column id="endMonth"/>
+                                    <column id="job"/>
+                                    <column id="location"/>
+                                    <column id="groupExperience"/>
+                                    <column id="miningExperience"/>
+                                    <column id="industry"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="beneficiaryGroupBox" caption="msg://beneficiaryGroupBox">
+                            <table id="beneficiaryTable" width="100%"
+                                   dataContainer="beneficiariesDc">
+                                <actions>
+                                    <action id="createBeneficiaryRequest" type="create"
+                                            invoke="createBeneficiaryRequest"
+                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
+                                            primary="true"/>
+                                    <action id="editBeneficiaryRequest" type="edit" trackSelection="true"
+                                            invoke="editBeneficiaryRequest" caption="msg://editRequest" icon="PENCIL"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="beneficiaryCreateBtn"
+                                            action="beneficiaryTable.createBeneficiaryRequest"/>
+                                    <button id="beneficiaryEditeBtn"
+                                            action="beneficiaryTable.editBeneficiaryRequest"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="relationshipType"/>
+                                    <column id="lastName"/>
+                                    <column id="firstName"/>
+                                    <column id="middleName"/>
+                                    <column id="birthDate"/>
+                                    <column id="workLocation"/>
+                                    <column id="homeAddress"/>
+                                    <column id="additionalContact"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="addressGroupBox" caption="msg://addressGroupBox">
+                            <table id="addressTable" width="100%"
+                                   dataContainer="addressesDc">
+                                <actions>
+                                    <action id="create" type="create" icon="font-icon:PLUS_CIRCLE"/>
+                                    <action id="edit" type="edit" icon="font-icon:PENCIL"/>
+                                    <action id="remove" type="remove"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="addressTableCreateBtn" action="addressTable.create"/>
+                                    <button id="addressTableEditBtn" action="addressTable.edit"/>
+                                    <button id="addressTableRemoveBtn" action="addressTable.remove"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="country"/>
+                                    <column id="city"/>
+                                    <column id="address"/>
+                                    <column id="language"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="addressGroupBox" caption="msg://addressGroupBox">
+                            <table id="addressTable" width="100%"
+                                   dataContainer="addressesDc">
+                                <actions>
+                                    <action id="create" type="create" icon="font-icon:PLUS_CIRCLE"/>
+                                    <action id="edit" type="edit" icon="font-icon:PENCIL"/>
+                                    <action id="remove" type="remove"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="addressTableCreateBtn" action="addressTable.create"/>
+                                    <button id="addressTableEditBtn" action="addressTable.edit"/>
+                                    <button id="addressTableRemoveBtn" action="addressTable.remove"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="country"/>
+                                    <column id="city"/>
+                                    <column id="address"/>
+                                    <column id="language"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                        <groupBox id="personContactGroupBox" caption="msg://personContactGroupBox">
+                            <table id="personContactTable" width="100%"
+                                   dataContainer="personContactsDc">
+                                <actions>
+                                    <action id="create" type="create" icon="font-icon:PLUS_CIRCLE"/>
+                                    <action id="edit" type="edit" icon="font-icon:PENCIL"/>
+                                    <action id="remove" type="remove"/>
+                                </actions>
+                                <buttonsPanel alwaysVisible="true">
+                                    <button id="personContactTableCreateBtn" action="personContactTable.create"/>
+                                    <button id="personContactTableEditBtn" action="personContactTable.edit"/>
+                                    <button id="personContactTableRemoveBtn" action="personContactTable.remove"/>
+                                </buttonsPanel>
+                                <rowsCount/>
+                                <columns>
+                                    <column id="type"/>
+                                    <column id="contactValue"/>
+                                </columns>
+                            </table>
+                        </groupBox>
+                    </vbox>
+                </scrollBox>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

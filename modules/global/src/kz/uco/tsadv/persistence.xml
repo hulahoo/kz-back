@@ -564,5 +564,15 @@
         <class>kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription</class>
         <class>kz.uco.tsadv.modules.administration.UserExt</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCompany</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonDocumentRequest</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicFormStudy</class>
+        <class>kz.uco.tsadv.modules.recruitment.model.PersonEducationRequest</class>
+        <class>kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkills</class>
+        <class>kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkillsRequest</class>
+        <class>kz.uco.tsadv.entity.tb.PersonQualificationRequest</class>
+        <class>kz.uco.tsadv.modules.recruitment.dictionary.DicIndustry</class>
+        <class>kz.uco.tsadv.modules.recruitment.model.PersonExperienceRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.BeneficiaryRequest</class>
     </persistence-unit>
 </persistence>
