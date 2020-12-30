@@ -21194,43 +21194,43 @@
     </view>
     <view entity="base$PositionGroupExt"
           name="positionExt-receptionAssignment" extends="_local">
-            <property name="list"
-                      view="_local">
-                <property name="costCenter"
-                          view="_minimal"/>
-                <property name="organizationGroupExt"
-                          view="organizationGroupExt-receptionAssignment"/>
-                <property name="jobGroup" view="_local">
-                    <property name="jobNameDefault"/>
-                </property>
-                <property name="gradeGroup" view="gradeGroup-receptionAssignment"/>
-                <property name="location" view="_local"/>
+        <property name="list"
+                  view="_local">
+            <property name="costCenter"
+                      view="_minimal"/>
+            <property name="organizationGroupExt"
+                      view="organizationGroupExt-receptionAssignment"/>
+            <property name="jobGroup" view="_local">
+                <property name="jobNameDefault"/>
             </property>
-            <property name="position"
+            <property name="gradeGroup" view="gradeGroup-receptionAssignment"/>
+            <property name="location" view="_local"/>
+        </property>
+        <property name="position"
+                  view="_minimal">
+            <property name="gradeGroup"
                       view="_minimal">
-                <property name="gradeGroup"
+                <property name="list"
+                          view="_minimal"/>
+            </property>
+            <property name="costCenter"
+                      view="_minimal"/>
+            <property name="legacyId"/>
+            <property name="organizationGroupExt"
+                      view="_local"/>
+        </property>
+        <property name="analytics"
+                  view="_minimal">
+            <property name="calendar"
+                      view="_minimal">
+                <property name="calendar"/>
+                <property name="orgAnalytics"
                           view="_minimal">
-                    <property name="list"
+                    <property name="calendar"
                               view="_minimal"/>
                 </property>
-                <property name="costCenter"
-                          view="_minimal"/>
-                <property name="legacyId"/>
-                <property name="organizationGroupExt"
-                          view="_local"/>
             </property>
-            <property name="analytics"
-                      view="_minimal">
-                <property name="calendar"
-                          view="_minimal">
-                    <property name="calendar"/>
-                    <property name="orgAnalytics"
-                              view="_minimal">
-                        <property name="calendar"
-                                  view="_minimal"/>
-                    </property>
-                </property>
-            </property>
+        </property>
     </view>
     <view entity="tsadv$GradeGroup"
           name="gradeGroup-receptionAssignment"
