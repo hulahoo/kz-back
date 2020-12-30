@@ -90,7 +90,7 @@
         <groupDatasource id="parentElementsGoalsDs"
                          class="kz.uco.tsadv.modules.personal.model.ParentElementsGoal"
                          refreshMode="NEVER"/>
-        <collectionDatasource id="organizationGroupExtsDs"
+        <collectionDatasource id="organizationGroupExtDs"
                               class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
                               view="organizationGroup.browse">
             <query>
@@ -237,8 +237,8 @@
                                            property="extra"/>
 
                                     <field id="organizationGroupExt"
-                                           captionProperty="organizationName"
-                                           optionsDatasource="organizationGroupExtsDs"
+                                           captionProperty="organization.organizationName"
+                                           optionsDatasource="organizationGroupExtDs"
                                            property="organizationGroupExt"
                                            required="true"/>
                                 </column>
@@ -328,8 +328,6 @@
                 >
                     <button id="windowCommit" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
                             caption="msg://table.btn.save"/>
-                    <button id="windowCommitHistory" caption="msg://table.btn.save.history"
-                            action="windowCommitHistory"/>
                     <button id="windowClose" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
                 </hbox>
             </tab>
@@ -451,8 +449,8 @@
                 >
                     <button id="windowCommit1" action="windowCommit" icon="theme://actions.Editor.Ok.icon"
                             caption="msg://table.btn.save"/>
-                    <button id="windowCommitHistory1" caption="msg://table.btn.save.history"
-                            action="windowCommitHistory"/>
+<!--                    <button id="windowCommitHistory1" caption="msg://table.btn.save.history"-->
+<!--                            action="windowCommitHistory"/>-->
                     <button id="windowClose1" action="windowClose" icon="theme://actions.Editor.Cancel.icon"/>
                 </hbox>
             </tab>

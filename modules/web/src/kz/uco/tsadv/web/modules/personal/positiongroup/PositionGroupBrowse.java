@@ -25,10 +25,7 @@ import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
-import kz.uco.tsadv.modules.personal.model.AssignmentExt;
-import kz.uco.tsadv.modules.personal.model.GradeRule;
-import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
-import kz.uco.tsadv.modules.personal.model.PositionExt;
+import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.web.modules.filterconfig.FilterConfig;
 import kz.uco.tsadv.web.modules.personal.position.PositionEdit;
@@ -152,26 +149,32 @@ public class PositionGroupBrowse extends AbstractLookup {
         }
     }
 
-    @Override
-    public void ready() {
-        super.ready();
-
-        editButton.setEnabled(positionGroupsDs.getItem() != null);
-        positionGroupsDs.addItemChangeListener(new Datasource.ItemChangeListener<PositionGroupExt>() {
-            @Override
-            public void itemChanged(Datasource.ItemChangeEvent<PositionGroupExt> e) {
-                editButton.setEnabled(e.getItem() != null);
-            }
-        });
-
-        positionGroupsFilter.setCaption(positionGroupsFilter.getCaption());
-        setDescription(null);
-    }
+//    @Override
+//    public void ready() {
+//        super.ready();
+//
+//        editButton.setEnabled(positionGroupsDs.getItem() != null);
+//        positionGroupsDs.addItemChangeListener(new Datasource.ItemChangeListener<PositionGroupExt>() {
+//            @Override
+//            public void itemChanged(Datasource.ItemChangeEvent<PositionGroupExt> e) {
+//                editButton.setEnabled(e.getItem() != null);
+//            }
+//        });
+//
+//        positionGroupsFilter.setCaption(positionGroupsFilter.getCaption());
+//        setDescription(null);
+//    }
 
     protected void applyFilter() {
         customFilter.selectFilter("positionFullNameRu");
         customFilter.selectFilter("organization");
         customFilter.applyFilter();
+    }
+
+    public void openPosition() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("firstRow", Boolean.TRUE);
+        openPositionEditor(metadata.create(PositionExt.class), params);
     }
 
 
@@ -324,38 +327,42 @@ public class PositionGroupBrowse extends AbstractLookup {
         if (positionGroup != null) {
             PositionExt position = positionGroup.getPosition();
             if (position != null) {
-                openPositionEditor(position, null);
+                Map<String, Object> params = new HashMap<>();
+                params.put("firstRow", Boolean.TRUE);
+                openPositionEditor(position, params);
             }
         }
     }
 
-    protected void openPositionEditor(PositionExt position, Map<String, Object> params) {
-        PositionEdit positionEdit = (PositionEdit) screenBuilders.editor(PositionExt.class, this)
-                .editEntity(position)
-                .withLaunchMode(OpenMode.THIS_TAB)
-                .withInitializer(e -> {
-                    PositionGroupExt positionGroupExt = position.getGroup();
-//                    positionGroupsDs.refresh();
-                    positionGroupsTable.repaint();
-                    if (positionGroupsDs.containsItem(positionGroupExt.getUuid())) {
-                        positionGroupsTable.setSelected(positionGroupExt);
-                    }
-                })
-                .build()
-                .show();
-        positionEdit.addAfterCloseListener(actionId -> {
-           positionGroupsDs.refresh();
-        });
 
-//        PositionEdit positionEdit = (PositionEdit) openEditor("base$Position.edit", position, WindowManager.OpenType.THIS_TAB, params);
-//        positionEdit.addCloseWithCommitListener(() -> {
-//            PositionGroupExt positionGroupExt = ((PositionExt) positionEdit.getItem()).getGroup();
-//            positionGroupsDs.refresh();
-//            positionGroupsTable.repaint();
-//            if (positionGroupsDs.containsItem(positionGroupExt.getUuid())) {
-//                positionGroupsTable.setSelected(positionGroupExt);
-//            }
+    protected void openPositionEditor(PositionExt position, Map<String, Object> params) {
+//        PositionEdit positionEdit = (PositionEdit) screenBuilders.editor(PositionExt.class, this)
+//                .editEntity(position)
+//                .withLaunchMode(OpenMode.THIS_TAB)
+//                .withInitializer(e -> {
+//                    PositionGroupExt positionGroupExt = position.getGroup();
+////                    positionGroupsDs.refresh();
+//                    positionGroupsTable.repaint();
+//                    if (positionGroupsDs.containsItem(positionGroupExt.getUuid())) {
+//                        positionGroupsTable.setSelected(positionGroupExt);
+//                    }
+//                })
+//                .build()
+//                .show();
+//        positionEdit.addAfterCloseListener(actionId -> {
+//           positionGroupsDs.refresh();
 //        });
+
+        PositionEdit positionEdit = (PositionEdit) openEditor("base$Position.edit", position, WindowManager.OpenType.THIS_TAB, params);
+        positionEdit.addCloseWithCommitListener(() -> {
+            PositionGroupExt positionGroupExt = ((PositionExt) positionEdit.getItem()).getGroup();
+            positionGroupsDs.refresh();
+            positionGroupsTable.repaint();
+            try{
+                positionGroupsTable.setSelected(positionGroupExt);
+            } catch (IllegalStateException e) {
+            }
+        });
     }
 
     public void editHistory() {

@@ -114,7 +114,7 @@ public class AssignmentSalaryChange extends AbstractLookup {
 
         searchTextField.addEnterPressListener(e -> searchBtn());
 
-        assignmentsTable.unwrap(com.vaadin.ui.TreeGrid.class).addExpandListener(event -> myTeamComponent.onExpand(event, teamDs));
+        assignmentsTable.unwrap(com.vaadin.v7.ui.TreeTable.class).addExpandListener(event -> myTeamComponent.onExpand(event, teamDs));
     }
 
     public void openTeamMemberView(MyTeamNew argument, String name) {

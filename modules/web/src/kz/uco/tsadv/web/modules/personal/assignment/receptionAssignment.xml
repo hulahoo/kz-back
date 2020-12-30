@@ -16,7 +16,7 @@
                                 property="person"/>
                 </datasource>
                 <datasource id="positionGroupDs"
-                            property="positionGroup" >
+                            property="positionGroup">
                     <datasource id="positionDs"
                                 property="position"/>
                 </datasource>
@@ -99,7 +99,7 @@
                 <field id="gradeGroup"
                        property="assignment.gradeGroup"/>
                 <field id="organizationGroup"
-                       captionProperty="organizationName"
+                       captionProperty="organization.organizationName"
                        property="assignment.organizationGroup"
                        required="true"/>
                 <field id="jobGroup"

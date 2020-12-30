@@ -104,11 +104,12 @@
                         height="100%"
                         width="100%">
                 <actions>
+                    <action id="edit"
+                            caption="msg://table.btn.edit"
+                            icon="icons/edit.png"
+                            invoke="edit"
+                            shortcut="${TABLE_EDIT_SHORTCUT}"/>
                     <action id="excel"/>
-                    <action id="orgAnalytics"
-                            caption="msg://kz.uco.tsadv.web.modules.personal.position/analitycs.tab"
-                            invoke="analyticsEdit"
-                            trackSelection="true"/>
                 </actions>
                 <columns>
                     <column id="fullName"
@@ -126,18 +127,15 @@
                 <rowsCount/>
                 <buttonsPanel id="buttonsPanel"
                               alwaysVisible="true">
-                    <button id="createButton"
-                            caption="mainMsg://table.btn.create"
+                    <button id="createBtn"
+                            caption="msg://table.btn.create"
                             icon="icons/add.png"
-                            invoke="create"/>
-                    <button id="editButton"
-                            caption="mainMsg://table.btn.edit"
-                            icon="icons/edit.png"
-                            invoke="edit"/>
-                    <button action="positionGroupsTable.orgAnalytics"/>
-                    <button action="positionGroupsTable.excel"
-                            caption="mainMsg://table.btn.excel"
-                            icon="icons/excel.png"/>
+                            invoke="openPosition"/>
+                    <button id="editBtn"
+                            action="positionGroupsTable.edit"/>
+                    <button id="excelBtn"
+                            action="positionGroupsTable.excel"
+                            caption="msg://table.btn.excel"/>
                 </buttonsPanel>
             </groupTable>
             <groupBox id="historyGroupBox"
@@ -147,15 +145,18 @@
                        height="100%"
                        width="100%">
                     <actions>
-                        <action id="edit"
-                                caption="mainMsg://table.btn.edit"
-                                invoke="editHistory"/>
-                        <action id="remove"
-                                caption="mainMsg://table.btn.remove"
-                                invoke="removeHistory"/>
-                        <action id="removeLate"
-                                caption="mainMsg://table.btn.remove.late"
-                                invoke="removeHistories"/>
+                    <action id="edit"
+                            caption="msg://table.btn.edit"
+                            trackSelection="true"
+                            invoke="editHistory"/>
+                    <action id="remove"
+                            trackSelection="true"
+                            caption="msg://table.btn.remove"
+                            invoke="removeHistory"/>
+                    <action id="removeLate"
+                            trackSelection="true"
+                            caption="msg://table.btn.remove.late"
+                            invoke="removeHistories"/>
                     </actions>
                     <columns>
                         <column id="startDate"/>
@@ -168,6 +169,14 @@
                         <column id="legacyId"/>
                     </columns>
                     <rows datasource="listDs"/>
+                    <buttonsPanel>
+                        <button id="editHistory"
+                                action="historyTable.edit"/>
+                        <button id="remove"
+                                action="historyTable.remove"/>
+                        <button id="removeLate"
+                                action="historyTable.removeLate"/>
+                    </buttonsPanel>
                 </table>
             </groupBox>
         </split>

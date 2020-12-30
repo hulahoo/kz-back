@@ -29,8 +29,8 @@ import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
-import kz.uco.tsadv.web.modules.personal.hierarchyelement.PersonPercentageDatasource;
-import kz.uco.tsadv.web.modules.personal.hierarchyelement.PositionPercentageDatasource;
+import kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68.PersonPercentageDatasource;
+import kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68.PositionPercentageDatasource;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;

@@ -7,8 +7,8 @@
             template="/kz/uco/tsadv/web/modules/personal/frames/organizations.xml"/>
     <screen id="positions"
             template="/kz/uco/tsadv/web/modules/personal/frames/positions.xml"/>
-    <screen id="base$HierarchyElement.browse"
-            template="/kz/uco/tsadv/web/modules/personal/hierarchyelement/hierarchy-element-browse.xml"/>
+    <screen id="base$HierarchyElement.browse.old"
+            template="/kz/uco/tsadv/web/modules/personal/hierarchyelement/old/v68/hierarchy-element-browse.xml"/>
     <screen id="tsadv$HierarchyElementTable.browse"
             template="/kz/uco/tsadv/web/modules/personal/hierarchyelementtable/hierarchy-element-table-browse.xml"/>
     <screen id="tsadv$HierarchyElementTable.edit"
@@ -16,7 +16,7 @@
     <screen id="base$Position.browse"
             template="/kz/uco/tsadv/web/modules/personal/position/position-browse.xml"/>
     <screen id="base$HierarchyElement.edit"
-            template="/kz/uco/tsadv/web/modules/personal/hierarchyelement/hierarchy-element-edit.xml"/>
+            template="/kz/uco/tsadv/web/modules/personal/hierarchyelement/old/v68/hierarchy-element-edit.xml"/>
     <screen id="tsadv$Competence.browse"
             template="/kz/uco/tsadv/web/modules/personal/competence/competence-browse.xml"/>
     <screen id="tsadv$CompetenceElement.edit"
@@ -155,10 +155,6 @@
             template="/kz/uco/tsadv/web/modules/performance/goal/goal-browse.xml"/>
     <screen id="tsadv$Goal.edit"
             template="/kz/uco/tsadv/web/modules/performance/goal/goal-edit.xml"/>
-    <screen id="tsadv$PerformancePlan.browse"
-            template="/kz/uco/tsadv/web/modules/performance/performanceplan/performance-plan-browse.xml"/>
-    <screen id="tsadv$PerformancePlan.edit"
-            template="/kz/uco/tsadv/web/modules/performance/performanceplan/performance-plan-edit.xml"/>
     <screen id="tsadv$AssignedGoal.browse"
             template="/kz/uco/tsadv/web/modules/performance/assignedgoal/assigned-goal-browse.xml"/>
     <screen id="tsadv$AssignedGoal.edit"
@@ -230,8 +226,6 @@
             template="/kz/uco/tsadv/web/modules/personal/successionplanning/succession-planning-edit.xml"/>
     <screen id="tsadv$Successor.edit"
             template="/kz/uco/tsadv/web/modules/personal/successor/successor-edit.xml"/>
-    <screen id="tsadv$PerformancePlan.edit"
-            template="/kz/uco/tsadv/web/modules/performance/performanceplan/performance-plan-edit.xml"/>
     <screen id="tsadv$Assessment.create"
             template="/kz/uco/tsadv/web/modules/performance/assessment/assessment-create.xml"/>
     <screen id="tsadv$DicAssessmentStatus.edit"
@@ -350,10 +344,6 @@
             template="/kz/uco/tsadv/web/modules/performance/dictionary/dicpriority/dic-priority-browse.xml"/>
     <screen id="tsadv$DicPriority.edit"
             template="/kz/uco/tsadv/web/modules/performance/dictionary/dicpriority/dic-priority-edit.xml"/>
-    <screen id="tsadv$AssignedPerformancePlan.browse"
-            template="/kz/uco/tsadv/web/modules/performance/assignedperformanceplan/assigned-performance-plan-browse.xml"/>
-    <screen id="tsadv$AssignedPerformancePlan.edit"
-            template="/kz/uco/tsadv/web/modules/performance/assignedperformanceplan/assigned-performance-plan-edit.xml"/>
     <screen id="tsadv$DicEmploymentType.browse"
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicemploymenttype/dic-employment-type-browse.xml"/>
     <screen id="tsadv$DicEmploymentType.edit"
@@ -503,7 +493,7 @@
     <screen id="base$Hierarchy.browse"
             template="/kz/uco/tsadv/web/modules/personal/hierarchy/hierarchy-browse.xml"/>
     <screen id="base$HierarchyElement.lookup"
-            template="/kz/uco/tsadv/web/modules/personal/hierarchyelement/hierarchy-element-lookup.xml"/>
+            template="/kz/uco/tsadv/web/modules/personal/hierarchyelement/old/v68/hierarchy-element-lookup.xml"/>
     <screen id="tsadv$Agreement.edit"
             template="/kz/uco/tsadv/web/modules/personal/agreement/agreement-edit.xml"/>
     <screen id="tsadv$TradeUnion.edit"

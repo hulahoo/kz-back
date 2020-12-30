@@ -11,6 +11,7 @@ import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.data.DataSupplier;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.impl.AbstractDatasource;
+import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.theme.ThemeConstantsManager;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.web.gui.components.WebProgressBar;
@@ -202,11 +203,23 @@ public class PersonCardNew extends AbstractEditor<PersonGroupExt> {
 
     @Override
     protected void postInit() {
+        initDs();
         PersonExt person = personDs.getItem();
         assignmentDs.setItem(assignmentService.getAssignment(person.getGroup().getId(), "assignment.card"));
         fillLeftLinks(tabSheet.getTab().getName());
         initPersonLeftMenu(person);
 //        absenceBalancesVDs.setPersonGroupId(personGroupDs.getItem().getId());
+    }
+
+    private void initDs() {
+        PersonExt as = dataManager.load(PersonExt.class)
+                .query("select j from base$PersonExt j where j.group.id = :id" +
+                        " and :systemDate between j.startDate and j.endDate")
+                .parameter("id", personGroupDs.getItem().getId())
+                .parameter("systemDate", CommonUtils.getSystemDate())
+                .view("person.browse")
+                .one();
+        personDs.setItem(as);
     }
 
     @Override

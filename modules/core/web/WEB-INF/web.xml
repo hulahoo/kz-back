@@ -15,7 +15,7 @@
         <param-name>appComponents</param-name>
         <param-value>com.haulmont.reports com.haulmont.fts com.haulmont.charts kz.uco.tsadv kz.uco.uactivity kz.uco.base
             com.haulmont.addon.restapi com.haulmont.addon.helium com.haulmont.addon.emailtemplates
-            com.haulmont.addon.bproc</param-value>
+            com.haulmont.addon.bproc de.diedavids.cuba.dataimport</param-value>
     </context-param>
     <listener>
         <listener-class>com.haulmont.cuba.core.sys.AppContextLoader</listener-class>
