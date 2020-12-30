@@ -643,4 +643,10 @@
         </method>
         <method name="loadBooks"/>
     </service>
+    <service name="tsadv_UserSettingService">
+        <method name="getTimeZones"/>
+    </service>
+    <service name="tsadv_NotificationService">
+        <method name="notifications"/>
+    </service>
 </services>

@@ -601,8 +601,8 @@ public class LmsServiceBean implements LmsService {
 
         UUID currentUserId = currentUser.getId();
 
-        String oldPasswordHash = passwordEncryption.getPlainHash(oldPassword);
-        boolean isCorrectOldPassword = userManagementService.checkPassword(currentUserId, oldPasswordHash);
+//        String oldPasswordHash = passwordEncryption.getPlainHash(oldPassword);
+        boolean isCorrectOldPassword = passwordEncryption.checkPassword(currentUser, oldPassword);
         if (!isCorrectOldPassword) {
             ResponsePojo r = new ResponsePojo();
             r.setStatus(ResponsePojo.Response.ERROR);
@@ -621,8 +621,7 @@ public class LmsServiceBean implements LmsService {
     @Override
     public ResponsePojo restorePassword(String userLogin) {
         ResponsePojo response = new ResponsePojo();
-        if(userLogin == null && userLogin.isEmpty())
-        {
+        if (userLogin == null && userLogin.isEmpty()) {
             response.setStatus(ResponsePojo.Response.ERROR);
             response.setMessage("passwordRestore.noLogin.caption");
             return response;
@@ -780,6 +779,7 @@ public class LmsServiceBean implements LmsService {
                         .collect(Collectors.toList())
         );
     }
+
     protected BookPojo parseBookToPojo(Book book) {
         BookPojo bookPojo = new BookPojo();
         bookPojo.setId(book.getId().toString());

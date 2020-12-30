@@ -21103,4 +21103,7 @@
 <!--        <property name="fioWithEmployeeNumber"/>-->
 <!--        <property name="personLatinFioWithEmployeeNumber"/>-->
     </view>
+    <view entity="uactivity$Activity" name="portal.notification" extends="_local" systemProperties="true">
+        <property name="name"/>
+    </view>
 </views>
