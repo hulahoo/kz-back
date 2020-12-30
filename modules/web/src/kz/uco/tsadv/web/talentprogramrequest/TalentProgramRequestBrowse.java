@@ -138,7 +138,7 @@ public class TalentProgramRequestBrowse extends AbstractLookup {
                 "select e.gradeGroup from tsadv$TalentProgramGrade e where e.talentProgram.id=:talProgId",
                 ParamsMap.of("talProgId", talentProgram.getId()), View.LOCAL);
         List<PersonGroupExt> personGroupExtsList = commonService.getEntities(PersonGroupExt.class,
-                "select e.personGroup from tsadv$TalentProgramExceptions e where e.talentProgram.id=:talProgId",
+                "select e.personGroupId from tsadv$TalentProgramExceptions e where e.talentProgram.id=:talProgId",
                 ParamsMap.of("talProgId", talentProgram.getId()), View.LOCAL);
 
 

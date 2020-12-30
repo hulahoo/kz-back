@@ -422,7 +422,7 @@ public class LearningPathCard extends CourseCommon {
         LoadContext<PersonLearningPath> loadContext = LoadContext.create(PersonLearningPath.class);
         loadContext.setQuery(LoadContext.createQuery(
                 "select e from tsadv$PersonLearningPath e " +
-                        "where e.personGroup.id = :pId and e.learningPath.id = :lpId")
+                        "where e.personGroupId.id = :pId and e.learningPath.id = :lpId")
                 .setParameter("pId", personGroupId)
                 .setParameter("lpId", learningPath.getId()));
         return dataManager.getCount(loadContext) > 0;
@@ -531,7 +531,7 @@ public class LearningPathCard extends CourseCommon {
         loadContext.setQuery(LoadContext.createQuery(
                 "select e from tsadv$Enrollment e " +
                         "where e.status = 5 " +
-                        "and e.personGroup.id = :pId " +
+                        "and e.personGroupId.id = :pId " +
                         "and e.course.id = :cId")
                 .setParameter("pId", personGroupId)
                 .setParameter("cId", course.getId()));

@@ -99,7 +99,7 @@ public class TeamMember extends AbstractEditor<PersonExt> {
 
     private AssignmentExt getCurrentAssignment() {
         String queryString = "select e from base$AssignmentExt e " +
-                "where e.personGroup.id = :personGroupId " +
+                "where e.personGroupId.id = :personGroupId " +
                 "and :systemDate between e.startDate and e.endDate " +
                 "and e.primaryFlag = true";
         Map<String, Object> map = new HashMap<>();

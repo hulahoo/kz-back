@@ -72,8 +72,8 @@ public class PcfMainData extends EditableFrame {
         dismissalDate = commonService.emQuerySingleRelult(Date.class,
                 "select max(e.dismissalDate) from tsadv$Dismissal e " +
                         "join base$PersonGroupExt pg " +
-                        "on pg.id = e.personGroup.id " +
-                        "where e.personGroup.id = :personGroupId " +
+                        "on pg.id = e.personGroupId.id " +
+                        "where e.personGroupId.id = :personGroupId " +
                         "and e.deleteTs is null ",
                 ParamsMap.of("personGroupId", personDs.getItem().getGroup().getId()));
         if (personDs.getItem().getHireDate() != null && dismissalDate != null) {
@@ -166,7 +166,7 @@ public class PcfMainData extends EditableFrame {
     /*protected boolean isSecondAssignment() {
         List<Dismissal> dismissals = new ArrayList<>();
         String queryString = "SELECT e from tsadv$Dismissal e " +
-                "WHERE e.personGroup.id = :personGroupId " +
+                "WHERE e.personGroupId.id = :personGroupId " +
                 "AND e.dismissalDate < :currentAssignmentStartDate";
         Map<String, Object> queryParams = new HashMap<>();
         AssignmentExt currentAssignmentFirst = assignmentDs.getItem().getGroup().getList().get(0);

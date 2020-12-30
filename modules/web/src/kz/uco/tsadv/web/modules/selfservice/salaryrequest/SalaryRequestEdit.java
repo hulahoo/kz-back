@@ -247,7 +247,7 @@ public class SalaryRequestEdit<T extends SalaryRequest> extends AbstractBpmEdito
             PersonExt personExt = commonService.getEntities(PersonExt.class,
                     "select p from base$PersonExt p " +
                             "   join base$AssignmentExt s " +
-                            "       on p.group.id = s.personGroup.id " +
+                            "       on p.group.id = s.personGroupId.id " +
                             "   where s.group.id = :id " +
                             "       and :date between p.startDate and p.endDate ",
                     ParamsMap.of("id", getItem().getAssignmentGroup().getId(), "date", oldDate),

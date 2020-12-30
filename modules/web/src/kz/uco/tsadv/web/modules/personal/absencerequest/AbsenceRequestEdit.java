@@ -144,10 +144,10 @@ public class AbsenceRequestEdit<T extends AbsenceRequest> extends AbstractBpmEdi
 //        Map<String, Object> absenceGroupTemplateParams = new HashMap<>();
 //
 //        if (userSession.getUser() != null) {
-//            PersonGroupExt personGroup = userSession.getAttribute(StaticVariable.USER_PERSON_GROUP);
-//            personGroup = dataManager.reload(personGroup, "personGroup.person.info");
-//            absenceGroupTemplateParams.put("employeeFullNameRu", personGroup.getPersonLatinFioWithEmployeeNumber("ru"));
-//            absenceGroupTemplateParams.put("employeeFullNameEn", personGroup.getPersonLatinFioWithEmployeeNumber("en"));
+//            PersonGroupExt personGroupId = userSession.getAttribute(StaticVariable.USER_PERSON_GROUP);
+//            personGroupId = dataManager.reload(personGroupId, "personGroupId.person.info");
+//            absenceGroupTemplateParams.put("employeeFullNameRu", personGroupId.getPersonLatinFioWithEmployeeNumber("ru"));
+//            absenceGroupTemplateParams.put("employeeFullNameEn", personGroupId.getPersonLatinFioWithEmployeeNumber("en"));
 //        } else {
 //            absenceGroupTemplateParams.put("employeeFullNameRu", "");
 //            absenceGroupTemplateParams.put("employeeFullNameEn", "");
@@ -268,9 +268,9 @@ public class AbsenceRequestEdit<T extends AbsenceRequest> extends AbstractBpmEdi
 //    }
 //
 //    protected String getIntersectionMessage(String language, boolean isHr) {
-//        PersonGroupExt personGroup = employeeService.getPersonGroupByAssignmentGroupId(getItem().getAssignmentGroup().getId());
+//        PersonGroupExt personGroupId = employeeService.getPersonGroupByAssignmentGroupId(getItem().getAssignmentGroup().getId());
 //        return absenceService.intersectionExists(
-//                personGroup.getId().toString(),
+//                personGroupId.getId().toString(),
 //                getItem().getDateFrom(),
 //                getItem().getDateTo(),
 //                language,
@@ -376,7 +376,7 @@ public class AbsenceRequestEdit<T extends AbsenceRequest> extends AbstractBpmEdi
 //                        LoadContext.createQuery("select e " +
 //                                "from base$AssignmentGroupExt e" +
 //                                " join e.list a " +
-//                                "where a.personGroup.id = :userPersonGroupId " +
+//                                "where a.personGroupId.id = :userPersonGroupId " +
 //                                " and :systemDate between a.startDate and a.endDate" +
 //                                " and a.primaryFlag = 'TRUE' " +
 //                                "   and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")

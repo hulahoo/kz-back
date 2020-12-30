@@ -98,7 +98,7 @@ public class LoadAttributsBean {
         query.setParameter("userId", userExt.getId());
 
         loadContext.setQuery(query);
-        loadContext.setView("personGroupExt.edit");
+        loadContext.setView("personGroupExt-for-load-attribute");
         return dataManager.load(loadContext);
     }
 

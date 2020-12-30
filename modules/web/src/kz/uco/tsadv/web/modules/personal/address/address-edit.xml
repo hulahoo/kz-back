@@ -24,7 +24,7 @@
             spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="addressDs">
-            <column  width="350px" fieldCaptionWidth="163px">
+            <column width="350px" fieldCaptionWidth="163px">
                 <field optionsDatasource="addressTypesDs"
                        property="addressType"/>
                 <field property="address"

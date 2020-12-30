@@ -49,7 +49,7 @@ public class AssignmentSalaryRequestEdit<T extends AssignmentSalaryRequest> exte
     protected Datasource<AssignmentExt> assignmentExtDs;
     @Inject
     protected Datasource<Salary> salaryDs;
-    @Named("fieldGroup1.personGroup")
+    @Named("fieldGroup1.personGroupId")
     protected PickerField<PersonGroupExt> personGroupField;
     @Inject
     protected PickerField<Entity> newGrade, picker, organizationSs, positionSs, pickerSubstitutedEmployee;

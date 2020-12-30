@@ -487,7 +487,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
 
 //        Utils.customizeLookup(jobGroupConfig.getComponent(), null, WindowManager.OpenType.DIALOG, null);
         Map<String, Object> map = new HashMap<>();
-        map.put("roleCode", " and (e.id in (select u.personGroup.id  " +
+        map.put("roleCode", " and (e.id in (select u.personGroupId.id  " +
                 "                       from tsadv$HrUserRole r, tsadv$UserExt u" +
                 "                      where u.id = r.user.id" +
                 "                        and r.role.code = 'RECRUITING_SPECIALIST'" +
@@ -516,7 +516,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         if (displayAllEmployees.getDisplayAllEmployees()) {
             Utils.customizeLookup(substitutablePersonGroupConfig.getComponent(), "base$PersonGroup.browse", WindowManager.OpenType.DIALOG, null);
         } else {
-            substitutablePersonGroupsDs.setQuery("select e.personGroup from base$AssignmentExt e\n" +
+            substitutablePersonGroupsDs.setQuery("select e.personGroupId from base$AssignmentExt e\n" +
                     "where e.positionGroup.id = :ds$requisitionDs.positionGroup.id");
             Utils.customizeLookup(substitutablePersonGroupConfig.getComponent(), "base$PersonGroup.browse", WindowManager.OpenType.DIALOG, Collections.singletonMap("commonFilter", (getItem().getPositionGroup() != null ? " and (a.positionGroup.id = '" + getItem().getPositionGroup().getId() + "')" : " and 1=0 ")));
 
@@ -760,7 +760,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         if (displayAllEmployees.getDisplayAllEmployees()) {
             Utils.customizeLookup(substitutablePersonGroupConfig.getComponent(), "base$PersonGroup.browse", WindowManager.OpenType.DIALOG, null);
         } else {
-            substitutablePersonGroupsDs.setQuery("select e.personGroup from base$AssignmentExt e\n" +
+            substitutablePersonGroupsDs.setQuery("select e.personGroupId from base$AssignmentExt e\n" +
                     "where e.positionGroup.id = :ds$requisitionDs.positionGroup.id");
             Utils.customizeLookup(substitutablePersonGroupConfig.getComponent(), "base$PersonGroup.browse", WindowManager.OpenType.DIALOG, Collections.singletonMap("commonFilter", (getItem().getPositionGroup() != null ? " and (a.positionGroup.id = '" + getItem().getPositionGroup().getId() + "')" : " and 1=0 ")));
         }
@@ -1146,7 +1146,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                     "    from tsadv$DicCostCenter e " +
                     "   where e.id in (select o.costCenter.id " +
                     "                    from base$AssignmentExt a, tsadv$PositionStructure ps, base$OrganizationExt o " +
-                    "                   where a.personGroup.id = :personGroupId " +
+                    "                   where a.personGroupId.id = :personGroupId " +
                     "                     and ps.positionGroup.id = a.positionGroup.id " +
                     "                     and o.group.id = ps.organizationGroup.id" +
                     "                     and a.primaryFlag = TRUE" +
@@ -1193,7 +1193,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                 && rmPersonGroupId != null && !rmPersonGroupId.isEmpty()
                 && rmPersonGroupId
                 .stream()
-                .filter(organizationHrUser -> employeeService.getPersonGroupByUserId(organizationHrUser.getUser().getId()).getId().equals(userPersonGroupId)) //TODO:personGroup need to test
+                .filter(organizationHrUser -> employeeService.getPersonGroupByUserId(organizationHrUser.getUser().getId()).getId().equals(userPersonGroupId)) //TODO:personGroupId need to test
                 .count() > 0;
 
         sendToRecruiter.setVisible(isDraft && (isManager || isRecruiter));
@@ -1532,7 +1532,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                                     for (OrganizationHrUser ohu : rmPersonGroupIdList) {
                                         Map<String, Object> paramsMap = new HashMap<>();
                                         paramsMap.put("code", getItem().getCode());
-                                        paramsMap.put("personFullName", employeeService.getPersonGroupByUserId(ohu.getUser().getId()).getPerson().getFullName()); //TODO: personGroup need to test
+                                        paramsMap.put("personFullName", employeeService.getPersonGroupByUserId(ohu.getUser().getId()).getPerson().getFullName()); //TODO: personGroupId need to test
                                         paramsMap.put("jobGroup", getItem().getJobGroup().getJob().getJobName());
                                         paramsMap.put("requisition", getItem().getId());
                                         paramsMap.put("webAppUrl", AppContext.getProperty("cuba.webAppUrl"));
@@ -1679,7 +1679,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                 } else {
                     paramsMap.put("positionNameRu", getItem().getJobGroup().getJob() == null ? "" : getItem().getJobGroup().getJob().getJobName());
                 }
-                //TODO: personGroup need to test
+                //TODO: personGroupId need to test
                 PersonGroupExt personGroup = employeeService.getPersonGroupByUserId(userExt.getId());
                 paramsMap.put("personFullNameEn", getLongValueOrFullName(personNameEn, personGroup));
                 paramsMap.put("personFullNameKz", getLongValueOrFullName(personNameKz, personGroup));
@@ -1721,13 +1721,13 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         PersonGroupExt personGroupExt = employeeService.getPersonGroupByUserId(userExt.getId());
         if (personGroupExt == null) return null;
         Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("personGroupId", personGroupExt.getId()); //TODO:personGroup
+        paramMap.put("personGroupId", personGroupExt.getId()); //TODO:personGroupId
         paramMap.put("systemDate", CommonUtils.getSystemDate());
         paramMap.put("language", language);
         paramMap.put("case", caseName);
         Case personName = commonService.getEntity(Case.class,
                 "select c from tsadv$Case c " +
-                        "join base$PersonExt t on t.group.id = c.personGroup.id " +
+                        "join base$PersonExt t on t.group.id = c.personGroupId.id " +
                         "join tsadv$CaseType ct on ct.id = c.caseType.id " +
                         "and ct.language = :language " +
                         "and ct.name = :case " +
@@ -1763,7 +1763,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
     protected UserExt getUserExt(UUID personGroupId) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from tsadv$UserExt e where e.personGroup.id = :pgId");
+                "select e from tsadv$UserExt e where e.personGroupId.id = :pgId");
         query.setParameter("pgId", personGroupId);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");

@@ -46,7 +46,7 @@ public class TimecardSelf extends AbstractWindow {
 
         PersonGroupExt personGroupExt = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP);
         if (personGroupExt == null) {
-            showNotification("There is no personGroup for user", NotificationType.ERROR);
+            showNotification("There is no personGroupId for user", NotificationType.ERROR);
             return;
         }
         UUID positionGroupId = employeeService.getPersonPositionGroup(personGroupExt.getId());

@@ -115,6 +115,9 @@
             <item screen="tsadv_DicIssuingAuthority.browse"
                   caption="mainMsg://menu_config.tsadv_DicIssuingAuthority.browse"/>
             <item screen="tsadv_DicFormStudy.browse" caption="mainMsg://menu_config.tsadv_DicFormStudy.browse"/>
+            <item screen="tsadv_DicLangaugeLevel.browse" caption="mainMsg://menu_config.tsadv_DicLangaugeLevel.browse"/>
+            <item screen="tsadv_DicPrevJobObligation.browse"
+                  caption="mainMsg://menu_config.tsadv_DicPrevJobObligation.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">

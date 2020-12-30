@@ -51,9 +51,9 @@ and :session$systemDate between e.startDate and e.endDate]]>
             <query>
                 <![CDATA[select e from bpm$ProcInstance e
 where e.entity.entityId in ( select p.id from tsadv$PersonalDataRequest p 
-                             where p.personGroup.id = :session$userPersonGroupId )
+                             where p.personGroupId.id = :session$userPersonGroupId )
     or e.entity.entityId in ( select a.id from tsadv$AddressRequest a 
-                              where a.personGroup.id = :session$userPersonGroupId)]]>
+                              where a.personGroupId.id = :session$userPersonGroupId)]]>
             </query>
         </collectionDatasource>-->
     </dsContext>
