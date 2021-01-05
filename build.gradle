@@ -120,7 +120,9 @@ configure(coreModule) {
         testRuntime(postgres)
         compile('com.google.zxing:core:3.4.0')
         compile('com.google.zxing:javase:3.3.0')
-
+        compile('org.telegram:telegrambots:3.3') {
+            exclude group: 'javax.validation', module: 'validation-api'
+        }
     }
 
     task cleanConf(description: 'Cleans up conf directory', type: Delete) {
@@ -135,7 +137,7 @@ configure(coreModule) {
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'postgres'
         host = 'localhost'
-        dbName = 'tsadv_master'
+        dbName = 'kzm'
         dbUser = 'tal'
         dbPassword = 'tal'
     }
@@ -143,7 +145,7 @@ configure(coreModule) {
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'postgres'
         host = 'localhost'
-        dbName = 'tsadv_master'
+        dbName = 'kzm'
         dbUser = 'tal'
         dbPassword = 'tal'
     }

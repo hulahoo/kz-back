@@ -21733,4 +21733,7 @@
         </property>
         <property name="personExperience" view="_minimal"/>
     </view>
+    <view entity="uactivity$Activity" name="portal.notification" extends="_local" systemProperties="true">
+        <property name="name"/>
+    </view>
 </views>
