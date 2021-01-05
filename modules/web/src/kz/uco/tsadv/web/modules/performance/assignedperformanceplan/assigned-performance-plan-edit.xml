@@ -9,6 +9,16 @@
                   view="assignedPerformancePlan.browse">
             <loader id="assignedPerformancePlanDl"/>
         </instance>
+        <collection id="assignedGoalDc"
+                    class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
+                    view="assignedGoal.edit">
+            <loader id="assignedGoalDl">
+                <query>
+                    <![CDATA[select e from tsadv$AssignedGoal e
+                              where e.assignedPerformancePlan = :assignedPerformancePlan]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -17,30 +27,55 @@
         <form id="form"
               dataContainer="assignedPerformancePlanDc"
               width="100%">
-            <column width="300px">
-                <pickerField id="performancePlan" property="performancePlan">
+            <column id="column1" width="300px">
+                <pickerField id="assignedPerson" property="assignedPerson" editable="false">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
-                <pickerField id="assignedPerson" property="assignedPerson">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-                <pickerField id="assignedBy" property="assigned_by">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
+                <textField id="organization"
+                           property="assignedPerson.currentAssignment.organizationGroup.organization.organizationName"
+                           editable="false"/>
+                <textField id="position" property="assignedPerson.currentAssignment.positionGroup"/>
+                <textField id="job" property="assignedPerson.currentAssignment.jobGroup"/>
+                <textField id="grade" property="assignedPerson.currentAssignment.gradeGroup"/>
+            </column>
+            <column id="column2" width="300px">
                 <textField property="result"/>
                 <lookupField property="status"/>
                 <textField property="gzp"/>
+                <dateField id="startDate" property="startDate"/>
+                <dateField id="endDate" property="endDate"/>
             </column>
         </form>
+        <hbox id="hbox" width="100%">
+            <table id="assignedGoalTable" width="100%" dataContainer="assignedGoalDc">
+                <actions>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="category"/>
+                    <column id="goalString"/>
+                    <column id="weight"/>
+                    <column id="result"/>
+                    <column id="goalType"/>
+                </columns>
+                <rows/>
+                <buttonsPanel id="assignedGoalBtnPnl">
+                    <popupButton id="popup" caption="msg://addGoal">
+                        <actions>
+                            <action id="library" caption="msg://library"/>
+                            <action id="cascade" caption="msg://cascade"/>
+                            <action id="individual" caption="msg://individual"/>
+                        </actions>
+                    </popupButton>
+                    <button id="goalEdit" action="assignedGoalTable.edit"/>
+                    <button id="goalRemove" action="assignedGoalTable.remove"/>
+                </buttonsPanel>
+            </table>
+        </hbox>
         <hbox id="windowActions" spacing="true" width="AUTO">
             <button action="windowCommitAndClose"/>
             <button action="windowClose"/>

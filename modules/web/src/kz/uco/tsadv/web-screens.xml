@@ -344,8 +344,6 @@
             template="/kz/uco/tsadv/web/modules/performance/dictionary/dicpriority/dic-priority-browse.xml"/>
     <screen id="tsadv$DicPriority.edit"
             template="/kz/uco/tsadv/web/modules/performance/dictionary/dicpriority/dic-priority-edit.xml"/>
-    <screen id="tsadv$AssignedPerformancePlan.browse"
-            template="/kz/uco/tsadv/web/modules/performance/assignedperformanceplan/assigned-performance-plan-browse.xml"/>
     <screen id="tsadv$DicEmploymentType.browse"
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicemploymenttype/dic-employment-type-browse.xml"/>
     <screen id="tsadv$DicEmploymentType.edit"
@@ -1934,8 +1932,8 @@
             template="kz/uco/tsadv/web/addressrequest/address-request-edit.xml"/>
     <screen id="tsadv$PersonalDataRequest.browse"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-browse.xml"/>
-    <screen id="tsadv$PersonalDataRequest.edit"
-            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-edit.xml"/>
+<!--    <screen id="tsadv$PersonalDataRequest.edit"-->
+<!--            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-edit.xml"/>-->
     <screen id="TeamMemberFrame"
             template="/kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
     <screen id="tsadv$Absence.lookup"

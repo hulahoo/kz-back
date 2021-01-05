@@ -109,7 +109,7 @@ public class RequisitionBrowse extends AbstractLookup {
             jobRequestWindowId = recruitmentConfig.getCandidateForm();
         }
         LoadContext<PersonGroupExt> loadContext = LoadContext.create(PersonGroupExt.class);
-        loadContext.setQuery(LoadContext.createQuery("SELECT a.personGroup " +
+        loadContext.setQuery(LoadContext.createQuery("SELECT a.personGroupId " +
                 " FROM base$AssignmentExt a " +
                 " JOIN base$HierarchyElementExt he " +
                 " JOIN base$PositionExt p " +
@@ -246,7 +246,7 @@ public class RequisitionBrowse extends AbstractLookup {
         PersonExt person = commonService.getEntity(PersonExt.class,
                 "SELECT p " +
                         "FROM base$PersonExt p " +
-                        "join tsadv$UserExt user ON p.group.id = user.personGroup.id " +
+                        "join tsadv$UserExt user ON p.group.id = user.personGroupId.id " +
                         "where user.id = :userId " +
                         "and :sysDate between p.startDate and p.endDate",
                 map,

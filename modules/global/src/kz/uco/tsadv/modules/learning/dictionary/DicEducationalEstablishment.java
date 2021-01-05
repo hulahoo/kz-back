@@ -1,11 +1,8 @@
 package kz.uco.tsadv.modules.learning.dictionary;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import kz.uco.base.entity.abstraction.AbstractDictionary;
+
+import javax.persistence.*;
 
 @Table(name = "TSADV_DIC_EDUCATIONAL_ESTABLISHMENT")
 @Entity(name = "tsadv$DicEducationalEstablishment")

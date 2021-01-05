@@ -1,19 +1,18 @@
 package kz.uco.tsadv.web.screens.vacationschedulerequest;
 
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.components.DateField;
-import com.haulmont.cuba.gui.model.InstanceContainer;
+import com.haulmont.cuba.gui.components.Form;
 import com.haulmont.cuba.gui.screen.*;
-import com.haulmont.cuba.security.global.UserSession;
-import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.entity.AbsenceRequestStatus;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
-import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
+import kz.uco.tsadv.service.TimesheetService;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -28,24 +27,27 @@ import java.util.concurrent.TimeUnit;
 @LoadDataBeforeShow
 public class VacationScheduleRequestEdit extends StandardEditor<VacationScheduleRequest> {
     @Inject
-    protected EmployeeNumberService employeeNumberService;
+    protected DateField<Date> startDateField;
+    @Inject
+    protected DateField<Date> endDateField;
+    @Inject
+    protected DataManager dataManager;
     @Inject
     protected EmployeeService employeeService;
     @Inject
-    protected CommonService commonService;
+    protected TimesheetService timesheetService;
     @Inject
-    protected InstanceContainer<VacationScheduleRequest> vacationScheduleRequestDc;
-    @Inject
-    protected DateField<Date> startDateField;
+    protected Form form;
     @Inject
     protected TimeSource timeSource;
-    @Inject
-    protected UserSession userSession;
-    @Inject
-    protected DateField<Date> endDateField;
 
     @Subscribe
     protected void onAfterInit(AfterInitEvent event) {
+        LocalDateTime ldt = LocalDateTime.ofInstant(timeSource.currentTimestamp().toInstant(), ZoneId.systemDefault());
+        Date out = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
+
+        startDateField.setRangeStart(out);
+        startDateField.setAutofill(true);
         startDateField.addValueChangeListener(dateValueChangeEvent -> {
             if (cantCalculateDays()) {
                 return;
@@ -59,15 +61,23 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
             }
             calculateDays();
         });
+
     }
 
-    private void calculateDays() {
+    @Subscribe
+    protected void onBeforeShow(BeforeShowEvent event) {
         VacationScheduleRequest item = getEditedEntity();
+        if (item.getStatus() != null && !"DRAFT".equals(item.getStatus().getCode())) {
+            form.setEditable(false);
+            return;
+        }
+    }
 
-        long diffInMillies = Math.abs(item.getEndDate().getTime() - item.getStartDate().getTime());
-        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-        item.setAbsenceDays(Math.toIntExact(diff));
+    protected void calculateDays() {
+        VacationScheduleRequest item = getEditedEntity();
+        int kz = timesheetService.getDateDiffByCalendar("KZ", item.getStartDate(), item.getEndDate(), false);
+        item.setAbsenceDays(kz);
     }
 
     protected boolean cantCalculateDays() {
@@ -79,19 +89,11 @@ public class VacationScheduleRequestEdit extends StandardEditor<VacationSchedule
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
         VacationScheduleRequest item = getEditedEntity();
-        if (item.getStatus() == null || "DRAFT".equals(item.getStatus().getCode())) {
-            item.setRequestDate(timeSource.currentTimestamp());
+        if ("DRAFT".equals(item.getStatus().getCode())) {
+            startDateField.setEditable(true);
+            endDateField.setEditable(true);
         }
-
-        if (item.getRequestNumber() == null) {
-            item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            item.setPersonGroup(employeeService.getPersonGroupByUserId(userSession.getUser().getId()));
-            item.setStatus(commonService.getEntity(AbsenceRequestStatus.class, "DRAFT"));
-        }
-
     }
-
-
 
 
 }

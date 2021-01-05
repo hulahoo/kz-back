@@ -112,8 +112,12 @@
             <item screen="tsadv$DicLearningHistoryStatus.browse"/>
             <item screen="tsadv$DicAssignmentCategory.browse"/>
             <item screen="tsadv$DicPersonQualificationType.browse"/>
-            <item screen="tsadv_AbsenceRequestStatus.browse"
-                  caption="mainMsg://menu_config.tsadv_AbsenceRequestStatus.browse"/>
+            <item screen="tsadv_DicIssuingAuthority.browse"
+                  caption="mainMsg://menu_config.tsadv_DicIssuingAuthority.browse"/>
+            <item screen="tsadv_DicFormStudy.browse" caption="mainMsg://menu_config.tsadv_DicFormStudy.browse"/>
+            <item screen="tsadv_DicLangaugeLevel.browse" caption="mainMsg://menu_config.tsadv_DicLangaugeLevel.browse"/>
+            <item screen="tsadv_DicPrevJobObligation.browse"
+                  caption="mainMsg://menu_config.tsadv_DicPrevJobObligation.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">
@@ -374,6 +378,7 @@
                    value="tsadv$BpmUserSubstitutionSs.browse"/>
         </item>
         <item screen="tsadv$Absence.self.browse"/>
+        <item screen="tsadv_PersonData" caption="mainMsg://menu_config.tsadv_PersonData"/>
     </menu>
     <menu id="performanceManagement"
           icon="font-icon:BAR_CHART_O"

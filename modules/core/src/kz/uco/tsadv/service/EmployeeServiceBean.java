@@ -1746,6 +1746,11 @@ public class EmployeeServiceBean implements EmployeeService {
                             "  and current_date between a.start_date and a.end_date " +
                             "  where n.path like " + "'%" + positionGroupId.toString() + "' " +
                             "  and pg.id <> ?1 " +
+                            "  and pg.delete_ts is null " +
+                            "  and a.delete_ts is null " +
+                            "  and das.delete_ts is null " +
+                            "  and su.delete_ts is null " +
+                            "  and per.delete_ts is null  " +
                             "  order by n1.level desc " + (showAll ? "" : "limit 1"));
             query.setParameter(1, positionGroupId);
 

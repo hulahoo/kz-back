@@ -569,10 +569,39 @@
         <class>kz.uco.tsadv.modules.performance.model.InstructionsKpi</class>
         <class>kz.uco.tsadv.entity.VacationSchedule</class>
         <class>kz.uco.tsadv.entity.VacationScheduleRequest</class>
-        <class>kz.uco.tsadv.entity.AbsenceRequestStatus</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCertificateType</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicReceivingType</class>
         <class>kz.uco.tsadv.modules.personal.model.CertificateRequest</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonDocumentRequest</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicFormStudy</class>
+        <class>kz.uco.tsadv.modules.recruitment.model.PersonEducationRequest</class>
+        <class>kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkills</class>
+        <class>kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkillsRequest</class>
+        <class>kz.uco.tsadv.entity.tb.PersonQualificationRequest</class>
+        <class>kz.uco.tsadv.modules.recruitment.dictionary.DicIndustry</class>
+        <class>kz.uco.tsadv.modules.recruitment.model.PersonExperienceRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.BeneficiaryRequest</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicLanguageLevel</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonLanguage</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicPrevJobObligation</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonAdwardRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.MilitaryFormRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonConviction</class>
+        <class>kz.uco.tsadv.modules.personal.model.RetirementRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonBenefit</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicReasonBenifit</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonBenefitRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonClinicDispancer</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonClinicDispancerRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.DisabilityRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonReasonChangingJob</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonCriminalAdministrativeLiability</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonCriminalAdministrativeLiabilityRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonHealth</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonRelativesHaveProperty</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonBankDetails</class>
+        <class>kz.uco.tsadv.modules.personal.model.PersonBankdetailsRequest</class>
         <class>kz.uco.tsadv.modules.personal.model.CertificateTemplate</class>
     </persistence-unit>
 </persistence>

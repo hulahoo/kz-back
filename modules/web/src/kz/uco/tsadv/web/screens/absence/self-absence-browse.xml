@@ -15,6 +15,26 @@
                 </query>
             </loader>
         </collection>
+        <collection id="vacationScheduleDc"
+                    class="kz.uco.tsadv.entity.VacationSchedule"
+                    view="vacation-view">
+            <loader id="vacationScheduleDl">
+                <query>
+                    <![CDATA[select e from tsadv_VacationSchedule e where e.personGroup.id = :session$userPersonGroupId
+ order by e.startDate desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="vacationScheduleRequestDc"
+                    class="kz.uco.tsadv.entity.VacationScheduleRequest"
+                    view="vacation-request-view">
+            <loader id="vacationScheduleRequestDl">
+                <query>
+                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.personGroup.id = :session$userPersonGroupId
+ order by e.startDate desc]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -59,6 +79,53 @@
                     </groupBox>
                 </scrollBox>
             </tab>
+            <tab id="vacationScheduleTab"
+                 caption="msg://kz.uco.tsadv.web/Vacations"
+                 margin="true">
+                <tabSheet id="vacationTabSheet">
+                    <tab id="schedulesTab" spacing="true" caption="msg://kz.uco.tsadv.web/Vacations">
+                        <vbox id="vBox3"
+                              expand="vacationScheduleTable"
+                              height="100%"
+                              spacing="true">
+                            <button id="newVacationScheduleButton"
+                                    caption="msg://newVacationScheduleButton"
+                                    stylename="primary"
+                                    invoke="newVacationScheduleButton"/>
+                            <table id="vacationScheduleTable"
+                                   sortable="false"
+                                   dataContainer="vacationScheduleDc"
+                                   width="100%">
+                                <columns>
+                                    <column id="startDate"/>
+                                    <column id="endDate"/>
+                                    <column id="absenceDays"/>
+                                    <column id="status"/>
+                                </columns>
+                            </table>
+                        </vbox>
+                    </tab>
+                    <tab id="requestsTab" spacing="true" caption="msg://myRequests">
+                        <vbox id="vBox3"
+                              expand="vacationScheduleRequestTable"
+                              height="100%"
+                              spacing="true">
+                            <table id="vacationScheduleRequestTable"
+                                   sortable="false"
+                                   dataContainer="vacationScheduleRequestDc"
+                                   width="100%">
+                                <columns>
+                                    <column id="startDate"/>
+                                    <column id="endDate"/>
+                                    <column id="absenceDays"/>
+                                    <column id="status"/>
+                                </columns>
+                            </table>
+                        </vbox>
+                    </tab>
+                </tabSheet>
+            </tab>
+
         </tabSheet>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>

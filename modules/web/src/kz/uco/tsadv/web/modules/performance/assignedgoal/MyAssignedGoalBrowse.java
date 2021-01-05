@@ -244,7 +244,7 @@ public class MyAssignedGoalBrowse extends AbstractWindow {
         AssignedGoal assignedGoal = metadata.create(AssignedGoal.class);
         assignedGoal.setAssignedByPersonGroup(((PersonExt) userSession.getAttribute("userPerson")).getGroup());
         assignedGoal.setPersonGroup(currentPerson.getGroup());
-        assignedGoal.setPerformancePlan(performancePlan);
+//        assignedGoal.setPerformancePlan(performancePlan);
         AssignedGoalEdit creator = (AssignedGoalEdit) openEditor("tsadv$AssignedGoal.edit", assignedGoal, WindowManager.OpenType.DIALOG, assignedGoalsDs);
         creator.addCloseListener(actionId -> {
             refreshLabel_2();

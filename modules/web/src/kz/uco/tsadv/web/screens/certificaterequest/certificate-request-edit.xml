@@ -20,10 +20,10 @@
             </view>
             <loader/>
         </instance>
-        <collection id="statusesDc" class="kz.uco.tsadv.entity.AbsenceRequestStatus" view="_minimal">
+        <collection id="statusesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus" view="_minimal">
             <loader id="statusesDl">
                 <query>
-                    <![CDATA[select e from tsadv_AbsenceRequestStatus e]]>
+                    <![CDATA[select e from tsadv$DicRequestStatus e]]>
                 </query>
             </loader>
         </collection>

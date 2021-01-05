@@ -1,14 +1,13 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.dictionary.*;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
 
 @Table(name = "TSADV_MILITARY_FORM")
 @Entity(name = "tsadv$MilitaryForm")
@@ -23,12 +22,15 @@ public class MilitaryForm extends AbstractParentEntity {
     @Column(name = "DATE_TO")
     protected Date date_to;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MILITARY_DOCUMENT_TYPE_ID")
     protected DicMilitaryDocumentType military_document_type;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Column(name = "MILITARY_DOCUMENT_TYPE_NAME", length = 2000)
+    private String militaryDocumentTypeName;
+
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "UDO_ID")
     protected DicUdo udo;
@@ -36,33 +38,48 @@ public class MilitaryForm extends AbstractParentEntity {
     @Column(name = "DOCUMENT_NUMBER", length = 100)
     protected String document_number;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MILITARY_TYPE_ID")
     protected DicMilitaryType military_type;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Column(name = "MILITARY_TYPE_NAME", length = 2000)
+    private String militaryTypeName;
+
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ATTITUDE_TO_MILITARY_ID")
     protected DicAttitudeToMilitary attitude_to_military;
 
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Column(name = "ATTITUDE_TO_MILITARY_NAME", length = 2000)
+    private String attitudeToMilitaryName;
+
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TROOPS_STRUCTURE_ID")
     protected DicTroopsStructure troops_structure;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Column(name = "COMPOSITION_MILITARY_REGISTRATION", length = 2000)
+    private String compositionMilitaryRegistration;
+
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MILITARY_RANK_ID")
     protected DicMilitaryRank military_rank;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Column(name = "MILITARY_RANK_NAME", length = 2000)
+    private String militaryRankName;
+
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "OFFICER_TYPE_ID")
     protected DicOfficerType officer_type;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Column(name = "OFFICER_TYPE_NAME", length = 2000)
+    private String officerTypeName;
+
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SUITABILITY_TO_MILITARY_ID")
     protected DicSuitabilityToMilitary suitability_to_military;
@@ -70,18 +87,25 @@ public class MilitaryForm extends AbstractParentEntity {
     @Column(name = "SPECIALIZATION")
     protected String specialization;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "ISSUE_DOC_DATE")
+    private Date issueDocDate;
+
+    @Column(name = "ISSUING_AUTHORITY", length = 2000)
+    private String issuingAuthority;
+
     @Column(name = "DELY")
     protected Boolean dely;
 
     @Column(name = "DELY_DESCRIPTION")
     protected String dely_description;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REGISTER_GROUP_ID")
     protected DicRegisterGroup register_group;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REGISTER_CATEGORY_ID")
     protected DicRegisterCategory register_category;
@@ -93,6 +117,94 @@ public class MilitaryForm extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_GROUP_ID")
     protected PersonGroupExt personGroup;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE_HISTORY")
+    private Date startDateHistory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE_HISTORY")
+    private Date endDateHistory;
+
+    public Date getEndDateHistory() {
+        return endDateHistory;
+    }
+
+    public void setEndDateHistory(Date endDateHistory) {
+        this.endDateHistory = endDateHistory;
+    }
+
+    public Date getStartDateHistory() {
+        return startDateHistory;
+    }
+
+    public void setStartDateHistory(Date startDateHistory) {
+        this.startDateHistory = startDateHistory;
+    }
+
+    public String getIssuingAuthority() {
+        return issuingAuthority;
+    }
+
+    public void setIssuingAuthority(String issuingAuthority) {
+        this.issuingAuthority = issuingAuthority;
+    }
+
+    public Date getIssueDocDate() {
+        return issueDocDate;
+    }
+
+    public void setIssueDocDate(Date issueDocDate) {
+        this.issueDocDate = issueDocDate;
+    }
+
+    public String getOfficerTypeName() {
+        return officerTypeName;
+    }
+
+    public void setOfficerTypeName(String officerTypeName) {
+        this.officerTypeName = officerTypeName;
+    }
+
+    public String getMilitaryRankName() {
+        return militaryRankName;
+    }
+
+    public void setMilitaryRankName(String militaryRankName) {
+        this.militaryRankName = militaryRankName;
+    }
+
+    public String getCompositionMilitaryRegistration() {
+        return compositionMilitaryRegistration;
+    }
+
+    public void setCompositionMilitaryRegistration(String compositionMilitaryRegistration) {
+        this.compositionMilitaryRegistration = compositionMilitaryRegistration;
+    }
+
+    public String getAttitudeToMilitaryName() {
+        return attitudeToMilitaryName;
+    }
+
+    public void setAttitudeToMilitaryName(String attitudeToMilitaryName) {
+        this.attitudeToMilitaryName = attitudeToMilitaryName;
+    }
+
+    public String getMilitaryTypeName() {
+        return militaryTypeName;
+    }
+
+    public void setMilitaryTypeName(String militaryTypeName) {
+        this.militaryTypeName = militaryTypeName;
+    }
+
+    public String getMilitaryDocumentTypeName() {
+        return militaryDocumentTypeName;
+    }
+
+    public void setMilitaryDocumentTypeName(String militaryDocumentTypeName) {
+        this.militaryDocumentTypeName = militaryDocumentTypeName;
+    }
 
     public void setUdo(DicUdo udo) {
         this.udo = udo;

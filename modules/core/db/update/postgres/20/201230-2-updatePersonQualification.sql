@@ -1,0 +1,6 @@
+alter table TSADV_PERSON_QUALIFICATION add column DIPLOMA varchar(2000) ;
+alter table TSADV_PERSON_QUALIFICATION add column TYPE_NAME varchar(2000) ;
+alter table TSADV_PERSON_QUALIFICATION add column EDUCATIONAL_INSTITUTION_NAME varchar(2000) ;
+alter table TSADV_PERSON_QUALIFICATION add column START_DATE_HISTORY date ;
+alter table TSADV_PERSON_QUALIFICATION add column END_DATE_HISTORY date ;
+alter table TSADV_PERSON_QUALIFICATION add column ISSUED_DATE date ;

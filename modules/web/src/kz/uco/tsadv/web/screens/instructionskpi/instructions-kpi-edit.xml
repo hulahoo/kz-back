@@ -15,13 +15,13 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="instructionsKpiDc">
             <column width="250px">
-                <textArea id="instructionField" property="instruction" rows="5"/>
-                <pickerField id="performancePlanField" property="performancePlan">
+                <pickerField id="performancePlanField" property="performancePlan" editable="false">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
+                <textArea id="instructionField" property="instruction" rows="5"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

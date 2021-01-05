@@ -287,7 +287,7 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
         return militaryRank;
     }
 
-    @MetaProperty
+    @MetaProperty(related = "assignments,personExperience")
     @Transient
     public Long getTotalExperience() {
         Long dateDiff = 0L; //TODO Сделать поле startDate в сущности Assignment обязательным или проверить на null

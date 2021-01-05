@@ -920,7 +920,7 @@ public class RequisitionJobRequest extends AbstractFrame {
 
     public Component generateContacts(JobRequest entity) {
         List<PersonContact> personContacts = commonService.getEntities(PersonContact.class,
-                "select e from tsadv$PersonContact e where e.personGroup.id = :personGroupId order by e.type.code",
+                "select e from tsadv$PersonContact e where e.personGroupId.id = :personGroupId order by e.type.code",
                 Collections.singletonMap("personGroupId", entity.getCandidatePersonGroup().getId()),
                 "personContact.edit");
         GridLayout gridLayout = componentsFactory.createComponent(GridLayout.class);
@@ -1074,7 +1074,7 @@ public class RequisitionJobRequest extends AbstractFrame {
         PersonGroupExt personGroup = commonService.getEntity(PersonGroupExt.class, "select e" +
                         "                          from base$PersonGroupExt e" +
                         "                          where e.id = :personGroupId",
-                params, "personGroup.linkedin");
+                params, "personGroupId.linkedin");
         return personGroup;
     }
 
@@ -1744,8 +1744,8 @@ public class RequisitionJobRequest extends AbstractFrame {
                     return false;
                 }
             }).findFirst().orElse(null);
-            if (address != null && address.getCity() != null) {
-                cityValue.setValue(address.getCity());
+            if (address != null && address.getCityName() != null) {
+                cityValue.setValue(address.getCityName());
             } else {
                 cityValue.setValue("");
             }
@@ -1768,7 +1768,7 @@ public class RequisitionJobRequest extends AbstractFrame {
                     if (addOrEdit.getIcon().equals("font-icon:PENCIL")) {
                         AbstractEditor fromRequisitionJobRequest = openEditor(addressToEditor, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                         fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCity());
+                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCityName());
                         });
                     } else if (addOrEdit.getIcon().equals("font-icon:PLUS")) {
                         Address addressNew = metadata.create(Address.class);
@@ -1779,7 +1779,7 @@ public class RequisitionJobRequest extends AbstractFrame {
                         addressNew.setEndDate(CommonUtils.getEndOfTime());
                         AbstractEditor fromRequisitionJobRequest = openEditor(addressNew, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                         fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCity());
+                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCityName());
                             addOrEdit.setIcon("font-icon:PENCIL");
                         });
                     }
@@ -1793,7 +1793,7 @@ public class RequisitionJobRequest extends AbstractFrame {
                         addressNew.setEndDate(CommonUtils.getEndOfTime());
                         AbstractEditor fromRequisitionJobRequest = openEditor(addressNew, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                         fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCity());
+                            cityValue.setValue(((Address) fromRequisitionJobRequest.getItem()).getCityName());
                             addOrEdit.setIcon("font-icon:PENCIL");
                             addressInner = (Address) fromRequisitionJobRequest.getItem();
                         });
@@ -1804,13 +1804,13 @@ public class RequisitionJobRequest extends AbstractFrame {
                             fromRequisitionJobRequest = openEditor(addressToEditor, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                             AbstractEditor finalFromRequisitionJobRequest = fromRequisitionJobRequest;
                             fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                                cityValue.setValue(((Address) finalFromRequisitionJobRequest.getItem()).getCity());
+                                cityValue.setValue(((Address) finalFromRequisitionJobRequest.getItem()).getCityName());
                             });
                         } else if (addressInner != null) {
                             fromRequisitionJobRequest = openEditor(addressInner, WindowManager.OpenType.DIALOG, ParamsMap.of("fromRequisitionJobRequest", new Object()));
                             AbstractEditor finalFromRequisitionJobRequest1 = fromRequisitionJobRequest;
                             fromRequisitionJobRequest.addCloseWithCommitListener(() -> {
-                                cityValue.setValue(((Address) finalFromRequisitionJobRequest1.getItem()).getCity());
+                                cityValue.setValue(((Address) finalFromRequisitionJobRequest1.getItem()).getCityName());
                             });
                         }
                     }
@@ -1897,7 +1897,7 @@ public class RequisitionJobRequest extends AbstractFrame {
         //Образование
         List<PersonEducation> educations = model.getCandidatePersonGroup().getPersonEducation();
         /*List<PersonEducation> educations = commonService.getEntities(PersonEducation.class,
-                "select e from tsadv$PersonEducation e where e.personGroup.id=:personGroupId",
+                "select e from tsadv$PersonEducation e where e.personGroupId.id=:personGroupId",
                 ParamsMap.of("personGroupId", model.getCandidatePersonGroup().getId()),
                 "_local");*/
         if (educations != null && !educations.isEmpty()) {
@@ -1945,7 +1945,7 @@ public class RequisitionJobRequest extends AbstractFrame {
 //        String query = "select e from tsadv$CompetenceElement e \n" +
 //                "                       join e.competenceGroup.list c\n" +
 //                "                       where c.competeceType.code = 'LANGUAGES'\n" +
-//                "                       and e.personGroup.id = :personGroupId\n" +
+//                "                       and e.personGroupId.id = :personGroupId\n" +
 //                "                       and :sysDate between c.startDate and c.endDate\n" +
 //                "                       and :sysDate between c.competeceType.startDate and c.competeceType.endDate";
 //        Map<String, Object> map = new HashMap<>();
@@ -1998,7 +1998,7 @@ public class RequisitionJobRequest extends AbstractFrame {
         //Приложения
 //        List<PersonAttachment> apps = commonService.getEntities(PersonAttachment.class,
 //                "select e from tsadv$PersonAttachment e " +
-//                        "where e.personGroup.id=:personGroupId",
+//                        "where e.personGroupId.id=:personGroupId",
 //                ParamsMap.of("personGroupId", model.getCandidatePersonGroup().getId()),
 //                "personAttachment-view-for-requisitionjobrequest");
 
@@ -2433,7 +2433,7 @@ public class RequisitionJobRequest extends AbstractFrame {
 //        String query = "select e from tsadv$CompetenceElement e \n" +
 //                "                       join e.competenceGroup.list c\n" +
 //                "                       where c.competeceType.code <> 'LANGUAGES'\n" +
-//                "                       and e.personGroup.id = :personGroupId\n" +
+//                "                       and e.personGroupId.id = :personGroupId\n" +
 //                "                       and :sysDate between c.startDate and c.endDate\n" +
 //                "                       and :sysDate between c.competeceType.startDate and c.competeceType.endDate";
 //        Map<String, Object> map = new HashMap<>();
@@ -3098,7 +3098,7 @@ public class RequisitionJobRequest extends AbstractFrame {
     public Component getContactsLabel(JobRequest entity) {
         List<PersonContact> personContacts = new ArrayList<>();
 //        personContacts = commonService.getEntities(PersonContact.class,
-//                "select e from tsadv$PersonContact e where e.personGroup.id = :personGroupId order by e.type.code",
+//                "select e from tsadv$PersonContact e where e.personGroupId.id = :personGroupId order by e.type.code",
 //                Collections.singletonMap("personGroupId", entity.getCandidatePersonGroup().getId()),
 //                "personContact.edit");
         personContacts = entity.getCandidatePersonGroup().getPersonContacts();
@@ -3241,7 +3241,7 @@ public class RequisitionJobRequest extends AbstractFrame {
         ).collect(Collectors.toList());
         userExtList = commonService.getEntities(UserExt.class,
                 "select e from tsadv$UserExt e " +
-                        " where e.personGroup.id in :personGroupId",
+                        " where e.personGroupId.id in :personGroupId",
                 ParamsMap.of("personGroupId", personGroupId),
                 "userExt.edit");
         offers = commonService.getEntities(Offer.class, "select e from tsadv$Offer e " +

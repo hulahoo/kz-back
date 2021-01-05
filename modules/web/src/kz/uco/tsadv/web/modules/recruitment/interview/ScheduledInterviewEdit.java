@@ -194,7 +194,7 @@ public class ScheduledInterviewEdit extends AbstractEditor<Interview> {
                                 "                          where :systemDate between p.startDate and p.endDate" +
                                 "                            and (p.type.code <> 'EMPLOYEE' OR :systemDate between a.startDate and a.endDate)" +
                                 "                            and e.id = :hsmPersonGroupId",
-                        params, "personGroup.browse");
+                        params, "personGroupId.browse");
                 if (personGroup != null)
                     getItem().setMainInterviewerPersonGroup(personGroup);
             } else if (hiringStepMember != null && "ROLE".equals(hiringStepMember.getHiringMemberType().getCode())) {
@@ -203,7 +203,7 @@ public class ScheduledInterviewEdit extends AbstractEditor<Interview> {
                 } else if ("RECRUITING_SPECIALIST".equals(hiringStepMember.getRole().getCode())) {
                     getItem().setMainInterviewerPersonGroup(getItem().getRequisition().getRecruiterPersonGroup());
                 } else if (organizationHrUsers != null && organizationHrUsers.size() == 1) {
-                    getItem().setMainInterviewerPersonGroup(employeeService.getPersonGroupByUserId(organizationHrUsers.get(0).getUser().getId())); //TODO:personGroup need to test
+                    getItem().setMainInterviewerPersonGroup(employeeService.getPersonGroupByUserId(organizationHrUsers.get(0).getUser().getId())); //TODO:personGroupId need to test
                 }
             }
         }

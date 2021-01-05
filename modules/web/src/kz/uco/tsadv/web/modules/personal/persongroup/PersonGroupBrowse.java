@@ -100,7 +100,7 @@ public class PersonGroupBrowse extends AbstractLookup {
                 "select e from base$AssignmentExt e " +
                         "where :sysDate between e.startDate and e.endDate " +
                         "  and e.primaryFlag = true " +
-                        "and e.personGroup.id = :personGroupId")
+                        "and e.personGroupId.id = :personGroupId")
                 .setParameter("personGroupId", personGroupId)
                 .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView("assignment.card");
@@ -140,7 +140,7 @@ public class PersonGroupBrowse extends AbstractLookup {
             personGroupsDs.setQuery("select e " +
                     " from base$PersonGroupExt e " +
                     "   left join tsadv$UserExt u " +
-                    "       on u.personGroup = e " +
+                    "       on u.personGroupId = e " +
                     "  join e.list p " +
                     " where :session$systemDate between p.startDate and p.endDate\n" +
                     " and u is null ");
@@ -149,7 +149,7 @@ public class PersonGroupBrowse extends AbstractLookup {
             personGroupsDs.setQuery("select e " +
                     " from base$PersonGroupExt e " +
                     "   left join tsadv$UserExt u " +
-                    "       on u.personGroup = e " +
+                    "       on u.personGroupId = e " +
                     "   left join sec$UserRole ur " +
                     "       on ur.user = u " +
                     "   left join sec$Role r " +

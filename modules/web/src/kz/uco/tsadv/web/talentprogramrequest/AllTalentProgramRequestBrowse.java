@@ -86,7 +86,7 @@ public class AllTalentProgramRequestBrowse extends AbstractLookup {
             talentProgramRequestsTableInvite.setEnabled(false);
         });
 
-        talentProgramRequestsTable.addGeneratedColumn("personGroup.fioWithEmployeeNumber", this::linkButtonFio);
+        talentProgramRequestsTable.addGeneratedColumn("personGroupId.fioWithEmployeeNumber", this::linkButtonFio);
 
         dicTalentProgramRequestStatusesDs.addCollectionChangeListener(e -> initProgressBar(progressBarStatus, e.getDs()));
         dicTalentProgramStepsDs.addCollectionChangeListener(e -> initProgressBar(progressBarStep, e.getDs()));

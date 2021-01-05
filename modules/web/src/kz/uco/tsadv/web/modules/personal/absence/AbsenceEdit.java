@@ -130,7 +130,7 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
         if (params.containsKey("assignmentGroupId")) {
             assignmentGroupId = (UUID) params.get("assignmentGroupId");
             List<PersonGroupExt> personGroupExtList = commonService.getEntities(PersonGroupExt.class,
-                    "SELECT a.personGroup " +
+                    "SELECT a.personGroupId " +
                             "FROM base$AssignmentExt a " +
                             "   WHERE a.group.id = :assignmentGroupId " +
                             "      AND current_date BETWEEN a.startDate AND a.endDate",
@@ -282,7 +282,7 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
         map.put("absenceEndDate", dateTo);
         return commonService.getEntity(AssignmentExt.class, "select e" +
                         "                          from base$AssignmentExt e" +
-                        "                          where e.personGroup.id = :absencePersonGroupId and e.deleteTs is null" +
+                        "                          where e.personGroupId.id = :absencePersonGroupId and e.deleteTs is null" +
                         "                          and :absenceEndDate between e.startDate and e.endDate" +
                         "                          and e.assignmentStatus.code <> 'TERMINATED'" +
                         "                          and e.primaryFlag = 'true'",

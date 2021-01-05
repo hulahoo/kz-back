@@ -6,12 +6,10 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.entity.Entity;
-import com.haulmont.cuba.core.global.CommitContext;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.global.*;
 import javafx.util.Pair;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.exceptions.ItemNotFoundException;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -38,23 +36,27 @@ import java.util.stream.Collectors;
 @Service(TimesheetService.NAME)
 public class TimesheetServiceBean implements TimesheetService {
 
-    private static final Long DAYS_IN_MILLIS = (long) 24 * 60 * 60 * 1000;
+    protected static final Long DAYS_IN_MILLIS = (long) 24 * 60 * 60 * 1000;
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String fieldsDelimiter = "@@";
     public static final String entityDelimiter = "@@@";
+    @Inject
+    protected TimesheetService timesheetService;
 
     @Inject
-    private CommonService commonService;
+    protected Messages messages;
     @Inject
-    private TimecardConfig timecardConfig;
+    protected CommonService commonService;
     @Inject
-    private DatesService datesService;
+    protected TimecardConfig timecardConfig;
     @Inject
-    private Metadata metadata;
+    protected DatesService datesService;
     @Inject
-    private DataManager dataManager;
+    protected Metadata metadata;
     @Inject
-    private Persistence persistence;
+    protected DataManager dataManager;
+    @Inject
+    protected Persistence persistence;
 
 
     @Override
@@ -406,7 +408,7 @@ public class TimesheetServiceBean implements TimesheetService {
         /* 2. FILL SCHEDULE END */
     }
 
-    private List<ScheduleDetail> removeDoubles(List<ScheduleDetail> scheduleDetails) {
+    protected List<ScheduleDetail> removeDoubles(List<ScheduleDetail> scheduleDetails) {
         ArrayList<ScheduleDetail> newScheduleDetails = new ArrayList<>();
         for (ScheduleDetail scheduleDetail : scheduleDetails) {
             if (newScheduleDetails.stream().noneMatch(d ->
@@ -853,7 +855,7 @@ public class TimesheetServiceBean implements TimesheetService {
     }
 
 
-    private int getAllDay(List<Object[]> list, Date absenceStartDate, Date absenceEndDate) {
+    protected int getAllDay(List<Object[]> list, Date absenceStartDate, Date absenceEndDate) {
         int holidayDays = 0;
         for (Object[] o : list) {
             Date startDate = (Date) o[0], endDate = (Date) o[1];
@@ -876,7 +878,7 @@ public class TimesheetServiceBean implements TimesheetService {
         return holidayDays;
     }
 
-    private ScheduleDetail createNightDetail(NightPartDTO nightPartDTO, DicScheduleElementType nightHoursElement) {
+    protected ScheduleDetail createNightDetail(NightPartDTO nightPartDTO, DicScheduleElementType nightHoursElement) {
         ScheduleDetail nightDetail = metadata.create(ScheduleDetail.class);
 
         Date nightHoursFrom = nightPartDTO.getNightHoursFrom();
@@ -910,7 +912,7 @@ public class TimesheetServiceBean implements TimesheetService {
         return nightDetail;
     }
 
-    private ScheduleSummary getBaseSummary(StandardSchedule schedule, ScheduleSummary summary) {
+    protected ScheduleSummary getBaseSummary(StandardSchedule schedule, ScheduleSummary summary) {
         StandardSchedule baseSchedule = schedule.getBaseStandardSchedule();
         if (baseSchedule == null) {
             return summary;
@@ -936,7 +938,7 @@ public class TimesheetServiceBean implements TimesheetService {
 
     }
 
-    private ScheduleHeader getBaseScheduleHeader(StandardSchedule schedule) {
+    protected ScheduleHeader getBaseScheduleHeader(StandardSchedule schedule) {
         ScheduleHeader baseHeader = null;
         List<ScheduleHeader> baseScheduleHeaders = commonService.getEntities(ScheduleHeader.class,
                 "  select e " +
@@ -953,7 +955,7 @@ public class TimesheetServiceBean implements TimesheetService {
         return baseHeader;
     }
 
-    private List<NightPartDTO> getNightParts(ScheduleDetail detail, DicScheduleElementType nightHoursElement) {
+    protected List<NightPartDTO> getNightParts(ScheduleDetail detail, DicScheduleElementType nightHoursElement) {
         List<NightPartDTO> nightPartsMap = new ArrayList<>();
 
         Date nightHoursFrom = datesService.getDateTime(detail.getTimeIn(), nightHoursElement.getTimeFrom());
@@ -990,5 +992,57 @@ public class TimesheetServiceBean implements TimesheetService {
         }
         return nightPartsMap;
     }
+
+    @Override
+    public int getDateDiffByCalendar(String calendarCode, Date startDate, Date endDate, Boolean ignoreHolidays) {
+
+        checkIsDatesNull(startDate, endDate);
+        kz.uco.tsadv.modules.timesheet.model.Calendar calendar = dataManager.load(kz.uco.tsadv.modules.timesheet.model.Calendar.class)
+                .query("select e from tsadv$Calendar e where e.calendar = :code")
+                .parameter("code", calendarCode)
+                .view("calendar.view")
+                .list().stream().findFirst().orElse(null);
+
+        return calcDays(startDate, endDate, ignoreHolidays, calendar);
+    }
+
+    protected void checkIsDatesNull(Date startDate, Date endDate) {
+        if (startDate == null || endDate == null) {
+            throw new NullPointerException("Dates must  not be null");
+        }
+    }
+
+    @Override
+    public int getDateDiffByCalendar(kz.uco.tsadv.modules.timesheet.model.Calendar calendar, Date startDate, Date endDate, Boolean ignoreHolidays) {
+        checkIsDatesNull(startDate, endDate);
+        return calcDays(startDate, endDate, ignoreHolidays, calendar);
+    }
+
+
+    protected int calcDays(Date startDate, Date endDate, Boolean ignoreHolidays, kz.uco.tsadv.modules.timesheet.model.Calendar calendar) {
+        if (calendar == null) {
+            throw new NullPointerException("Calendar not exists");
+        }
+        checkIsDatesNull(startDate, endDate);
+
+        if (ignoreHolidays==null){
+            ignoreHolidays=false;
+        }
+
+        if (endDate.compareTo(startDate) <= 0) {
+            throw new ItemNotFoundException(messages.getMainMessage("startDate.validatorMsg"));
+        }
+
+        int days = 0;
+
+        days = datesService.getFullDaysCount(startDate, endDate);
+
+        if (!ignoreHolidays) {
+            days = days - timesheetService.getAllHolidays(calendar, startDate, endDate);
+        }
+
+        return days;
+    }
+
 
 }

@@ -165,7 +165,7 @@ public class PersonCandidate extends AbstractHrEditor<PersonExt> {
 //            if (getItem() != null) {
 //                if (getItem().getGroup() != null) {
 //                    personDocumentsTableCreate.setInitialValuesSupplier(() ->
-//                            Collections.singletonMap("personGroup", getItem().getGroup())
+//                            Collections.singletonMap("personGroupId", getItem().getGroup())
 //                    );
 //                } else {
 //                    showNotification(getMessage("personGroupIsNull"));

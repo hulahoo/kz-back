@@ -410,7 +410,7 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
                                 "                          where :systemDate between p.startDate and p.endDate" +
                                 "                            and (p.type.code <> 'EMPLOYEE' OR :systemDate between a.startDate and a.endDate)" +
                                 "                            and e.id = :hsmPersonGroupId",
-                        params, "personGroup.browse");
+                        params, "personGroupId.browse");
                 if (personGroup != null)
                     getItem().setMainInterviewerPersonGroup(personGroup);
             } else if (hiringStepMember != null && "ROLE".equals(hiringStepMember.getHiringMemberType().getCode())) {
@@ -419,7 +419,7 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
                 } else if ("RECRUITING_SPECIALIST".equals(hiringStepMember.getRole().getCode())) {
                     getItem().setMainInterviewerPersonGroup(getItem().getRequisition().getRecruiterPersonGroup());
                 } else if (organizationHrUsers != null && organizationHrUsers.size() == 1) {
-                    getItem().setMainInterviewerPersonGroup(employeeService.getPersonGroupByUserId(organizationHrUsers.get(0).getUser().getId())); //TODO: personGroup need to test
+                    getItem().setMainInterviewerPersonGroup(employeeService.getPersonGroupByUserId(organizationHrUsers.get(0).getUser().getId())); //TODO: personGroupId need to test
                 }
             }
         }
@@ -678,7 +678,7 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
                 userList = commonService.getEntities(UserExt.class,
                         "select e " +
                                 "    from tsadv$UserExt e " +
-                                "   where e.personGroup.id = :mainInterviewerPersonGroupId ",
+                                "   where e.personGroupId.id = :mainInterviewerPersonGroupId ",
                         Collections.singletonMap("mainInterviewerPersonGroupId", interview.getMainInterviewerPersonGroup().getId()),
                         "user.browse");
                 params.put("interview", getItem());
@@ -691,7 +691,7 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
                 userList = commonService.getEntities(UserExt.class,
                         "select e " +
                                 "    from tsadv$UserExt e " +
-                                "   where e.personGroup.id = :candidatePersonGroupId",
+                                "   where e.personGroupId.id = :candidatePersonGroupId",
                         Collections.singletonMap("candidatePersonGroupId", interview.getJobRequest().getCandidatePersonGroup().getId()),
                         "user.browse");
                 if (isSystemNotificationAllow) {

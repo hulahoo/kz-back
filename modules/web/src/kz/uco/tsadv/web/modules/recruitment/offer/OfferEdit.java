@@ -371,11 +371,11 @@ public class OfferEdit extends AbstractEditor<Offer> {
 
             map.put("keyValue", commonService.getEntity(PersonGroupExt.class,
                     "select e.managerPersonGroup from tsadv$Requisition e where e.id = :recId",
-                    mapReqId, "personGroup.browse"));
+                    mapReqId, "personGroupId.browse"));
 
             UserExt user = commonService.getEntity(UserExt.class,
                     "select e from tsadv$UserExt e " +
-                            "where e.personGroup.id = :keyValue",
+                            "where e.personGroupId.id = :keyValue",
                     map,
                     "user.edit");
             Map<String, Object> params = new HashMap<>();

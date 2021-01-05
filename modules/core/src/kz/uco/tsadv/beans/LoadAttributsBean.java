@@ -4,6 +4,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.security.auth.events.UserLoggedInEvent;
 import com.haulmont.cuba.security.global.UserSession;
+import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.UserExt;
@@ -47,6 +48,7 @@ public class LoadAttributsBean {
                 userSession.setAttribute(StaticVariable.USER_PERSON, person);
                 userSession.setAttribute(StaticVariable.USER_PERSON_GROUP, personGroup);
                 userSession.setAttribute(StaticVariable.USER_PERSON_GROUP_ID, personGroup.getId());
+                userSession.setAttribute(StaticVariable.SYSTEM_DATE, BaseCommonUtils.getSystemDate());
 
                 try {
                     LoadContext<AssignmentExt> assignmentLoadContext = LoadContext.create(AssignmentExt.class);
@@ -96,7 +98,7 @@ public class LoadAttributsBean {
         query.setParameter("userId", userExt.getId());
 
         loadContext.setQuery(query);
-        loadContext.setView("personGroupExt.edit");
+        loadContext.setView("personGroupExt-for-load-attribute");
         return dataManager.load(loadContext);
     }
 
