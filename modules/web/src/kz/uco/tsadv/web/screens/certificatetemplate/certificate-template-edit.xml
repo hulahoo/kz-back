@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://certificateTemplateEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.certificatetemplate">
+    <data>
+        <instance id="certificateTemplateDc"
+                  class="kz.uco.tsadv.modules.personal.model.CertificateTemplate">
+            <view extends="_local">
+                <property name="receivingType" view="_local"/>
+                <property name="language" view="dicLanguage.langValueAndCode.view"/>
+                <property name="signer" view="personGroup-view"/>
+                <property name="report" view="report.edit"/>
+                <property name="organization" view="organizationGroup.browse"/>
+            </view>
+            <loader/>
+        </instance>
+        <collection id="receivingTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType"
+                    view="_minimal">
+            <loader id="receivingTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicReceivingType e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="languagesDc" class="kz.uco.base.entity.dictionary.DicLanguage" view="_minimal">
+            <loader id="languagesDl">
+                <query>
+                    <![CDATA[select e from base$DicLanguage e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">1
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="certificateTemplateDc">
+                <column width="350px">
+                    <textField id="langValue1Field" property="langValue1"/>
+                    <textField id="langValue2Field" property="langValue2"/>
+                    <textField id="langValue3Field" property="langValue3"/>
+                    <pickerField id="signerField" property="signer" editable="false"/>
+                    <lookupPickerField id="receivingTypeField" optionsContainer="receivingTypesDc"
+                                       property="receivingType"/>
+                    <lookupPickerField id="languageField" optionsContainer="languagesDc" property="language"/>
+                    <checkBox id="showSalaryField" property="showSalary"/>
+                    <pickerField id="reportField" property="report"/>
+                    <pickerField id="organizationField" property="organization"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

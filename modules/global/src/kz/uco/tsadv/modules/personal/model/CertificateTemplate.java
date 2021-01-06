@@ -6,6 +6,7 @@ import com.haulmont.reports.entity.Report;
 import kz.uco.base.entity.abstraction.AbstractDictionary;
 import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
+import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -22,6 +23,11 @@ public class CertificateTemplate extends AbstractDictionary {
     @JoinColumn(name = "RECEIVING_TYPE_ID")
     private DicReceivingType receivingType;
 
+    @Lookup(type = LookupType.SCREEN, actions = "lookup")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORGANIZATION_ID")
+    private OrganizationGroupExt organization;
+
     @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -32,16 +38,23 @@ public class CertificateTemplate extends AbstractDictionary {
     @Column(name = "SHOW_SALARY", nullable = false)
     private Boolean showSalary = false;
 
-    @Lookup(type = LookupType.SCREEN, actions = "open")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "SIGNER_ID")
     private PersonGroupExt signer;
 
-    @Lookup(type = LookupType.SCREEN, actions = "open")
+    @Lookup(type = LookupType.SCREEN, actions = "lookup")
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REPORT_ID")
     private Report report;
+
+    public OrganizationGroupExt getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(OrganizationGroupExt organization) {
+        this.organization = organization;
+    }
 
     public Report getReport() {
         return report;

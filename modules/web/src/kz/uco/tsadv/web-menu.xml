@@ -632,6 +632,8 @@
             <item screen="tsadv_DicReceivingType.browse" caption="mainMsg://menu_config.tsadv_DicReceivingType.browse"/>
             <item screen="tsadv_DicCertificateType.browse"
                   caption="mainMsg://menu_config.tsadv_DicCertificateType.browse"/>
+            <item screen="tsadv_CertificateTemplate.browse"
+                  caption="mainMsg://menu_config.tsadv_CertificateTemplate.browse"/>
         </menu>
         <item screen="tsadv_CertificateRequest.browse" caption="mainMsg://menu_config.tsadv_CertificateRequest.browse"/>
     </menu>

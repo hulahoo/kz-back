@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://certificateTemplateBrowse.caption"
+        focusComponent="certificateTemplatesTable"
+        messagesPack="kz.uco.tsadv.web.screens.certificatetemplate">
+    <data readOnly="true">
+        <collection id="certificateTemplatesDc"
+                    class="kz.uco.tsadv.modules.personal.model.CertificateTemplate">
+            <view extends="_local">
+                <property name="receivingType" view="_local"/>
+                <property name="language" view="_minimal"/>
+                <property name="signer" view="personGroup-view"/>
+                <property name="organization" view="_minimal"/>
+            </view>
+            <loader id="certificateTemplatesDl">
+                <query>
+                    <![CDATA[select e from tsadv_CertificateTemplate e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="certificateTemplatesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="certificateTemplatesTable"
+                dataLoader="certificateTemplatesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="certificateTemplatesTable"
+                    width="100%"
+                    dataContainer="certificateTemplatesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue"/>
+                <column id="receivingType"/>
+                <column id="language"/>
+                <column id="showSalary"/>
+                <column id="signer"/>
+                <column id="organization"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="certificateTemplatesTable.create"/>
+                <button id="editBtn" action="certificateTemplatesTable.edit"/>
+                <button id="removeBtn" action="certificateTemplatesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
