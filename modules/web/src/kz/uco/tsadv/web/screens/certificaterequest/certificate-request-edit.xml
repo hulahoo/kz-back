@@ -7,11 +7,7 @@
         <instance id="certificateRequestDc"
                   class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
             <view extends="_local">
-                <property name="personGroup" view="personGroup-view">
-                    <property name="currentAssignment" view="_minimal">
-                        <property name="positionGroup" view="_minimal"/>
-                    </property>
-                </property>
+                <property name="personGroup" view="personGroupExt-view"/>
                 <property name="cretificateType" view="_minimal"/>
                 <property name="receivingType" view="_minimal"/>
                 <property name="language" view="_minimal"/>
@@ -66,7 +62,6 @@
                 <lookupPickerField id="languageField" optionsContainer="languageDc" property="language"/>
                 <checkBox id="showSalaryField" property="showSalary"/>
                 <textField id="numberOfCopyField" property="numberOfCopy"/>
-                <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

@@ -9,6 +9,7 @@
                     class="kz.uco.tsadv.modules.personal.model.CertificateTemplate">
             <view extends="_local">
                 <property name="receivingType" view="_local"/>
+                <property name="certificateType" view="_local"/>
                 <property name="language" view="_minimal"/>
                 <property name="signer" view="personGroup-view"/>
                 <property name="organization" view="_minimal"/>
@@ -38,7 +39,7 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="langValue"/>
+                <column id="certificateType"/>
                 <column id="receivingType"/>
                 <column id="language"/>
                 <column id="showSalary"/>

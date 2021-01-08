@@ -21733,4 +21733,14 @@
         </property>
         <property name="personExperience" view="_minimal"/>
     </view>
+    <view entity="tsadv_CertificateRequest" name="certificateRequest-view" extends="_local">
+        <property name="personGroup" view="personGroup-view">
+            <property name="assignments" view="assignment.view"/>
+        </property>
+        <property name="status" view="_local"/>
+        <property name="receivingType" view="_local"/>
+        <property name="file" view="_local"/>
+        <property name="language" view="_local"/>
+        <property name="cretificateType" view="_local"/>
+    </view>
 </views>

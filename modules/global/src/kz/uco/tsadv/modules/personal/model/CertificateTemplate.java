@@ -3,8 +3,9 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.reports.entity.Report;
-import kz.uco.base.entity.abstraction.AbstractDictionary;
-import kz.uco.base.entity.dictionary.DicLanguage;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
+import kz.uco.tsadv.modules.personal.dictionary.DicCertificateType;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_CERTIFICATE_TEMPLATE")
 @Entity(name = "tsadv_CertificateTemplate")
-public class CertificateTemplate extends AbstractDictionary {
+public class CertificateTemplate extends AbstractParentEntity {
     private static final long serialVersionUID = 5432478836546413447L;
 
     @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
@@ -22,6 +23,12 @@ public class CertificateTemplate extends AbstractDictionary {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "RECEIVING_TYPE_ID")
     private DicReceivingType receivingType;
+
+    @Lookup(type = LookupType.SCREEN, actions = "lookup")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "CERTIFICATE_TYPE_ID")
+    @NotNull
+    private DicCertificateType certificateType;
 
     @Lookup(type = LookupType.SCREEN, actions = "lookup")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,6 +54,14 @@ public class CertificateTemplate extends AbstractDictionary {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REPORT_ID")
     private Report report;
+
+    public DicCertificateType getCertificateType() {
+        return certificateType;
+    }
+
+    public void setCertificateType(DicCertificateType certificateType) {
+        this.certificateType = certificateType;
+    }
 
     public OrganizationGroupExt getOrganization() {
         return organization;

@@ -8,6 +8,7 @@
                   class="kz.uco.tsadv.modules.personal.model.CertificateTemplate">
             <view extends="_local">
                 <property name="receivingType" view="_local"/>
+                <property name="certificateType" view="_local"/>
                 <property name="language" view="dicLanguage.langValueAndCode.view"/>
                 <property name="signer" view="personGroup-view"/>
                 <property name="report" view="report.edit"/>
@@ -37,10 +38,8 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form" dataContainer="certificateTemplateDc">
                 <column width="350px">
-                    <textField id="langValue1Field" property="langValue1"/>
-                    <textField id="langValue2Field" property="langValue2"/>
-                    <textField id="langValue3Field" property="langValue3"/>
                     <pickerField id="signerField" property="signer" editable="false"/>
+                    <pickerField id="certificateTypeField" property="certificateType"/>
                     <lookupPickerField id="receivingTypeField" optionsContainer="receivingTypesDc"
                                        property="receivingType"/>
                     <lookupPickerField id="languageField" optionsContainer="languagesDc" property="language"/>
