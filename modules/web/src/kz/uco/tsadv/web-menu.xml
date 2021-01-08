@@ -180,6 +180,8 @@
         <item screen="tsadv$TalentProgramExceptions.browse"/>
         <item screen="base$AssignmenthExt.browse"/>
         <item screen="base$AssignmedtExt.browse"/>
+        <item screen="tsadv_CertificateRequestHR.browse"
+              caption="mainMsg://menu_config.tsadv_CertificateRequestHR.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
@@ -632,6 +634,8 @@
             <item screen="tsadv_DicReceivingType.browse" caption="mainMsg://menu_config.tsadv_DicReceivingType.browse"/>
             <item screen="tsadv_DicCertificateType.browse"
                   caption="mainMsg://menu_config.tsadv_DicCertificateType.browse"/>
+            <item screen="tsadv_CertificateTemplate.browse"
+                  caption="mainMsg://menu_config.tsadv_CertificateTemplate.browse"/>
         </menu>
         <item screen="tsadv_CertificateRequest.browse" caption="mainMsg://menu_config.tsadv_CertificateRequest.browse"/>
     </menu>

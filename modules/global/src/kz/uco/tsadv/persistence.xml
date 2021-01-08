@@ -602,5 +602,6 @@
         <class>kz.uco.tsadv.modules.personal.model.PersonRelativesHaveProperty</class>
         <class>kz.uco.tsadv.modules.personal.model.PersonBankDetails</class>
         <class>kz.uco.tsadv.modules.personal.model.PersonBankdetailsRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.CertificateTemplate</class>
     </persistence-unit>
 </persistence>

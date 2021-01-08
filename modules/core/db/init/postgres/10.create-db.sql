@@ -16101,3 +16101,28 @@ create table TSADV_PERSON_CLINIC_DISPANCER (
     primary key (ID)
 )^
 -- end TSADV_PERSON_CLINIC_DISPANCER
+-- begin TSADV_CERTIFICATE_TEMPLATE
+create table TSADV_CERTIFICATE_TEMPLATE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    RECEIVING_TYPE_ID uuid not null,
+    CERTIFICATE_TYPE_ID uuid not null,
+    ORGANIZATION_ID uuid,
+    LANGUAGE_ID uuid not null,
+    SHOW_SALARY boolean not null,
+    SIGNER_ID uuid not null,
+    REPORT_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_CERTIFICATE_TEMPLATE

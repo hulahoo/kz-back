@@ -4,6 +4,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.tsadv.modules.personal.dictionary.DicCertificateType;
 import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_CERTIFICATE_REQUEST")
 @Entity(name = "tsadv_CertificateRequest")
 public class CertificateRequest extends StandardEntity {

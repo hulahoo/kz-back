@@ -21736,4 +21736,14 @@
     <view entity="uactivity$Activity" name="portal.notification" extends="_local" systemProperties="true">
         <property name="name"/>
     </view>
+    <view entity="tsadv_CertificateRequest" name="certificateRequest-view" extends="_local">
+        <property name="personGroup" view="personGroup-view">
+            <property name="assignments" view="assignment.view"/>
+        </property>
+        <property name="status" view="_local"/>
+        <property name="receivingType" view="_local"/>
+        <property name="file" view="_local"/>
+        <property name="language" view="_local"/>
+        <property name="cretificateType" view="_local"/>
+    </view>
 </views>
