@@ -7,7 +7,6 @@ import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
-import javafx.util.Pair;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
 import kz.uco.tsadv.global.common.CommonUtils;
@@ -862,16 +861,17 @@ public class TimesheetServiceBean implements TimesheetService {
             Date transferStartDate = (Date) (o[2] != null ? o[2] : o[0]);
             Date transferEndDate = o[3] != null ? (Date) o[3] : CommonUtils.getEndOfTime();
 
-            Pair<Calendar, Calendar> intersectPeriod = datesService.getItersectionPeriod(absenceStartDate, absenceEndDate, transferStartDate, transferEndDate);
-            if (intersectPeriod != null) {
-                for (int i = intersectPeriod.getKey().get(Calendar.YEAR); i <= intersectPeriod.getValue().get(Calendar.YEAR); i++) {
+            Map<Calendar, Calendar> intersectPeriod = datesService.getItersectionPeriod(absenceStartDate, absenceEndDate, transferStartDate, transferEndDate);
+            if (intersectPeriod != null && !intersectPeriod.isEmpty()) {
+                Calendar key = intersectPeriod.keySet().stream().findFirst().get();
+                for (int i = key.get(Calendar.YEAR); i <= intersectPeriod.get(key).get(Calendar.YEAR); i++) {
                     Calendar c1 = Calendar.getInstance();
                     c1.setTime(startDate);
                     c1.set(Calendar.YEAR, i);
                     Calendar c2 = Calendar.getInstance();
                     c2.setTime(endDate);
                     c2.set(Calendar.YEAR, i);
-                    holidayDays += datesService.getIntersectionLengthInDays(c1.getTime(), c2.getTime(), intersectPeriod.getKey().getTime(), intersectPeriod.getValue().getTime());
+                    holidayDays += datesService.getIntersectionLengthInDays(c1.getTime(), c2.getTime(), key.getTime(), intersectPeriod.get(key).getTime());
                 }
             }
         }

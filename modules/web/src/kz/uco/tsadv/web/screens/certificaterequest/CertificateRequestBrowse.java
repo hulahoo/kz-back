@@ -1,6 +1,6 @@
 package kz.uco.tsadv.web.screens.certificaterequest;
 
-import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
@@ -11,7 +11,6 @@ import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import kz.uco.tsadv.service.EmployeeService;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 
 /**
@@ -34,6 +33,8 @@ public class CertificateRequestBrowse extends StandardLookup<CertificateRequest>
     protected EmployeeService employeeService;
     @Inject
     protected UserSession userSession;
+    @Inject
+    protected ExportDisplay exportDisplay;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -43,8 +44,7 @@ public class CertificateRequestBrowse extends StandardLookup<CertificateRequest>
     }
 
 
-    public void printReport() {
-
-
+    public void printReport(CertificateRequest item, String columnId) {
+        exportDisplay.show(item.getFile());
     }
 }
