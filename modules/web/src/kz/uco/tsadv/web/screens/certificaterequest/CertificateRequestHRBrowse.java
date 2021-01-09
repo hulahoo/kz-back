@@ -1,7 +1,17 @@
 package kz.uco.tsadv.web.screens.certificaterequest;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.components.GroupTable;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.reports.entity.Report;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
+import kz.uco.tsadv.service.CommonReportsService;
+
+import javax.inject.Inject;
 
 
 /**
@@ -15,6 +25,34 @@ import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 @LookupComponent("certificateRequestsTable")
 @LoadDataBeforeShow
 public class CertificateRequestHRBrowse extends StandardLookup<CertificateRequest> {
+    @Inject
+    protected CollectionContainer<CertificateRequest> certificateRequestsDc;
+    @Inject
+    protected GroupTable<CertificateRequest> certificateRequestsTable;
+    @Inject
+    protected ExportDisplay exportDisplay;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected MessageBundle messageBundle;
+    @Inject
+    protected CommonReportsService commonReportsService;
+
     public void print() {
+        CertificateRequest request = certificateRequestsTable.getSingleSelected();
+        if (request == null) {
+            notifications.create(Notifications.NotificationType.ERROR).withCaption(messageBundle.getMessage("select_before_printing")).show();
+            return;
+        }
+
+        FileDescriptor report = commonReportsService.getReportByCertificateRequest(request);
+
+        if (report == null) {
+            notifications.create(Notifications.NotificationType.ERROR).withCaption(messageBundle.getMessage("no_report")).show();
+            return;
+        }
+
+        exportDisplay.show(report);
     }
+
 }

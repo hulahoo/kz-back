@@ -132,6 +132,7 @@
                 <entry key="tsadv_ScheduledNotificationsService"
                        value="kz.uco.tsadv.service.ScheduledNotificationsService"/>
                 <entry key="tsadv_KpiService" value="kz.uco.tsadv.service.KpiService"/>
+                <entry key="tsadv_CommonReportsService" value="kz.uco.tsadv.service.CommonReportsService"/>
             </map>
         </property>
     </bean>

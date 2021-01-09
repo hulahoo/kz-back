@@ -37,7 +37,7 @@
                 <column id="requestNumber"/>
                 <column id="requestDate"/>
                 <column id="status"/>
-                <column id="file" linkInvoke="printReport"/>
+                <column id="file" link="true" linkInvoke="printReport"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
