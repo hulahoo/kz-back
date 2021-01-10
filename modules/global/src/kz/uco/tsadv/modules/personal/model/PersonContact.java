@@ -4,13 +4,13 @@ import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import kz.uco.tsadv.modules.personal.dictionary.DicPhoneType;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.personal.dictionary.DicPhoneType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
-import java.util.Date;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Table(name = "TSADV_PERSON_CONTACT")
 @Entity(name = "tsadv$PersonContact")
@@ -30,7 +30,7 @@ public class PersonContact extends AbstractParentEntity {
     @Column(name = "START_DATE", nullable = false)
     protected Date startDate;
 
-    @Lookup(type = LookupType.DROPDOWN, actions = {"clear"})
+    @Lookup(type = LookupType.DROPDOWN, actions = "clear")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "TYPE_ID")
     protected DicPhoneType type;

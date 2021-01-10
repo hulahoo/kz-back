@@ -200,7 +200,7 @@ public class RequisitionEdit extends RequisitionCommonEdit {
         boolean isRecruiterManager = userPersonGroupId != null && getItem().getOrganizationGroup() != null
                 && getRmPersonGroupId(getItem().getOrganizationGroup().getId())
                 .stream()
-                .filter(organizationHrUser -> employeeService.getPersonGroupByUserId(organizationHrUser.getUser().getId()).getId().equals(userPersonGroupId))//TODO:personGroup need to test
+                .filter(organizationHrUser -> employeeService.getPersonGroupByUserId(organizationHrUser.getUser().getId()).getId().equals(userPersonGroupId))//TODO:personGroupId need to test
                 .count() > 0;
 
         if (this.isRecruiter && isRecruiterManager && getItem().getRequisitionStatus() == RequisitionStatus.ON_APPROVAL) {

@@ -150,8 +150,8 @@ public class ReqCompetence extends AbstractFrame {
         map.put("userSessionManagerID", requisitionDs.getItem().getManagerPersonGroup() != null ?
                 requisitionDs.getItem().getManagerPersonGroup().getId() : null);
         String query = "SELECT e FROM tsadv$UserExt e " +
-                "JOIN base$PersonGroupExt t ON t.id = e.personGroup.id " +
-                "where e.id = :userSessionID AND e.personGroup.id = :userSessionManagerID";
+                "JOIN base$PersonGroupExt t ON t.id = e.personGroupId.id " +
+                "where e.id = :userSessionID AND e.personGroupId.id = :userSessionManagerID";
         List<UserExt> extList = commonService.getEntities(UserExt.class, query, map, null);
         ButtonsPanel panel = (ButtonsPanel) getComponent("competencesButtonsPanel");
         if (extList.size() > 0) {

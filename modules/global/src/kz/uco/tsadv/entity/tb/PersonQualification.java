@@ -47,6 +47,75 @@ public class PersonQualification extends AbstractParentEntity {
     @Column(name = "NOTE", length = 3000)
     protected String note;
 
+    @Column(name = "EDUCATIONAL_INSTITUTION_NAME", length = 2000)
+    private String educationalInstitutionName;
+
+    @Column(name = "DIPLOMA", length = 2000)
+    private String diploma;
+
+    @Column(name = "TYPE_NAME", length = 2000)
+    private String typeName;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "ISSUED_DATE")
+    private Date issuedDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE_HISTORY")
+    private Date startDateHistory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE_HISTORY")
+    private Date endDateHistory;
+
+    public Date getEndDateHistory() {
+        return endDateHistory;
+    }
+
+    public void setEndDateHistory(Date endDateHistory) {
+        this.endDateHistory = endDateHistory;
+    }
+
+    public Date getStartDateHistory() {
+        return startDateHistory;
+    }
+
+    public void setStartDateHistory(Date startDateHistory) {
+        this.startDateHistory = startDateHistory;
+    }
+
+    public Date getIssuedDate() {
+        return issuedDate;
+    }
+
+    public void setIssuedDate(Date issuedDate) {
+        this.issuedDate = issuedDate;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getDiploma() {
+        return diploma;
+    }
+
+    public void setDiploma(String diploma) {
+        this.diploma = diploma;
+    }
+
+    public String getEducationalInstitutionName() {
+        return educationalInstitutionName;
+    }
+
+    public void setEducationalInstitutionName(String educationalInstitutionName) {
+        this.educationalInstitutionName = educationalInstitutionName;
+    }
+
     public void setPersonGroup(PersonGroupExt personGroup) {
         this.personGroup = personGroup;
     }

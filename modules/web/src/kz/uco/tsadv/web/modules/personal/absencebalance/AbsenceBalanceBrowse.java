@@ -77,9 +77,9 @@ public class AbsenceBalanceBrowse extends EditableFrame {
         setHeight("100%");
         Map<String, Object> initParams = new HashMap<>();
 
-        initParams.put("personGroup", personGroup);
-        Integer balanceDays = absenceBalanceService.getBalanceDays(personGroup, null);
-        Integer additionalBalanceDays = absenceBalanceService.getAdditionalBalanceDays(personGroup);
+        initParams.put("personGroupId", personGroupId);
+        Integer balanceDays = absenceBalanceService.getBalanceDays(personGroupId, null);
+        Integer additionalBalanceDays = absenceBalanceService.getAdditionalBalanceDays(personGroupId);
         if (additionalBalanceDays != null) {
             additionalBalanceDays = 0;
         }
@@ -103,7 +103,7 @@ public class AbsenceBalanceBrowse extends EditableFrame {
                 "select v from base$AssignmentExt a" +
                         "   join tsadv$VacationConditions v " +
                         "       on v.positionGroup = a.positionGroup " +
-                        " where a.personGroup.id = :personGroupId" +
+                        " where a.personGroupId.id = :personGroupId" +
                         "   and :sysDate between a.startDate and a.endDate " +
                         "   and a.primaryFlag = 'TRUE' " +
                         "   and :sysDate between v.startDate and v.endDate " +
@@ -156,15 +156,15 @@ public class AbsenceBalanceBrowse extends EditableFrame {
         Date dateFrom = personGroup.getPerson().getHireDate();
         Date dateTo = absenceBalanceService.getActualDateTo(dateFrom);
         int balanceDays = absenceBalanceService.getBalanceDays(personGroup, null);
-//        int additionalBalanceDays = absenceBalanceService.getAdditionalBalanceDays(personGroup);
+//        int additionalBalanceDays = absenceBalanceService.getAdditionalBalanceDays(personGroupId);
         int annualDaysSpent = 0;
         if (lastAbsenceBalance == null) {
-//            annualDaysSpent = absenceBalanceService.getAnnualDaysSpent(personGroup);
+//            annualDaysSpent = absenceBalanceService.getAnnualDaysSpent(personGroupId);
         } else {
             annualDaysSpent = annualDaysSpentFromPrevious;
         }
         int daysLeft = balanceDays - annualDaysSpent;
-//        int extraDaysSpent = absenceBalanceService.getAdditionalDaysSpent(personGroup);
+//        int extraDaysSpent = absenceBalanceService.getAdditionalDaysSpent(personGroupId);
         int extraDaysSpent = 0;
 //        int extraDaysLeft = additionalBalanceDays - extraDaysSpent;
 

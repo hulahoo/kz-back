@@ -47,7 +47,7 @@ public class TemporaryTranslationRequestEdit<T extends TemporaryTranslationReque
     protected Datasource<TemporaryTranslationRequest> temporaryTranslationRequestDs;
     @Inject
     protected PickerField<Entity> picker, organizationSs, newGrade, newPosition, pickerSubstitutedEmployee;
-    @Named("fieldGroup1.personGroup")
+    @Named("fieldGroup1.personGroupId")
     protected PickerField personGroupField;
     @Inject
     protected DateField<Date> oldDateFrom, newDateFrom, newDateEnd;

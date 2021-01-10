@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://militaryFormRequestEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.militaryformrequest">
+    <data>
+        <instance id="militaryFormRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.MilitaryFormRequest">
+            <view extends="_minimal">
+                <property name="date_from"/>
+                <property name="date_to"/>
+                <property name="militaryDocumentTypeName"/>
+                <property name="document_number"/>
+                <property name="militaryTypeName"/>
+                <property name="attitude_to_military" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="compositionMilitaryRegistration"/>
+                <property name="militaryRankName"/>
+                <property name="officerTypeName"/>
+                <property name="specialization"/>
+                <property name="issueDocDate"/>
+                <property name="issuingAuthority"/>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+                <property name="requestStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="file" view="_minimal"/>
+            </view>
+            <loader/>
+        </instance>
+        <collection id="attitude_to_militariesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAttitudeToMilitary"
+                    view="_minimal">
+            <loader id="attitude_to_militariesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicAttitudeToMilitary e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="militaryFormRequestDc">
+                <column width="350px">
+                    <pickerField id="personGroupField" property="personGroup" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <dateField id="date_fromField" property="date_from"/>
+                    <dateField id="date_toField" property="date_to"/>
+                    <textField id="militaryDocumentTypeNameField" property="militaryDocumentTypeName"/>
+                    <textField id="document_numberField" property="document_number"/>
+                    <textField id="militaryTypeNameField" property="militaryTypeName"/>
+                    <lookupPickerField id="attitude_to_militaryField" optionsContainer="attitude_to_militariesDc"
+                                       property="attitude_to_military"/>
+                    <textField id="compositionMilitaryRegistrationField" property="compositionMilitaryRegistration"/>
+                    <textField id="militaryRankNameField" property="militaryRankName"/>
+                    <textField id="officerTypeNameField" property="officerTypeName"/>
+                    <textField id="specializationField" property="specialization"/>
+                    <dateField id="issueDocDateField" property="issueDocDate"/>
+                    <textField id="issuingAuthorityField" property="issuingAuthority"/>
+                    <pickerField id="requsetStatusField" property="requestStatus" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

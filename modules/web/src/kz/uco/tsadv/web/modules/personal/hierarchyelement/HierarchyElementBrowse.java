@@ -137,7 +137,6 @@ public class HierarchyElementBrowse extends StandardLookup<HierarchyElementExt> 
             return;
         } else if (searchText.length() <= 3) {
             notifications.create(Notifications.NotificationType.HUMANIZED)
-                    .withCaption(messages.getMainMessage("warningNotification.caption"))
                     .withDescription(messages.getMainMessage("search.text.small"))
                     .show();
             return;

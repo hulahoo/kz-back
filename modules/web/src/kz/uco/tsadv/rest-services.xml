@@ -643,4 +643,17 @@
         </method>
         <method name="loadBooks"/>
     </service>
+    <service name="tsadv_UserSettingService">
+        <method name="getTimeZones"/>
+    </service>
+    <service name="tsadv_NotificationService">
+        <method name="notifications"/>
+    </service>
+    <service name="tsadv_KpiService">
+        <method name="loadUsersPerformancePlans">
+            <param name="page" type="java.lang.Integer"/>
+            <param name="pageSize" type="java.lang.Integer"/>
+        </method>
+        <method name="countUsersPerformancePlans"/>
+    </service>
 </services>

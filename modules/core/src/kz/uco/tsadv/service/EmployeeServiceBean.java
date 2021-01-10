@@ -467,6 +467,19 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
+    public PersonGroupExt getPersonGroupByUserIdExtendedView(UUID userId) {
+        return persistence.callInTransaction(em -> {
+            Query query = em.createQuery("select e.personGroup " +
+                    "from tsadv$UserExt e " +
+                    "where e.id = :uId")
+                    .setParameter("uId", userId);
+            query.setView(PersonGroupExt.class, "personGroupExt-view");
+            List list = query.getResultList();
+            return list.isEmpty() ? null : (PersonGroupExt) list.get(0);
+        });
+    }
+
+    @Override
     public UserExt getUserExtByPersonGroupId(UUID personGroupId) {
         return getUserExtByPersonGroupId(personGroupId, null);
     }

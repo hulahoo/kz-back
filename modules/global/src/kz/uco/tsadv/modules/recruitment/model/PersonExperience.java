@@ -4,10 +4,10 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.base.entity.dictionary.DicIndustry;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @NamePattern("%s (%s - %s)|company,startMonth,endMonth")
@@ -40,6 +40,86 @@ public class PersonExperience extends AbstractParentEntity {
 
     @Column(name = "DESCRIPTION", length = 4000)
     protected String description;
+
+    @Column(name = "LOCATION", length = 2000)
+    private String location;
+
+    @Column(name = "PART_TIME")
+    private Boolean partTime;
+
+    @Column(name = "MINING_EXPERIENCE")
+    private Boolean miningExperience;
+
+    @Column(name = "GROUP_EXPERIENCE")
+    private Boolean groupExperience;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INDUSTRY_ID")
+    private DicIndustry industry;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE_HISTORY")
+    private Date startDateHistory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE_HISTORY")
+    private Date endDateHistory;
+
+    public Date getEndDateHistory() {
+        return endDateHistory;
+    }
+
+    public void setEndDateHistory(Date endDateHistory) {
+        this.endDateHistory = endDateHistory;
+    }
+
+    public Date getStartDateHistory() {
+        return startDateHistory;
+    }
+
+    public void setStartDateHistory(Date startDateHistory) {
+        this.startDateHistory = startDateHistory;
+    }
+
+    public DicIndustry getIndustry() {
+        return industry;
+    }
+
+    public void setIndustry(DicIndustry industry) {
+        this.industry = industry;
+    }
+
+    public Boolean getGroupExperience() {
+        return groupExperience;
+    }
+
+    public void setGroupExperience(Boolean groupExperience) {
+        this.groupExperience = groupExperience;
+    }
+
+    public Boolean getMiningExperience() {
+        return miningExperience;
+    }
+
+    public void setMiningExperience(Boolean miningExperience) {
+        this.miningExperience = miningExperience;
+    }
+
+    public Boolean getPartTime() {
+        return partTime;
+    }
+
+    public void setPartTime(Boolean partTime) {
+        this.partTime = partTime;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     public void setUntilNow(Boolean untilNow) {
         this.untilNow = untilNow;

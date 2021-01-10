@@ -1,0 +1,1 @@
+alter table TSADV_CERTIFICATE_TEMPLATE add column ORGANIZATION_ID uuid ;

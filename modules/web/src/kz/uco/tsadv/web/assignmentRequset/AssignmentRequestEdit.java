@@ -41,7 +41,7 @@ public class AssignmentRequestEdit<T extends AssignmentRequest> extends Abstract
     protected EmployeeService employeeService;
     @Inject
     protected Datasource<AssignmentExt> assignmentExtDs;
-    @Named("fieldGroup1.personGroup")
+    @Named("fieldGroup1.personGroupId")
     protected PickerField personGroupField;
     @Named("fieldGroup2.attachment")
     protected FileUploadField attachmentField;

@@ -166,7 +166,7 @@ public class StandartSettings extends AbstractFrame {
         this.personGroup = commonService.getEntity(PersonGroupExt.class, "select e" +
                         "                          from base$PersonGroupExt e" +
                         "                          where e.id = :personGroupId",
-                params, "personGroup.linkedin");
+                params, "personGroupId.linkedin");
         return personGroup;
     }
 
@@ -201,8 +201,8 @@ public class StandartSettings extends AbstractFrame {
         try {
             LinkedinProfileDTO linkedinProfileDTO = linkedinService.getFilledProfileDTO(getFreshPersonGroup());
             byte[] userPhoto = linkedinProfileDTO.getPhoto();
-//            employeeService.getPersonGroupByUserId(userExt.getId()).getPerson().setPhoto(userPhoto); //TODO:personGroup need to test
-            //Utils.getPersonImageEmbedded(employeeService.getPersonGroupByUserId(userExt.getId()).getPerson(), null, userImage); //TODO:personGroup need to test
+//            employeeService.getPersonGroupByUserId(userExt.getId()).getPerson().setPhoto(userPhoto); //TODO:personGroupId need to test
+            //Utils.getPersonImageEmbedded(employeeService.getPersonGroupByUserId(userExt.getId()).getPerson(), null, userImage); //TODO:personGroupId need to test
             showNotification(getMessage("profileFromLinkedinIsFilled"), NotificationType.HUMANIZED);
         } catch (Exception e) {
             showNotification(e.getMessage(), NotificationType.ERROR);

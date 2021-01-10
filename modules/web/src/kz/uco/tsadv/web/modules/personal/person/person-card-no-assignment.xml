@@ -322,26 +322,26 @@
                               datasourceClass="kz.uco.tsadv.datasource.AbsenceBalanceDatasource">
             <!--<query>
                 <![CDATA[select e from tsadv$AbsenceBalanceV e
-                where e.personGroup.id = :ds$personGroupDs.id
+                where e.personGroupId.id = :ds$personGroupDs.id
                 order by e.dateFrom desc
                 ]]>
             </query>-->
             <!--<query>
                 <![CDATA[select e from tsadv$AbsenceBalance e
-                    where e.personGroup.id = :ds$personGroupDs.id
+                    where e.personGroupId.id = :ds$personGroupDs.id
                       and e.dateFrom >= (select p.hireDate from base$PersonExt p
                                            where p.group.id = :ds$personGroupDs.id
                                              and :session$systemDate between p.startDate and p.endDate)
                       and (0 = (select count(d.dismissalDate) from tsadv$Dismissal d
-                                          where d.personGroup.id = :ds$personGroupDs.id
+                                          where d.personGroupId.id = :ds$personGroupDs.id
                                             and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
-                                                                         where a.personGroup.id = :ds$personGroupDs.id
+                                                                         where a.personGroupId.id = :ds$personGroupDs.id
                                                                            and :session$systemDate between a.startDate and a.endDate
                                                                            and a.primaryFlag = true))
                           or e.dateFrom <= (select d.dismissalDate from tsadv$Dismissal d
-                                          where d.personGroup.id = :ds$personGroupDs.id
+                                          where d.personGroupId.id = :ds$personGroupDs.id
                                             and d.assignmentGroup.id = (select a.group.id from base$AssignmentExt a
-                                                                         where a.personGroup.id = :ds$personGroupDs.id
+                                                                         where a.personGroupId.id = :ds$personGroupDs.id
                                                                            and :session$systemDate between a.startDate and a.endDate
                                                                            and a.primaryFlag = true)))
                         order by e.dateFrom asc]]>

@@ -1993,6 +1993,15 @@
             </property>
             <property name="list"
                       view="_local">
+                <property name="gradeGroup"
+                          view="_minimal">
+                    <property name="grade"
+                              view="_minimal"/>
+                    <property name="list"
+                              view="_minimal"/>
+                </property>
+                <property name="costCenter"
+                          view="_minimal"/>
             </property>
         </property>
         <property name="group"
@@ -7393,7 +7402,7 @@
                 <property name="country"
                           view="_local"/>
                 <property name="postalCode"/>
-                <property name="city"/>
+                <property name="cityName"/>
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
@@ -7735,7 +7744,7 @@
             <property name="linkedinTokenExpiresInDate"/>
             <property name="addresses"
                       view="_minimal">
-                <property name="city"/>
+                <property name="cityName"/>
                 <property name="startDate"/>
                 <property name="endDate"/>
                 <property name="addressType"
@@ -11256,7 +11265,7 @@
             </property>
             <property name="addresses"
                       view="_minimal">
-                <property name="city"/>
+                <property name="cityName"/>
             </property>
             <property name="list"
                       view="_minimal">
@@ -13546,39 +13555,65 @@
     </view>
     <view entity="base$PersonExt"
           name="person.browse">
-        <property name="group" view="_minimal">
-            <property name="list" view="_minimal">
-                <property name="group" view="_minimal"/>
+        <property name="legacyId"/>
+        <property name="nationality" view="_local">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="nonresidentType" view="_local"/>
+        <property name="citizenship" view="_local"/>
+        <property name="nationalIdentifier"/>
+        <property name="dateOfBirth"/>
+        <property name="sex"
+                  view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="fioWithEmployeeNumber"/>
+        <property name="hireDate"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="type"
+                  view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="image"
+                  view="_minimal"/>
+        <property name="group"
+                  view="_minimal">
+            <property name="list"
+                      view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
+                <property name="group"
+                          view="_minimal"/>
             </property>
-            <property name="person" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
-            <property name="assignments" view="_minimal">
-                <property name="assignmentStatus" view="_minimal">
-                    <property name="code"/>
-                </property>
-                <property name="jobGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="jobNameLang1"/>
-                        <property name="jobNameLang2"/>
-                        <property name="jobNameLang3"/>
-                        <property name="jobNameLang4"/>
-                        <property name="jobNameLang5"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                </property>
-                <property name="gradeGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                </property>
-                <property name="organizationGroup" view="_minimal">
-                    <property name="list" view="_minimal">
+            <property name="assignments"
+                      view="_minimal">
+                <property name="group"
+                          view="_local"/>
+                <property name="organizationGroup"
+                          view="_minimal">
+                    <property name="list"
+                              view="_minimal">
                         <property name="startDate"/>
                         <property name="endDate"/>
                         <property name="organizationNameLang1"/>
@@ -13705,36 +13740,12 @@
             </property>
         </property>
         <property name="maritalStatus" view="_local"/>
-        <property name="type" view="_minimal">
-            <property name="legacyId"/>
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-        </property>
-        <property name="legacyId"/>
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="writeHistory"/>
-        <property name="image" view="_minimal"/>
         <property name="firstName"/>
         <property name="firstNameLatin"/>
         <property name="middleNameLatin"/>
         <property name="lastName"/>
         <property name="lastNameLatin"/>
         <property name="middleName"/>
-        <property name="hireDate"/>
-        <property name="nationalIdentifier"/>
-        <property name="dateOfBirth"/>
-        <property name="sex" view="_minimal">
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-        <property name="fioWithEmployeeNumber"/>
     </view>
     <view entity="base$PersonExt"
           name="person-for-search">
@@ -15204,7 +15215,7 @@
             <property name="country"
                       view="_local"/>
             <property name="postalCode"/>
-            <property name="city"/>
+            <property name="cityName"/>
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
@@ -16838,7 +16849,7 @@
                 <property name="endDate"/>
                 <property name="code"/>
             </property>
-            <property name="city"/>
+            <property name="cityName"/>
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
@@ -17583,7 +17594,7 @@
                 <property name="code"/>
             </property>
             <property name="postalCode"/>
-            <property name="city"/>
+            <property name="cityName"/>
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
@@ -17600,9 +17611,9 @@
                 <property name="positionGroup"
                           view="_minimal">
                     <property name="list"
-                              view="_minimal">
+                              view="_local">
                         <property name="gradeGroup"
-                                  view="_minimal">
+                                  view="_local">
                             <property name="grade"
                                       view="_minimal"/>
                         </property>
@@ -21230,43 +21241,43 @@
     </view>
     <view entity="base$PositionGroupExt"
           name="positionExt-receptionAssignment" extends="_local">
-            <property name="list"
-                      view="_local">
-                <property name="costCenter"
-                          view="_minimal"/>
-                <property name="organizationGroupExt"
-                          view="organizationGroupExt-receptionAssignment"/>
-                <property name="jobGroup" view="_local">
-                    <property name="jobNameDefault"/>
-                </property>
-                <property name="gradeGroup" view="gradeGroup-receptionAssignment"/>
-                <property name="location" view="_local"/>
+        <property name="list"
+                  view="_local">
+            <property name="costCenter"
+                      view="_minimal"/>
+            <property name="organizationGroupExt"
+                      view="organizationGroupExt-receptionAssignment"/>
+            <property name="jobGroup" view="_local">
+                <property name="jobNameDefault"/>
             </property>
-            <property name="position"
+            <property name="gradeGroup" view="gradeGroup-receptionAssignment"/>
+            <property name="location" view="_local"/>
+        </property>
+        <property name="position"
+                  view="_minimal">
+            <property name="gradeGroup"
                       view="_minimal">
-                <property name="gradeGroup"
+                <property name="list"
+                          view="_minimal"/>
+            </property>
+            <property name="costCenter"
+                      view="_minimal"/>
+            <property name="legacyId"/>
+            <property name="organizationGroupExt"
+                      view="_local"/>
+        </property>
+        <property name="analytics"
+                  view="_minimal">
+            <property name="calendar"
+                      view="_minimal">
+                <property name="calendar"/>
+                <property name="orgAnalytics"
                           view="_minimal">
-                    <property name="list"
+                    <property name="calendar"
                               view="_minimal"/>
                 </property>
-                <property name="costCenter"
-                          view="_minimal"/>
-                <property name="legacyId"/>
-                <property name="organizationGroupExt"
-                          view="_local"/>
             </property>
-            <property name="analytics"
-                      view="_minimal">
-                <property name="calendar"
-                          view="_minimal">
-                    <property name="calendar"/>
-                    <property name="orgAnalytics"
-                              view="_minimal">
-                        <property name="calendar"
-                                  view="_minimal"/>
-                    </property>
-                </property>
-            </property>
+        </property>
     </view>
     <view entity="tsadv$GradeGroup"
           name="gradeGroup-receptionAssignment"
@@ -21415,6 +21426,197 @@
             <property name="endDate"/>
         </property>
     </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-person-data" extends="_local">
+        <property name="list" view="_minimal">
+            <property name="nationality" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+            <property name="birthPlace"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="firstNameLatin"/>
+            <property name="middleNameLatin"/>
+            <property name="lastNameLatin"/>
+            <property name="nationalIdentifier"/>
+            <property name="dateOfBirth"/>
+            <property name="sex" view="_minimal"/>
+            <property name="citizenship" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+            <property name="writeHistory"/>
+            <property name="type" view="_minimal"/>
+            <property name="stateAwards"/>
+            <property name="scientificWorksIventions"/>
+            <property name="academicDegree"/>
+            <property name="haveCrippleChild"/>
+            <property name="haveChildWithoutParent"/>
+            <property name="prevJobNDA"/>
+            <property name="prevJobObligation" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+        </property>
+        <property name="person" view="_minimal">
+            <property name="nationality" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+            <property name="birthPlace"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="firstNameLatin"/>
+            <property name="middleNameLatin"/>
+            <property name="lastNameLatin"/>
+            <property name="nationalIdentifier"/>
+            <property name="writeHistory"/>
+        </property>
+        <property name="assignments" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="primaryFlag"/>
+            <property name="assignmentStatus" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+        </property>
+        <property name="personExperience" view="_minimal"/>
+    </view>
+    <view entity="tsadv$PersonalDataRequest" name="personalDataRequest-edit" extends="_local">
+        <property name="status" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="assignments" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="primaryFlag"/>
+                <property name="assignmentStatus" view="_local"/>
+            </property>
+            <property name="personExperience" view="_minimal"/>
+        </property>
+        <property name="nationality" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="citizenship" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="attachments" view="_minimal"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-for-person-data" extends="_local">
+        <property name="list" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="assignments" view="_minimal">
+            <property name="assignmentStatus" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+            <property name="primaryFlag"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="personExperience" view="_minimal"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-for-load-attribute" extends="_minimal">
+        <property name="list" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="writeHistory"/>
+        </property>
+    </view>
+    <view entity="tsadv_PersonAdwardRequest" name="personAdwardRequest-edit" extends="_local">
+        <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="academicDegree"/>
+                <property name="scientificWorksIventions"/>
+                <property name="stateAwards"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="writeHistory"/>
+            </property>
+            <property name="assignments" view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+            <property name="personExperience" view="_minimal"/>
+        </property>
+        <property name="requestStatus" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
     <view entity="tsadv$AssignedGoal" name="assignedGoalForKpi" extends="_local">
         <property name="goal" view="_minimal">
             <property name="startDate"/>
@@ -21506,5 +21708,158 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
+    </view>
+    <view entity="tsadv_VacationScheduleRequest" name="vacation-request-view" extends="_local">
+        <property name="status" view="_local"/>
+        <property name="personGroup" view="_local"/>
+    </view>
+    <view entity="tsadv_VacationSchedule" name="vacation-view" extends="_local">
+        <property name="personGroup" view="personGroupExt-view"/>
+        <property name="status" view="_local"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-person-data" extends="_local">
+        <property name="list" view="_minimal">
+            <property name="nationality" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+            <property name="birthPlace"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="firstNameLatin"/>
+            <property name="middleNameLatin"/>
+            <property name="lastNameLatin"/>
+            <property name="nationalIdentifier"/>
+            <property name="dateOfBirth"/>
+            <property name="sex" view="_minimal"/>
+            <property name="citizenship" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+        </property>
+        <property name="person" view="_minimal">
+            <property name="nationality" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+            <property name="birthPlace"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="firstNameLatin"/>
+            <property name="middleNameLatin"/>
+            <property name="lastNameLatin"/>
+            <property name="nationalIdentifier"/>
+        </property>
+        <property name="assignments" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="primaryFlag"/>
+            <property name="assignmentStatus" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+        </property>
+        <property name="personExperience" view="_minimal"/>
+    </view>
+    <view entity="tsadv$PersonalDataRequest" name="personalDataRequest-edit" extends="_local">
+        <property name="status" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="assignments" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="primaryFlag"/>
+                <property name="assignmentStatus" view="_local"/>
+            </property>
+            <property name="personExperience" view="_minimal"/>
+        </property>
+        <property name="nationality" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="citizenship" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="attachments" view="_minimal"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-for-person-data" extends="_local">
+        <property name="list" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="assignments" view="_minimal">
+            <property name="assignmentStatus" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+            <property name="primaryFlag"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="personExperience" view="_minimal"/>
+    </view>
+    <view entity="uactivity$Activity" name="portal.notification" extends="_local" systemProperties="true">
+        <property name="name"/>
+    </view>
+    <view entity="tsadv_CertificateRequest" name="certificateRequest-view" extends="_local">
+        <property name="personGroup" view="personGroup-view">
+            <property name="assignments" view="assignment.view"/>
+        </property>
+        <property name="status" view="_local"/>
+        <property name="receivingType" view="_local"/>
+        <property name="file" view="_local"/>
+        <property name="language" view="_local"/>
+        <property name="cretificateType" view="_local"/>
     </view>
 </views>

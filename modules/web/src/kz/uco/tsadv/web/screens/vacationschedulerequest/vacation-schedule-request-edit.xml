@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://vacationScheduleRequestEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.vacationschedulerequest">
+    <data>
+        <instance id="vacationScheduleRequestDc"
+                  class="kz.uco.tsadv.entity.VacationScheduleRequest">
+            <view extends="_local">
+                <property name="personGroup" view="_minimal">
+                </property>
+                <property name="status" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="code"/>
+                </property>
+            </view>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="vacationScheduleRequestDc">
+            <column width="350px">
+                <textField id="requestNumberField" property="requestNumber" editable="false"/>
+                <dateField id="requestDateField" property="requestDate" editable="false"/>
+                <pickerField id="personGroupField" property="personGroup" editable="false"/>
+                <pickerField id="statusField" property="status" editable="false"/>
+                <dateField id="startDateField"  property="startDate" editable="false"/>
+                <dateField id="endDateField" property="endDate" editable="false"/>
+                <textField id="absenceDaysField" property="absenceDays" editable="false"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

@@ -22,8 +22,7 @@ import java.util.*;
 /**
  * @author Adilbekov Yernar
  */
-
-//TODO поудалять всё лишнее
+@Deprecated
 public class OrganizationFrame extends AbstractFrame {
 
     protected HierarchyElementBrowse browse;

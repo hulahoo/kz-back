@@ -2,7 +2,7 @@ package kz.uco.tsadv.components;
 
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.data.HierarchicalDatasource;
-import com.vaadin.event.ExpandEvent;
+import com.vaadin.v7.ui.Tree;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.MyTeamNew;
 import kz.uco.tsadv.service.MyTeamService;
@@ -40,8 +40,8 @@ public class MyTeamComponent {
         }
     }
 
-    public void onExpand(ExpandEvent<MyTeamNew> expandEvent, HierarchicalDatasource<MyTeamNew, UUID> teamDs) {
-        UUID itemId = expandEvent.getExpandedItem().getId();
+    public void onExpand(Tree.ExpandEvent expandEvent, HierarchicalDatasource<MyTeamNew, UUID> teamDs) {
+        UUID itemId = (UUID) expandEvent.getItemId();
         Collection<UUID> children = teamDs.getChildren(itemId);
         boolean firstTime = false;
         if (children.size() == 1) {

@@ -79,8 +79,8 @@ public class SearchCandidate extends AbstractWindow {
                         && address.getAddressType().getCode().equals("20") && address.getStartDate() != null
                         && address.getEndDate() != null && !address.getStartDate().after(CommonUtils.getSystemDate())
                         && !address.getEndDate().before(CommonUtils.getSystemDate())
-                        && address.getCity() != null) {
-                    return address.getCity();
+                        && address.getCityName() != null) {
+                    return address.getCityName();
                 }
             }
             return "";

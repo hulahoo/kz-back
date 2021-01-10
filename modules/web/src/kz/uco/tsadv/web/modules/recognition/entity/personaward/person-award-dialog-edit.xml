@@ -36,7 +36,7 @@
                     <!--<clearQuery entityClass="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
                            escapeValueForLike="true"
                            searchStringFormat="%$searchString%"
-                           view="personGroup.search">
+                           view="personGroupId.search">
                         <![CDATA[select pg from base$PersonGroupExt pg
                     join pg.list p
                     join pg.assignments a

@@ -18,6 +18,18 @@ public class Retirement extends AbstractParentEntity {
     @JoinColumn(name = "RETIREMENT_TYPE_ID")
     protected DicRetirementType retirementType;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "ISSEU_DOC_DATE")
+    private Date isseuDocDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE_HISTORY")
+    private Date startDateHistory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE_HISTORY")
+    private Date endDateHistory;
+
     @Column(name = "DOCUMENT_NUMBER")
     protected String documentNumber;
 
@@ -32,6 +44,30 @@ public class Retirement extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_GROUP_EXT_ID")
     protected PersonGroupExt personGroupExt;
+
+    public Date getEndDateHistory() {
+        return endDateHistory;
+    }
+
+    public void setEndDateHistory(Date endDateHistory) {
+        this.endDateHistory = endDateHistory;
+    }
+
+    public Date getStartDateHistory() {
+        return startDateHistory;
+    }
+
+    public void setStartDateHistory(Date startDateHistory) {
+        this.startDateHistory = startDateHistory;
+    }
+
+    public Date getIsseuDocDate() {
+        return isseuDocDate;
+    }
+
+    public void setIsseuDocDate(Date isseuDocDate) {
+        this.isseuDocDate = isseuDocDate;
+    }
 
     public void setPersonGroupExt(PersonGroupExt personGroupExt) {
         this.personGroupExt = personGroupExt;

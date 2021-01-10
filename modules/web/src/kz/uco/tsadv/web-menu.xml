@@ -112,6 +112,12 @@
             <item screen="tsadv$DicLearningHistoryStatus.browse"/>
             <item screen="tsadv$DicAssignmentCategory.browse"/>
             <item screen="tsadv$DicPersonQualificationType.browse"/>
+            <item screen="tsadv_DicIssuingAuthority.browse"
+                  caption="mainMsg://menu_config.tsadv_DicIssuingAuthority.browse"/>
+            <item screen="tsadv_DicFormStudy.browse" caption="mainMsg://menu_config.tsadv_DicFormStudy.browse"/>
+            <item screen="tsadv_DicLangaugeLevel.browse" caption="mainMsg://menu_config.tsadv_DicLangaugeLevel.browse"/>
+            <item screen="tsadv_DicPrevJobObligation.browse"
+                  caption="mainMsg://menu_config.tsadv_DicPrevJobObligation.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">
@@ -174,6 +180,8 @@
         <item screen="tsadv$TalentProgramExceptions.browse"/>
         <item screen="base$AssignmenthExt.browse"/>
         <item screen="base$AssignmedtExt.browse"/>
+        <item screen="tsadv_CertificateRequestHR.browse"
+              caption="mainMsg://menu_config.tsadv_CertificateRequestHR.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
@@ -372,6 +380,7 @@
                    value="tsadv$BpmUserSubstitutionSs.browse"/>
         </item>
         <item screen="tsadv$Absence.self.browse"/>
+        <item screen="tsadv_PersonData" caption="mainMsg://menu_config.tsadv_PersonData"/>
     </menu>
     <menu id="performanceManagement"
           icon="font-icon:BAR_CHART_O"
@@ -620,6 +629,16 @@
         <item id="rcScheduledInterviews"
               screen="tsadv$ScheduledInterview.browse"/>
     </menu>
+    <menu id="employeeSelfService">
+        <menu id="employeeSelfServiceDic" caption="mainMsg://menu-config.Dictionary">
+            <item screen="tsadv_DicReceivingType.browse" caption="mainMsg://menu_config.tsadv_DicReceivingType.browse"/>
+            <item screen="tsadv_DicCertificateType.browse"
+                  caption="mainMsg://menu_config.tsadv_DicCertificateType.browse"/>
+            <item screen="tsadv_CertificateTemplate.browse"
+                  caption="mainMsg://menu_config.tsadv_CertificateTemplate.browse"/>
+        </menu>
+        <item screen="tsadv_CertificateRequest.browse" caption="mainMsg://menu_config.tsadv_CertificateRequest.browse"/>
+    </menu>
     <menu id="accessRead">
         <item screen="person-group-browse-ro" icon="font-icon:USERS"/>
     </menu>
@@ -657,8 +676,7 @@
         <item id="report$Report.run"/>
         <item id="report$showChart"/>
     </menu>
-    <menu id="bproc"
-          insertBefore="administration">
+    <menu id="bproc" insertBefore="administration">
         <item screen="bproc_StartProcessScreen"/>
         <item screen="bproc_MyTasks.browse"/>
         <separator/>
@@ -670,17 +688,6 @@
         <item screen="bproc_DmnDecisionTableBrowse"/>
         <item screen="bproc_DecisionTableModelerScreen"/>
     </menu>
-    <!--    <menu id="bpm" icon="font-icon:SPINNER">-->
-    <!--        <item id="bpm$ProcModel.lookup"/>-->
-    <!--        <item id="bpm$ProcDefinition.lookup"/>-->
-    <!--        <item id="bpm$ProcInstance.lookup"/>-->
-    <!--        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>-->
-    <!--        <item id="bpm$ProcTask.lookup"/>-->
-    <!--        <item id="bpm$ProcAttachmentType.lookup"/>-->
-    <!--        <item id="stencilSetEditor"/>-->
-    <!--        <item id="tsadv$BpmRolesDefiner.browse"/>-->
-    <!--        <item screen="tsadv$PositionBpmRole.browse"/>-->
-    <!--    </menu>-->
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">
             <item screen="uactivity$ActivityType.browse"/>
@@ -876,4 +883,15 @@
             <item screen="tsadv$RecognitionLoginLog.browse"/>
         </menu>
     </menu>
+    <!--    <menu id="bpm" icon="font-icon:SPINNER">-->
+    <!--        <item id="bpm$ProcModel.lookup"/>-->
+    <!--        <item id="bpm$ProcDefinition.lookup"/>-->
+    <!--        <item id="bpm$ProcInstance.lookup"/>-->
+    <!--        <item screen="tsadv$ProcInstanceV.browse" id="tsadv$ProcInstanceV.browse"/>-->
+    <!--        <item id="bpm$ProcTask.lookup"/>-->
+    <!--        <item id="bpm$ProcAttachmentType.lookup"/>-->
+    <!--        <item id="stencilSetEditor"/>-->
+    <!--        <item id="tsadv$BpmRolesDefiner.browse"/>-->
+    <!--        <item screen="tsadv$PositionBpmRole.browse"/>-->
+    <!--    </menu>-->
 </menu-config>

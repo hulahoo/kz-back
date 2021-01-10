@@ -5,9 +5,11 @@ import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
-import kz.uco.base.entity.dictionary.DicCountry;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.base.entity.dictionary.DicCity;
+import kz.uco.base.entity.dictionary.DicCountry;
+import kz.uco.base.entity.dictionary.DicLanguage;
+import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -41,8 +43,16 @@ public class Address extends AbstractParentEntity {
     @Column(name = "POSTAL_CODE")
     protected String postalCode;
 
-    @Column(name = "CITY")
-    protected String city;
+    @Column(name = "CITY_NAME")
+    protected String cityName;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CITY_ID")
+    private DicCity city;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LANGUAGE_ID")
+    private DicLanguage language;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE", nullable = false)
@@ -51,6 +61,22 @@ public class Address extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE", nullable = false)
     protected Date endDate;
+
+    public DicLanguage getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(DicLanguage language) {
+        this.language = language;
+    }
+
+    public DicCity getCity() {
+        return city;
+    }
+
+    public void setCity(DicCity city) {
+        this.city = city;
+    }
 
 
     public void setPersonGroup(PersonGroupExt personGroup) {
@@ -85,12 +111,12 @@ public class Address extends AbstractParentEntity {
         return postalCode;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityName(String city) {
+        this.cityName = city;
     }
 
-    public String getCity() {
-        return city;
+    public String getCityName() {
+        return cityName;
     }
 
     public void setStartDate(Date startDate) {

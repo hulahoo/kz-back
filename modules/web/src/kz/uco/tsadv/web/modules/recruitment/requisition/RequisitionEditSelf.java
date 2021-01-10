@@ -210,7 +210,7 @@ public class RequisitionEditSelf extends RequisitionCommonEdit {
                             "    from base$OrganizationGroupExt e " +
                             "   where e.id in (select ps.organizationGroup.id " +
                             "                    from base$AssignmentExt a, tsadv$PositionStructure ps " +
-                            "                   where a.personGroup.id = :personGroupId " +
+                            "                   where a.personGroupId.id = :personGroupId " +
                             "                     and :systemDate between a.startDate and a.endDate " +
                             "                     and ps.positionGroup.id = a.positionGroup.id " +
                             "                     and :systemDate between ps.startDate and ps.endDate " +

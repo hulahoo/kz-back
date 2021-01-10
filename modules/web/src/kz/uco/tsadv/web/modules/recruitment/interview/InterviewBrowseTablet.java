@@ -186,7 +186,7 @@ public class InterviewBrowseTablet extends AbstractWindow {
         try {
             UserExt candidateUser = commonService.getEntity(UserExt.class,
                     "select e from tsadv$UserExt e " +
-                            "where e.personGroup.id = (select jr.candidatePersonGroup.id from tsadv$JobRequest jr where jr.id = :jrId)",
+                            "where e.personGroupId.id = (select jr.candidatePersonGroup.id from tsadv$JobRequest jr where jr.id = :jrId)",
                     Collections.singletonMap("jrId", interview.getJobRequest().getId()),
                     "user.browse");
 

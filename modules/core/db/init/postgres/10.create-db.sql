@@ -2134,6 +2134,8 @@ create table TSADV_JOB (
     JOB_DESCRIPTION_LANG4 text,
     JOB_DESCRIPTION_LANG5 text,
     JOB_CATEGORY_ID uuid,
+    CANDIDATEREQUIREMENTS varchar(255),
+    JOBDESCRIPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -2228,8 +2230,11 @@ create table TSADV_PERSON_DOCUMENT (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     ISSUE_DATE date not null,
+    START_DATE date,
+    END_DATE date,
     EXPIRED_DATE date not null,
     ISSUED_BY varchar(500),
+    ISSUING_AUTHORITY_ID uuid not null,
     DESCRIPTION varchar(2000),
     DOCUMENT_TYPE_ID uuid not null,
     PERSON_GROUP_ID uuid,
@@ -2436,7 +2441,9 @@ create table TSADV_ADDRESS (
     ADDRESS varchar(500) not null,
     COUNTRY_ID uuid not null,
     POSTAL_CODE varchar(255),
-    CITY varchar(255),
+    CITY_NAME varchar(255),
+    CITY_ID uuid,
+    LANGUAGE_ID uuid,
     START_DATE date not null,
     END_DATE date not null,
     --
@@ -3020,6 +3027,7 @@ create table TSADV_ORDER (
     CANCEL_ORDER_REASON_ID uuid,
     APPROVER_PERSON_GROUP_ID uuid,
     ORDER_REASON_ID uuid,
+    CAPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -3348,6 +3356,10 @@ create table TSADV_BUSINESS_TRIP (
     TYPE_ID uuid not null,
     ORD_ASSIGNMENT_ID uuid,
     PERSON_GROUP_ID uuid,
+    ROUTE varchar(255),
+    ABSENCEDAYS integer,
+    BUSINESSTRIPWITHDATE varchar(255),
+    PARENTBUSINESSTRIPCAPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -3488,6 +3500,8 @@ create table TSADV_DIC_DOCUMENT_TYPE (
     ACTIVE boolean not null,
     IS_DEFAULT boolean not null,
     ORDER_ integer,
+    --
+    FOREIGNER Boolean default false,
     --
     primary key (ID)
 )^
@@ -4447,6 +4461,7 @@ create table TSADV_SUCCESSION_PLANNING (
     END_DATE date not null,
     DESCRIPTION text,
     PERSON_GROUP_ID uuid,
+    POSITIONNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -5040,6 +5055,7 @@ create table TSADV_COURSE_SECTION_ATTEMPT (
     ENROLLMENT_ID uuid not null,
     COURSE_SECTION_ID uuid,
     COURSE_SECTION_SESSION_ID uuid,
+    COURSESECTIONFORMAT varchar(255),
     --
     primary key (ID)
 )^
@@ -5156,6 +5172,8 @@ create table TSADV_FAQ (
     CONTENT_LANG_VALUE3 text,
     CONTENT_LANG_VALUE4 text,
     CONTENT_LANG_VALUE5 text,
+    LANGVALUE varchar(255),
+    CONTENTLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -5179,6 +5197,7 @@ create table TSADV_FAQ_CONTENT (
     LANG_VALUE3 text,
     LANG_VALUE4 text,
     LANG_VALUE5 text,
+    LANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -5472,6 +5491,8 @@ create table TSADV_REQUISITION (
     MANAGER_DESCRIPTION_LANG4 text,
     MANAGER_DESCRIPTION_LANG5 text,
     VIEW_COUNT bigint not null,
+    DESCRIPTIONLANG varchar(255),
+    NAMEFORSITELANG varchar(255),
     --
     primary key (ID)
 )^
@@ -5816,12 +5837,19 @@ create table TSADV_PERSON_EDUCATION (
     GRADUATION_DATE date,
     FOREIGN_EDUCATION boolean not null,
     SCHOOL varchar(255),
+    EDUCATIONAL_ESTABLISHMENT_ID uuid,
+    EDUCATION_TYPE_ID uuid,
     START_YEAR integer,
     END_YEAR integer,
     SPECIALIZATION varchar(255),
     DEGREE_ID uuid,
     LOCATION varchar(255),
     LEVEL_ID uuid,
+    FACULTY varchar(2000),
+    QUALIFICATION varchar(2000),
+    FORM_STUDY_ID uuid,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
     --
     primary key (ID)
 )^
@@ -5847,6 +5875,13 @@ create table TSADV_PERSON_EXPERIENCE (
     START_MONTH date not null,
     END_MONTH date,
     DESCRIPTION varchar(4000),
+    LOCATION varchar(2000),
+    PART_TIME boolean,
+    MINING_EXPERIENCE boolean,
+    GROUP_EXPERIENCE boolean,
+    INDUSTRY_ID uuid,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
     --
     primary key (ID)
 )^
@@ -5934,6 +5969,7 @@ create table TSADV_JOB_REQUEST (
     IS_RESERVED boolean not null,
     SELECTED_BY_MANAGER boolean not null,
     SENT boolean not null,
+    NAME varchar(255),
     --
     primary key (ID)
 )^
@@ -6419,6 +6455,16 @@ create table TSADV_BENEFICIARY (
     DATE_TO date,
     GET_ALIMONY boolean,
     RELATIONSHIP_TYPE_ID uuid,
+    LAST_NAME varchar(2000),
+    FIRST_NAME varchar(2000),
+    MIDDLE_NAME varchar(2000),
+    BIRTH_DATE date,
+    WORK_LOCATION varchar(2000),
+    HOME_ADDRESS varchar(2000),
+    ADDITIONAL_CONTACT varchar(2000),
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
+    PERSON_GROUP_ID uuid,
     --
     primary key (ID)
 )^
@@ -7228,6 +7274,7 @@ create table TSADV_BUDGET_REQUEST (
     HOUR_ integer,
     BUSINESS_TRIP_EMPLOYEE integer,
     BUDGET_ITEM_ID uuid,
+    CALCCOURSENAME varchar(255),
     --
     primary key (ID)
 )^
@@ -7290,6 +7337,7 @@ create table TSADV_RC_QUESTION (
     IS_ACTIVE boolean not null,
     QUESTION_CATEGORY_ID uuid,
     QUESTION_ACCESSIBILITY_ID uuid,
+    QUESTIONTEXT varchar(255),
     --
     primary key (ID)
 )^
@@ -7385,6 +7433,7 @@ create table TSADV_RC_ANSWER (
     ANSWER_TEXT5 varchar(2000),
     ANSWER_RESULT varchar(50),
     POSITIVE_ boolean not null,
+    ANSWERTEXT varchar(255),
     --
     primary key (ID)
 )^
@@ -8302,6 +8351,7 @@ create table TSADV_STANDARD_OFFSET (
     OFFSET_DISPLAY_DAYS integer not null,
     START_DATE date not null,
     END_DATE date,
+    OFFSETSCHEDULENAME varchar(255),
     --
     primary key (ID)
 )^
@@ -8495,6 +8545,7 @@ create table TSADV_DIC_SCHEDULE_ELEMENT_TYPE (
     TIME_FROM time,
     TIME_TO time,
     DISPLAY_ON_TIMECARD_EDIT_SCREEN boolean,
+    SHORTNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -8557,6 +8608,7 @@ create table TSADV_SCHEDULE_SUMMARY (
     ELEMENT_TYPE_ID uuid not null,
     CORRECTION_FLAG boolean not null,
     DISPLAY_VALUE varchar(255),
+    SHIFTNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -8970,21 +9022,31 @@ create table TSADV_MILITARY_FORM (
     DATE_FROM date,
     DATE_TO date,
     MILITARY_DOCUMENT_TYPE_ID uuid,
+    MILITARY_DOCUMENT_TYPE_NAME varchar(2000),
     UDO_ID uuid,
     DOCUMENT_NUMBER varchar(100),
     MILITARY_TYPE_ID uuid,
+    MILITARY_TYPE_NAME varchar(2000),
     ATTITUDE_TO_MILITARY_ID uuid,
+    ATTITUDE_TO_MILITARY_NAME varchar(2000),
     TROOPS_STRUCTURE_ID uuid,
+    COMPOSITION_MILITARY_REGISTRATION varchar(2000),
     MILITARY_RANK_ID uuid,
+    MILITARY_RANK_NAME varchar(2000),
     OFFICER_TYPE_ID uuid,
+    OFFICER_TYPE_NAME varchar(2000),
     SUITABILITY_TO_MILITARY_ID uuid,
     SPECIALIZATION varchar(255),
+    ISSUE_DOC_DATE date,
+    ISSUING_AUTHORITY varchar(2000),
     DELY boolean,
     DELY_DESCRIPTION varchar(255),
     REGISTER_GROUP_ID uuid,
     REGISTER_CATEGORY_ID uuid,
     DATE_POST date,
     PERSON_GROUP_ID uuid,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
     --
     primary key (ID)
 )^
@@ -9089,6 +9151,7 @@ create table TSADV_ORDER_MASTER_ENTITY_PROPERTY (
     LANG_NAME4 varchar(255),
     LANG_NAME5 varchar(255),
     ORDER_MASTER_ENTITY_ID uuid,
+    LANGNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -9116,6 +9179,7 @@ create table TSADV_ORDER_MASTER_ENTITY (
     ENTITY_NAME_LANG5 varchar(255),
     ORDER_ integer not null,
     ORDER_MASTER_ID uuid,
+    ENTITYLANGNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -9607,6 +9671,7 @@ create table TSADV_WORKED_HOURS_SUMMARY (
     BUSSINESS_TRIP_ID uuid,
     ORDER_ID uuid,
     ABSENCE_ID uuid,
+    TIMECARDREPRESENTATION varchar(255),
     --
     primary key (ID)
 )^
@@ -10045,6 +10110,7 @@ create table TSADV_DIC_QUALITY (
     FULL_LANG_VALUE3 varchar(2000),
     FULL_LANG_VALUE4 varchar(2000),
     FULL_LANG_VALUE5 varchar(2000),
+    FULLLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -10490,6 +10556,10 @@ create table TSADV_DISABILITY (
     DATE_FROM date,
     DATE_TO date,
     PERSON_GROUP_EXT_ID uuid,
+    HAVE_DISABILITY varchar(50),
+    GROUP_ varchar(2000),
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
     --
     primary key (ID)
 )^
@@ -10509,6 +10579,9 @@ create table TSADV_RETIREMENT (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     RETIREMENT_TYPE_ID uuid,
+    ISSEU_DOC_DATE date,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
     DOCUMENT_NUMBER varchar(255),
     DATE_FROM date,
     DATE_TO date,
@@ -10719,6 +10792,8 @@ create table TSADV_GOODS (
     PRICE double precision not null,
     ACTIVE boolean not null,
     RECOGNITION_PROVIDER_ID uuid,
+    NAME varchar(255),
+    DESCRIPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -10926,6 +11001,7 @@ create table TSADV_MEDAL (
     LANG_NAME3 varchar(255),
     LANG_NAME4 varchar(255),
     SORT integer,
+    LANGNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -11087,6 +11163,7 @@ create table TSADV_RCG_QUESTION_ANSWER (
     CODE varchar(255),
     ICON_ID uuid,
     RCG_QUESTION_ID uuid not null,
+    TEXT varchar(255),
     --
     primary key (ID)
 )^
@@ -11115,6 +11192,8 @@ create table TSADV_RCG_QUESTION (
     ACTIVE boolean not null,
     ANSWER_TYPE varchar(50) not null,
     COINS bigint,
+    TEXT varchar(255),
+    DESCRIPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -11634,6 +11713,7 @@ create table TSADV_PERSONAL_PROTECTION_INSPECTOR (
     ORGANIZATION_GROUP_ID uuid not null,
     ASSIGNMENT_DATE date not null,
     ASSIGNMENT_ORDER varchar(255),
+    EMPLOYEEFULLNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -12472,6 +12552,7 @@ create table TSADV_LEARNING_FEEDBACK_ANSWER (
     ANSWER_LANG_VALUE4 varchar(2000),
     ANSWER_LANG_VALUE5 varchar(2000),
     FEEDBACK_QUESTION_ID uuid not null,
+    ANSWERLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -12497,6 +12578,7 @@ create table TSADV_LEARNING_FEEDBACK_QUESTION (
     QUESTION_LANG_VALUE5 varchar(2000),
     QUESTION_TYPE varchar(50) not null,
     DIC_QUESTION_TYPE_ID uuid,
+    QUESTIONLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -12980,6 +13062,7 @@ create table TSADV_SALARY_REQUEST (
     ORDER_GROUP_ID uuid,
     AGREEMENT_ID uuid,
     TYPE_ varchar(50) not null,
+    DIFFERENCE double precision,
     --
     primary key (ID)
 )^
@@ -13041,6 +13124,9 @@ create table TSADV_PERSONAL_DATA_REQUEST (
     ATTACHMENT_ID uuid,
     STATUS_ID uuid,
     PERSON_GROUP_ID uuid,
+    NATIONALITY_ID uuid,
+    CITIZENSHIP_ID uuid,
+    NATIONAL_IDENTIFIER varchar(255),
     --
     primary key (ID)
 )^
@@ -14118,6 +14204,12 @@ create table TSADV_PERSON_QUALIFICATION (
     ASSIGN_VALIDATION_DATE date,
     ATTACHMENT_ID uuid,
     NOTE varchar(3000),
+    EDUCATIONAL_INSTITUTION_NAME varchar(2000),
+    DIPLOMA varchar(2000),
+    TYPE_NAME varchar(2000),
+    ISSUED_DATE date,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
     --
     primary key (ID)
 )^
@@ -14178,6 +14270,7 @@ create table TSADV_TALENT_PROGRAM (
     QUESTION_OF_ESSAY_RU varchar(255) not null,
     QUESTION_OF_ESSAY_KZ varchar(255) not null,
     QUESTION_OF_ESSAY_EN varchar(255) not null,
+    QUESTIONOFESSAY varchar(255),
     --
     primary key (ID)
 )^
@@ -14540,7 +14633,15 @@ alter table BASE_PERSON add column NATIONALITY_ID uuid ^
 alter table BASE_PERSON add column CITIZENSHIP_ID uuid ^
 alter table BASE_PERSON add column FULL_NAME_CYRILLIC varchar(255) ^
 alter table BASE_PERSON add column FULL_NAME_NUMBER_CYRILLIC varchar(255) ^
-alter table BASE_PERSON add column DTYPE varchar(100) ^
+alter table BASE_PERSON add column BIRTH_PLACE varchar(2000) ^
+alter table BASE_PERSON add column ACADEMIC_DEGREE varchar(2000) ^
+alter table BASE_PERSON add column SCIENTIFIC_WORKS_IVENTIONS varchar(2000) ^
+alter table BASE_PERSON add column STATE_AWARDS varchar(2000) ^
+alter table BASE_PERSON add column HAVE_CRIPPLE_CHILD varchar(50) ^
+alter table BASE_PERSON add column HAVE_CHILD_WITHOUT_PARENT varchar(50) ^
+alter table BASE_PERSON add column PREV_JOB_NDA varchar(50) ^
+alter table BASE_PERSON add column PREV_JOB_OBLIGATION_ID uuid ^
+alter table BASE_PERSON add column DTYPE varchar(31) ^
 update BASE_PERSON set DTYPE = 'base$PersonExt' where DTYPE is null ^
 -- end BASE_PERSON
 -- begin BASE_ORGANIZATION
@@ -14950,108 +15051,7 @@ create table TSADV_DIC_COMPANY (
     primary key (ID)
 )^
 -- end TSADV_DIC_COMPANY
--- begin TSADV_DIC_ASSESSMENT_EVENTS
-create table TSADV_DIC_ASSESSMENT_EVENTS (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_EVENTS
--- begin TSADV_DIC_ASSESSMENT_RESULT
-create table TSADV_DIC_ASSESSMENT_RESULT (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_RESULT
--- begin TSADV_DIC_ASSESSMENT_TYPE
-create table TSADV_DIC_ASSESSMENT_TYPE (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_TYPE
+
 -- begin TSADV_HIERARCHY_ELEMENT_GROUP
 create table TSADV_HIERARCHY_ELEMENT_GROUP (
     ID uuid,
@@ -15108,3 +15108,1022 @@ create table TSADV_DIC_JOB_GROUP (
     primary key (ID)
 )^
 -- end TSADV_DIC_JOB_GROUP
+-- begin TSADV_VACATION_SCHEDULE
+create table TSADV_VACATION_SCHEDULE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    START_DATE date,
+    END_DATE date,
+    ABSENCE_DAYS integer,
+    STATUS_ID uuid not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_VACATION_SCHEDULE
+
+-- begin TSADV_VACATION_SCHEDULE_REQUEST
+create table TSADV_VACATION_SCHEDULE_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    REQUEST_NUMBER bigint not null,
+    REQUEST_DATE date not null,
+    PERSON_GROUP_ID uuid not null,
+    STATUS_ID uuid not null,
+    START_DATE date,
+    END_DATE date,
+    ABSENCE_DAYS integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_VACATION_SCHEDULE_REQUEST
+-- begin TSADV_DIC_CERTIFICATE_TYPE
+create table TSADV_DIC_CERTIFICATE_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_CERTIFICATE_TYPE
+-- begin TSADV_DIC_RECEIVING_TYPE
+create table TSADV_DIC_RECEIVING_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_RECEIVING_TYPE
+-- begin TSADV_CERTIFICATE_REQUEST
+create table TSADV_CERTIFICATE_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    REQUEST_NUMBER bigint not null,
+    REQUEST_DATE date not null,
+    PERSON_GROUP_ID uuid not null,
+    CRETIFICATE_TYPE_ID uuid not null,
+    RECEIVING_TYPE_ID uuid not null,
+    LANGUAGE_ID uuid not null,
+    SHOW_SALARY boolean not null,
+    NUMBER_OF_COPY integer not null,
+    FILE_ID uuid,
+    STATUS_ID uuid not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_CERTIFICATE_REQUEST
+-- begin TSADV_DIC_INDUSTRY
+create table TSADV_DIC_INDUSTRY (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_INDUSTRY
+-- begin TSADV_DIC_REASON_BENIFIT
+create table TSADV_DIC_REASON_BENIFIT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_REASON_BENIFIT
+-- begin TSADV_DIC_ISSUING_AUTHORITY
+create table TSADV_DIC_ISSUING_AUTHORITY (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ISSUING_AUTHORITY
+-- begin TSADV_DIC_PREV_JOB_OBLIGATION
+create table TSADV_DIC_PREV_JOB_OBLIGATION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_PREV_JOB_OBLIGATION
+-- begin TSADV_DIC_LANGUAGE_LEVEL
+create table TSADV_DIC_LANGUAGE_LEVEL (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_LANGUAGE_LEVEL
+-- begin TSADV_DIC_FORM_STUDY
+create table TSADV_DIC_FORM_STUDY (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_FORM_STUDY
+-- begin TSADV_PERSON_ADWARD_REQUEST
+create table TSADV_PERSON_ADWARD_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    ACADEMIC_DEGREE varchar(2000),
+    SCIENTIFIC_WORKS_IVENTIONS varchar(2000),
+    STATE_AWARDS varchar(2000),
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_ADWARD_REQUEST
+-- begin TSADV_PERSON_BANKDETAILS_REQUEST
+create table TSADV_PERSON_BANKDETAILS_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    BANK_ID uuid,
+    FULL_NAME_BANK_CARD varchar(2000),
+    IBAN varchar(255),
+    BIC_BANK varchar(255),
+    PERSON_GROUP_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    FILE_ID uuid,
+    BANK_DETAILS_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_BANKDETAILS_REQUEST
+-- begin TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY
+create table TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
+    HAVE_LIABILITY varchar(50),
+    REASON_PERIOD varchar(2000),
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY
+-- begin TSADV_PERSON_EDUCATION_REQUEST
+create table TSADV_PERSON_EDUCATION_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid not null,
+    DIPLOMA_NUMBER varchar(255),
+    GRADUATION_DATE date,
+    FOREIGN_EDUCATION boolean not null,
+    SCHOOL varchar(255),
+    EDUCATIONAL_INSTITUTION_ID uuid,
+    EDUCATION_TYPE_ID uuid,
+    START_YEAR integer,
+    END_YEAR integer,
+    SPECIALIZATION varchar(255),
+    DEGREE_ID uuid,
+    LOCATION varchar(255),
+    LEVEL_ID uuid,
+    FACULTY varchar(2000),
+    QUALIFICATION varchar(2000),
+    FORM_STUDY_ID uuid,
+    STATUS_ID uuid,
+    FILE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_EDUCATION_REQUEST
+-- begin TSADV_DISABILITY_REQUEST
+create table TSADV_DISABILITY_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    DISABILITY_TYPE_ID uuid,
+    ATTACHMENT_NAME varchar(255),
+    ATTACHMENT bytea,
+    DURATION_ID uuid,
+    DATE_FROM date,
+    DATE_TO date,
+    PERSON_GROUP_EXT_ID uuid,
+    HAVE_DISABILITY varchar(50),
+    GROUP_ varchar(2000),
+    REQUEST_STATUS_ID uuid,
+    FILE_ID uuid,
+    DISABILITY_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DISABILITY_REQUEST
+-- begin TSADV_PERSON_BENEFIT_REQUEST
+create table TSADV_PERSON_BENEFIT_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    REASON_ID uuid,
+    COMBATANT varchar(50),
+    CERTIFICATE_FROM_DATE varchar(255),
+    DOCUMENT_NUMBER varchar(255),
+    RADIATION_RISK_ZONE varchar(50),
+    PERSON_GROUP_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    FILE_ID uuid,
+    PERSON_BENEFIT_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_BENEFIT_REQUEST
+-- begin TSADV_BENEFICIARY_REQUEST
+create table TSADV_BENEFICIARY_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_PARENT_ID uuid,
+    PERSON_GROUP_CHILD_ID uuid,
+    DATE_FROM date,
+    DATE_TO date,
+    GET_ALIMONY boolean,
+    RELATIONSHIP_TYPE_ID uuid,
+    LAST_NAME varchar(2000),
+    FIRST_NAME varchar(2000),
+    MIDDLE_NAME varchar(2000),
+    BIRTH_DATE date,
+    WORK_LOCATION varchar(2000),
+    HOME_ADDRESS varchar(2000),
+    ADDITIONAL_CONTACT varchar(2000),
+    PERSON_GROUP_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    BENEFICIARY_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_BENEFICIARY_REQUEST
+-- begin TSADV_IMPROVING_PROFESSIONAL_SKILLS_REQUEST
+create table TSADV_IMPROVING_PROFESSIONAL_SKILLS_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid not null,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
+    START_DATE date,
+    END_DATE date,
+    SPECIALTY varchar(2000),
+    DIPLOMA varchar(2000),
+    ISSUE_DATE date,
+    REQUEST_STATUS_ID uuid,
+    FILE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_IMPROVING_PROFESSIONAL_SKILLS_REQUEST
+-- begin TSADV_PERSON_CLINIC_DISPANCER_REQUEST
+create table TSADV_PERSON_CLINIC_DISPANCER_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    FILE_ID uuid,
+    PERSON_CLINIC_DISPANCER_ID uuid,
+    HAVE_CLINIC_DISPANCER varchar(50),
+    PERIOD_FROM varchar(2000),
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_CLINIC_DISPANCER_REQUEST
+-- begin TSADV_IMPROVING_PROFESSIONAL_SKILLS
+create table TSADV_IMPROVING_PROFESSIONAL_SKILLS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid not null,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
+    START_DATE date,
+    END_DATE date,
+    SPECIALTY varchar(2000),
+    DIPLOMA varchar(2000),
+    ISSUE_DATE date,
+    --
+    primary key (ID)
+)^
+-- end TSADV_IMPROVING_PROFESSIONAL_SKILLS
+-- begin TSADV_PERSON_RELATIVES_HAVE_PROPERTY
+create table TSADV_PERSON_RELATIVES_HAVE_PROPERTY (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    HAVE_OR_NOT varchar(50),
+    PROPERTY varchar(2000),
+    PERSON_GROUP_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_RELATIVES_HAVE_PROPERTY
+-- begin TSADV_PERSON_REASON_CHANGING_JOB
+create table TSADV_PERSON_REASON_CHANGING_JOB (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    REASON text,
+    TEL_FULL_NAME_HR varchar(2000),
+    PERSON_GROUP_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_REASON_CHANGING_JOB
+-- begin TSADV_PERSON_DOCUMENT_REQUEST
+create table TSADV_PERSON_DOCUMENT_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    ISSUE_DATE date not null,
+    EXPIRED_DATE date not null,
+    ISSUED_BY varchar(500),
+    ISSUING_AUTHORITY_ID uuid not null,
+    DESCRIPTION varchar(2000),
+    DOCUMENT_TYPE_ID uuid not null,
+    PERSON_GROUP_ID uuid,
+    DOCUMENT_NUMBER varchar(255) not null,
+    SERIES varchar(255),
+    STATUS_ID uuid not null,
+    FILE_ID uuid,
+    REQUEST_STATUS_ID uuid not null,
+    EDITED_PERSON_DOCUMENT_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_DOCUMENT_REQUEST
+-- begin TSADV_PERSON_QUALIFICATION_REQUEST
+create table TSADV_PERSON_QUALIFICATION_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    TYPE_ID uuid,
+    PERSON_GROUP_ID uuid not null,
+    START_DATE date not null,
+    END_DATE date not null,
+    ASSIGN_VALIDATION_DATE date,
+    ATTACHMENT_ID uuid,
+    NOTE varchar(3000),
+    EDUCATIONAL_INSTITUTION_NAME varchar(2000),
+    DIPLOMA varchar(2000),
+    TYPE_NAME varchar(2000),
+    ISSUED_DATE date,
+    REQUEST_STATUS_ID uuid,
+    FILE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_QUALIFICATION_REQUEST
+-- begin TSADV_PERSON_BENEFIT
+create table TSADV_PERSON_BENEFIT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    REASON_ID uuid,
+    COMBATANT varchar(50),
+    CERTIFICATE_FROM_DATE varchar(255),
+    DOCUMENT_NUMBER varchar(255),
+    RADIATION_RISK_ZONE varchar(50),
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
+    PERSON_GROUP_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_BENEFIT
+-- begin TSADV_PERSON_EXPERIENCE_REQUEST
+create table TSADV_PERSON_EXPERIENCE_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid not null,
+    UNTIL_NOW boolean,
+    COMPANY varchar(255) not null,
+    JOB varchar(255) not null,
+    START_MONTH date not null,
+    END_MONTH date,
+    DESCRIPTION varchar(4000),
+    LOCATION varchar(2000),
+    PART_TIME boolean,
+    MINING_EXPERIENCE boolean,
+    GROUP_EXPERIENCE boolean,
+    INDUSTRY_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_EXPERIENCE_REQUEST
+-- begin TSADV_PERSON_CONVICTION
+create table TSADV_PERSON_CONVICTION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    HAVE_CONVICTION varchar(50),
+    REASON varchar(2000),
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_CONVICTION
+-- begin TSADV_RETIREMENT_REQUEST
+create table TSADV_RETIREMENT_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    RETIREMENT_TYPE_ID uuid,
+    ISSEU_DOC_DATE date,
+    DOCUMENT_NUMBER varchar(255),
+    DATE_FROM date,
+    DATE_TO date,
+    PERSON_GROUP_EXT_ID uuid,
+    RETIREMENT_ID uuid,
+    FILE_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_RETIREMENT_REQUEST
+-- begin TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY_REQUEST
+create table TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    HAVE_LIABILITY varchar(50),
+    REASON_PERIOD varchar(2000),
+    REQUEST_STATUS_ID uuid,
+    FILE_ID uuid,
+    LIABILITY_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY_REQUEST
+-- begin TSADV_PERSON_HEALTH
+create table TSADV_PERSON_HEALTH (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    HEALTH_STATUS varchar(2000),
+    CONTRAINDICATIONS varchar(2000),
+    PERSON_GROUP_ID uuid,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_HEALTH
+-- begin TSADV_PERSON_LANGUAGE
+create table TSADV_PERSON_LANGUAGE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    LANGUAGE_ID uuid,
+    LANGUAGE_LEVEL_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_LANGUAGE
+-- begin TSADV_PERSON_BANK_DETAILS
+create table TSADV_PERSON_BANK_DETAILS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    BANK_ID uuid,
+    FULL_NAME_BANK_CARD varchar(2000),
+    IBAN varchar(255),
+    BIC_BANK varchar(255),
+    PERSON_GROUP_ID uuid,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_BANK_DETAILS
+-- begin TSADV_MILITARY_FORM_REQUEST
+create table TSADV_MILITARY_FORM_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    DATE_FROM date,
+    DATE_TO date,
+    MILITARY_DOCUMENT_TYPE_ID uuid,
+    MILITARY_DOCUMENT_TYPE_NAME varchar(2000),
+    UDO_ID uuid,
+    DOCUMENT_NUMBER varchar(100),
+    MILITARY_TYPE_ID uuid,
+    MILITARY_TYPE_NAME varchar(2000),
+    ATTITUDE_TO_MILITARY_ID uuid,
+    TROOPS_STRUCTURE_ID uuid,
+    COMPOSITION_MILITARY_REGISTRATION varchar(2000),
+    MILITARY_RANK_ID uuid,
+    MILITARY_RANK_NAME varchar(2000),
+    OFFICER_TYPE_ID uuid,
+    OFFICER_TYPE_NAME varchar(2000),
+    SUITABILITY_TO_MILITARY_ID uuid,
+    SPECIALIZATION varchar(255),
+    ISSUE_DOC_DATE date,
+    ISSUING_AUTHORITY varchar(2000),
+    DELY boolean,
+    DELY_DESCRIPTION varchar(255),
+    REGISTER_GROUP_ID uuid,
+    REGISTER_CATEGORY_ID uuid,
+    DATE_POST date,
+    PERSON_GROUP_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    FILE_ID uuid,
+    MILITARY_FORM_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_MILITARY_FORM_REQUEST
+-- begin TSADV_PERSON_CLINIC_DISPANCER
+create table TSADV_PERSON_CLINIC_DISPANCER (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
+    HAVE_CLINIC_DISPANCER varchar(50),
+    PERIOD_FROM varchar(2000),
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_CLINIC_DISPANCER
+-- begin TSADV_CERTIFICATE_TEMPLATE
+create table TSADV_CERTIFICATE_TEMPLATE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    RECEIVING_TYPE_ID uuid not null,
+    CERTIFICATE_TYPE_ID uuid not null,
+    ORGANIZATION_ID uuid,
+    LANGUAGE_ID uuid not null,
+    SHOW_SALARY boolean not null,
+    SIGNER_ID uuid not null,
+    REPORT_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_CERTIFICATE_TEMPLATE

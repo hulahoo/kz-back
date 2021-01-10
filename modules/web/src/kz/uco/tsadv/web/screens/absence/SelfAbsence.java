@@ -3,21 +3,27 @@ package kz.uco.tsadv.web.screens.absence;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Button;
+import com.haulmont.cuba.gui.components.TabSheet;
+import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
-import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.service.AssignmentService;
+import kz.uco.tsadv.service.EmployeeNumberService;
 
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +33,10 @@ import java.util.UUID;
 @LoadDataBeforeShow
 public class SelfAbsence extends StandardLookup<Absence>
         implements SelfServiceMixin {
+    @Inject
+    protected TimeSource timeSource;
+    @Inject
+    protected EmployeeNumberService employeeNumberService;
     @Inject
     private UserSession userSession;
     @Inject
@@ -45,6 +55,10 @@ public class SelfAbsence extends StandardLookup<Absence>
     private CommonService commonService;
     @Inject
     private ScreenBuilders screenBuilders;
+    @Inject
+    protected TabSheet vacationTabSheet;
+    @Inject
+    protected CollectionLoader<VacationScheduleRequest> vacationScheduleRequestDl;
 
     @Subscribe("addBtn")
     public void onAddBtnClick(Button.ClickEvent event) {
@@ -90,5 +104,31 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .withScreenId("tsadv$myAbsenceBalance")
                 .build()
                 .show();
+    }
+
+
+    public void newVacationScheduleButton() {
+        VacationScheduleRequest item = dataManager.create(VacationScheduleRequest.class);
+        Date today = timeSource.currentTimestamp();
+
+        item.setRequestDate(today);
+        item.setStartDate(today);
+
+        item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
+        item.setPersonGroup(dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
+                "from tsadv$UserExt e " +
+                "where e.id = :uId").parameter("uId", userSession.getUser().getId())
+                .view("personGroupExt-view")
+                .list().stream().findFirst().orElse(null));
+        item.setStatus(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
+
+        screenBuilders.editor(VacationScheduleRequest.class, this)
+                .editEntity(item)
+                .build()
+                .show()
+                .addAfterCloseListener(afterCloseEvent -> {
+                    vacationScheduleRequestDl.load();
+                    vacationTabSheet.setSelectedTab("requestsTab");
+                });
     }
 }

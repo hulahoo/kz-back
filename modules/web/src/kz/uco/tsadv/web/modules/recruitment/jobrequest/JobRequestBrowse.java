@@ -19,7 +19,7 @@ public class JobRequestBrowse extends AbstractLookup {
             jobRequestsDs.setQuery("select distinct e from tsadv$JobRequest e " +
                     "where (e.requisition.id in (select rm.requisition.id " +
                     "                             from tsadv$RequisitionMember rm " +
-                    "                            where rm.personGroup.id = :param$hrManagerPersonGroupId)" +
+                    "                            where rm.personGroupId.id = :param$hrManagerPersonGroupId)" +
                     "   or e.requisition.recruiterPersonGroup.id = :param$hrManagerPersonGroupId)" +
                     "  and e.requestStatus = 6");
         }

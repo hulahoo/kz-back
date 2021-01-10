@@ -10,10 +10,8 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.base.entity.shared.Person;
 import kz.uco.tsadv.global.dictionary.DicNationality;
-import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
-import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
-import kz.uco.tsadv.modules.personal.dictionary.DicNonresidentType;
-import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
+import kz.uco.tsadv.modules.personal.dictionary.*;
+import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -28,7 +26,7 @@ import static kz.uco.base.common.Null.isNotEmpty;
 @Extends(Person.class)
 @Entity(name = "base$PersonExt")
 public class PersonExt extends Person implements Categorized, IGroupedEntity<PersonGroupExt> {
-    private static final long serialVersionUID = -6341957289240331481L;
+    protected static final long serialVersionUID = -6341957289240331481L;
 
     @Transient
     @MetaProperty
@@ -77,6 +75,95 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
 
     @Column(name = "FULL_NAME_NUMBER_CYRILLIC")
     protected String fullNameNumberCyrillic;
+
+    @Column(name = "BIRTH_PLACE", length = 2000)
+    protected String birthPlace;
+
+    @Column(name = "ACADEMIC_DEGREE", length = 2000)
+    protected String academicDegree;
+
+    @Column(name = "SCIENTIFIC_WORKS_IVENTIONS", length = 2000)
+    protected String scientificWorksIventions;
+
+    @Column(name = "STATE_AWARDS", length = 2000)
+    protected String stateAwards;
+
+    @Column(name = "HAVE_CRIPPLE_CHILD")
+    protected String haveCrippleChild;
+
+    @Column(name = "HAVE_CHILD_WITHOUT_PARENT")
+    protected String haveChildWithoutParent;
+
+    @Column(name = "PREV_JOB_NDA")
+    protected String prevJobNDA;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PREV_JOB_OBLIGATION_ID")
+    protected DicPrevJobObligation prevJobObligation;
+
+    public DicPrevJobObligation getPrevJobObligation() {
+        return prevJobObligation;
+    }
+
+    public void setPrevJobObligation(DicPrevJobObligation prevJobObligation) {
+        this.prevJobObligation = prevJobObligation;
+    }
+
+    public YesNoEnum getPrevJobNDA() {
+        return prevJobNDA == null ? null : YesNoEnum.fromId(prevJobNDA);
+    }
+
+    public void setPrevJobNDA(YesNoEnum prevJobNDA) {
+        this.prevJobNDA = prevJobNDA == null ? null : prevJobNDA.getId();
+    }
+
+    public YesNoEnum getHaveChildWithoutParent() {
+        return haveChildWithoutParent == null ? null : YesNoEnum.fromId(haveChildWithoutParent);
+    }
+
+    public void setHaveChildWithoutParent(YesNoEnum haveChildWithoutParent) {
+        this.haveChildWithoutParent = haveChildWithoutParent == null ? null : haveChildWithoutParent.getId();
+    }
+
+    public YesNoEnum getHaveCrippleChild() {
+        return haveCrippleChild == null ? null : YesNoEnum.fromId(haveCrippleChild);
+    }
+
+    public void setHaveCrippleChild(YesNoEnum haveCrippleChild) {
+        this.haveCrippleChild = haveCrippleChild == null ? null : haveCrippleChild.getId();
+    }
+
+    public String getStateAwards() {
+        return stateAwards;
+    }
+
+    public void setStateAwards(String stateAwards) {
+        this.stateAwards = stateAwards;
+    }
+
+    public String getScientificWorksIventions() {
+        return scientificWorksIventions;
+    }
+
+    public void setScientificWorksIventions(String scientificWorksIventions) {
+        this.scientificWorksIventions = scientificWorksIventions;
+    }
+
+    public String getAcademicDegree() {
+        return academicDegree;
+    }
+
+    public void setAcademicDegree(String academicDegree) {
+        this.academicDegree = academicDegree;
+    }
+
+    public String getBirthPlace() {
+        return birthPlace;
+    }
+
+    public void setBirthPlace(String birthPlace) {
+        this.birthPlace = birthPlace;
+    }
 
     public void setFullNameNumberCyrillic(String fullNameNumberCyrillic) {
         this.fullNameNumberCyrillic = fullNameNumberCyrillic;
@@ -186,6 +273,7 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     }
 
     @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin", "employeeNumber"})
+    @Transient
     public String getFioWithEmployeeNumberWithSortSupported() {
         StringBuilder builder = new StringBuilder(getFullName());
         if (employeeNumber != null) builder.append("(").append(employeeNumber).append(")");

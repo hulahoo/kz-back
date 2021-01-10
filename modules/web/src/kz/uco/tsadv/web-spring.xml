@@ -127,6 +127,12 @@
                        value="kz.uco.tsadv.service.VideoService"/>
                 <entry key="tsadv_LmsService"
                        value="kz.uco.tsadv.service.LmsService"/>
+                <entry key="tsadv_UserSettingService" value="kz.uco.tsadv.service.portal.UserSettingService"/>
+                <entry key="tsadv_NotificationService" value="kz.uco.tsadv.service.portal.NotificationService"/>
+                <entry key="tsadv_ScheduledNotificationsService"
+                       value="kz.uco.tsadv.service.ScheduledNotificationsService"/>
+                <entry key="tsadv_KpiService" value="kz.uco.tsadv.service.KpiService"/>
+                <entry key="tsadv_CommonReportsService" value="kz.uco.tsadv.service.CommonReportsService"/>
             </map>
         </property>
     </bean>

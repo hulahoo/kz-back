@@ -2633,8 +2633,8 @@ public class RcApiServiceBean implements RcApiService {
                                     "systemDate", CommonUtils.getSystemDate()), View.LOCAL);
                     if (!addressList.isEmpty()) {
                         for (Address address : addressList) {
-                            if (address.getCity() != null && !address.getCity().equals(personInt.getCityName())) {
-                                address.setCity(personInt.getCityName());
+                            if (address.getCityName() != null && !address.getCityName().equals(personInt.getCityName())) {
+                                address.setCityName(personInt.getCityName());
                                 address.setAddress(personInt.getCityName());
                                 commitInstances.add(address);
                             }
@@ -2753,7 +2753,7 @@ public class RcApiServiceBean implements RcApiService {
                 address.setAddress(city.getLangValue());
                 address.setCountry(city.getCountry());
                 address.setPostalCode(null);
-                address.setCity(city.getLangValue());
+                address.setCityName(city.getLangValue());
                 address.setStartDate(CommonUtils.getSystemDate());
                 address.setEndDate(new SimpleDateFormat("dd.MM.yyyy").parse("31.12.9999"));
 
@@ -2853,7 +2853,7 @@ public class RcApiServiceBean implements RcApiService {
                 address.setCountry(city.getCountry());
                 address.setAddressType(commonService.getEntity(DicAddressType.class, "RESIDENCE"));
                 address.setPostalCode(null);
-                address.setCity(city.getLangValue());
+                address.setCityName(city.getLangValue());
                 address.setStartDate(CommonUtils.getSystemDate());
                 address.setEndDate(new SimpleDateFormat("dd.MM.yyyy").parse("31.12.9999"));
 
@@ -3707,7 +3707,7 @@ public class RcApiServiceBean implements RcApiService {
             address.setAddress(cityName);
             address.setCountry(commonService.getEntity(DicCountry.class, "398"));
             address.setPostalCode(null);
-            address.setCity(cityName);
+            address.setCityName(cityName);
             address.setStartDate(CommonUtils.getSystemDate());
             address.setEndDate(new SimpleDateFormat("dd.MM.yyyy").parse("31.12.9999"));
 

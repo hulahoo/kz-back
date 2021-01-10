@@ -70,6 +70,8 @@ public interface EmployeeService {
 
     PersonGroupExt getPersonGroupByUserId(UUID userId);
 
+    PersonGroupExt getPersonGroupByUserIdExtendedView(UUID userId);
+
     UserExt getUserExtByPersonGroupId(UUID personGroupId);
 
     UserExt getUserExtByPersonGroupId(UUID personGroupId, String viewName);

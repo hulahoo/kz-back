@@ -47,6 +47,7 @@ import javax.inject.Named;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class HierarchyElementBrowse extends AbstractLookup {
 
     @Inject
