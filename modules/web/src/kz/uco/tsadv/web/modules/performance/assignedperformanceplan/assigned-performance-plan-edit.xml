@@ -50,19 +50,21 @@
             </column>
         </form>
         <hbox id="hbox" width="100%">
-            <table id="assignedGoalTable" width="100%" dataContainer="assignedGoalDc">
+            <table id="assignedGoalTable" width="100%" dataContainer="assignedGoalDc" editable="true"
+                   aggregatable="true">
                 <actions>
                     <action id="edit" type="edit"/>
                     <action id="remove" type="remove"/>
                 </actions>
                 <columns>
                     <column id="category"/>
-                    <column id="goalString"/>
-                    <column id="weight"/>
-                    <column id="result"/>
+                    <column id="goalString" editable="true"/>
+                    <column id="weight" editable="true">
+                        <aggregation type="SUM"/>
+                    </column>
+                    <column id="result" editable="true"/>
                     <column id="goalType"/>
                 </columns>
-                <rows/>
                 <buttonsPanel id="assignedGoalBtnPnl">
                     <popupButton id="popup" caption="msg://addGoal">
                         <actions>
@@ -73,7 +75,9 @@
                     </popupButton>
                     <button id="goalEdit" action="assignedGoalTable.edit"/>
                     <button id="goalRemove" action="assignedGoalTable.remove"/>
+                    <label id="label" value="opana" align="BOTTOM_RIGHT"/>
                 </buttonsPanel>
+                <rows/>
             </table>
         </hbox>
         <hbox id="windowActions" spacing="true" width="AUTO">

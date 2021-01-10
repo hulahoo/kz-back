@@ -9,21 +9,21 @@
                   view="assignedGoalForKpi">
             <loader/>
         </instance>
-        <collection id="personGroupDc"
-                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
-                    view="personGroup.browse">
-            <loader id="personGroupDl">
+        <collection id="goalLibraryDc"
+                    class="kz.uco.tsadv.modules.performance.model.GoalLibrary"
+                    view="goalLibrary.edit">
+            <loader id="goalLibraryDl">
                 <query>
-                    <![CDATA[select e from base$PersonGroupExt e where e in :personGroupList]]>
+                    <![CDATA[select e from tsadv$GoalLibrary e ]]>
                 </query>
             </loader>
         </collection>
-        <collection id="assignedGoalForLookupDc"
-                    class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
-                    view="assignedGoalForKpi">
-            <loader id="assignedGoalForLookupDl">
+        <collection id="goalDc"
+                    class="kz.uco.tsadv.modules.performance.model.Goal"
+                    view="goal.edit">
+            <loader id="goalDl">
                 <query>
-                    <![CDATA[select e from tsadv$AssignedGoal e where e in :assignedGoalList]]>
+                    <![CDATA[select e from tsadv$Goal e where e in :goalList]]>
                 </query>
             </loader>
         </collection>
@@ -35,23 +35,23 @@
             <hbox id="hbox" spacing="true">
                 <form id="form" dataContainer="assignedGoalDc">
                     <column width="250px">
-                        <lookupField id="assignedByPersonGroupField" caption="msg://chooseMentor"
+                        <lookupField id="goalLibraryField" property="goalLibrary"
                                      required="true"
-                                     property="assignedByPersonGroup" optionsContainer="personGroupDc"/>
-                        <lookupField id="parentAssignedGoalField" property="parentAssignedGoal"
-                                     required="true"
-                                     caption="msg://selectGoal"
-                                     optionsContainer="assignedGoalForLookupDc"
-                                     enable="false"/>
-                        <textField id="goalStringField" property="goalString" caption="msg://goalEdit"/>
+                                     optionsContainer="goalLibraryDc"/>
+                        <lookupField id="parentGoalField" property="parentGoal"
+                                     caption="msg://libraryGoals"
+                                     optionsContainer="goalDc"
+                                     required="true"/>
                         <textField id="weightField" property="weight" required="true"/>
                         <textField id="resultField" property="result" required="true"/>
                     </column>
                 </form>
                 <form id="form2" dataContainer="assignedGoalDc">
-                    <textArea id="comment" property="successCritetia"
-                              caption="msg://comments"
-                              rows="9"/>
+                    <column width="250px">
+                        <textArea id="commentField" property="successCritetia"
+                                  caption="msg://comments"
+                                  rows="7"/>
+                    </column>
                 </form>
             </hbox>
         </scrollBox>

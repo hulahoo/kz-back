@@ -92,6 +92,8 @@ public interface EmployeeService {
 
     Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId, boolean showAll);
 
+    List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll);
+
     List<UserExt> recursiveFindManager(UUID positionGroupId);
 
     List<UserExt> recursiveFindManagerInActiveOne(UUID positionGroupId);

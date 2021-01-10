@@ -77,30 +77,33 @@
                         dataLoader="assignedPerformancePlansDl">
                     <properties include=".*"/>
                 </filter>
-                <table id="assignedPerformancePlanTable" width="100%" height="100%"
-                       dataContainer="assignedPerformancePlansDc">
+                <dataGrid id="assignedPerformancePlanTable" width="100%" height="100%"
+                          selectionMode="MULTI_CHECK"
+                          dataContainer="assignedPerformancePlansDc">
                     <actions>
                         <action id="create" type="create" caption="msg://addKpi"/>
                         <action id="edit" type="edit"/>
                         <action id="remove" type="remove"/>
+                        <action id="massGoals" caption="msg://massGoals" trackSelection="true"/>
                     </actions>
                     <columns>
-                        <column id="assignedPerson"/>
-                        <column id="assignedPerson.currentAssignment.organizationGroup"/>
-                        <column id="assignedPerson.currentAssignment.positionGroup"/>
-                        <column id="assignedPerson.currentAssignment.jobGroup"/>
-                        <column id="assignedPerson.currentAssignment.gradeGroup"/>
-                        <column id="assigned_by"/>
-                        <column id="result"/>
-                        <column id="gzp"/>
-                        <column id="status"/>
+                        <column property="assignedPerson"/>
+                        <column property="assignedPerson.currentAssignment.organizationGroup"/>
+                        <column property="assignedPerson.currentAssignment.positionGroup"/>
+                        <column property="assignedPerson.currentAssignment.jobGroup"/>
+                        <column property="assignedPerson.currentAssignment.gradeGroup"/>
+                        <column property="assigned_by"/>
+                        <column property="result"/>
+                        <column property="gzp"/>
+                        <column property="status"/>
                     </columns>
                     <buttonsPanel id="assignedPerformancePlanBtnPnl">
                         <button id="assignedCreate" action="assignedPerformancePlanTable.create"/>
                         <button id="assignedEdit" action="assignedPerformancePlanTable.edit"/>
                         <button id="assignedRemove" action="assignedPerformancePlanTable.remove"/>
+                        <button id="assignedMass" action="assignedPerformancePlanTable.massGoals"/>
                     </buttonsPanel>
-                </table>
+                </dataGrid>
             </tab>
             <tab id="instruction" spacing="true" margin="true, false, false, false"
                  visible="false"

@@ -3810,9 +3810,10 @@ create table TSADV_ASSIGNED_GOAL (
     ASSIGNED_PERFORMANCE_PLAN_ID uuid,
     CATEGORY_ID uuid,
     GOAL_STRING varchar(255),
-    PARENT_ID uuid,
     GOAL_TYPE varchar(50),
     RESULT double precision,
+    PARENT_ASSIGNED_GOAL_ID uuid,
+    GOAL_LIBRARY_ID uuid,
     --
     primary key (ID)
 )^

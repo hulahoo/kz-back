@@ -222,7 +222,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     "FROM base$AssignmentExt a " +
                     "   WHERE a.personGroup.id = ?1 " +
                     "      AND current_date BETWEEN a.startDate AND a.endDate" +
-                    "       and a.primaryFlag = true "+
+                    "       and a.primaryFlag = true " +
                     "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
                     .setParameter(1, personGroupExt.getId());
             query.setView(AssignmentGroupExt.class, View.MINIMAL);
@@ -1770,6 +1770,80 @@ public class EmployeeServiceBean implements EmployeeService {
                     }
                 }
                 return resultMap;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll) {
+        try (Transaction tx = persistence.createTransaction()) {
+            EntityManager em = persistence.getEntityManager();
+
+            String hierarchyId = recognitionConfig.getHierarchyId();
+
+            if (hierarchyId == null) {
+                return null;
+            }
+
+            Query query = em.createNativeQuery(
+                    "with a as (WITH RECURSIVE nodes(id,parent_id, position_group_id, path, pathName, level) AS (  " +
+                            "select he.id, " +
+                            "       he.parent_id, " +
+                            "       he.position_group_id, " +
+                            "       CAST(he.position_group_id AS VARCHAR (4000)), " +
+                            "       CAST(p.position_full_name_lang1 AS VARCHAR (4000)), " +
+                            "       1 " +
+                            "  from base_hierarchy_element he " +
+                            "  join base_hierarchy h on h.id = he.hierarchy_id " +
+                            "  join base_position p on p.group_id=he.position_group_id " +
+                            "  and current_date between p.start_date and p.end_date " +
+                            " WHERE he.delete_ts is null " +
+                            "   and he.parent_id is null  " +
+                            "   and he.hierarchy_id = '" + hierarchyId + "' " +
+                            " UNION " +
+                            " select he.id, he.parent_id, he.position_group_id, " +
+                            "       CAST(s1.PATH ||'->'|| he.position_group_id AS VARCHAR(4000)), " +
+                            "       CAST(s1.pathName ||'->'|| p.position_full_name_lang1 AS VARCHAR(4000)), " +
+                            "       LEVEL + 1 " +
+                            "  from base_hierarchy_element he " +
+                            "  join nodes s1 on he.parent_id = s1.id " +
+                            "  join base_position p on p.group_id=he.position_group_id " +
+                            "  and current_date between p.start_date and p.end_date " +
+                            ") " +
+                            "SELECT " +
+                            " n1.level, " +
+                            "  pg.id position_group_id, " +
+                            "  a.person_group_id " +
+                            "  FROM nodes n " +
+                            "  join base_position_group pg " +
+                            "  on n.path like concat('%', concat(pg.id, '%')) " +
+                            "  join nodes n1 " +
+                            "  on n1.position_group_id=pg.id " +
+                            "  join base_assignment a " +
+                            "  on a.position_group_id=pg.id " +
+                            "  and current_date between a.start_date and a.end_date " +
+                            "  and a.primary_flag=true " +
+                            "  join tsadv_dic_assignment_status das " +
+                            "  on das.id=a.assignment_status_id " +
+                            "  and das.code='ACTIVE' " +
+                            "  where n.path like " + "'%" + positionGroupId.toString() + "' " +
+                            "  and pg.id <> ?1 " +
+                            "  and pg.delete_ts is null " +
+                            "  and a.delete_ts is null " +
+                            "  and das.delete_ts is null ) " +
+                            " select * from a t " + (showAll ? "" : " where t.level = (select max(level) from a)" ));
+            query.setParameter(1, positionGroupId);
+
+            List<Object[]> rows = query.getResultList();
+            if (!rows.isEmpty()) {
+                List<PersonGroupExt> personGroupExtList = new ArrayList<>();
+                for (Object[] row : rows) {
+                    PersonGroupExt personGroupExt = metadata.create(PersonGroupExt.class);
+                    personGroupExt.setId((UUID) row[2]);
+                    personGroupExtList.add(personGroupExt);
+                }
+                return personGroupExtList;
             }
         }
         return null;

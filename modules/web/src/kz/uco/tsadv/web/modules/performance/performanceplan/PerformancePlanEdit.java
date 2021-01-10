@@ -7,9 +7,7 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.TabSheet;
-import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -17,13 +15,17 @@ import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
+import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.performance.model.InstructionsKpi;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.modules.personal.model.*;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @UiController("tsadv$PerformancePlan.edit")
 @UiDescriptor("performance-plan-edit.xml")
@@ -56,7 +58,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     @Inject
     protected Table<InstructionsKpi> instructionTable;
     @Inject
-    protected Table<AssignedPerformancePlan> assignedPerformancePlanTable;
+    protected DataGrid<AssignedPerformancePlan> assignedPerformancePlanTable;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -72,9 +74,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         if (PersistenceHelper.isNew(performancePlanDc.getItem())) {
             visibleTab(false);
             performancePlanDc.getItem().setStartDate(BaseCommonUtils.getSystemDate());
+            performancePlanDc.getItem().setAccessibilityEndDate(BaseCommonUtils.getEndOfTime());
             performancePlanDc.getItem().setEndDate(BaseCommonUtils.getEndOfTime());
             performancePlanDc.getItem().setAccessibilityStartDate(BaseCommonUtils.getSystemDate());
-            performancePlanDc.getItem().setAccessibilityEndDate(BaseCommonUtils.getEndOfTime());
         } else {
             visibleTab(true);
         }
@@ -147,5 +149,89 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     assignedPerformancePlansDl.load();
                 })
                 .build().show();
+    }
+
+    @Subscribe("startDate")
+    protected void onStartDateValueChange(HasValue.ValueChangeEvent<Date> event) {
+        Date accessibilityStartDate = performancePlanDc.getItem().getAccessibilityStartDate();
+        if (accessibilityStartDate != null && event.getValue() != null
+                && accessibilityStartDate.before(event.getValue())) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
+        }
+    }
+
+    @Subscribe("endDate")
+    protected void onEndDateValueChange(HasValue.ValueChangeEvent<Date> event) {
+        Date accessibilityEndDate = performancePlanDc.getItem().getAccessibilityEndDate();
+        if (accessibilityEndDate != null && event.getValue() != null && accessibilityEndDate.after(event.getValue())) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
+        }
+    }
+
+    @Subscribe("accessibilityStartDate")
+    protected void onAccessibilityStartDateValueChange(HasValue.ValueChangeEvent<Date> event) {
+        Date startDate = performancePlanDc.getItem().getStartDate();
+        if (startDate != null && event.getValue() != null
+                && event.getValue().before(startDate)) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
+        }
+    }
+
+    @Subscribe("accessibilityEndDate")
+    protected void onAccessibilityEndDateValueChange(HasValue.ValueChangeEvent<Date> event) {
+        Date endDate = performancePlanDc.getItem().getEndDate();
+        if (endDate != null && event.getValue() != null && event.getValue().after(endDate)) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
+        }
+    }
+
+    @Subscribe("assignedPerformancePlanTable.massGoals")
+    protected void onAssignedPerformancePlanTableMassGoals(Action.ActionPerformedEvent event) {
+        Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
+        CommitContext commitContext = new CommitContext();
+        assignedPerformancePlans.forEach(assignedPerformancePlan -> {
+            AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson().getCurrentAssignment();
+            List<OrganizationGroupGoalLink> orgGoalList = currentAssignment.getOrganizationGroup() != null
+                    ? currentAssignment.getOrganizationGroup().getGoals()
+                    : Collections.emptyList();
+            List<PositionGroupGoalLink> positionGoalList = currentAssignment.getPositionGroup() != null
+                    ? currentAssignment.getPositionGroup().getGoals()
+                    : Collections.emptyList();
+            List<JobGroupGoalLink> jobGoalList = currentAssignment.getJobGroup() != null
+                    ? currentAssignment.getJobGroup().getGoals()
+                    : Collections.emptyList();
+            for (OrganizationGroupGoalLink organizationGoal : orgGoalList) {
+                AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                newAssignedGoal.setGoal(organizationGoal.getGoal());
+                newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
+                newAssignedGoal.setWeight(organizationGoal.getWeight());
+                newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
+                commitContext.addInstanceToCommit(newAssignedGoal);
+            }
+            for (PositionGroupGoalLink positionGoal : positionGoalList) {
+                AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                newAssignedGoal.setGoal(positionGoal.getGoal());
+                newAssignedGoal.setGoalString(positionGoal.getGoal().getGoalName());
+                newAssignedGoal.setWeight(positionGoal.getWeight());
+                newAssignedGoal.setPositionGroup(positionGoal.getPositionGroup());
+                commitContext.addInstanceToCommit(newAssignedGoal);
+            }
+            for (JobGroupGoalLink jobGoal : jobGoalList) {
+                AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                newAssignedGoal.setGoal(jobGoal.getGoal());
+                newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
+                newAssignedGoal.setWeight(jobGoal.getWeight());
+                newAssignedGoal.setJobGroup(jobGoal.getJobGroup());
+                commitContext.addInstanceToCommit(newAssignedGoal);
+            }
+        });
+        dataManager.commit(commitContext);
     }
 }

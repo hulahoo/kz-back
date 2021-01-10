@@ -27,9 +27,9 @@
                 <form id="form" dataContainer="assignedGoalDc">
                     <column width="250px">
                         <lookupField id="category" property="category" optionsContainer="goalCategoryDc"/>
-                        <textField id="goalStringField" property="goalString"/>
-                        <textField id="weightField" property="weight"/>
-                        <textField id="resultField" property="result"/>
+                        <textField id="goalStringField" property="goalString" required="true"/>
+                        <textField id="weightField" property="weight" required="true"/>
+                        <textField id="resultField" property="result" required="true"/>
                     </column>
                 </form>
                 <form id="form2" dataContainer="assignedGoalDc">

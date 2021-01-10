@@ -149,7 +149,7 @@ public class MyAssignedGoalBrowse extends AbstractWindow {
             priorityValueLabel.setStyleName("ss-my-goals-value");
             weightValueLabel.setStyleName("ss-my-goals-value");
 
-            goalNameLabel.setValue(entity.getGoal().getGoalName());
+            goalNameLabel.setValue(entity.getParentGoal().getGoalName());
             priorityValueLabel.setValue(entity.getPriority().getLangValue());
             weightValueLabel.setValue(entity.getWeight() + "%");
 
@@ -172,7 +172,7 @@ public class MyAssignedGoalBrowse extends AbstractWindow {
         categoryHBoxLayout.setSpacing(true);
 
         categoryCaptionLabel.setValue(getMessage("AssignedGoal.myAssignedGoal.browse.category"));
-        categoryValueLabel.setValue(entity.getGoal().getLibrary().getCategory().getLangValue());
+        categoryValueLabel.setValue(entity.getParentGoal().getLibrary().getCategory().getLangValue());
         endDateLabel.setValue(getMessage("AssignedGoal.myAssignedGoal.browse.endDate") + ": " + new SimpleDateFormat("dd.MM.yyyy").format(entity.getEndDate()));
 
         vBoxLayout.add(categoryHBoxLayout);
