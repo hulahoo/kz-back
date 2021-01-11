@@ -60,10 +60,8 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
         assignedGoalDc.addItemPropertyChangeListener(assignedGoalItemPropertyChangeEvent -> {
-                    if (assignedGoalItemPropertyChangeEvent != null
-                            && assignedGoalItemPropertyChangeEvent.getProperty().equals("weight")
-                            || assignedGoalItemPropertyChangeEvent != null
-                            && assignedGoalItemPropertyChangeEvent.getProperty().equals("result")) {
+                    if ("weight".equals(assignedGoalItemPropertyChangeEvent.getProperty())
+                            || "result".equals(assignedGoalItemPropertyChangeEvent.getProperty())) {
                         double result = 0.0;
                         for (AssignedGoal item : assignedGoalDc.getItems()) {
                             result += (item.getResult() != null ? item.getResult() : 0) * item.getWeight() / 100;
