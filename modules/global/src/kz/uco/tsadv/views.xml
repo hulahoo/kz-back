@@ -13561,6 +13561,21 @@
             </property>
             <property name="assignments"
                       view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                        <property name="langValue1"/>
+                        <property name="langValue2"/>
+                        <property name="langValue3"/>
+                        <property name="langValue4"/>
+                        <property name="langValue5"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="code"/>
+                    </property>
+                <property name="gradeGroup" view="_local">
+                    <property name="grade" view="_local">
+                        <property name="gradeName"/>
+                    </property>
+                </property>
                 <property name="group"
                           view="_local"/>
                 <property name="organizationGroup"
