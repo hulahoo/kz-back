@@ -13,6 +13,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_PERSON_DOCUMENT")
 @Entity(name = "tsadv$PersonDocument")
@@ -73,6 +74,21 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     protected FileDescriptor file;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_DOCUMENT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_DOCUMENT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public Date getEndDate() {
         return endDate;

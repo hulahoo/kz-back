@@ -39,9 +39,12 @@
                     <property name="code"/>
                 </property>
                 <property name="nationalIdentifier"/>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader id="personExtDl"/>
+            <collection id="personAttachmentsDc" property="attachments"/>
         </instance>
+
         <collection id="sexesDc" class="kz.uco.base.entity.dictionary.DicSex" view="_minimal">
             <loader id="sexesDl">
                 <query>
@@ -49,7 +52,7 @@
                 </query>
             </loader>
         </collection>
-        <collection id="personDocumentsForeignerDc" class="kz.uco.tsadv.modules.personal.model.PersonDocument">
+        <collection id="personDocumentsDc" class="kz.uco.tsadv.modules.personal.model.PersonDocument">
             <view extends="_minimal">
                 <property name="issueDate"/>
                 <property name="expiredDate"/>
@@ -86,57 +89,13 @@
                     </property>
                 </property>
                 <property name="documentNumber"/>
-                <property name="file" view="_minimal"/>
-            </view>
-            <loader id="personDocumentsForeignerDl">
-                <query>
-                    <![CDATA[select e from tsadv$PersonDocument e
-                    where e.documentType.foreigner = true
-                    and e.personGroup.id = :personGroup
-                    and e.startDate <= :systemDate
-                    and e.endDate >= :systemDate ]]>
-                </query>
-            </loader>
-        </collection>
-        <collection id="personDocumentsDc" class="kz.uco.tsadv.modules.personal.model.PersonDocument">
-            <view extends="_minimal">
-                <property name="issueDate"/>
-                <property name="expiredDate"/>
-                <property name="issuingAuthority" view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
-                <property name="documentType" view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
-                <property name="personGroup" view="_minimal">
-                    <property name="person">
-                        <property name="firstName"/>
-                        <property name="lastName"/>
-                        <property name="middleName"/>
-                        <property name="employeeNumber"/>
-                    </property>
-                </property>
-                <property name="documentNumber"/>
-                <property name="file" view="_minimal"/>
+                <property name="attachments" view="_minimal"/>
+                <property name="series"/>
             </view>
             <loader id="personDocumentsDl">
                 <query>
                     <![CDATA[select e from tsadv$PersonDocument e
-                    where e.documentType.foreigner = false
-                    and e.personGroup.id = :personGroup
+                    where e.personGroup.id = :personGroup
                     and e.startDate <= :systemDate
                     and e.endDate >= :systemDate ]]>
                 </query>
@@ -153,6 +112,7 @@
                         <property name="primaryFlag"/>
                         <property name="startDate"/>
                         <property name="endDate"/>
+                        <property name="assignmentStatus"/>
                     </property>
                     <property name="personExperience" view="_minimal"/>
                 </property>
@@ -176,6 +136,10 @@
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
+                <property name="educationalEstablishment" view="_local"/>
+                <property name="educationType" view="_local"/>
+                <property name="formStudy" view="_minimal"/>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader id="personEducationsDl">
                 <query>
@@ -198,9 +162,20 @@
                         <property name="primaryFlag"/>
                         <property name="startDate"/>
                         <property name="endDate"/>
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
                     </property>
                     <property name="personExperience" view="_minimal"/>
                 </property>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader id="improvingProfessionalSkillsesDl">
                 <query>
@@ -212,7 +187,31 @@
             </loader>
         </collection>
         <collection id="personQualificationsDc" class="kz.uco.tsadv.entity.tb.PersonQualification">
-            <view extends="_local"/>
+            <view extends="_local">
+                <property name="attachments" view="_minimal"/>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+            </view>
             <loader id="personQualificationsDl">
                 <query>
                     <![CDATA[select e from tsadv$PersonQualification e
@@ -233,6 +232,16 @@
                         <property name="startDate"/>
                         <property name="endDate"/>
                         <property name="primaryFlag"/>
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
                     </property>
                     <property name="personExperience" view="_minimal"/>
                 </property>
@@ -240,6 +249,7 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader id="personExperiencesDl">
                 <query>
@@ -252,16 +262,6 @@
         </collection>
         <collection id="beneficiariesDc" class="kz.uco.tsadv.modules.personal.model.Beneficiary">
             <view extends="_local">
-                <property name="relationshipType" view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
                 <property name="personGroup" view="_minimal">
                     <property name="list" view="_minimal">
                         <property name="startDate"/>
@@ -273,6 +273,50 @@
                         <property name="endDate"/>
                     </property>
                     <property name="personExperience" view="_minimal"/>
+                </property>
+                <property name="relatedPersonGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+                <property name="relationDegree" view="_minimal">
+                    <property name="parent" view="_minimal">
+                        <property name="langValue1"/>
+                        <property name="langValue2"/>
+                        <property name="langValue3"/>
+                        <property name="langValue4"/>
+                        <property name="langValue5"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="code"/>
+                    </property>
+                    <property name="child" view="_minimal">
+                        <property name="langValue1"/>
+                        <property name="langValue2"/>
+                        <property name="langValue3"/>
+                        <property name="langValue4"/>
+                        <property name="langValue5"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="code"/>
+                    </property>
                 </property>
             </view>
             <loader id="beneficiariesDl">
@@ -323,16 +367,12 @@
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
-                <property name="city" view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
                 <property name="language" view="_minimal">
                     <property name="startDate"/>
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader id="addressesDl">
                 <query>
@@ -855,78 +895,44 @@
                     <vbox id="vbox" spacing="true">
                         <groupBox id="personDataGroupBox" caption="msg://personDataGroupBox">
                             <vbox id="personDataVBox">
-                                <groupBox id="notEditableGroupBox">
+                                <groupBox id="notEditableGroupBox" spacing="true">
                                     <buttonsPanel id="personDataButtonPanel">
                                         <button id="personDataEdit" icon="PENCIL" invoke="personDataRequest"/>
                                     </buttonsPanel>
                                     <form id="personExtForm" dataContainer="personExtDc">
-                                        <column id="column1">
+                                        <column id="column1" width="350px">
                                             <textField id="lastNameField" property="lastName" editable="false"/>
                                             <textField id="firstNameField" property="firstName" editable="false"/>
                                             <textField id="middleNameField" property="middleName" editable="false"/>
-                                            <textField id="nationalIdentifierField" property="nationalIdentifier"
-                                                       editable="false"/>
-                                        </column>
-                                        <column id="column2">
-                                            <dateField id="dateOfBirthField" property="dateOfBirth" editable="false"/>
                                             <lookupField id="sexField" optionsContainer="sexesDc" property="sex"
                                                          editable="false"/>
+                                            <dateField id="dateOfBirthField" property="dateOfBirth" editable="false"/>
+                                        </column>
+                                        <column id="column2" width="350px">
+
+                                            <textField id="birthPlaceField" property="birthPlace" editable="false"/>
                                             <pickerField id="nationalityField" property="nationality" editable="false">
                                                 <actions>
                                                     <action id="lookup" type="picker_lookup"/>
                                                     <action id="clear" type="picker_clear"/>
                                                 </actions>
                                             </pickerField>
-                                            <pickerField id="citizenshipField" property="citizenship" editable="false">
-                                                <actions>
-                                                    <action id="lookup" type="picker_lookup"/>
-                                                    <action id="clear" type="picker_clear"/>
-                                                </actions>
-                                            </pickerField>
+                                            <textField id="lastNameLatinField" property="lastNameLatin"
+                                                       editable="false"/>
+                                            <textField id="firstNameLatinField" property="firstNameLatin"
+                                                       editable="false"/>
+                                            <textField id="nationalIdentifierField" property="nationalIdentifier"
+                                                       editable="false"/>
                                         </column>
                                     </form>
-                                </groupBox>
-                                <groupBox id="editableGroupBox" spacing="true">
-                                    <form id="personExtFormEditable" dataContainer="personExtDc">
-                                        <column id="column1">
-                                            <textField id="lastNameLatinField" property="lastNameLatin"/>
-                                        </column>
-                                        <column id="column2">
-                                            <textField id="firstNameLatinField" property="firstNameLatin"/>
-                                        </column>
-                                    </form>
-                                    <buttonsPanel id="personDataEditableButtonPanel">
-                                        <button id="savePerson" caption="msg://savePerson" invoke="savePersonData"/>
-                                        <button id="savePersonWithHistory" caption="msg://savePersonWithHistory"
-                                                invoke="savePersonDataWithHistory"/>
-                                    </buttonsPanel>
+                                    <table id="personAttachmentTable" height="100px" width="100%"
+                                           dataContainer="personAttachmentsDc">
+                                        <columns>
+                                            <column id="name" caption="msg://fileName"/>
+                                        </columns>
+                                    </table>
                                 </groupBox>
                             </vbox>
-                        </groupBox>
-                        <groupBox id="foreignerDocsGroupBox" caption="msg://foreignerDocsGroupBox">
-                            <table id="foreignerDocumentsTable" width="100%"
-                                   dataContainer="personDocumentsForeignerDc">
-                                <rowsCount/>
-                                <actions>
-                                    <action id="createForeignerRequest" type="create" invoke="createRequest"
-                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
-                                            primary="true"/>
-                                    <action id="editForeignerRequest" type="edit" trackSelection="true"
-                                            invoke="editRequest" caption="msg://editRequest" icon="PENCIL"/>
-                                </actions>
-                                <buttonsPanel alwaysVisible="true">
-                                    <button id="foreignerDocumentsTableCreateBtn"
-                                            action="foreignerDocumentsTable.createForeignerRequest"/>
-                                    <button id="foreignerDocumentsTableEditBtn"
-                                            action="foreignerDocumentsTable.editForeignerRequest"/>
-                                </buttonsPanel>
-                                <columns>
-                                    <column id="documentType"/>
-                                    <column id="issueDate"/>
-                                    <column id="expiredDate"/>
-                                    <column id="documentNumber"/>
-                                </columns>
-                            </table>
                         </groupBox>
                         <groupBox id="personDocsGroupBox" caption="msg://personDocsGroupBox">
                             <table id="personDocumentsTable" width="100%"
@@ -951,7 +957,7 @@
                                     <column id="issueDate"/>
                                     <column id="expiredDate"/>
                                     <column id="issuingAuthority"/>
-                                    <column id="personGroup.person.nationalIdentifier"/>
+                                    <column id="attachments" generator="filesLinks"/>
                                 </columns>
                             </table>
                         </groupBox>
@@ -971,13 +977,14 @@
                                 <columns>
                                     <column id="educationalEstablishment"/>
                                     <column id="educationType"/>
+                                    <column id="formStudy"/>
                                     <column id="specialization"/>
                                     <column id="diplomaNumber"/>
                                     <column id="faculty"/>
                                     <column id="startYear"/>
                                     <column id="endYear"/>
                                     <column id="qualification"/>
-                                    <column id="formStudy"/>
+                                    <column id="attachments" generator="filesLinks"/>
                                 </columns>
                             </table>
                         </groupBox>
@@ -1002,6 +1009,7 @@
                                     <column id="endDate"/>
                                     <column id="diploma"/>
                                     <column id="issueDate"/>
+                                    <column id="attachments" generator="filesLinks"/>
                                 </columns>
                             </table>
                         </groupBox>
@@ -1023,8 +1031,10 @@
                                     <column id="educationalInstitutionName"/>
                                     <column id="startDate"/>
                                     <column id="endDate"/>
+                                    <column id="typeName"/>
                                     <column id="diploma"/>
-                                    <column id="issueDate"/>
+                                    <column id="issuedDate"/>
+                                    <column id="attachments" generator="filesLinks"/>
                                 </columns>
                             </table>
                         </groupBox>
@@ -1044,13 +1054,17 @@
                                 <rowsCount/>
                                 <columns>
                                     <column id="company"/>
+                                    <column id="location"/>
                                     <column id="startMonth"/>
                                     <column id="endMonth"/>
                                     <column id="job"/>
-                                    <column id="location"/>
-                                    <column id="groupExperience"/>
+                                    <column id="partTime"/>
                                     <column id="miningExperience"/>
-                                    <column id="industry"/>
+                                    <column id="groupExperience"/>
+                                    <column id="years"/>
+                                    <column id="months"/>
+                                    <column id="days"/>
+                                    <column id="attachments" generator="filesLinks"/>
                                 </columns>
                             </table>
                         </groupBox>
@@ -1073,7 +1087,7 @@
                                 </buttonsPanel>
                                 <rowsCount/>
                                 <columns>
-                                    <column id="relationshipType"/>
+                                    <column id="relationDegree"/>
                                     <column id="lastName"/>
                                     <column id="firstName"/>
                                     <column id="middleName"/>
@@ -1099,10 +1113,12 @@
                                 </buttonsPanel>
                                 <rowsCount/>
                                 <columns>
+                                    <column id="addressType"/>
                                     <column id="country"/>
                                     <column id="city"/>
                                     <column id="address"/>
                                     <column id="language"/>
+                                    <column id="attachments" generator="filesLinks"/>
                                 </columns>
                             </table>
                         </groupBox>

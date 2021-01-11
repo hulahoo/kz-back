@@ -603,5 +603,6 @@
         <class>kz.uco.tsadv.modules.personal.model.PersonBankDetails</class>
         <class>kz.uco.tsadv.modules.personal.model.PersonBankdetailsRequest</class>
         <class>kz.uco.tsadv.modules.personal.model.CertificateTemplate</class>
+        <class>kz.uco.tsadv.entity.AdditionalFile</class>
     </persistence-unit>
 </persistence>

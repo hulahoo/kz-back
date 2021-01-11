@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.recruitment.model;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
@@ -9,6 +10,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_PERSON_EXPERIENCE_REQUEST")
 @Entity(name = "tsadv_PersonExperienceRequest")
@@ -56,9 +58,57 @@ public class PersonExperienceRequest extends AbstractParentEntity {
     @JoinColumn(name = "INDUSTRY_ID")
     private DicIndustry industry;
 
+    @Column(name = "YEARS")
+    private Integer years;
+
+    @Column(name = "MONTHS")
+    private Integer months;
+
+    @Column(name = "DAYS")
+    private Integer days;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REQUEST_STATUS_ID")
     private DicRequestStatus requestStatus;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXPERIENCE_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXPERIENCE_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public Integer getDays() {
+        return days;
+    }
+
+    public void setDays(Integer days) {
+        this.days = days;
+    }
+
+    public Integer getMonths() {
+        return months;
+    }
+
+    public void setMonths(Integer months) {
+        this.months = months;
+    }
+
+    public Integer getYears() {
+        return years;
+    }
+
+    public void setYears(Integer years) {
+        this.years = years;
+    }
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public DicRequestStatus getRequestStatus() {
         return requestStatus;

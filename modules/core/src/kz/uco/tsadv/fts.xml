@@ -1819,5 +1819,8 @@
         <entity class="kz.uco.tsadv.modules.personal.model.CertificateTemplate">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.entity.AdditionalFile">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
