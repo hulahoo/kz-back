@@ -101,6 +101,21 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     @JoinColumn(name = "PREV_JOB_OBLIGATION_ID")
     protected DicPrevJobObligation prevJobObligation;
 
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
+
     public DicPrevJobObligation getPrevJobObligation() {
         return prevJobObligation;
     }

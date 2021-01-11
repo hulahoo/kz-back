@@ -14,6 +14,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_PERSON_DOCUMENT_REQUEST")
 @Entity(name = "tsadv_PersonDocumentRequest")
@@ -75,6 +76,21 @@ public class PersonDocumentRequest extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EDITED_PERSON_DOCUMENT_ID")
     private PersonDocument editedPersonDocument;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_DOCUMENT_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_DOCUMENT_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public PersonDocument getEditedPersonDocument() {
         return editedPersonDocument;

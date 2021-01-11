@@ -7,6 +7,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.Period;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -289,7 +290,7 @@ public class DatesServiceBean implements DatesService {
                             enclosing(startDate1, endDate1, startDate2, endDate2) ||
                             enclosingEndTouching(startDate1, endDate1, startDate2, endDate2) ||
                             exactMatch(startDate1, endDate1, startDate2, endDate2)
-                    ) {
+            ) {
                 result = getFullDaysCount(startDate1, endDate1);
             } else if (endInside(startDate1, endDate1, startDate2, endDate2)) {
                 result = getFullDaysCount(startDate1, endDate2);
@@ -367,6 +368,16 @@ public class DatesServiceBean implements DatesService {
             c.add(Calendar.MINUTE, 1);
         c.set(Calendar.SECOND, 0);
         return c.getTime();
+    }
+
+    @Override
+    public Period getPeriodFromTwoDates(Date startDate, Date endDate) {
+        if (startDate != null && endDate != null) {
+            return Period.between(new java.sql.Date(startDate.getTime()).toLocalDate(),
+                    new java.sql.Date(endDate.getTime()).toLocalDate());
+        } else {
+            return null;
+        }
     }
 
 }

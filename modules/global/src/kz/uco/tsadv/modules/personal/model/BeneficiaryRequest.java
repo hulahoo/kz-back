@@ -70,6 +70,30 @@ public class BeneficiaryRequest extends AbstractParentEntity {
     @JoinColumn(name = "BENEFICIARY_ID")
     private Beneficiary beneficiary;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RELATED_PERSON_GROUP_ID")
+    private PersonGroupExt relatedPersonGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RELATION_DEGREE_ID")
+    private RelationshipTypeBeneficiary relationDegree;
+
+    public RelationshipTypeBeneficiary getRelationDegree() {
+        return relationDegree;
+    }
+
+    public void setRelationDegree(RelationshipTypeBeneficiary relationDegree) {
+        this.relationDegree = relationDegree;
+    }
+
+    public PersonGroupExt getRelatedPersonGroup() {
+        return relatedPersonGroup;
+    }
+
+    public void setRelatedPersonGroup(PersonGroupExt relatedPersonGroup) {
+        this.relatedPersonGroup = relatedPersonGroup;
+    }
+
     public Beneficiary getBeneficiary() {
         return beneficiary;
     }
