@@ -16,6 +16,16 @@
                         <property name="primaryFlag"/>
                         <property name="startDate"/>
                         <property name="endDate"/>
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
                     </property>
                     <property name="personExperience" view="_minimal"/>
                 </property>
@@ -34,8 +44,10 @@
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader/>
+            <collection id="attachmentsDc" property="attachments"/>
         </instance>
     </data>
     <dialogMode height="600"
@@ -50,20 +62,17 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <textField id="companyField" property="company"/>
-                    <textField id="jobField" property="job"/>
-                    <dateField id="startMonthField" property="startMonth"/>
-                    <dateField id="endMonthField" property="endMonth"/>
+                    <textField id="companyField" property="company" required="true"/>
                     <textField id="locationField" property="location"/>
+                    <dateField id="startMonthField" property="startMonth" required="true"/>
+                    <dateField id="endMonthField" property="endMonth" required="true"/>
+                    <textField id="jobField" property="job" required="true"/>
                     <checkBox id="partTimeField" property="partTime"/>
                     <checkBox id="miningExperienceField" property="miningExperience"/>
                     <checkBox id="groupExperienceField" property="groupExperience"/>
-                    <pickerField id="industryField" property="industry">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
+                    <textField id="yearsField" property="years" editable="false"/>
+                    <textField id="monthsField" property="months" editable="false"/>
+                    <textField id="daysField" property="days" editable="false"/>
                     <pickerField id="requestStatusField" property="requestStatus" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
@@ -72,6 +81,20 @@
                     </pickerField>
                 </column>
             </form>
+            <table id="personExperienceRequestAttachmentsTable" dataContainer="attachmentsDc" width="100%">
+                <actions>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <buttonsPanel>
+                    <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                            stylename="primary"/>
+                    <button id="personExperienceRequestAttachmentsTableRemoveBtn"
+                            action="personExperienceRequestAttachmentsTable.remove"/>
+                </buttonsPanel>
+                <columns>
+                    <column id="name"/>
+                </columns>
+            </table>
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>

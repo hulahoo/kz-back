@@ -29,7 +29,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'kz.uco.tsadv'
-        version = "2.0.4"
+        version = "2.0.5"
         isSnapshot = true
     }
     tomcat {
@@ -137,7 +137,7 @@ configure(coreModule) {
     task createDb(dependsOn: assembleDbScripts, description: 'Creates local database', type: CubaDbCreation) {
         dbms = 'postgres'
         host = 'localhost'
-        dbName = 'tsadv_master'
+        dbName = 'kzm'
         dbUser = 'tal'
         dbPassword = 'tal'
     }
@@ -145,7 +145,7 @@ configure(coreModule) {
     task updateDb(dependsOn: assembleDbScripts, description: 'Updates local database', type: CubaDbUpdate) {
         dbms = 'postgres'
         host = 'localhost'
-        dbName = 'tsadv_master'
+        dbName = 'kzm'
         dbUser = 'tal'
         dbPassword = 'tal'
     }

@@ -1,0 +1,5 @@
+create table TSADV_ADDRESS_FILE_DESCRIPTOR_LINK (
+    ADDRESS_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (ADDRESS_ID, FILE_DESCRIPTOR_ID)
+);

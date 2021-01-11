@@ -1,16 +1,10 @@
 package kz.uco.tsadv.entity.tb;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.entity.tb.dictionary.AttachmentType;
-import com.haulmont.cuba.core.entity.FileDescriptor;
-import java.util.UUID;
-import javax.persistence.Column;
+
+import javax.persistence.*;
 
 @Table(name = "TSADV_ATTACHMENT")
 @Entity(name = "tsadv$Attachment")

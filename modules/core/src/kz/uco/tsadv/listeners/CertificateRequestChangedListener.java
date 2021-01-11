@@ -37,7 +37,9 @@ public class CertificateRequestChangedListener {
         DicReceivingType receivingType = request.getReceivingType();
 
         try {
-            approveScanVersion(request, receivingType);
+            if ("SCAN_VERSION".equals(receivingType.getCode()) && "CERTIFICATE_OF_EMPLOYMENT".equals(request.getCretificateType().getCode())) {
+                approveScanVersion(request);
+            }
         } catch (Exception e) {
             log.error("Error on approving Scan version of Certificate", e);
         }
@@ -45,12 +47,10 @@ public class CertificateRequestChangedListener {
 
     }
 
-    private void approveScanVersion(CertificateRequest request, DicReceivingType receivingType) {
-        if ("SCAN_VERSION".equals(receivingType.getCode())) {
-            request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
-            request.setFile(commonReportsService.getReportByCertificateRequest(request));
-            dataManager.save(request);
-        }
+    private void approveScanVersion(CertificateRequest request) {
+        request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
+        request.setFile(commonReportsService.getReportByCertificateRequest(request));
+        dataManager.save(request);
     }
 
 

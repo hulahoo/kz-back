@@ -9,7 +9,7 @@
             <view extends="_local">
                 <property name="receivingType" view="_local"/>
                 <property name="certificateType" view="_local"/>
-                <property name="language" view="dicLanguage.langValueAndCode.view"/>
+                <property name="language" view="_local"/>
                 <property name="signer" view="personGroup-view"/>
                 <property name="report" view="report.edit"/>
                 <property name="organization" view="organizationGroup.browse"/>
@@ -17,17 +17,17 @@
             <loader/>
         </instance>
         <collection id="receivingTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType"
-                    view="_minimal">
+                    view="_local">
             <loader id="receivingTypesDl">
                 <query>
                     <![CDATA[select e from tsadv_DicReceivingType e]]>
                 </query>
             </loader>
         </collection>
-        <collection id="languagesDc" class="kz.uco.base.entity.dictionary.DicLanguage" view="_minimal">
+        <collection id="languagesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicLanguage" view="_local">
             <loader id="languagesDl">
                 <query>
-                    <![CDATA[select e from base$DicLanguage e]]>
+                    <![CDATA[select e from tsadv$DicLanguage e]]>
                 </query>
             </loader>
         </collection>

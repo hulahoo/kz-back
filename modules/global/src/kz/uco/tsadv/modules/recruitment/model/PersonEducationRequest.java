@@ -17,6 +17,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_PERSON_EDUCATION_REQUEST")
 @Entity(name = "tsadv_PersonEducationRequest")
@@ -92,6 +93,21 @@ public class PersonEducationRequest extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     private FileDescriptor file;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EDUCATION_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EDUCATION_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public FileDescriptor getFile() {
         return file;
