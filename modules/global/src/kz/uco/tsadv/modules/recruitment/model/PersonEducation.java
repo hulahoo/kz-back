@@ -2,6 +2,7 @@ package kz.uco.tsadv.modules.recruitment.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.chile.core.annotations.NumberFormat;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
@@ -16,6 +17,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @NamePattern("%s (%s-%s)|school,startYear,endYear")
 @Table(name = "TSADV_PERSON_EDUCATION")
@@ -91,6 +93,21 @@ public class PersonEducation extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE_HISTORY")
     private Date endDateHistory;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EDUCATION_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EDUCATION_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public Date getEndDateHistory() {
         return endDateHistory;

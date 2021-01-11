@@ -9,6 +9,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_PERSON_QUALIFICATION")
 @Listeners("tsadv_PersonQualificationListener")
@@ -31,9 +32,8 @@ public class PersonQualification extends AbstractParentEntity {
     @Column(name = "START_DATE", nullable = false)
     protected Date startDate;
 
-    @NotNull
     @Temporal(TemporalType.DATE)
-    @Column(name = "END_DATE", nullable = false)
+    @Column(name = "END_DATE")
     protected Date endDate;
 
     @Temporal(TemporalType.DATE)
@@ -67,6 +67,21 @@ public class PersonQualification extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE_HISTORY")
     private Date endDateHistory;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_QUALIFICATION_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_QUALIFICATION_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public Date getEndDateHistory() {
         return endDateHistory;

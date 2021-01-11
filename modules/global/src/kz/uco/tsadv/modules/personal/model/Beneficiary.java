@@ -40,38 +40,62 @@ public class Beneficiary extends AbstractParentEntity {
     protected DicRelationshipType relationshipType;
 
     @Column(name = "LAST_NAME", length = 2000)
-    private String lastName;
+    protected String lastName;
 
     @Column(name = "FIRST_NAME", length = 2000)
-    private String firstName;
+    protected String firstName;
 
     @Column(name = "MIDDLE_NAME", length = 2000)
-    private String middleName;
+    protected String middleName;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "BIRTH_DATE")
-    private Date birthDate;
+    protected Date birthDate;
 
     @Column(name = "WORK_LOCATION", length = 2000)
-    private String workLocation;
+    protected String workLocation;
 
     @Column(name = "HOME_ADDRESS", length = 2000)
-    private String homeAddress;
+    protected String homeAddress;
 
     @Column(name = "ADDITIONAL_CONTACT", length = 2000)
-    private String additionalContact;
+    protected String additionalContact;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE_HISTORY")
-    private Date startDateHistory;
+    protected Date startDateHistory;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE_HISTORY")
-    private Date endDateHistory;
+    protected Date endDateHistory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_GROUP_ID")
-    private PersonGroupExt personGroup;
+    protected PersonGroupExt personGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RELATED_PERSON_GROUP_ID")
+    private PersonGroupExt relatedPersonGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RELATION_DEGREE_ID")
+    private RelationshipTypeBeneficiary relationDegree;
+
+    public RelationshipTypeBeneficiary getRelationDegree() {
+        return relationDegree;
+    }
+
+    public void setRelationDegree(RelationshipTypeBeneficiary relationDegree) {
+        this.relationDegree = relationDegree;
+    }
+
+    public PersonGroupExt getRelatedPersonGroup() {
+        return relatedPersonGroup;
+    }
+
+    public void setRelatedPersonGroup(PersonGroupExt relatedPersonGroup) {
+        this.relatedPersonGroup = relatedPersonGroup;
+    }
 
     public PersonGroupExt getPersonGroup() {
         return personGroup;

@@ -30,8 +30,10 @@
                     <property name="code"/>
                 </property>
                 <property name="file" view="_minimal"/>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader/>
+            <collection id="attachmentsDc" property="attachments"/>
         </instance>
     </data>
     <dialogMode height="600"
@@ -46,12 +48,11 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <dateField id="startDateField" property="startDate"/>
+                    <textField id="specialtyField" property="specialty" required="true"/>
+                    <dateField id="startDateField" property="startDate" required="true"/>
                     <dateField id="endDateField" property="endDate"/>
-                    <textField id="specialtyField" property="specialty"/>
                     <textField id="diplomaField" property="diploma"/>
                     <dateField id="issueDateField" property="issueDate"/>
-                    <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
                     <pickerField id="requestStatusField" property="requestStatus" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
@@ -60,6 +61,20 @@
                     </pickerField>
                 </column>
             </form>
+            <table id="improvingProfessionalSkillsRequestAttachmentsTable" dataContainer="attachmentsDc" width="100%">
+                <actions>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <buttonsPanel>
+                    <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                            stylename="primary"/>
+                    <button id="improvingProfessionalSkillsRequestAttachmentsTableRemoveBtn"
+                            action="improvingProfessionalSkillsRequestAttachmentsTable.remove"/>
+                </buttonsPanel>
+                <columns>
+                    <column id="name"/>
+                </columns>
+            </table>
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>

@@ -9,6 +9,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_PERSON_QUALIFICATION_REQUEST")
 @Entity(name = "tsadv_PersonQualificationRequest")
@@ -29,9 +30,8 @@ public class PersonQualificationRequest extends AbstractParentEntity {
     @Column(name = "START_DATE", nullable = false)
     protected Date startDate;
 
-    @NotNull
     @Temporal(TemporalType.DATE)
-    @Column(name = "END_DATE", nullable = false)
+    @Column(name = "END_DATE")
     protected Date endDate;
 
     @Temporal(TemporalType.DATE)
@@ -65,6 +65,21 @@ public class PersonQualificationRequest extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     private FileDescriptor file;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_QUALIFICATION_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_QUALIFICATION_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public DicRequestStatus getRequestStatus() {
         return requestStatus;

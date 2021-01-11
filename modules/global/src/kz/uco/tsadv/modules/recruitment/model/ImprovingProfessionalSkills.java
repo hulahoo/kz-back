@@ -1,11 +1,13 @@
 package kz.uco.tsadv.modules.recruitment.model;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_IMPROVING_PROFESSIONAL_SKILLS")
 @Entity(name = "tsadv_ImprovingProfessionalSkills")
@@ -42,6 +44,21 @@ public class ImprovingProfessionalSkills extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "ISSUE_DATE")
     private Date issueDate;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_IMPROVING_PROFESSIONAL_SKILLS_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "IMPROVING_PROFESSIONAL_SKILLS_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public Date getIssueDate() {
         return issueDate;

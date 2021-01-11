@@ -1,7 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
 import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
@@ -14,7 +14,7 @@ import java.util.List;
 
 @Table(name = "TSADV_PERSONAL_DATA_REQUEST")
 @Entity(name = "tsadv$PersonalDataRequest")
-public class PersonalDataRequest extends StandardEntity {
+public class PersonalDataRequest extends AbstractParentEntity {
     private static final long serialVersionUID = -1704847249874220670L;
 
     @Column(name = "LAST_NAME")

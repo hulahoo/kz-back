@@ -3,6 +3,7 @@ package kz.uco.tsadv.service;
 
 import javafx.util.Pair;
 
+import java.time.Period;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -73,5 +74,7 @@ public interface DatesService {
     String getHoursWithTwoDigitsAfterComma(double hours);
 
     Date toNearestWholeMinute(Date date);
+
+    Period getPeriodFromTwoDates(Date startDate,Date endDate);
 
 }

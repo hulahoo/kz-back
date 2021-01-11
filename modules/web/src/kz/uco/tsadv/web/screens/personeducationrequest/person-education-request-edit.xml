@@ -54,9 +54,38 @@
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader/>
+            <collection id="attachmentsDc" property="attachments"/>
         </instance>
+        <collection id="dicEducationalEstablishmentsDc"
+                    class="kz.uco.tsadv.modules.learning.dictionary.DicEducationalEstablishment">
+            <view extends="_local">
+                <property name="educationalEstablishmentType" view="_local"/>
+            </view>
+            <loader id="dicEducationalEstablishmentsDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicEducationalEstablishment e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicEducationTypesDc" class="kz.uco.base.entity.dictionary.DicEducationType">
+            <view extends="_local"/>
+            <loader id="dicEducationTypesDl">
+                <query>
+                    <![CDATA[select e from base$DicEducationType e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicFormStudiesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicFormStudy">
+            <view extends="_local"/>
+            <loader id="dicFormStudiesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicFormStudy e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -70,30 +99,27 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <textField id="diplomaNumberField" property="diplomaNumber"/>
-                    <pickerField id="educationalEstablishmentField" property="educationalEstablishment">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
-                    <pickerField id="educationTypeField" property="educationType">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
-                    <textField id="startYearField" property="startYear"/>
-                    <textField id="endYearField" property="endYear"/>
+                    <lookupField id="educationalEstablishmentField" property="educationalEstablishment"
+                                 optionsContainer="dicEducationalEstablishmentsDc" required="true"/>
+                    <lookupField id="educationTypeField" property="educationType"
+                                 optionsContainer="dicEducationTypesDc" required="true"/>
+                    <lookupField id="formStudyField" property="formStudy" optionsContainer="dicFormStudiesDc"/>
                     <textField id="specializationField" property="specialization"/>
+                    <textField id="diplomaNumberField" property="diplomaNumber"/>
                     <textField id="facultyField" property="faculty"/>
+                    <textField id="startYearField" property="startYear" required="true">
+                        <validators>
+                            <min message="msg://yearValidatorNotification" value="1000"/>
+                            <max message="msg://yearValidatorNotification" value="9999"/>
+                        </validators>
+                    </textField>
+                    <textField id="endYearField" property="endYear">
+                        <validators>
+                            <min message="msg://yearValidatorNotification" value="1000"/>
+                            <max message="msg://yearValidatorNotification" value="9999"/>
+                        </validators>
+                    </textField>
                     <textField id="qualificationField" property="qualification"/>
-                    <pickerField id="formStudyField" property="formStudy">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
                     <pickerField id="statusField" property="status" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
@@ -102,6 +128,20 @@
                     </pickerField>
                 </column>
             </form>
+            <table id="personEducationRequestAttachmentsTable" dataContainer="attachmentsDc" width="100%">
+                <actions>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <buttonsPanel>
+                    <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                            stylename="primary"/>
+                    <button id="personEducationRequestAttachmentsTableRemoveBtn"
+                            action="personEducationRequestAttachmentsTable.remove"/>
+                </buttonsPanel>
+                <columns>
+                    <column id="name"/>
+                </columns>
+            </table>
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>

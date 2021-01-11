@@ -1816,5 +1816,8 @@
         <entity class="kz.uco.tsadv.modules.personal.model.PersonBankdetailsRequest">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.entity.AdditionalFile">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
