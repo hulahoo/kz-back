@@ -45,7 +45,7 @@
                                      enable="false"/>
                         <textField id="goalStringField" property="goalString" caption="msg://goalEdit"/>
                         <textField id="weightField" property="weight" required="true"/>
-                        <textField id="resultField" property="result" required="true"/>
+                        <textField id="resultField" property="result"/>
                     </column>
                 </form>
                 <form id="form2" dataContainer="assignedGoalDc">

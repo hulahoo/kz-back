@@ -36,13 +36,14 @@
                 </pickerField>
                 <textField id="organization"
                            property="assignedPerson.currentAssignment.organizationGroup.organization.organizationName"
+                           caption="mainMsg://organizationName"
                            editable="false"/>
                 <textField id="position" property="assignedPerson.currentAssignment.positionGroup"/>
                 <textField id="job" property="assignedPerson.currentAssignment.jobGroup"/>
                 <textField id="grade" property="assignedPerson.currentAssignment.gradeGroup"/>
             </column>
             <column id="column2" width="300px">
-                <textField property="result"/>
+                <textField property="result" enable="false"/>
                 <lookupField property="status"/>
                 <textField property="gzp"/>
                 <dateField id="startDate" property="startDate"/>
@@ -75,7 +76,6 @@
                     </popupButton>
                     <button id="goalEdit" action="assignedGoalTable.edit"/>
                     <button id="goalRemove" action="assignedGoalTable.remove"/>
-                    <label id="label" value="opana" align="BOTTOM_RIGHT"/>
                 </buttonsPanel>
                 <rows/>
             </table>

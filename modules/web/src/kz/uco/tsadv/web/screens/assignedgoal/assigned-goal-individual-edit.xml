@@ -29,7 +29,7 @@
                         <lookupField id="category" property="category" optionsContainer="goalCategoryDc"/>
                         <textField id="goalStringField" property="goalString" required="true"/>
                         <textField id="weightField" property="weight" required="true"/>
-                        <textField id="resultField" property="result" required="true"/>
+                        <textField id="resultField" property="result"/>
                     </column>
                 </form>
                 <form id="form2" dataContainer="assignedGoalDc">

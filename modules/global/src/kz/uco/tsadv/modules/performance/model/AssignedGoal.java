@@ -13,10 +13,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import java.util.Date;
 
 @NamePattern("%s|goalString")
@@ -77,10 +74,8 @@ public class AssignedGoal extends AbstractParentEntity {
     @Column(name = "END_DATE")
     protected Date endDate;
 
-    @Max(message = "{msg://tsadv$AssignedGoal.weight.validation.Max}", value = 100)
-    @Min(message = "{msg://tsadv$AssignedGoal.weight.validation.Min}", value = 0)
     @Column(name = "WEIGHT")
-    protected Integer weight;
+    protected Double weight;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -102,7 +97,6 @@ public class AssignedGoal extends AbstractParentEntity {
     protected String goalType;
 
     @DecimalMin(message = "{msg://tsadv$AssignedGoal.result.validation.DecimalMin}", value = "0")
-    @DecimalMax(message = "{msg://tsadv$AssignedGoal.result.validation.DecimalMax}", value = "100")
     @Column(name = "RESULT")
     protected Double result;
 
@@ -113,6 +107,14 @@ public class AssignedGoal extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GOAL_LIBRARY_ID")
     protected GoalLibrary goalLibrary;
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
 
     public GoalLibrary getGoalLibrary() {
         return goalLibrary;
@@ -230,15 +232,6 @@ public class AssignedGoal extends AbstractParentEntity {
 
     public PersonGroupExt getPersonGroup() {
         return personGroup;
-    }
-
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public Integer getWeight() {
-        return weight;
     }
 
 

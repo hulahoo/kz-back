@@ -88,11 +88,11 @@
                     </actions>
                     <columns>
                         <column property="assignedPerson"/>
-                        <column property="assignedPerson.currentAssignment.organizationGroup"/>
+                        <column property="assignedPerson.currentAssignment.organizationGroup.organization.organizationName"
+                                caption="mainMsg://organizationName"/>
                         <column property="assignedPerson.currentAssignment.positionGroup"/>
                         <column property="assignedPerson.currentAssignment.jobGroup"/>
                         <column property="assignedPerson.currentAssignment.gradeGroup"/>
-                        <column property="assigned_by"/>
                         <column property="result"/>
                         <column property="gzp"/>
                         <column property="status"/>

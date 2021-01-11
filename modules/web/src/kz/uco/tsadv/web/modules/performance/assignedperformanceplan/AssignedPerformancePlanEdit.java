@@ -50,17 +50,30 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected void onAssignedGoalDcItemPropertyChange(InstanceContainer.ItemPropertyChangeEvent<AssignedGoal> event) {
         String property = event.getProperty();
         if (property.equals("weight")) {
-            if (((int) event.getValue()) > 100 || ((int) event.getValue()) < 0) {
+            if (event.getValue() != null && ((double) event.getValue()) > 100 || ((double) event.getValue()) < 0) {
                 notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                         .withCaption(messageBundle.getMessage("notBeLessOrMore")).show();
             }
-        } else if (property.equals("result")) {
-            if (((double) event.getValue()) > 100 || ((double) event.getValue()) < 0) {
-                notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                        .withCaption(messageBundle.getMessage("resultNotBeLessOrMore")).show();
-            }
         }
     }
+
+    @Subscribe
+    protected void onAfterShow(AfterShowEvent event) {
+        assignedGoalDc.addItemPropertyChangeListener(assignedGoalItemPropertyChangeEvent -> {
+                    if (assignedGoalItemPropertyChangeEvent != null
+                            && assignedGoalItemPropertyChangeEvent.getProperty().equals("weight")
+                            || assignedGoalItemPropertyChangeEvent != null
+                            && assignedGoalItemPropertyChangeEvent.getProperty().equals("result")) {
+                        double result = 0.0;
+                        for (AssignedGoal item : assignedGoalDc.getItems()) {
+                            result += (item.getResult() != null ? item.getResult() : 0) * item.getWeight() / 100;
+                        }
+                        assignedPerformancePlanDc.getItem().setResult(result);
+                    }
+                }
+        );
+    }
+
 
     @Subscribe
     protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
@@ -70,14 +83,10 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                 notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                         .withCaption(messageBundle.getMessage("notBeLessOrMore")).show();
                 event.preventCommit();
-            } else if (assignedGoal.getResult() > 100 || assignedGoal.getResult() < 0) {
-                notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                        .withCaption(messageBundle.getMessage("resultNotBeLessOrMore")).show();
-                event.preventCommit();
             }
             allWeight += assignedGoal.getWeight();
         }
-        if (allWeight != 100) {
+        if (allWeight > 100 || allWeight < 0) {
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("weightNot100")).show();
             event.preventCommit();

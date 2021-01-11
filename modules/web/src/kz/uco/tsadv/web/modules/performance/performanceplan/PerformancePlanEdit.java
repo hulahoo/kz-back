@@ -14,6 +14,7 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
@@ -193,45 +194,70 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected void onAssignedPerformancePlanTableMassGoals(Action.ActionPerformedEvent event) {
         Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
         CommitContext commitContext = new CommitContext();
-        assignedPerformancePlans.forEach(assignedPerformancePlan -> {
-            AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson().getCurrentAssignment();
-            List<OrganizationGroupGoalLink> orgGoalList = currentAssignment.getOrganizationGroup() != null
-                    ? currentAssignment.getOrganizationGroup().getGoals()
-                    : Collections.emptyList();
-            List<PositionGroupGoalLink> positionGoalList = currentAssignment.getPositionGroup() != null
-                    ? currentAssignment.getPositionGroup().getGoals()
-                    : Collections.emptyList();
-            List<JobGroupGoalLink> jobGoalList = currentAssignment.getJobGroup() != null
-                    ? currentAssignment.getJobGroup().getGoals()
-                    : Collections.emptyList();
-            for (OrganizationGroupGoalLink organizationGoal : orgGoalList) {
-                AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
-                newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
-                newAssignedGoal.setGoal(organizationGoal.getGoal());
-                newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
-                newAssignedGoal.setWeight(organizationGoal.getWeight());
-                newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
-                commitContext.addInstanceToCommit(newAssignedGoal);
-            }
-            for (PositionGroupGoalLink positionGoal : positionGoalList) {
-                AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
-                newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
-                newAssignedGoal.setGoal(positionGoal.getGoal());
-                newAssignedGoal.setGoalString(positionGoal.getGoal().getGoalName());
-                newAssignedGoal.setWeight(positionGoal.getWeight());
-                newAssignedGoal.setPositionGroup(positionGoal.getPositionGroup());
-                commitContext.addInstanceToCommit(newAssignedGoal);
-            }
-            for (JobGroupGoalLink jobGoal : jobGoalList) {
-                AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
-                newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
-                newAssignedGoal.setGoal(jobGoal.getGoal());
-                newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
-                newAssignedGoal.setWeight(jobGoal.getWeight());
-                newAssignedGoal.setJobGroup(jobGoal.getJobGroup());
-                commitContext.addInstanceToCommit(newAssignedGoal);
-            }
-        });
-        dataManager.commit(commitContext);
+        try {
+            assignedPerformancePlans.forEach(assignedPerformancePlan -> {
+                AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson().getCurrentAssignment();
+                List<OrganizationGroupGoalLink> orgGoalList = currentAssignment.getOrganizationGroup() != null
+                        ? currentAssignment.getOrganizationGroup().getGoals()
+                        : Collections.emptyList();
+                List<PositionGroupGoalLink> positionGoalList = currentAssignment.getPositionGroup() != null
+                        ? currentAssignment.getPositionGroup().getGoals()
+                        : Collections.emptyList();
+                List<JobGroupGoalLink> jobGoalList = currentAssignment.getJobGroup() != null
+                        ? currentAssignment.getJobGroup().getGoals()
+                        : Collections.emptyList();
+                for (OrganizationGroupGoalLink organizationGoal : orgGoalList) {
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(organizationGoal.getGoal());
+                    newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(organizationGoal.getWeight()));
+                    newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
+                    newAssignedGoal.setCategory(organizationGoal.getGoal() != null
+                            && organizationGoal.getGoal().getLibrary() != null
+                            ? organizationGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(organizationGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                }
+                for (PositionGroupGoalLink positionGoal : positionGoalList) {
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(positionGoal.getGoal());
+                    newAssignedGoal.setGoalString(positionGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(positionGoal.getWeight()));
+                    newAssignedGoal.setPositionGroup(positionGoal.getPositionGroup());
+                    newAssignedGoal.setCategory(positionGoal.getGoal() != null
+                            && positionGoal.getGoal().getLibrary() != null
+                            ? positionGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(positionGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                }
+                for (JobGroupGoalLink jobGoal : jobGoalList) {
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(jobGoal.getGoal());
+                    newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(jobGoal.getWeight()));
+                    newAssignedGoal.setJobGroup(jobGoal.getJobGroup());
+                    newAssignedGoal.setCategory(jobGoal.getGoal() != null
+                            && jobGoal.getGoal().getLibrary() != null
+                            ? jobGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(jobGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                }
+            });
+            dataManager.commit(commitContext);
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("addMassGoalSuccess")).show();
+        } catch (Exception e) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("addMassGoalNotSuccess")).show();
+        }
     }
 }

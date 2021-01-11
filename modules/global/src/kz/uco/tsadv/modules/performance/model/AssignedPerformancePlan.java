@@ -5,6 +5,7 @@ import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "TSADV_ASSIGNED_PERFORMANCE_PLAN")
@@ -17,10 +18,10 @@ public class AssignedPerformancePlan extends StandardEntity {
     protected PerformancePlan performancePlan;
 
     @Column(name = "RESULT")
-    protected Integer result;
+    protected Double result;
 
     @Column(name = "GZP")
-    protected Integer gzp;
+    protected BigDecimal gzp;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ASSIGNED_PERSON_ID")
@@ -40,6 +41,22 @@ public class AssignedPerformancePlan extends StandardEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE")
     protected Date endDate;
+
+    public void setResult(Double result) {
+        this.result = result;
+    }
+
+    public Double getResult() {
+        return result;
+    }
+
+    public void setGzp(BigDecimal gzp) {
+        this.gzp = gzp;
+    }
+
+    public BigDecimal getGzp() {
+        return gzp;
+    }
 
     public Date getEndDate() {
         return endDate;
@@ -63,22 +80,6 @@ public class AssignedPerformancePlan extends StandardEntity {
 
     public void setStatus(CardStatusEnum status) {
         this.status = status == null ? null : status.getId();
-    }
-
-    public Integer getGzp() {
-        return gzp;
-    }
-
-    public void setGzp(Integer gzp) {
-        this.gzp = gzp;
-    }
-
-    public Integer getResult() {
-        return result;
-    }
-
-    public void setResult(Integer result) {
-        this.result = result;
     }
 
     public void setPerformancePlan(PerformancePlan performancePlan) {

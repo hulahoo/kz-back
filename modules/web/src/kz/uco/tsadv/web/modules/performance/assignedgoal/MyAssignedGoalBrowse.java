@@ -81,7 +81,7 @@ public class MyAssignedGoalBrowse extends AbstractWindow {
     }
 
     protected void refreshLabel_2() {
-        int commonWeight = getCommonWeight();
+        double commonWeight = getCommonWeight();
         label_2.setValue(getMessage(commonWeight + "%"));
         if (commonWeight > 100) {
             label_2.addStyleName("font-color-red");
@@ -260,8 +260,8 @@ public class MyAssignedGoalBrowse extends AbstractWindow {
         }
     }
 
-    public Integer getCommonWeight() {
-        Integer result = 0;
+    public Double getCommonWeight() {
+        double result = 0;
         for (AssignedGoal ag : assignedGoalsDs.getItems()) {
             result += ag.getWeight();
         }
