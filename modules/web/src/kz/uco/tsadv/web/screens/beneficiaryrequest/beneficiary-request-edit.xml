@@ -83,36 +83,24 @@
                         <property name="code"/>
                     </property>
                 </property>
+                <property name="relationshipType" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
             </view>
             <loader/>
         </instance>
-        <collection id="relationshipTypeBeneficiariesDc"
-                    class="kz.uco.tsadv.modules.personal.model.RelationshipTypeBeneficiary">
-            <view extends="_local">
-                <property name="parent" view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
-                <property name="child" view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
-            </view>
-            <loader id="relationshipTypeBeneficiariesDl">
+        <collection id="dicRelationshipTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType">
+            <view extends="_local"/>
+            <loader id="dicRelationshipTypesDl">
                 <query>
-                    <![CDATA[select e from tsadv$RelationshipTypeBeneficiary e]]>
+                    <![CDATA[select e from tsadv$DicRelationshipType e]]>
                 </query>
             </loader>
         </collection>
@@ -129,8 +117,8 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <lookupField id="relationDegreeField" property="relationDegree" required="true"
-                                 optionsContainer="relationshipTypeBeneficiariesDc">
+                    <lookupField id="relationshipTypeField" property="relationshipType" required="true"
+                                 optionsContainer="dicRelationshipTypesDc">
                     </lookupField>
                     <pickerField id="relatedPersonGroupField" property="relatedPersonGroup">
                         <actions>>

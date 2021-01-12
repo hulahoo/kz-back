@@ -320,6 +320,16 @@
                         <property name="code"/>
                     </property>
                 </property>
+                <property name="relationshipType" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
             </view>
             <loader id="beneficiariesDl">
                 <query>
@@ -1168,7 +1178,7 @@
                                 </buttonsPanel>
                                 <rowsCount/>
                                 <columns>
-                                    <column id="relationDegree"/>
+                                    <column id="relationshipType"/>
                                     <column id="lastName"/>
                                     <column id="firstName"/>
                                     <column id="middleName"/>
