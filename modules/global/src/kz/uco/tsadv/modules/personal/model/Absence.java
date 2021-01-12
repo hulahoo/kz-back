@@ -37,7 +37,7 @@ public class Absence extends AbstractParentCategorizedEntity {
     protected FileDescriptor file;
 
     @Transient
-    @MetaProperty
+    @MetaProperty(related = {"dateFrom", "dateTo", "type"})
     protected String typeAndDate;
 
     @Transient
@@ -220,7 +220,7 @@ public class Absence extends AbstractParentCategorizedEntity {
 
     public String getTypeAndDate() {
 
-        typeAndDate = type.getLangValue() + " " + dateFormat.format(dateFrom) + " - " + dateFormat.format(dateTo);
+        typeAndDate = type == null ? "" : type.getLangValue() + " " + dateFormat.format(dateFrom) + " - " + dateFormat.format(dateTo);
         return typeAndDate;
     }
 

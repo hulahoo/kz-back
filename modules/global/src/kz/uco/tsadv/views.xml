@@ -4487,6 +4487,7 @@
                   view="_minimal">
             <property name="code"/>
         </property>
+        <property name="order" view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Absence"
           extends="_local"

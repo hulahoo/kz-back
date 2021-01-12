@@ -145,19 +145,12 @@ public class SelfAbsence extends StandardLookup<Absence>
         item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
         item.setStatusRequest(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
         item.setVacation(getItem);
-        item.setStartDate(getItem.getPeriodStart());
-        item.setEndData(getItem.getPeriodEnd());
+        item.setStartDate(today);
+        item.setEndData(today);
 
-//        Screen build =
-                screenBuilders.editor(LeavingVacationRequest.class, this)
+        screenBuilders.editor(LeavingVacationRequest.class, this)
                 .editEntity(item)
                 .build()
                 .show();
-//        ((SelfAbsence)build).setMyItem(null);
-//                build.show();
-    }
-
-    private void setMyItem(Object o) {
-
     }
 }

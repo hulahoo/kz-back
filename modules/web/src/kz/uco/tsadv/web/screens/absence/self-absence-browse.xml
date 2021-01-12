@@ -60,7 +60,7 @@
                                 <action id="excel" type="excel"/>
                                 <action id="newLeavingVacationRequest"
                                         invoke="newLeavingVacationRequest"
-                                        trackSelection="false"/>
+                                        trackSelection="true"/>
                             </actions>
                             <columns>
                                 <column id="type"/>
