@@ -1,13 +1,17 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_MILITARY_FORM")
 @Entity(name = "tsadv$MilitaryForm")
@@ -125,6 +129,22 @@ public class MilitaryForm extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE_HISTORY")
     private Date endDateHistory;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_MILITARY_FORM_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "MILITARY_FORM_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @OnDelete(DeletePolicy.CASCADE)
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public Date getEndDateHistory() {
         return endDateHistory;

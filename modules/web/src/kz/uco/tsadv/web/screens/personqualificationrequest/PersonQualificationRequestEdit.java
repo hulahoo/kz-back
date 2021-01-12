@@ -3,13 +3,18 @@ package kz.uco.tsadv.web.screens.personqualificationrequest;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.FileUploadField;
+import com.haulmont.cuba.gui.components.LinkButton;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.entity.tb.PersonQualificationRequest;
-import kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkillsRequest;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -33,6 +38,10 @@ public class PersonQualificationRequestEdit extends StandardEditor<PersonQualifi
     protected CollectionPropertyContainer<FileDescriptor> attachmentsDc;
     @Inject
     protected MessageBundle messageBundle;
+    @Inject
+    private ExportDisplay exportDisplay;
+    @Inject
+    private ComponentsFactory componentsFactory;
 
     @Subscribe("upload")
     protected void onUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
@@ -63,5 +72,18 @@ public class PersonQualificationRequestEdit extends StandardEditor<PersonQualifi
                 || personQualificationRequestDc.getItem().getAttachments().size() == 0) {
             event.getErrors().add(messageBundle.getMessage("downloadOneFile"));
         }
+    }
+
+    public Component generatorName(FileDescriptor fd) {
+        LinkButton linkButton = componentsFactory.createComponent(LinkButton.class);
+        linkButton.setCaption(fd.getName());
+        linkButton.setAction(new BaseAction("export") {
+            @Override
+            public void actionPerform(Component component) {
+                super.actionPerform(component);
+                exportDisplay.show(fd, ExportFormat.OCTET_STREAM);
+            }
+        });
+        return linkButton;
     }
 }

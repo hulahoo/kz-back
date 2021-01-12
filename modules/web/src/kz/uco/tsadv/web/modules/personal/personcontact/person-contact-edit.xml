@@ -17,8 +17,8 @@
             </query>
         </collectionDatasource>
     </dsContext>
-    <dialogMode forceDialog="true"
-                height="AUTO"
+    <dialogMode
+            height="AUTO"
                 width="600"/>
     <layout expand="windowActions"
             spacing="true">

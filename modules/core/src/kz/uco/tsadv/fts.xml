@@ -1822,5 +1822,14 @@
         <entity class="kz.uco.tsadv.entity.AdditionalFile">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.AwardsRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.ChildDescription">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

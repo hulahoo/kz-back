@@ -1,28 +1,24 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.haulmont.cuba.core.entity.annotation.Listeners;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicAwardType;
 import kz.uco.tsadv.modules.personal.dictionary.DicPromotionType;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import com.haulmont.chile.core.annotations.NamePattern;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Listeners("tsadv_AwardsListener")
 @Table(name = "TSADV_AWARDS")
 @Entity(name = "tsadv$Awards")
 public class Awards extends AbstractParentEntity {
     private static final long serialVersionUID = -1942689863888906200L;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PERSON_GROUP_ID")
+    private PersonGroupExt personGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PROMOTION_TYPE_ID")
@@ -58,6 +54,61 @@ public class Awards extends AbstractParentEntity {
 
     @Column(name = "REASON")
     protected String reason;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE")
+    private Date startDate;
+
+    @Column(name = "NOTE", length = 2500)
+    private String note;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE_HISTORY")
+    private Date startDateHistory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE_HISTORY")
+    private Date endDateHistory;
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public Date getEndDateHistory() {
+        return endDateHistory;
+    }
+
+    public void setEndDateHistory(Date endDateHistory) {
+        this.endDateHistory = endDateHistory;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getStartDateHistory() {
+        return startDateHistory;
+    }
+
+    public void setStartDateHistory(Date startDateHistory) {
+        this.startDateHistory = startDateHistory;
+    }
+
+    public PersonGroupExt getPersonGroup() {
+        return personGroup;
+    }
+
+    public void setPersonGroup(PersonGroupExt personGroup) {
+        this.personGroup = personGroup;
+    }
 
 
     public void setCalculated(String calculated) {

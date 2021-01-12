@@ -604,5 +604,8 @@
         <class>kz.uco.tsadv.modules.personal.model.PersonBankdetailsRequest</class>
         <class>kz.uco.tsadv.modules.personal.model.CertificateTemplate</class>
         <class>kz.uco.tsadv.entity.AdditionalFile</class>
+        <class>kz.uco.tsadv.modules.personal.model.AwardsRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.ChildDescription</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType</class>
     </persistence-unit>
 </persistence>
