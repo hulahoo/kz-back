@@ -9,6 +9,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_MILITARY_FORM_REQUEST")
 @Entity(name = "tsadv_MilitaryFormRequest")
@@ -127,6 +128,21 @@ public class MilitaryFormRequest extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MILITARY_FORM_ID")
     private MilitaryForm militaryForm;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_MILITARY_FORM_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "MILITARY_FORM_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public MilitaryForm getMilitaryForm() {
         return militaryForm;

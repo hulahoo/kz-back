@@ -13576,12 +13576,21 @@
         <property name="nonresidentType" view="_local"/>
         <property name="group" view="_minimal">
             <property name="list" view="_minimal">
-                <property name="group" view="_minimal"/>
                 <property name="startDate"/>
                 <property name="endDate"/>
+                <property name="group"
+                          view="_minimal"/>
             </property>
-            <property name="assignments" view="_minimal">
+            <property name="assignments"
+                      view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
                     <property name="code"/>
                     <property name="active"/>
                 </property>
@@ -13590,9 +13599,16 @@
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
+                    <property name="grade" view="_local">
+                        <property name="gradeName"/>
+                    </property>
                 </property>
-                <property name="organizationGroup" view="_minimal">
-                    <property name="list" view="_minimal">
+                <property name="group"
+                          view="_local"/>
+                <property name="organizationGroup"
+                          view="_minimal">
+                    <property name="list"
+                              view="_minimal">
                         <property name="startDate"/>
                         <property name="endDate"/>
                         <property name="organizationNameLang1"/>
@@ -21468,13 +21484,9 @@
             <property name="academicDegree"/>
             <property name="haveCrippleChild"/>
             <property name="haveChildWithoutParent"/>
-            <property name="prevJobNDA"/>
-            <property name="prevJobObligation" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
             <property name="attachments" view="_minimal"/>
+            <property name="prevJobNDA"/>
+            <property name="prevJobObligation"/>
         </property>
         <property name="person" view="_minimal">
             <property name="nationality" view="_minimal">

@@ -3,11 +3,17 @@ package kz.uco.tsadv.web.screens.personeducationrequest;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.FileUploadField;
+import com.haulmont.cuba.gui.components.LinkButton;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.modules.recruitment.model.PersonEducationRequest;
 
 import javax.inject.Inject;
@@ -31,6 +37,10 @@ public class PersonEducationRequestEdit extends StandardEditor<PersonEducationRe
     protected CollectionPropertyContainer<FileDescriptor> attachmentsDc;
     @Inject
     protected MessageBundle messageBundle;
+    @Inject
+    private ComponentsFactory componentsFactory;
+    @Inject
+    private ExportDisplay exportDisplay;
 
     @Subscribe("upload")
     protected void onUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
@@ -57,5 +67,18 @@ public class PersonEducationRequestEdit extends StandardEditor<PersonEducationRe
                         .compareTo(personEducationRequestDc.getItem().getEndYear()) >= 0) {
             event.getErrors().add(messageBundle.getMessage("wrongEducationYears"));
         }
+    }
+
+    public Component generatorName(FileDescriptor fd) {
+        LinkButton linkButton = componentsFactory.createComponent(LinkButton.class);
+        linkButton.setCaption(fd.getName());
+        linkButton.setAction(new BaseAction("export") {
+            @Override
+            public void actionPerform(Component component) {
+                super.actionPerform(component);
+                exportDisplay.show(fd, ExportFormat.OCTET_STREAM);
+            }
+        });
+        return linkButton;
     }
 }

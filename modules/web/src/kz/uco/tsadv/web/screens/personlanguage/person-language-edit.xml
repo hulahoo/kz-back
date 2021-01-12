@@ -42,6 +42,21 @@
             </view>
             <loader/>
         </instance>
+        <collection id="dicLanguagesDc" class="kz.uco.base.entity.dictionary.DicLanguage">
+            <loader id="dicLanguagesDl">
+                <query>
+                    <![CDATA[select e from base$DicLanguage e ]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicLanguageLevelsDc" class="kz.uco.tsadv.modules.personal.dictionary.DicLanguageLevel">
+            <view extends="_local"/>
+            <loader id="dicLanguageLevelsDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicLanguageLevel e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -54,18 +69,11 @@
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
-                <pickerField id="langaugeField" property="language">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-                <pickerField id="languageLevelField" property="languageLevel">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
+                <lookupField id="langaugeField" property="language" optionsContainer="dicLanguagesDc" required="true">
+                </lookupField>
+                <lookupField id="languageLevelField" property="languageLevel" optionsContainer="dicLanguageLevelsDc"
+                             required="true">
+                </lookupField>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

@@ -73,21 +73,23 @@
                     </pickerField>
                 </column>
             </form>
-            <table id="personQualificationRequestAttachmentsTable" dataContainer="attachmentsDc" width="100%">
-                <actions>
-                    <action id="remove" type="remove"/>
-                </actions>
-                <buttonsPanel>
-                    <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
-                            stylename="primary"/>
-                    <button id="personQualificationRequestAttachmentsTableRemoveBtn"
-                            action="personQualificationRequestAttachmentsTable.remove"/>
-                </buttonsPanel>
-                <columns>
-                    <column id="name"></column>
-                </columns>
-                <rows/>
-            </table>
+            <groupBox>
+                <table id="personQualificationRequestAttachmentsTable" dataContainer="attachmentsDc" width="100%">
+                    <actions>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <buttonsPanel>
+                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                stylename="primary"/>
+                        <button id="personQualificationRequestAttachmentsTableRemoveBtn"
+                                action="personQualificationRequestAttachmentsTable.remove"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="name" caption="mainMsg://fileName" generator="generatorName"></column>
+                    </columns>
+                    <rows/>
+                </table>
+            </groupBox>
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>

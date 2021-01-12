@@ -44,6 +44,15 @@
             </view>
             <loader/>
         </instance>
+        <collection id="dicCriminalLiabilityTypesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType">
+            <view extends="_local"/>
+            <loader id="dicCriminalLiabilityTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicCriminalLiabilityType e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -56,9 +65,11 @@
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
-                <lookupField id="haveLiabilityField" property="haveLiability"/>
-                <textField id="reasonPeriodField" property="reasonPeriod"/>
-                <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
+                <lookupField id="typeField" property="type" required="true"/>
+                <lookupField id="haveLiabilityField" property="haveLiability"
+                             contextHelpText="msg://haveLiabilityField.contextHelpText"
+                             description="msg://haveLiabilityField.contextHelpText" required="true"/>
+                <textField id="reasonPeriodField" property="reasonPeriod" required="true"/>
                 <pickerField id="requestStatusField" property="requestStatus" editable="false">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
