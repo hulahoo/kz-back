@@ -13574,41 +13574,8 @@
     <view entity="base$PersonExt"
           name="person.browse">
         <property name="nonresidentType" view="_local"/>
-        <property name="citizenship" view="_local"/>
-        <property name="nationalIdentifier"/>
-        <property name="dateOfBirth"/>
-        <property name="sex"
-                  view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-        <property name="fioWithEmployeeNumber"/>
-        <property name="hireDate"/>
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="type"
-                  view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="legacyId"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-        </property>
-        <property name="image"
-                  view="_minimal"/>
-        <property name="group"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
+        <property name="group" view="_minimal">
+            <property name="list" view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
                 <property name="group"
@@ -13625,8 +13592,13 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                     <property name="code"/>
+                    <property name="active"/>
                 </property>
-                <property name="gradeGroup" view="_local">
+                <property name="gradeGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
                     <property name="grade" view="_local">
                         <property name="gradeName"/>
                     </property>
