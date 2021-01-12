@@ -8,6 +8,7 @@ import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.TabSheet;
+import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
@@ -60,6 +61,8 @@ public class SelfAbsence extends StandardLookup<Absence>
     protected TabSheet vacationTabSheet;
     @Inject
     protected CollectionLoader<VacationScheduleRequest> vacationScheduleRequestDl;
+    @Inject
+    private CollectionContainer<Absence> absencesDc;
 
     @Subscribe("addBtn")
     public void onAddBtnClick(Button.ClickEvent event) {
@@ -134,16 +137,27 @@ public class SelfAbsence extends StandardLookup<Absence>
     }
 
     public void newLeavingVacationRequest() {
+        Absence getItem = absencesDc.getItem();
         LeavingVacationRequest item = dataManager.create(LeavingVacationRequest.class);
         Date today =timeSource.currentTimestamp();
 
         item.setRequestDate(today);
         item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
         item.setStatusRequest(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
+        item.setVacation(getItem);
+        item.setStartDate(getItem.getPeriodStart());
+        item.setEndData(getItem.getPeriodEnd());
 
-        screenBuilders.editor(LeavingVacationRequest.class, this)
+//        Screen build =
+                screenBuilders.editor(LeavingVacationRequest.class, this)
                 .editEntity(item)
                 .build()
                 .show();
+//        ((SelfAbsence)build).setMyItem(null);
+//                build.show();
+    }
+
+    private void setMyItem(Object o) {
+
     }
 }
