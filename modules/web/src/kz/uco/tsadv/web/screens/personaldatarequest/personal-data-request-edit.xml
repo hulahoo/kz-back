@@ -47,7 +47,7 @@
                 </buttonsPanel>
                 <rows/>
                 <columns>
-                    <column id="name"/>
+                    <column id="name" caption="mainMsg://fileName"/>
                 </columns>
             </groupTable>
         </groupBox>

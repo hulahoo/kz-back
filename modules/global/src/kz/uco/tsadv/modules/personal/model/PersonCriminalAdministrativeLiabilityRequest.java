@@ -2,6 +2,7 @@ package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -16,6 +17,10 @@ public class PersonCriminalAdministrativeLiabilityRequest extends AbstractParent
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_GROUP_ID")
     private PersonGroupExt personGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TYPE_ID")
+    private DicCriminalLiabilityType type;
 
     @Column(name = "HAVE_LIABILITY")
     private String haveLiability;
@@ -34,6 +39,14 @@ public class PersonCriminalAdministrativeLiabilityRequest extends AbstractParent
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LIABILITY_ID")
     private PersonCriminalAdministrativeLiability liability;
+
+    public DicCriminalLiabilityType getType() {
+        return type;
+    }
+
+    public void setType(DicCriminalLiabilityType type) {
+        this.type = type;
+    }
 
     public PersonCriminalAdministrativeLiability getLiability() {
         return liability;

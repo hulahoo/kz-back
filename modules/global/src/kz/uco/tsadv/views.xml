@@ -21417,13 +21417,9 @@
             <property name="academicDegree"/>
             <property name="haveCrippleChild"/>
             <property name="haveChildWithoutParent"/>
-            <property name="prevJobNDA"/>
-            <property name="prevJobObligation" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
             <property name="attachments" view="_minimal"/>
+            <property name="prevJobNDA"/>
+            <property name="prevJobObligation"/>
         </property>
         <property name="person" view="_minimal">
             <property name="nationality" view="_minimal">

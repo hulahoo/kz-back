@@ -118,6 +118,8 @@
             <item screen="tsadv_DicLangaugeLevel.browse" caption="mainMsg://menu_config.tsadv_DicLangaugeLevel.browse"/>
             <item screen="tsadv_DicPrevJobObligation.browse"
                   caption="mainMsg://menu_config.tsadv_DicPrevJobObligation.browse"/>
+            <item screen="tsadv_DicCriminalLiabilityType.browse"
+                  caption="mainMsg://menu_config.tsadv_DicCriminalLiabilityType.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">

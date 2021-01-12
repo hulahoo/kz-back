@@ -99,13 +99,13 @@
                     <lookupField id="languageField" property="language" optionsContainer="dicLanguagesDc"/>
                 </column>
             </form>
-            <groupBox id="attachmentsBox" caption="msg://kz.uco.tsadv.modules.personal.model/Address.attachments">
+            <groupBox id="attachmentsBox">
                 <table id="attachmentsTable" dataContainer="attachmentsDc" width="100%">
                     <actions>
                         <action id="remove" type="remove"/>
                     </actions>
                     <columns>
-                        <column id="name"/>
+                        <column id="name" caption="mainMsg://fileName" generator="generatorName"/>
                     </columns>
                     <buttonsPanel>
                         <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"

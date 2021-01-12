@@ -9903,6 +9903,7 @@ create table TSADV_AWARDS (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
+    PERSON_GROUP_ID uuid,
     PROMOTION_TYPE_ID uuid,
     CALCULATED varchar(255),
     SUR_CHARGE_TYPE integer,
@@ -9913,6 +9914,10 @@ create table TSADV_AWARDS (
     ORDER_DATE date,
     ASSIGNMENT_GROUP_ID uuid,
     REASON varchar(255),
+    START_DATE date,
+    NOTE varchar(2500),
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
     --
     primary key (ID)
 )^
@@ -14647,7 +14652,7 @@ alter table BASE_PERSON add column STATE_AWARDS varchar(2000) ^
 alter table BASE_PERSON add column HAVE_CRIPPLE_CHILD varchar(50) ^
 alter table BASE_PERSON add column HAVE_CHILD_WITHOUT_PARENT varchar(50) ^
 alter table BASE_PERSON add column PREV_JOB_NDA varchar(50) ^
-alter table BASE_PERSON add column PREV_JOB_OBLIGATION_ID uuid ^
+alter table BASE_PERSON add column PREV_JOB_OBLIGATION varchar(50) ^
 alter table BASE_PERSON add column DTYPE varchar(31) ^
 update BASE_PERSON set DTYPE = 'base$PersonExt' where DTYPE is null ^
 -- end BASE_PERSON
@@ -15525,6 +15530,7 @@ create table TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     PERSON_GROUP_ID uuid,
+    TYPE_ID uuid,
     START_DATE_HISTORY date,
     END_DATE_HISTORY date,
     HAVE_LIABILITY varchar(50),
@@ -15967,6 +15973,7 @@ create table TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY_REQUEST (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     PERSON_GROUP_ID uuid,
+    TYPE_ID uuid,
     HAVE_LIABILITY varchar(50),
     REASON_PERIOD varchar(2000),
     REQUEST_STATUS_ID uuid,
@@ -16218,3 +16225,104 @@ create table TSADV_ADDRESS_FILE_DESCRIPTOR_LINK (
     primary key (ADDRESS_ID, FILE_DESCRIPTOR_ID)
 )^
 -- end TSADV_ADDRESS_FILE_DESCRIPTOR_LINK
+-- begin TSADV_AWARDS_REQUEST
+create table TSADV_AWARDS_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    PROMOTION_TYPE_ID uuid,
+    CALCULATED varchar(255),
+    SUR_CHARGE_TYPE integer,
+    VALUE_ integer,
+    AWARD_TYPE_ID uuid,
+    DATE_ date,
+    ORDER_NUM varchar(255),
+    ORDER_DATE date,
+    ASSIGNMENT_GROUP_ID uuid,
+    REASON varchar(255),
+    START_DATE date,
+    NOTE varchar(2500),
+    REQUEST_STATUS_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_AWARDS_REQUEST
+-- begin TSADV_MILITARY_FORM_FILE_DESCRIPTOR_LINK
+create table TSADV_MILITARY_FORM_FILE_DESCRIPTOR_LINK (
+    MILITARY_FORM_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (MILITARY_FORM_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_MILITARY_FORM_FILE_DESCRIPTOR_LINK
+-- begin TSADV_MILITARY_FORM_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_MILITARY_FORM_REQUEST_FILE_DESCRIPTOR_LINK (
+    MILITARY_FORM_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (MILITARY_FORM_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_MILITARY_FORM_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_CHILD_DESCRIPTION
+create table TSADV_CHILD_DESCRIPTION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    HAVE_DISABLED_CHILD varchar(50),
+    HAVE_LITTLE_CHILD varchar(50),
+    --
+    primary key (ID)
+)^
+-- end TSADV_CHILD_DESCRIPTION
+-- begin TSADV_DIC_CRIMINAL_LIABILITY_TYPE
+create table TSADV_DIC_CRIMINAL_LIABILITY_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_CRIMINAL_LIABILITY_TYPE

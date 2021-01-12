@@ -3,12 +3,18 @@ package kz.uco.tsadv.web.screens.personexperiencerequest;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.FileUploadField;
 import com.haulmont.cuba.gui.components.HasValue;
+import com.haulmont.cuba.gui.components.LinkButton;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.modules.recruitment.model.PersonExperienceRequest;
 import kz.uco.tsadv.service.DatesService;
 
@@ -38,6 +44,10 @@ public class PersonExperienceRequestEdit extends StandardEditor<PersonExperience
     protected MessageBundle messageBundle;
     @Inject
     protected DatesService datesService;
+    @Inject
+    private ExportDisplay exportDisplay;
+    @Inject
+    private ComponentsFactory componentsFactory;
 
     @Subscribe("startMonthField")
     protected void onStartMonthFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
@@ -86,5 +96,18 @@ public class PersonExperienceRequestEdit extends StandardEditor<PersonExperience
                 .after(personExperienceRequestDc.getItem().getEndMonth())) {
             event.getErrors().add(messageBundle.getMessage("expireDateIsOut"));
         }
+    }
+
+    public Component generatorName(FileDescriptor fd) {
+        LinkButton linkButton = componentsFactory.createComponent(LinkButton.class);
+        linkButton.setCaption(fd.getName());
+        linkButton.setAction(new BaseAction("export") {
+            @Override
+            public void actionPerform(Component component) {
+                super.actionPerform(component);
+                exportDisplay.show(fd, ExportFormat.OCTET_STREAM);
+            }
+        });
+        return linkButton;
     }
 }

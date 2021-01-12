@@ -72,7 +72,7 @@
                             action="improvingProfessionalSkillsRequestAttachmentsTable.remove"/>
                 </buttonsPanel>
                 <columns>
-                    <column id="name"/>
+                    <column id="name" caption="mainMsg://fileName"  generator="generatorName" />
                 </columns>
             </table>
         </scrollBox>

@@ -44,25 +44,27 @@
                            property="status"/>
                 </column>
             </fieldGroup>
-            <table id="attachmentTable"
-                   multiselect="true"
-                   height="100%"
-                   width="100%">
-                <actions>
-                    <action id="remove"
-                            invoke="removeFile"
-                            enable="false"
-                            caption="mainMsg://table.btn.remove"/>
-                </actions>
-                <columns>
-                    <column id="name" caption="mainMsg://attachment.FileName" generator="generatorName"/>
-                </columns>
-                <rows datasource="attachmentsDs"/>
-                <buttonsPanel>
-                    <upload id="addFile"/>
-                    <button action="attachmentTable.remove"/>
-                </buttonsPanel>
-            </table>
+            <groupBox id="groupBox">
+                <table id="attachmentTable"
+                       multiselect="true"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="remove"
+                                invoke="removeFile"
+                                enable="false"
+                                caption="mainMsg://table.btn.remove"/>
+                    </actions>
+                    <columns>
+                        <column id="name" caption="mainMsg://fileName" generator="generatorName"/>
+                    </columns>
+                    <rows datasource="attachmentsDs"/>
+                    <buttonsPanel>
+                        <upload id="addFile"/>
+                        <button action="attachmentTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
         </scrollBox>
         <hbox id="hbox"
               spacing="true">

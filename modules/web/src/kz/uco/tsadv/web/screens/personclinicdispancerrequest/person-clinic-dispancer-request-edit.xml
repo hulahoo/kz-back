@@ -46,8 +46,9 @@
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
-                <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
-                <lookupField id="haveClinicDispancerField" property="haveClinicDispancer"/>
+                <lookupField id="haveClinicDispancerField" property="haveClinicDispancer"
+                             contextHelpText="msg://haveClinicDispancerField.contextHelpText"
+                             description="msg://haveClinicDispancerField.contextHelpText"/>
                 <textField id="periodFromField" property="periodFrom"/>
                 <pickerField id="requestStatusField" property="requestStatus" editable="false">
                     <actions>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://personContactPersonDataEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.personcontact">
+    <data>
+        <instance id="personContactDc"
+                  class="kz.uco.tsadv.modules.personal.model.PersonContact">
+            <view extends="_local">
+                <property name="type" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+            </view>
+            <loader/>
+        </instance>
+        <collection id="typesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicPhoneType" view="_local">
+            <loader id="typesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicPhoneType e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="personContactDc">
+            <column width="350px">
+                <pickerField id="personGroupField" property="personGroup" editable="false">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <lookupField id="typeField" optionsContainer="typesDc" property="type"/>
+                <textField id="contactValueField" property="contactValue"/>
+                <textField id="contactEmailValueField" property="contactValue" visible="false">
+                    <validators>
+                        <email message="mainMsg://emailValidate"/>
+                    </validators>
+                </textField>
+                <textField id="contactPhoneValueField" property="contactValue" visible="false">
+                    <validators>
+                        <regexp message="msg://withoutLetters"
+                                regexp="^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$"/>
+                    </validators>
+                </textField>
+                <dateField id="startDateField" property="startDate"/>
+                <dateField id="endDateField" property="endDate"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
