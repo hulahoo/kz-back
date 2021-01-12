@@ -46,6 +46,7 @@
                 <column property="type.langValue"
                         caption="msg://Person.type"/>
             </columns>
+            <rowsCount/>
         </dataGrid>
         <hbox id="lookupActions" spacing="true">
             <button id="lookupSelection" action="lookupSelectAction" enable="false"/>
