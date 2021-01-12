@@ -1822,5 +1822,8 @@
         <entity class="kz.uco.tsadv.entity.AdditionalFile">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.LeavingVacationRequest">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

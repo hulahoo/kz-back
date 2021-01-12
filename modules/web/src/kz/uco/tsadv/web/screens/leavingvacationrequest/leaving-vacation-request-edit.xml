@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://leavingVacationRequestEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.leavingvacationrequest">
+    <data>
+        <instance id="leavingVacationRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.LeavingVacationRequest"
+                  view="leavingVacationRequest-editView">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="leavingVacationRequestDc">
+            <column width="350px">
+                <textField id="requestNumberField" property="requestNumber" editable="false"/>
+                <pickerField id="statusRequestField" property="statusRequest" editable="false">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <dateField id="requestDateField" property="requestDate" editable="true"/>
+                <pickerField id="requestTypeField" property="requestType" editable="false">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <pickerField id="vacationField" property="vacation">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <dateField id="startDateField" property="startDate" editable="false"/>
+                <dateField id="endDataField" property="endData" editable="false"/>
+                <dateField id="plannedStartDateField" property="plannedStartDate"/>
+                <textField id="commentField" property="comment"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

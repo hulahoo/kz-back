@@ -182,6 +182,8 @@
         <item screen="base$AssignmedtExt.browse"/>
         <item screen="tsadv_CertificateRequestHR.browse"
               caption="mainMsg://menu_config.tsadv_CertificateRequestHR.browse"/>
+        <item screen="tsadv$LeavingVacationRequest.browse"
+              caption="mainMsg://menu_config.tsadv$LeavingVacationRequest.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"

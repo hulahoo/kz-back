@@ -19,6 +19,7 @@ import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
+import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
 import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 
@@ -130,5 +131,19 @@ public class SelfAbsence extends StandardLookup<Absence>
                     vacationScheduleRequestDl.load();
                     vacationTabSheet.setSelectedTab("requestsTab");
                 });
+    }
+
+    public void newLeavingVacationRequest() {
+        LeavingVacationRequest item = dataManager.create(LeavingVacationRequest.class);
+        Date today =timeSource.currentTimestamp();
+
+        item.setRequestDate(today);
+        item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
+        item.setStatusRequest(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
+
+        screenBuilders.editor(LeavingVacationRequest.class, this)
+                .editEntity(item)
+                .build()
+                .show();
     }
 }
