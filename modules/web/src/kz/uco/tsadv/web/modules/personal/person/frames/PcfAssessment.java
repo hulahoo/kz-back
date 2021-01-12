@@ -126,7 +126,7 @@ public class PcfAssessment extends EditableFrame {
     private boolean isManager() {
         LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
         loadContext.setQuery(LoadContext.createQuery("select e from base$AssignmentExt e " +
-                "where e.personGroupId.id = :personGroupId")
+                "where e.personGroup.id = :personGroupId")
                 .setParameter("personGroupId", (userSessionSource.getUserSession().getAttribute("userPersonGroupId"))))
                 .setView("assignment.isManager");
         List<AssignmentExt> assignment = dataManager.loadList(loadContext);
@@ -167,7 +167,7 @@ public class PcfAssessment extends EditableFrame {
         map.put("systemDate", CommonUtils.getSystemDate());
         PositionGroupExt positionGroup = commonService.getEntity(PositionGroupExt.class,
                 "select e.positionGroup from base$AssignmentExt e " +
-                        " where e.personGroupId.id =  :personGroupId" +
+                        " where e.personGroup.id =  :personGroupId" +
                         "   and :systemDate between e.startDate and e.endDate", map,
                 "positionGroup.forAssess");
         if (positionGroup != null) {
