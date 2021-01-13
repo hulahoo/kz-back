@@ -12984,6 +12984,7 @@ create table TSADV_BPM_ROLES_LINK (
     --
     BPM_ROLES_DEFINER_ID uuid,
     HR_ROLE_ID uuid not null,
+    BPROC_USER_TASK_CODE varchar(255),
     REQUIRED boolean not null,
     FIND_BY_COUNTER boolean not null,
     POSITION_BPM_ROLE_ID uuid,
@@ -15058,3 +15059,21 @@ create table TSADV_HIERARCHY_ELEMENT_GROUP (
     primary key (ID)
 )^
 -- end TSADV_HIERARCHY_ELEMENT_GROUP
+-- begin TSADV_BPROC_INSTANCE_ROLES_LINK
+create table TSADV_BPROC_INSTANCE_ROLES_LINK (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PROCESS_INSTANCE_ID varchar(255),
+    HR_ROLE_ID uuid,
+    USER_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_BPROC_INSTANCE_ROLES_LINK

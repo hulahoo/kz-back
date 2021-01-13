@@ -27,10 +27,11 @@
                     <action id="remove" type="remove"/>
                 </actions>
                 <columns>
+                    <column id="bpmRolesDefiner"/>
+                    <column id="bprocUserTaskCode"/>
+                    <column id="hrRole"/>
                     <column id="required"/>
                     <column id="findByCounter"/>
-                    <column id="bpmRolesDefiner"/>
-                    <column id="hrRole"/>
                 </columns>
                 <buttonsPanel>
                     <button action="linksTable.create"/>

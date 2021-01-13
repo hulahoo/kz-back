@@ -11,6 +11,7 @@ import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.util.OperationResult;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.mixins.BprocActionMixin;
@@ -145,6 +146,21 @@ public class AbsenceRequestNewEdit extends StandardEditor<AbsenceRequest>
         return absenceType != null ? absenceType.getVacationDurationType() : null;
     }
 
+    @Override
+    public boolean beforeOpenRunProcessDialogHandler() {
+        OperationResult operationResult = commitChanges();
+        if (operationResult.getStatus() == OperationResult.Status.SUCCESS) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void afterCloseRunProcessDialogHandler(Screen screen, AfterCloseEvent afterCloseEvent) {
+        if (Window.COMMIT_ACTION_ID.equals(((StandardCloseAction) afterCloseEvent.getCloseAction()).getActionId())) {
+            closeWithCommit();
+        }
+    }
 
     @Override
     public String getProcDefinitionKey() {

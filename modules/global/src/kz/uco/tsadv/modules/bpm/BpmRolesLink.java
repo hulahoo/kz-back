@@ -22,6 +22,9 @@ public class BpmRolesLink extends StandardEntity {
     protected DicHrRole hrRole;
 
 
+    @Column(name = "BPROC_USER_TASK_CODE")
+    protected String bprocUserTaskCode;
+
     @NotNull
     @Column(name = "REQUIRED", nullable = false)
     protected Boolean required = false;
@@ -33,6 +36,14 @@ public class BpmRolesLink extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POSITION_BPM_ROLE_ID")
     protected PositionBpmRole positionBpmRole;
+
+    public String getBprocUserTaskCode() {
+        return bprocUserTaskCode;
+    }
+
+    public void setBprocUserTaskCode(String bprocUserTaskCode) {
+        this.bprocUserTaskCode = bprocUserTaskCode;
+    }
 
     public void setFindByCounter(Boolean findByCounter) {
         this.findByCounter = findByCounter;

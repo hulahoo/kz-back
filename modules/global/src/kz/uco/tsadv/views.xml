@@ -1246,9 +1246,9 @@
         <property name="priority"
                   view="_local"/>
         <property name="assignedUser"
-                  view="_minimal"/>
+                  view="_local"/>
         <property name="assignedBy"
-                  view="_minimal"/>
+                  view="_local"/>
         <property name="createTs"/>
     </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
@@ -5199,6 +5199,11 @@
                           view="_minimal">
                     <property name="list"
                               view="_minimal">
+                        <property name="firstName"/>
+                        <property name="lastName"/>
+                        <property name="middleName"/>
+                        <property name="firstNameLatin"/>
+                        <property name="lastNameLatin"/>
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
@@ -21065,6 +21070,9 @@
             </property>
         </property>
     </view>
+    <view entity="tsadv$UserExt" name="userExt.bproc" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+    </view>
     <view entity="tsadv$UserExt" name="userExt.edit" extends="_minimal">
         <property name="image"
                   view="_minimal"/>
@@ -21148,5 +21156,11 @@
             <property name="hierarchy"
                       view="_minimal"/>
         </property>
+    </view>
+    <view entity="tsadv_BprocInstanceRolesLink" name="bprocInstanceRolesLink-getAssignee" extends="_local">
+        <property name="hrRole" view="_minimal">
+            <property name="code"/>
+        </property>
+        <property name="user" view="_minimal"/>
     </view>
 </views>
