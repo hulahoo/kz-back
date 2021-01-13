@@ -442,7 +442,7 @@ public class RcgProfile extends AbstractRcgPage {
         LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
         LoadContext.Query loadContextQuery = LoadContext.createQuery(
                 "select e from base$AssignmentExt e " +
-                        "where e.personGroup.id = :pgId " +
+                        "where e.personGroupId.id = :pgId " +
                         "  and e.primaryFlag = true " +
                         "and :systemDate between e.startDate and e.endDate");
         loadContextQuery.setParameter("pgId", personGroupId);

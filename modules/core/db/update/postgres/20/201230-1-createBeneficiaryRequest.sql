@@ -1,0 +1,32 @@
+create table TSADV_BENEFICIARY_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_PARENT_ID uuid,
+    PERSON_GROUP_CHILD_ID uuid,
+    DATE_FROM date,
+    DATE_TO date,
+    GET_ALIMONY boolean,
+    RELATIONSHIP_TYPE_ID uuid,
+    LAST_NAME varchar(2000),
+    FIRST_NAME varchar(2000),
+    MIDDLE_NAME varchar(2000),
+    BIRTH_DATE date,
+    WORK_LOCATION varchar(2000),
+    HOME_ADDRESS varchar(2000),
+    ADDITIONAL_CONTACT varchar(2000),
+    PERSON_GROUP_ID uuid,
+    REQUEST_STATUS_ID uuid,
+    BENEFICIARY_ID uuid,
+    --
+    primary key (ID)
+);

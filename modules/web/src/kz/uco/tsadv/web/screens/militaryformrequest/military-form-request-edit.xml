@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://militaryFormRequestEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.militaryformrequest">
+    <data>
+        <instance id="militaryFormRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.MilitaryFormRequest">
+            <view extends="_minimal">
+                <property name="date_from"/>
+                <property name="date_to"/>
+                <property name="militaryDocumentTypeName"/>
+                <property name="document_number"/>
+                <property name="militaryTypeName"/>
+                <property name="attitude_to_military" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="compositionMilitaryRegistration"/>
+                <property name="militaryRankName"/>
+                <property name="officerTypeName"/>
+                <property name="specialization"/>
+                <property name="issueDocDate"/>
+                <property name="issuingAuthority"/>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+                <property name="requestStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="file" view="_minimal"/>
+                <property name="attachments" view="_minimal"/>
+            </view>
+            <loader/>
+            <collection id="attachmentsDc" property="attachments"/>
+        </instance>
+        <collection id="attitude_to_militariesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAttitudeToMilitary"
+                    view="_minimal">
+            <loader id="attitude_to_militariesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicAttitudeToMilitary e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+
+            <form id="form" dataContainer="militaryFormRequestDc">
+                <column width="350px">
+                    <pickerField id="personGroupField" property="personGroup" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <lookupPickerField id="attitude_to_militaryField" optionsContainer="attitude_to_militariesDc"
+                                       property="attitude_to_military" required="true"/>
+                    <textField id="militaryDocumentTypeNameField" property="militaryDocumentTypeName" required="true"/>
+                    <textField id="document_numberField" property="document_number" required="true"/>
+                    <textField id="militaryTypeNameField" property="militaryTypeName" required="true"/>
+                    <textField id="compositionMilitaryRegistrationField" property="compositionMilitaryRegistration"/>
+                    <textField id="militaryRankNameField" property="militaryRankName" required="true"/>
+                    <textField id="officerTypeNameField" property="officerTypeName" required="true"/>
+                    <textField id="specializationField" property="specialization" required="true"/>
+                    <dateField id="date_fromField" property="date_from" required="true"/>
+                    <dateField id="date_toField" property="date_to" required="true"/>
+                    <pickerField id="requsetStatusField" property="requestStatus" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                </column>
+            </form>
+            <groupBox>
+                <table id="fileDescriptorsTable" width="100%" dataContainer="attachmentsDc">
+                    <actions>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <buttonsPanel alwaysVisible="true">
+                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                stylename="primary"/>
+                        <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="name" generator="generatorName" caption="mainMsg://fileName"/>
+                    </columns>
+                </table>
+            </groupBox>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

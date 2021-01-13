@@ -1,14 +1,13 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 @Listeners("tsadv_BeneficiaryListener")
 @NamePattern("%s %s|personGroupChild,personGroupParent")
@@ -39,6 +38,144 @@ public class Beneficiary extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "RELATIONSHIP_TYPE_ID")
     protected DicRelationshipType relationshipType;
+
+    @Column(name = "LAST_NAME", length = 2000)
+    protected String lastName;
+
+    @Column(name = "FIRST_NAME", length = 2000)
+    protected String firstName;
+
+    @Column(name = "MIDDLE_NAME", length = 2000)
+    protected String middleName;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "BIRTH_DATE")
+    protected Date birthDate;
+
+    @Column(name = "WORK_LOCATION", length = 2000)
+    protected String workLocation;
+
+    @Column(name = "HOME_ADDRESS", length = 2000)
+    protected String homeAddress;
+
+    @Column(name = "ADDITIONAL_CONTACT", length = 2000)
+    protected String additionalContact;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE_HISTORY")
+    protected Date startDateHistory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE_HISTORY")
+    protected Date endDateHistory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PERSON_GROUP_ID")
+    protected PersonGroupExt personGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RELATED_PERSON_GROUP_ID")
+    private PersonGroupExt relatedPersonGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "RELATION_DEGREE_ID")
+    private RelationshipTypeBeneficiary relationDegree;
+
+    public RelationshipTypeBeneficiary getRelationDegree() {
+        return relationDegree;
+    }
+
+    public void setRelationDegree(RelationshipTypeBeneficiary relationDegree) {
+        this.relationDegree = relationDegree;
+    }
+
+    public PersonGroupExt getRelatedPersonGroup() {
+        return relatedPersonGroup;
+    }
+
+    public void setRelatedPersonGroup(PersonGroupExt relatedPersonGroup) {
+        this.relatedPersonGroup = relatedPersonGroup;
+    }
+
+    public PersonGroupExt getPersonGroup() {
+        return personGroup;
+    }
+
+    public void setPersonGroup(PersonGroupExt personGroup) {
+        this.personGroup = personGroup;
+    }
+
+    public Date getEndDateHistory() {
+        return endDateHistory;
+    }
+
+    public void setEndDateHistory(Date endDateHistory) {
+        this.endDateHistory = endDateHistory;
+    }
+
+    public Date getStartDateHistory() {
+        return startDateHistory;
+    }
+
+    public void setStartDateHistory(Date startDateHistory) {
+        this.startDateHistory = startDateHistory;
+    }
+
+    public String getAdditionalContact() {
+        return additionalContact;
+    }
+
+    public void setAdditionalContact(String additionalContact) {
+        this.additionalContact = additionalContact;
+    }
+
+    public String getHomeAddress() {
+        return homeAddress;
+    }
+
+    public void setHomeAddress(String homeAddress) {
+        this.homeAddress = homeAddress;
+    }
+
+    public String getWorkLocation() {
+        return workLocation;
+    }
+
+    public void setWorkLocation(String workLocation) {
+        this.workLocation = workLocation;
+    }
+
+    public Date getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleNmae) {
+        this.middleName = middleNmae;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public DicRelationshipType getRelationshipType() {
         return relationshipType;

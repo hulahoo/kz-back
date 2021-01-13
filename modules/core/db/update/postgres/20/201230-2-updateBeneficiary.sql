@@ -1,0 +1,10 @@
+alter table TSADV_BENEFICIARY add column ADDITIONAL_CONTACT varchar(2000) ;
+alter table TSADV_BENEFICIARY add column BIRTH_DATE date ;
+alter table TSADV_BENEFICIARY add column HOME_ADDRESS varchar(2000) ;
+alter table TSADV_BENEFICIARY add column START_DATE_HISTORY date ;
+alter table TSADV_BENEFICIARY add column WORK_LOCATION varchar(2000) ;
+alter table TSADV_BENEFICIARY add column MIDDLE_NAME varchar(2000) ;
+alter table TSADV_BENEFICIARY add column PERSON_GROUP_ID uuid ;
+alter table TSADV_BENEFICIARY add column LAST_NAME varchar(2000) ;
+alter table TSADV_BENEFICIARY add column END_DATE_HISTORY date ;
+alter table TSADV_BENEFICIARY add column FIRST_NAME varchar(2000) ;

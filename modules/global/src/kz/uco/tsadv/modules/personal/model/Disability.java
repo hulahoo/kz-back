@@ -1,20 +1,14 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import kz.uco.tsadv.modules.personal.dictionary.DicDisabilityType;
 import kz.uco.tsadv.modules.personal.dictionary.DicDuration;
+import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Listeners("tsadv_DisabilityListener")
 @Table(name = "TSADV_DISABILITY")
@@ -47,6 +41,52 @@ public class Disability extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_GROUP_EXT_ID")
     protected PersonGroupExt personGroupExt;
+
+    @Column(name = "HAVE_DISABILITY")
+    private String haveDisability;
+
+    @Column(name = "GROUP_", length = 2000)
+    private String group;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE_HISTORY")
+    private Date startDateHistory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE_HISTORY")
+    private Date endDateHistory;
+
+    public Date getEndDateHistory() {
+        return endDateHistory;
+    }
+
+    public void setEndDateHistory(Date endDateHistory) {
+        this.endDateHistory = endDateHistory;
+    }
+
+    public Date getStartDateHistory() {
+        return startDateHistory;
+    }
+
+    public void setStartDateHistory(Date startDateHistory) {
+        this.startDateHistory = startDateHistory;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public YesNoEnum getHaveDisability() {
+        return haveDisability == null ? null : YesNoEnum.fromId(haveDisability);
+    }
+
+    public void setHaveDisability(YesNoEnum haveDisability) {
+        this.haveDisability = haveDisability == null ? null : haveDisability.getId();
+    }
 
     public void setAttachmentName(String attachmentName) {
         this.attachmentName = attachmentName;

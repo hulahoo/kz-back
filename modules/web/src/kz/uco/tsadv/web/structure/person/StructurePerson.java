@@ -103,9 +103,10 @@ public class StructurePerson extends AbstractLookup {
         teamDs.addItemChangeListener(this::itemChangeListener);
     }
 
-    public void itemExpand(ExpandEvent event) {
+    public void itemExpand( ExpandEvent<MyTeamNew>  event) {
         if (pathParent != null) return;
-        myTeamComponent.onExpand(event, teamDs);
+        com.vaadin.v7.ui.Tree.ExpandEvent expandEvent = new com.vaadin.v7.ui.Tree.ExpandEvent(event.getComponent(),event.getExpandedItem().getId());
+        myTeamComponent.onExpand(expandEvent, teamDs);
     }
 
     protected void itemChangeListener(Datasource.ItemChangeEvent<MyTeamNew> event) {
@@ -220,7 +221,7 @@ public class StructurePerson extends AbstractLookup {
                 "select e from base$AssignmentExt e " +
                         "where :sysDate between e.startDate and e.endDate " +
                         "  and e.primaryFlag = true " +
-                        "and e.personGroup.id = :personGroupId",
+                        "and e.personGroupId.id = :personGroupId",
                 ParamsMap.of("personGroupId", personGroupId,
                         "sysDate", CommonUtils.getSystemDate()),
                 "assignment.card");

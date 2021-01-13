@@ -1,0 +1,10 @@
+alter table TSADV_MILITARY_FORM add column MILITARY_DOCUMENT_TYPE_NAME varchar(2000) ;
+alter table TSADV_MILITARY_FORM add column COMPOSITION_MILITARY_REGISTRATION varchar(2000) ;
+alter table TSADV_MILITARY_FORM add column OFFICER_TYPE_NAME varchar(2000) ;
+alter table TSADV_MILITARY_FORM add column ATTITUDE_TO_MILITARY_NAME varchar(2000) ;
+alter table TSADV_MILITARY_FORM add column ISSUING_AUTHORITY varchar(2000) ;
+alter table TSADV_MILITARY_FORM add column MILITARY_RANK_NAME varchar(2000) ;
+alter table TSADV_MILITARY_FORM add column START_DATE_HISTORY date ;
+alter table TSADV_MILITARY_FORM add column MILITARY_TYPE_NAME varchar(2000) ;
+alter table TSADV_MILITARY_FORM add column ISSUE_DOC_DATE date ;
+alter table TSADV_MILITARY_FORM add column END_DATE_HISTORY date ;

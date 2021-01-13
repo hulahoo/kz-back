@@ -83,7 +83,7 @@ public class CertificationEnrollmentEdit extends AbstractEditor<CertificationEnr
         LoadContext<CertificationEnrollment> loadContext = LoadContext.create(CertificationEnrollment.class);
         LoadContext.Query query = LoadContext.createQuery(String.format(
                 "select e from tsadv$CertificationEnrollment e " +
-                        "where e.personGroup.id = :pId " +
+                        "where e.personGroupId.id = :pId " +
                         "and e.certification.id = :cId " +
                         "and e.status = :status %s",
                 isCreate ? "" : String.format("and e.id <> '%s'", getItem().getId())));
@@ -98,7 +98,7 @@ public class CertificationEnrollmentEdit extends AbstractEditor<CertificationEnr
         LoadContext<Enrollment> loadContext = LoadContext.create(Enrollment.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$Enrollment e " +
-                        "where e.personGroup.id = :pId " +
+                        "where e.personGroupId.id = :pId " +
                         "and e.course.id = :cId " +
                         "and e.status in (1, 2, 3, 6)");
         query.setParameter("pId", getItem().getPersonGroup().getId());

@@ -41,7 +41,7 @@ public class RcgOrders extends AbstractRcgPage {
                     .collect(Collectors.joining(","));
 
             goodsOrdersDs.setQuery(String.format("select e from tsadv$GoodsOrder e " +
-                    "join e.personGroup pg " +
+                    "join e.personGroupId pg " +
                     "where pg.id in (%s) and e.status = :custom$onApproval order by e.orderDate", sqlIds));
 
             goodsOrdersDs.refresh(ParamsMap.of("onApproval", GoodsOrderStatus.ON_APPROVAL));

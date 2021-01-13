@@ -1,0 +1,17 @@
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists LANG_VALUE1__U62731 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  DESCRIPTION1__U41253 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  LANG_VALUE2__U17519 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  DESCRIPTION2__U55555 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  LANG_VALUE3__U80031 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  DESCRIPTION3__U72636 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  LANG_VALUE4__U14958 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  DESCRIPTION4__U29312 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  LANG_VALUE5__U71335 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  DESCRIPTION5__U74917 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  START_DATE__U60772 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  END_DATE__U06800 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  CODE__U83106 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  IS_SYSTEM_RECORD__U18816 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  ACTIVE__U11904 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  IS_DEFAULT__U92714 cascade ;
+alter table TSADV_CERTIFICATE_TEMPLATE drop column if exists  ORDER___U55392 cascade ;

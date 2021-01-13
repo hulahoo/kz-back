@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://beneficiaryRequestEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.beneficiaryrequest">
+    <data>
+        <instance id="beneficiaryRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.BeneficiaryRequest">
+            <view extends="_local">
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+                <property name="requestStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="beneficiary" view="_minimal"/>
+                <property name="relatedPersonGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                </property>
+                <property name="relationDegree" view="_minimal">
+                    <property name="parent" view="_minimal">
+                        <property name="langValue1"/>
+                        <property name="langValue2"/>
+                        <property name="langValue3"/>
+                        <property name="langValue4"/>
+                        <property name="langValue5"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="code"/>
+                    </property>
+                    <property name="child" view="_minimal">
+                        <property name="langValue1"/>
+                        <property name="langValue2"/>
+                        <property name="langValue3"/>
+                        <property name="langValue4"/>
+                        <property name="langValue5"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="code"/>
+                    </property>
+                </property>
+                <property name="relationshipType" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+            </view>
+            <loader/>
+        </instance>
+        <collection id="dicRelationshipTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType">
+            <view extends="_local"/>
+            <loader id="dicRelationshipTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicRelationshipType e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="beneficiaryRequestDc">
+                <column width="350px">
+                    <pickerField id="personGroupField" property="personGroup" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <lookupField id="relationshipTypeField" property="relationshipType" required="true"
+                                 optionsContainer="dicRelationshipTypesDc">
+                    </lookupField>
+                    <pickerField id="relatedPersonGroupField" property="relatedPersonGroup">
+                        <actions>>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <textField id="lastNameField" property="lastName" required="true"/>
+                    <textField id="firstNameField" property="firstName" required="true"/>
+                    <textField id="middleNameField" property="middleName"/>
+                    <dateField id="birthDateField" property="birthDate"/>
+                    <textField id="workLocationField" property="workLocation"/>
+                    <textField id="homeAddressField" property="homeAddress"/>
+                    <textField id="additionalContactField" property="additionalContact"
+                               contextHelpText="msg://additionalContactFieldContext"
+                               description="msg://additionalContactFieldContext"/>
+                    <pickerField id="requestStatusField" property="requestStatus" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

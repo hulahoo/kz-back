@@ -1,32 +1,88 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
-        class="kz.uco.tsadv.web.modules.performance.assignedperformanceplan.AssignedPerformancePlanEdit"
-        datasource="assignedPerformancePlanDs"
-        focusComponent="fieldGroup"
+        focusComponent="form"
         messagesPack="kz.uco.tsadv.web.modules.performance.assignedperformanceplan">
-    <dsContext>
-        <datasource id="assignedPerformancePlanDs"
-                    class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
-                    view="assignedPerformancePlan.browse"/>
-    </dsContext>
+    <data>
+        <instance id="assignedPerformancePlanDc"
+                  class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
+                  view="assignedPerformancePlan.browse">
+            <loader id="assignedPerformancePlanDl"/>
+        </instance>
+        <collection id="assignedGoalDc"
+                    class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
+                    view="assignedGoal.edit">
+            <loader id="assignedGoalDl">
+                <query>
+                    <![CDATA[select e from tsadv$AssignedGoal e
+                              where e.assignedPerformancePlan = :assignedPerformancePlan]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="windowActions"
             spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="assignedPerformancePlanDs"
-                    width="100%">
-            <column width="300px">
-                <field captionProperty="performancePlanName"
-                       property="performancePlan"/>
-                <field captionProperty="person"
-                       property="assignedPerson"/>
-                <field captionProperty="person"
-                       property="assigned_by"/>
+        <form id="form"
+              dataContainer="assignedPerformancePlanDc"
+              width="100%">
+            <column id="column1" width="300px">
+                <pickerField id="assignedPerson" property="assignedPerson" editable="false">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <textField id="organization"
+                           property="assignedPerson.currentAssignment.organizationGroup.organization.organizationName"
+                           caption="mainMsg://organizationName"
+                           editable="false"/>
+                <textField id="position" property="assignedPerson.currentAssignment.positionGroup"/>
+                <textField id="job" property="assignedPerson.currentAssignment.jobGroup"/>
+                <textField id="grade" property="assignedPerson.currentAssignment.gradeGroup"/>
             </column>
-        </fieldGroup>
-        <frame id="windowActions"
-               screen="editWindowActions"/>
+            <column id="column2" width="300px">
+                <textField property="result" enable="false"/>
+                <lookupField property="status"/>
+                <textField property="gzp"/>
+                <dateField id="startDate" property="startDate"/>
+                <dateField id="endDate" property="endDate"/>
+            </column>
+        </form>
+        <hbox id="hbox" width="100%">
+            <table id="assignedGoalTable" width="100%" dataContainer="assignedGoalDc" editable="true"
+                   aggregatable="true">
+                <actions>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="category"/>
+                    <column id="goalString" editable="true"/>
+                    <column id="weight" editable="true">
+                        <aggregation type="SUM"/>
+                    </column>
+                    <column id="result" editable="true"/>
+                    <column id="goalType"/>
+                </columns>
+                <buttonsPanel id="assignedGoalBtnPnl">
+                    <popupButton id="popup" caption="msg://addGoal">
+                        <actions>
+                            <action id="library" caption="msg://library"/>
+                            <action id="cascade" caption="msg://cascade"/>
+                            <action id="individual" caption="msg://individual"/>
+                        </actions>
+                    </popupButton>
+                    <button id="goalEdit" action="assignedGoalTable.edit"/>
+                    <button id="goalRemove" action="assignedGoalTable.remove"/>
+                </buttonsPanel>
+                <rows/>
+            </table>
+        </hbox>
+        <hbox id="windowActions" spacing="true" width="AUTO">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>

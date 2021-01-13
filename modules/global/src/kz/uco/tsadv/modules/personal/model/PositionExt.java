@@ -122,7 +122,7 @@ public class PositionExt extends Position implements IGroupedEntity<PositionGrou
     @MetaProperty(related = "positionFullNameLang1")
     @Transient
     public String getPositionNameLang1Reducted() {
-        if (positionFullNameLang1.length() > 48) {
+        if (positionFullNameLang1 != null && positionFullNameLang1.length() > 48) {
             return positionFullNameLang1.substring(0, 48) + " ...";
         } else {
             return positionFullNameLang1;
@@ -133,7 +133,7 @@ public class PositionExt extends Position implements IGroupedEntity<PositionGrou
     @MetaProperty(related = "positionFullNameLang2")
     @Transient
     public String getPositionNameLang2Reducted() {
-        if (positionFullNameLang2.length() > 48) {
+        if (positionFullNameLang2 != null && positionFullNameLang2.length() > 48) {
             return positionFullNameLang2.substring(0, 48) + " ...";
         } else {
             return positionFullNameLang2;
@@ -144,7 +144,7 @@ public class PositionExt extends Position implements IGroupedEntity<PositionGrou
     @MetaProperty(related = "positionFullNameLang3")
     @Transient
     public String getPositionNameLang3Reducted() {
-        if (positionFullNameLang3.length() > 48) {
+        if (positionFullNameLang3 != null && positionFullNameLang3.length() > 48) {
             return positionFullNameLang3.substring(0, 48) + " ...";
         } else {
             return positionFullNameLang3;

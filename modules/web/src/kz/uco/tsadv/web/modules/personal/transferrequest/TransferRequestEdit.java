@@ -54,7 +54,7 @@ public class TransferRequestEdit extends AbstractEditor<TransferRequest> {
     public void postInit() {
         initProcActionsFrame();
 
-        /*UserExt u = commonService.getEntity(UserExt.class, String.format("select u from tsadv$UserExt u where u.%s = :keyValue", "personGroup.id"), Collections.singletonMap("keyValue", getItem().getAssignmentGroup().getAssignment().getPersonGroup().getId()), "user.edit");
+        /*UserExt u = commonService.getEntity(UserExt.class, String.format("select u from tsadv$UserExt u where u.%s = :keyValue", "personGroupId.id"), Collections.singletonMap("keyValue", getItem().getAssignmentGroup().getAssignment().getPersonGroup().getId()), "user.edit");
         log.info(u.getLogin() + "");*/
     }
 

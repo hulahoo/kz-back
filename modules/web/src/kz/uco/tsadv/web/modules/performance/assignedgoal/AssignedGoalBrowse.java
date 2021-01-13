@@ -298,14 +298,14 @@ public class AssignedGoalBrowse extends AbstractLookup {
         switch (calculateMode) {
             case "total":
                 loadContext.setQuery(LoadContext.createQuery("select e from tsadv$AssignedGoal e " +
-                        "where e.personGroup.id = :currentPersonId" +
+                        "where e.personGroupId.id = :currentPersonId" +
                         "  and e.performancePlan.id = :currentPerformancePlanId")
                         .setParameter("currentPersonId", assignment.getPersonGroup().getId())
                         .setParameter("currentPerformancePlanId", performancePlansDs.getItem()));
                 break;
             case "notStarted":
                 loadContext.setQuery(LoadContext.createQuery("select e from tsadv$AssignedGoal e " +
-                        "where e.personGroup.id = :currentPersonId" +
+                        "where e.personGroupId.id = :currentPersonId" +
                         "  and e.performancePlan.id = :currentPerformancePlanId" +
                         "  and e.actualValue = 0")
                         .setParameter("currentPersonId", assignment.getPersonGroup().getId())
@@ -313,7 +313,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
                 break;
             case "inProgress":
                 loadContext.setQuery(LoadContext.createQuery("select e from tsadv$AssignedGoal e " +
-                        "where e.personGroup.id = :currentPersonId" +
+                        "where e.personGroupId.id = :currentPersonId" +
                         "  and e.performancePlan.id = :currentPerformancePlanId" +
                         "  and e.actualValue > 0" +
                         "  and e.actualValue < e.targetValue")
@@ -322,7 +322,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
                 break;
             case "completed":
                 loadContext.setQuery(LoadContext.createQuery("select e from tsadv$AssignedGoal e " +
-                        "where e.personGroup.id = :currentPersonId" +
+                        "where e.personGroupId.id = :currentPersonId" +
                         "  and e.performancePlan.id = :currentPerformancePlanId" +
                         "  and e.actualValue = e.targetValue" +
                         "  and e.targetValue <> 0")
@@ -517,9 +517,9 @@ public class AssignedGoalBrowse extends AbstractLookup {
                 params2.put("positionGroupId", (Integer) o[0] == 2 ? o[1] : null);
                 params2.put("jobGroupId", (Integer) o[0] == 3 ? o[1] : null);*/
                 AssignedGoal agToDelete = assignedGoalsDs.getItems().stream().filter(assignedGoal ->  //search from ds list
-                        assignedGoal.getGoal().getId().equals((UUID) o[2]) &&
+                        assignedGoal.getParentGoal().getId().equals((UUID) o[2]) &&
                                 assignedGoal.getPersonGroup().getId().equals(assignment.getPersonGroup().getId()) &&
-                                assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem()) &&
+//                                assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem()) &&
                                 (((Integer) o[0] == 1 &&
                                         assignedGoal.getOrganizationGroup() != null &&
                                         assignedGoal.getOrganizationGroup().getId().equals((UUID) o[1])) ||
@@ -532,7 +532,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
 
                 /*commonService.getEntity(AssignedGoal.class, "select e from tsadv$AssignedGoal e " + //search by clearQuery
                         "where e.goal.id = :goalId " +
-                        "and e.personGroup.id = :personGroupId " +
+                        "and e.personGroupId.id = :personGroupId " +
                         "and e.performancePlan.id = :performancePlanId " +
                         "and e.organizationGroup.id = :organizationGroupId " +
                         "and e.positionGroup.id = :positionGroupId " +
@@ -546,16 +546,17 @@ public class AssignedGoalBrowse extends AbstractLookup {
                 params2.put("performancePlanId", performancePlansDs.getItem().getId());
                 /*commonService.getEntity(AssignedGoal.class, "select e from tsadv$AssignedGoal e " + //search by clearQuery
                         "where e.goal.id = :goalId " +
-                        "and e.personGroup.id = :personGroupId " +
+                        "and e.personGroupId.id = :personGroupId " +
                         "and e.performancePlan.id = :performancePlanId", params2, null)*/
                 if (assignedGoalsDs.getItems().stream().filter(assignedGoal ->  //search from ds list
-                        assignedGoal.getGoal().getId().equals((UUID) o[2]) &&
-                                assignedGoal.getPersonGroup().getId().equals(assignment.getPersonGroup().getId()) &&
-                                assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem()))
+                        assignedGoal.getParentGoal().getId().equals((UUID) o[2]) &&
+                                assignedGoal.getPersonGroup().getId().equals(assignment.getPersonGroup().getId())
+//                                && assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem())
+                )
                         .findFirst().orElse(null) == null) {
                     AssignedGoal ag = metadata.create(AssignedGoal.class);
                     Goal g = commonService.getEntity(Goal.class, (UUID) o[2]);
-                    ag.setGoal(g);
+                    ag.setParentGoal(g);
                     ag.setPersonGroup(assignment.getPersonGroup());
                     ag.setOrganizationGroup((Integer) o[0] == 1 ? commonService.getEntity(OrganizationGroupExt.class, (UUID) o[1]) : null);
                     ag.setPositionGroup((Integer) o[0] == 2 ? commonService.getEntity(PositionGroupExt.class, (UUID) o[1]) : null);
@@ -566,9 +567,9 @@ public class AssignedGoalBrowse extends AbstractLookup {
                     ag.setAssignedByPersonGroup(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP));
                     ag.setStartDate(performancePlansDs.getItem().getStartDate());
                     ag.setEndDate(performancePlansDs.getItem().getEndDate());
-                    ag.setWeight((Integer) o[3]);
+                    ag.setWeight((Double) o[3]);
                     ag.setPriority(commonService.getEntity(DicPriority.class, "HIGH"));
-                    ag.setPerformancePlan(performancePlansDs.getItem());
+//                    ag.setPerformancePlan(performancePlansDs.getItem());
                     assignedGoalsDs.addItem(ag);
                 }
             }

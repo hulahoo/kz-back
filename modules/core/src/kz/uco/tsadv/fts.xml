@@ -1681,6 +1681,159 @@
         <entity class="kz.uco.tsadv.modules.personal.model.HierarchyElementGroup">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.performance.dictionary.DicJobGroup">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.VacationSchedule">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCertificateType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonDocumentRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicFormStudy">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.model.PersonEducationRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkills">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.model.ImprovingProfessionalSkillsRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.tb.PersonQualificationRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.dictionary.DicIndustry">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.recruitment.model.PersonExperienceRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.BeneficiaryRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.HierarchyElementGroup">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.dictionary.DicJobGroup">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.VacationSchedule">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCertificateType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicLangaugeLevel">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonLanguage">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicPrevJobObligation">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonAdwardRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.MilitaryFormRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonConviction">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.RetirementRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonBenefit">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicReasonBenifit">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonBenefitRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonClinicDispancer">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonClinicDispancerRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.DisabilityRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonReasonChangingJob">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonCriminalAdministrativeLiability">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonCriminalAdministrativeLiabilityRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonHealth">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonRelativesHaveProperty">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonBankDetails">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonBankdetailsRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.CertificateTemplate">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.AdditionalFile">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.AwardsRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.ChildDescription">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.LeavingVacationRequest">
+            <include re=".*"/>
+        </entity>
         <entity class="kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink">
             <include re=".*"/>
         </entity>

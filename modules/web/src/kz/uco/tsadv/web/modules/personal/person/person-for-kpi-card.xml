@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="dataGrid"
+        messagesPack="kz.uco.tsadv.web.modules.personal.person">
+    <data readOnly="true">
+        <collection id="personDc"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person.browse">
+            <loader id="personExtDl">
+                <query>
+                    <![CDATA[select e
+                           from base$PersonExt e
+                           left join e.group.assignments a
+                          where current_date between e.startDate and e.endDate
+                            and current_date between a.startDate and a.endDate
+                            and a.assignmentStatus.code = 'ACTIVE'
+                            and a.primaryFlag = true]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dataGrid"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dataGrid"
+                dataLoader="personExtDl">
+            <properties include=".*"/>
+        </filter>
+        <dataGrid id="dataGrid"
+                  width="100%"
+                  dataContainer="personDc"
+                  selectionMode="MULTI_CHECK">
+            <columns>
+                <column property="fioWithEmployeeNumber"/>
+                <column property="group.currentAssignment.organizationGroup.organization.organizationName"
+                        caption="mainMsg://organizationName"/>
+                <column property="group.currentAssignment.positionGroup.position.positionFullName"
+                        caption="mainMsg://positionName"/>
+                <column property="group.currentAssignment.jobGroup"
+                        caption="mainMsg://jobName"/>
+                <column property="group.currentAssignment.gradeGroup.grade.gradeName"/>
+                <column property="group.currentAssignment.location.langValue"/>
+                <column property="type.langValue"
+                        caption="msg://Person.type"/>
+            </columns>
+            <rowsCount/>
+        </dataGrid>
+        <hbox id="lookupActions" spacing="true">
+            <button id="lookupSelection" action="lookupSelectAction" enable="false"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

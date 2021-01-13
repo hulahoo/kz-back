@@ -36,7 +36,7 @@
                         width="100%">
                 <column id="column" width="550px">
                     <field property="goal" id="goal"/>
-                    <field property="parentGoal" id="parentGoal"/>
+                    <field property="goal" id="goal"/>
                     <field property="targetValue" id="targetValue"/>
                     <field property="actualValue" id="actualValue"/>
                     <field custom="true" id="successCritetia"

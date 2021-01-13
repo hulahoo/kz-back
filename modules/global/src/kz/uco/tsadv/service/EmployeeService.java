@@ -70,6 +70,8 @@ public interface EmployeeService {
 
     PersonGroupExt getPersonGroupByUserId(UUID userId);
 
+    PersonGroupExt getPersonGroupByUserIdExtendedView(UUID userId);
+
     UserExt getUserExtByPersonGroupId(UUID personGroupId);
 
     UserExt getUserExtByPersonGroupId(UUID personGroupId, String viewName);
@@ -91,6 +93,8 @@ public interface EmployeeService {
     Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId);
 
     Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId, boolean showAll);
+
+    List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll);
 
     List<UserExt> recursiveFindManager(UUID positionGroupId);
 

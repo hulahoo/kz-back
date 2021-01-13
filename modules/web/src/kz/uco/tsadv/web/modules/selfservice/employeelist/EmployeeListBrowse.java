@@ -81,11 +81,11 @@ public class EmployeeListBrowse extends AbstractLookup {
                 assignmentGroupsDs.setQuery("select e\n" +
                         "                           from base$AssignmentGroupExt e\n" +
                         "                           join base$AssignmentExt a on a.group.id = e.id\n" +
-                        "                           join base$PersonExt p on p.group.id =  a.personGroup.id\n" +
-                        "                           join tsadv$MyTeam m on m.personGroup.id = a.personGroup.id\n" +
+                        "                           join base$PersonExt p on p.group.id =  a.personGroupId.id\n" +
+                        "                           join tsadv$MyTeam m on m.personGroupId.id = a.personGroupId.id\n" +
                         "                          where :session$systemDate between a.startDate and a.endDate\n" +
                         "                            and :session$systemDate between p.startDate and p.endDate " +
-                        "and m.personPath like :custom$like and m.personGroup.id <> :custom$personGroup");
+                        "and m.personPath like :custom$like and m.personGroupId.id <> :custom$personGroupId");
                 Map<String, Object> map = new HashMap<>();
                 String like = "%" + currentPersonGroup.getId().toString() + "%";
                 map.put("like", like);

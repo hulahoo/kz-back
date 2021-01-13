@@ -287,7 +287,7 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
         return militaryRank;
     }
 
-    @MetaProperty
+    @MetaProperty(related = "assignments,personExperience")
     @Transient
     public Long getTotalExperience() {
         Long dateDiff = 0L; //TODO Сделать поле startDate в сущности Assignment обязательным или проверить на null
@@ -299,11 +299,13 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
                 dateDiff += assignment.getEndDate().getTime() - assignment.getStartDate().getTime();
             }
         }
-        for (PersonExperience personExperience : getPersonExperience()) {
-            if (personExperience.getEndMonth() == null || personExperience.getEndMonth().after(curDate)) {
-                dateDiff += curDate.getTime() - personExperience.getStartMonth().getTime();
-            } else {
-                dateDiff += personExperience.getEndMonth().getTime() - personExperience.getStartMonth().getTime();
+        if (getPersonExperience() != null) {
+            for (PersonExperience personExperience : getPersonExperience()) {
+                if (personExperience.getEndMonth() == null || personExperience.getEndMonth().after(curDate)) {
+                    dateDiff += curDate.getTime() - personExperience.getStartMonth().getTime();
+                } else {
+                    dateDiff += personExperience.getEndMonth().getTime() - personExperience.getStartMonth().getTime();
+                }
             }
         }
         Long years = Math.round(dateDiff / (1000.0 * 60 * 60 * 24 * 365));

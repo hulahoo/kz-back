@@ -1,11 +1,12 @@
 package kz.uco.tsadv.service;
 
 
-import javafx.util.Pair;
 
+import java.time.Period;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface DatesService {
     String NAME = "tsadv_DatesService";
@@ -66,12 +67,14 @@ public interface DatesService {
 
     int getIntersectionLengthInDays(Date startDate1, Date endDate1, Date startDate2, Date endDate2);
 
-    Pair<Calendar, Calendar> getItersectionPeriod(Date startDate1, Date endDate1, Date startDate2, Date endDate2);
+    Map<Calendar, Calendar> getItersectionPeriod(Date startDate1, Date endDate1, Date startDate2, Date endDate2);
 
     String getHoursWithMinutes(double hours);
 
     String getHoursWithTwoDigitsAfterComma(double hours);
 
     Date toNearestWholeMinute(Date date);
+
+    Period getPeriodFromTwoDates(Date startDate,Date endDate);
 
 }

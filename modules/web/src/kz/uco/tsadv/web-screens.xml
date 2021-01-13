@@ -155,10 +155,6 @@
             template="/kz/uco/tsadv/web/modules/performance/goal/goal-browse.xml"/>
     <screen id="tsadv$Goal.edit"
             template="/kz/uco/tsadv/web/modules/performance/goal/goal-edit.xml"/>
-    <screen id="tsadv$PerformancePlan.browse"
-            template="/kz/uco/tsadv/web/modules/performance/performanceplan/performance-plan-browse.xml"/>
-    <screen id="tsadv$PerformancePlan.edit"
-            template="/kz/uco/tsadv/web/modules/performance/performanceplan/performance-plan-edit.xml"/>
     <screen id="tsadv$AssignedGoal.browse"
             template="/kz/uco/tsadv/web/modules/performance/assignedgoal/assigned-goal-browse.xml"/>
     <screen id="tsadv$AssignedGoal.edit"
@@ -230,8 +226,6 @@
             template="/kz/uco/tsadv/web/modules/personal/successionplanning/succession-planning-edit.xml"/>
     <screen id="tsadv$Successor.edit"
             template="/kz/uco/tsadv/web/modules/personal/successor/successor-edit.xml"/>
-    <screen id="tsadv$PerformancePlan.edit"
-            template="/kz/uco/tsadv/web/modules/performance/performanceplan/performance-plan-edit.xml"/>
     <screen id="tsadv$Assessment.create"
             template="/kz/uco/tsadv/web/modules/performance/assessment/assessment-create.xml"/>
     <screen id="tsadv$DicAssessmentStatus.edit"
@@ -350,10 +344,6 @@
             template="/kz/uco/tsadv/web/modules/performance/dictionary/dicpriority/dic-priority-browse.xml"/>
     <screen id="tsadv$DicPriority.edit"
             template="/kz/uco/tsadv/web/modules/performance/dictionary/dicpriority/dic-priority-edit.xml"/>
-    <screen id="tsadv$AssignedPerformancePlan.browse"
-            template="/kz/uco/tsadv/web/modules/performance/assignedperformanceplan/assigned-performance-plan-browse.xml"/>
-    <screen id="tsadv$AssignedPerformancePlan.edit"
-            template="/kz/uco/tsadv/web/modules/performance/assignedperformanceplan/assigned-performance-plan-edit.xml"/>
     <screen id="tsadv$DicEmploymentType.browse"
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicemploymenttype/dic-employment-type-browse.xml"/>
     <screen id="tsadv$DicEmploymentType.edit"
@@ -1936,8 +1926,8 @@
             template="kz/uco/tsadv/web/addressrequest/address-request-edit.xml"/>
     <screen id="tsadv$PersonalDataRequest.browse"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-browse.xml"/>
-    <screen id="tsadv$PersonalDataRequest.edit"
-            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-edit.xml"/>
+<!--    <screen id="tsadv$PersonalDataRequest.edit"-->
+<!--            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-edit.xml"/>-->
     <screen id="TeamMemberFrame"
             template="/kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
     <screen id="tsadv$Absence.lookup"

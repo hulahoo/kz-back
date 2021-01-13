@@ -165,7 +165,7 @@
                                     captionProperty="ordAssignment.assignmentPersonByOrderDate.fioWithEmployeeNumber"/>
                             <column id="ordAssignment.assignmentPositionByOrderDate"
                                     captionProperty="ordAssignment.assignmentPositionByOrderDate.positionName"/>
-                            <!--<column id="assignmentGroup.assignment.personGroup.personFioWithEmployeeNumber"/>-->
+                            <!--<column id="assignmentGroup.assignment.personGroupId.personFioWithEmployeeNumber"/>-->
                             <!--<column id="assignmentGroup.assignment.positionGroup.position.positionName"/>-->
                             <column id="amount"
                                     editable="true"/>
@@ -241,7 +241,7 @@
                                         captionProperty="assignmentPersonByOrderDate.fioWithEmployeeNumber"/>
                                 <column id="assignmentPositionByOrderDate"
                                         captionProperty="assignmentPositionByOrderDate.positionName"/>
-                                <!--<column id="assignmentGroup.assignment.personGroup.person.fioWithEmployeeNumber"/>-->
+                                <!--<column id="assignmentGroup.assignment.personGroupId.person.fioWithEmployeeNumber"/>-->
                                 <!--<column id="assignmentGroup.assignment.positionGroup.position"-->
                                 <!--captionProperty="assignmentGroup.assignment.positionGroup.position.positionName"/>-->
                             </columns>

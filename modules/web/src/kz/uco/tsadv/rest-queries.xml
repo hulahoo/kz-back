@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<queries xmlns="http://schemas.haulmont.com/cuba/rest-queries.xsd">
+    <query name="usersActivities" entity="uactivity$Activity" view="portal.notification">
+        <jpql>
+            select e
+            from uactivity$Activity e
+            where e.assignedUser.id = :currentUserId
+            and e.status = :activeStatusId
+            and e.type.code = :notificationCode
+            order by e.createTs desc
+        </jpql>
+        <params>
+            <param name="currentUserId" type="java.util.UUID"/>
+            <param name="activeStatusId" type="java.lang.Integer"/>
+            <param name="notificationCode" type="java.lang.String"/>
+        </params>
+    </query>
+</queries>

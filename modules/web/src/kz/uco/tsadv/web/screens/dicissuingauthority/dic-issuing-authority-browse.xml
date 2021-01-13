@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://dicIssuingAuthorityBrowse.caption"
+        focusComponent="dicIssuingAuthoritiesTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicissuingauthority">
+    <data readOnly="true">
+        <collection id="dicIssuingAuthoritiesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority">
+            <view extends="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </view>
+            <loader id="dicIssuingAuthoritiesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicIssuingAuthority e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicIssuingAuthoritiesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicIssuingAuthoritiesTable"
+                dataLoader="dicIssuingAuthoritiesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicIssuingAuthoritiesTable"
+                    width="100%"
+                    dataContainer="dicIssuingAuthoritiesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="langValue4"/>
+                <column id="langValue5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="langValue"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicIssuingAuthoritiesTable.create"/>
+                <button id="editBtn" action="dicIssuingAuthoritiesTable.edit"/>
+                <button id="removeBtn" action="dicIssuingAuthoritiesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

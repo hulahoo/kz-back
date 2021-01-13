@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://dicCriminalLiabilityTypeBrowse.caption"
+        focusComponent="dicCriminalLiabilityTypesTable"
+        messagesPack="kz.uco.tsadv.web.screens.diccriminalliabilitytype">
+    <data readOnly="true">
+        <collection id="dicCriminalLiabilityTypesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType">
+            <view extends="_local"/>
+            <loader id="dicCriminalLiabilityTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicCriminalLiabilityType e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicCriminalLiabilityTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicCriminalLiabilityTypesTable"
+                dataLoader="dicCriminalLiabilityTypesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicCriminalLiabilityTypesTable"
+                    width="100%"
+                    dataContainer="dicCriminalLiabilityTypesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="legacyId"/>
+                <column id="organizationBin"/>
+                <column id="integrationUserLogin"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="isDefault"/>
+                <column id="order"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicCriminalLiabilityTypesTable.create"/>
+                <button id="editBtn" action="dicCriminalLiabilityTypesTable.edit"/>
+                <button id="removeBtn" action="dicCriminalLiabilityTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
