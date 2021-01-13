@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menu-config xmlns="http://schemas.haulmont.com/cuba/menu.xsd">
-    <item screen="tsadv_RunProcessDialog" insertAfter="hr"/>
     <menu id="hr"
           icon="font-icon:FILE_TEXT"
           insertBefore="reports">
