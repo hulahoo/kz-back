@@ -4487,6 +4487,7 @@
                   view="_minimal">
             <property name="code"/>
         </property>
+        <property name="order" view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Absence"
           extends="_local"
@@ -21833,5 +21834,37 @@
         <property name="file" view="_local"/>
         <property name="language" view="_local"/>
         <property name="cretificateType" view="_local"/>
+    </view>
+    <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-editView" extends="_local">
+        <property name="statusRequest" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="requestType" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+            <property name="isSystemRecord"/>
+            <property name="active"/>
+        </property>
+        <property name="vacation" view="_minimal">
+            <property name="orderNum"/>
+        </property>
+    </view>
+    <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-browseView" extends="_local">
+        <property name="statusRequest" view="_minimal"/>
+        <property name="requestType" view="_minimal"/>
+        <property name="vacation" view="_minimal"/>
     </view>
 </views>

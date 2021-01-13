@@ -282,7 +282,7 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
         map.put("absenceEndDate", dateTo);
         return commonService.getEntity(AssignmentExt.class, "select e" +
                         "                          from base$AssignmentExt e" +
-                        "                          where e.personGroupId.id = :absencePersonGroupId and e.deleteTs is null" +
+                        "                          where e.personGroup.id = :absencePersonGroupId and e.deleteTs is null" +
                         "                          and :absenceEndDate between e.startDate and e.endDate" +
                         "                          and e.assignmentStatus.code <> 'TERMINATED'" +
                         "                          and e.primaryFlag = 'true'",

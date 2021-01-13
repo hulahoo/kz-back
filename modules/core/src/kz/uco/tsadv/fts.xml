@@ -1831,5 +1831,8 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.LeavingVacationRequest">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

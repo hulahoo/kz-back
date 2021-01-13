@@ -607,5 +607,6 @@
         <class>kz.uco.tsadv.modules.personal.model.AwardsRequest</class>
         <class>kz.uco.tsadv.modules.personal.model.ChildDescription</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType</class>
+        <class>kz.uco.tsadv.modules.personal.model.LeavingVacationRequest</class>
     </persistence-unit>
 </persistence>
