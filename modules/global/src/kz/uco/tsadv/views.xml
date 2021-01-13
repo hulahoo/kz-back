@@ -21858,7 +21858,9 @@
             <property name="isSystemRecord"/>
             <property name="active"/>
         </property>
-        <property name="vacation" view="_minimal"/>
+        <property name="vacation" view="_minimal">
+            <property name="orderNum"/>
+        </property>
     </view>
     <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-browseView" extends="_local">
         <property name="statusRequest" view="_minimal"/>

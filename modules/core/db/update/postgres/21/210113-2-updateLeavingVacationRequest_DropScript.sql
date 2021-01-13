@@ -1,0 +1,2 @@
+alter table TSADV_LEAVING_VACATION_REQUEST drop column REQUEST_NUMBER__U78316 cascade ;
+alter table TSADV_LEAVING_VACATION_REQUEST drop column STATUS_REQUEST_ID__U03495 cascade ;

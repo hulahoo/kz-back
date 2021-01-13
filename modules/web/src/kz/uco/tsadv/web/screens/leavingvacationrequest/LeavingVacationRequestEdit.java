@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.screens.leavingvacationrequest;
 
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.components.DateField;
+import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
 
@@ -16,18 +17,33 @@ import java.util.Date;
 @LoadDataBeforeShow
 public class LeavingVacationRequestEdit extends StandardEditor<LeavingVacationRequest> {
 
-    @Inject
-    private DateField<Date> startDateField;
+
     @Inject
     private DateField<Date> requestDateField;
     @Inject
     protected TimeSource timeSource;
+    @Inject
+    private DateField<Date> plannedStartDateField;
+    @Inject
+    private DateField<Date> endDataField;
+    @Inject
+    private InstanceContainer<LeavingVacationRequest> leavingVacationRequestDc;
+
+
 
     @Subscribe
     protected void onAfterInit(AfterInitEvent event) {
         LocalDateTime ldt = LocalDateTime.ofInstant(timeSource.currentTimestamp().toInstant(), ZoneId.systemDefault());
-        Date out = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
+        Date outRequestDate = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
 
-        requestDateField.setRangeStart(out);
+        Date outPlannedStart = Date.from(ldt.minusDays(-30).atZone(ZoneId.systemDefault()).toInstant());
+
+        requestDateField.setRangeStart(outRequestDate);
+        plannedStartDateField.setRangeStart(outPlannedStart);
+    }
+
+    @Subscribe
+    public void onBeforeShow(BeforeShowEvent event) {
+        plannedStartDateField.setRangeEnd(leavingVacationRequestDc.getItem().getEndData());
     }
 }

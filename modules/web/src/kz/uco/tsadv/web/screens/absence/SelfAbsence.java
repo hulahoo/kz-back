@@ -8,25 +8,32 @@ import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.TabSheet;
+import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
+import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
+import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
+import kz.uco.tsadv.modules.recruitment.dictionary.DicRequisitionType;
 import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @UiController("tsadv$Absence.self.browse")
@@ -63,6 +70,12 @@ public class SelfAbsence extends StandardLookup<Absence>
     protected CollectionLoader<VacationScheduleRequest> vacationScheduleRequestDl;
     @Inject
     private CollectionContainer<Absence> absencesDc;
+    @Inject
+    private CollectionLoader<Absence> absencesDl;
+    @Named("absencesTable.newLeavingVacationRequest")
+    private BaseAction absencesTableNewLeavingVacationRequest;
+    @Inject
+    private Table<Absence> absencesTable;
 
     @Subscribe("addBtn")
     public void onAddBtnClick(Button.ClickEvent event) {
@@ -136,6 +149,16 @@ public class SelfAbsence extends StandardLookup<Absence>
                 });
     }
 
+    @Subscribe(id = "absencesDc", target = Target.DATA_CONTAINER)
+    protected void onAbsencesDcItemChange(InstanceContainer.ItemChangeEvent<Absence> event) {
+        DicAbsenceType absenceType = commonService.getEntity(DicAbsenceType.class, "MATERNITY");
+
+        if (event.getItem().getType().equals(absenceType)){
+            absencesTableNewLeavingVacationRequest.setEnabled(true);
+        }
+    }
+
+
     public void newLeavingVacationRequest() {
         Absence getItem = absencesDc.getItem();
         LeavingVacationRequest item = dataManager.create(LeavingVacationRequest.class);
@@ -145,8 +168,9 @@ public class SelfAbsence extends StandardLookup<Absence>
         item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
         item.setStatusRequest(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
         item.setVacation(getItem);
-        item.setStartDate(today);
-        item.setEndData(today);
+        item.setStartDate(getItem.getDateFrom());
+        item.setEndData(getItem.getDateTo());
+        item.setRequestType(commonService.getEntity(DicRequisitionType.class, "MATERNITY"));
 
         screenBuilders.editor(LeavingVacationRequest.class, this)
                 .editEntity(item)
