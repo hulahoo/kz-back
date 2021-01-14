@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://contractConditionsBrowse.caption"
+        focusComponent="contractConditionsesTable"
+        messagesPack="kz.uco.tsadv.web.screens.contractconditions">
+    <data readOnly="true">
+        <collection id="contractConditionsesDc"
+                    class="kz.uco.tsadv.modules.personal.model.ContractConditions"
+                    view="contractConditions-browseView">
+            <loader id="contractConditionsesDl">
+                <query>
+                    <![CDATA[select e from tsadv$ContractConditions e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="contractConditionsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="contractConditionsesTable"
+                dataLoader="contractConditionsesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="contractConditionsesTable"
+                    width="100%"
+                    dataContainer="contractConditionsesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="relationshipType"/>
+                <column id="ageMin"/>
+                <column id="ageMax"/>
+                <column id="isFree"/>
+                <column id="costInKzt"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="contractConditionsesTable.create"/>
+                <button id="editBtn" action="contractConditionsesTable.edit"/>
+                <button id="removeBtn" action="contractConditionsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
