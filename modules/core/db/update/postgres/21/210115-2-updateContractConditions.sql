@@ -1,0 +1,1 @@
+alter table TSADV_CONTRACT_CONDITIONS add column INSURANCE_CONTRACT_ID uuid ;

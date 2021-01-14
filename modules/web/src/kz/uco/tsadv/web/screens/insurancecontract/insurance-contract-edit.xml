@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://insuranceContractEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.insurancecontract">
+    <data>
+        <instance id="insuranceContractDc"
+                  class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
+                  view="insuranceContract-editView">
+            <loader/>
+        </instance>
+        <collection id="companyDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicCompany" view="_local">
+            <loader id="companyDl">
+                <query><![CDATA[select e from tsadv$DicCompany e]]></query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="insuranceContractDc">
+                    <column width="350px">
+                    <textField id="policyNameField" property="policyName"/>
+                    <textField id="contractField" property="contract"/>
+                    <dateField id="signDateField" property="signDate"/>
+                    <lookupField property="company"
+                                 id="lookupCompany"
+                                 optionsContainer="companyDc"
+                                 editable="true"/>
+                    <pickerField id="responsibleField" property="responsible">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <textField id="yearField" property="year"/>
+                    <dateField id="startDateField" property="startDate"/>
+                    <dateField id="expirationDateField" property="expirationDate"/>
+                </column>
+                    <column width="350px">
+                        <textField id="insurerField" property="insurer"/>
+                        <dateField id="availabilityPeriodFromField" property="availabilityPeriodFrom"/>
+                        <textField id="insuranceProgramField" property="insuranceProgram"/>
+                        <textField id="insurerContactsField" property="insurerContacts"/>
+                        <dateField id="notificationDateField" property="notificationDate"/>
+                        <textField id="attachingAnEmployeeField" property="attachingAnEmployee"/>
+                        <textField id="attachingFamilyField" property="attachingFamily"/>
+                        <textField id="countOfFreeMembersField" property="countOfFreeMembers"/>
+                    </column>
+
+            </form>
+
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
