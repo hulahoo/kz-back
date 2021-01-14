@@ -1840,5 +1840,8 @@
         <entity class="kz.uco.tsadv.entity.bproc.AbstractBprocRequest">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.ScoreSetting">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

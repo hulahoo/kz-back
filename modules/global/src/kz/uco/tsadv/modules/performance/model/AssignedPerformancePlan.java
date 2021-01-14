@@ -42,6 +42,72 @@ public class AssignedPerformancePlan extends StandardEntity {
     @Column(name = "END_DATE")
     protected Date endDate;
 
+    @Column(name = "KPI_SCORE")
+    protected Double kpiScore;
+
+    @Column(name = "EXTRA_POINT")
+    protected Double extraPoint;
+
+    @Column(name = "FINAL_SCORE")
+    protected Double finalScore;
+
+    @Column(name = "COMPANY_BONUS")
+    protected Double companyBonus;
+
+    @Column(name = "PERSONAL_BONUS")
+    protected Double personalBonus;
+
+    @Column(name = "FINAL_BONUS")
+    protected Double finalBonus;
+
+    public Double getFinalBonus() {
+        return finalBonus;
+    }
+
+    public void setFinalBonus(Double finalBonus) {
+        this.finalBonus = finalBonus;
+    }
+
+    public void setKpiScore(Double kpiScore) {
+        this.kpiScore = kpiScore;
+    }
+
+    public Double getKpiScore() {
+        return kpiScore;
+    }
+
+    public void setExtraPoint(Double extraPoint) {
+        this.extraPoint = extraPoint;
+    }
+
+    public Double getExtraPoint() {
+        return extraPoint;
+    }
+
+    public Double getPersonalBonus() {
+        return personalBonus;
+    }
+
+    public void setPersonalBonus(Double personalBonus) {
+        this.personalBonus = personalBonus;
+    }
+
+    public Double getCompanyBonus() {
+        return companyBonus;
+    }
+
+    public void setCompanyBonus(Double companyBonus) {
+        this.companyBonus = companyBonus;
+    }
+
+    public Double getFinalScore() {
+        return finalScore;
+    }
+
+    public void setFinalScore(Double finalScore) {
+        this.finalScore = finalScore;
+    }
+
     public void setResult(Double result) {
         this.result = result;
     }

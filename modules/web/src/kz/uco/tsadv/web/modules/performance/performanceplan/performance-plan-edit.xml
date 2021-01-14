@@ -35,6 +35,16 @@
                 </query>
             </loader>
         </collection>
+        <collection id="scoreSettingDc"
+                    class="kz.uco.tsadv.modules.performance.model.ScoreSetting"
+                    view="_local">
+            <loader id="scoreSettingDl">
+                <query>
+                    <![CDATA[select e from tsadv_ScoreSetting e
+                             where e.performancePlan = :performancePlan]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -121,6 +131,27 @@
                         <button id="instructionCreate" action="instructionTable.create"/>
                         <button id="instructionEdit" action="instructionTable.edit"/>
                         <button id="instructionRemove" action="instructionTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="scoreSetting" caption="msg://scoreSetting" visible="false"
+                 spacing="true" margin="true, false, fasle, false">
+                <table id="scoreSettingTable" width="100%" height="100%" dataContainer="scoreSettingDc">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="minPercent"/>
+                        <column id="maxPercent"/>
+                        <column id="finalScore"/>
+                    </columns>
+                    <rows/>
+                    <buttonsPanel id="scoreSettingBtnPanel">
+                        <button id="scoreSettingCreateBtn" action="scoreSettingTable.create"/>
+                        <button id="scoreSettingEditBtn" action="scoreSettingTable.edit"/>
+                        <button id="scoreSettingRemoveBtn" action="scoreSettingTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>
