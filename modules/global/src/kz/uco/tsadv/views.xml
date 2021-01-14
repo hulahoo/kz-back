@@ -21901,4 +21901,8 @@
           extends="_local">
         <property name="employee" view="_minimal"/>
     </view>
+    <view entity="tsadv$InsuranceContract" name="insuranceContract-browseView" extends="_local">
+        <property name="company" view="_minimal"/>
+        <property name="responsible" view="_minimal"/>
+    </view>
 </views>

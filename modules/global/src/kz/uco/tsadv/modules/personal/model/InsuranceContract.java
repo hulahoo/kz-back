@@ -39,7 +39,7 @@ public class InsuranceContract extends StandardEntity {
     @Column(name = "INSURER")
     private String insurer;
 
-    @Column(name = "YAER")
+    @Column(name = "YEAR")
     private Integer year;
 
     @Temporal(TemporalType.DATE)
@@ -49,8 +49,8 @@ public class InsuranceContract extends StandardEntity {
 
     @Temporal(TemporalType.DATE)
     @NotNull
-    @Column(name = "EXPIRATIO_DATE", nullable = false)
-    private Date expiratioDate;
+    @Column(name = "EXPIRATION_DATE", nullable = false)
+    private Date expirationDate;
 
     @Temporal(TemporalType.DATE)
     @NotNull
@@ -147,12 +147,12 @@ public class InsuranceContract extends StandardEntity {
         this.availabilityPeriodFrom = availabilityPeriodFrom;
     }
 
-    public Date getExpiratioDate() {
-        return expiratioDate;
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setExpiratioDate(Date expiratioDate) {
-        this.expiratioDate = expiratioDate;
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
     public Date getStartDate() {
