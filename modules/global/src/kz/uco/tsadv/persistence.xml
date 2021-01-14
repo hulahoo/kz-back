@@ -613,5 +613,6 @@
         <class>kz.uco.tsadv.modules.performance.model.ScoreSetting</class>
         <class>kz.uco.tsadv.modules.personal.model.ContractConditions</class>
         <class>kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator</class>
+        <class>kz.uco.tsadv.modules.personal.model.InsuranceContract</class>
     </persistence-unit>
 </persistence>

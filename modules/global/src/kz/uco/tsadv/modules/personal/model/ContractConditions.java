@@ -32,6 +32,18 @@ public class ContractConditions extends StandardEntity {
     @Column(name = "COST_IN_KZT", nullable = false)
     private Double costInKzt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INSURANCE_CONTRACT_ID")
+    private InsuranceContract insuranceContract;
+
+    public InsuranceContract getInsuranceContract() {
+        return insuranceContract;
+    }
+
+    public void setInsuranceContract(InsuranceContract insuranceContract) {
+        this.insuranceContract = insuranceContract;
+    }
+
     public Double getCostInKzt() {
         return costInKzt;
     }

@@ -1849,5 +1849,8 @@
         <entity class="kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.InsuranceContract">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
