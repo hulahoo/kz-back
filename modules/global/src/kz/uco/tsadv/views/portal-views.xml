@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <view entity="tsadv$PersonDocument" name="portal.my-profile" extends="_local">
+        <property name="documentType">
+            <property name="langValue" />
+            <property name="langValue1" />
+            <property name="langValue2" />
+            <property name="langValue3" />
+            <property name="langValue4" />
+            <property name="langValue5" />
+        </property>
+        <property name="file">
+            <property name="id" />
+            <property name="name" />
+        </property>
+    </view>
+</views>

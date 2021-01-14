@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <include file="kz/uco/tsadv/views/portal-views.xml" />
 <!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
 <!--          extends="procTask-frame"-->
 <!--          name="procTask-frame-extended">-->
@@ -21412,5 +21413,15 @@
     </view>
     <view entity="uactivity$Activity" name="portal.notification" extends="_local" systemProperties="true">
         <property name="name"/>
+    </view>
+    <view entity="tsadv$PersonContact" name="portal.my-profile" extends="_local">
+        <property name="type">
+            <property name="langValue" />
+            <property name="langValue1" />
+            <property name="langValue2" />
+            <property name="langValue3" />
+            <property name="langValue4" />
+            <property name="langValue5" />
+        </property>
     </view>
 </views>

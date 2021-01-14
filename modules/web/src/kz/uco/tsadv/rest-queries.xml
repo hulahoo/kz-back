@@ -15,4 +15,27 @@
             <param name="notificationCode" type="java.lang.String"/>
         </params>
     </query>
+    <query name="myProfile" entity="tsadv$PersonalDataRequest" view="_local">
+        <jpql>
+            select e
+            from tsadv$PersonalDataRequest e
+                inner join tsadv$UserExt u
+                    on u.personGroup.id = e.personGroup.id
+            where u.id = :userId
+        </jpql>
+        <params>
+            <param name="userId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="personGroupInfo" entity="base$PersonGroupExt" view="_local">
+        <jpql>
+            select p
+            from tsadv$UserExt u
+                inner join u.personGroup p
+            where u.id = :userId
+        </jpql>
+        <params>
+            <param name="userId" type="java.util.UUID"/>
+        </params>
+    </query>
 </queries>
