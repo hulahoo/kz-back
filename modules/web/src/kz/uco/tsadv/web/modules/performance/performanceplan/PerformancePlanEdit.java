@@ -16,10 +16,7 @@ import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
-import kz.uco.tsadv.modules.performance.model.AssignedGoal;
-import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
-import kz.uco.tsadv.modules.performance.model.InstructionsKpi;
-import kz.uco.tsadv.modules.performance.model.PerformancePlan;
+import kz.uco.tsadv.modules.performance.model.*;
 import kz.uco.tsadv.modules.personal.model.*;
 
 import javax.inject.Inject;
@@ -60,6 +57,10 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected Table<InstructionsKpi> instructionTable;
     @Inject
     protected DataGrid<AssignedPerformancePlan> assignedPerformancePlanTable;
+    @Inject
+    protected CollectionLoader<ScoreSetting> scoreSettingDl;
+    @Inject
+    protected Table<ScoreSetting> scoreSettingTable;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -68,6 +69,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         assignedPerformancePlansDl.load();
         instructionKpiDl.setParameter("performancePlan", performancePlanDc.getItem());
         instructionKpiDl.load();
+        scoreSettingDl.setParameter("performancePlan", performancePlanDc.getItem());
+        scoreSettingDl.load();
     }
 
     @Subscribe
@@ -91,6 +94,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected void visibleTab(Boolean isVisible) {
         tabSheet.getTab("assignedPerformancePlan").setVisible(isVisible);
         tabSheet.getTab("instruction").setVisible(isVisible);
+        tabSheet.getTab("scoreSetting").setVisible(isVisible);
     }
 
 
@@ -259,5 +263,18 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("addMassGoalNotSuccess")).show();
         }
+    }
+
+    @Subscribe("scoreSettingTable.create")
+    protected void onScoreSettingTableCreate(Action.ActionPerformedEvent event) {
+        screenBuilders.editor(scoreSettingTable)
+                .newEntity()
+                .withInitializer(scoreSetting -> {
+                    scoreSetting.setPerformancePlan(performancePlanDc.getItem());
+                })
+                .build().show()
+                .addAfterCloseListener(afterCloseEvent -> {
+                    scoreSettingDl.load();
+                });
     }
 }

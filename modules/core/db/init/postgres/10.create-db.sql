@@ -5255,6 +5255,12 @@ create table TSADV_ASSIGNED_PERFORMANCE_PLAN (
     STATUS varchar(50),
     START_DATE date,
     END_DATE date,
+    KPI_SCORE double precision,
+    EXTRA_POINT double precision,
+    FINAL_SCORE double precision,
+    COMPANY_BONUS double precision,
+    PERSONAL_BONUS double precision,
+    FINAL_BONUS double precision,
     --
     primary key (ID)
 )^
@@ -16454,3 +16460,22 @@ create table TSADV_DIC_CRIMINAL_LIABILITY_TYPE (
     primary key (ID)
 )^
 -- end TSADV_DIC_CRIMINAL_LIABILITY_TYPE
+-- begin TSADV_SCORE_SETTING
+create table TSADV_SCORE_SETTING (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PERFORMANCE_PLAN_ID uuid,
+    MIN_PERCENT double precision,
+    MAX_PERCENT double precision,
+    FINAL_SCORE integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_SCORE_SETTING

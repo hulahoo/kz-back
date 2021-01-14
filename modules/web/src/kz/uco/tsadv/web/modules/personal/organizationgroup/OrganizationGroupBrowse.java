@@ -176,6 +176,7 @@ public class OrganizationGroupBrowse extends AbstractLookup {
     }
 
     protected void openOrganizationEditor(OrganizationExt organization, Map<String, Object> params) {
+        organization.setGroup(organizationGroupsDs.getItem());
         OrganizationEdit organizationEdit = (OrganizationEdit) openEditor("base$Organization.edit", organization, WindowManager.OpenType.THIS_TAB, params);
         organizationEdit.addCloseWithCommitListener(new CloseWithCommitListener() {
             @Override

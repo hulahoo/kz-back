@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.scoresetting">
+    <data>
+        <instance id="scoreSettingDc"
+                  class="kz.uco.tsadv.modules.performance.model.ScoreSetting"
+                  view="_local">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="scoreSettingDc">
+            <column width="250px">
+                <textField id="minPercentField" property="minPercent" required="true"/>
+                <textField id="maxPercentField" property="maxPercent" required="true"/>
+                <textField id="finalScoreField" property="finalScore" required="true"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
