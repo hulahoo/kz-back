@@ -5,12 +5,11 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
-@Table(name = "TSADV_CONTRACT_ADMINISTRATOR")
-@Entity(name = "tsad$ContractAdministrator")
+@Table(name = "TSADV_INSURANCE_CONTRACT_ADMINISTRATOR")
+@Entity(name = "tsad$InsuranceContractAdministrator")
 public class InsuranceContractAdministrator extends StandardEntity {
-    private static final long serialVersionUID = 4372972668186211278L;
+    private static final long serialVersionUID = 5323731111863476380L;
 
     @Column(name = "NOTIFY_ABOUT_NEW_ATTACHMENTS")
     private Boolean notifyAboutNewAttachments;
@@ -19,14 +18,16 @@ public class InsuranceContractAdministrator extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "EMPLOYEE_ID")
     private PersonGroupExt employee;
-    @OneToMany(mappedBy = "insuranceContractAdministrator")
-    private List<InsuranceContract> insuranceContract;
 
-    public List<InsuranceContract> getInsuranceContract() {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INSURANCE_CONTRACT_ID")
+    private InsuranceContract insuranceContract;
+
+    public InsuranceContract getInsuranceContract() {
         return insuranceContract;
     }
 
-    public void setInsuranceContract(List<InsuranceContract> insuranceContract) {
+    public void setInsuranceContract(InsuranceContract insuranceContract) {
         this.insuranceContract = insuranceContract;
     }
 
