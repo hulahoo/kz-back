@@ -40,15 +40,6 @@
                 <column id="responsible"/>
                 <column id="insurer"/>
                 <column id="year"/>
-                <column id="startDate"/>
-                <column id="expirationDate"/>
-                <column id="availabilityPeriodFrom"/>
-                <column id="insuranceProgram"/>
-                <column id="insurerContacts"/>
-                <column id="notificationDate"/>
-                <column id="attachingAnEmployee"/>
-                <column id="attachingFamily"/>
-                <column id="countOfFreeMembers"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
@@ -56,6 +47,7 @@
                 <button id="createBtn" action="insuranceContractsTable.create"/>
                 <button id="editBtn" action="insuranceContractsTable.edit"/>
                 <button id="removeBtn" action="insuranceContractsTable.remove"/>
+                <button id="click" caption="Список застрахованных"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

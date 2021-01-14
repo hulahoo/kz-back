@@ -242,6 +242,7 @@ create table TSADV_ATTACHMENT (
     HARMFULL_FACTORS_ID uuid,
     NOT_ALLOWED_PERSON_ID uuid,
     MEDICAL_INSPECTION_ID uuid,
+    INSURANCE_CONTRACT_ID uuid,
     --
     primary key (ID)
 )^
@@ -16442,6 +16443,7 @@ create table TSADV_CONTRACT_CONDITIONS (
     AGE_MAX varchar(255) not null,
     IS_FREE boolean not null,
     COST_IN_KZT double precision not null,
+    INSURANCE_CONTRACT_ID uuid,
     --
     primary key (ID)
 )^
@@ -16459,8 +16461,40 @@ create table TSADV_INSURANCE_CONTRACT_ADMINISTRATOR (
     --
     NOTIFY_ABOUT_NEW_ATTACHMENTS boolean,
     EMPLOYEE_ID uuid not null,
+    INSURANCE_CONTRACT_ID uuid,
     --
     primary key (ID)
 )^
 -- end TSADV_INSURANCE_CONTRACT_ADMINISTRATOR
 
+-- begin TSADV_INSURANCE_CONTRACT
+create table TSADV_INSURANCE_CONTRACT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    POLICY_NAME varchar(25) not null,
+    CONTRACT varchar(10) not null,
+    SIGN_DATE date not null,
+    COMPANY_ID uuid not null,
+    RESPONSIBLE_ID uuid,
+    INSURER varchar(255),
+    YEAR integer,
+    START_DATE date not null,
+    EXPIRATION_DATE date not null,
+    AVAILABILITY_PERIOD_FROM date not null,
+    INSURANCE_PROGRAM varchar(500) not null,
+    INSURER_CONTACTS varchar(100),
+    NOTIFICATION_DATE date not null,
+    ATTACHING_AN_EMPLOYEE integer not null,
+    ATTACHING_FAMILY integer not null,
+    COUNT_OF_FREE_MEMBERS integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_INSURANCE_CONTRACT

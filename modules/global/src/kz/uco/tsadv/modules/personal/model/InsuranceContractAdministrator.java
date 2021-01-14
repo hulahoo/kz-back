@@ -18,6 +18,17 @@ public class InsuranceContractAdministrator extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "EMPLOYEE_ID")
     private PersonGroupExt employee;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "INSURANCE_CONTRACT_ID")
+    private InsuranceContract insuranceContract;
+
+    public InsuranceContract getInsuranceContract() {
+        return insuranceContract;
+    }
+
+    public void setInsuranceContract(InsuranceContract insuranceContract) {
+        this.insuranceContract = insuranceContract;
+    }
 
     public PersonGroupExt getEmployee() {
         return employee;

@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -82,6 +83,28 @@ public class InsuranceContract extends StandardEntity {
 
     @OneToMany(mappedBy = "insuranceContract")
     private List<ContractConditions> programConditions;
+
+    @OneToMany(mappedBy = "insuranceContract")
+    private List<InsuranceContractAdministrator> contractAdministrator;
+
+    @OneToMany(mappedBy = "insuranceContract")
+    private List<Attachment> attachments;
+
+    public List<Attachment> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
+    }
+
+    public List<InsuranceContractAdministrator> getContractAdministrator() {
+        return contractAdministrator;
+    }
+
+    public void setContractAdministrator(List<InsuranceContractAdministrator> contractAdministrator) {
+        this.contractAdministrator = contractAdministrator;
+    }
 
     public List<ContractConditions> getProgramConditions() {
         return programConditions;
