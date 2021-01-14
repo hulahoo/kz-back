@@ -3,8 +3,10 @@ package kz.uco.tsadv.entity.tb;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.entity.tb.dictionary.AttachmentType;
+import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name = "TSADV_ATTACHMENT")
 @Entity(name = "tsadv$Attachment")
@@ -62,6 +64,16 @@ public class Attachment extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEDICAL_INSPECTION_ID")
     protected MedicalInspection medicalInspection;
+    @OneToMany(mappedBy = "attachment")
+    private List<InsuranceContract> insuranceContract;
+
+    public List<InsuranceContract> getInsuranceContract() {
+        return insuranceContract;
+    }
+
+    public void setInsuranceContract(List<InsuranceContract> insuranceContract) {
+        this.insuranceContract = insuranceContract;
+    }
 
     public void setMedicalInspection(MedicalInspection medicalInspection) {
         this.medicalInspection = medicalInspection;
