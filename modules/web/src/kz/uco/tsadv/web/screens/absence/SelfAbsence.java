@@ -123,6 +123,12 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .show();
     }
 
+    @Subscribe(id = "absencesDc", target = Target.DATA_CONTAINER)
+    protected void onAbsencesDcItemChange(InstanceContainer.ItemChangeEvent<Absence> event) {
+
+        boolean isEnabled = event.getItem() != null && "MATERNITY".equals(event.getItem().getType().getCode());
+        absencesTableNewLeavingVacationRequest.setEnabled(isEnabled);
+    }
 
     public void newVacationScheduleButton() {
         VacationScheduleRequest item = dataManager.create(VacationScheduleRequest.class);
@@ -149,20 +155,10 @@ public class SelfAbsence extends StandardLookup<Absence>
                 });
     }
 
-    @Subscribe(id = "absencesDc", target = Target.DATA_CONTAINER)
-    protected void onAbsencesDcItemChange(InstanceContainer.ItemChangeEvent<Absence> event) {
-        DicAbsenceType absenceType = commonService.getEntity(DicAbsenceType.class, "MATERNITY");
-
-        if (event.getItem().getType().equals(absenceType)){
-            absencesTableNewLeavingVacationRequest.setEnabled(true);
-        }
-    }
-
-
     public void newLeavingVacationRequest() {
         Absence getItem = absencesDc.getItem();
         LeavingVacationRequest item = dataManager.create(LeavingVacationRequest.class);
-        Date today =timeSource.currentTimestamp();
+        Date today = timeSource.currentTimestamp();
 
         item.setRequestDate(today);
         item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
