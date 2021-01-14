@@ -36,9 +36,16 @@ public class LeavingVacationRequestEdit extends StandardEditor<LeavingVacationRe
         LocalDateTime ldt = LocalDateTime.ofInstant(timeSource.currentTimestamp().toInstant(), ZoneId.systemDefault());
         Date outRequestDate = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
 
-        Date outPlannedStart = Date.from(ldt.minusDays(-30).atZone(ZoneId.systemDefault()).toInstant());
-
         requestDateField.setRangeStart(outRequestDate);
+
+    }
+
+    @Subscribe
+    public void onAfterShow(AfterShowEvent event) {
+
+        LocalDateTime ldt1 = LocalDateTime.ofInstant(requestDateField.getValue().toInstant(), ZoneId.systemDefault());
+        Date outPlannedStart = Date.from(ldt1.minusDays(-30).atZone(ZoneId.systemDefault()).toInstant());
+
         plannedStartDateField.setRangeStart(outPlannedStart);
     }
 
