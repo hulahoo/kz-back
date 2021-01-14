@@ -21895,14 +21895,4 @@
         </property>
         <property name="user" view="_minimal"/>
     </view>
-    <view entity="tsadv$PersonContact" name="portal.my-profile" extends="_local">
-        <property name="type">
-            <property name="langValue" />
-            <property name="langValue1" />
-            <property name="langValue2" />
-            <property name="langValue3" />
-            <property name="langValue4" />
-            <property name="langValue5" />
-        </property>
-    </view>
 </views>
