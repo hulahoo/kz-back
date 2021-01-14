@@ -21897,4 +21897,8 @@
     <view entity="tsadv$ContractConditions" name="contractConditions-browseView" extends="_local">
         <property name="relationshipType" view="_minimal"/>
     </view>
+    <view entity="tsadv$InsuranceContractAdministrator" name="insuranceContractAdministrator-browseView"
+          extends="_local">
+        <property name="employee" view="_minimal"/>
+    </view>
 </views>

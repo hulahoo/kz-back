@@ -16279,7 +16279,6 @@ create table TSADV_BPROC_INSTANCE_ROLES_LINK (
 )^
 -- end TSADV_BPROC_INSTANCE_ROLES_LINK
 
-
 -- begin TSADV_AWARDS_REQUEST
 create table TSADV_AWARDS_REQUEST (
     ID uuid,
@@ -16447,3 +16446,20 @@ create table TSADV_CONTRACT_CONDITIONS (
     primary key (ID)
 )^
 -- end TSADV_CONTRACT_CONDITIONS
+-- begin TSADV_INSURANCE_CONTRACT_ADMINISTRATOR
+create table TSADV_INSURANCE_CONTRACT_ADMINISTRATOR (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NOTIFY_ABOUT_NEW_ATTACHMENTS boolean,
+    EMPLOYEE_ID uuid not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_INSURANCE_CONTRACT_ADMINISTRATOR

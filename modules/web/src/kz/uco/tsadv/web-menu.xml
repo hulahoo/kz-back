@@ -186,6 +186,8 @@
               caption="mainMsg://menu_config.tsadv$LeavingVacationRequest.browse"/>
         <item screen="tsadv_InsuranceContract.browse" caption="mainMsg://menu_config.tsadv_InsuranceContract.browse"/>
         <item screen="tsadv$ContractConditions.browse" caption="mainMsg://menu_config.tsadv$ContractConditions.browse"/>
+        <item screen="tsadv$InsuranceContractAdministrator.browse"
+              caption="mainMsg://menu_config.tsadv$InsuranceContractAdministrator.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
