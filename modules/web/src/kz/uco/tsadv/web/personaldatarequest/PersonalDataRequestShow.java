@@ -86,7 +86,7 @@ public class PersonalDataRequestShow extends AbstractWindow {
 
         userContactCreate.setInitialValuesSupplier(() ->
                 personDs.getItem().getGroup() != null
-                        ? ParamsMap.of("personGroup", personDs.getItem().getGroup())
+                        ? ParamsMap.of("personGroupId", personDs.getItem().getGroup())
                         : null);
 
         userContactCreate.setWindowParamsSupplier(() -> ParamsMap.of("noEmail", true));
@@ -181,7 +181,7 @@ public class PersonalDataRequestShow extends AbstractWindow {
         List<PersonContact> personContact = personGroupExt != null ?
                 commonService.getEntities(PersonContact.class,
                         "select e from tsadv$PersonContact e " +
-                                " where e.personGroup.id = :id and :currentDate between e.startDate and e.endDate " +
+                                " where e.personGroupId.id = :id and :currentDate between e.startDate and e.endDate " +
                                 "       and e.type.code = :code",
                         ParamsMap.of("id", personGroupExt.getId(),
                                 "currentDate", CommonUtils.getSystemDate(),
@@ -250,7 +250,7 @@ public class PersonalDataRequestShow extends AbstractWindow {
     protected PersonalDataRequest getActiveRequest(String statusCode) {
         List<PersonalDataRequest> list = commonService.getEntities(PersonalDataRequest.class,
                 "select e from tsadv$PersonalDataRequest e " +
-                        " where e.personGroup.id = :groupId " +
+                        " where e.personGroupId.id = :groupId " +
                         "   and e.status.code = :code "
                 , ParamsMap.of("groupId", userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID),
                         "code", statusCode),
@@ -283,10 +283,10 @@ public class PersonalDataRequestShow extends AbstractWindow {
 
         List<AddressRequest> list = commonService.getEntities(AddressRequest.class,
                 " select e from tsadv$AddressRequest e " +
-                        " where e.personGroup.id = :personGroup " +
+                        " where e.personGroupId.id = :personGroupId " +
                         "       and e.status.code = 'DRAFT' " +
                         "       and e.baseAddress is null ",
-                ParamsMap.of("personGroup", personGroupExt.getId()), "addressRequest-view");
+                ParamsMap.of("personGroupId", personGroupExt.getId()), "addressRequest-view");
         AddressRequest addressRequest = list.isEmpty() ? null : list.get(0);
         if (addressRequest == null) {
             addressRequest = metadata.create(AddressRequest.class);
@@ -325,10 +325,10 @@ public class PersonalDataRequestShow extends AbstractWindow {
 
         List<AddressRequest> list = commonService.getEntities(AddressRequest.class,
                 " select e from tsadv$AddressRequest e " +
-                        " where e.personGroup.id = :personGroup " +
+                        " where e.personGroupId.id = :personGroupId " +
                         "       and e.status.code = 'DRAFT' " +
                         "       and e.baseAddress.id = :addressId ",
-                ParamsMap.of("personGroup", personGroupExt.getId()
+                ParamsMap.of("personGroupId", personGroupExt.getId()
                         , "addressId", selectedAddress.getId()), "addressRequest-view");
         AddressRequest addressRequest = list.isEmpty() ? null : list.get(0);
         if (addressRequest == null) {

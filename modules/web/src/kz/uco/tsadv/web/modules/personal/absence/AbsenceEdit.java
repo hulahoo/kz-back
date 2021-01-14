@@ -130,7 +130,7 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
         if (params.containsKey("assignmentGroupId")) {
             assignmentGroupId = (UUID) params.get("assignmentGroupId");
             List<PersonGroupExt> personGroupExtList = commonService.getEntities(PersonGroupExt.class,
-                    "SELECT a.personGroup " +
+                    "SELECT a.personGroupId " +
                             "FROM base$AssignmentExt a " +
                             "   WHERE a.group.id = :assignmentGroupId " +
                             "      AND current_date BETWEEN a.startDate AND a.endDate",

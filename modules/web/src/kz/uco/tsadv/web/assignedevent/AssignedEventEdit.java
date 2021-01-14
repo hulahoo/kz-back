@@ -46,9 +46,9 @@ public class AssignedEventEdit extends AbstractEditor<AssignedEvent> {
 //    protected void initNewItem(AssignedEvent item){
 //        super.initNewItem(item);
 //
-//        PersonGroup personGroup userSession.getAttribute(StaticVariable.USER_PERSON_GROUP);
-//        if (personGroup != null){
-//            item.setAssigned(personGroup);
+//        PersonGroup personGroupId userSession.getAttribute(StaticVariable.USER_PERSON_GROUP);
+//        if (personGroupId != null){
+//            item.setAssigned(personGroupId);
 //        }
 //    }
 

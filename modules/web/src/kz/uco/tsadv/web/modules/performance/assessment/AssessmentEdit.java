@@ -32,7 +32,6 @@ import kz.uco.tsadv.web.toolkit.ui.ratestarscomponent.RateStarsComponent;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -474,7 +473,7 @@ public class AssessmentEdit extends AbstractEditor<Assessment> {
         LoadContext<AssessmentGoal> loadContext = LoadContext.create(AssessmentGoal.class);
         loadContext.setQuery(LoadContext.createQuery("select e from tsadv$AssessmentGoal e where " +
                 "e.goal.id = :goal and e.participantAssessment.id = :ap")
-                .setParameter("goal", ag.getGoal().getId())
+                .setParameter("goal", ag.getParentGoal().getId())
                 .setParameter("ap", currentAssessmentParticipant.getId()));
         AssessmentGoal assessmentGoal = dataManager.load(loadContext);
         if (assessmentGoal == null)
@@ -822,7 +821,7 @@ public class AssessmentEdit extends AbstractEditor<Assessment> {
     private List<AssignedGoal> getAssignedGoals() {
         LoadContext<AssignedGoal> loadContext = LoadContext.create(AssignedGoal.class);
         loadContext.setQuery(LoadContext.createQuery("select e from tsadv$AssignedGoal e " +
-                "where e.personGroup.id = :personId")
+                "where e.personGroupId.id = :personId")
                 .setParameter("personId", person.getGroup().getId()))
                 .setView("assignedGoalForCard");
         return dataManager.loadList(loadContext);
@@ -934,7 +933,7 @@ public class AssessmentEdit extends AbstractEditor<Assessment> {
     private AssessmentGoal getCurrentAssessmentGoal(AssessmentParticipant assessmentParticipant, AssignedGoal ag) {
         if (assessmentParticipant.getAssessmentGoal() != null) {
             for (AssessmentGoal assessmentGoal : assessmentParticipant.getAssessmentGoal()) {
-                if (assessmentGoal.getGoal().equals(ag.getGoal())) {
+                if (assessmentGoal.getGoal().equals(ag.getParentGoal())) {
                     return assessmentGoal;
                 }
             }

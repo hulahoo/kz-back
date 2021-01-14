@@ -38,7 +38,7 @@
                 <column id="middleName"/>
                 <column id="email"/>
                 <column id="mobilePhone"/>
-                <!-- <column id="personGroup" captionProperty="personGroup.personFioWithEmployeeNumber"/>-->
+                <!-- <column id="personGroupId" captionProperty="personGroupId.personFioWithEmployeeNumber"/>-->
             </columns>
             <rows datasource="userExtsDs"/>
             <rowsCount/>

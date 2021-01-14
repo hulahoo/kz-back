@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://personBenefitRequestEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.personbenefitrequest">
+    <data>
+        <instance id="personBenefitRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.PersonBenefitRequest">
+            <view extends="_local">
+                <property name="reason" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="assignments" view="_minimal">
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+                <property name="requestStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="file" view="_minimal"/>
+                <property name="personBenefit" view="_minimal"/>
+            </view>
+            <loader/>
+        </instance>
+        <collection id="dicReasonBenifitsDc" class="kz.uco.tsadv.modules.personal.dictionary.DicReasonBenifit">
+            <view extends="_local"/>
+            <loader id="dicReasonBenifitsDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicReasonBenifit e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="personBenefitRequestDc">
+                <column width="350px">
+                    <pickerField id="personGroupField" property="personGroup" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <lookupField id="reasonField" property="reason" required="true"
+                                 optionsContainer="dicReasonBenifitsDc"/>
+                    <lookupField id="combatantField" property="combatant" required="true"/>
+                    <textField id="certificateFromDateField" property="certificateFromDate" required="true"/>
+                    <textField id="documentNumberField" property="documentNumber" required="true"/>
+                    <lookupField id="radiationRiskZoneField" property="radiationRiskZone" required="true"/>
+                    <pickerField id="requestStatusField" property="requestStatus" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

@@ -328,7 +328,7 @@ public class UcoBpmProcActorsFrame /*extends ProcActorsFrame */{
         UUID posId = employeeService.getDirectorPositionByPersonGroup(personGroupExt.getId());
         if (posId != null) {
             List<PersonGroupExt> list = commonService.getEntities(PersonGroupExt.class,
-                    "select e.personGroup from base$AssignmentExt e " +
+                    "select e.personGroupId from base$AssignmentExt e " +
                             "where current_date between e.startDate and e.endDate " +
                             " and e.primaryFlag = TRUE " +
                             " and e.positionGroup.id = :pos", ParamsMap.of("pos", posId), View.MINIMAL);

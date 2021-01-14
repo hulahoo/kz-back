@@ -5,7 +5,9 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.screen.Screen;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.dbview.GradeSsView;
@@ -36,6 +38,8 @@ public class GroupsComponent {
     protected Metadata metadata;
     @Inject
     protected ComponentsFactory componentsFactory;
+    @Inject
+    private UiComponents uiComponents;
 
     public void setInDateGroups(AssignmentExt assignmentExt, Date inDate) {
         if (assignmentExt == null || inDate == null) return;
@@ -145,5 +149,33 @@ public class GroupsComponent {
         groupBoxLayout.add(scrollBoxLayout);
         groupBoxLayout.setId("activityGroupBoxLayout");
         abstractWindow.add(groupBoxLayout, 0);
+    }
+
+    public void addActivityBodyToScreen(@Nonnull Screen screen, @Nonnull Activity activity) {
+        if (screen.getWindow().getComponent("activityGroupBoxLayout") != null) return;
+        GroupBoxLayout groupBoxLayout = uiComponents.create(GroupBoxLayout.class);
+        ScrollBoxLayout scrollBoxLayout = uiComponents.create(ScrollBoxLayout.class);
+        Label label3 = uiComponents.create(Label.class);
+        label3.setValue(activity.getNotificationBody());
+        label3.setHtmlEnabled(true);
+        label3.setStyleName("p-notify-label");
+        scrollBoxLayout.add(label3);
+        groupBoxLayout.add(scrollBoxLayout);
+        groupBoxLayout.setId("activityGroupBoxLayout");
+        screen.getWindow().add(groupBoxLayout, 0);
+    }
+
+    public void addActivityHeaderToScreen(@Nonnull Screen screen, @Nonnull Activity activity) {
+        if (screen.getWindow().getComponent("activityGroupBoxLayout") != null) return;
+        GroupBoxLayout groupBoxLayout = uiComponents.create(GroupBoxLayout.class);
+        ScrollBoxLayout scrollBoxLayout = uiComponents.create(ScrollBoxLayout.class);
+        Label label3 = uiComponents.create(Label.class);
+        label3.setValue(activity.getNotificationHeader());
+        label3.setHtmlEnabled(true);
+        label3.setStyleName("p-notify-label");
+        scrollBoxLayout.add(label3);
+        groupBoxLayout.add(scrollBoxLayout);
+        groupBoxLayout.setId("activityGroupBoxLayout");
+        screen.getWindow().add(groupBoxLayout, 0);
     }
 }

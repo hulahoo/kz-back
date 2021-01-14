@@ -1918,12 +1918,6 @@
             template="kz/uco/tsadv/web/bpm/form/uco-bpm-start-proc-form.xml"/>
     <screen id="ucoBpmReassignProcForm"
             template="kz/uco/tsadv/web/bpm/form/uco-bpm-reassign-proc-form.xml"/>
-    <screen id="tsadv$BpmRolesDefiner.browse"
-            template="kz/uco/tsadv/web/bpmrolesdefiner/bpm-roles-definer-browse.xml"/>
-    <screen id="tsadv$BpmRolesDefiner.edit"
-            template="kz/uco/tsadv/web/bpmrolesdefiner/bpm-roles-definer-edit.xml"/>
-    <screen id="tsadv$BpmRolesLink.edit"
-            template="/kz/uco/tsadv/web/bpmrolesdefiner/bpm-roles-link-edit.xml"/>
     <screen id="tsadv$PersonalDataRequest.show"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request.xml"/>
     <screen id="tsadv$PersonalDataRequest.bpm"
@@ -1932,8 +1926,8 @@
             template="kz/uco/tsadv/web/addressrequest/address-request-edit.xml"/>
     <screen id="tsadv$PersonalDataRequest.browse"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-browse.xml"/>
-    <screen id="tsadv$PersonalDataRequest.edit"
-            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-edit.xml"/>
+<!--    <screen id="tsadv$PersonalDataRequest.edit"-->
+<!--            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-edit.xml"/>-->
     <screen id="TeamMemberFrame"
             template="/kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
     <screen id="tsadv$Absence.lookup"

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://leavingVacationRequestBrowse.caption"
+        focusComponent="leavingVacationRequestsTable"
+        messagesPack="kz.uco.tsadv.web.screens.leavingvacationrequest">
+    <data readOnly="true">
+        <collection id="leavingVacationRequestsDc"
+                    class="kz.uco.tsadv.modules.personal.model.LeavingVacationRequest"
+                    view="leavingVacationRequest-browseView">
+            <loader id="leavingVacationRequestsDl">
+                <query>
+                    <![CDATA[select e from tsadv$LeavingVacationRequest e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="leavingVacationRequestsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="leavingVacationRequestsTable"
+                dataLoader="leavingVacationRequestsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="leavingVacationRequestsTable"
+                    width="100%"
+                    dataContainer="leavingVacationRequestsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="requestNumber"/>
+                <column id="statusRequest"/>
+                <column id="requestDate"/>
+                <column id="requestType"/>
+                <column id="vacation"/>
+                <column id="startDate"/>
+                <column id="endData"/>
+                <column id="plannedStartDate"/>
+                <column id="comment"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="leavingVacationRequestsTable.create"/>
+                <button id="editBtn" action="leavingVacationRequestsTable.edit"/>
+                <button id="removeBtn" action="leavingVacationRequestsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

@@ -5,6 +5,7 @@ import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "TSADV_ASSIGNED_PERFORMANCE_PLAN")
@@ -17,10 +18,10 @@ public class AssignedPerformancePlan extends StandardEntity {
     protected PerformancePlan performancePlan;
 
     @Column(name = "RESULT")
-    protected Integer result;
+    protected Double result;
 
     @Column(name = "GZP")
-    protected Integer gzp;
+    protected BigDecimal gzp;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ASSIGNED_PERSON_ID")
@@ -40,6 +41,88 @@ public class AssignedPerformancePlan extends StandardEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE")
     protected Date endDate;
+
+    @Column(name = "KPI_SCORE")
+    protected Double kpiScore;
+
+    @Column(name = "EXTRA_POINT")
+    protected Double extraPoint;
+
+    @Column(name = "FINAL_SCORE")
+    protected Double finalScore;
+
+    @Column(name = "COMPANY_BONUS")
+    protected Double companyBonus;
+
+    @Column(name = "PERSONAL_BONUS")
+    protected Double personalBonus;
+
+    @Column(name = "FINAL_BONUS")
+    protected Double finalBonus;
+
+    public Double getFinalBonus() {
+        return finalBonus;
+    }
+
+    public void setFinalBonus(Double finalBonus) {
+        this.finalBonus = finalBonus;
+    }
+
+    public void setKpiScore(Double kpiScore) {
+        this.kpiScore = kpiScore;
+    }
+
+    public Double getKpiScore() {
+        return kpiScore;
+    }
+
+    public void setExtraPoint(Double extraPoint) {
+        this.extraPoint = extraPoint;
+    }
+
+    public Double getExtraPoint() {
+        return extraPoint;
+    }
+
+    public Double getPersonalBonus() {
+        return personalBonus;
+    }
+
+    public void setPersonalBonus(Double personalBonus) {
+        this.personalBonus = personalBonus;
+    }
+
+    public Double getCompanyBonus() {
+        return companyBonus;
+    }
+
+    public void setCompanyBonus(Double companyBonus) {
+        this.companyBonus = companyBonus;
+    }
+
+    public Double getFinalScore() {
+        return finalScore;
+    }
+
+    public void setFinalScore(Double finalScore) {
+        this.finalScore = finalScore;
+    }
+
+    public void setResult(Double result) {
+        this.result = result;
+    }
+
+    public Double getResult() {
+        return result;
+    }
+
+    public void setGzp(BigDecimal gzp) {
+        this.gzp = gzp;
+    }
+
+    public BigDecimal getGzp() {
+        return gzp;
+    }
 
     public Date getEndDate() {
         return endDate;
@@ -63,22 +146,6 @@ public class AssignedPerformancePlan extends StandardEntity {
 
     public void setStatus(CardStatusEnum status) {
         this.status = status == null ? null : status.getId();
-    }
-
-    public Integer getGzp() {
-        return gzp;
-    }
-
-    public void setGzp(Integer gzp) {
-        this.gzp = gzp;
-    }
-
-    public Integer getResult() {
-        return result;
-    }
-
-    public void setResult(Integer result) {
-        this.result = result;
     }
 
     public void setPerformancePlan(PerformancePlan performancePlan) {

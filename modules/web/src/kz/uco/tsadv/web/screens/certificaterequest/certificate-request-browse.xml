@@ -13,7 +13,7 @@
             </view>
             <loader id="certificateRequestsDl">
                 <query>
-                    <![CDATA[select e from tsadv_CertificateRequest e]]>
+                    <![CDATA[select e from tsadv_CertificateRequest e where e.personGroup.id = :session$userPersonGroupId]]>
                 </query>
             </loader>
         </collection>
@@ -37,7 +37,7 @@
                 <column id="requestNumber"/>
                 <column id="requestDate"/>
                 <column id="status"/>
-                <column id="file"/>
+                <column id="file" link="true" linkInvoke="printReport"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

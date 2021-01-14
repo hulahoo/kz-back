@@ -263,7 +263,7 @@ public class TimecardBrowse extends AbstractLookup {
             Date startDate = assignment.getStartDate().after(monthStart) ? assignment.getStartDate() : monthStart;
             Date endDate = assignment.getEndDate().before(monthEnd) ? assignment.getEndDate() : monthEnd;
             List<Absence> absences = commonService.getEntities(Absence.class, "select e from tsadv$Absence e  " +
-                            "    where   e.personGroup.id = :personGroupId" +
+                            "    where   e.personGroupId.id = :personGroupId" +
                             "       and  :startDate <= e.dateTo" +
                             "       and  :endDate >= e.dateFrom",
                     ParamsMap.of("personGroupId", assignment.getPersonGroup().getId(), "startDate", startDate, "endDate", endDate), View.MINIMAL);

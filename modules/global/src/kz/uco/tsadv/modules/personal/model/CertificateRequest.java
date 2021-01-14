@@ -4,6 +4,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.tsadv.modules.personal.dictionary.DicCertificateType;
 import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
@@ -14,6 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_CERTIFICATE_REQUEST")
 @Entity(name = "tsadv_CertificateRequest")
 public class CertificateRequest extends StandardEntity {
@@ -34,19 +36,19 @@ public class CertificateRequest extends StandardEntity {
     @JoinColumn(name = "PERSON_GROUP_ID")
     private PersonGroupExt personGroup;
 
-    @Lookup(type = LookupType.SCREEN, actions = "lookup")
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CRETIFICATE_TYPE_ID")
     private DicCertificateType cretificateType;
 
-    @Lookup(type = LookupType.SCREEN, actions = "lookup")
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "RECEIVING_TYPE_ID")
     private DicReceivingType receivingType;
 
-    @Lookup(type = LookupType.SCREEN, actions = "lookup")
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "LANGUAGE_ID")

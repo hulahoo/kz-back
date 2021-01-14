@@ -13,10 +13,10 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
 import java.util.Date;
-import java.util.UUID;
 
-@NamePattern("%s|goal")
+@NamePattern("%s|goalString")
 @Table(name = "TSADV_ASSIGNED_GOAL", uniqueConstraints = {
         @UniqueConstraint(name = "IDX_TSADV_ASSIGNED_GOAL_UNQ", columnNames = {"PERSON_GROUP_ID", "GOAL_ID"})
 })
@@ -75,7 +75,7 @@ public class AssignedGoal extends AbstractParentEntity {
     protected Date endDate;
 
     @Column(name = "WEIGHT")
-    protected Integer weight;
+    protected Double weight;
 
     @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
@@ -93,14 +93,44 @@ public class AssignedGoal extends AbstractParentEntity {
     @Column(name = "GOAL_STRING")
     protected String goalString;
 
-    @Column(name = "PARENT_ID")
-    protected UUID parentId;
-
     @Column(name = "GOAL_TYPE")
     protected String goalType;
 
+    @DecimalMin(message = "{msg://tsadv$AssignedGoal.result.validation.DecimalMin}", value = "0")
     @Column(name = "RESULT")
     protected Double result;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ASSIGNED_GOAL_ID")
+    protected AssignedGoal parentAssignedGoal;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GOAL_LIBRARY_ID")
+    protected GoalLibrary goalLibrary;
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public GoalLibrary getGoalLibrary() {
+        return goalLibrary;
+    }
+
+    public void setGoalLibrary(GoalLibrary goalLibrary) {
+        this.goalLibrary = goalLibrary;
+    }
+
+    public AssignedGoal getParentAssignedGoal() {
+        return parentAssignedGoal;
+    }
+
+    public void setParentAssignedGoal(AssignedGoal parentAssignedGoal) {
+        this.parentAssignedGoal = parentAssignedGoal;
+    }
 
     public Double getResult() {
         return result;
@@ -116,14 +146,6 @@ public class AssignedGoal extends AbstractParentEntity {
 
     public void setGoalType(AssignedGoalTypeEnum goalType) {
         this.goalType = goalType == null ? null : goalType.getId();
-    }
-
-    public UUID getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(UUID parentId) {
-        this.parentId = parentId;
     }
 
     public String getGoalString() {
@@ -210,15 +232,6 @@ public class AssignedGoal extends AbstractParentEntity {
 
     public PersonGroupExt getPersonGroup() {
         return personGroup;
-    }
-
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public Integer getWeight() {
-        return weight;
     }
 
 

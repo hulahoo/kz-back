@@ -9,8 +9,6 @@ import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.screen.UiControllerUtils;
 import com.haulmont.cuba.security.global.UserSession;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,13 +24,18 @@ public interface SelfServiceMixin {
         for (String loaderId : screenData.getLoaderIds()) {
             DataLoader loader = screenData.getLoader(loaderId);
             String query = loader.getQuery();
+            if (query == null || query.isEmpty()) {
+                continue;
+            }
             Matcher matcher = CONTAINER_REF_PATTERN.matcher(query);
             while (matcher.find()) {
                 String paramName = matcher.group(1);
                 String sessionAttribute = matcher.group(2);
                 BeanLocator beanLocator = Extensions.getBeanLocator(event.getSource());
                 UserSession userSession = beanLocator.get(UserSession.class);
-                loader.setParameter(paramName, userSession.getAttribute(sessionAttribute));
+                query = query.replace(paramName, sessionAttribute);
+                loader.setQuery(query);
+                loader.setParameter(sessionAttribute, userSession.getAttribute(sessionAttribute));
                 loader.load();
             }
         }

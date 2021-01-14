@@ -19,7 +19,7 @@ public class AgreementLookup extends AbstractLookup {
         super.init(params);
 
         if (params.containsKey("personGroupId")) {
-            agreementsDs.setQuery(CustomFilter.getFilteredQuery(agreementsDs.getQuery(), " e.personGroup.id = :param$personGroupId "));
+            agreementsDs.setQuery(CustomFilter.getFilteredQuery(agreementsDs.getQuery(), " e.personGroupId.id = :param$personGroupId "));
         }
 
 

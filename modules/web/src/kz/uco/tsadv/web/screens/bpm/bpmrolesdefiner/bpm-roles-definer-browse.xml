@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="bpmRolesDefinersTable"
+        messagesPack="kz.uco.tsadv.web.screens.bpm.bpmrolesdefiner">
+    <data readOnly="true">
+        <collection id="bpmRolesDefinersDc"
+                    class="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"
+                    view="_local">
+            <loader id="bpmRolesDefinersDl">
+                <query>
+                    <![CDATA[select e from tsadv$BpmRolesDefiner e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="bpmRolesDefinersTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="bpmRolesDefinersTable"
+                dataLoader="bpmRolesDefinersDl">
+            <properties include=".*"/>
+        </filter>
+        <table id="bpmRolesDefinersTable"
+               width="100%"
+               dataContainer="bpmRolesDefinersDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="processDefinitionKey"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="bpmRolesDefinersTable.create"/>
+                <button id="editBtn" action="bpmRolesDefinersTable.edit"/>
+                <button id="removeBtn" action="bpmRolesDefinersTable.remove"/>
+            </buttonsPanel>
+        </table>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

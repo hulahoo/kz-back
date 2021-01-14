@@ -1,15 +1,21 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.EntityManager;
+import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.entity.Category;
 import com.haulmont.cuba.core.entity.CategoryAttribute;
 import com.haulmont.cuba.core.entity.CategoryAttributeValue;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
+import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
+import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.timesheet.model.Calendar;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +38,10 @@ public class AbsenceServiceBean implements AbsenceService {
     protected CallStoredFunctionService callStoredFunctionService;
     @Inject
     protected CalendarService calendarService;
+    @Inject
+    private Persistence persistence;
+    @Inject
+    private Metadata metadata;
 
     @Override
     public boolean isLongAbsence(Absence absence) {
@@ -383,5 +393,30 @@ public class AbsenceServiceBean implements AbsenceService {
                         "       and s.code = 'ABSENCETYPELONG' " +
                         "       and s.booleanValue = true ",
                 ParamsMap.empty(), Optional.ofNullable(viewName).orElse(View.MINIMAL));
+    }
+
+    @Override
+    public void createAbsenceFromRequest(String entityId) {
+        EntityManager em = persistence.getEntityManager();
+        AbsenceRequest absenceRequest = em.find(AbsenceRequest.class, UUID.fromString(entityId), "absenceRequest.view");
+        Absence absence = metadata.create(Absence.class);
+
+        absence.setNotificationDate(absenceRequest.getRequestDate());
+        absence.setAbsenceDays(absenceRequest.getAbsenceDays());
+        absence.setAbsenceRequest(absenceRequest);
+        absence.setPersonGroup(absenceRequest.getAssignmentGroup().getList().get(0).getPersonGroup());
+        absence.setDateFrom(absenceRequest.getDateFrom());
+        absence.setDateTo(absenceRequest.getDateTo());
+        absence.setType(absenceRequest.getType());
+
+        if (AppBeans.get(DatesService.class).getFullDaysCount(absenceRequest.getDateFrom(), absenceRequest.getDateTo()) >= 30
+                && isAbsenceTypeLong(absenceRequest.getId())) {
+            absence.setUseInBalance(true);
+        }
+
+        Objects.requireNonNull(absenceRequest).setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
+
+        em.merge(absenceRequest);
+        em.persist(absence);
     }
 }

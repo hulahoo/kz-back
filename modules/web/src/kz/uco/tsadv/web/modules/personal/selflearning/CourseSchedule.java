@@ -109,7 +109,7 @@ public class CourseSchedule extends AbstractWindow {
         LoadContext<CertificationEnrollment> loadContext = LoadContext.create(CertificationEnrollment.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$CertificationEnrollment e " +
-                        "where e.personGroup.id = :pId " +
+                        "where e.personGroupId.id = :pId " +
                         "and e.status = :status");
         query.setParameter("pId", personGroup.getId());
         query.setParameter("status", CertificationStatus.ACTIVE);
@@ -291,7 +291,7 @@ public class CourseSchedule extends AbstractWindow {
         LoadContext<Enrollment> loadContext = LoadContext.create(Enrollment.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$Enrollment e  " +
-                        "where e.personGroup.id = :pId " +
+                        "where e.personGroupId.id = :pId " +
                         "and e.status = :status");
         query.setParameter("pId", personGroup.getId());
         query.setParameter("status", EnrollmentStatus.APPROVED);

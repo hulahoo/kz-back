@@ -2,12 +2,12 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.Configuration;
-import javafx.util.Pair;
 import kz.uco.tsadv.modules.timesheet.config.TimecardConfig;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.Period;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -290,7 +290,7 @@ public class DatesServiceBean implements DatesService {
                             enclosing(startDate1, endDate1, startDate2, endDate2) ||
                             enclosingEndTouching(startDate1, endDate1, startDate2, endDate2) ||
                             exactMatch(startDate1, endDate1, startDate2, endDate2)
-                    ) {
+            ) {
                 result = getFullDaysCount(startDate1, endDate1);
             } else if (endInside(startDate1, endDate1, startDate2, endDate2)) {
                 result = getFullDaysCount(startDate1, endDate2);
@@ -300,16 +300,16 @@ public class DatesServiceBean implements DatesService {
     }
 
     @Override
-    public Pair<Calendar, Calendar> getItersectionPeriod(Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
+    public Map<Calendar, Calendar> getItersectionPeriod(Date startDate1, Date endDate1, Date startDate2, Date endDate2) {
         Calendar c1 = Calendar.getInstance();
         Calendar c2 = Calendar.getInstance();
-        Pair<Calendar, Calendar> result = null;
+        Map<Calendar, Calendar> result =  new HashMap<>();
         //first period enter in second period
         if (!startDate1.before(startDate2)
                 && !endDate1.after(endDate2)) {
             c1.setTime(startDate1);
             c2.setTime(endDate1);
-            result = new Pair<>(c1, c2);
+            result.put(c1, c2);
         }
         //from first period start to second period end
         if (!startDate1.before(startDate2)
@@ -317,7 +317,8 @@ public class DatesServiceBean implements DatesService {
                 && !startDate1.before(endDate2)) {
             c1.setTime(startDate1);
             c2.setTime(endDate2);
-            result = new Pair<>(c1, c2);
+            result.clear();
+            result.put(c1, c2);
         }
         //from second period start to first period end
         if (startDate1.before(startDate2)
@@ -325,14 +326,16 @@ public class DatesServiceBean implements DatesService {
                 && !endDate1.after(endDate2)) {
             c1.setTime(startDate2);
             c2.setTime(endDate1);
-            result = new Pair<>(c1, c2);
+            result.clear();
+            result.put(c1, c2);
         }
         //second period enter to first period
         if (!startDate1.after(startDate2)
                 && !endDate1.before(endDate2)) {
             c1.setTime(startDate2);
             c2.setTime(endDate2);
-            result = new Pair<>(c1, c2);
+            result.clear();
+            result.put(c1, c2);
         }
         return result;
     }
@@ -365,6 +368,16 @@ public class DatesServiceBean implements DatesService {
             c.add(Calendar.MINUTE, 1);
         c.set(Calendar.SECOND, 0);
         return c.getTime();
+    }
+
+    @Override
+    public Period getPeriodFromTwoDates(Date startDate, Date endDate) {
+        if (startDate != null && endDate != null) {
+            return Period.between(new java.sql.Date(startDate.getTime()).toLocalDate(),
+                    new java.sql.Date(endDate.getTime()).toLocalDate());
+        } else {
+            return null;
+        }
     }
 
 }

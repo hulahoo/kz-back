@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
+import kz.uco.base.entity.dictionary.DicCity;
 import kz.uco.base.entity.dictionary.DicCountry;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
@@ -46,7 +47,7 @@ public class AddressEdit extends AbstractEditor<Address> {
     protected PickerField addressTypeField;
 
     @Named("fieldGroup.city")
-    protected TextField cityField;
+    protected PickerField<DicCity> cityField;
     private Map<String, Object> param;
 
     @Override
@@ -82,7 +83,7 @@ public class AddressEdit extends AbstractEditor<Address> {
                     List<Address> existed = commonService.getEntities(Address.class,
                             "select e " +
                                     " from tsadv$Address e, tsadv$DicAddressType at " +
-                                    " where e.personGroup.id = :personGroupId " +
+                                    " where e.personGroupId.id = :personGroupId " +
                                     " and e.addressType.id = at.id " +
                                     " and at.code = 'BIRTHPLACE'" +
                                     " and e.id <> :id " +
@@ -145,7 +146,7 @@ public class AddressEdit extends AbstractEditor<Address> {
 
         List<Address> addresses = commonService.getEntities(Address.class, "select e " +
                         " from tsadv$Address e " +
-                        " where e.personGroup.id = :personGroupId " +
+                        " where e.personGroupId.id = :personGroupId " +
                         " and e.addressType.id = :addressTypeId " +
                         " and e.deleteTs is null " +
                         " and e.id <> :id " +
@@ -171,10 +172,10 @@ public class AddressEdit extends AbstractEditor<Address> {
         return commonService.getCount(Address.class,
                 "select e from tsadv$Address e " +
                         " where e.addressType.id = :typeId " +
-                        "   and e.personGroup.id = :personGroupId " +
+                        "   and e.personGroupId.id = :personGroupId " +
                         "   and e.startDate <= :endDate and e.endDate >= :startDate " +
                         "   and e.id <> :id",
-                ParamsMap.of("personGroupId", address.getPersonGroup(),
+                ParamsMap.of("personGroupId", address.getPersonGroup().getId(),
                         "typeId", address.getAddressType().getId(),
                         "startDate", address.getStartDate(),
                         "endDate", address.getEndDate(),

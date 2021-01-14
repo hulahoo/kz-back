@@ -2,17 +2,22 @@ package kz.uco.tsadv.modules.recruitment.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.chile.core.annotations.NumberFormat;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import kz.uco.tsadv.modules.learning.dictionary.DicEducationDegree;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.base.entity.dictionary.DicEducationType;
+import kz.uco.tsadv.modules.learning.dictionary.DicEducationDegree;
 import kz.uco.tsadv.modules.learning.dictionary.DicEducationLevel;
+import kz.uco.tsadv.modules.learning.dictionary.DicEducationalEstablishment;
+import kz.uco.tsadv.modules.personal.dictionary.DicFormStudy;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
-import java.util.Date;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
 
 @NamePattern("%s (%s-%s)|school,startYear,endYear")
 @Table(name = "TSADV_PERSON_EDUCATION")
@@ -39,14 +44,22 @@ public class PersonEducation extends AbstractParentEntity {
     @Column(name = "SCHOOL")
     protected String school;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EDUCATIONAL_ESTABLISHMENT_ID")
+    private DicEducationalEstablishment educationalEstablishment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EDUCATION_TYPE_ID")
+    private DicEducationType educationType;
+
     @Digits(integer = 4, fraction = 0)
     @Column(name = "START_YEAR")
-    @NumberFormat(pattern = "#", decimalSeparator = "", groupingSeparator = "")
+    @NumberFormat(pattern = "#")
     protected Integer startYear;
 
     @Digits(integer = 4, fraction = 0)
     @Column(name = "END_YEAR")
-    @NumberFormat(pattern = "#", decimalSeparator = "", groupingSeparator = "")
+    @NumberFormat(pattern = "#")
     protected Integer endYear;
 
     @Column(name = "SPECIALIZATION")
@@ -62,6 +75,95 @@ public class PersonEducation extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LEVEL_ID")
     protected DicEducationLevel level;
+
+    @Column(name = "FACULTY", length = 2000)
+    private String faculty;
+
+    @Column(name = "QUALIFICATION", length = 2000)
+    private String qualification;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FORM_STUDY_ID")
+    private DicFormStudy formStudy;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "START_DATE_HISTORY")
+    private Date startDateHistory;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "END_DATE_HISTORY")
+    private Date endDateHistory;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EDUCATION_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EDUCATION_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
+
+    public Date getEndDateHistory() {
+        return endDateHistory;
+    }
+
+    public void setEndDateHistory(Date endDateHistory) {
+        this.endDateHistory = endDateHistory;
+    }
+
+    public Date getStartDateHistory() {
+        return startDateHistory;
+    }
+
+    public void setStartDateHistory(Date startDateHistory) {
+        this.startDateHistory = startDateHistory;
+    }
+
+    public DicFormStudy getFormStudy() {
+        return formStudy;
+    }
+
+    public void setFormStudy(DicFormStudy formStudy) {
+        this.formStudy = formStudy;
+    }
+
+    public void setEducationalEstablishment(DicEducationalEstablishment educationalInstitution) {
+        this.educationalEstablishment = educationalInstitution;
+    }
+
+    public DicEducationalEstablishment getEducationalEstablishment() {
+        return educationalEstablishment;
+    }
+
+    public DicEducationType getEducationType() {
+        return educationType;
+    }
+
+    public void setEducationType(DicEducationType educationType) {
+        this.educationType = educationType;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
 
     public void setDiplomaNumber(String diplomaNumber) {
         this.diplomaNumber = diplomaNumber;

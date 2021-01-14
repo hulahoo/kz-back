@@ -87,7 +87,7 @@ public class EnrollmentBrowse extends AbstractLookup {
                 "select e from base$AssignmentExt e " +
                         "where :sysDate between e.startDate and e.endDate " +
                         "  and e.primaryFlag = true " +
-                        "and e.personGroup.id = :personGroupId")
+                        "and e.personGroupId.id = :personGroupId")
                 .setParameter("personGroupId", personGroupId)
                 .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView("assignment.card");

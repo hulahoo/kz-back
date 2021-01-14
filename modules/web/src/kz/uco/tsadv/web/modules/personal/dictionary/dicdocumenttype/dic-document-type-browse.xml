@@ -10,7 +10,7 @@
                          class="kz.uco.tsadv.modules.personal.dictionary.DicDocumentType"
                          view="_local">
             <query>
-                <![CDATA[select e from tsadv$DicDocumentType e]]>
+                <![CDATA[select e from tsadv$DicDocumentType e ]]>
             </query>
         </groupDatasource>
     </dsContext>

@@ -45,7 +45,7 @@ public class RequisitionBrowseSelfNew extends AbstractLookup {
     public void init(Map<String, Object> params) {
         super.init(params);
         currentPersonGroup = commonService.getEntity(PersonGroupExt.class,
-                "select e.personGroup from tsadv$UserExt e where e.id = :userId",
+                "select e.personGroupId from tsadv$UserExt e where e.id = :userId",
                 ParamsMap.of("userId", userSession.getUser().getId()), View.MINIMAL);
         setCreateActionSettings();
         setEditActionSettings();

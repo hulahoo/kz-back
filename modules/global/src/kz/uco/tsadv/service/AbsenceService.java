@@ -5,6 +5,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
+import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 
 import javax.annotation.Nullable;
 import java.util.Date;
@@ -34,4 +35,6 @@ public interface AbsenceService {
     boolean isAbsenceTypeLong(UUID entityId);
 
     List<DicAbsenceType> getAbsenceTypeLong(@Nullable String viewName);
+
+    void createAbsenceFromRequest(String entityId);
 }

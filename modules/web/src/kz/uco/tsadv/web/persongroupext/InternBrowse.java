@@ -125,7 +125,7 @@ public class InternBrowse extends AbstractLookup {
 
     protected void loadLists() {
         internships = commonService.getEntities(Internship.class, "select e" +
-                        " from tsadv$Internship e where e.personGroup.id in :personGroupIdList",
+                        " from tsadv$Internship e where e.personGroupId.id in :personGroupIdList",
                 ParamsMap.of("personGroupIdList",
                         personExtsDs.getItems().stream().map(personExt -> personExt.getGroup().getId()).collect(Collectors.toList())),
                 "internship.for.loadList");

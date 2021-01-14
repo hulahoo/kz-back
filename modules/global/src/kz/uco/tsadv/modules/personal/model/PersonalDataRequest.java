@@ -1,31 +1,20 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
-import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import java.util.Date;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.global.dictionary.DicNationality;
+import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
+import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+
+import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OrderBy;
 
 @Table(name = "TSADV_PERSONAL_DATA_REQUEST")
 @Entity(name = "tsadv$PersonalDataRequest")
-public class PersonalDataRequest extends StandardEntity {
+public class PersonalDataRequest extends AbstractParentEntity {
     private static final long serialVersionUID = -1704847249874220670L;
 
     @Column(name = "LAST_NAME")
@@ -71,10 +60,45 @@ public class PersonalDataRequest extends StandardEntity {
 
     @OrderBy("name")
     @JoinTable(name = "TSADV_PERSONAL_DATA_REQUEST_FILE_DESCRIPTOR_LINK",
-        joinColumns = @JoinColumn(name = "PERSONAL_DATA_REQUEST_ID"),
-        inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+            joinColumns = @JoinColumn(name = "PERSONAL_DATA_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @ManyToMany
     protected List<FileDescriptor> attachments;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "NATIONALITY_ID")
+    private DicNationality nationality;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CITIZENSHIP_ID")
+    private DicCitizenship citizenship;
+
+    @Column(name = "NATIONAL_IDENTIFIER")
+    private String nationalIdentifier;
+
+    public String getNationalIdentifier() {
+        return nationalIdentifier;
+    }
+
+    public void setNationalIdentifier(String nationalIdentifier) {
+        this.nationalIdentifier = nationalIdentifier;
+    }
+
+    public void setNationality(DicNationality nationality) {
+        this.nationality = nationality;
+    }
+
+    public DicNationality getNationality() {
+        return nationality;
+    }
+
+    public DicCitizenship getCitizenship() {
+        return citizenship;
+    }
+
+    public void setCitizenship(DicCitizenship citizenship) {
+        this.citizenship = citizenship;
+    }
 
     public void setAttachments(List<FileDescriptor> attachments) {
         this.attachments = attachments;

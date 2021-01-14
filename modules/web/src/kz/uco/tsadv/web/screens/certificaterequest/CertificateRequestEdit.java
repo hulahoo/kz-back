@@ -42,7 +42,6 @@ public class CertificateRequestEdit extends StandardEditor<CertificateRequest> {
         if (item.getStatus() == null || "DRAFT".equals(item.getStatus().getCode())) {
             item.setRequestDate(timeSource.currentTimestamp());
         }
-
         if (item.getRequestNumber() == null) {
             item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
             item.setPersonGroup(employeeService.getPersonGroupByUserIdExtendedView(userSession.getUser().getId()));
@@ -50,7 +49,6 @@ public class CertificateRequestEdit extends StandardEditor<CertificateRequest> {
             item.setShowSalary(false);
             item.setNumberOfCopy(1);
         }
-
     }
 
 

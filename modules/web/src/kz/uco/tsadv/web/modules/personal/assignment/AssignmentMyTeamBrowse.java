@@ -90,7 +90,7 @@ public class AssignmentMyTeamBrowse extends AbstractLookup {
             String queryString = "SELECT e.positionGroup from base$AssignmentExt e\n" +
                     "             WHERE :currentDate between e.startDate and e.endDate\n" +
                     "             AND e.primaryFlag = true\n" +
-                    "             AND e.personGroup.id = :currentPersonGroupId";
+                    "             AND e.personGroupId.id = :currentPersonGroupId";
             Map<String, Object> queryParams = new HashMap<>();
             queryParams.put("currentPersonGroupId", currentPersonGroup.getId());
             queryParams.put("currentDate", currentDate);

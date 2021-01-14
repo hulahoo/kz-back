@@ -436,7 +436,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
         //PLEASE do not delete commented code
             /*Map<String, Object> templateParams = new HashMap<>();
             UserExt mainInterviewerUser = commonService.getEntity(UserExt.class,
-                    "select u from sec$User u where u.personGroup.id = :personGroupId",
+                    "select u from sec$User u where u.personGroupId.id = :personGroupId",
                     Collections.singletonMap("personGroupId", getItem().getMainInterviewerPersonGroup().getId()),
                     "user.edit");
             templateParams.put("interview", getItem());
@@ -807,7 +807,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
                                         "                          where :systemDate between p.startDate and p.endDate" +
                                         "                            and (p.type.code <> 'EMPLOYEE' OR :systemDate between a.startDate and a.endDate)" +
                                         "                            and e.id = :hsmPersonGroupId",
-                                params, "personGroup.browse");
+                                params, "personGroupId.browse");
                         if (personGroup != null)
                             getItem().setMainInterviewerPersonGroup(personGroup);
                         break;
@@ -825,7 +825,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
                                 }
                                 default: {
                                     if (organizationHrUsers != null && organizationHrUsers.size() == 1) {
-                                        getItem().setMainInterviewerPersonGroup(employeeService.getPersonGroupByUserId(organizationHrUsers.get(0).getUser().getId())); //TODO:personGroup need to test
+                                        getItem().setMainInterviewerPersonGroup(employeeService.getPersonGroupByUserId(organizationHrUsers.get(0).getUser().getId())); //TODO:personGroupId need to test
                                     }
                                 }
                             }

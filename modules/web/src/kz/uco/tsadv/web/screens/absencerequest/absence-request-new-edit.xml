@@ -6,7 +6,7 @@
     <data>
         <instance id="absenceRequestDc"
                   class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
-                  view="absenceRequest.view">
+                  view="absenceRequest.edit">
             <loader/>
         </instance>
         <collection id="dicAbsenceTypesDc"
@@ -32,7 +32,7 @@
                     <column width="750px">
                         <textField id="requestNumberField" property="requestNumber" editable="false"/>
                         <textField id="statusField" property="status" editable="false"/>
-                        <lookupField required="true" property="type" optionsContainer="dicAbsenceTypesDc"/>
+                        <lookupPickerField id="typeField" required="true" property="type" optionsContainer="dicAbsenceTypesDc"/>
                         <dateField id="dateFromField" property="dateFrom" required="true"/>
                         <dateField id="dateToField" property="dateTo" required="true"/>
                         <textField id="absenceDaysField" property="absenceDays" editable="false"/>
