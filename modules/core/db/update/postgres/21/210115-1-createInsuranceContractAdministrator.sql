@@ -10,6 +10,7 @@ create table TSADV_INSURANCE_CONTRACT_ADMINISTRATOR (
     --
     NOTIFY_ABOUT_NEW_ATTACHMENTS boolean,
     EMPLOYEE_ID uuid not null,
+    INSURANCE_CONTRACT_ID uuid,
     --
     primary key (ID)
 );

@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_CONTRACT_CONDITIONS")
 @Entity(name = "tsadv$ContractConditions")
+@NamePattern("%s|id")
 public class ContractConditions extends StandardEntity {
     private static final long serialVersionUID = -3559965550974523753L;
 

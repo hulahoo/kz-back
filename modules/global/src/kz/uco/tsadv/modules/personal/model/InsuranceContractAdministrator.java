@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_INSURANCE_CONTRACT_ADMINISTRATOR")
 @Entity(name = "tsadv$InsuranceContractAdministrator")
+@NamePattern("%s|id")
 public class InsuranceContractAdministrator extends StandardEntity {
     private static final long serialVersionUID = 5323731111863476380L;
 

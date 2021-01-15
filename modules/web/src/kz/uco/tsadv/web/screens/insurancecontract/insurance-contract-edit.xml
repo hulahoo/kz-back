@@ -8,6 +8,9 @@
                   class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
                   view="insuranceContract-editView">
             <loader/>
+            <collection id="programConditionsDc" property="programConditions"/>
+            <collection id="contractAdministratorDc" property="contractAdministrator"/>
+            <collection id="attachmentsDc" property="attachments"/>
         </instance>
         <collection id="companyDc"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicCompany" view="_local">
@@ -15,42 +18,138 @@
                 <query><![CDATA[select e from tsadv$DicCompany e]]></query>
             </loader>
         </collection>
+        <collection id="responsibleDc"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                    view="personGroup.browse">
+            <loader id="responsibleDl">
+                <query><![CDATA[select e from base$PersonGroupExt e]]></query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="scrollBox" spacing="true">
         <scrollBox id="scrollBox" spacing="true">
-            <form id="form" dataContainer="insuranceContractDc">
+            <groupBox caption="msg://mainGroupBox">
+                <form id="form" dataContainer="insuranceContractDc">
                     <column width="350px">
-                    <textField id="policyNameField" property="policyName"/>
-                    <textField id="contractField" property="contract"/>
-                    <dateField id="signDateField" property="signDate"/>
-                    <lookupField property="company"
-                                 id="lookupCompany"
-                                 optionsContainer="companyDc"
-                                 editable="true"/>
-                    <pickerField id="responsibleField" property="responsible">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
-                    <textField id="yearField" property="year"/>
-                    <dateField id="startDateField" property="startDate"/>
-                    <dateField id="expirationDateField" property="expirationDate"/>
-                </column>
+                        <textField id="policyNameField" property="policyName"/>
+                        <textField id="contractField" property="contract"/>
+                        <dateField id="signDateField" property="signDate"/>
+                        <lookupField property="company"
+                                     id="companyLookupField"
+                                     optionsContainer="companyDc"
+                                     editable="true"/>
+                        <lookupField id="responsibleLookupField"
+                                     optionsContainer="responsibleDc"
+                                     property="responsible"/>
+                        <textField id="yearField" property="year"/>
+                        <dateField id="startDateField" property="startDate"/>
+                        <dateField id="expirationDateField" property="expirationDate"/>
+                    </column>
                     <column width="350px">
                         <textField id="insurerField" property="insurer"/>
                         <dateField id="availabilityPeriodFromField" property="availabilityPeriodFrom"/>
                         <textField id="insuranceProgramField" property="insuranceProgram"/>
                         <textField id="insurerContactsField" property="insurerContacts"/>
                         <dateField id="notificationDateField" property="notificationDate"/>
-                        <textField id="attachingAnEmployeeField" property="attachingAnEmployee"/>
-                        <textField id="attachingFamilyField" property="attachingFamily"/>
+                        <textField id="attachingAnEmployeeField" property="attachingAnEmployee"
+                                   contextHelpText="msg://attachingAnEmployeeField.helpText"/>
+                        <textField id="attachingFamilyField" property="attachingFamily"
+                                   contextHelpText="msg://attachingFamilyField.helpText"/>
                         <textField id="countOfFreeMembersField" property="countOfFreeMembers"/>
                     </column>
+                </form>
+            </groupBox>
+            <groupBox
+                    caption="msg://programConditions"
+                    outerMargin="true, false, true, false">
+                <dataGrid id="programConditionsDataGrid"
+                          width="100%"
+                          dataContainer="programConditionsDc">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column property="relationshipType"/>
+                        <column property="ageMin"/>
+                        <column property="ageMax"/>
+                        <column property="isFree"/>
+                        <column property="costInKzt"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button id="createBtn" action="programConditionsDataGrid.create"/>
+                        <button id="editBtn" action="programConditionsDataGrid.edit"/>
+                        <button id="removeBtn" action="programConditionsDataGrid.remove"/>
+                    </buttonsPanel>
+                    <rowsCount/>
+                </dataGrid>
+            </groupBox>
+            <groupBox caption="msg://ContractAdministrator"
+                      outerMargin="true, false, true, false">
+                <dataGrid id="contractAdministratorDataGrid"
+                          width="100%"
+                          dataContainer="contractAdministratorDc">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column property="notifyAboutNewAttachments"/>
+                        <column property="employee"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button id="btnCreate" action="contractAdministratorDataGrid.create"/>
+                        <button id="btnEdit" action="contractAdministratorDataGrid.edit"/>
+                        <button id="btnRemove" action="contractAdministratorDataGrid.remove"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </groupBox>
 
-            </form>
+            <table id="attachmentTable"
+                   height="100%"
+                   width="100%">
+                <actions>
+                    <action id="create"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/plus-btn.png"/>
+                    <action id="remove"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/remove.png"/>
+                    <action id="edit"
+                            caption="mainMsg://table.btn.empty"
+                            icon="icons/edit.png"/>
+                </actions>
+                <columns>
+                    <column id="attachmentType"/>
+                    <column id="attachment"/>
+                </columns>
+                <rows datasource="attachmentsDc"/>
+                <buttonsPanel>
+                    <button action="attachmentTable.create"/>
+                    <button action="attachmentTable.edit"/>
+                    <button action="attachmentTable.remove"/>
+                </buttonsPanel>
+            </table>
+
+<!--            <groupBox id="groupBox">-->
+<!--                <table id="fileDescriptorsTable" width="100%" dataContainer="attachmentsDc">-->
+<!--                    <actions>-->
+<!--                        <action id="remove" type="remove"/>-->
+<!--                    </actions>-->
+<!--                    <buttonsPanel alwaysVisible="true">-->
+<!--                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"-->
+<!--                                stylename="primary"/>-->
+<!--                        <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>-->
+<!--                    </buttonsPanel>-->
+<!--                    <columns>-->
+<!--                        <column id="name" generator="generatorName" caption="mainMsg://fileName"/>-->
+<!--                    </columns>-->
+<!--                </table>-->
+<!--            </groupBox>-->
 
         </scrollBox>
         <hbox id="editActions" spacing="true">

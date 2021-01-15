@@ -13,6 +13,7 @@ create table TSADV_CONTRACT_CONDITIONS (
     AGE_MAX varchar(255) not null,
     IS_FREE boolean not null,
     COST_IN_KZT double precision not null,
+    INSURANCE_CONTRACT_ID uuid,
     --
     primary key (ID)
 );

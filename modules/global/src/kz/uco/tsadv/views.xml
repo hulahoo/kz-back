@@ -12117,7 +12117,8 @@
             <property name="hireDate"/>
         </property>
         <property name="person"
-                  view="_minimal">
+                  view="_local">
+            <property name="fullName"/>
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="hireDate"/>
@@ -21903,11 +21904,11 @@
     </view>
     <view entity="tsadv$InsuranceContract" name="insuranceContract-browseView" extends="_local">
         <property name="company" view="_minimal"/>
-        <property name="responsible" view="_minimal"/>
+        <property name="responsible" view="personGroup.browse"/>
     </view>
     <view entity="tsadv$InsuranceContract" name="insuranceContract-editView" extends="_local">
         <property name="company" view="_minimal"/>
-        <property name="responsible" view="_minimal"/>
+        <property name="responsible" view="personGroup.browse"/>
         <property name="programConditions" view="_minimal">
             <property name="relationshipType" view="_minimal"/>
             <property name="ageMin"/>
@@ -21925,5 +21926,11 @@
             <property name="attachment" view="_minimal"/>
             <property name="attachmentType" view="_minimal"/>
         </property>
+    </view>
+    <view entity="tsadv$ContractConditions" name="contractConditions-editView" extends="_local">
+        <property name="relationshipType" view="_minimal"/>
+    </view>
+    <view entity="tsadv$InsuranceContractAdministrator" name="insuranceContractAdministrator-editView" extends="_local">
+        <property name="employee" view="_minimal"/>
     </view>
 </views>

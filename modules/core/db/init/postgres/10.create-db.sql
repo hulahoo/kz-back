@@ -16426,7 +16426,6 @@ create table TSADV_SCORE_SETTING (
     --
     primary key (ID)
 )^
--- end TSADV_SCORE_SETTING
 -- begin TSADV_CONTRACT_CONDITIONS
 create table TSADV_CONTRACT_CONDITIONS (
     ID uuid,
@@ -16466,7 +16465,6 @@ create table TSADV_INSURANCE_CONTRACT_ADMINISTRATOR (
     primary key (ID)
 )^
 -- end TSADV_INSURANCE_CONTRACT_ADMINISTRATOR
-
 -- begin TSADV_INSURANCE_CONTRACT
 create table TSADV_INSURANCE_CONTRACT (
     ID uuid,
@@ -16498,3 +16496,22 @@ create table TSADV_INSURANCE_CONTRACT (
     primary key (ID)
 )^
 -- end TSADV_INSURANCE_CONTRACT
+-- begin TSADV_SCORE_SETTING
+create table TSADV_SCORE_SETTING (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PERFORMANCE_PLAN_ID uuid,
+    MIN_PERCENT double precision,
+    MAX_PERCENT double precision,
+    FINAL_SCORE integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_SCORE_SETTING

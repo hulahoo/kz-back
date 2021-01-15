@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
@@ -81,12 +82,15 @@ public class InsuranceContract extends StandardEntity {
     @Column(name = "COUNT_OF_FREE_MEMBERS")
     private Integer countOfFreeMembers;
 
+    @Composition
     @OneToMany(mappedBy = "insuranceContract")
     private List<ContractConditions> programConditions;
 
+    @Composition
     @OneToMany(mappedBy = "insuranceContract")
     private List<InsuranceContractAdministrator> contractAdministrator;
 
+    @Composition
     @OneToMany(mappedBy = "insuranceContract")
     private List<Attachment> attachments;
 
