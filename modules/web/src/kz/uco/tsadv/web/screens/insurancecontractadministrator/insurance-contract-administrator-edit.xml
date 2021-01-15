@@ -10,7 +10,7 @@
             <loader/>
         </instance>
         <collection id="personGroupDc"
-                    view="_local"
+                    view="personGroup.browse"
                     class="kz.uco.tsadv.modules.personal.group.PersonGroupExt">
             <loader id="personGroupDl">
                 <query><![CDATA[select e from base$PersonGroupExt e]]></query>

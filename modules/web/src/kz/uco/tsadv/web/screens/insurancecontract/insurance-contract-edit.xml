@@ -65,6 +65,7 @@
                     caption="msg://programConditions"
                     outerMargin="true, false, true, false">
                 <dataGrid id="programConditionsDataGrid"
+                          editorEnabled="true"
                           width="100%"
                           dataContainer="programConditionsDc">
                     <actions>
@@ -90,6 +91,7 @@
             <groupBox caption="msg://ContractAdministrator"
                       outerMargin="true, false, true, false">
                 <dataGrid id="contractAdministratorDataGrid"
+                          editorEnabled="true"
                           width="100%"
                           dataContainer="contractAdministratorDc">
                     <actions>
@@ -99,7 +101,8 @@
                     </actions>
                     <columns>
                         <column property="notifyAboutNewAttachments"/>
-                        <column property="employee"/>
+                        <column property="employee">
+                        </column>
                     </columns>
                     <buttonsPanel>
                         <button id="btnCreate" action="contractAdministratorDataGrid.create"/>
@@ -108,32 +111,24 @@
                     </buttonsPanel>
                 </dataGrid>
             </groupBox>
-
-            <table id="attachmentTable"
-                   height="100%"
-                   width="100%">
-                <actions>
-                    <action id="create"
-                            caption="mainMsg://table.btn.empty"
-                            icon="icons/plus-btn.png"/>
-                    <action id="remove"
-                            caption="mainMsg://table.btn.empty"
-                            icon="icons/remove.png"/>
-                    <action id="edit"
-                            caption="mainMsg://table.btn.empty"
-                            icon="icons/edit.png"/>
-                </actions>
-                <columns>
-                    <column id="attachmentType"/>
-                    <column id="attachment"/>
-                </columns>
-                <rows datasource="attachmentsDc"/>
-                <buttonsPanel>
-                    <button action="attachmentTable.create"/>
-                    <button action="attachmentTable.edit"/>
-                    <button action="attachmentTable.remove"/>
-                </buttonsPanel>
-            </table>
+            <groupBox caption="msg://attachments">
+                <dataGrid id="attachmentsDataGrid"
+                          width="100%"
+                          dataContainer="attachmentsDc">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column property="attachmentType"/>
+                        <column property="attachment"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button id="createAttachmentBtn" action="attachmentsDataGrid.create"/>
+                        <button id="removeAttachmentBtn" action="attachmentsDataGrid.remove"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </groupBox>
 
 <!--            <groupBox id="groupBox">-->
 <!--                <table id="fileDescriptorsTable" width="100%" dataContainer="attachmentsDc">-->
