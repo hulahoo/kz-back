@@ -31,6 +31,17 @@
         <jpql>
             select p
             from tsadv$UserExt u
+            inner join u.personGroup p
+            where u.id = :userId
+        </jpql>
+        <params>
+            <param name="userId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="kpiEditPage" entity="tsadv$AssignedPerformancePlan" view="assignedPerformancePlan-myKpi-edit">
+        <jpql>
+            select p
+            from tsadv$UserExt u
                 inner join u.personGroup p
             where u.id = :userId
         </jpql>
