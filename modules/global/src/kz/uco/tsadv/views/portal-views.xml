@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
+    <view entity="tsadv$PersonDocument" name="portal.my-profile" extends="_local">
+        <property name="documentType">
+            <property name="langValue"/>
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+        </property>
+        <property name="issuingAuthority" view="_minimal"/>
+        <property name="status" view="_minimal"/>
+        <property name="file">
+            <property name="id"/>
+            <property name="name"/>
+        </property>
+    </view>
+    <view entity="tsadv$PersonContact" name="portal.my-profile" extends="_local">
+        <property name="type">
+            <property name="langValue"/>
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+        </property>
+    </view>
+    <view entity="tsadv$AssignedPerformancePlan" name="assignedPerformancePlan-myKpi" extends="_minimal">
+        <property name="performancePlan">
+            <property name="performancePlanName"/>
+            <property name="performancePlanNameEn"/>
+            <property name="performancePlanNameKz"/>
+        </property>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="status"/>
+    </view>
+    <view entity="tsadv$AssignedPerformancePlan" name="assignedPerformancePlan-myKpi-edit" extends="_minimal">
+        <property name="performancePlan">
+            <property name="performancePlanName"/>
+            <property name="performancePlanNameEn"/>
+            <property name="performancePlanNameKz"/>
+        </property>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="status"/>
+        <property name="assigned_by" view="_minimal">
+            <property name="assignments">
+                <property name="positionGroup" view="_minimal"/>
+            </property>
+        </property>
+        <property name="assignedPerson" view="_minimal"/>
+    </view>
+    <view entity="tsadv$AssignedGoal" name="assignedGoal-portal-kpi-create-default" extends="_local">
+        <property name="category" view="_minimal"/>
+    </view>
+</views>
