@@ -119,9 +119,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                                 .getCurrentAssignment().getPositionGroup().getId()
                                 : null)))
                 .build().show()
-                .addAfterCloseListener(afterCloseEvent -> {
-                    assignedGoalDl.load();
-                });
+                .addAfterCloseListener(afterCloseEvent -> assignedGoalDl.load());
     }
 
     @Subscribe("popup.individual")
@@ -133,9 +131,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                     assignedGoal.setAssignedPerformancePlan(assignedPerformancePlanDc.getItem());
                     assignedGoal.setGoalType(AssignedGoalTypeEnum.INDIVIDUAL);
                 }).build().show()
-                .addAfterCloseListener(afterCloseEvent -> {
-                    assignedGoalDl.load();
-                });
+                .addAfterCloseListener(afterCloseEvent -> assignedGoalDl.load());
     }
 
     @Subscribe("popup.cascade")
@@ -154,9 +150,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                     assignedGoal.setAssignedPerformancePlan(assignedPerformancePlanDc.getItem());
                     assignedGoal.setGoalType(AssignedGoalTypeEnum.CASCADE);
                 }).build().show()
-                .addAfterCloseListener(afterCloseEvent -> {
-                    assignedGoalDl.load();
-                });
+                .addAfterCloseListener(afterCloseEvent -> assignedGoalDl.load());
     }
 
     @Subscribe("popup.library")
