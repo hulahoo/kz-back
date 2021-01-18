@@ -8,4 +8,12 @@ import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 @EditedEntityContainer("insuredPersonDc")
 @LoadDataBeforeShow
 public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
+
+
+    @Subscribe
+    public void onInit(InitEvent event) {
+
+    }
+
+
 }

@@ -74,12 +74,13 @@
                     <column width="350px">
                         <lookupField optionsContainer="employeeDc"
                                      id="employeeField"
+                                     editable="false"
                                      property="employee"/>
 <!--                        <textField id="firstNameField" property="firstName"/>-->
 <!--                        <textField id="secondNameField" property="secondName"/>-->
 <!--                        <textField id="middleNameField" property="middleName"/>-->
-                        <textField id="iinField" property="iin"/>
-                        <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
+                        <textField id="iinField" editable="false" property="iin" />
+                        <lookupField id="sexField" property="sex" optionsContainer="sexDc" editable="false"/>
                         <dateField id="birthdateField" property="birthdate"/>
                         <lookupField id="documentTypeField" property="documentType"
                                      optionsContainer="documentTypeDc"/>
@@ -108,8 +109,8 @@
 
                         <lookupField id="insuranceContractField" optionsContainer="insuranceContractDc"
                                      property="insuranceContract"/>
-                        <dateField id="startDateField"/>
-                        <dateField id="endDateField"/>
+                        <dateField id="startDateField" caption="msg://startData"/>
+                        <dateField id="endDateField" caption="msg://endData"/>
                         <dateField id="attachDateField" property="attachDate" editable="false"/>
                         <lookupField id="statusRequestField" editable="false"
                                      optionsContainer="DicVHIAttachmentStatusDc" property="statusRequest"/>

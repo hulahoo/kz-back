@@ -16515,3 +16515,77 @@ create table TSADV_SCORE_SETTING (
     primary key (ID)
 )^
 -- end TSADV_SCORE_SETTING
+-- begin TSADV_DIC_VHI_ATTACHMENT_STATUS
+create table TSADV_DIC_VHI_ATTACHMENT_STATUS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_VHI_ATTACHMENT_STATUS
+-- begin TSADV_INSURED_PERSON
+create table TSADV_INSURED_PERSON (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    ATTACH_DATE date not null,
+    STATUS_REQUEST_ID uuid not null,
+    INSURANCE_CONTRACT_ID uuid not null,
+    COMPANY_ID uuid not null,
+    EMPLOYEE_ID uuid not null,
+    ASSIGN_DATE date not null,
+    RELATIVE_ID uuid not null,
+    FIRST_NAME varchar(50) not null,
+    SECOND_NAME varchar(50) not null,
+    MIDDLE_NAME varchar(50),
+    JOB_ID uuid,
+    SEX_ID uuid not null,
+    IIN varchar(255) not null,
+    BIRTHDATE date not null,
+    DOCUMENT_TYPE_ID uuid not null,
+    DOCUMENT_NUMBER integer not null,
+    REGION_ID uuid not null,
+    ADDRESS_ID uuid not null,
+    INSURANCE_PROGRAM varchar(500) not null,
+    FILE_ID uuid,
+    TYPE integer not null,
+    AMOUNT decimal(19, 2),
+    TOTAL_AMOUNT decimal(19, 2) not null,
+    EXCLUSION_DATE date,
+    COMMENT varchar(500),
+    --
+    primary key (ID)
+)^
+-- end TSADV_INSURED_PERSON

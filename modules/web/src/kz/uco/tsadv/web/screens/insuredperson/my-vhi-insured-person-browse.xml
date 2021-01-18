@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
-        caption="msg://insuredPersonBrowse.caption"
+        caption="msg://myVhiInsuredPersonBrowse.caption"
         focusComponent="insuredPersonsTable"
         messagesPack="kz.uco.tsadv.web.screens.insuredperson">
     <data readOnly="true">
@@ -9,13 +9,10 @@
                     class="kz.uco.tsadv.modules.personal.model.InsuredPerson">
             <view extends="_local">
                 <property name="statusRequest" view="_minimal"/>
-                <property name="employee" view="_minimal"/>
-                <property name="relative" view="_minimal"/>
-                <property name="sex" view="_minimal"/>
-                <property name="documentType" view="_minimal"/>
-                <property name="documentNumber"/>
-                <property name="region" view="_minimal"/>
-                <property name="address" view="_minimal"/>
+                <property name="insuranceContract" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="expirationDate"/>
+                </property>
             </view>
             <loader id="insuredPersonsDl">
                 <query>
@@ -37,40 +34,30 @@
                     width="100%"
                     dataContainer="insuredPersonsDc">
             <actions>
-                <action id="create" type="create"/>
-                <action id="edit" type="edit"/>
-                <action id="remove" type="remove"/>
-                <action id="excel" type="excel"/>
+<!--                <action id="create" invoke="eatVHI"/>-->
             </actions>
             <columns>
                 <column id="attachDate"/>
                 <column id="statusRequest"/>
-                <column id="employee"/>
-                <column id="relative"/>
+                <column id="insuranceContract"/>
+                <column id="assignDate"/>
                 <column id="firstName"/>
                 <column id="secondName"/>
                 <column id="middleName"/>
-                <column id="sex"/>
                 <column id="iin"/>
                 <column id="birthdate"/>
-                <column id="documentType"/>
                 <column id="documentNumber"/>
-                <column id="region"/>
-                <column id="address"/>
                 <column id="insuranceProgram"/>
-                <column id="totalAmount"/>
                 <column id="type"/>
                 <column id="amount"/>
+                <column id="totalAmount"/>
                 <column id="exclusionDate"/>
                 <column id="comment"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn" action="insuredPersonsTable.create"/>
-                <button id="editBtn" action="insuredPersonsTable.edit"/>
-                <button id="removeBtn" action="insuredPersonsTable.remove"/>
-                <button id="excelBtn" action="insuredPersonsTable.excel"/>
+                <button id="createBtn"  invoke="joinVHI" caption="msg://joinVHI"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">
