@@ -304,10 +304,12 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                 : 0)).divide(BigDecimal.valueOf(100)));
                 assignedPerformancePlan.setKpiScore(getFinalScore(assignedPerformancePlan.getResult()));
                 assignedPerformancePlan.setFinalScore(assignedPerformancePlan.getKpiScore()
-                        + assignedPerformancePlan.getExtraPoint());
+                        + (assignedPerformancePlan.getExtraPoint() != null
+                        ? assignedPerformancePlan.getExtraPoint()
+                        : 0.0));
                 assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus()).doubleValue());
                 assignedPerformancePlan.setPersonalBonus(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus()
-                        , assignedPerformancePlan.getFinalScore() + assignedPerformancePlan.getExtraPoint()));
+                        , assignedPerformancePlan.getFinalScore()));
                 assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
                         + assignedPerformancePlan.getPersonalBonus());
                 commitContext.addInstanceToCommit(assignedPerformancePlan);
