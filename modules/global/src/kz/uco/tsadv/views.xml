@@ -6276,6 +6276,7 @@
                 </property>
                 <property name="gradeGroup" view="_minimal">
                     <property name="list" view="_minimal">
+                        <property name="bonusPercent"/>
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
@@ -8362,8 +8363,13 @@
     <view class="kz.uco.tsadv.modules.personal.model.Grade"
           extends="_local"
           name="grade.edit">
-        <property name="group"
-                  view="_minimal"/>
+        <property name="group" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="bonusPercent"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"
           extends="_local"
@@ -21893,5 +21899,8 @@
             <property name="code"/>
         </property>
         <property name="user" view="_minimal"/>
+    </view>
+    <view entity="tsadv_CorrectionCoefficient" name="correctionCoefficient.edit" extends="_local">
+        <property name="performancePlan" view="_minimal"/>
     </view>
 </views>

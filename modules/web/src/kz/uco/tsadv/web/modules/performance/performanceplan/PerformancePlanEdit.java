@@ -18,8 +18,10 @@ import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.*;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.service.KpiService;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -61,6 +63,14 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected CollectionLoader<ScoreSetting> scoreSettingDl;
     @Inject
     protected Table<ScoreSetting> scoreSettingTable;
+    @Inject
+    protected KpiService kpiService;
+    @Inject
+    protected CollectionLoader<CorrectionCoefficient> correctionCoefDl;
+    @Inject
+    protected Table<CorrectionCoefficient> correctionCoefTable;
+    @Inject
+    protected CollectionContainer<CorrectionCoefficient> correctionCoefDc;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -71,6 +81,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         instructionKpiDl.load();
         scoreSettingDl.setParameter("performancePlan", performancePlanDc.getItem());
         scoreSettingDl.load();
+        correctionCoefDl.setParameter("performancePlan", performancePlanDc.getItem());
+        correctionCoefDl.load();
     }
 
     @Subscribe
@@ -95,6 +107,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         tabSheet.getTab("assignedPerformancePlan").setVisible(isVisible);
         tabSheet.getTab("instruction").setVisible(isVisible);
         tabSheet.getTab("scoreSetting").setVisible(isVisible);
+        tabSheet.getTab("correctionCoef").setVisible(isVisible);
     }
 
 
@@ -269,12 +282,75 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected void onScoreSettingTableCreate(Action.ActionPerformedEvent event) {
         screenBuilders.editor(scoreSettingTable)
                 .newEntity()
-                .withInitializer(scoreSetting -> {
-                    scoreSetting.setPerformancePlan(performancePlanDc.getItem());
-                })
+                .withInitializer(scoreSetting -> scoreSetting.setPerformancePlan(performancePlanDc.getItem()))
                 .build().show()
-                .addAfterCloseListener(afterCloseEvent -> {
-                    scoreSettingDl.load();
-                });
+                .addAfterCloseListener(afterCloseEvent -> scoreSettingDl.load());
+    }
+
+    @Subscribe("assignedPerformancePlanTable.calculateGZP")
+    protected void onAssignedPerformancePlanTableCalculateGZP(Action.ActionPerformedEvent event) {
+        Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
+        CommitContext commitContext = new CommitContext();
+        try {
+            assignedPerformancePlans.forEach(assignedPerformancePlan -> {
+                assignedPerformancePlan.setGzp(BigDecimal.valueOf(
+                        kpiService.calculationOfGZP(assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGroup(),
+                                performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));
+                assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
+                        BigDecimal.valueOf(assignedPerformancePlan.getAssignedPerson().getCurrentAssignment() != null
+                                && assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGradeGroup() != null
+                                && assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGradeGroup().getGrade() != null
+                                ? assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGradeGroup().getGrade().getBonusPercent()
+                                : 0)).divide(BigDecimal.valueOf(100)));
+                assignedPerformancePlan.setKpiScore(getFinalScore(assignedPerformancePlan.getResult()));
+                assignedPerformancePlan.setFinalScore(assignedPerformancePlan.getKpiScore());
+                assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus()).doubleValue());
+                assignedPerformancePlan.setPersonalBonus(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus()
+                        , assignedPerformancePlan.getFinalScore() + assignedPerformancePlan.getExtraPoint()));
+                assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
+                        + assignedPerformancePlan.getPersonalBonus());
+                commitContext.addInstanceToCommit(assignedPerformancePlan);
+            });
+            dataManager.commit(commitContext);
+            assignedPerformancePlansDl.load();
+        } catch (Exception ignored) {
+        }
+    }
+
+    private Double calculatePersonalBonus(BigDecimal maxBonus, Double finalScore) {
+        return maxBonus.doubleValue() *
+                ((100 - correctionCoefDc.getItems().get(0).getGroupEfficiencyPercent()) / 100) * (finalScore / 20);
+    }
+
+    private BigDecimal calculateCompanyBonus(BigDecimal maxBonus) {
+        correctionCoefDc.getItems();
+        CorrectionCoefficient correctionCoefficient = correctionCoefDc.getItems().get(0);
+        if (correctionCoefficient != null) {
+            return maxBonus.multiply(BigDecimal.valueOf(correctionCoefficient.getGroupEfficiencyPercent())
+                    .divide(BigDecimal.valueOf(100))).multiply(BigDecimal.valueOf(0.5));
+        }
+        return new BigDecimal(0.0);
+    }
+
+    private Double getFinalScore(Double result) {
+        List<ScoreSetting> scoreSettingList = dataManager.load(ScoreSetting.class)
+                .query("select e from tsadv_ScoreSetting e " +
+                        " where :result between e.minPercent and e.maxPercent")
+                .parameter("result", result)
+                .list();
+        if (!scoreSettingList.isEmpty()) {
+            return Double.valueOf(scoreSettingList.get(0).getFinalScore());
+        }
+        return 0.0;
+    }
+
+    @Subscribe("correctionCoefTable.create")
+    protected void onCorrectionCoefTableCreate(Action.ActionPerformedEvent event) {
+        screenBuilders.editor(correctionCoefTable)
+                .newEntity()
+                .withInitializer(correctionCoefficient ->
+                        correctionCoefficient.setPerformancePlan(performancePlanDc.getItem()))
+                .build().show()
+                .addAfterCloseListener(afterCloseEvent -> correctionCoefDl.load());
     }
 }
