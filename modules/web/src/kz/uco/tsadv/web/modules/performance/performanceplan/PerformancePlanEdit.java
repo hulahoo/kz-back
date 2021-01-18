@@ -303,7 +303,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                 ? assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGradeGroup().getGrade().getBonusPercent()
                                 : 0)).divide(BigDecimal.valueOf(100)));
                 assignedPerformancePlan.setKpiScore(getFinalScore(assignedPerformancePlan.getResult()));
-                assignedPerformancePlan.setFinalScore(assignedPerformancePlan.getKpiScore());
+                assignedPerformancePlan.setFinalScore(assignedPerformancePlan.getKpiScore()
+                        + assignedPerformancePlan.getExtraPoint());
                 assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus()).doubleValue());
                 assignedPerformancePlan.setPersonalBonus(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus()
                         , assignedPerformancePlan.getFinalScore() + assignedPerformancePlan.getExtraPoint()));
