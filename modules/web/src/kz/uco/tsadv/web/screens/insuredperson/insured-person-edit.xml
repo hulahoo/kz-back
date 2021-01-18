@@ -29,17 +29,11 @@
                 <query><![CDATA[select e from base$PersonGroupExt e]]></query>
             </loader>
         </collection>
-        <collection id="personGroup"
-                    class="kz.uco.base.entity.shared.PersonGroup"
-                    view="_local">
-            <loader id="personGroupDl">
-                <query><![CDATA[select e from base$PersonGroup e]]></query>
-            </loader>
-        </collection>
-        <collection id="documentTypeDc" class="kz.uco.base.entity.dictionary.DicPersonIdentityDocumentType"
+        <collection id="documentTypeDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicDocumentType"
                     view="_local">
             <loader id="documentTypeDl">
-                <query><![CDATA[select e from base$DicPersonIdentityDocumentType e]]></query>
+                <query><![CDATA[select e from tsadv$DicDocumentType e]]></query>
             </loader>
         </collection>
         <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">

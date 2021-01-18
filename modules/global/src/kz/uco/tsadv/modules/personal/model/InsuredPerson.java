@@ -4,12 +4,12 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import kz.uco.base.entity.dictionary.DicEducationType;
 import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.entity.shared.Address;
 import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
+import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
@@ -90,10 +90,10 @@ public class InsuredPerson extends StandardEntity {
     @Column(name = "BIRTHDATE", nullable = false)
     private Date birthdate;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DOCUMENT_TYPE_ID")
-    private DicEducationType documentType;
+    @NotNull
+    private DicDocumentType documentType;
 
     @Column(name = "DOCUMENT_NUMBER", nullable = false)
     @NotNull
@@ -135,6 +135,14 @@ public class InsuredPerson extends StandardEntity {
 
     @Column(name = "COMMENT", length = 500)
     private String comment;
+
+    public void setDocumentType(DicDocumentType documentType) {
+        this.documentType = documentType;
+    }
+
+    public DicDocumentType getDocumentType() {
+        return documentType;
+    }
 
     public void setDocumentNumber(Integer documentNumber) {
         this.documentNumber = documentNumber;
@@ -238,14 +246,6 @@ public class InsuredPerson extends StandardEntity {
 
     public void setRegion(DicRegion region) {
         this.region = region;
-    }
-
-    public DicEducationType getDocumentType() {
-        return documentType;
-    }
-
-    public void setDocumentType(DicEducationType documentType) {
-        this.documentType = documentType;
     }
 
     public Date getBirthdate() {
