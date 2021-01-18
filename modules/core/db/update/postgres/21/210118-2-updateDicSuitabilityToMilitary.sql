@@ -1,0 +1,1 @@
+alter table TSADV_DIC_SUITABILITY_TO_MILITARY add column COMPANY_ID uuid ;

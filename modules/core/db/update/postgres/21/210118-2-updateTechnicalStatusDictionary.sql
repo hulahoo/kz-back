@@ -1,0 +1,1 @@
+alter table TSADV_TECHNICAL_STATUS_DICTIONARY add column COMPANY_ID uuid ;

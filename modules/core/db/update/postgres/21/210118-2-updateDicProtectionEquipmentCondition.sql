@@ -1,0 +1,1 @@
+alter table TSADV_DIC_PROTECTION_EQUIPMENT_CONDITION add column COMPANY_ID uuid ;

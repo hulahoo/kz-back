@@ -1,0 +1,1 @@
+alter table TSADV_DIC_LEARNING_FEEDBACK_QUESTION_TYPE add column COMPANY_ID uuid ;

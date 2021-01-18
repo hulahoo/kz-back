@@ -1,0 +1,1 @@
+alter table TSADV_DIC_EDUCATIONAL_ESTABLISHMENT add column COMPANY_ID uuid ;

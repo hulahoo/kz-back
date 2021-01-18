@@ -1,0 +1,1 @@
+alter table TSADV_DIC_RC_QUESTIONNAIRE_STATUS add column COMPANY_ID uuid ;
