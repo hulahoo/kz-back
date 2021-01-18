@@ -70,6 +70,15 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                     }
                 }
         );
+        assignedPerformancePlanDc.addItemPropertyChangeListener(assignedPerformancePlanItemPropertyChangeEvent -> {
+            if ("extraPoint".equals(assignedPerformancePlanItemPropertyChangeEvent.getProperty())) {
+                assignedPerformancePlanDc.getItem().setFinalScore(
+                        ((double) (assignedPerformancePlanItemPropertyChangeEvent.getValue() != null
+                                ? assignedPerformancePlanItemPropertyChangeEvent.getValue()
+                                : 0.0))
+                                + assignedPerformancePlanDc.getItem().getKpiScore());
+            }
+        });
     }
 
 

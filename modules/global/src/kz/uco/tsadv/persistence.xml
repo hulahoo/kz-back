@@ -611,5 +611,6 @@
         <class>kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink</class>
         <class>kz.uco.tsadv.entity.bproc.AbstractBprocRequest</class>
         <class>kz.uco.tsadv.modules.performance.model.ScoreSetting</class>
+        <class>kz.uco.tsadv.modules.performance.model.CorrectionCoefficient</class>
     </persistence-unit>
 </persistence>
