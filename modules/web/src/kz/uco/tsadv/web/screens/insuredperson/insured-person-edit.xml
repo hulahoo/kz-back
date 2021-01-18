@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://insuredPersonEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.insuredperson">
+    <data>
+        <instance id="insuredPersonDc"
+                  class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
+                  view="insuredPerson-editView">
+            <loader/>
+        </instance>
+        <collection id="DicVHIAttachmentStatusDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus" view="_local">
+            <loader id="DicVHIAttachmentStatusDl">
+                <query><![CDATA[select e from tsadv$DicVHIAttachmentStatus e]]></query>
+            </loader>
+        </collection>
+        <collection id="regionDc"
+                    class="kz.uco.base.entity.dictionary.DicRegion"
+                    view="_local">
+            <loader id="regionDl">
+                <query><![CDATA[select e from base$DicRegion e]]></query>
+            </loader>
+        </collection>
+        <collection id="employeeDc"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                    view="_local">
+            <loader id="employee">
+                <query><![CDATA[select e from base$PersonGroupExt e]]></query>
+            </loader>
+        </collection>
+        <collection id="personGroup"
+                    class="kz.uco.base.entity.shared.PersonGroup"
+                    view="_local">
+            <loader id="personGroupDl">
+                <query><![CDATA[select e from base$PersonGroup e]]></query>
+            </loader>
+        </collection>
+        <collection id="documentTypeDc" class="kz.uco.base.entity.dictionary.DicPersonIdentityDocumentType"
+                    view="_local">
+            <loader id="documentTypeDl">
+                <query><![CDATA[select e from base$DicPersonIdentityDocumentType e]]></query>
+            </loader>
+        </collection>
+        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
+            <loader id="addressDl">
+                <query><![CDATA[select e from tsadv$Address e]]></query>
+            </loader>
+        </collection>
+        <collection id="companyDc" class="kz.uco.tsadv.modules.personal.dictionary.DicCompany" view="_local">
+            <loader id="companyDl">
+                <query><![CDATA[select e from tsadv$DicCompany e]]></query>
+            </loader>
+        </collection>
+        <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup" view="_local">
+            <loader id="jobDl">
+                <query><![CDATA[select e from tsadv$JobGroup e]]></query>
+            </loader>
+        </collection>
+        <collection id="sexDc" class="kz.uco.base.entity.dictionary.DicSex" view="_local">
+            <loader id="sexDl">
+                <query><![CDATA[select e from base$DicSex e]]></query>
+            </loader>
+        </collection>
+        <collection id="insuranceContractDc" class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
+                    view="_local">
+            <loader id="insuranceContractDl">
+                <query><![CDATA[select e from tsadv$InsuranceContract e]]></query>
+            </loader>
+        </collection>
+
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <groupBox caption="msg://generalInformation"
+                      outerMargin="true, false, true, false">
+                <form id="form" dataContainer="insuredPersonDc">
+                    <column width="350px">
+                        <lookupField optionsContainer="employeeDc"
+                                     id="employeeField"
+                                     property="employee"/>
+<!--                        <textField id="firstNameField" property="firstName"/>-->
+<!--                        <textField id="secondNameField" property="secondName"/>-->
+<!--                        <textField id="middleNameField" property="middleName"/>-->
+                        <textField id="iinField" property="iin"/>
+                        <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
+                        <dateField id="birthdateField" property="birthdate"/>
+                        <lookupField id="documentTypeField" property="documentType"
+                                     optionsContainer="documentTypeDc"/>
+
+                        <field property="documentNumber" id="documentNumberType"/>
+                        <lookupField id="addressField" property="address"
+                                     optionsContainer="addressDc"/>
+                        <lookupField id="companyField" property="company"
+                                     optionsContainer="companyDc"/>
+                        <lookupField id="jobField"
+                                     optionsContainer="jobDc"
+                                     property="job"/>
+                        <pickerField id="assignDateField" property="assignDate">
+                            <actions>
+                                <action id="lookup" type="picker_lookup"/>
+                                <action id="clear" type="picker_clear"/>Ы
+                            </actions>
+                        </pickerField>
+                    </column>
+                </form>
+            </groupBox>
+            <groupBox caption="msg://informationOnVHI"
+                      outerMargin="true, false, true, false">
+                <form id="form2" dataContainer="insuredPersonDc">
+                    <column width="350">
+
+                        <lookupField id="insuranceContractField" optionsContainer="insuranceContractDc"
+                                     property="insuranceContract"/>
+                        <dateField id="startDateField"/>
+                        <dateField id="endDateField"/>
+                        <dateField id="attachDateField" property="attachDate" editable="false"/>
+                        <lookupField id="statusRequestField" editable="false"
+                                     optionsContainer="DicVHIAttachmentStatusDc" property="statusRequest"/>
+                        <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram"/>
+                        <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
+
+                        <pickerField id="fileField" property="file">
+                            <actions>
+                                <action id="lookup" type="picker_lookup"/>
+                                <action id="clear" type="picker_clear"/>
+                            </actions>
+                        </pickerField>
+                        <textField id="totalAmountField" property="totalAmount"/>
+                        <textField id="amountField" property="amount"/>
+                        <dateField id="exclusionDateField" property="exclusionDate"/>
+                        <textField id="commentField" property="comment"/>
+                    </column>
+                </form>
+            </groupBox>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

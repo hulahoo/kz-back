@@ -8,4 +8,6 @@ import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 @LookupComponent("insuranceContractsTable")
 @LoadDataBeforeShow
 public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
+    public void showInsuredPersons() {
+    }
 }

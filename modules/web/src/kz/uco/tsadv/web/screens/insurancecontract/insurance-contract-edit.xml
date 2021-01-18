@@ -130,21 +130,6 @@
                 </dataGrid>
             </groupBox>
 
-<!--            <groupBox id="groupBox">-->
-<!--                <table id="fileDescriptorsTable" width="100%" dataContainer="attachmentsDc">-->
-<!--                    <actions>-->
-<!--                        <action id="remove" type="remove"/>-->
-<!--                    </actions>-->
-<!--                    <buttonsPanel alwaysVisible="true">-->
-<!--                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"-->
-<!--                                stylename="primary"/>-->
-<!--                        <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>-->
-<!--                    </buttonsPanel>-->
-<!--                    <columns>-->
-<!--                        <column id="name" generator="generatorName" caption="mainMsg://fileName"/>-->
-<!--                    </columns>-->
-<!--                </table>-->
-<!--            </groupBox>-->
 
         </scrollBox>
         <hbox id="editActions" spacing="true">

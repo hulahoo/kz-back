@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://insuredPersonBrowse.caption"
+        focusComponent="insuredPersonsTable"
+        messagesPack="kz.uco.tsadv.web.screens.insuredperson">
+    <data readOnly="true">
+        <collection id="insuredPersonsDc"
+                    class="kz.uco.tsadv.modules.personal.model.InsuredPerson">
+            <view extends="_local">
+                <property name="statusRequest" view="_minimal"/>
+                <property name="employee" view="_minimal"/>
+                <property name="relative" view="_minimal"/>
+                <property name="sex" view="_minimal"/>
+                <property name="documentType" view="_minimal"/>
+                <property name="documentNumber" view="_minimal"/>
+                <property name="region" view="_minimal"/>
+                <property name="address" view="_minimal"/>
+            </view>
+            <loader id="insuredPersonsDl">
+                <query>
+                    <![CDATA[select e from tsadv$InsuredPerson e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="insuredPersonsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="insuredPersonsTable"
+                dataLoader="insuredPersonsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="insuredPersonsTable"
+                    width="100%"
+                    dataContainer="insuredPersonsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+                <action id="excel" type="excel"/>
+            </actions>
+            <columns>
+                <column id="attachDate"/>
+                <column id="statusRequest"/>
+                <column id="employee"/>
+                <column id="relative"/>
+                <column id="firstName"/>
+                <column id="secondName"/>
+                <column id="middleName"/>
+                <column id="sex"/>
+                <column id="iin"/>
+                <column id="birthdate"/>
+                <column id="documentType"/>
+                <column id="documentNumber"/>
+                <column id="region"/>
+                <column id="address"/>
+                <column id="insuranceProgram"/>
+                <column id="totalAmount"/>
+                <column id="type"/>
+                <column id="amount"/>
+                <column id="exclusionDate"/>
+                <column id="comment"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="insuredPersonsTable.create"/>
+                <button id="editBtn" action="insuredPersonsTable.edit"/>
+                <button id="removeBtn" action="insuredPersonsTable.remove"/>
+                <button id="excelBtn" action="insuredPersonsTable.excel"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
