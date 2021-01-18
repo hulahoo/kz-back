@@ -27,6 +27,17 @@ public class Grade extends AbstractTimeBasedEntity implements IGroupedEntity<Gra
     @JoinColumn(name = "GROUP_ID")
     protected GradeGroup group;
 
+    @Column(name = "BONUS_PERCENT")
+    protected Double bonusPercent;
+
+    public Double getBonusPercent() {
+        return bonusPercent;
+    }
+
+    public void setBonusPercent(Double bonusPercent) {
+        this.bonusPercent = bonusPercent;
+    }
+
     public void setRecognitionNominate(Boolean recognitionNominate) {
         this.recognitionNominate = recognitionNominate;
     }
