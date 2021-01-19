@@ -6,8 +6,8 @@ import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.abstraction.IGroupedEntity;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.Organization;
-import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -41,12 +41,12 @@ public class OrganizationExt extends Organization implements IGroupedEntity<Orga
     @Column(name = "INTERNAL")
     protected Boolean internal;
 
-    public DicCompany getCompany() {
-        return company;
-    }
-
     public void setCompany(DicCompany company) {
         this.company = company;
+    }
+
+    public DicCompany getCompany() {
+        return company;
     }
 
     @SuppressWarnings("all")

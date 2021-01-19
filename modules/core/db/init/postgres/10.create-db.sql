@@ -2193,6 +2193,7 @@ create table TSADV_GRADE (
     RECOGNITION_NOMINATE boolean not null,
     GROUP_ID uuid,
     BONUS_PERCENT double precision,
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^
@@ -3689,8 +3690,8 @@ create table TSADV_GOAL_LIBRARY (
     --
     LIBRARY_NAME varchar(240) not null,
     CATEGORY_ID uuid not null,
-    START_DATE date not null,
-    END_DATE date not null,
+    START_DATE date,
+    END_DATE date,
     --
     primary key (ID)
 )^
@@ -3747,10 +3748,10 @@ create table TSADV_GOAL (
     GOAL_NAME varchar(1000) not null,
     SUCCESS_CRITERIA varchar(100),
     LIBRARY_ID uuid not null,
-    MEASURE_TYPE_ID uuid not null,
+    MEASURE_TYPE_ID uuid,
     UOM_ID uuid,
-    START_DATE date not null,
-    END_DATE date not null,
+    START_DATE date,
+    END_DATE date,
     --
     primary key (ID)
 )^
@@ -14848,14 +14849,11 @@ update BASE_PERSON set DTYPE = 'base$PersonExt' where DTYPE is null ^
 -- end BASE_PERSON
 -- begin BASE_ORGANIZATION
 alter table BASE_ORGANIZATION add column GROUP_ID uuid ^
--- alter table BASE_ORGANIZATION add column COMPANY_ID uuid ^
--- update BASE_ORGANIZATION set COMPANY_ID = <default_value> ^
--- alter table BASE_ORGANIZATION alter column COMPANY_ID set not null ^
-alter table BASE_ORGANIZATION add column COMPANY_ID uuid not null ^
+alter table BASE_ORGANIZATION add column COMPANY_ID uuid ^
 alter table BASE_ORGANIZATION add column COST_CENTER_ID uuid ^
 alter table BASE_ORGANIZATION add column PAYROLL_ID uuid ^
 alter table BASE_ORGANIZATION add column INTERNAL boolean ^
-alter table BASE_ORGANIZATION add column DTYPE varchar(31) ^
+alter table BASE_ORGANIZATION add column DTYPE varchar(100) ^
 update BASE_ORGANIZATION set DTYPE = 'base$OrganizationExt' where DTYPE is null ^
 -- end BASE_ORGANIZATION
 -- begin BASE_POSITION
@@ -16859,6 +16857,7 @@ create table TSADV_CORRECTION_COEFFICIENT (
     GROUP_EFFICIENCY_PERCENT double precision,
     COMPANY_RESULT double precision,
     PERFORMANCE_PLAN_ID uuid,
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^

@@ -70,13 +70,11 @@ public class AssignedGoalCascadeEdit extends StandardEditor<AssignedGoal> {
             if (assignedGoalValueChangeEvent != null && assignedGoalValueChangeEvent.getValue() != null) {
                 item.setGoalString(assignedGoalValueChangeEvent.getValue().getGoalString());
                 item.setWeight(assignedGoalValueChangeEvent.getValue().getWeight());
-                item.setResult(assignedGoalValueChangeEvent.getValue().getResult());
                 item.setSuccessCritetia(assignedGoalValueChangeEvent.getValue().getSuccessCritetia());
                 item.setCategory(assignedGoalValueChangeEvent.getValue().getCategory());
             } else {
                 item.setGoalString(null);
                 item.setWeight(null);
-                item.setResult(null);
                 item.setSuccessCritetia(null);
                 item.setCategory(null);
             }

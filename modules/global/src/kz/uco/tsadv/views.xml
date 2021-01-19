@@ -2826,6 +2826,7 @@
         <property name="langValue4"/>
         <property name="langValue5"/>
         <property name="isSystemRecord"/>
+        <property name="code"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
           name="assignedGoal.browse">
@@ -8371,6 +8372,7 @@
                 <property name="endDate"/>
             </property>
         </property>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"
           extends="_local"
@@ -21903,5 +21905,6 @@
     </view>
     <view entity="tsadv_CorrectionCoefficient" name="correctionCoefficient.edit" extends="_local">
         <property name="performancePlan" view="_minimal"/>
+        <property name="company" view="_minimal"/>
     </view>
 </views>

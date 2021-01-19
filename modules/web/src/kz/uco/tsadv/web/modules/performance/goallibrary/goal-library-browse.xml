@@ -32,8 +32,6 @@
             <columns>
                 <column id="libraryName"/>
                 <column id="category"/>
-                <column id="startDate"/>
-                <column id="endDate"/>
             </columns>
             <rows datasource="goalLibrariesDs"/>
             <rowsCount/>
