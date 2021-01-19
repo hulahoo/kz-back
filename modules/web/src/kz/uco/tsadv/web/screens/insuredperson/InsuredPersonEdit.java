@@ -1,10 +1,12 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.entity.dictionary.DicSex;
+import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -21,8 +23,6 @@ import java.util.Date;
 public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Inject
     private CollectionLoader<InsuranceContract> insuranceContractDl;
-    @Inject
-    private InstanceContainer<InsuredPerson> insuredPersonDc;
     @Inject
     private LookupField<InsuranceContract> insuranceContractField;
     @Inject
@@ -45,6 +45,8 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private LookupField<DicDocumentType> documentTypeField;
     @Inject
     private LookupField<PersonGroupExt> employeeField;
+    @Inject
+    private DataManager dataManager;
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -73,8 +75,16 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Subscribe("employeeField")
     public void onEmployeeFieldValueChange(HasValue.ValueChangeEvent<PersonGroupExt> event) {
         if (event.getValue() != null && event.getValue().getCurrentAssignment() !=null){
-            insuranceContractDl.setParameter("company",
-                    event.getValue().getCurrentAssignment().getOrganizationGroup().getOrganization().getCompany());
+
+            DicCompany company = dataManager.load(DicCompany.class)
+                    .query("select s.organizationGroup.company " +
+                            "   from base$PersonGroupExt e" +
+                            "   join e.assignments s " +
+                            " where e.id = :pg")
+                    .parameter("pg", event.getValue().getId())
+                    .list().stream().findFirst().orElse(null);
+
+            insuranceContractDl.setParameter("company",company);
             insuranceContractDl.load();
 
         }

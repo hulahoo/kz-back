@@ -83,7 +83,6 @@
                         <dateField id="birthdateField" property="birthdate"/>
                         <lookupField id="documentTypeField" property="documentType"
                                      optionsContainer="documentTypeDc"/>
-
                         <field property="documentNumber" id="documentNumberType"/>
                         <lookupField id="addressField" property="address"
                                      optionsContainer="addressDc"/>
@@ -92,12 +91,7 @@
                         <lookupField id="jobField"
                                      optionsContainer="jobDc"
                                      property="job"/>
-                        <pickerField id="assignDateField" property="assignDate">
-                            <actions>
-                                <action id="lookup" type="picker_lookup"/>
-                                <action id="clear" type="picker_clear"/>
-                            </actions>
-                        </pickerField>
+                        <dateField id="assignDateField" property="assignDate"/>
                     </column>
                 </form>
             </groupBox>
@@ -109,7 +103,9 @@
                         <lookupField id="insuranceContractField"
                                      optionsContainer="insuranceContractDc"
                                      property="insuranceContract"/>
-                        <dateField id="startDateField" caption="msg://startData" editable="false"/>
+                        <dateField id="startDateField" caption="msg://startData"
+                                  resolution="DAY"
+                                   editable="false"/>
                         <dateField id="endDateField" caption="msg://endData" editable="false"/>
                         <dateField id="attachDateField" property="attachDate" editable="false"/>
                         <lookupField id="statusRequestField" editable="false"

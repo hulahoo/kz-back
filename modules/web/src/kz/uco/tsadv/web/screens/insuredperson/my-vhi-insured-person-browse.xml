@@ -14,7 +14,9 @@
                         <property name="organizationGroup" view="_local">
                             <property name="organization" view="_minimal">
                                 <property name="startDate"/>
+                                <property name="company" view="_local"/>
                             </property>
+                            <property name="company" view="_local"/>
                         </property>
                         <property name="jobGroup" view="_local">
                             <property name="job" view="_minimal">
