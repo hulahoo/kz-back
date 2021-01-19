@@ -14,6 +14,7 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.*;
@@ -71,6 +72,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected Table<CorrectionCoefficient> correctionCoefTable;
     @Inject
     protected CollectionContainer<CorrectionCoefficient> correctionCoefDc;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -294,7 +297,10 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         try {
             assignedPerformancePlans.forEach(assignedPerformancePlan -> {
                 assignedPerformancePlan.setGzp(BigDecimal.valueOf(
-                        kpiService.calculationOfGZP(assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGroup(),
+                        kpiService.calculationOfGZP(assignedPerformancePlan.getAssignedPerson() != null
+                                        && assignedPerformancePlan.getAssignedPerson().getCurrentAssignment() != null
+                                        ? assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGroup()
+                                        : null,
                                 performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));
                 assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
                         BigDecimal.valueOf(assignedPerformancePlan.getAssignedPerson().getCurrentAssignment() != null
@@ -322,17 +328,22 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
     private Double calculatePersonalBonus(BigDecimal maxBonus, Double finalScore) {
         return maxBonus.doubleValue() *
-                ((100 - correctionCoefDc.getItems().get(0).getGroupEfficiencyPercent()) / 100) * (finalScore / 20);
+                ((100 - correctionCoefDc.getItems().get(0).getGroupEfficiencyPercent()) / 100) * (finalScore
+                / extAppPropertiesConfig.getIndividualScore());
     }
 
     private BigDecimal calculateCompanyBonus(BigDecimal maxBonus) {
-        correctionCoefDc.getItems();
         CorrectionCoefficient correctionCoefficient = correctionCoefDc.getItems().get(0);
         if (correctionCoefficient != null) {
             return maxBonus.multiply(BigDecimal.valueOf(correctionCoefficient.getGroupEfficiencyPercent())
-                    .divide(BigDecimal.valueOf(100))).multiply(BigDecimal.valueOf(0.5));
+                    .divide(BigDecimal.valueOf(100)))
+                    .multiply(BigDecimal.valueOf(correctionCoefficient.getCompanyResult())
+                            .divide(BigDecimal.valueOf(100)));
+        } else {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("correctionCoefIsNull")).show();
         }
-        return new BigDecimal(0.0);
+        return null;
     }
 
     private Double getFinalScore(Double result) {
@@ -343,8 +354,11 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 .list();
         if (!scoreSettingList.isEmpty()) {
             return Double.valueOf(scoreSettingList.get(0).getFinalScore());
+        } else {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("notScoreSetting")).show();
         }
-        return 0.0;
+        return null;
     }
 
     @Subscribe("correctionCoefTable.create")

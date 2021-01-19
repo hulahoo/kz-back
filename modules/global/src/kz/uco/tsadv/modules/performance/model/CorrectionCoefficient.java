@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.performance.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.base.entity.dictionary.DicCompany;
 
 import javax.persistence.*;
 
@@ -18,6 +19,18 @@ public class CorrectionCoefficient extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERFORMANCE_PLAN_ID")
     protected PerformancePlan performancePlan;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    protected DicCompany company;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
 
     public PerformancePlan getPerformancePlan() {
         return performancePlan;

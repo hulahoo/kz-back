@@ -3,6 +3,7 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.chile.core.annotations.NamePattern;
 import kz.uco.base.entity.abstraction.AbstractTimeBasedEntity;
 import kz.uco.base.entity.abstraction.IGroupedEntity;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.group.GradeGroup;
 
 import javax.persistence.*;
@@ -29,6 +30,18 @@ public class Grade extends AbstractTimeBasedEntity implements IGroupedEntity<Gra
 
     @Column(name = "BONUS_PERCENT")
     protected Double bonusPercent;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    protected DicCompany company;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
 
     public Double getBonusPercent() {
         return bonusPercent;

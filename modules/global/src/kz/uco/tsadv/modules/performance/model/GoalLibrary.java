@@ -3,8 +3,8 @@ package kz.uco.tsadv.modules.performance.model;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
-import kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -20,7 +20,7 @@ public class GoalLibrary extends AbstractParentEntity {
     @Column(name = "LIBRARY_NAME", nullable = false, length = 240)
     protected String libraryName;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CATEGORY_ID")
@@ -28,11 +28,11 @@ public class GoalLibrary extends AbstractParentEntity {
 
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "START_DATE", nullable = false)
+    @Column(name = "START_DATE")
     protected Date startDate;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "END_DATE", nullable = false)
+    @Column(name = "END_DATE")
     protected Date endDate;
 
     public void setStartDate(Date startDate) {

@@ -98,7 +98,6 @@
                         <action id="remove" type="remove"/>
                         <action id="massGoals" caption="msg://massGoals" trackSelection="true"/>
                         <action id="calculateGZP" caption="msg://calculateGZP" trackSelection="true"/>
-                        <action id="excelUnload" type="excel"/>
                     </actions>
                     <columns>
                         <column property="assignedPerson"/>
@@ -118,7 +117,6 @@
                         <button id="assignedRemove" action="assignedPerformancePlanTable.remove"/>
                         <button id="assignedMass" action="assignedPerformancePlanTable.massGoals"/>
                         <button id="assignedCalculateGZP" action="assignedPerformancePlanTable.calculateGZP"/>
-                        <button id="assignedExcelUnload" action="assignedPerformancePlanTable.excelUnload"/>
                     </buttonsPanel>
                 </dataGrid>
             </tab>
@@ -171,6 +169,7 @@
                         <action id="remove" type="remove"/>
                     </actions>
                     <columns>
+                        <column id="company"/>
                         <column id="groupEfficiencyPercent"/>
                         <column id="companyResult"/>
                     </columns>
