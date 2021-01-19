@@ -112,8 +112,10 @@ public class AssignedGoalCascadeEdit extends StandardEditor<AssignedGoal> {
                 .query("select e from tsadv$AssignedGoal e " +
                         " join e.assignedPerformancePlan app " +
                         " where app.assignedPerson = :personGroup " +
+                        " and app.performancePlan = :performancePlan " +
                         " and :currentDate between app.startDate and app.endDate ")
                 .parameter("personGroup", personGroupExt)
+                .parameter("performancePlan", assignedGoalDc.getItem().getAssignedPerformancePlan().getPerformancePlan())
                 .parameter("currentDate", BaseCommonUtils.getSystemDate())
                 .view("assignedGoalForKpi")
                 .list();

@@ -2751,19 +2751,11 @@
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.Goal"
           name="goal.browse">
+        <!--todo - заменить DicUOM на общий справочник kz.uco.tsadv.global.dictionary.DicUnitOfMeasure-->
         <property name="goalName"/>
         <property name="successCriteria"/>
-        <property name="measureType"
-                  view="dicMeasureType.browse"/>
-        <property name="uom"
-                  view="dicUOM.browse"/>
-        <!--todo - заменить DicUOM на общий справочник kz.uco.tsadv.global.dictionary.DicUnitOfMeasure-->
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="library"
-                  view="_minimal">
-            <property name="category"
-                      view="_minimal">
+        <property name="library" view="_minimal">
+            <property name="category" view="_minimal">
                 <property name="langValue1"/>
                 <property name="langValue2"/>
                 <property name="langValue3"/>
@@ -2774,6 +2766,11 @@
                 <property name="code"/>
             </property>
         </property>
+        <property name="measureType" view="dicMeasureType.browse"/>
+        <property name="uom" view="dicUOM.browse"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="parentGoal" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.Goal"
           name="goal.edit">
@@ -2798,6 +2795,7 @@
         <property name="uom" view="dicUOM.browse"/>
         <property name="startDate"/>
         <property name="endDate"/>
+        <property name="parentGoal" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.dictionary.DicMeasureType"
           name="dicMeasureType.browse">
@@ -21698,6 +21696,7 @@
             <property name="personExperience" view="_minimal"/>
         </property>
         <property name="assignedPerformancePlan" view="_minimal">
+            <property name="performancePlan" view="_minimal"/>
             <property name="assignedPerson" view="_minimal">
                 <property name="list" view="_minimal"/>
                 <property name="assignments" view="_minimal">

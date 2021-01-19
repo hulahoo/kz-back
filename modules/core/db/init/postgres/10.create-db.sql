@@ -3752,6 +3752,7 @@ create table TSADV_GOAL (
     UOM_ID uuid,
     START_DATE date,
     END_DATE date,
+    PARENT_GOAL_ID uuid,
     --
     primary key (ID)
 )^
