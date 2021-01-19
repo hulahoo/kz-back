@@ -50,6 +50,18 @@ public class Goal extends AbstractParentEntity {
     @Column(name = "END_DATE")
     protected Date endDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_GOAL_ID")
+    protected Goal parentGoal;
+
+    public Goal getParentGoal() {
+        return parentGoal;
+    }
+
+    public void setParentGoal(Goal parentGoal) {
+        this.parentGoal = parentGoal;
+    }
+
     public GoalLibrary getLibrary() {
         return library;
     }
