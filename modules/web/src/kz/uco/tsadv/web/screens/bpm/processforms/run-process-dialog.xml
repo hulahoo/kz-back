@@ -6,7 +6,11 @@
         <collection id="bprocInstanceRolesLinksDc" class="kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink">
             <view extends="_local">
                 <property name="hrRole" view="_minimal"/>
-                <property name="user" view="_minimal"/>
+                <property name="user" view="_minimal">
+                    <property name="personGroup" view="_minimal">
+                        <property name="list" view="_local"/>
+                    </property>
+                </property>
             </view>
             <loader id="bprocInstanceRolesLinksDl">
                 <query>
@@ -39,8 +43,8 @@
             </buttonsPanel>
             <columns>
                 <column id="hrRole" generator="hrRolesGenerate" width="300px"/>
-                <column id="user" generator="userGenerate" width="300px"
-                caption="msg://users"/>
+                <column id="user" generator="personGenerate" width="300px"
+                        caption="msg://approvers"/>
                 <column id="deleteRow" generator="deleteGenerate" width="100px"
                         caption="msg://table.btn.remove"/>
             </columns>

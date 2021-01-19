@@ -4,7 +4,6 @@ import com.haulmont.addon.bproc.entity.ProcessInstanceData;
 import com.haulmont.addon.bproc.service.BprocRuntimeService;
 import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.addon.bproc.web.processform.ProcessFormContext;
-import com.haulmont.addon.bproc.web.processform.ProcessVariable;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
@@ -18,12 +17,14 @@ import com.haulmont.cuba.gui.model.CollectionChangeType;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
-import com.haulmont.cuba.security.entity.User;
 import com.haulmont.cuba.security.global.UserSession;
+import kz.uco.base.entity.shared.Person;
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.model.PersonExt;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -48,16 +49,16 @@ public class RunProcessDialog extends Screen {
     @Inject
     protected ProcessFormContext processFormContext;
     @Inject
-    private UiComponents uiComponents;
+    protected UiComponents uiComponents;
     @Inject
-    private CollectionContainer<DicHrRole> dicHrRolesDc;
+    protected CollectionContainer<DicHrRole> dicHrRolesDc;
     @Inject
-    private CollectionLoader<DicHrRole> dicHrRolesDl;
+    protected CollectionLoader<DicHrRole> dicHrRolesDl;
+    @Inject
+    protected UserSession userSession;
 
     protected String processDefinitionKey;
-    protected Map<BprocInstanceRolesLink, LookupField<UserExt>> userListsMap = new HashMap<>();
-    @Inject
-    private UserSession userSession;
+    protected Map<BprocInstanceRolesLink, LookupField<PersonExt>> userListsMap = new HashMap<>();
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -81,7 +82,7 @@ public class RunProcessDialog extends Screen {
                 if (itemPropertyChangeEvent.getValue() != null) {
                     dicHrRolesDc.getMutableItems().remove(itemPropertyChangeEvent.getValue());
                 }
-                userListsMap.get(itemPropertyChangeEvent.getItem()).setOptionsList(getUsersByRole(itemPropertyChangeEvent.getItem().getHrRole()));
+                userListsMap.get(itemPropertyChangeEvent.getItem()).setOptionsList(getPersonsByRole(itemPropertyChangeEvent.getItem().getHrRole()));
             }
         });
         bprocInstanceRolesLinksDl.setParameter("processInstanceId", processFormContext.getFormData().getBusinessKey());
@@ -141,42 +142,60 @@ public class RunProcessDialog extends Screen {
     }
 
     public Component hrRolesGenerate(BprocInstanceRolesLink bprocInstanceRolesLink) {
-            LookupField<DicHrRole> lookupField = uiComponents.create(LookupField.of(DicHrRole.class));
-            lookupField.setValue(bprocInstanceRolesLink.getHrRole());
-            lookupField.setEditable(!Optional.ofNullable(bprocInstanceRolesLink.isRequired()).orElse(true));
-            lookupField.addValueChangeListener(dicHrRoleValueChangeEvent -> {
-                bprocInstanceRolesLink.setHrRole(dicHrRoleValueChangeEvent.getValue());
-                bprocInstanceRolesLinksDc.setItem(getScreenData().getDataContext().merge(bprocInstanceRolesLink));
-            });
-            lookupField.setOptions(new ContainerOptions(dicHrRolesDc));
-            lookupField.setRequired(true);
-            lookupField.setNullOptionVisible(false);
-            lookupField.setWidth("200px");
-            return lookupField;
+        LookupField<DicHrRole> lookupField = uiComponents.create(LookupField.of(DicHrRole.class));
+        lookupField.setValue(bprocInstanceRolesLink.getHrRole());
+        lookupField.setEditable(!Optional.ofNullable(bprocInstanceRolesLink.isRequired()).orElse(true));
+        lookupField.addValueChangeListener(dicHrRoleValueChangeEvent -> {
+            bprocInstanceRolesLink.setHrRole(dicHrRoleValueChangeEvent.getValue());
+            bprocInstanceRolesLinksDc.setItem(getScreenData().getDataContext().merge(bprocInstanceRolesLink));
+        });
+        lookupField.setOptions(new ContainerOptions(dicHrRolesDc));
+        lookupField.setRequired(true);
+        lookupField.setNullOptionVisible(false);
+        lookupField.setWidth("200px");
+        return lookupField;
     }
 
-    public Component userGenerate(BprocInstanceRolesLink bprocInstanceRolesLink) {
+    public Component personGenerate(BprocInstanceRolesLink bprocInstanceRolesLink) {
         if (bprocInstanceRolesLink.isRequired()) {
             Label<String> label = uiComponents.create(Label.class);
-            String users = getUsersByRole(bprocInstanceRolesLink.getHrRole()).stream()
-                    .map(User::getLogin)
-                    .collect(Collectors.joining(", "));
-            label.setValue(users);
-            PopupView popupView = uiComponents.create(PopupView.class);
-            popupView.setHideOnMouseOut(false);
-            popupView.setMinimizedValue("Users");
-            popupView.setPopupContent(label);
-            return popupView;
+            List<PersonExt> personList = getPersonsByRole(bprocInstanceRolesLink.getHrRole());
+
+            Label<String> fistPersonLabel = uiComponents.create(Label.class);
+            PersonExt firstPerson = personList.stream().findFirst().orElse(null);
+            if (firstPerson == null) return null;
+            fistPersonLabel.setValue(firstPerson.getFioWithEmployeeNumber());
+            if (personList.size() > 1) {
+                HBoxLayout hBoxLayout = uiComponents.create(HBoxLayout.class);
+                personList.remove(firstPerson);
+                String persons = personList.stream()
+                        .map(PersonExt::getFioWithEmployeeNumber)
+                        .collect(Collectors.joining(", "));
+                label.setValue(persons);
+                PopupView popupView = uiComponents.create(PopupView.class);
+                popupView.setHideOnMouseOut(false);
+                popupView.setMinimizedValue(", ...");
+                popupView.setPopupContent(label);
+                hBoxLayout.add(fistPersonLabel);
+                hBoxLayout.add(popupView);
+                return hBoxLayout;
+            }
+            return fistPersonLabel;
         } else {
-            LookupField<UserExt> lookupField = uiComponents.create(LookupField.of(UserExt.class));
+            LookupField<PersonExt> lookupField = uiComponents.create(LookupField.of(PersonExt.class));
+            lookupField.setOptionCaptionProvider(Person::getFioWithEmployeeNumber);
             lookupField.setRequired(true);
             lookupField.setWidth("200px");
-            List<UserExt> userExtList = getUsersByRole(bprocInstanceRolesLink.getHrRole());
-            lookupField.setOptionsList(userExtList);
-            lookupField.setValue(bprocInstanceRolesLink.getUser());
+            List<PersonExt> personExtList = getPersonsByRole(bprocInstanceRolesLink.getHrRole());
+            lookupField.setOptionsList(personExtList);
+            if (bprocInstanceRolesLink.getUser() != null
+                    && bprocInstanceRolesLink.getUser().getPersonGroup() != null
+                    && bprocInstanceRolesLink.getUser().getPersonGroup().getPerson() != null) {
+                lookupField.setValue(bprocInstanceRolesLink.getUser().getPersonGroup().getPerson());
+            }
             lookupField.setEditable(!bprocInstanceRolesLink.isRequired());
             lookupField.addValueChangeListener(userExtValueChangeEvent -> {
-                bprocInstanceRolesLink.setUser(userExtValueChangeEvent.getValue());
+                bprocInstanceRolesLink.setUser(getUserByPersonGroup(userExtValueChangeEvent.getValue().getGroup()));
                 bprocInstanceRolesLinksDc.setItem(getScreenData().getDataContext().merge(bprocInstanceRolesLink));
             });
             userListsMap.put(bprocInstanceRolesLink, lookupField);
@@ -184,17 +203,42 @@ public class RunProcessDialog extends Screen {
         }
     }
 
-    protected List<UserExt> getUsersByRole(DicHrRole hrRole) {
-        if (hrRole == null) {
-            return new ArrayList<>();
-        }
-        List<UserExt> userList = dataManager.load(UserExt.class)
-                .query("select e.user from tsadv$HrUserRole e" +
-                        " where e.role.id = :hrRoleId")
+    protected UserExt getUserByPersonGroup(PersonGroupExt personGroup) {
+        View view = new View(UserExt.class, View.LOCAL)
+                .addProperty("personGroup", new View(PersonGroupExt.class)
+                        .addProperty("list", new View(PersonExt.class)
+                        .addProperty("lastName")
+                        .addProperty("firstName")
+                        .addProperty("middleName")
+                        .addProperty("firstNameLatin")
+                        .addProperty("lastNameLatin")
+                        .addProperty("employeeNumber")));
+        return dataManager.load(UserExt.class)
+                .query("select e from tsadv$UserExt e" +
+                        " where e.personGroup.id = :personGroupId")
+                .parameter("personGroupId", personGroup.getId())
+                .view(view)
+                .optional().orElse(null);
+    }
+
+    protected List<PersonExt> getPersonsByRole(DicHrRole hrRole) {
+        if (hrRole == null) return new ArrayList<>();
+        View view = new View(PersonExt.class);
+        view.addProperty("lastName");
+        view.addProperty("firstName");
+        view.addProperty("middleName");
+        view.addProperty("firstNameLatin");
+        view.addProperty("lastNameLatin");
+        view.addProperty("employeeNumber");
+        view.addProperty("group");
+        List<PersonExt> personList = dataManager.load(PersonExt.class)
+                .query("select e from base$PersonExt e" +
+                        " join tsadv$HrUserRole r on r.user.personGroup.id = e.group.id" +
+                        " where r.role.id = :hrRoleId")
                 .parameter("hrRoleId", hrRole.getId())
-                .view(View.LOCAL)
+                .view(view)
                 .list();
-        return userList;
+        return personList;
     }
 
     public Component deleteGenerate(Entity entity) {
