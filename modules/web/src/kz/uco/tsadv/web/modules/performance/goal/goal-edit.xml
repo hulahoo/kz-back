@@ -33,14 +33,13 @@
                     datasource="goalDs">
             <column width="250px">
                 <field property="goalName"/>
-                <field property="successCriteria"/>
                 <field property="library"/>
-                <field optionsDatasource="measureTypesDs"
-                       property="measureType"/>
+                <field property="parentGoal"/>
                 <field optionsDatasource="uomsDs"
-                       property="uom"/>
+                property="uom"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
+                <field property="successCriteria" rows="4"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

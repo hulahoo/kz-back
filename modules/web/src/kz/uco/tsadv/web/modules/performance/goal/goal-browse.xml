@@ -31,12 +31,12 @@
             </actions>
             <columns>
                 <column id="goalName"/>
-                <column id="successCriteria"/>
                 <column id="library.libraryName"/>
-                <column id="measureType"/>
+                <column id="parentGoal"/>
                 <column id="uom"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="successCriteria"/>
             </columns>
             <rows datasource="goalsDs"/>
             <rowsCount/>
