@@ -13,13 +13,12 @@
                 <property name="relative" view="_minimal"/>
                 <property name="sex" view="_minimal"/>
                 <property name="documentType" view="_minimal"/>
-                <property name="documentNumber"/>
                 <property name="region" view="_minimal"/>
                 <property name="address" view="_minimal"/>
             </view>
             <loader id="insuredPersonsDl">
                 <query>
-                    <![CDATA[select e from tsadv$InsuredPerson e]]>
+                    <![CDATA[select e from tsadv$InsuredPerson e where e.company = :myCompany]]>
                 </query>
             </loader>
         </collection>

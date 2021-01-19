@@ -20116,6 +20116,16 @@
     <view class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
           extends="_local"
           name="personGroupExt-view">
+        <property name="assignments" view="_local">
+            <property name="organizationGroup" view="_local">
+                <property name="company" view="_local"/>
+                <property name="organization" view="_local">
+                    <property name="company" view="_local"/>
+                </property>
+            </property>
+            <property name="jobGroup" view="_local"/>
+            <property name="assignmentStatus" view="_local"/>
+        </property>
         <property name="list"
                   view="_minimal">
             <property name="legacyId"/>
@@ -20124,11 +20134,21 @@
             <property name="firstNameLatin"/>
             <property name="middleNameLatin"/>
             <property name="lastNameLatin"/>
+            <property name="nationalIdentifier"/>
+            <property name="hireDate"/>
+            <property name="dateOfBirth"/>
+            <property name="sex"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_local"
           name="assignmentExt-view">
+        <property name="organizationGroup" view="_local">
+            <property name="company" view="_local"/>
+        </property>
+        <property name="jobGroup" view="_local">
+            <property name="job" view="_local"/>
+        </property>
         <property name="gradeGroup"
                   view="_minimal">
             <property name="grade"
@@ -21937,7 +21957,11 @@
         <property name="statusRequest" view="_minimal"/>
         <property name="insuranceContract" view="_minimal"/>
         <property name="company" view="_minimal"/>
-        <property name="employee" view="_minimal"/>
+        <property name="employee" view="_local">
+            <property name="list" view="_local">
+                <property name="nationalIdentifier"/>
+            </property>
+        </property>
         <property name="relative" view="_minimal"/>
         <property name="job" view="_minimal"/>
         <property name="sex" view="_minimal"/>

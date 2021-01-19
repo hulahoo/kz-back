@@ -59,7 +59,7 @@
         <collection id="insuranceContractDc" class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
                     view="_local">
             <loader id="insuranceContractDl">
-                <query><![CDATA[select e from tsadv$InsuranceContract e]]></query>
+                <query><![CDATA[select e from tsadv$InsuranceContract e where e.company.id = :company]]></query>
             </loader>
         </collection>
 
@@ -74,13 +74,12 @@
                     <column width="350px">
                         <lookupField optionsContainer="employeeDc"
                                      id="employeeField"
-                                     editable="false"
                                      property="employee"/>
-<!--                        <textField id="firstNameField" property="firstName"/>-->
-<!--                        <textField id="secondNameField" property="secondName"/>-->
-<!--                        <textField id="middleNameField" property="middleName"/>-->
-                        <textField id="iinField" editable="false" property="iin" />
-                        <lookupField id="sexField" property="sex" optionsContainer="sexDc" editable="false"/>
+                        <textField id="firstNameField" property="firstName"/>
+                        <textField id="secondNameField" property="secondName"/>
+                        <textField id="middleNameField" property="middleName"/>
+                        <textField id="iinField" property="iin"/>
+                        <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
                         <dateField id="birthdateField" property="birthdate"/>
                         <lookupField id="documentTypeField" property="documentType"
                                      optionsContainer="documentTypeDc"/>
@@ -96,7 +95,7 @@
                         <pickerField id="assignDateField" property="assignDate">
                             <actions>
                                 <action id="lookup" type="picker_lookup"/>
-                                <action id="clear" type="picker_clear"/>Ы
+                                <action id="clear" type="picker_clear"/>
                             </actions>
                         </pickerField>
                     </column>
@@ -106,11 +105,12 @@
                       outerMargin="true, false, true, false">
                 <form id="form2" dataContainer="insuredPersonDc">
                     <column width="350">
-
-                        <lookupField id="insuranceContractField" optionsContainer="insuranceContractDc"
+                        <field property="type" id="typeField" visible="true"/>
+                        <lookupField id="insuranceContractField"
+                                     optionsContainer="insuranceContractDc"
                                      property="insuranceContract"/>
-                        <dateField id="startDateField" caption="msg://startData"/>
-                        <dateField id="endDateField" caption="msg://endData"/>
+                        <dateField id="startDateField" caption="msg://startData" editable="false"/>
+                        <dateField id="endDateField" caption="msg://endData" editable="false"/>
                         <dateField id="attachDateField" property="attachDate" editable="false"/>
                         <lookupField id="statusRequestField" editable="false"
                                      optionsContainer="DicVHIAttachmentStatusDc" property="statusRequest"/>

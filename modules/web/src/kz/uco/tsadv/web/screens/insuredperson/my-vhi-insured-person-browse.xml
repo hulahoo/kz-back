@@ -8,11 +8,27 @@
         <collection id="insuredPersonsDc"
                     class="kz.uco.tsadv.modules.personal.model.InsuredPerson">
             <view extends="_local">
+                <property name="company" view="_local"/>
+                <property name="employee" view="_local">
+                    <property name="assignments" view="_local">
+                        <property name="organizationGroup" view="_local">
+                            <property name="organization" view="_minimal">
+                                <property name="startDate"/>
+                            </property>
+                        </property>
+                        <property name="jobGroup" view="_local">
+                            <property name="job" view="_minimal">
+                                <property name="startDate"/>
+                            </property>
+                        </property>
+                    </property>
+                </property>
                 <property name="statusRequest" view="_minimal"/>
                 <property name="insuranceContract" view="_minimal">
                     <property name="startDate"/>
                     <property name="expirationDate"/>
                 </property>
+
             </view>
             <loader id="insuredPersonsDl">
                 <query>
@@ -34,7 +50,8 @@
                     width="100%"
                     dataContainer="insuredPersonsDc">
             <actions>
-<!--                <action id="create" invoke="eatVHI"/>-->
+                <action id="joinFamilyMember" trackSelection="true"
+                        invoke="joinFamilyMember"/>
             </actions>
             <columns>
                 <column id="attachDate"/>
@@ -57,7 +74,12 @@
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn"  invoke="joinVHI" caption="msg://joinVHI"/>
+                <button id="createBtn" stylename="primary"
+                        invoke="joinVHI" caption="msg://joinVHI"/>
+                <button id="createBtnFamilyMember"
+                        stylename="primary"
+                        caption="msg://JoinTheMICFamilyMember"
+                        action="insuredPersonsTable.joinFamilyMember"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

@@ -136,6 +136,14 @@ public class InsuredPerson extends StandardEntity {
     @Column(name = "COMMENT", length = 500)
     private String comment;
 
+    public void setJob(JobGroup job) {
+        this.job = job;
+    }
+
+    public JobGroup getJob() {
+        return job;
+    }
+
     public void setDocumentType(DicDocumentType documentType) {
         this.documentType = documentType;
     }
@@ -262,14 +270,6 @@ public class InsuredPerson extends StandardEntity {
 
     public void setIin(String iin) {
         this.iin = iin;
-    }
-
-    public JobGroup getJob() {
-        return job;
-    }
-
-    public void setJob(JobGroup job) {
-        this.job = job;
     }
 
     public String getMiddleName() {
