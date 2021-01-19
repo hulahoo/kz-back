@@ -296,17 +296,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         CommitContext commitContext = new CommitContext();
         try {
             assignedPerformancePlans.forEach(assignedPerformancePlan -> {
+                AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson() != null
+                        ? assignedPerformancePlan.getAssignedPerson().getCurrentAssignment()
+                        : null;
                 assignedPerformancePlan.setGzp(BigDecimal.valueOf(
-                        kpiService.calculationOfGZP(assignedPerformancePlan.getAssignedPerson() != null
-                                        && assignedPerformancePlan.getAssignedPerson().getCurrentAssignment() != null
-                                        ? assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGroup()
+                        kpiService.calculationOfGZP(currentAssignment != null
+                                        ? currentAssignment.getGroup()
                                         : null,
                                 performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));
                 assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
-                        BigDecimal.valueOf(assignedPerformancePlan.getAssignedPerson().getCurrentAssignment() != null
-                                && assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGradeGroup() != null
-                                && assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGradeGroup().getGrade() != null
-                                ? assignedPerformancePlan.getAssignedPerson().getCurrentAssignment().getGradeGroup().getGrade().getBonusPercent()
+                        BigDecimal.valueOf(currentAssignment != null
+                                && currentAssignment.getGradeGroup() != null
+                                && currentAssignment.getGradeGroup().getGrade() != null
+                                ? currentAssignment.getGradeGroup().getGrade().getBonusPercent()
                                 : 0)).divide(BigDecimal.valueOf(100)));
                 assignedPerformancePlan.setKpiScore(getFinalScore(assignedPerformancePlan.getResult()));
                 assignedPerformancePlan.setFinalScore(assignedPerformancePlan.getKpiScore()
