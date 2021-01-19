@@ -14,6 +14,7 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
@@ -315,7 +316,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                         + (assignedPerformancePlan.getExtraPoint() != null
                         ? assignedPerformancePlan.getExtraPoint()
                         : 0.0));
-                assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus()).doubleValue());
+                assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus(),
+                        currentAssignment).doubleValue());
                 assignedPerformancePlan.setPersonalBonus(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus()
                         , assignedPerformancePlan.getFinalScore()));
                 assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
@@ -334,8 +336,15 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 / extAppPropertiesConfig.getIndividualScore());
     }
 
-    private BigDecimal calculateCompanyBonus(BigDecimal maxBonus) {
-        CorrectionCoefficient correctionCoefficient = correctionCoefDc.getItems().get(0);
+    private BigDecimal calculateCompanyBonus(BigDecimal maxBonus, AssignmentExt currentAssignment) {
+        DicCompany currentCompany = currentAssignment.getOrganizationGroup() != null
+                && currentAssignment.getOrganizationGroup().getOrganization() != null
+                ? currentAssignment.getOrganizationGroup().getOrganization().getCompany()
+                : null;
+        CorrectionCoefficient correctionCoefficient = correctionCoefDc.getItems().stream()
+                .filter(correctionCoefficient1 -> correctionCoefficient1.getCompany() != null
+                        && correctionCoefficient1.getCompany().equals(currentCompany))
+                .findFirst().orElse(null);
         if (correctionCoefficient != null) {
             return maxBonus.multiply(BigDecimal.valueOf(correctionCoefficient.getGroupEfficiencyPercent())
                     .divide(BigDecimal.valueOf(100)))
@@ -345,7 +354,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("correctionCoefIsNull")).show();
         }
-        return null;
+        return BigDecimal.ZERO;
     }
 
     private Double getFinalScore(Double result) {
