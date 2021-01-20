@@ -8,22 +8,6 @@
         <datasource id="goalDs"
                     class="kz.uco.tsadv.modules.performance.model.Goal"
                     view="goal.edit"/>
-        <collectionDatasource id="measureTypesDs"
-                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
-                              class="kz.uco.tsadv.modules.personal.dictionary.DicMeasureType"
-                              view="dicMeasureType.browse">
-            <query>
-                <![CDATA[select e from tsadv$DicMeasureType e]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="uomsDs"
-                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
-                              class="kz.uco.tsadv.modules.performance.dictionary.DicUOM"
-                              view="dicUOM.browse">
-            <query>
-                <![CDATA[select e from tsadv$DicUOM e]]>
-            </query>
-        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -35,8 +19,6 @@
                 <field property="goalName"/>
                 <field property="library"/>
                 <field property="parentGoal"/>
-                <field optionsDatasource="uomsDs"
-                property="uom"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="successCriteria" rows="4"/>
