@@ -1,8 +1,8 @@
 package kz.uco.tsadv.service;
 
-import com.haulmont.addon.bproc.entity.ExecutionData;
-import com.haulmont.addon.bproc.entity.ProcessInstanceData;
+import com.haulmont.addon.bproc.entity.HistoricVariableInstanceData;
 import com.haulmont.addon.bproc.entity.TaskData;
+import com.haulmont.addon.bproc.service.BprocHistoricService;
 import com.haulmont.addon.bproc.service.BprocRuntimeService;
 import com.haulmont.addon.bproc.service.BprocTaskService;
 import com.haulmont.bali.util.ParamsMap;
@@ -15,6 +15,7 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.entity.bproc.BprocTaskHistory;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink;
@@ -28,7 +29,6 @@ import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.service.ActivityService;
-import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +57,8 @@ public class BprocUtilServiceBean implements BprocUtilService {
     protected CommonService commonService;
     @Inject
     protected Persistence persistence;
+    @Inject
+    private BprocHistoricService bprocHistoricService;
 
     @Override
     @Transactional
@@ -167,13 +169,14 @@ public class BprocUtilServiceBean implements BprocUtilService {
         return transactionalDataManager.loadList(loadContext);
     }
 
-    protected Map<String, Object> getParamsMap(UserExt toWhom, String notificationCode, String entityName, String entityId) {
+    protected Map<String, Object> getParamsMap(UserExt toWhom, String notificationCode, String entityName,
+                                               String entityId) {
         Map<String, Object> resultMap = new HashMap<>();
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         AbstractBprocRequest abstractBprocRequest = null;
         //специфические параметры для каждого конкретного уведомления
         switch (notificationCode) {
-            case "absence.request.approver.notification" :
+            case "absence.request.approver.notification":
             case "absence.request.revision":
             case "absence.request.cancelled":
             case "absence.request.approved":
@@ -330,5 +333,41 @@ public class BprocUtilServiceBean implements BprocUtilService {
     @Override
     public void approve(String entityName, String entityId) {
 
+    }
+
+    @Override
+    public List<? extends BprocTaskHistory> getBprocTaskHistory(String procInstanceId) {
+        List<BprocTaskHistory> result = new ArrayList<>();
+        List<TaskData> tasks = bprocHistoricService.createHistoricTaskDataQuery().processInstanceId(procInstanceId).list();
+        for (TaskData task : tasks) {
+            BprocTaskHistory bprocTaskHistory = metadata.create(BprocTaskHistory.class);
+            bprocTaskHistory.setProcInstanseId(procInstanceId);
+            bprocTaskHistory.setUser(getUserExtForTaskHistory(task));
+            bprocTaskHistory.setRole(getRoleForTaskHistory(task));
+            bprocTaskHistory.setStartDate(null); //todo
+            bprocTaskHistory.setEndDate(null); //todo
+            bprocTaskHistory.setOutcome(getOutcomeForTaskHistory(task));
+            result.add(bprocTaskHistory);
+        }
+        return result;
+    }
+
+    private String getOutcomeForTaskHistory(TaskData task) {
+        HistoricVariableInstanceData historicVariableInstanceData
+                = bprocHistoricService.createHistoricVariableInstanceDataQuery()
+                .variableName(task.getId() + "_result")
+                .list().stream()
+                .findAny().orElse(null);
+        return null;
+    }
+
+    private DicHrRole getRoleForTaskHistory(TaskData task) {
+        return null;
+    }
+
+    public UserExt getUserExtForTaskHistory(TaskData task) {
+        UserExt userExt = metadata.create(UserExt.class);
+        userExt.setId(UUID.fromString(task.getAssignee()));
+        return userExt;
     }
 }

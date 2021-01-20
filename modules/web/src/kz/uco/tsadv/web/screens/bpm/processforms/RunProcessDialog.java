@@ -10,9 +10,11 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.gui.actions.picker.LookupAction;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.components.data.options.ContainerOptions;
+import com.haulmont.cuba.gui.components.data.value.ContainerValueSource;
 import com.haulmont.cuba.gui.model.CollectionChangeType;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
@@ -163,7 +165,9 @@ public class RunProcessDialog extends Screen {
 
             Label<String> fistPersonLabel = uiComponents.create(Label.class);
             PersonExt firstPerson = personList.stream().findFirst().orElse(null);
-            if (firstPerson == null) return null;
+            if (firstPerson == null) {
+                return getPersonPickerField(bprocInstanceRolesLink);
+            }
             fistPersonLabel.setValue(firstPerson.getFioWithEmployeeNumber());
             if (personList.size() > 1) {
                 HBoxLayout hBoxLayout = uiComponents.create(HBoxLayout.class);
@@ -182,25 +186,47 @@ public class RunProcessDialog extends Screen {
             }
             return fistPersonLabel;
         } else {
-            LookupField<PersonExt> lookupField = uiComponents.create(LookupField.of(PersonExt.class));
-            lookupField.setOptionCaptionProvider(Person::getFioWithEmployeeNumber);
-            lookupField.setRequired(true);
-            lookupField.setWidth("200px");
-            List<PersonExt> personExtList = getPersonsByRole(bprocInstanceRolesLink.getHrRole());
-            lookupField.setOptionsList(personExtList);
-            if (bprocInstanceRolesLink.getUser() != null
-                    && bprocInstanceRolesLink.getUser().getPersonGroup() != null
-                    && bprocInstanceRolesLink.getUser().getPersonGroup().getPerson() != null) {
-                lookupField.setValue(bprocInstanceRolesLink.getUser().getPersonGroup().getPerson());
-            }
-            lookupField.setEditable(!bprocInstanceRolesLink.isRequired());
-            lookupField.addValueChangeListener(userExtValueChangeEvent -> {
-                bprocInstanceRolesLink.setUser(getUserByPersonGroup(userExtValueChangeEvent.getValue().getGroup()));
-                bprocInstanceRolesLinksDc.setItem(getScreenData().getDataContext().merge(bprocInstanceRolesLink));
-            });
-            userListsMap.put(bprocInstanceRolesLink, lookupField);
-            return lookupField;
+            return getPersonLookup(bprocInstanceRolesLink, false);
         }
+    }
+
+    public Component getPersonLookup(BprocInstanceRolesLink bprocInstanceRolesLink, boolean editable) {
+        LookupField<PersonExt> lookupField = uiComponents.create(LookupField.of(PersonExt.class));
+        lookupField.setOptionCaptionProvider(Person::getFioWithEmployeeNumber);
+        lookupField.setRequired(true);
+        lookupField.setWidth("200px");
+        List<PersonExt> personExtList = getPersonsByRole(bprocInstanceRolesLink.getHrRole());
+        lookupField.setOptionsList(personExtList);
+        if (bprocInstanceRolesLink.getUser() != null
+                && bprocInstanceRolesLink.getUser().getPersonGroup() != null
+                && bprocInstanceRolesLink.getUser().getPersonGroup().getPerson() != null) {
+            lookupField.setValue(bprocInstanceRolesLink.getUser().getPersonGroup().getPerson());
+        }
+        lookupField.setEditable(!bprocInstanceRolesLink.isRequired());
+        lookupField.addValueChangeListener(userExtValueChangeEvent -> {
+            bprocInstanceRolesLink.setUser(getUserByPersonGroup(userExtValueChangeEvent.getValue().getGroup()));
+            bprocInstanceRolesLinksDc.setItem(getScreenData().getDataContext().merge(bprocInstanceRolesLink));
+        });
+        userListsMap.put(bprocInstanceRolesLink, lookupField);
+        return lookupField;
+    }
+
+    @Inject
+    protected Actions actions;
+
+    public Component getPersonPickerField(BprocInstanceRolesLink bprocInstanceRolesLink) {
+        PickerField<PersonExt> pickerField = uiComponents.create(PickerField.of(PersonExt.class));
+        pickerField.setRequired(true);
+        pickerField.setWidth("200px");
+        LookupAction lookupAction = actions.create(LookupAction.class);
+        pickerField.setMetaClass(new PersonExt().getMetaClass());
+        pickerField.addAction(lookupAction);
+        pickerField.addValueChangeListener(userExtValueChangeEvent -> {
+            UserExt userExt = getUserByPersonGroup(userExtValueChangeEvent.getValue().getGroup());
+            bprocInstanceRolesLink.setUser(getUserByPersonGroup(userExtValueChangeEvent.getValue().getGroup()));
+            bprocInstanceRolesLinksDc.setItem(getScreenData().getDataContext().merge(bprocInstanceRolesLink));
+        });
+        return pickerField;
     }
 
     protected UserExt getUserByPersonGroup(PersonGroupExt personGroup) {

@@ -1,7 +1,10 @@
 package kz.uco.tsadv.web.screens.absencerequest;
 
 import com.haulmont.addon.bproc.entity.ProcessDefinitionData;
+import com.haulmont.addon.bproc.entity.ProcessInstanceData;
 import com.haulmont.addon.bproc.service.BprocRepositoryService;
+import com.haulmont.addon.bproc.service.BprocRuntimeService;
+import com.haulmont.addon.bproc.service.BprocTaskService;
 import com.haulmont.addon.bproc.web.processform.Outcome;
 import com.haulmont.addon.bproc.web.processform.ProcessFormScreens;
 import com.haulmont.cuba.core.global.DataManager;
@@ -9,10 +12,11 @@ import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.*;
-import com.haulmont.cuba.gui.model.InstanceContainer;
+import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.util.OperationResult;
 import com.haulmont.cuba.security.global.UserSession;
+import kz.uco.tsadv.entity.bproc.BprocTaskHistory;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.mixins.BprocActionMixin;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
@@ -21,6 +25,7 @@ import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.VacationConditions;
 import kz.uco.tsadv.service.AbsenceService;
 import kz.uco.tsadv.service.AssignmentService;
+import kz.uco.tsadv.service.BprocUtilService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 
 import javax.annotation.Nonnull;
@@ -62,6 +67,10 @@ public class AbsenceRequestNewEdit extends StandardEditor<AbsenceRequest>
     @Inject
     private BprocRepositoryService bprocRepositoryService;
     @Inject
+    private BprocTaskService bprocTaskService;
+    @Inject
+    private BprocRuntimeService bprocRuntimeService;
+    @Inject
     private Notifications notifications;
     @Inject
     private MessageBundle messageBundle;
@@ -72,9 +81,30 @@ public class AbsenceRequestNewEdit extends StandardEditor<AbsenceRequest>
     private DateField<Date> dateFromField;
     @Inject
     private AbsenceService absenceService;
+    @Inject
+    private DataComponents dataComponents;
+    @Inject
+    private BprocUtilService bprocUtilService;
 
     @Subscribe
     public void onInit(InitEvent event) {
+
+        DataContext dataContext = dataComponents.createDataContext();
+        getScreenData().setDataContext(dataContext);
+
+        CollectionContainer<BprocTaskHistory> bprocTaskHistoryDc = dataComponents.createCollectionContainer(BprocTaskHistory.class);
+
+        CollectionLoader<BprocTaskHistory> bprocTaskHistoryDl = dataComponents.createCollectionLoader();
+        bprocTaskHistoryDl.setContainer(bprocTaskHistoryDc);
+        bprocTaskHistoryDl.setDataContext(dataContext);
+
+        ProcessInstanceData processInstanceData = bprocRuntimeService.createProcessInstanceDataQuery()
+                .processDefinitionKey(getProcDefinitionKey())
+                .variableValueEquals("entityId", getEditedEntity().getId().toString())
+                .list().stream().findFirst().orElse(null);
+
+        bprocTaskHistoryDc.getMutableItems().addAll(bprocUtilService.getBprocTaskHistory(processInstanceData.getId()));
+
 
         typeField.addValueChangeListener(e -> {
             boolean visible = hasStatus("APPROVING")
