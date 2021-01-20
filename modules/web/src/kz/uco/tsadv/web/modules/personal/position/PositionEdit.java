@@ -297,7 +297,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         fteField.addValueChangeListener(e -> {
             if (fteField.getValue() != null) {
                 Double d = (Double) fteField.getValue();
-                Integer val =  d.intValue();
+                Integer val = d.intValue();
                 maxPersonsField.setValue(val);
             }
         });
@@ -387,7 +387,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     public void onCreate(Component source) {
         PositionGroupGoalLink positionGroupGoalLink = metadata.create(PositionGroupGoalLink.class);
         positionGroupGoalLink.setPositionGroup(getItem().getGroup());
-        PositionGroupGoalLinkEdit positionGroupGoalLinkEdit = (PositionGroupGoalLinkEdit) openEditor(positionGroupGoalLink, WindowManager.OpenType.THIS_TAB, null, goalsDs);
+        PositionGroupGoalLinkEdit positionGroupGoalLinkEdit = (PositionGroupGoalLinkEdit) openEditor(positionGroupGoalLink, WindowManager.OpenType.THIS_TAB);
         positionGroupGoalLinkEdit.addCloseListener(a -> goalsDs.refresh());
     }
 
