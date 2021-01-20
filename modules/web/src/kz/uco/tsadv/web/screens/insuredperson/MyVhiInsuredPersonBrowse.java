@@ -1,14 +1,19 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.GroupTable;
+import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
+import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
@@ -33,17 +38,35 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     private CommonService commonService;
     @Inject
     private TimeSource timeSource;
+    @Inject
+    private GroupTable<InsuredPerson> insuredPersonsTable;
+    @Inject
+    private Metadata metadata;
 
-    public void joinVHI() {
+//    public void joinVHI() {
+//        InsuredPerson item = dataManager.create(InsuredPerson.class);
+//        Date today = timeSource.currentTimestamp();
+//        item.setAttachDate(today);
+//        chekType(1, item);
+//        screenBuilders.editor(InsuredPerson.class, this)
+//                .editEntity(item)
+//                .build()
+//                .show();
+//    }
+
+    @Subscribe("insuredPersonsTable.joinFamilyMember")
+    public void onInsuredPersonsTableCreate(Action.ActionPerformedEvent event) {
         InsuredPerson item = dataManager.create(InsuredPerson.class);
         Date today = timeSource.currentTimestamp();
         item.setAttachDate(today);
         chekType(1, item);
-        screenBuilders.editor(InsuredPerson.class, this)
-                .editEntity(item)
+        screenBuilders.editor(insuredPersonsTable)
+                .newEntity(item)
                 .build()
                 .show();
     }
+
+
 
     public void joinFamilyMember() {
     }

@@ -33,8 +33,6 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     @Inject
     private CommonService commonService;
     protected InsuranceContract insuranceContract;
-    protected DicAddressType addressType;
-    protected DicDocumentType documentType;
     @Inject
     private TimeSource timeSource;
 
@@ -43,11 +41,9 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         insuredPersonsDl.setParameter("myCompany",null);
     }
 
-    public void setParameter(DicCompany company, InsuranceContract contract, DicDocumentType document, DicAddressType address) {
+    public void setParameter(InsuranceContract contract) {
         insuranceContract = contract;
-        addressType =address;
-        documentType = document;
-        insuredPersonsDl.setParameter("myCompany", company);
+        insuredPersonsDl.setParameter("myCompany", contract.getCompany());
         insuredPersonsDl.load();
     }
 
@@ -55,8 +51,11 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     public void onInsuredPersonsTableCreate(Action.ActionPerformedEvent event) {
         InsuredPerson insuredPerson = metadata.create(InsuredPerson.class);
         insuredPerson.setInsuranceContract(insuranceContract);
-        insuredPerson.setDocumentType(documentType);
+        insuredPerson.setAddressType(insuranceContract.getDefaultAddress());
+        insuredPerson.setDocumentType(insuranceContract.getDefaultDocumentType());
         insuredPerson.setAttachDate(timeSource.currentTimestamp());
+        insuredPerson.setCompany(insuranceContract.getCompany());
+        insuredPerson.setInsuranceProgram(insuranceContract.getInsuranceProgram());
         insuredPerson.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
         screenBuilders.editor(insuredPersonsTable)
                 .newEntity(insuredPerson)

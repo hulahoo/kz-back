@@ -13,6 +13,10 @@
                 <property name="relative" view="_minimal"/>
                 <property name="sex" view="_minimal"/>
                 <property name="documentType" view="_minimal"/>
+                <property name="insuranceContract" view="_local">
+                    <property name="defaultDocumentType" view="_local"/>
+                    <property name="defaultAddress" view="_local"/>
+                </property>
                 <property name="region" view="_minimal"/>
                 <property name="addressType" view="_minimal"/>
             </view>
@@ -42,24 +46,20 @@
                 <action id="excel" type="excel"/>
             </actions>
             <columns>
-                <column id="attachDate"/>
-                <column id="statusRequest"/>
-                <column id="employee"/>
                 <column id="relative"/>
+                <column id="employee"/>
+                <column id="statusRequest"/>
                 <column id="firstName"/>
                 <column id="secondName"/>
                 <column id="middleName"/>
                 <column id="sex"/>
-                <column id="iin"/>
                 <column id="birthdate"/>
-                <column id="documentType"/>
+                <column id="iin"/>
                 <column id="documentNumber"/>
                 <column id="region"/>
-                <column id="addressType"/>
                 <column id="insuranceProgram"/>
+                <column id="address"/>
                 <column id="totalAmount"/>
-                <column id="type"/>
-                <column id="amount"/>
                 <column id="exclusionDate"/>
                 <column id="comment"/>
             </columns>

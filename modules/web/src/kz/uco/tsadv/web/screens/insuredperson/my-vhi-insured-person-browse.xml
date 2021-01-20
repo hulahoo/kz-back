@@ -52,14 +52,12 @@
                     width="100%"
                     dataContainer="insuredPersonsDc">
             <actions>
-                <action id="joinFamilyMember" trackSelection="true"
-                        invoke="joinFamilyMember"/>
+                <action id="joinFamilyMember" type="create"/>
             </actions>
             <columns>
                 <column id="attachDate"/>
                 <column id="statusRequest"/>
                 <column id="insuranceContract"/>
-                <column id="assignDate"/>
                 <column id="firstName"/>
                 <column id="secondName"/>
                 <column id="middleName"/>
@@ -77,11 +75,11 @@
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn" stylename="primary"
-                        invoke="joinVHI" caption="msg://joinVHI"/>
+                        action="insuredPersonsTable.joinFamilyMember" caption="msg://joinVHI"/>
                 <button id="createBtnFamilyMember"
                         stylename="primary"
                         caption="msg://JoinTheMICFamilyMember"
-                        action="insuredPersonsTable.joinFamilyMember"/>
+                        invoke="joinFamilyMember"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

@@ -70,17 +70,50 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
-        if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode())){
-            firstNameField.setVisible(true);
-            middleNameField.setVisible(true);
-            secondNameField.setVisible(true);
+        if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode())) {
+            checkRelationType(true);
+            iinField.setValue(null);
+            birthdateField.setValue(null);
+            sexField.setValue(null);
+            jobField.setValue(null);
+            typeField.setValue(2);
+            PersonGroupExt personGroupExt = employeeField.getValue();
+            if (personGroupExt == null){
+                iinField.setValue(null);
+                birthdateField.setValue(null);
+                sexField.setValue(null);
+                jobField.setValue(null);
+            }
+        } else if (event.getValue() != null && "PRIMARY".equals(event.getValue().getCode())) {
+            checkRelationType(false);
+            PersonGroupExt personGroupExt = employeeField.getValue();
+            if (personGroupExt != null){
+                PersonExt person = personGroupExt.getPerson();
+                AssignmentExt assignment = personGroupExt.getCurrentAssignment();
+
+                iinField.setValue(person.getNationalIdentifier());
+                birthdateField.setValue(person.getDateOfBirth());
+                sexField.setValue(person.getSex());
+                jobField.setValue(assignment.getJobGroup());
+                typeField.setValue(1);
+            }else {
+                iinField.setValue(null);
+                birthdateField.setValue(null);
+                sexField.setValue(null);
+                jobField.setValue(null);
+            }
         }
+    }
+
+    private void checkRelationType(boolean b){
+        firstNameField.setVisible(b);
+        middleNameField.setVisible(b);
+        secondNameField.setVisible(b);
     }
 
     @Subscribe("typeField")
     public void onTypeFieldValueChange(HasValue.ValueChangeEvent<Integer> event) {
         if (null != event.getValue() && 1 == event.getValue()){
-            employeeField.setEditable(false);
             insuranceContractField.setEditable(true);
             firstNameField.setVisible(false);
             middleNameField.setVisible(false);
@@ -89,10 +122,10 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             sexField.setEditable(false);
             birthdateField.setEditable(false);
             iinField.setEditable(false);
-            documentNumberType.setEditable(false);
-            documentTypeField.setEditable(false);
             companyField.setEditable(false);
             assignDateField.setEditable(false);
+        } else if (event.getValue() != null && !(1 == event.getValue())){
+
         }
     }
 
@@ -112,17 +145,25 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     .parameter("pg", event.getValue().getId()).view(View.LOCAL)
                     .list().stream().findFirst().orElse(null);
 
-            PersonGroupExt personGroupExt = event.getValue();
-            PersonExt person = personGroupExt.getPerson();
-            AssignmentExt assignment = personGroupExt.getCurrentAssignment();
 
-            iinField.setValue(person.getNationalIdentifier());
+            PersonExt person = event.getValue().getPerson();
             assignDateField.setValue(person.getHireDate());
-            birthdateField.setValue(person.getDateOfBirth());
-            sexField.setValue(person.getSex());
-            jobField.setValue(assignment.getJobGroup());
             companyField.setValue(company);
-            typeField.setValue(1);
+            if (relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY")){
+                AssignmentExt assignment = event.getValue().getCurrentAssignment();
+
+                iinField.setValue(person.getNationalIdentifier());
+                birthdateField.setValue(person.getDateOfBirth());
+                sexField.setValue(person.getSex());
+                jobField.setValue(assignment.getJobGroup());
+                typeField.setValue(1);
+            }
+        }else {
+                iinField.setValue(null);
+                birthdateField.setValue(null);
+                sexField.setValue(null);
+                jobField.setValue(null);
+
         }
     }
 

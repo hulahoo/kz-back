@@ -36,11 +36,7 @@
                 <query><![CDATA[select e from tsadv$DicDocumentType e]]></query>
             </loader>
         </collection>
-        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
-            <loader id="addressDl">
-                <query><![CDATA[select e from tsadv$Address e]]></query>
-            </loader>
-        </collection>
+
         <collection id="companyDc" class="kz.uco.tsadv.modules.personal.dictionary.DicCompany" view="_local">
             <loader id="companyDl">
                 <query><![CDATA[select e from tsadv$DicCompany e]]></query>
@@ -65,6 +61,11 @@
         <collection id="relativeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType" view="_local">
             <loader id="relativeDl">
                 <query><![CDATA[select e from tsadv$DicRelationshipType e]]></query>
+            </loader>
+        </collection>
+        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType" view="_local">
+            <loader id="addressDl">
+                <query><![CDATA[select e from tsadv$DicAddressType e]]></query>
             </loader>
         </collection>
 
@@ -97,7 +98,7 @@
                         <field property="documentNumber" id="documentNumberType"/>
                         <lookupField id="addressTypeField" property="addressType"
                                      optionsContainer="addressDc"/>
-                        <lookupField id="addressField" property="address"/>
+                        <field id="addressField" property="address"/>
                         <lookupField id="companyField" property="company"
                                      optionsContainer="companyDc"/>
                         <lookupField id="jobField"
