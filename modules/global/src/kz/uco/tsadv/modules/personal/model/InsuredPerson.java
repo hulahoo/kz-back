@@ -6,12 +6,8 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
-import kz.uco.base.entity.shared.Address;
 import kz.uco.tsadv.entity.tb.Attachment;
-import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
-import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
-import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
-import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -30,6 +26,10 @@ public class InsuredPerson extends StandardEntity {
     @NotNull
     @Column(name = "ATTACH_DATE", nullable = false)
     private Date attachDate;
+
+    @NotNull
+    @Column(name = "ADDRESS", nullable = false)
+    private String address;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STATUS_REQUEST_ID")
@@ -50,11 +50,6 @@ public class InsuredPerson extends StandardEntity {
     @JoinColumn(name = "EMPLOYEE_ID")
     @NotNull
     private PersonGroupExt employee;
-
-    @Column(name = "ASSIGN_DATE", nullable = false)
-    @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date assignDate;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -104,10 +99,10 @@ public class InsuredPerson extends StandardEntity {
     @JoinColumn(name = "REGION_ID")
     private DicRegion region;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ADDRESS_ID")
-    private Address address;
+    @NotNull
+    private DicAddressType addressType;
 
     @NotNull
     @Column(name = "INSURANCE_PROGRAM", nullable = false, length = 500)
@@ -136,6 +131,22 @@ public class InsuredPerson extends StandardEntity {
     @Column(name = "COMMENT", length = 500)
     private String comment;
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setAddressType(DicAddressType addressType) {
+        this.addressType = addressType;
+    }
+
+    public DicAddressType getAddressType() {
+        return addressType;
+    }
+
     public void setJob(JobGroup job) {
         this.job = job;
     }
@@ -158,14 +169,6 @@ public class InsuredPerson extends StandardEntity {
 
     public Integer getDocumentNumber() {
         return documentNumber;
-    }
-
-    public void setAssignDate(Date assignDate) {
-        this.assignDate = assignDate;
-    }
-
-    public Date getAssignDate() {
-        return assignDate;
     }
 
     public void setSex(DicSex sex) {
@@ -238,14 +241,6 @@ public class InsuredPerson extends StandardEntity {
 
     public void setInsuranceProgram(String insuranceProgram) {
         this.insuranceProgram = insuranceProgram;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public DicRegion getRegion() {

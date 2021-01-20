@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.screens.insuredperson;
 
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
@@ -59,11 +60,16 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                     .list().stream().findFirst().orElse(null);
 
             DicCompany company = dataManager.load(DicCompany.class)
-                    .query("select s.organizationGroup.company " +
-                            "   from base$PersonGroupExt e" +
-                            "   join e.assignments s " +
-                            " where e.id = :pg")
-                    .parameter("pg", personGroupExt.getId())
+                    .query("select o.company " +
+                            "   from base$AssignmentExt a" +
+                            " join a.assignmentStatus s " +
+                            " join a.organizationGroup.list o " +
+                            " where a.personGroup.id = :pg " +
+                            "and current_date between a.startDate and a.endDate "+
+                            "and a.primaryFlag = 'TRUE' " +
+                            "and s.code in ('ACTIVE','SUSPENDED') " +
+                            " and current_date between o.startDate and o.endDate")
+                    .parameter("pg", personGroupExt.getId()).view(View.LOCAL)
                     .list().stream().findFirst().orElse(null);
 
             PersonExt person = personGroupExt.getPerson();
@@ -74,7 +80,6 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             insuredPerson.setSecondName(person.getLastName());
             insuredPerson.setMiddleName(person.getMiddleName());
             insuredPerson.setIin(person.getNationalIdentifier());
-            insuredPerson.setAssignDate(person.getHireDate());
             insuredPerson.setBirthdate(person.getDateOfBirth());
             insuredPerson.setSex(person.getSex());
             insuredPerson.setRelative(relationshipType);

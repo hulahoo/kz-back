@@ -29,7 +29,7 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
                 .build();
 
         if (contract != null && contract.getCompany() != null){
-            insuredPersonBrowse.setParameter(contract.getCompany());
+            insuredPersonBrowse.setParameter(contract.getCompany(), contract, contract.getDefaultDocumentType(), contract.getDefaultAddress());
             insuredPersonBrowse.show();
         }
     }

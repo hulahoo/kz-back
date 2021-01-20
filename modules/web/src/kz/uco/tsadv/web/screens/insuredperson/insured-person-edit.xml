@@ -59,7 +59,12 @@
         <collection id="insuranceContractDc" class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
                     view="_local">
             <loader id="insuranceContractDl">
-                <query><![CDATA[select e from tsadv$InsuranceContract e where e.company.id = :company]]></query>
+                <query><![CDATA[select e from tsadv$InsuranceContract e]]></query>
+            </loader>
+        </collection>
+        <collection id="relativeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType" view="_local">
+            <loader id="relativeDl">
+                <query><![CDATA[select e from tsadv$DicRelationshipType e]]></query>
             </loader>
         </collection>
 
@@ -72,26 +77,33 @@
                       outerMargin="true, false, true, false">
                 <form id="form" dataContainer="insuredPersonDc">
                     <column width="350px">
-                        <lookupField optionsContainer="employeeDc"
-                                     id="employeeField"
-                                     property="employee"/>
-                        <textField id="firstNameField" property="firstName"/>
-                        <textField id="secondNameField" property="secondName"/>
-                        <textField id="middleNameField" property="middleName"/>
+                        <pickerField
+                                id="employeeField"
+                                     property="employee">
+                            <actions>
+                                <action id="lookup" type="picker_lookup"/>
+                                <action id="clear" type="picker_clear"/>
+                            </actions>
+                        </pickerField>
+                        <lookupField property="relative" optionsContainer="relativeDc" id="relativeField"   />
+                        <textField id="firstNameField" property="firstName" visible="false"/>
+                        <textField id="secondNameField" property="secondName" visible="false"/>
+                        <textField id="middleNameField" property="middleName" visible="false"/>
                         <textField id="iinField" property="iin"/>
                         <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
                         <dateField id="birthdateField" property="birthdate"/>
                         <lookupField id="documentTypeField" property="documentType"
                                      optionsContainer="documentTypeDc"/>
                         <field property="documentNumber" id="documentNumberType"/>
-                        <lookupField id="addressField" property="address"
+                        <lookupField id="addressTypeField" property="addressType"
                                      optionsContainer="addressDc"/>
+                        <lookupField id="addressField" property="address"/>
                         <lookupField id="companyField" property="company"
                                      optionsContainer="companyDc"/>
                         <lookupField id="jobField"
                                      optionsContainer="jobDc"
                                      property="job"/>
-                        <dateField id="assignDateField" property="assignDate"/>
+                        <dateField id="assignDateField" resolution="DAY" caption="msg://assignDate"/>
                     </column>
                 </form>
             </groupBox>
@@ -99,18 +111,20 @@
                       outerMargin="true, false, true, false">
                 <form id="form2" dataContainer="insuredPersonDc">
                     <column width="350">
-                        <field property="type" id="typeField" visible="true"/>
+                        <field property="type" id="typeField" visible="false"/>
                         <lookupField id="insuranceContractField"
+                                     editable="false"
+                                     captionProperty="contract"
                                      optionsContainer="insuranceContractDc"
                                      property="insuranceContract"/>
                         <dateField id="startDateField" caption="msg://startData"
                                   resolution="DAY"
                                    editable="false"/>
-                        <dateField id="endDateField" caption="msg://endData" editable="false"/>
+                        <dateField id="endDateField" resolution="DAY" caption="msg://endData" editable="false"/>
                         <dateField id="attachDateField" property="attachDate" editable="false"/>
                         <lookupField id="statusRequestField" editable="false"
                                      optionsContainer="DicVHIAttachmentStatusDc" property="statusRequest"/>
-                        <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram"/>
+                        <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
                         <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
 
                         <pickerField id="fileField" property="file">

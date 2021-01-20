@@ -22,14 +22,6 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Inject
     private CollectionPropertyContainer<Attachment> attachmentsDc;
 
-    @Subscribe
-    public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
-        DataContext dataContext = event.getDataContext();
-        contractAdministratorDc.getItems().forEach(dataContext::merge);
-        programConditionsDc.getItems().forEach(dataContext::merge);
-        attachmentsDc.getItems().forEach(dataContext::merge);
-    }
-
     @Inject
     private DataGrid<ContractConditions> programConditionsDataGrid;
     @Inject DataGrid<InsuranceContractAdministrator> contractAdministratorDataGrid;
@@ -41,6 +33,14 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     private CollectionPropertyContainer<ContractConditions> programConditionsDc;
     @Inject
     private CollectionPropertyContainer<InsuranceContractAdministrator> contractAdministratorDc;
+
+    @Subscribe
+    public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
+        DataContext dataContext = event.getDataContext();
+        contractAdministratorDc.getItems().forEach(dataContext::merge);
+        programConditionsDc.getItems().forEach(dataContext::merge);
+        attachmentsDc.getItems().forEach(dataContext::merge);
+    }
 
     @Subscribe("programConditionsDataGrid.create")
     public void onProgramConditionsDataGridCreate(Action.ActionPerformedEvent event) {

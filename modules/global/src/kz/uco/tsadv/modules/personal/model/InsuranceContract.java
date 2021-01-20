@@ -3,8 +3,9 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.tsadv.entity.tb.Attachment;
+import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -34,12 +35,16 @@ public class InsuranceContract extends StandardEntity {
     @JoinColumn(name = "COMPANY_ID")
     private DicCompany company;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "RESPONSIBLE_ID")
-    private PersonGroupExt responsible;
-
     @Column(name = "INSURER")
     private String insurer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DEFAULT_DOCUMENT_TYPE_ID")
+    private DicDocumentType defaultDocumentType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "DEFAULT_ADDRESS_ID")
+    private DicAddressType defaultAddress;
 
     @Column(name = "YEAR")
     private Integer year;
@@ -58,6 +63,11 @@ public class InsuranceContract extends StandardEntity {
     @NotNull
     @Column(name = "AVAILABILITY_PERIOD_FROM", nullable = false)
     private Date availabilityPeriodFrom;
+
+    @Temporal(TemporalType.DATE)
+    @NotNull
+    @Column(name = "AVAILABILITY_PERIOD_TO", nullable = false)
+    private Date availabilityPeriodTo;
 
     @NotNull
     @Column(name = "INSURANCE_PROGRAM", nullable = false, length = 500)
@@ -93,6 +103,30 @@ public class InsuranceContract extends StandardEntity {
     @Composition
     @OneToMany(mappedBy = "insuranceContract")
     private List<Attachment> attachments;
+
+    public DicAddressType getDefaultAddress() {
+        return defaultAddress;
+    }
+
+    public void setDefaultAddress(DicAddressType defaultAddress) {
+        this.defaultAddress = defaultAddress;
+    }
+
+    public DicDocumentType getDefaultDocumentType() {
+        return defaultDocumentType;
+    }
+
+    public void setDefaultDocumentType(DicDocumentType defaultDocumentType) {
+        this.defaultDocumentType = defaultDocumentType;
+    }
+
+    public Date getAvailabilityPeriodTo() {
+        return availabilityPeriodTo;
+    }
+
+    public void setAvailabilityPeriodTo(Date availabilityPeriodTo) {
+        this.availabilityPeriodTo = availabilityPeriodTo;
+    }
 
     public List<Attachment> getAttachments() {
         return attachments;
@@ -204,14 +238,6 @@ public class InsuranceContract extends StandardEntity {
 
     public void setInsurer(String insurer) {
         this.insurer = insurer;
-    }
-
-    public PersonGroupExt getResponsible() {
-        return responsible;
-    }
-
-    public void setResponsible(PersonGroupExt responsible) {
-        this.responsible = responsible;
     }
 
     public DicCompany getCompany() {

@@ -18,11 +18,14 @@
                 <query><![CDATA[select e from tsadv$DicCompany e]]></query>
             </loader>
         </collection>
-        <collection id="responsibleDc"
-                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
-                    view="personGroup.browse">
-            <loader id="responsibleDl">
-                <query><![CDATA[select e from base$PersonGroupExt e]]></query>
+        <collection id="documentTypeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicDocumentType" view="_local">
+            <loader id="documentTypeDl">
+                <query><![CDATA[select e from tsadv$DicDocumentType e]]></query>
+            </loader>
+        </collection>
+        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType" view="_local">
+            <loader id="addressDl">
+                <query><![CDATA[select e from tsadv$DicAddressType e]]></query>
             </loader>
         </collection>
     </data>
@@ -40,24 +43,24 @@
                                      id="companyLookupField"
                                      optionsContainer="companyDc"
                                      editable="true"/>
-                        <lookupField id="responsibleLookupField"
-                                     optionsContainer="responsibleDc"
-                                     property="responsible"/>
                         <textField id="yearField" property="year"/>
                         <dateField id="startDateField" property="startDate"/>
                         <dateField id="expirationDateField" property="expirationDate"/>
+                        <textField id="insurerField" property="insurer"/>
+                        <dateField id="notificationDateField" property="notificationDate"/>
                     </column>
                     <column width="350px">
-                        <textField id="insurerField" property="insurer"/>
                         <dateField id="availabilityPeriodFromField" property="availabilityPeriodFrom"/>
+                        <dateField id="availabilityPeriodToField" property="availabilityPeriodTo"/>
                         <textField id="insuranceProgramField" property="insuranceProgram"/>
                         <textField id="insurerContactsField" property="insurerContacts"/>
-                        <dateField id="notificationDateField" property="notificationDate"/>
                         <textField id="attachingAnEmployeeField" property="attachingAnEmployee"
                                    contextHelpText="msg://attachingAnEmployeeField.helpText"/>
                         <textField id="attachingFamilyField" property="attachingFamily"
                                    contextHelpText="msg://attachingFamilyField.helpText"/>
                         <textField id="countOfFreeMembersField" property="countOfFreeMembers"/>
+                        <lookupField id="documentTypeField" property="defaultDocumentType" optionsContainer="documentTypeDc"/>
+                        <lookupField id="defaultAddress" property="defaultAddress" optionsContainer="addressDc"/>
                     </column>
                 </form>
             </groupBox>

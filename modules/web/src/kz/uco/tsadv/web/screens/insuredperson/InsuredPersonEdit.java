@@ -1,6 +1,8 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -8,10 +10,13 @@ import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
+import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
+import kz.uco.tsadv.modules.personal.model.PersonExt;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -21,6 +26,7 @@ import java.util.Date;
 @EditedEntityContainer("insuredPersonDc")
 @LoadDataBeforeShow
 public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
+
     @Inject
     private CollectionLoader<InsuranceContract> insuranceContractDl;
     @Inject
@@ -44,13 +50,31 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Inject
     private LookupField<DicDocumentType> documentTypeField;
     @Inject
-    private LookupField<PersonGroupExt> employeeField;
+    private PickerField<PersonGroupExt> employeeField;
     @Inject
     private DataManager dataManager;
+    @Inject
+    private LookupField<DicRelationshipType> relativeField;
+    @Inject
+    private LookupField<DicCompany> companyField;
+    @Inject
+    private DateField<Date> assignDateField;
+    @Inject
+    private Field<Integer> typeField;
+    @Inject
+    private DateField<Date> startDateField;
+    @Inject
+    private DateField<Date> endDateField;
+    @Inject
+    private DateField<Date> attachDateField;
 
-    @Subscribe
-    public void onInit(InitEvent event) {
-        insuranceContractDl.setParameter("company",null);
+    @Subscribe("relativeField")
+    public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
+        if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode())){
+            firstNameField.setVisible(true);
+            middleNameField.setVisible(true);
+            secondNameField.setVisible(true);
+        }
     }
 
     @Subscribe("typeField")
@@ -67,31 +91,45 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             iinField.setEditable(false);
             documentNumberType.setEditable(false);
             documentTypeField.setEditable(false);
+            companyField.setEditable(false);
+            assignDateField.setEditable(false);
         }
     }
-
-
 
     @Subscribe("employeeField")
     public void onEmployeeFieldValueChange(HasValue.ValueChangeEvent<PersonGroupExt> event) {
-        if (event.getValue() != null && event.getValue().getCurrentAssignment() !=null){
-
+        if (event.getValue() != null){
             DicCompany company = dataManager.load(DicCompany.class)
-                    .query("select s.organizationGroup.company " +
-                            "   from base$PersonGroupExt e" +
-                            "   join e.assignments s " +
-                            " where e.id = :pg")
-                    .parameter("pg", event.getValue().getId())
+                    .query("select o.company " +
+                            "   from base$AssignmentExt a" +
+                            " join a.assignmentStatus s " +
+                            " join a.organizationGroup.list o " +
+                            " where a.personGroup.id = :pg " +
+                            "and current_date between a.startDate and a.endDate "+
+                            "and a.primaryFlag = 'TRUE' " +
+                            "and s.code in ('ACTIVE','SUSPENDED') " +
+                            " and current_date between o.startDate and o.endDate")
+                    .parameter("pg", event.getValue().getId()).view(View.LOCAL)
                     .list().stream().findFirst().orElse(null);
 
-            insuranceContractDl.setParameter("company",company);
-            insuranceContractDl.load();
+            PersonGroupExt personGroupExt = event.getValue();
+            PersonExt person = personGroupExt.getPerson();
+            AssignmentExt assignment = personGroupExt.getCurrentAssignment();
 
+            iinField.setValue(person.getNationalIdentifier());
+            assignDateField.setValue(person.getHireDate());
+            birthdateField.setValue(person.getDateOfBirth());
+            sexField.setValue(person.getSex());
+            jobField.setValue(assignment.getJobGroup());
+            companyField.setValue(company);
+            typeField.setValue(1);
         }
-
     }
 
-
-
+    @Subscribe("insuranceContractField")
+    public void onInsuranceContractFieldValueChange(HasValue.ValueChangeEvent<InsuranceContract> event) {
+        startDateField.setValue(event.getValue().getAvailabilityPeriodFrom());
+        endDateField.setValue(event.getValue().getAvailabilityPeriodTo());
+    }
 
 }
