@@ -9,12 +9,10 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.AbstractGroup;
 import kz.uco.base.entity.abstraction.IEntityGroup;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.model.Grade;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
@@ -29,9 +27,21 @@ public class GradeGroup extends AbstractGroup implements IEntityGroup<Grade> {
     @OneToMany(mappedBy = "group")
     protected List<Grade> list;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    protected DicCompany company;
+
     @Transient
     @MetaProperty(related = "list")
     protected Grade grade;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
 
     public List<Grade> getList() {
         return list;

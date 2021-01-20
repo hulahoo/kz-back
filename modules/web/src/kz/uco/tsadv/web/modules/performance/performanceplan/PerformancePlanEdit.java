@@ -338,8 +338,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
     private BigDecimal calculateCompanyBonus(BigDecimal maxBonus, AssignmentExt currentAssignment) {
         DicCompany currentCompany = currentAssignment.getOrganizationGroup() != null
-                && currentAssignment.getOrganizationGroup().getOrganization() != null
-                ? currentAssignment.getOrganizationGroup().getOrganization().getCompany()
+                ? currentAssignment.getOrganizationGroup().getCompany()
                 : null;
         CorrectionCoefficient correctionCoefficient = correctionCoefDc.getItems().stream()
                 .filter(correctionCoefficient1 -> correctionCoefficient1.getCompany() != null

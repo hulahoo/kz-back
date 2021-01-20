@@ -7,7 +7,9 @@
     <dsContext>
         <datasource id="gradeDs"
                     class="kz.uco.tsadv.modules.personal.model.Grade"
-                    view="grade.edit"/>
+                    view="grade.edit">
+            <datasource id="groupDs" property="group"/>
+        </datasource>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -22,8 +24,8 @@
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="recognitionNominate"/>
-                <field property="company"/>
                 <field property="bonusPercent"/>
+                <field property="company" datasource="groupDs"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

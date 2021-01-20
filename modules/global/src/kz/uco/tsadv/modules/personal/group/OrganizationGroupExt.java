@@ -12,11 +12,11 @@ import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.IEntityGroup;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
 import kz.uco.base.entity.shared.OrganizationGroup;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
-import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.model.*;
@@ -124,6 +124,14 @@ public class OrganizationGroupExt extends OrganizationGroup implements IEntityGr
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected OrganizationExt relevantOrganization; // Текущее (для момента в машине времени) подразделение
 
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
     public void setPayroll(DicPayroll payroll) {
         this.payroll = payroll;
     }
@@ -178,14 +186,6 @@ public class OrganizationGroupExt extends OrganizationGroup implements IEntityGr
             }
         }
         return organizationNameLang1;
-    }
-
-    public DicCompany getCompany() {
-        return company;
-    }
-
-    public void setCompany(DicCompany company) {
-        this.company = company;
     }
 
     public Boolean getIs_internal() {

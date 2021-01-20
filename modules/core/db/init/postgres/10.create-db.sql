@@ -2193,7 +2193,6 @@ create table TSADV_GRADE (
     RECOGNITION_NOMINATE boolean not null,
     GROUP_ID uuid,
     BONUS_PERCENT double precision,
-    COMPANY_ID uuid,
     --
     primary key (ID)
 )^
@@ -3577,6 +3576,8 @@ create table TSADV_GRADE_GROUP (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    --
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^
@@ -5341,6 +5342,8 @@ create table TSADV_ASSIGNED_PERFORMANCE_PLAN (
     PERSONAL_BONUS double precision,
     FINAL_BONUS double precision,
     MAX_BONUS decimal(19, 2),
+    ADJUSTED_BONUS double precision,
+    ADJUSTED_SCORE double precision,
     --
     primary key (ID)
 )^
@@ -14850,7 +14853,6 @@ update BASE_PERSON set DTYPE = 'base$PersonExt' where DTYPE is null ^
 -- end BASE_PERSON
 -- begin BASE_ORGANIZATION
 alter table BASE_ORGANIZATION add column GROUP_ID uuid ^
-alter table BASE_ORGANIZATION add column COMPANY_ID uuid ^
 alter table BASE_ORGANIZATION add column COST_CENTER_ID uuid ^
 alter table BASE_ORGANIZATION add column PAYROLL_ID uuid ^
 alter table BASE_ORGANIZATION add column INTERNAL boolean ^
@@ -14937,7 +14939,7 @@ alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG5 varchar(1
 alter table BASE_ORGANIZATION_GROUP add column LOCATION_ID uuid ^
 alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_TYPE_ID uuid ^
 alter table BASE_ORGANIZATION_GROUP add column ANALYTICS_ID uuid ^
-alter table BASE_ORGANIZATION_GROUP add column DTYPE varchar(31) ^
+alter table BASE_ORGANIZATION_GROUP add column DTYPE varchar(100) ^
 update BASE_ORGANIZATION_GROUP set DTYPE = 'base$OrganizationGroupExt' where DTYPE is null ^
 -- end BASE_ORGANIZATION_GROUP
 -- begin BASE_PERSON_GROUP
