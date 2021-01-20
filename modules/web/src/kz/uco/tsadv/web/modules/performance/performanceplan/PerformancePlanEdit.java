@@ -126,11 +126,11 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
             event.preventCommit();
         }
-        if (accessibilityEndDate != null && endDate != null && accessibilityEndDate.after(endDate)) {
-            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
-            event.preventCommit();
-        }
+//        if (accessibilityEndDate != null && endDate != null && accessibilityEndDate.after(endDate)) {
+//            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+//                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
+//            event.preventCommit();
+//        }
     }
 
     @Subscribe("instructionTable.create")
@@ -183,14 +183,14 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         }
     }
 
-    @Subscribe("endDate")
-    protected void onEndDateValueChange(HasValue.ValueChangeEvent<Date> event) {
-        Date accessibilityEndDate = performancePlanDc.getItem().getAccessibilityEndDate();
-        if (accessibilityEndDate != null && event.getValue() != null && accessibilityEndDate.after(event.getValue())) {
-            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
-        }
-    }
+//    @Subscribe("endDate")
+//    protected void onEndDateValueChange(HasValue.ValueChangeEvent<Date> event) {
+//        Date accessibilityEndDate = performancePlanDc.getItem().getAccessibilityEndDate();
+//        if (accessibilityEndDate != null && event.getValue() != null && accessibilityEndDate.after(event.getValue())) {
+//            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+//                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
+//        }
+//    }
 
     @Subscribe("accessibilityStartDate")
     protected void onAccessibilityStartDateValueChange(HasValue.ValueChangeEvent<Date> event) {
@@ -202,14 +202,14 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         }
     }
 
-    @Subscribe("accessibilityEndDate")
-    protected void onAccessibilityEndDateValueChange(HasValue.ValueChangeEvent<Date> event) {
-        Date endDate = performancePlanDc.getItem().getEndDate();
-        if (endDate != null && event.getValue() != null && event.getValue().after(endDate)) {
-            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
-        }
-    }
+//    @Subscribe("accessibilityEndDate")
+//    protected void onAccessibilityEndDateValueChange(HasValue.ValueChangeEvent<Date> event) {
+//        Date endDate = performancePlanDc.getItem().getEndDate();
+//        if (endDate != null && event.getValue() != null && event.getValue().after(endDate)) {
+//            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+//                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
+//        }
+//    }
 
     @Subscribe("assignedPerformancePlanTable.massGoals")
     protected void onAssignedPerformancePlanTableMassGoals(Action.ActionPerformedEvent event) {
@@ -360,8 +360,10 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     private Double getFinalScore(Double result) {
         List<ScoreSetting> scoreSettingList = dataManager.load(ScoreSetting.class)
                 .query("select e from tsadv_ScoreSetting e " +
-                        " where :result between e.minPercent and e.maxPercent")
+                        " where :result between e.minPercent and e.maxPercent " +
+                        " and e.performancePlan = :performancePlan")
                 .parameter("result", result)
+                .parameter("performancePlan", performancePlanDc.getItem())
                 .list();
         if (!scoreSettingList.isEmpty()) {
             return Double.valueOf(scoreSettingList.get(0).getFinalScore());
