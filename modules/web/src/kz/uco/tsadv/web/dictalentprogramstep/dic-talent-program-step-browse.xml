@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicTalentProgramStepsDs"
                          class="kz.uco.tsadv.entity.tb.dictionary.DicTalentProgramStep"
-                         view="_local">
+                         view="dicTalentProgramStep-browse">
             <query>
                 <![CDATA[select e from tsadv$DicTalentProgramStep e]]>
             </query>
@@ -49,6 +49,7 @@
                 <column id="isSystemRecord"/>
                 <column id="active"/>
                 <column id="order"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicTalentProgramStepsDs"/>
             <rowsCount/>

@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicPersonAwardTypeDs"
                     class="kz.uco.tsadv.modules.recognition.dictionary.DicPersonAwardType"
-                    view="_local"/>
+                    view="dicPersonAwardType-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -36,6 +36,7 @@
                     <field property="code"/>
                     <field property="legacyId"/>
                     <field property="isSystemRecord"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

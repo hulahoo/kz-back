@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicJobRequestReasonsDs"
                          class="kz.uco.tsadv.modules.recruitment.dictionary.DicJobRequestReason"
-                         view="_local">
+                         view="dicJobRequestReason-browse">
             <query>
                 <![CDATA[select e from tsadv$DicJobRequestReason e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicJobRequestReasonsDs"/>
             <rowsCount/>

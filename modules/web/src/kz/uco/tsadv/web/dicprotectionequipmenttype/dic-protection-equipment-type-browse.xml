@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicProtectionEquipmentTypesDs"
                          class="kz.uco.tsadv.modules.personprotection.dictionary.DicProtectionEquipmentType"
-                         view="_local">
+                         view="dicProtectionEquipmentType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicProtectionEquipmentType e]]>
             </query>
@@ -42,6 +42,7 @@
                 <column id="endDate"/>
                 <column id="legacyId"
                         caption="mainMsg://legacyId"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicProtectionEquipmentTypesDs"/>
             <rowsCount/>

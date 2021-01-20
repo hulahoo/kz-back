@@ -38,6 +38,7 @@
                 <column id="langValue"/>
                 <column id="active"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

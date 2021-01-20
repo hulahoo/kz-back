@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicPositionStatusesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicPositionStatus"
-                         view="_local">
+                         view="dicPositionStatus-browse">
             <query>
                 <![CDATA[select e from tsadv$DicPositionStatus e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicPositionStatusesDs"/>
             <rowsCount/>

@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicJobCategoryDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicJobCategory"
-                    view="_local"/>
+                    view="dicJobCategory-edit"/>
     </dsContext>
     <dialogMode height="AUTO"
                 modal="true"
@@ -25,7 +25,8 @@
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="code"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

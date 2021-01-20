@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicCostCentersDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicCostCenter"
-                         view="_local">
+                         view="dicCostCenter-browse">
             <query>
                 <![CDATA[select e from tsadv$DicCostCenter e]]>
             </query>
@@ -40,6 +40,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="legacyId"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicCostCentersDs"/>
             <rowsCount/>

@@ -53,6 +53,7 @@
                 <column id="active"/>
                 <column id="isDefault"/>
                 <column id="order"/>
+                <column id="company"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

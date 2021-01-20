@@ -41,6 +41,7 @@
                 <column id="endDate"/>
                 <column id="dicAccommodationType"
                         caption="msg://accommodationType"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAccommodationClassesDs"/>
             <rowsCount/>

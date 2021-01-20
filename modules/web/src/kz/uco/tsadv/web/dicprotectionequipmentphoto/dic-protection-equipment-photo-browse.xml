@@ -34,6 +34,7 @@
                 <column id="legacyId"/>
                 <column id="description"/>
                 <column id="attachment"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicProtectionEquipmentPhotosDs"/>
             <rowsCount/>

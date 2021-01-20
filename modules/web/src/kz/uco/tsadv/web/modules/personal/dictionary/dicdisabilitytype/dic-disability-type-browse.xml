@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicDisabilityTypesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicDisabilityType"
-                         view="_local">
+                         view="dicDisabilityType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicDisabilityType e]]>
             </query>
@@ -46,6 +46,7 @@
                 <column id="code"/>
                 <column id="legacyId"/>
                 <column id="isSystemRecord"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicDisabilityTypesDs"/>
             <rowsCount/>

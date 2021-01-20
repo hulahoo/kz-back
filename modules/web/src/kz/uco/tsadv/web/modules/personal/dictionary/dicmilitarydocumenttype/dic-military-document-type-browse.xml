@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicMilitaryDocumentTypesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicMilitaryDocumentType"
-                         view="_local">
+                         view="dicMilitaryDocumentType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicMilitaryDocumentType e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicMilitaryDocumentTypesDs"/>
             <rowsCount/>

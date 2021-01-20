@@ -42,6 +42,7 @@
                 <column id="active"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicProtectionEquipmentsDs"/>
             <rowsCount/>

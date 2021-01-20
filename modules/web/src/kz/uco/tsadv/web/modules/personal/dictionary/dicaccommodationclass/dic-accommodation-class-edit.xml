@@ -29,6 +29,7 @@
                     <field property="endDate"/>
                     <field caption="msg://accommodationType"
                            property="dicAccommodationType"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

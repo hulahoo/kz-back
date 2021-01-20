@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicHrRoleDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicHrRole"
-                    view="_local"/>
+                    view="dicHrRole-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -27,7 +27,8 @@
                 <field property="endDate"/>
                 <field property="code"
                        required="true"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

@@ -38,6 +38,7 @@
                 <column id="code"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

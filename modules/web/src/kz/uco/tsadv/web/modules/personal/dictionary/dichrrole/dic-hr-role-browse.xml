@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicHrRolesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicHrRole"
-                         view="_local">
+                         view="dicHrRole-browse">
             <query>
                 <![CDATA[select e from tsadv$DicHrRole e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicHrRolesDs"/>
             <rowsCount/>

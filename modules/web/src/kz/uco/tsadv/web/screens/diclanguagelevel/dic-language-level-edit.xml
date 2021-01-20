@@ -29,6 +29,7 @@
                     <dateField id="startDateField" property="startDate"/>
                     <dateField id="endDateField" property="endDate"/>
                     <textField id="codeField" property="code"/>
+                    <pickerField id="companyField" property="company"/>
                 </column>
             </form>
         </scrollBox>

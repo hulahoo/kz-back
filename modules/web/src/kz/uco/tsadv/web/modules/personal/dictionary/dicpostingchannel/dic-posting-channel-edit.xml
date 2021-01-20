@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicPostingChannelDs"
                     class="kz.uco.tsadv.modules.recruitment.dictionary.DicPostingChannel"
-                    view="_local"/>
+                    view="dicPostingChannel-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -36,6 +36,7 @@
                     <field property="userName"/>
                     <field property="password"/>
                     <field property="connectionURL"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>
