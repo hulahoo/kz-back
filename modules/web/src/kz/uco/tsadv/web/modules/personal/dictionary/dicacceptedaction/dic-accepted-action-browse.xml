@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicAcceptedActionsDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicAcceptedAction"
-                         view="_base">
+                         view="dicAcceptedAction-browse">
             <query>
                 <![CDATA[select e from tsadv$DicAcceptedAction e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAcceptedActionsDs"/>
             <rowsCount/>

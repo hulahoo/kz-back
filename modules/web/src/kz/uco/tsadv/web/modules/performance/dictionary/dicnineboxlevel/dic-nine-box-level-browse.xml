@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicNineBoxLevelsDs"
                          class="kz.uco.tsadv.modules.performance.dictionary.DicNineBoxLevel"
-                         view="_local">
+                         view="dicNineBoxLevel-browse">
             <query>
                 <![CDATA[select e from tsadv$DicNineBoxLevel e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicNineBoxLevelsDs"/>
             <rowsCount/>

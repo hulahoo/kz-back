@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicEducationLevelsDs"
                          class="kz.uco.tsadv.modules.learning.dictionary.DicEducationLevel"
-                         view="_local">
+                         view="dicEducationLevel-browse">
             <query>
                 <![CDATA[select e from tsadv$DicEducationLevel e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicEducationLevelsDs"/>
             <rowsCount/>

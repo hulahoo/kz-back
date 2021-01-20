@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicOverallRatingDs"
                     class="kz.uco.tsadv.modules.performance.dictionary.DicOverallRating"
-                    view="_local"/>
+                    view="dicOverallRating-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -24,7 +24,8 @@
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="code"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

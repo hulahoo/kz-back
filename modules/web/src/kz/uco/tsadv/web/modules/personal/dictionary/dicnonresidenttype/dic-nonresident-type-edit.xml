@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicNonresidentTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicNonresidentType"
-                    view="_local"/>
+                    view="dicNonresidentType-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -34,6 +34,7 @@
                     <field property="code"/>
                     <field property="legacyId"/>
                     <field property="isSystemRecord"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

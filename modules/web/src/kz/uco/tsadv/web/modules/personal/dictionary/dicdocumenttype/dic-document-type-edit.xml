@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicDocumentTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicDocumentType"
-                    view="_local"/>
+                    view="dicDocumentType-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -25,7 +25,8 @@
                 <field property="foreigner"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

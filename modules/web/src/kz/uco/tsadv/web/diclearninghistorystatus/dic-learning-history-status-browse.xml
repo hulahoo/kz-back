@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicLearningHistoryStatusesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicLearningHistoryStatus"
-                         view="_local">
+                         view="dicLearningHistoryStatus-browse">
             <query>
                 <![CDATA[select e from tsadv$DicLearningHistoryStatus e]]>
             </query>
@@ -48,6 +48,7 @@
                 <column id="isSystemRecord"/>
                 <column id="active"/>
                 <column id="order"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicLearningHistoryStatusesDs"/>
             <rowsCount/>

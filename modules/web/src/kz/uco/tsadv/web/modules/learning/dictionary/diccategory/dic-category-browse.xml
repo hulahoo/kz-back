@@ -43,6 +43,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="parentCategory"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicCategoriesDs"/>
             <rowsCount/>

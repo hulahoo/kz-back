@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicScheduleElementTypeDs"
                     class="kz.uco.tsadv.modules.timesheet.dictionary.DicScheduleElementType"
-                    view="_local"/>
+                    view="dicScheduleElementType-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -32,6 +32,7 @@
                     <field property="timeFrom"/>
                     <field property="timeTo"/>
                     <field property="displayOnTimecardEditScreen"/>
+                    <field property="company"/>
                 </column>
                 <column width="50%">
                     <field property="description1"/>

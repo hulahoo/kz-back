@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicLearningTypesDs"
                          class="kz.uco.tsadv.modules.learning.dictionary.DicLearningType"
-                         view="_local">
+                         view="dicLearningType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicLearningType e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicLearningTypesDs"/>
             <rowsCount/>

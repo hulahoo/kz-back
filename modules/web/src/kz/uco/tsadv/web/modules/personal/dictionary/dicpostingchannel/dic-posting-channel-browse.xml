@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicPostingChannelsDs"
                          class="kz.uco.tsadv.modules.recruitment.dictionary.DicPostingChannel"
-                         view="_local">
+                         view="dicPostingChannel-browse">
             <query>
                 <![CDATA[select e from tsadv$DicPostingChannel e]]>
             </query>
@@ -54,6 +54,7 @@
                 <column id="password"/>
                 <column id="userName"/>
                 <column id="connectionURL"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicPostingChannelsDs"/>
             <rowsCount/>

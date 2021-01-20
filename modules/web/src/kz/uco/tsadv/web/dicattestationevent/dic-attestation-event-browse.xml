@@ -47,6 +47,7 @@
                 <column id="code"/>
                 <column id="legacyId"/>
                 <column id="isSystemRecord"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAttestationEventsDs"/>
             <rowsCount/>

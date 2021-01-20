@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicAttachmentCategoriesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicAttachmentCategory"
-                         view="_local">
+                         view="dicAttachmentCategory-browse">
             <query>
                 <![CDATA[select e from tsadv$DicAttachmentCategory e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAttachmentCategoriesDs"/>
             <rowsCount/>

@@ -49,6 +49,7 @@
                 <column id="active"/>
                 <column id="order"/>
                 <column id="image"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicRcgFeedbackTypesDs"/>
             <rowsCount/>

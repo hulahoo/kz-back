@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicOrderStatusDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicOrderStatus"
-                    view="_local"/>
+                    view="dicOrderStatus-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -25,7 +25,8 @@
                 <field property="langValue5"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

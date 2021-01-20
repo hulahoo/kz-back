@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicLCArticleDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicLCArticle"
-                    view="_local"/>
+                    view="dicLCArticle-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -30,6 +30,7 @@
                     <field property="langValue5"/>
                     <field property="startDate"/>
                     <field property="endDate"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

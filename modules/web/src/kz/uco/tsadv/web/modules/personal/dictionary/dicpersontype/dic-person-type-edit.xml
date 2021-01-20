@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicPersonTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicPersonType"
-                    view="_local"/>
+                    view="dicPersonType-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -27,7 +27,8 @@
                 <field property="endDate"/>
                 <field property="code"/>
                 <field property="sortOrder"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

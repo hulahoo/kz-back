@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicOverallRatingsDs"
                          class="kz.uco.tsadv.modules.performance.dictionary.DicOverallRating"
-                         view="_local">
+                         view="dicOverallRating-browse">
             <query>
                 <![CDATA[select e from tsadv$DicOverallRating e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicOverallRatingsDs"/>
             <rowsCount/>

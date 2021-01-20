@@ -21,7 +21,8 @@
                 <field property="langValue3"/>
                 <field property="langValue4"/>
                 <field property="langValue5"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

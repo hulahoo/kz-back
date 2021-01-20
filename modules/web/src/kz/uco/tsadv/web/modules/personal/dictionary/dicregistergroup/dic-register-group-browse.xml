@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicRegisterGroupsDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicRegisterGroup"
-                         view="_local">
+                         view="dicRegisterGroup-browse">
             <query>
                 <![CDATA[select e from tsadv$DicRegisterGroup e]]>
             </query>
@@ -40,6 +40,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicRegisterGroupsDs"/>
             <rowsCount/>

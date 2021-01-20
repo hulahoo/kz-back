@@ -36,7 +36,8 @@
             <column width="250px">
                 <field property="description"
                        rows="5"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicCostTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicCostType"
-                    view="_local"/>
+                    view="dicCostType-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -27,7 +27,8 @@
                 <field property="endDate"/>
                 <field property="code"/>
                 <field property="isBusinessTrip"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

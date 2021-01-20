@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicTroopsStructureDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicTroopsStructure"
-                    view="_local"/>
+                    view="dicTroopsStructure-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -27,6 +27,7 @@
                     <field property="langValue5"/>
                     <field property="startDate"/>
                     <field property="endDate"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

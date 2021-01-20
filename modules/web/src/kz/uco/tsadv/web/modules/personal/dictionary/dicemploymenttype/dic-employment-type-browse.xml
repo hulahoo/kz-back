@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicEmploymentTypesDs"
                          class="kz.uco.tsadv.modules.recruitment.dictionary.DicEmploymentType"
-                         view="_local">
+                         view="dicEmploymentType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicEmploymentType e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicEmploymentTypesDs"/>
             <rowsCount/>
