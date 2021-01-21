@@ -144,7 +144,7 @@
                                     <field id="payroll"
                                            property="payroll"/>
                                     <field id="company"
-                                           property="company"/>
+                                           property="company" datasource="orgGroupDs"/>
                                     <field id="startDate"
                                            property="startDate"/>
                                     <field id="endDate"

@@ -36,33 +36,45 @@
                 </pickerField>
                 <textField id="organization"
                            property="assignedPerson.currentAssignment.organizationGroup.organization.organizationName"
+                           caption="mainMsg://organizationName"
                            editable="false"/>
                 <textField id="position" property="assignedPerson.currentAssignment.positionGroup"/>
                 <textField id="job" property="assignedPerson.currentAssignment.jobGroup"/>
                 <textField id="grade" property="assignedPerson.currentAssignment.gradeGroup"/>
+                <textField id="kpiScore" property="kpiScore"/>
+                <textField id="extraPoint" property="extraPoint"/>
+                <textField id="finalScore" property="finalScore"/>
+                <textField id="maxBonusPercent" property="maxBonusPercent"/>
             </column>
             <column id="column2" width="300px">
-                <textField property="result"/>
-                <lookupField property="status"/>
-                <textField property="gzp"/>
+                <lookupField id="status" property="status"/>
                 <dateField id="startDate" property="startDate"/>
                 <dateField id="endDate" property="endDate"/>
+                <textField id="result" property="result" enable="false"/>
+                <textField id="gzp" property="gzp"/>
+                <textField id="maxBonus" property="maxBonus"/>
+                <textField id="personalBonus" property="personalBonus"/>
+                <textField id="companyBonus" property="companyBonus"/>
+                <textField id="finalBonus" property="finalBonus"/>
             </column>
         </form>
-        <hbox id="hbox" width="100%">
-            <table id="assignedGoalTable" width="100%" dataContainer="assignedGoalDc">
+        <groupBox id="hbox" width="100%" spacing="true">
+            <table id="assignedGoalTable" width="100%" dataContainer="assignedGoalDc" editable="true"
+                   aggregatable="true">
                 <actions>
                     <action id="edit" type="edit"/>
                     <action id="remove" type="remove"/>
                 </actions>
                 <columns>
                     <column id="category"/>
-                    <column id="goalString"/>
-                    <column id="weight"/>
-                    <column id="result"/>
+                    <column id="goalString" editable="true"/>
+                    <column id="weight" editable="true">
+                        <aggregation type="SUM"/>
+                    </column>
+                    <column id="result" editable="true"/>
                     <column id="goalType"/>
                 </columns>
-                <rows/>
+                <rowsCount/>
                 <buttonsPanel id="assignedGoalBtnPnl">
                     <popupButton id="popup" caption="msg://addGoal">
                         <actions>
@@ -74,8 +86,9 @@
                     <button id="goalEdit" action="assignedGoalTable.edit"/>
                     <button id="goalRemove" action="assignedGoalTable.remove"/>
                 </buttonsPanel>
+                <rows/>
             </table>
-        </hbox>
+        </groupBox>
         <hbox id="windowActions" spacing="true" width="AUTO">
             <button action="windowCommitAndClose"/>
             <button action="windowClose"/>

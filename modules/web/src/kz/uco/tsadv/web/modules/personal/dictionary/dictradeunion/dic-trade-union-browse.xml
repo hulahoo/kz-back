@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicTradeUnionsDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicTradeUnion"
-                         view="_local">
+                         view="dicTradeUnion-browse">
             <query>
                 <![CDATA[select e from tsadv$DicTradeUnion e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicTradeUnionsDs"/>
             <rowsCount/>

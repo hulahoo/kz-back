@@ -27,8 +27,6 @@
                 <field property="libraryName"/>
                 <field optionsDatasource="categoriesDs"
                        property="category"/>
-                <field property="startDate"/>
-                <field property="endDate"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

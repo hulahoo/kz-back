@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicRequestStatusesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus"
-                         view="_local">
+                         view="dicRequestStatus-browse">
             <query>
                 <![CDATA[select e from tsadv$DicRequestStatus e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicRequestStatusesDs"/>
             <rowsCount/>

@@ -1,0 +1,1 @@
+alter table TSADV_DIC_REQUISITION_ACCESS_LEVEL add column COMPANY_ID uuid ;

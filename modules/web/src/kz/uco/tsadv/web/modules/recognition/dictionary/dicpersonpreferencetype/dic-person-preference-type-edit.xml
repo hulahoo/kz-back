@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicPersonPreferenceTypeDs"
                     class="kz.uco.tsadv.modules.recognition.dictionary.DicPersonPreferenceType"
-                    view="_local"/>
+                    view="dicPersonPreferenceType-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -35,6 +35,7 @@
                     <field property="description5"/>
                     <field property="startDate"/>
                     <field property="endDate"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

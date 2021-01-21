@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicOperatorCodesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicOperatorCode"
-                         view="_local">
+                         view="dicOperatorCode-browse">
             <query>
                 <![CDATA[select e from tsadv$DicOperatorCode e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicOperatorCodesDs"/>
             <rowsCount/>

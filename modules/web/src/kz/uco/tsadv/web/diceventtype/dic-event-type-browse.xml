@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicEventTypesDs"
                          class="kz.uco.tsadv.entity.tb.dictionary.DicEventType"
-                         view="_local">
+                         view="dicEventType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicEventType e]]>
             </query>
@@ -52,6 +52,7 @@
                 <column id="code"/>
                 <column id="legacyId"/>
                 <column id="isSystemRecord"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicEventTypesDs"/>
             <rowsCount/>

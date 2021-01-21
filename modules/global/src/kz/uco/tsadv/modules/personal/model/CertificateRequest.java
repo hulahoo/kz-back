@@ -44,19 +44,19 @@ public class CertificateRequest extends StandardEntity {
     @JoinColumn(name = "PERSON_GROUP_ID")
     private PersonGroupExt personGroup;
 
-    @Lookup(type = LookupType.SCREEN, actions = "lookup")
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CERTIFICATE_TYPE_ID")
     private DicCertificateType certificateType;
 
-    @Lookup(type = LookupType.SCREEN, actions = "lookup")
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "RECEIVING_TYPE_ID")
     private DicReceivingType receivingType;
 
-    @Lookup(type = LookupType.SCREEN, actions = "lookup")
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "LANGUAGE_ID")

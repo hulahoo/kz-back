@@ -31,6 +31,7 @@
             </menu>
             <item id="hrDicPersonTypes"
                   screen="tsadv$DicPersonType.browse"/>
+            <item id="base_DicCompany" screen="base_DicCompany.browse"/>
             <item id="hrDicSexes"
                   screen="base$DicSex.browse"/>
             <item id="hrDicHierarchyTypes"
@@ -115,9 +116,11 @@
             <item screen="tsadv_DicIssuingAuthority.browse"
                   caption="mainMsg://menu_config.tsadv_DicIssuingAuthority.browse"/>
             <item screen="tsadv_DicFormStudy.browse" caption="mainMsg://menu_config.tsadv_DicFormStudy.browse"/>
-            <item screen="tsadv_DicLangaugeLevel.browse" caption="mainMsg://menu_config.tsadv_DicLangaugeLevel.browse"/>
+            <item screen="tsadv_DicLanguageLevel.browse" caption="mainMsg://menu_config.tsadv_DicLangaugeLevel.browse"/>
             <item screen="tsadv_DicPrevJobObligation.browse"
                   caption="mainMsg://menu_config.tsadv_DicPrevJobObligation.browse"/>
+            <item screen="tsadv_DicCriminalLiabilityType.browse"
+                  caption="mainMsg://menu_config.tsadv_DicCriminalLiabilityType.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">
@@ -178,10 +181,10 @@
         <item screen="tsadv$CoinDistributionPosition.browse"/>
         <item screen="tsadv$CoinDistributionPerson.browse"/>
         <item screen="tsadv$TalentProgramExceptions.browse"/>
-        <item screen="base$AssignmenthExt.browse"/>
-        <item screen="base$AssignmedtExt.browse"/>
         <item screen="tsadv_CertificateRequestHR.browse"
               caption="mainMsg://menu_config.tsadv_CertificateRequestHR.browse"/>
+        <item screen="tsadv$LeavingVacationRequest.browse"
+              caption="mainMsg://menu_config.tsadv$LeavingVacationRequest.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
@@ -687,6 +690,7 @@
         <item screen="bproc_AllTasks.browse"/>
         <item screen="bproc_DmnDecisionTableBrowse"/>
         <item screen="bproc_DecisionTableModelerScreen"/>
+        <item screen="tsadv$BpmRolesDefiner.browse"/>
     </menu>
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">

@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicPhoneTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicPhoneType"
-                    view="_local"/>
+                    view="dicPhoneType-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -26,7 +26,8 @@
                 <field property="langValue5"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

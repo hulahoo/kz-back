@@ -1,0 +1,1 @@
+alter table TSADV_DIC_TALENT_PROGRAM_REQUEST_STATUS add column COMPANY_ID uuid ;

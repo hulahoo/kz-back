@@ -39,6 +39,7 @@
                     <field property="sticker"/>
                     <field property="emptySticker"/>
                     <field property="order"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

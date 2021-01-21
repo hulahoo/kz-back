@@ -79,7 +79,7 @@
                         <column id="column2"
                                 width="270px">
                             <field property="notificationDate"/>
-                            <field captionProperty="requestName"
+                            <field
                                    optionsDatasource="absenceRequestsDs"
                                    property="absenceRequest"/>
                             <field property="file"/>

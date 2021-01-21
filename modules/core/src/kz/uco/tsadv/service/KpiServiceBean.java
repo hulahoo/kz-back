@@ -1,22 +1,26 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
+import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
+import kz.uco.tsadv.modules.personal.model.Salary;
 import kz.uco.tsadv.pojo.kpi.AssignedPerformancePlanListPojo;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service(KpiService.NAME)
 public class KpiServiceBean implements KpiService {
 
+    @Inject
+    protected DataManager dataManager;
+    @Inject
+    protected DatesService datesService;
     @Inject
     private Persistence persistence;
 
@@ -84,5 +88,31 @@ public class KpiServiceBean implements KpiService {
             sb.append(") t");
         }
         return sb.toString();
+    }
+
+    @Override
+    public double calculationOfGZP(AssignmentGroupExt assignmentGroupExt, Date startDate, Date endDate) {
+        List<Salary> salaryList = dataManager.load(Salary.class)
+                .query("select e from tsadv$Salary e " +
+                        " where e.startDate <= :planEndDate " +
+                        " and e.endDate >= :planStartDate " +
+                        " and e.assignmentGroup = :assignmentGroup" +
+                        " order by e.startDate ")
+                .parameter("planStartDate", startDate)
+                .parameter("planEndDate", endDate)
+                .parameter("assignmentGroup", assignmentGroupExt)
+                .view("salary.view")
+                .list();
+        final double[] gzp = {0.0};
+        salaryList.forEach(salary -> {
+            gzp[0] += ((double) (datesService.getFullDaysCount(salary == ((Vector) salaryList).firstElement()
+                            ? startDate
+                            : salary.getStartDate()
+                    , salary == ((Vector) salaryList).lastElement()
+                            ? endDate
+                            : salary.getEndDate())))
+                    / 365 * salary.getAmount() * 12;
+        });
+        return gzp[0];
     }
 }

@@ -1,13 +1,20 @@
 package kz.uco.tsadv.web.persondata;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
+import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.gui.actions.list.CreateAction;
 import com.haulmont.cuba.gui.builders.EditorBuilder;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -17,9 +24,11 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.cuba.actions.CreateActionExt;
+import kz.uco.base.cuba.actions.EditActionExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.PersonQualification;
 import kz.uco.tsadv.entity.tb.PersonQualificationRequest;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
 import kz.uco.tsadv.modules.personal.dictionary.DicPrevJobObligation;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
@@ -27,18 +36,25 @@ import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.recruitment.model.*;
+import kz.uco.tsadv.web.screens.address.AddressPersonDataEdit;
+import kz.uco.tsadv.web.screens.personcontact.PersonContactPersonDataEdit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @UiController("tsadv_PersonData")
 @UiDescriptor("person-data.xml")
 public class PersonData extends Screen implements SelfServiceMixin {
 
+    @Inject
+    protected MessageBundle messageBundle;
+    @Inject
+    protected Notifications notifications;
     @Inject
     protected Screens screens;
     @Inject
@@ -49,6 +65,7 @@ public class PersonData extends Screen implements SelfServiceMixin {
     protected DataManager dataManager;
     @Inject
     protected UserSession userSession;
+
     @Inject
     protected UserSessionSource userSessionSource;
     @Inject
@@ -60,13 +77,9 @@ public class PersonData extends Screen implements SelfServiceMixin {
     protected InstanceLoader<PersonExt> personExtDl;
     @Inject
     protected CommonService commonService;
-    @Inject
-    protected Table<PersonDocument> foreignerDocumentsTable;
     protected DicRequestStatus draftRequestStatus;
     @Inject
     protected CollectionLoader<PersonEducation> personEducationsDl;
-    @Inject
-    protected CollectionLoader<PersonDocument> personDocumentsForeignerDl;
     @Inject
     protected CollectionLoader<PersonDocument> personDocumentsDl;
     @Inject
@@ -94,27 +107,15 @@ public class PersonData extends Screen implements SelfServiceMixin {
     protected Date systemDate;
     protected UUID personGroupId;
     @Inject
-    protected TextField<String> scientificWorksIventionsField;
-    @Inject
-    protected TextField<String> stateAwardsField;
-    @Inject
-    protected TextField<String> academicDegreeField;
-    @Inject
     protected CollectionLoader<MilitaryForm> militaryFormsDl;
     @Inject
     protected Table<MilitaryForm> militaryTable;
     @Inject
     protected Button firstOtherInformationBtn;
     @Inject
-    protected PickerField<DicPrevJobObligation> prevJobObligationField;
+    protected LookupField<DicPrevJobObligation> prevJobObligationField;
     @Inject
     protected LookupField<YesNoEnum> prevJobNDAField;
-    @Named("personConvictionTable.create")
-    protected CreateActionExt personConvictionTableCreate;
-    @Inject
-    protected CollectionContainer<PersonConviction> personConvictionsDc;
-    @Inject
-    protected CollectionLoader<PersonConviction> personConvictionsDl;
     @Inject
     protected CollectionLoader<Retirement> retirementsDl;
     @Inject
@@ -155,13 +156,28 @@ public class PersonData extends Screen implements SelfServiceMixin {
     protected Table<PersonBankDetails> bankDetailsTable;
     @Inject
     protected CollectionLoader<PersonBankDetails> personBankDetailsesDl;
+    @Inject
+    protected UiComponents uiComponents;
+    @Inject
+    protected ExportDisplay exportDisplay;
+    @Inject
+    protected Table<PersonDocument> personDocumentsTable;
+    @Named("addressTable.edit")
+    protected EditActionExt addressTableEdit;
+    @Named("personContactTable.edit")
+    protected EditActionExt personContactTableEdit;
+    @Inject
+    protected CollectionLoader<Awards> awardsesDl;
+    @Inject
+    protected CollectionContainer<Awards> awardsesDc;
+    @Inject
+    protected CollectionLoader<ChildDescription> childDescriptionsDl;
+    @Named("childDescriptionTable.create")
+    protected CreateAction<ChildDescription> childDescriptionTableCreate;
 
     @Subscribe(id = "personExtDc", target = Target.DATA_CONTAINER)
     protected void onPersonExtDcItemChange(InstanceContainer.ItemChangeEvent<PersonExt> event) {
         personGroupId = event.getItem().getGroup().getId();
-        personDocumentsForeignerDl.setParameter("personGroup", personGroupId);
-        personDocumentsForeignerDl.setParameter("systemDate", systemDate);
-        personDocumentsForeignerDl.load();
         personEducationsDl.setParameter("personGroup", personGroupId);
         personEducationsDl.setParameter("systemDate", systemDate);
         personEducationsDl.load();
@@ -182,13 +198,13 @@ public class PersonData extends Screen implements SelfServiceMixin {
         improvingProfessionalSkillsesDl.load();
         addressesDl.setParameter("personGroup", personGroupId);
         addressesDl.load();
-        personContactsDl.setParameter("personGroup", personGroupId);
-        personContactsDl.load();
+//        personContactsDl.setParameter("personGroup", personGroupId);
+//        personContactsDl.load();
         personLanguagesDl.setParameter("personGroup", personGroupId);
         personLanguagesDl.load();
-        personConvictionsDl.setParameter("personGroup", personGroupId);
-        personConvictionsDl.load();
-        personConvictionTableCreate.setEnabled(personConvictionsDc.getItems().isEmpty());
+        awardsesDl.setParameter("personGroup", personGroupId);
+        awardsesDl.setParameter("systemDate", systemDate);
+        awardsesDl.load();
         militaryFormsDl.setParameter("personGroup", personGroupId);
         militaryFormsDl.setParameter("systemDate", systemDate);
         militaryFormsDl.load();
@@ -215,6 +231,8 @@ public class PersonData extends Screen implements SelfServiceMixin {
         personBankDetailsesDl.setParameter("personGroup", personGroupId);
         personBankDetailsesDl.setParameter("systemDate", systemDate);
         personBankDetailsesDl.load();
+        childDescriptionsDl.setParameter("personGroup", personGroupId);
+        childDescriptionsDl.load();
     }
 
 
@@ -233,22 +251,16 @@ public class PersonData extends Screen implements SelfServiceMixin {
 
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
-        PersonExt personExt = personExtDc.getItem();
-        dataManager.load(PersonalDataRequest.class).query(
-                "select e from tsadv$PersonalDataRequest e " +
-                        " where e.personGroup.id = :personId and e.status.code = 'DRAFT'")
-                .parameter("personId", personExt.getGroup().getId()).view("personalDataRequest-edit").optional()
-                .ifPresent(personalDataRequest -> personDataEdit.setEnabled(false));
-        personExtDc.addItemPropertyChangeListener(personExtItemPropertyChangeEvent -> {
-            if ("lastNameLatin".equals(personExtItemPropertyChangeEvent.getProperty()) ||
-                    "firstNameLatin".equals(personExtItemPropertyChangeEvent.getProperty())) {
-                latinPropertyChanged = true;
-            }
-        });
+        addressTableEdit.setScreenClass(AddressPersonDataEdit.class);
+        addressTableCreate.setScreenClass(AddressPersonDataEdit.class);
         addressTableCreate.setInitializer(o -> {
             Address address = (Address) o;
             address.setPersonGroup(personExtDc.getItem().getGroup());
         });
+        personContactTableCreate.setScreenClass(PersonContactPersonDataEdit.class);
+        personContactTableEdit.setScreenClass(PersonContactPersonDataEdit.class);
+        personContactTableEdit.setOpenMode(OpenMode.THIS_TAB);
+        personContactTableCreate.setOpenMode(OpenMode.THIS_TAB);
         personContactTableCreate.setInitializer(o -> {
             PersonContact personContact = (PersonContact) o;
             personContact.setPersonGroup(personExtDc.getItem().getGroup());
@@ -261,10 +273,6 @@ public class PersonData extends Screen implements SelfServiceMixin {
                 || personExtDc.getItem().getPrevJobNDA() == null);
         prevJobNDAField.setEditable(personExtDc.getItem().getPrevJobNDA() == null);
         prevJobObligationField.setEditable(personExtDc.getItem().getPrevJobObligation() == null);
-        personConvictionTableCreate.setInitializer(o -> {
-            PersonConviction personConviction = (PersonConviction) o;
-            personConviction.setPersonGroup(personExtDc.getItem().getGroup());
-        });
         reasonChangeJobTableCreate.setInitializer(o -> {
             PersonReasonChangingJob personReasonChangingJob = (PersonReasonChangingJob) o;
             personReasonChangingJob.setPersonGroup(personExtDc.getItem().getGroup());
@@ -278,6 +286,10 @@ public class PersonData extends Screen implements SelfServiceMixin {
         relativePropertyTableCreate.setInitializer(o -> {
             PersonRelativesHaveProperty haveProperty = (PersonRelativesHaveProperty) o;
             haveProperty.setPersonGroup(personExtDc.getItem().getGroup());
+        });
+        childDescriptionTableCreate.setInitializer(o -> {
+            ChildDescription childDescription = (ChildDescription) o;
+            childDescription.setPersonGroup(personExtDc.getItem().getGroup());
         });
 
     }
@@ -329,7 +341,7 @@ public class PersonData extends Screen implements SelfServiceMixin {
                         personalDataRequest.setStatus(draftRequestStatus);
                     });
         }
-        editorBuilder.withOpenMode(OpenMode.DIALOG).build().show();
+        editorBuilder.withOpenMode(OpenMode.THIS_TAB).build().show();
     }
 
 
@@ -340,12 +352,12 @@ public class PersonData extends Screen implements SelfServiceMixin {
                             .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
                     personDocumentRequest.setRequestStatus(draftRequestStatus);
                 }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true,
-                "foreigner", source.getId().equals("createRequest"))))
+                "isForeigner", isForeigner())))
                 .build().show();
     }
 
     public void editRequest(Component source) {
-        PersonDocument personDocument = foreignerDocumentsTable.getSingleSelected();
+        PersonDocument personDocument = personDocumentsTable.getSingleSelected();
         screenBuilders.editor(PersonDocumentRequest.class, this).newEntity()
                 .withInitializer(personDocumentRequest -> {
                     personDocumentRequest.setDocumentNumber(personDocument.getDocumentNumber());
@@ -353,16 +365,21 @@ public class PersonData extends Screen implements SelfServiceMixin {
                     personDocumentRequest.setIssuingAuthority(personDocument.getIssuingAuthority());
                     personDocumentRequest.setIssueDate(personDocument.getIssueDate());
                     personDocumentRequest.setExpiredDate(personDocument.getExpiredDate());
-                    personDocumentRequest.setDescription(personDocument.getDescription());
-                    personDocumentRequest.setFile(personDocument.getFile());
                     personDocumentRequest.setSeries(personDocument.getSeries());
                     personDocumentRequest.setPersonGroup(dataManager
                             .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
+                    personDocumentRequest.setAttachments(personDocument.getAttachments());
                     personDocumentRequest.setRequestStatus(draftRequestStatus);
                     personDocumentRequest.setEditedPersonDocument(personDocument);
                 }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true,
-                "foreigner", source.getId().equals("createRequest"))))
+                "isForeigner", isForeigner())))
                 .build().show();
+    }
+
+    protected boolean isForeigner() {
+        return !(personExtDc.getItem().getCitizenship() == null
+                || personExtDc.getItem().getCitizenship().getCode() == null
+                || personExtDc.getItem().getCitizenship().getCode().equals("PQH_KZ"));
     }
 
     public void createEducationRequest(Component source) {
@@ -424,10 +441,11 @@ public class PersonData extends Screen implements SelfServiceMixin {
                     beneficiaryRequest.setMiddleName(beneficiary.getMiddleName());
                     beneficiaryRequest.setRelationshipType(beneficiary.getRelationshipType());
                     beneficiaryRequest.setBirthDate(beneficiary.getBirthDate());
-                    beneficiaryRequest.setRelationshipType(beneficiary.getRelationshipType());
+                    beneficiaryRequest.setRelationDegree(beneficiary.getRelationDegree());
                     beneficiaryRequest.setBeneficiary(beneficiary);
                     beneficiaryRequest.setWorkLocation(beneficiary.getWorkLocation());
                     beneficiaryRequest.setAdditionalContact(beneficiary.getAdditionalContact());
+                    beneficiaryRequest.setRelatedPersonGroup(beneficiary.getRelatedPersonGroup());
                     beneficiaryRequest.setPersonGroup(dataManager
                             .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
                     beneficiaryRequest.setRequestStatus(draftRequestStatus);
@@ -658,6 +676,13 @@ public class PersonData extends Screen implements SelfServiceMixin {
     }
 
     public void createBankDetailsRequest() {
+        if (CommonUtils.getSystemDate().getDate() < 11
+                && CommonUtils.getSystemDate().getDate() > 20) {
+            notifications.create(Notifications.NotificationType.HUMANIZED)
+                    .withCaption(messageBundle.getMessage("bankRangeOut")).show();
+            return;
+        }
+
         screenBuilders.editor(PersonBankdetailsRequest.class, this).newEntity()
                 .withInitializer(bankdetailsRequest -> {
                     bankdetailsRequest.setPersonGroup(dataManager
@@ -668,6 +693,12 @@ public class PersonData extends Screen implements SelfServiceMixin {
     }
 
     public void editBankDetailsRequest() {
+        if (CommonUtils.getSystemDate().getDate() < 11
+                && CommonUtils.getSystemDate().getDate() > 20) {
+            notifications.create(Notifications.NotificationType.HUMANIZED)
+                    .withCaption(messageBundle.getMessage("bankRangeOut")).show();
+            return;
+        }
         PersonBankDetails bankDetails = bankDetailsTable.getSingleSelected();
         screenBuilders.editor(PersonBankdetailsRequest.class, this).newEntity()
                 .withInitializer(bankdetailsRequest -> {
@@ -678,6 +709,53 @@ public class PersonData extends Screen implements SelfServiceMixin {
                     bankdetailsRequest.setFullNameBankCard(bankDetails.getFullNameBankCard());
                     bankdetailsRequest.setBicBank(bankDetails.getBicBank());
                     bankdetailsRequest.setIban(bankDetails.getIban());
+                }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true)))
+                .build().show();
+    }
+
+
+    public Component filesLinks(Entity entity) {
+        List<FileDescriptor> attachments = null;
+        Method getAttachments = Arrays.stream(entity.getClass().getMethods()).filter(method ->
+                method.getName().equals("getAttachments")).findFirst().orElse(null);
+        if (getAttachments != null) {
+            try {
+                attachments = (List<FileDescriptor>) getAttachments.invoke(entity);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        if (attachments == null) {
+            attachments = new ArrayList<>();
+        }
+        return getFileLinks(attachments);
+    }
+
+    private HBoxLayout getFileLinks(List<FileDescriptor> attachments) {
+        HBoxLayout hBoxLayout = uiComponents.create(HBoxLayout.class);
+        hBoxLayout.setSpacing(true);
+        for (FileDescriptor attachment : attachments) {
+            LinkButton linkButton = uiComponents.create(LinkButton.class);
+            linkButton.setCaption(attachment.getName());
+            linkButton.setAction(new BaseAction(attachment.getId().toString()) {
+                @Override
+                public void actionPerform(Component component) {
+                    exportDisplay.show(attachment);
+                }
+            });
+            hBoxLayout.add(linkButton);
+        }
+        return hBoxLayout;
+    }
+
+    public void createAwardsRequest() {
+        screenBuilders.editor(AwardsRequest.class, this).newEntity()
+                .withInitializer(awardsRequest -> {
+                    awardsRequest.setPersonGroup(dataManager
+                            .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
+                    awardsRequest.setRequestStatus(draftRequestStatus);
                 }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true)))
                 .build().show();
     }

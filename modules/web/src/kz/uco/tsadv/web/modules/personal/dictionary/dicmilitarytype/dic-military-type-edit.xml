@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicMilitaryTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicMilitaryType"
-                    view="_local"/>
+                    view="dicMilitaryType-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -24,7 +24,8 @@
                 <field property="langValue5"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

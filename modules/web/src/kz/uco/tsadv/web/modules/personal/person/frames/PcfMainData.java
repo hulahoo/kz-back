@@ -72,8 +72,8 @@ public class PcfMainData extends EditableFrame {
         dismissalDate = commonService.emQuerySingleRelult(Date.class,
                 "select max(e.dismissalDate) from tsadv$Dismissal e " +
                         "join base$PersonGroupExt pg " +
-                        "on pg.id = e.personGroupId.id " +
-                        "where e.personGroupId.id = :personGroupId " +
+                        "on pg.id = e.personGroup.id " +
+                        "where e.personGroup.id = :personGroupId " +
                         "and e.deleteTs is null ",
                 ParamsMap.of("personGroupId", personDs.getItem().getGroup().getId()));
         if (personDs.getItem().getHireDate() != null && dismissalDate != null) {

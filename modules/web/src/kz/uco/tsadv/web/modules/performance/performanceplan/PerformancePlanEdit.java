@@ -7,23 +7,27 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.TabSheet;
-import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
+import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
-import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
-import kz.uco.tsadv.modules.performance.model.InstructionsKpi;
-import kz.uco.tsadv.modules.performance.model.PerformancePlan;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.modules.performance.model.*;
+import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.service.KpiService;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 @UiController("tsadv$PerformancePlan.edit")
 @UiDescriptor("performance-plan-edit.xml")
@@ -56,7 +60,21 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     @Inject
     protected Table<InstructionsKpi> instructionTable;
     @Inject
-    protected Table<AssignedPerformancePlan> assignedPerformancePlanTable;
+    protected DataGrid<AssignedPerformancePlan> assignedPerformancePlanTable;
+    @Inject
+    protected CollectionLoader<ScoreSetting> scoreSettingDl;
+    @Inject
+    protected Table<ScoreSetting> scoreSettingTable;
+    @Inject
+    protected KpiService kpiService;
+    @Inject
+    protected CollectionLoader<CorrectionCoefficient> correctionCoefDl;
+    @Inject
+    protected Table<CorrectionCoefficient> correctionCoefTable;
+    @Inject
+    protected CollectionContainer<CorrectionCoefficient> correctionCoefDc;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -65,16 +83,31 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         assignedPerformancePlansDl.load();
         instructionKpiDl.setParameter("performancePlan", performancePlanDc.getItem());
         instructionKpiDl.load();
+        scoreSettingDl.setParameter("performancePlan", performancePlanDc.getItem());
+        scoreSettingDl.load();
+        correctionCoefDl.setParameter("performancePlan", performancePlanDc.getItem());
+        correctionCoefDl.load();
     }
+
+    @Subscribe
+    protected void onInit(InitEvent event) {
+        assignedPerformancePlanTable.addRowStyleProvider(assignedPerformancePlan -> {
+            if (assignedPerformancePlan.getMaxBonusPercent() != null) {
+                return "orange-day";
+            }
+            return null;
+        });
+    }
+
 
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
         if (PersistenceHelper.isNew(performancePlanDc.getItem())) {
             visibleTab(false);
             performancePlanDc.getItem().setStartDate(BaseCommonUtils.getSystemDate());
+            performancePlanDc.getItem().setAccessibilityEndDate(BaseCommonUtils.getEndOfTime());
             performancePlanDc.getItem().setEndDate(BaseCommonUtils.getEndOfTime());
             performancePlanDc.getItem().setAccessibilityStartDate(BaseCommonUtils.getSystemDate());
-            performancePlanDc.getItem().setAccessibilityEndDate(BaseCommonUtils.getEndOfTime());
         } else {
             visibleTab(true);
         }
@@ -88,6 +121,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected void visibleTab(Boolean isVisible) {
         tabSheet.getTab("assignedPerformancePlan").setVisible(isVisible);
         tabSheet.getTab("instruction").setVisible(isVisible);
+        tabSheet.getTab("scoreSetting").setVisible(isVisible);
+        tabSheet.getTab("correctionCoef").setVisible(isVisible);
     }
 
 
@@ -95,16 +130,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
         Date accessibilityStartDate = performancePlanDc.getItem().getAccessibilityStartDate();
         Date startDate = performancePlanDc.getItem().getStartDate();
-        Date accessibilityEndDate = performancePlanDc.getItem().getAccessibilityEndDate();
-        Date endDate = performancePlanDc.getItem().getEndDate();
         if (accessibilityStartDate != null && startDate != null && accessibilityStartDate.before(startDate)) {
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
-            event.preventCommit();
-        }
-        if (accessibilityEndDate != null && endDate != null && accessibilityEndDate.after(endDate)) {
-            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
             event.preventCommit();
         }
     }
@@ -147,5 +175,199 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     assignedPerformancePlansDl.load();
                 })
                 .build().show();
+    }
+
+    @Subscribe("startDate")
+    protected void onStartDateValueChange(HasValue.ValueChangeEvent<Date> event) {
+        Date accessibilityStartDate = performancePlanDc.getItem().getAccessibilityStartDate();
+        if (accessibilityStartDate != null && event.getValue() != null
+                && accessibilityStartDate.before(event.getValue())) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
+        }
+    }
+
+    @Subscribe("accessibilityStartDate")
+    protected void onAccessibilityStartDateValueChange(HasValue.ValueChangeEvent<Date> event) {
+        Date startDate = performancePlanDc.getItem().getStartDate();
+        if (startDate != null && event.getValue() != null
+                && event.getValue().before(startDate)) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
+        }
+    }
+
+    @Subscribe("assignedPerformancePlanTable.massGoals")
+    protected void onAssignedPerformancePlanTableMassGoals(Action.ActionPerformedEvent event) {
+        Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
+        CommitContext commitContext = new CommitContext();
+        try {
+            assignedPerformancePlans.forEach(assignedPerformancePlan -> {
+                AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson().getCurrentAssignment();
+                List<OrganizationGroupGoalLink> orgGoalList = currentAssignment.getOrganizationGroup() != null
+                        ? currentAssignment.getOrganizationGroup().getGoals()
+                        : Collections.emptyList();
+                List<PositionGroupGoalLink> positionGoalList = currentAssignment.getPositionGroup() != null
+                        ? currentAssignment.getPositionGroup().getGoals()
+                        : Collections.emptyList();
+                List<JobGroupGoalLink> jobGoalList = currentAssignment.getJobGroup() != null
+                        ? currentAssignment.getJobGroup().getGoals()
+                        : Collections.emptyList();
+                for (OrganizationGroupGoalLink organizationGoal : orgGoalList) {
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(organizationGoal.getGoal());
+                    newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(organizationGoal.getWeight()));
+                    newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
+                    newAssignedGoal.setCategory(organizationGoal.getGoal() != null
+                            && organizationGoal.getGoal().getLibrary() != null
+                            ? organizationGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(organizationGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                }
+                for (PositionGroupGoalLink positionGoal : positionGoalList) {
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(positionGoal.getGoal());
+                    newAssignedGoal.setGoalString(positionGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(positionGoal.getWeight()));
+                    newAssignedGoal.setPositionGroup(positionGoal.getPositionGroup());
+                    newAssignedGoal.setCategory(positionGoal.getGoal() != null
+                            && positionGoal.getGoal().getLibrary() != null
+                            ? positionGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(positionGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                }
+                for (JobGroupGoalLink jobGoal : jobGoalList) {
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(jobGoal.getGoal());
+                    newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(jobGoal.getWeight()));
+                    newAssignedGoal.setJobGroup(jobGoal.getJobGroup());
+                    newAssignedGoal.setCategory(jobGoal.getGoal() != null
+                            && jobGoal.getGoal().getLibrary() != null
+                            ? jobGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(jobGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                }
+            });
+            dataManager.commit(commitContext);
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("addMassGoalSuccess")).show();
+        } catch (Exception e) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("addMassGoalNotSuccess")).show();
+        }
+    }
+
+    @Subscribe("scoreSettingTable.create")
+    protected void onScoreSettingTableCreate(Action.ActionPerformedEvent event) {
+        screenBuilders.editor(scoreSettingTable)
+                .newEntity()
+                .withInitializer(scoreSetting -> scoreSetting.setPerformancePlan(performancePlanDc.getItem()))
+                .build().show()
+                .addAfterCloseListener(afterCloseEvent -> scoreSettingDl.load());
+    }
+
+    @Subscribe("assignedPerformancePlanTable.calculateGZP")
+    protected void onAssignedPerformancePlanTableCalculateGZP(Action.ActionPerformedEvent event) {
+        Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
+        CommitContext commitContext = new CommitContext();
+        try {
+            assignedPerformancePlans.forEach(assignedPerformancePlan -> {
+                AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson() != null
+                        ? assignedPerformancePlan.getAssignedPerson().getCurrentAssignment()
+                        : null;
+                assignedPerformancePlan.setGzp(BigDecimal.valueOf(
+                        kpiService.calculationOfGZP(currentAssignment != null
+                                        ? currentAssignment.getGroup()
+                                        : null,
+                                performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));
+                assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
+                        BigDecimal.valueOf(assignedPerformancePlan.getMaxBonusPercent() != null
+                                ? assignedPerformancePlan.getMaxBonusPercent()
+                                : currentAssignment != null
+                                && currentAssignment.getGradeGroup() != null
+                                && currentAssignment.getGradeGroup().getGrade() != null
+                                ? currentAssignment.getGradeGroup().getGrade().getBonusPercent()
+                                : 0)).divide(BigDecimal.valueOf(100)));
+                assignedPerformancePlan.setKpiScore(getFinalScore(assignedPerformancePlan.getResult()));
+                assignedPerformancePlan.setFinalScore(assignedPerformancePlan.getKpiScore()
+                        + (assignedPerformancePlan.getExtraPoint() != null
+                        ? assignedPerformancePlan.getExtraPoint()
+                        : 0.0));
+                assignedPerformancePlan.setCompanyBonus(calculateCompanyBonus(assignedPerformancePlan.getMaxBonus(),
+                        currentAssignment).doubleValue());
+                assignedPerformancePlan.setPersonalBonus(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus()
+                        , assignedPerformancePlan.getFinalScore()));
+                assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
+                        + assignedPerformancePlan.getPersonalBonus());
+                commitContext.addInstanceToCommit(assignedPerformancePlan);
+            });
+            dataManager.commit(commitContext);
+            assignedPerformancePlansDl.load();
+        } catch (Exception ignored) {
+        }
+    }
+
+    private Double calculatePersonalBonus(BigDecimal maxBonus, Double finalScore) {
+        return maxBonus.doubleValue() *
+                ((100 - correctionCoefDc.getItems().get(0).getGroupEfficiencyPercent()) / 100) * (finalScore
+                / extAppPropertiesConfig.getIndividualScore());
+    }
+
+    private BigDecimal calculateCompanyBonus(BigDecimal maxBonus, AssignmentExt currentAssignment) {
+        DicCompany currentCompany = currentAssignment.getOrganizationGroup() != null
+                ? currentAssignment.getOrganizationGroup().getCompany()
+                : null;
+        CorrectionCoefficient correctionCoefficient = correctionCoefDc.getItems().stream()
+                .filter(correctionCoefficient1 -> correctionCoefficient1.getCompany() != null
+                        && correctionCoefficient1.getCompany().equals(currentCompany))
+                .findFirst().orElse(null);
+        if (correctionCoefficient != null) {
+            return maxBonus.multiply(BigDecimal.valueOf(correctionCoefficient.getGroupEfficiencyPercent())
+                    .divide(BigDecimal.valueOf(100)))
+                    .multiply(BigDecimal.valueOf(correctionCoefficient.getCompanyResult())
+                            .divide(BigDecimal.valueOf(100)));
+        } else {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("correctionCoefIsNull")).show();
+        }
+        return BigDecimal.ZERO;
+    }
+
+    private Double getFinalScore(Double result) {
+        List<ScoreSetting> scoreSettingList = dataManager.load(ScoreSetting.class)
+                .query("select e from tsadv_ScoreSetting e " +
+                        " where :result between e.minPercent and e.maxPercent " +
+                        " and e.performancePlan = :performancePlan")
+                .parameter("result", result)
+                .parameter("performancePlan", performancePlanDc.getItem())
+                .list();
+        if (!scoreSettingList.isEmpty()) {
+            return Double.valueOf(scoreSettingList.get(0).getFinalScore());
+        } else {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("notScoreSetting")).show();
+        }
+        return null;
+    }
+
+    @Subscribe("correctionCoefTable.create")
+    protected void onCorrectionCoefTableCreate(Action.ActionPerformedEvent event) {
+        screenBuilders.editor(correctionCoefTable)
+                .newEntity()
+                .withInitializer(correctionCoefficient ->
+                        correctionCoefficient.setPerformancePlan(performancePlanDc.getItem()))
+                .build().show()
+                .addAfterCloseListener(afterCloseEvent -> correctionCoefDl.load());
     }
 }

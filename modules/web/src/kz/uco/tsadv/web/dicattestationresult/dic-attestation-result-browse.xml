@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicAttestationResultsDs"
                          class="kz.uco.tsadv.modules.learning.dictionary.DicAttestationResult"
-                         view="_local">
+                         view="dicAttestationResult-browse">
             <query>
                 <![CDATA[select e from tsadv$DicAttestationResult e]]>
             </query>
@@ -46,6 +46,7 @@
                 <column id="code"/>
                 <column id="legacyId"/>
                 <column id="isSystemRecord"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAttestationResultsDs"/>
             <rowsCount/>

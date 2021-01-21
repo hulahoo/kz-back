@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -16,6 +17,10 @@ public class PersonCriminalAdministrativeLiability extends AbstractParentEntity 
     @JoinColumn(name = "PERSON_GROUP_ID")
     private PersonGroupExt personGroup;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TYPE_ID")
+    private DicCriminalLiabilityType type;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE_HISTORY")
     private Date startDateHistory;
@@ -29,6 +34,14 @@ public class PersonCriminalAdministrativeLiability extends AbstractParentEntity 
 
     @Column(name = "REASON_PERIOD", length = 2000)
     private String reasonPeriod;
+
+    public DicCriminalLiabilityType getType() {
+        return type;
+    }
+
+    public void setType(DicCriminalLiabilityType type) {
+        this.type = type;
+    }
 
     public String getReasonPeriod() {
         return reasonPeriod;

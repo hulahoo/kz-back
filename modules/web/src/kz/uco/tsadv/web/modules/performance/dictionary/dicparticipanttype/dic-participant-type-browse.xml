@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicParticipantTypesDs"
                          class="kz.uco.tsadv.modules.performance.dictionary.DicParticipantType"
-                         view="_local">
+                         view="dicParticipantType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicParticipantType e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicParticipantTypesDs"/>
             <rowsCount/>

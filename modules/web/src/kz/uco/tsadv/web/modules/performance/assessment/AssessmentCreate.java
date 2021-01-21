@@ -54,7 +54,7 @@ public class AssessmentCreate extends AbstractEditor<Assessment> {
         for (AssignedGoal ag : getAssignedGoals()) {
             AssessmentGoal assessmentGoal = metadata.create(AssessmentGoal.class);
             assessmentGoal.setParticipantAssessment(ap);
-            assessmentGoal.setGoal(ag.getGoal());
+            assessmentGoal.setGoal(ag.getParentGoal());
             assessmentGoal.setWeight(ag.getWeight().doubleValue());
             assessmentGoal.setOverallRating(defaultOverallRating);
             assessmentGoalDs.addItem(assessmentGoal);

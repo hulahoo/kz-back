@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicAttitudeToMilitariesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicAttitudeToMilitary"
-                         view="_local">
+                         view="dicAttitudeToMilitary-browse">
             <query>
                 <![CDATA[select e from tsadv$DicAttitudeToMilitary e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAttitudeToMilitariesDs"/>
             <rowsCount/>

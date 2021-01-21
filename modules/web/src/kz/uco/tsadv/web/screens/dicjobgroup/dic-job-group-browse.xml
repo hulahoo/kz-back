@@ -33,6 +33,7 @@
             </actions>
             <columns>
                 <column id="jobGroup"/>
+                <column id="company"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

@@ -122,6 +122,7 @@
                             caption="mainMsg://Organization"/>
                     <column id="position.gradeGroup.grade.gradeName"/>
                     <column id="position.positionStatus"/>
+                    <column id="position.organizationGroupExt.company"/>
                 </columns>
                 <rows datasource="positionGroupsDs"/>
                 <rowsCount/>
@@ -145,18 +146,18 @@
                        height="100%"
                        width="100%">
                     <actions>
-                    <action id="edit"
-                            caption="msg://table.btn.edit"
-                            trackSelection="true"
-                            invoke="editHistory"/>
-                    <action id="remove"
-                            trackSelection="true"
-                            caption="msg://table.btn.remove"
-                            invoke="removeHistory"/>
-                    <action id="removeLate"
-                            trackSelection="true"
-                            caption="msg://table.btn.remove.late"
-                            invoke="removeHistories"/>
+                        <action id="edit"
+                                caption="msg://table.btn.edit"
+                                trackSelection="true"
+                                invoke="editHistory"/>
+                        <action id="remove"
+                                trackSelection="true"
+                                caption="msg://table.btn.remove"
+                                invoke="removeHistory"/>
+                        <action id="removeLate"
+                                trackSelection="true"
+                                caption="msg://table.btn.remove.late"
+                                invoke="removeHistories"/>
                     </actions>
                     <columns>
                         <column id="startDate"/>

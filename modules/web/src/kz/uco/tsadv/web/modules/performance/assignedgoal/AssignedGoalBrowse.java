@@ -517,7 +517,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
                 params2.put("positionGroupId", (Integer) o[0] == 2 ? o[1] : null);
                 params2.put("jobGroupId", (Integer) o[0] == 3 ? o[1] : null);*/
                 AssignedGoal agToDelete = assignedGoalsDs.getItems().stream().filter(assignedGoal ->  //search from ds list
-                        assignedGoal.getGoal().getId().equals((UUID) o[2]) &&
+                        assignedGoal.getParentGoal().getId().equals((UUID) o[2]) &&
                                 assignedGoal.getPersonGroup().getId().equals(assignment.getPersonGroup().getId()) &&
 //                                assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem()) &&
                                 (((Integer) o[0] == 1 &&
@@ -549,14 +549,14 @@ public class AssignedGoalBrowse extends AbstractLookup {
                         "and e.personGroupId.id = :personGroupId " +
                         "and e.performancePlan.id = :performancePlanId", params2, null)*/
                 if (assignedGoalsDs.getItems().stream().filter(assignedGoal ->  //search from ds list
-                        assignedGoal.getGoal().getId().equals((UUID) o[2]) &&
+                        assignedGoal.getParentGoal().getId().equals((UUID) o[2]) &&
                                 assignedGoal.getPersonGroup().getId().equals(assignment.getPersonGroup().getId())
 //                                && assignedGoal.getPerformancePlan().equals(performancePlansDs.getItem())
                 )
                         .findFirst().orElse(null) == null) {
                     AssignedGoal ag = metadata.create(AssignedGoal.class);
                     Goal g = commonService.getEntity(Goal.class, (UUID) o[2]);
-                    ag.setGoal(g);
+                    ag.setParentGoal(g);
                     ag.setPersonGroup(assignment.getPersonGroup());
                     ag.setOrganizationGroup((Integer) o[0] == 1 ? commonService.getEntity(OrganizationGroupExt.class, (UUID) o[1]) : null);
                     ag.setPositionGroup((Integer) o[0] == 2 ? commonService.getEntity(PositionGroupExt.class, (UUID) o[1]) : null);
@@ -567,7 +567,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
                     ag.setAssignedByPersonGroup(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP));
                     ag.setStartDate(performancePlansDs.getItem().getStartDate());
                     ag.setEndDate(performancePlansDs.getItem().getEndDate());
-                    ag.setWeight((Integer) o[3]);
+                    ag.setWeight((Double) o[3]);
                     ag.setPriority(commonService.getEntity(DicPriority.class, "HIGH"));
 //                    ag.setPerformancePlan(performancePlansDs.getItem());
                     assignedGoalsDs.addItem(ag);

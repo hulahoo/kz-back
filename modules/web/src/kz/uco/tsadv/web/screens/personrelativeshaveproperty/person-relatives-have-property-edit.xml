@@ -44,7 +44,9 @@
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
-                <lookupField id="haveOrNotField" property="haveOrNot"/>
+                <lookupField id="haveOrNotField" property="haveOrNot"
+                             contextHelpText="msg://haveOrNotField.contextHelpText"
+                             description="msg://haveOrNotField.contextHelpText"/>
                 <textField id="propertyField" property="property"/>
             </column>
         </form>

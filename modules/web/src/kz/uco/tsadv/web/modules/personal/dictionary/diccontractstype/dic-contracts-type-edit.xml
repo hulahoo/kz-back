@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicContractsTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicContractsType"
-                    view="_local"/>
+                    view="dicContractsType-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -25,6 +25,7 @@
                     <field property="langValue3"/>
                     <field property="langValue4"/>
                     <field property="langValue5"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

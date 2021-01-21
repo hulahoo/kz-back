@@ -39,6 +39,14 @@
             </view>
             <loader/>
         </instance>
+        <collection id="dicReasonBenifitsDc" class="kz.uco.tsadv.modules.personal.dictionary.DicReasonBenifit">
+            <view extends="_local"/>
+            <loader id="dicReasonBenifitsDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicReasonBenifit e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -52,17 +60,12 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <pickerField id="reasonField" property="reason">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
-                    <lookupField id="combatantField" property="combatant"/>
-                    <textField id="certificateFromDateField" property="certificateFromDate"/>
-                    <textField id="documentNumberField" property="documentNumber"/>
-                    <lookupField id="radiationRiskZoneField" property="radiationRiskZone"/>
-                    <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
+                    <lookupField id="reasonField" property="reason" required="true"
+                                 optionsContainer="dicReasonBenifitsDc"/>
+                    <lookupField id="combatantField" property="combatant" required="true"/>
+                    <textField id="certificateFromDateField" property="certificateFromDate" required="true"/>
+                    <textField id="documentNumberField" property="documentNumber" required="true"/>
+                    <lookupField id="radiationRiskZoneField" property="radiationRiskZone" required="true"/>
                     <pickerField id="requestStatusField" property="requestStatus" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>

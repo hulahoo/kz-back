@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicQualitiesDs"
                     class="kz.uco.tsadv.modules.recognition.dictionary.DicQuality"
-                    view="_local"/>
+                    view="dicQuality-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -18,6 +18,7 @@
                         datasource="dicQualitiesDs">
                 <column>
                     <field property="order" width="185px"/>
+                    <field property="company"/>
                 </column>
                 <column width="250px">
                     <field property="code"/>

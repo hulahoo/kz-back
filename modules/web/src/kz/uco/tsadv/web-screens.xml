@@ -151,10 +151,6 @@
             template="/kz/uco/tsadv/web/modules/performance/goallibrary/goal-library-browse.xml"/>
     <screen id="tsadv$GoalLibrary.edit"
             template="/kz/uco/tsadv/web/modules/performance/goallibrary/goal-library-edit.xml"/>
-    <screen id="tsadv$Goal.browse"
-            template="/kz/uco/tsadv/web/modules/performance/goal/goal-browse.xml"/>
-    <screen id="tsadv$Goal.edit"
-            template="/kz/uco/tsadv/web/modules/performance/goal/goal-edit.xml"/>
     <screen id="tsadv$AssignedGoal.browse"
             template="/kz/uco/tsadv/web/modules/performance/assignedgoal/assigned-goal-browse.xml"/>
     <screen id="tsadv$AssignedGoal.edit"
@@ -1918,12 +1914,6 @@
             template="kz/uco/tsadv/web/bpm/form/uco-bpm-start-proc-form.xml"/>
     <screen id="ucoBpmReassignProcForm"
             template="kz/uco/tsadv/web/bpm/form/uco-bpm-reassign-proc-form.xml"/>
-    <screen id="tsadv$BpmRolesDefiner.browse"
-            template="kz/uco/tsadv/web/bpmrolesdefiner/bpm-roles-definer-browse.xml"/>
-    <screen id="tsadv$BpmRolesDefiner.edit"
-            template="kz/uco/tsadv/web/bpmrolesdefiner/bpm-roles-definer-edit.xml"/>
-    <screen id="tsadv$BpmRolesLink.edit"
-            template="/kz/uco/tsadv/web/bpmrolesdefiner/bpm-roles-link-edit.xml"/>
     <screen id="tsadv$PersonalDataRequest.show"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request.xml"/>
     <screen id="tsadv$PersonalDataRequest.bpm"

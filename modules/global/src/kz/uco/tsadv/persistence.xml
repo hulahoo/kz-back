@@ -603,5 +603,14 @@
         <class>kz.uco.tsadv.modules.personal.model.PersonBankDetails</class>
         <class>kz.uco.tsadv.modules.personal.model.PersonBankdetailsRequest</class>
         <class>kz.uco.tsadv.modules.personal.model.CertificateTemplate</class>
+        <class>kz.uco.tsadv.entity.AdditionalFile</class>
+        <class>kz.uco.tsadv.modules.personal.model.AwardsRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.ChildDescription</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType</class>
+        <class>kz.uco.tsadv.modules.personal.model.LeavingVacationRequest</class>
+        <class>kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink</class>
+        <class>kz.uco.tsadv.entity.bproc.AbstractBprocRequest</class>
+        <class>kz.uco.tsadv.modules.performance.model.ScoreSetting</class>
+        <class>kz.uco.tsadv.modules.performance.model.CorrectionCoefficient</class>
     </persistence-unit>
 </persistence>

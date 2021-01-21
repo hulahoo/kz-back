@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicTalentProgramStepDs"
                     class="kz.uco.tsadv.entity.tb.dictionary.DicTalentProgramStep"
-                    view="_local"/>
+                    view="dicTalentProgramStep-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -36,6 +36,7 @@
                     <field property="isSystemRecord"/>
                     <field property="active"/>
                     <field property="order"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

@@ -1,13 +1,17 @@
 package kz.uco.tsadv.web.screens.certificaterequest;
 
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.components.Button;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.reports.entity.Report;
+import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import kz.uco.tsadv.service.CommonReportsService;
 
@@ -37,6 +41,27 @@ public class CertificateRequestHRBrowse extends StandardLookup<CertificateReques
     protected MessageBundle messageBundle;
     @Inject
     protected CommonReportsService commonReportsService;
+    @Inject
+    private Button printBtn;
+
+    @Subscribe
+    public void onInit(InitEvent event) {
+        certificateRequestsTable.addSelectionListener(e -> {
+            CertificateRequest certificateRequest = e.getSelected().stream().findFirst().orElse(null);
+            if (certificateRequest == null) {
+                printBtn.setEnabled(true);
+                return;
+            }
+            DicReceivingType receivingType = certificateRequest.getReceivingType();
+            if (receivingType == null) {
+                printBtn.setEnabled(true);
+                return;
+            }
+            String code = receivingType.getCode();
+            printBtn.setEnabled("SCAN_VERSION".equals(code));
+        });
+    }
+
 
     public void print() {
         CertificateRequest request = certificateRequestsTable.getSingleSelected();
@@ -54,5 +79,10 @@ public class CertificateRequestHRBrowse extends StandardLookup<CertificateReques
 
         exportDisplay.show(report);
     }
+
+    public void printReport(CertificateRequest item, String columnId) {
+        exportDisplay.show(item.getFile());
+    }
+
 
 }

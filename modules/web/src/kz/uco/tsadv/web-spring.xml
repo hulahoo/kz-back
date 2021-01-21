@@ -133,6 +133,7 @@
                        value="kz.uco.tsadv.service.ScheduledNotificationsService"/>
                 <entry key="tsadv_KpiService" value="kz.uco.tsadv.service.KpiService"/>
                 <entry key="tsadv_CommonReportsService" value="kz.uco.tsadv.service.CommonReportsService"/>
+                <entry key="tsadv_BprocUtilService" value="kz.uco.tsadv.service.BprocUtilService"/>
                 <entry key="tsadv_PortalHelperService" value="kz.uco.tsadv.service.portal.PortalHelperService"/>
             </map>
         </property>

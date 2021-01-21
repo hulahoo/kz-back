@@ -54,6 +54,14 @@
             </view>
             <loader/>
         </instance>
+        <collection id="dicRetirementTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRetirementType">
+            <view extends="_local"/>
+            <loader id="dicRetirementTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicRetirementType e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -67,15 +75,10 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <pickerField id="retirementTypeField" property="retirementType">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
-                    <dateField id="isseuDocDateField" property="isseuDocDate"/>
-                    <textField id="documentNumberField" property="documentNumber"/>
-                    <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
+                    <lookupField id="retirementTypeField" property="retirementType"
+                                 optionsContainer="dicRetirementTypesDc" required="true"/>
+                    <dateField id="isseuDocDateField" property="isseuDocDate" required="true"/>
+                    <textField id="documentNumberField" property="documentNumber" required="true"/>
                     <pickerField id="requestStatusField" property="requestStatus" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>

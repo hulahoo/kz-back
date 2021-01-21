@@ -39,7 +39,8 @@
                         <field property="replacementUom"/>
                         <field property="gost"/>
                         <field property="isSystemRecord"/>
-                    </column>
+                        <field property="company"/>
+                </column>
                     <column width="250px">
                         <field property="legacyId"
                                caption="mainMsg://legacyId"/>

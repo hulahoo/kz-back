@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicRcQuestionnaireCategoriesDs"
                          class="kz.uco.tsadv.modules.recruitment.dictionary.DicRcQuestionnaireCategory"
-                         view="_local">
+                         view="dicRcQuestionnaireCategory-browse">
             <query>
                 <![CDATA[select e from tsadv$DicRcQuestionnaireCategory e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicRcQuestionnaireCategoriesDs"/>
             <rowsCount/>

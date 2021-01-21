@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicJobRequestStatusDs"
                     class="kz.uco.tsadv.modules.recruitment.dictionary.DicJobRequestStatus"
-                    view="_local"/>
+                    view="dicJobRequestStatus-edit"/>
     </dsContext>
     <dialogMode height="AUTO"
                 width="800"/>
@@ -24,7 +24,8 @@
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="code"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

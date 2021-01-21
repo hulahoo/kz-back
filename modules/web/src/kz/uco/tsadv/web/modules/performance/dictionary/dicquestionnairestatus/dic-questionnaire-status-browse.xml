@@ -35,6 +35,7 @@
                 <column id="langValue3"/>
                 <column id="langValue4"/>
                 <column id="langValue5"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicQuestionnaireStatusesDs"/>
             <rowsCount/>

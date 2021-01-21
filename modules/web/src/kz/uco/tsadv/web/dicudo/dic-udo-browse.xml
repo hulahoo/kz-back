@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicUdoesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicUdo"
-                         view="_local">
+                         view="dicUdo-browse">
             <query>
                 <![CDATA[select e from tsadv$DicUdo e]]>
             </query>
@@ -46,6 +46,7 @@
                 <column id="code"/>
                 <column id="legacyId"/>
                 <column id="isSystemRecord"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicUdoesDs"/>
             <rowsCount/>

@@ -1,5 +1,6 @@
 package kz.uco.tsadv.web.screens.certificaterequest;
 
+import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;

@@ -44,8 +44,11 @@
                         <action id="clear" type="picker_clear"/>
                     </actions>
                 </pickerField>
-                <textField id="healthStatusField" property="healthStatus"/>
-                <textField id="contraindicationsField" property="contraindications"/>
+                <textField id="healthStatusField" property="healthStatus"
+                           contextHelpText="msg://healthStatusField.contextHelpText"
+                           description="msg://healthStatusField.contextHelpText"/>
+                <textField id="contraindicationsField" property="contraindications"
+                           contextHelpText="msg://contraindicationsField.contextHelpText"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

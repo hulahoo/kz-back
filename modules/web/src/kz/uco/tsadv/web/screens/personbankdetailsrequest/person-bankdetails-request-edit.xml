@@ -73,10 +73,17 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <textField id="fullNameBankCardField" property="fullNameBankCard"/>
+                    <textField id="fullNameBankCardField" property="fullNameBankCard">
+                        <validators>
+                            <regexp message="msg://fullNameBankCardField.regexp" regexp="[A-Za-z\s]"/>
+                        </validators>
+                    </textField>
                     <textField id="ibanField" property="iban"/>
-                    <textField id="bicBankField" property="bicBank"/>
-                    <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
+                    <textField id="bicBankField" property="bicBank">
+                        <validators>
+                            <regexp message="msg://bicBankField.regexp" regexp="[0-9a-zA-Z]"/>
+                        </validators>
+                    </textField>
                     <pickerField id="requestStatusField" property="requestStatus" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>

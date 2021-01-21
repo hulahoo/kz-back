@@ -17,29 +17,17 @@
                 width="800" resizable="true"/>
     <facets>
         <notification id="notificationTray" caption="msg://changeIIN" type="TRAY"
-        onAction="actionTray"/>
+                      onAction="actionTray"/>
     </facets>
     <layout expand="filesGroupBox" spacing="true">
         <form id="form" dataContainer="personalDataRequestDc">
             <column width="350px">
                 <textField id="requestNumberField" property="requestNumber" editable="false"/>
-                <textField id="lastNameField" property="lastName"/>
-                <textField id="firstNameField" property="firstName"/>
+                <textField id="lastNameField" property="lastName" required="true"/>
+                <textField id="firstNameField" property="firstName" required="true"/>
                 <textField id="middleNameField" property="middleName"/>
-                <dateField id="dateOfBirthField" property="dateOfBirth"/>
-                <pickerField id="nationalityField" property="nationality">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-                <pickerField id="citizenshipField" property="citizenship">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-                <textField id="nationalIdentifierField" property="nationalIdentifier"/>
+                <textField id="lastNameLatinField" property="lastNameLatin" required="true"/>
+                <textField id="firstNameLatinField" property="firstNameLatin" required="true"/>
                 <pickerField id="statusField" property="status" editable="false">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
@@ -51,16 +39,15 @@
         <groupBox id="filesGroupBox" caption="msg://filesGroupBox" expand="groupTable">
             <groupTable id="groupTable" dataContainer="attachmentsDc" width="100%">
                 <actions>
-                    <action id="create" type="create"/>
                     <action id="remove" type="remove"/>
                 </actions>
                 <buttonsPanel>
-                    <button id="groupTableCreateBtn" action="groupTable.create"/>
+                    <upload id="upload" uploadButtonIcon="PLUS_CIRCLE" stylename="primary"/>
                     <button id="groupTableRemoveBtn" action="groupTable.remove"/>
                 </buttonsPanel>
                 <rows/>
                 <columns>
-                    <column id="name"/>
+                    <column id="name" caption="mainMsg://fileName"/>
                 </columns>
             </groupTable>
         </groupBox>

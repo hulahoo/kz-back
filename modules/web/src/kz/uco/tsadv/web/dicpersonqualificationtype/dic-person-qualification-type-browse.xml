@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicPersonQualificationTypesDs"
                          class="kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType"
-                         view="_local">
+                         view="dicPersonQualificationType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicPersonQualificationType e]]>
             </query>
@@ -48,6 +48,7 @@
                 <column id="isSystemRecord"/>
                 <column id="active"/>
                 <column id="order"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicPersonQualificationTypesDs"/>
             <rowsCount/>

@@ -52,8 +52,8 @@
         <form id="form" dataContainer="certificateRequestDc">
             <column width="350px">
                 <textField id="requestNumberField" property="requestNumber" editable="false"/>
-                <lookupPickerField id="statusField" optionsContainer="statusesDc" property="status" editable="false"/>
-                <lookupPickerField id="receivingTypeField" optionsContainer="receivingTypeDc" property="receivingType"/>
+                <lookupField id="statusField" optionsContainer="statusesDc" property="status" editable="false"/>
+                <lookupField id="receivingTypeField" optionsContainer="receivingTypeDc" property="receivingType"/>
                 <dateField id="requestDateField" property="requestDate" editable="false"/>
                 <pickerField id="personGroupField" property="personGroup" editable="false"/>
                 <pickerField id="positionField" property="personGroup.currentAssignment.positionGroup" editable="false"/>

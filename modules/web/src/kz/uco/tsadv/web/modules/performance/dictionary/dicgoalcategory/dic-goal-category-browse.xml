@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicGoalCategoriesDs"
                          class="kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory"
-                         view="_local">
+                         view="dicGoalCategory-browse">
             <query>
                 <![CDATA[select e from tsadv$DicGoalCategory e]]>
             </query>
@@ -37,6 +37,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicGoalCategoriesDs"/>
             <rowsCount/>

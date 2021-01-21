@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicCertificationStatusesDs"
                          class="kz.uco.tsadv.modules.learning.dictionary.DicCertificationStatus"
-                         view="_local">
+                         view="dicCertificationStatus-browse">
             <query>
                 <![CDATA[select e from tsadv$DicCertificationStatus e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicCertificationStatusesDs"/>
             <rowsCount/>

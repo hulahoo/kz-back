@@ -10,14 +10,14 @@
                     view="dicMilitaryRank-view"/>
         <collectionDatasource id="categoryCompositionsDs"
                               class="kz.uco.tsadv.modules.personal.dictionary.DicTroopsStructure"
-                              view="_local">
+                              view="dicMilitaryRank-edit">
             <query>
                 <![CDATA[select e from tsadv$DicTroopsStructure e]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="troopTypesDs"
                               class="kz.uco.tsadv.modules.personal.dictionary.DicTroopType"
-                              view="_local">
+                              view="dicMilitaryRank-edit">
             <query>
                 <![CDATA[select e from tsadv$DicTroopType e]]>
             </query>
@@ -47,6 +47,7 @@
                     <field property="langValue5"/>
                     <field property="startDate"/>
                     <field property="endDate"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

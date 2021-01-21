@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicPayrollsDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicPayroll"
-                         view="_local">
+                         view="dicPayroll-browse">
             <query>
                 <![CDATA[select e from tsadv$DicPayroll e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicPayrollsDs"/>
             <rowsCount/>

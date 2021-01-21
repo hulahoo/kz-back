@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicPersonTypesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicPersonType"
-                         view="_local">
+                         view="dicPersonType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicPersonType e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicPersonTypesDs"/>
             <rowsCount/>

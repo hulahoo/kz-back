@@ -43,6 +43,7 @@
                 </property>
             </view>
             <loader/>
+            <collection id="attachmentsDc" property="attachments"/>
         </instance>
     </data>
     <dialogMode height="600"
@@ -57,14 +58,13 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <dateField id="startDateField" property="startDate"/>
+                    <textField id="educationalInstitutionNameField" property="educationalInstitutionName"
+                               required="true"/>
+                    <dateField id="startDateField" property="startDate" required="true"/>
                     <dateField id="endDateField" property="endDate"/>
-                    <textField id="educationalInstitutionNameField" property="educationalInstitutionName"/>
-                    <textField id="diplomaField" property="diploma"/>
                     <textField id="typeNameField" property="typeName"/>
+                    <textField id="diplomaField" property="diploma"/>
                     <dateField id="issuedDateField" property="issuedDate"/>
-                    <upload id="fileFiled" fileStoragePutMode="IMMEDIATE" property="file"
-                            showFileName="true"/>
                     <pickerField id="" property="requestStatus" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
@@ -73,6 +73,23 @@
                     </pickerField>
                 </column>
             </form>
+            <groupBox>
+                <table id="personQualificationRequestAttachmentsTable" dataContainer="attachmentsDc" width="100%">
+                    <actions>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <buttonsPanel>
+                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                stylename="primary"/>
+                        <button id="personQualificationRequestAttachmentsTableRemoveBtn"
+                                action="personQualificationRequestAttachmentsTable.remove"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="name" caption="mainMsg://fileName" generator="generatorName"></column>
+                    </columns>
+                    <rows/>
+                </table>
+            </groupBox>
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>

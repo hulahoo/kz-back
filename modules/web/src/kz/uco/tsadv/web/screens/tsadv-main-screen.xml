@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:ext="http://schemas.haulmont.com/cuba/window-ext.xsd"
+        extends="kz/uco/base/web/root/base-main-screen.xml"
+        messagesPack="kz.uco.tsadv.web.screens">
+    <layout/>
+</window>

@@ -51,6 +51,7 @@
                 <column id="endDate"/>
                 <column id="code"/>
                 <column id="langValue"/>
+                <column id="company"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

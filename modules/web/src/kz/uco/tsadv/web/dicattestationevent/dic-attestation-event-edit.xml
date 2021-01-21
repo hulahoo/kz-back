@@ -35,6 +35,7 @@
                     <field property="code"/>
                     <field property="legacyId"/>
                     <field property="isSystemRecord"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

@@ -35,14 +35,18 @@
                   selectionMode="MULTI_CHECK">
             <columns>
                 <column property="fioWithEmployeeNumber"/>
-                <column property="group.currentAssignment.organizationGroup.organization.organizationName"/>
-                <column property="group.currentAssignment.positionGroup.position.positionFullName"/>
-                <column property="group.currentAssignment.jobGroup.job.jobName"/>
+                <column property="group.currentAssignment.organizationGroup.organization.organizationName"
+                        caption="mainMsg://organizationName"/>
+                <column property="group.currentAssignment.positionGroup.position.positionFullName"
+                        caption="mainMsg://positionName"/>
+                <column property="group.currentAssignment.jobGroup"
+                        caption="mainMsg://jobName"/>
                 <column property="group.currentAssignment.gradeGroup.grade.gradeName"/>
                 <column property="group.currentAssignment.location.langValue"/>
                 <column property="type.langValue"
                         caption="msg://Person.type"/>
             </columns>
+            <rowsCount/>
         </dataGrid>
         <hbox id="lookupActions" spacing="true">
             <button id="lookupSelection" action="lookupSelectAction" enable="false"/>

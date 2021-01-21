@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicOrderReasonsDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicOrderReason"
-                         view="_local">
+                         view="dicOrderReason-browse">
             <query>
                 <![CDATA[select e from tsadv$DicOrderReason e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicOrderReasonsDs"/>
             <rowsCount/>

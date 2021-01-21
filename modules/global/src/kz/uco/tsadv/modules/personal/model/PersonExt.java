@@ -10,7 +10,10 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.base.entity.shared.Person;
 import kz.uco.tsadv.global.dictionary.DicNationality;
-import kz.uco.tsadv.modules.personal.dictionary.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
+import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicNonresidentType;
+import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -97,16 +100,30 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     @Column(name = "PREV_JOB_NDA")
     protected String prevJobNDA;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PREV_JOB_OBLIGATION_ID")
-    protected DicPrevJobObligation prevJobObligation;
+    @Column(name = "PREV_JOB_OBLIGATION")
+    protected String prevJobObligation;
 
-    public DicPrevJobObligation getPrevJobObligation() {
-        return prevJobObligation;
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public void setPrevJobObligation(YesNoEnum prevJobObligation) {
+        this.prevJobObligation = prevJobObligation == null ? null : prevJobObligation.getId();
     }
 
-    public void setPrevJobObligation(DicPrevJobObligation prevJobObligation) {
-        this.prevJobObligation = prevJobObligation;
+    public YesNoEnum getPrevJobObligation() {
+        return prevJobObligation == null ? null : YesNoEnum.fromId(prevJobObligation);
+    }
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
     }
 
     public YesNoEnum getPrevJobNDA() {

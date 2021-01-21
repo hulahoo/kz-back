@@ -70,6 +70,9 @@
                                    property="jobNameLang4"/>
                             <field id="jobNameLangId5"
                                    property="jobNameLang5"/>
+                            <field id="company"
+                                   property="company"
+                                   datasource="groupDs"/>
                         </column>
                     </fieldGroup>
                     <fieldGroup id="fieldGroup"

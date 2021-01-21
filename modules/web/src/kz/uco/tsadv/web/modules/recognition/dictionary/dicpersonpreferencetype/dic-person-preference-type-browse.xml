@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicPersonPreferenceTypesDs"
                          class="kz.uco.tsadv.modules.recognition.dictionary.DicPersonPreferenceType"
-                         view="_local">
+                         view="dicPersonPreferenceType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicPersonPreferenceType e]]>
             </query>
@@ -40,6 +40,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicPersonPreferenceTypesDs"/>
             <rowsCount/>

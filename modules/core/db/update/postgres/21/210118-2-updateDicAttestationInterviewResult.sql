@@ -1,0 +1,1 @@
+alter table TSADV_DIC_ATTESTATION_INTERVIEW_RESULT add column COMPANY_ID uuid ;

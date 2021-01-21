@@ -9,13 +9,13 @@ import java.util.UUID;
 
 public class PositionGroupGoalLinkEdit extends AbstractEditor<PositionGroupGoalLink> {
 
-    @Override
-    protected void postValidate(ValidationErrors errors) {
-        super.postValidate(errors);
-        ((CollectionDatasource<PositionGroupGoalLink, UUID>) getParentDs()).getItems().forEach(gl -> {
-                if (getItem().getGoal().equals(gl.getGoal())&& !getItem().getId().equals(gl.getId()))
-                    errors.add(getMessage("ValidationError.goalLink.uniqueGoal"));
-            });
-
-    }
+//    @Override
+//    protected void postValidate(ValidationErrors errors) {
+//        super.postValidate(errors);
+//        ((CollectionDatasource<PositionGroupGoalLink, UUID>) getParentDs()).getItems().forEach(gl -> {
+//                if (getItem().getGoal().equals(gl.getGoal())&& !getItem().getId().equals(gl.getId()))
+//                    errors.add(getMessage("ValidationError.goalLink.uniqueGoal"));
+//            });
+//
+//    }
 }

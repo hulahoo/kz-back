@@ -43,6 +43,7 @@
                 <column id="requestDate"/>
                 <column id="status"/>
                 <column id="personGroup"/>
+                <column id="file" link="true" linkInvoke="printReport"/>
                 <column id="personGroup.currentAssignment.organizationGroup"/>
                 <column id="personGroup.currentAssignment.positionGroup"/>
                 <column id="certificateType"/>

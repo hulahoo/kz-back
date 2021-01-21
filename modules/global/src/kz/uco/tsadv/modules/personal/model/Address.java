@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
@@ -14,6 +15,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @NamePattern("%s|address")
 @Table(name = "TSADV_ADDRESS")
@@ -61,6 +63,21 @@ public class Address extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE", nullable = false)
     protected Date endDate;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_ADDRESS_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "ADDRESS_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public DicLanguage getLanguage() {
         return language;

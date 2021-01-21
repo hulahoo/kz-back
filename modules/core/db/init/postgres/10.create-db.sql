@@ -419,6 +419,7 @@ create table TSADV_REASON_NO_PRODUCTION_CONNECTION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -453,6 +454,7 @@ create table TSADV_ACCIDENT_PERSON_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -487,6 +489,7 @@ create table TSADV_ACCIDENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -521,6 +524,7 @@ create table TSADV_DIRECT_REASON (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -555,6 +559,7 @@ create table TSADV_EXCAVATION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -589,6 +594,7 @@ create table TSADV_DISABILITY_GROUP (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -623,6 +629,7 @@ create table TSADV_INVESTIGATION_CONDUCTED (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -657,6 +664,7 @@ create table TSADV_PUNISHMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -691,6 +699,7 @@ create table TSADV_TRAUMA_LEVEL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -725,6 +734,7 @@ create table TSADV_TECHNICAL_STATUS_DICTIONARY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -759,6 +769,7 @@ create table TSADV_CONTROL_STAGE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -793,6 +804,7 @@ create table TSADV_HARMFUL_FACTOR_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -848,6 +860,7 @@ create table TSADV_INVESTIGATION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -882,6 +895,7 @@ create table TSADV_INSPECTION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -916,6 +930,7 @@ create table TSADV_CONTROL_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1095,6 +1110,7 @@ create table TSADV_INCIDENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1183,6 +1199,7 @@ create table TSADV_RESULT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1255,6 +1272,7 @@ create table TSADV_DISCONFORMITY_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1289,6 +1307,7 @@ create table TSADV_INSPECTION_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1323,6 +1342,7 @@ create table TSADV_INTOXICATION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1357,6 +1377,7 @@ create table TSADV_EVENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1391,6 +1412,7 @@ create table TSADV_OBJECT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1425,6 +1447,7 @@ create table TSADV_ATTACHMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1483,6 +1506,7 @@ create table TSADV_DIC_FIRE_SAFETY_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1517,6 +1541,7 @@ create table TSADV_DIC_FIRE_RESISTANCE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1551,6 +1576,7 @@ create table TSADV_RISKS_VIOLATIONS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1585,6 +1611,7 @@ create table TSADV_SUBSECTIONS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1686,6 +1713,7 @@ create table TSADV_STATUS_MSDS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1903,6 +1931,7 @@ create table TSADV_REABILITATION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -1977,6 +2006,7 @@ create table TSADV_DIC_EVENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2011,6 +2041,7 @@ create table TSADV_UOM (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2076,6 +2107,7 @@ create table TSADV_EVENT_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2160,6 +2192,7 @@ create table TSADV_GRADE (
     GRADE_NAME varchar(500) not null,
     RECOGNITION_NOMINATE boolean not null,
     GROUP_ID uuid,
+    BONUS_PERCENT double precision,
     --
     primary key (ID)
 )^
@@ -2365,6 +2398,7 @@ create table TSADV_DIC_MARITAL_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2399,6 +2433,7 @@ create table TSADV_DIC_PERSON_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2463,6 +2498,7 @@ create table TSADV_DIC_ADDRESS_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2497,6 +2533,7 @@ create table TSADV_DIC_NATIONALITY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2531,6 +2568,7 @@ create table TSADV_DIC_CITIZENSHIP (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2565,6 +2603,7 @@ create table TSADV_DIC_PHONE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2599,6 +2638,7 @@ create table TSADV_DIC_EDUCATION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2659,6 +2699,7 @@ create table TSADV_DIC_COST_CENTER (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2693,6 +2734,7 @@ create table TSADV_DIC_PAYROLL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2727,6 +2769,7 @@ create table TSADV_DIC_POSITION_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2782,6 +2825,7 @@ create table TSADV_DIC_ASSIGNMENT_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2816,6 +2860,7 @@ create table TSADV_DIC_ORDER_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2850,6 +2895,7 @@ create table TSADV_DIC_ORDER_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2884,6 +2930,7 @@ create table TSADV_DIC_LANGUAGE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2918,6 +2965,7 @@ create table TSADV_DIC_CASE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -2952,6 +3000,7 @@ create table TSADV_DIC_ENTITY_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3045,6 +3094,7 @@ create table TSADV_DIC_ASSIGNMENT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3079,6 +3129,7 @@ create table TSADV_DIC_ABSENCE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3163,6 +3214,7 @@ create table TSADV_DIC_ABSENCE_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3227,6 +3279,7 @@ create table TSADV_DIC_BUSINESS_TRIP_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3265,6 +3318,7 @@ create table TSADV_DIC_BUSINESS_TRIP_LINE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3304,6 +3358,7 @@ create table TSADV_DIC_COST_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3430,6 +3485,7 @@ create table TSADV_DIC_SALARY_CHANGE_REASON (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3483,6 +3539,7 @@ create table TSADV_DIC_DOCUMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3519,6 +3576,8 @@ create table TSADV_GRADE_GROUP (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    --
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^
@@ -3595,6 +3654,7 @@ create table TSADV_JOB_GROUP (
     JOB_NAME_LANG5 varchar(1000),
     EMPLOYEE_CATEGORY_ID uuid,
     JOB_CATEGORY_ID uuid,
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^
@@ -3632,8 +3692,8 @@ create table TSADV_GOAL_LIBRARY (
     --
     LIBRARY_NAME varchar(240) not null,
     CATEGORY_ID uuid not null,
-    START_DATE date not null,
-    END_DATE date not null,
+    START_DATE date,
+    END_DATE date,
     --
     primary key (ID)
 )^
@@ -3651,6 +3711,7 @@ create table TSADV_DIC_GOAL_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3689,10 +3750,11 @@ create table TSADV_GOAL (
     GOAL_NAME varchar(1000) not null,
     SUCCESS_CRITERIA varchar(100),
     LIBRARY_ID uuid not null,
-    MEASURE_TYPE_ID uuid not null,
+    MEASURE_TYPE_ID uuid,
     UOM_ID uuid,
-    START_DATE date not null,
-    END_DATE date not null,
+    START_DATE date,
+    END_DATE date,
+    PARENT_GOAL_ID uuid,
     --
     primary key (ID)
 )^
@@ -3710,6 +3772,7 @@ create table TSADV_DIC_MEASURE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3744,6 +3807,7 @@ create table TSADV_DIC_UOM (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3819,14 +3883,15 @@ create table TSADV_ASSIGNED_GOAL (
     ASSIGNED_BY_PERSON_GROUP_ID uuid,
     START_DATE date,
     END_DATE date,
-    WEIGHT integer,
+    WEIGHT double precision,
     PRIORITY_ID uuid,
     ASSIGNED_PERFORMANCE_PLAN_ID uuid,
     CATEGORY_ID uuid,
     GOAL_STRING varchar(255),
-    PARENT_ID uuid,
     GOAL_TYPE varchar(50),
     RESULT double precision,
+    PARENT_ASSIGNED_GOAL_ID uuid,
+    GOAL_LIBRARY_ID uuid,
     --
     primary key (ID)
 )^
@@ -3876,6 +3941,7 @@ create table TSADV_DIC_QUESTIONNAIRE_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3910,6 +3976,7 @@ create table TSADV_DIC_QUESTION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4104,6 +4171,7 @@ create table TSADV_DIC_ASSESSMENT_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4167,6 +4235,7 @@ create table TSADV_DIC_PARTICIPANT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4201,6 +4270,7 @@ create table TSADV_DIC_NINE_BOX_LEVEL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4258,6 +4328,7 @@ create table TSADV_DIC_OVERALL_RATING (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4335,6 +4406,7 @@ create table TSADV_DIC_ORDER_REASON (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4420,6 +4492,7 @@ create table TSADV_DIC_READINESS_LEVEL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4531,6 +4604,7 @@ create table TSADV_DIC_REQUEST_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4565,6 +4639,7 @@ create table TSADV_DIC_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4722,6 +4797,7 @@ create table TSADV_DIC_TEST_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4831,6 +4907,7 @@ create table TSADV_DIC_LEARNING_CENTER (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4869,6 +4946,7 @@ create table TSADV_DIC_COURSE_CYCLE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4928,6 +5006,7 @@ create table TSADV_DIC_COURSE_FORMAT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -4983,6 +5062,7 @@ create table TSADV_DIC_LEARNING_OBJECT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5125,6 +5205,7 @@ create table TSADV_DIC_MONTH (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5214,6 +5295,7 @@ create table TSADV_DIC_PRIORITY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5247,13 +5329,23 @@ create table TSADV_ASSIGNED_PERFORMANCE_PLAN (
     DELETED_BY varchar(50),
     --
     PERFORMANCE_PLAN_ID uuid not null,
-    RESULT integer,
-    GZP integer,
+    RESULT double precision,
+    GZP decimal(19, 2),
     ASSIGNED_PERSON_ID uuid not null,
     ASSIGNED_BY_ID uuid,
     STATUS varchar(50),
     START_DATE date,
     END_DATE date,
+    KPI_SCORE double precision,
+    EXTRA_POINT double precision,
+    FINAL_SCORE double precision,
+    COMPANY_BONUS double precision,
+    PERSONAL_BONUS double precision,
+    FINAL_BONUS double precision,
+    MAX_BONUS decimal(19, 2),
+    ADJUSTED_BONUS double precision,
+    ADJUSTED_SCORE double precision,
+    MAX_BONUS_PERCENT double precision,
     --
     primary key (ID)
 )^
@@ -5315,6 +5407,7 @@ create table TSADV_DIC_REQUISITION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5349,6 +5442,7 @@ create table TSADV_DIC_EMPLOYMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5383,6 +5477,7 @@ create table TSADV_DIC_REQUISITION_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5417,6 +5512,7 @@ create table TSADV_DIC_REQUISITION_ACCESS_LEVEL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5562,6 +5658,7 @@ create table TSADV_DIC_HIRING_MEMBER_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5796,6 +5893,7 @@ create table TSADV_DIC_ATTACHMENT_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -5879,6 +5977,9 @@ create table TSADV_PERSON_EXPERIENCE (
     MINING_EXPERIENCE boolean,
     GROUP_EXPERIENCE boolean,
     INDUSTRY_ID uuid,
+    YEARS integer,
+    MONTHS integer,
+    DAYS integer,
     START_DATE_HISTORY date,
     END_DATE_HISTORY date,
     --
@@ -5921,6 +6022,7 @@ create table TSADV_DIC_JOB_REQUEST_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6022,6 +6124,7 @@ create table TSADV_DIC_INTERVIEW_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6174,6 +6277,7 @@ create table TSADV_DIC_LC_ARTICLE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6213,6 +6317,7 @@ create table TSADV_DIC_DISMISSAL_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6247,6 +6352,7 @@ create table TSADV_DIC_DISMISSAL_REASON (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6413,6 +6519,7 @@ create table TSADV_DIC_TRADE_UNION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6464,6 +6571,8 @@ create table TSADV_BENEFICIARY (
     START_DATE_HISTORY date,
     END_DATE_HISTORY date,
     PERSON_GROUP_ID uuid,
+    RELATED_PERSON_GROUP_ID uuid,
+    RELATION_DEGREE_ID uuid,
     --
     primary key (ID)
 )^
@@ -6481,6 +6590,7 @@ create table TSADV_DIC_RELATIONSHIP_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6541,6 +6651,7 @@ create table TSADV_DIC_ABSENCE_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6627,6 +6738,7 @@ create table TSADV_DIC_EMPLOYEE_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6707,6 +6819,7 @@ create table TSADV_SUR_CHARGE_NAME (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6764,6 +6877,7 @@ create table TSADV_DIC_OPERATOR_CODE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6798,6 +6912,7 @@ create table TSADV_DIC_AGREEMENT_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -6832,6 +6947,7 @@ create table TSADV_DIC_APPROVAL_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7027,6 +7143,7 @@ create table TSADV_DIC_CERTIFICATION_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7147,6 +7264,7 @@ create table TSADV_DIC_BUDGET_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7291,6 +7409,7 @@ create table TSADV_DIC_LEARNING_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7354,6 +7473,7 @@ create table TSADV_DIC_RC_QUESTION_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7388,6 +7508,7 @@ create table TSADV_DIC_RC_QUESTION_ACCESSIBILITY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7477,6 +7598,7 @@ create table TSADV_DIC_RC_QUESTIONNAIRE_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7511,6 +7633,7 @@ create table TSADV_DIC_RC_QUESTIONNAIRE_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7770,6 +7893,7 @@ create table TSADV_DIC_JOB_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7853,6 +7977,7 @@ create table TSADV_DIC_LEARNING_FORM (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7908,6 +8033,7 @@ create table TSADV_DIC_EDUCATION_LEVEL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7942,6 +8068,7 @@ create table TSADV_DIC_EDUCATION_DEGREE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -7976,6 +8103,7 @@ create table TSADV_DIC_INTERVIEW_REASON (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8030,6 +8158,7 @@ create table TSADV_DIC_JOB_REQUEST_REASON (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8084,6 +8213,7 @@ create table TSADV_DIC_HR_ROLE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8422,6 +8552,7 @@ create table TSADV_DIC_POSTING_CHANNEL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8518,7 +8649,7 @@ create table TSADV_DIC_SCHEDULE_ELEMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
-    COMPANY_ID uuid not null,
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8545,7 +8676,6 @@ create table TSADV_DIC_SCHEDULE_ELEMENT_TYPE (
     TIME_FROM time,
     TIME_TO time,
     DISPLAY_ON_TIMECARD_EDIT_SCREEN boolean,
-    SHORTNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -8651,6 +8781,7 @@ create table TSADV_DIC_MILITARY_DOCUMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8685,6 +8816,7 @@ create table TSADV_DIC_MILITARY_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8719,6 +8851,7 @@ create table TSADV_DIC_ATTITUDE_TO_MILITARY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8753,6 +8886,7 @@ create table TSADV_DIC_TROOPS_STRUCTURE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8787,6 +8921,7 @@ create table TSADV_DIC_TROOP_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8821,6 +8956,7 @@ create table TSADV_DIC_MILITARY_RANK (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8858,6 +8994,7 @@ create table TSADV_DIC_OFFICER_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8892,6 +9029,7 @@ create table TSADV_DIC_SUITABILITY_TO_MILITARY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8926,6 +9064,7 @@ create table TSADV_DIC_REGISTER_GROUP (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -8960,6 +9099,7 @@ create table TSADV_DIC_REGISTER_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9109,6 +9249,7 @@ create table TSADV_DIC_SOURCE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9216,6 +9357,7 @@ create table TSADV_DIC_PROMOTION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9250,6 +9392,7 @@ create table TSADV_DIC_AWARD_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9286,6 +9429,7 @@ create table TSADV_DIC_PUNISHMENT_TYPES (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9320,6 +9464,7 @@ create table TSADV_DIC_OFFENCE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9354,6 +9499,7 @@ create table TSADV_DIC_ADDITIONAL_EDUCATION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9388,6 +9534,7 @@ create table TSADV_DIC_EXAM_RESULTS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9422,6 +9569,7 @@ create table TSADV_DIC_ACCEPTED_ACTION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9456,6 +9604,7 @@ create table TSADV_DIC_TRAINING_METHOD (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9490,6 +9639,7 @@ create table TSADV_DIC_CONTRACTS_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9717,6 +9867,7 @@ create table TSADV_DIC_TRANSPORT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9751,6 +9902,7 @@ create table TSADV_DIC_TRANSPORT_CLASS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9787,6 +9939,7 @@ create table TSADV_DIC_ACCOMMODATION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9821,6 +9974,7 @@ create table TSADV_DIC_ACCOMMODATION_CLASS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -9899,6 +10053,7 @@ create table TSADV_AWARDS (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
+    PERSON_GROUP_ID uuid,
     PROMOTION_TYPE_ID uuid,
     CALCULATED varchar(255),
     SUR_CHARGE_TYPE integer,
@@ -9909,6 +10064,10 @@ create table TSADV_AWARDS (
     ORDER_DATE date,
     ASSIGNMENT_GROUP_ID uuid,
     REASON varchar(255),
+    START_DATE date,
+    NOTE varchar(2500),
+    START_DATE_HISTORY date,
+    END_DATE_HISTORY date,
     --
     primary key (ID)
 )^
@@ -10048,6 +10207,7 @@ create table TSADV_DIC_RECOGNITION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10087,7 +10247,7 @@ create table TSADV_DIC_QUALITY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
-    COMPANY_ID uuid not null,
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10111,7 +10271,6 @@ create table TSADV_DIC_QUALITY (
     FULL_LANG_VALUE3 varchar(2000),
     FULL_LANG_VALUE4 varchar(2000),
     FULL_LANG_VALUE5 varchar(2000),
-    FULLLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -10173,6 +10332,7 @@ create table TSADV_DIC_PERSON_PREFERENCE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10232,6 +10392,7 @@ create table TSADV_DIC_QUESTIONNAIRE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10318,6 +10479,7 @@ create table TSADV_DIC_ACTION_LIKE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10392,6 +10554,7 @@ create table TSADV_DIC_PERSON_ACTION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10447,6 +10610,7 @@ create table TSADV_DIC_DISABILITY_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10481,6 +10645,7 @@ create table TSADV_DIC_DURATION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10515,6 +10680,7 @@ create table TSADV_DIC_RETIREMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10604,6 +10770,7 @@ create table TSADV_DIC_SCHEDULE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10638,6 +10805,7 @@ create table TSADV_DIC_NONRESIDENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10672,6 +10840,7 @@ create table TSADV_DIC_COMPETENCE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10706,6 +10875,7 @@ create table TSADV_DIC_WORKING_CONDITION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11123,6 +11293,7 @@ create table TSADV_DIC_PERSON_AWARD_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11258,6 +11429,7 @@ create table TSADV_DIC_UDO (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11420,6 +11592,7 @@ create table TSADV_DIC_GOODS_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11456,6 +11629,7 @@ create table TSADV_DIC_ATTESTATION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11490,6 +11664,7 @@ create table TSADV_DIC_ATTESTATION_RESULT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11524,6 +11699,7 @@ create table TSADV_DIC_ATTESTATION_EVENT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11616,6 +11792,7 @@ create table TSADV_DIC_PROTECTION_EQUIPMENT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11787,6 +11964,7 @@ create table TSADV_DIC_INTERNSHIP_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11840,6 +12018,7 @@ create table TSADV_DIC_INTERNSHIP_RATING (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -11919,6 +12098,7 @@ create table TSADV_DIC_CONTACT_PERSON_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -12088,6 +12268,7 @@ create table TSADV_DIC_ATTESTATION_INTERVIEW_RESULT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -12361,6 +12542,7 @@ create table TSADV_DIC_BUDGET_ITEM (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -12440,6 +12622,7 @@ create table TSADV_DIC_REASON_FOR_LEARNING (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -12694,6 +12877,7 @@ create table TSADV_DIC_EDUCATIONAL_ESTABLISHMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -12728,6 +12912,7 @@ create table TSADV_DIC_EDUCATIONAL_ESTABLISHMENT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -12784,6 +12969,7 @@ create table TSADV_DIC_QUESTIONNAIRE_QUESTION_SECTION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -12892,6 +13078,7 @@ create table TSADV_DIC_REQUIRED_EDUCATION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13081,6 +13268,7 @@ create table TSADV_BPM_ROLES_LINK (
     --
     BPM_ROLES_DEFINER_ID uuid,
     HR_ROLE_ID uuid not null,
+    BPROC_USER_TASK_CODE varchar(255),
     REQUIRED boolean not null,
     FIND_BY_COUNTER boolean not null,
     POSITION_BPM_ROLE_ID uuid,
@@ -13099,6 +13287,8 @@ create table TSADV_BPM_ROLES_DEFINER (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    PROCESS_DEFINITION_KEY varchar(255),
+    --
     primary key (ID)
 )^
 -- end TSADV_BPM_ROLES_DEFINER
@@ -13112,6 +13302,9 @@ create table TSADV_PERSONAL_DATA_REQUEST (
     UPDATED_BY varchar(50),
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
     --
     LAST_NAME varchar(255),
     REQUEST_NUMBER bigint,
@@ -13307,6 +13500,7 @@ create table TSADV_DIC_LENGTH_OF_SERVICE_RANGE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13345,6 +13539,7 @@ create table TSADV_DIC_LENGTH_OF_SERVICE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13470,6 +13665,7 @@ create table TSADV_DIC_PROTECTION_EQUIPMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13504,6 +13700,7 @@ create table TSADV_DIC_PROTECTION_EQUIPMENT_CONDITION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13538,6 +13735,7 @@ create table TSADV_DIC_INCIDENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13572,6 +13770,7 @@ create table TSADV_DIC_EQUIPMENT_REPLACEMENT_REASON (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13766,6 +13965,7 @@ create table TSADV_DIC_RATE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13833,6 +14033,7 @@ create table TSADV_DIC_LEARNING_HISTORY_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -13867,6 +14068,7 @@ create table TSADV_DIC_ASSIGNMENT_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14002,6 +14204,7 @@ create table TSADV_DIC_RCG_FEEDBACK_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14129,6 +14332,7 @@ create table TSADV_DICDELIVERY_ADDRESS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14163,6 +14367,7 @@ create table TSADV_DIC_PERSON_QUALIFICATION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14201,7 +14406,7 @@ create table TSADV_PERSON_QUALIFICATION (
     TYPE_ID uuid not null,
     PERSON_GROUP_ID uuid not null,
     START_DATE date not null,
-    END_DATE date not null,
+    END_DATE date,
     ASSIGN_VALIDATION_DATE date,
     ATTACHMENT_ID uuid,
     NOTE varchar(3000),
@@ -14289,6 +14494,7 @@ create table TSADV_DIC_TALENT_PROGRAM_STEP (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14323,6 +14529,7 @@ create table TSADV_DIC_TALENT_PROGRAM_SKILL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14464,6 +14671,7 @@ create table TSADV_DIC_TALENT_PROGRAM_REQUEST_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14641,17 +14849,16 @@ alter table BASE_PERSON add column STATE_AWARDS varchar(2000) ^
 alter table BASE_PERSON add column HAVE_CRIPPLE_CHILD varchar(50) ^
 alter table BASE_PERSON add column HAVE_CHILD_WITHOUT_PARENT varchar(50) ^
 alter table BASE_PERSON add column PREV_JOB_NDA varchar(50) ^
-alter table BASE_PERSON add column PREV_JOB_OBLIGATION_ID uuid ^
+alter table BASE_PERSON add column PREV_JOB_OBLIGATION varchar(50) ^
 alter table BASE_PERSON add column DTYPE varchar(31) ^
 update BASE_PERSON set DTYPE = 'base$PersonExt' where DTYPE is null ^
 -- end BASE_PERSON
 -- begin BASE_ORGANIZATION
 alter table BASE_ORGANIZATION add column GROUP_ID uuid ^
-alter table BASE_ORGANIZATION add column COMPANY_ID uuid ^
 alter table BASE_ORGANIZATION add column COST_CENTER_ID uuid ^
 alter table BASE_ORGANIZATION add column PAYROLL_ID uuid ^
 alter table BASE_ORGANIZATION add column INTERNAL boolean ^
-alter table BASE_ORGANIZATION add column DTYPE varchar(31) ^
+alter table BASE_ORGANIZATION add column DTYPE varchar(100) ^
 update BASE_ORGANIZATION set DTYPE = 'base$OrganizationExt' where DTYPE is null ^
 -- end BASE_ORGANIZATION
 -- begin BASE_POSITION
@@ -14734,7 +14941,7 @@ alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_NAME_LANG5 varchar(1
 alter table BASE_ORGANIZATION_GROUP add column LOCATION_ID uuid ^
 alter table BASE_ORGANIZATION_GROUP add column ORGANIZATION_TYPE_ID uuid ^
 alter table BASE_ORGANIZATION_GROUP add column ANALYTICS_ID uuid ^
-alter table BASE_ORGANIZATION_GROUP add column DTYPE varchar(31) ^
+alter table BASE_ORGANIZATION_GROUP add column DTYPE varchar(100) ^
 update BASE_ORGANIZATION_GROUP set DTYPE = 'base$OrganizationGroupExt' where DTYPE is null ^
 -- end BASE_ORGANIZATION_GROUP
 -- begin BASE_PERSON_GROUP
@@ -14845,6 +15052,7 @@ create table TSADV_DIC_BOOK_CATEGORY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14922,6 +15130,7 @@ create table TSADV_DIC_LEARNING_FEEDBACK_QUESTION_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15028,6 +15237,7 @@ create table TSADV_DIC_COMPANY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15168,6 +15378,7 @@ create table TSADV_DIC_CERTIFICATE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15202,6 +15413,7 @@ create table TSADV_DIC_RECEIVING_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15261,6 +15473,7 @@ create table TSADV_DIC_INDUSTRY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15295,6 +15508,7 @@ create table TSADV_DIC_REASON_BENIFIT (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15329,6 +15543,7 @@ create table TSADV_DIC_ISSUING_AUTHORITY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15363,6 +15578,7 @@ create table TSADV_DIC_PREV_JOB_OBLIGATION (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15397,6 +15613,7 @@ create table TSADV_DIC_LANGUAGE_LEVEL (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15431,6 +15648,7 @@ create table TSADV_DIC_FORM_STUDY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -15516,6 +15734,7 @@ create table TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     PERSON_GROUP_ID uuid,
+    TYPE_ID uuid,
     START_DATE_HISTORY date,
     END_DATE_HISTORY date,
     HAVE_LIABILITY varchar(50),
@@ -15647,6 +15866,8 @@ create table TSADV_BENEFICIARY_REQUEST (
     PERSON_GROUP_ID uuid,
     REQUEST_STATUS_ID uuid,
     BENEFICIARY_ID uuid,
+    RELATED_PERSON_GROUP_ID uuid,
+    RELATION_DEGREE_ID uuid,
     --
     primary key (ID)
 )^
@@ -15819,7 +16040,7 @@ create table TSADV_PERSON_QUALIFICATION_REQUEST (
     TYPE_ID uuid,
     PERSON_GROUP_ID uuid not null,
     START_DATE date not null,
-    END_DATE date not null,
+    END_DATE date,
     ASSIGN_VALIDATION_DATE date,
     ATTACHMENT_ID uuid,
     NOTE varchar(3000),
@@ -15885,6 +16106,9 @@ create table TSADV_PERSON_EXPERIENCE_REQUEST (
     MINING_EXPERIENCE boolean,
     GROUP_EXPERIENCE boolean,
     INDUSTRY_ID uuid,
+    YEARS integer,
+    MONTHS integer,
+    DAYS integer,
     REQUEST_STATUS_ID uuid,
     --
     primary key (ID)
@@ -15953,6 +16177,7 @@ create table TSADV_PERSON_CRIMINAL_ADMINISTRATIVE_LIABILITY_REQUEST (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     PERSON_GROUP_ID uuid,
+    TYPE_ID uuid,
     HAVE_LIABILITY varchar(50),
     REASON_PERIOD varchar(2000),
     REQUEST_STATUS_ID uuid,
@@ -16125,3 +16350,520 @@ create table TSADV_CERTIFICATE_TEMPLATE (
     primary key (ID)
 )^
 -- end TSADV_CERTIFICATE_TEMPLATE
+-- begin TSADV_ADDITIONAL_FILE
+create table TSADV_ADDITIONAL_FILE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    FILE_ID uuid not null,
+    RELATION_ENTITY_ID uuid not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_ADDITIONAL_FILE
+-- begin TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK (
+    PERSON_EXT_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_EXT_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK
+-- begin TSADV_PERSON_DOCUMENT_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_DOCUMENT_REQUEST_FILE_DESCRIPTOR_LINK (
+    PERSON_DOCUMENT_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_DOCUMENT_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_DOCUMENT_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_PERSON_DOCUMENT_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_DOCUMENT_FILE_DESCRIPTOR_LINK (
+    PERSON_DOCUMENT_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_DOCUMENT_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_DOCUMENT_FILE_DESCRIPTOR_LINK
+-- begin TSADV_PERSON_EDUCATION_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_EDUCATION_REQUEST_FILE_DESCRIPTOR_LINK (
+    PERSON_EDUCATION_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_EDUCATION_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_EDUCATION_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_PERSON_EDUCATION_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_EDUCATION_FILE_DESCRIPTOR_LINK (
+    PERSON_EDUCATION_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_EDUCATION_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_EDUCATION_FILE_DESCRIPTOR_LINK
+-- begin TSADV_IMPROVING_PROFESSIONAL_SKILLS_REQ_FILE_DESCRIPTOR_LINK
+create table TSADV_IMPROVING_PROFESSIONAL_SKILLS_REQ_FILE_DESCRIPTOR_LINK (
+    IMPROVING_PROFESSIONAL_SKILLS_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (IMPROVING_PROFESSIONAL_SKILLS_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_IMPROVING_PROFESSIONAL_SKILLS_REQ_FILE_DESCRIPTOR_LINK
+-- begin TSADV_IMPROVING_PROFESSIONAL_SKILLS_FILE_DESCRIPTOR_LINK
+create table TSADV_IMPROVING_PROFESSIONAL_SKILLS_FILE_DESCRIPTOR_LINK (
+    IMPROVING_PROFESSIONAL_SKILLS_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (IMPROVING_PROFESSIONAL_SKILLS_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_IMPROVING_PROFESSIONAL_SKILLS_FILE_DESCRIPTOR_LINK
+-- begin TSADV_PERSON_QUALIFICATION_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_QUALIFICATION_FILE_DESCRIPTOR_LINK (
+    PERSON_QUALIFICATION_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_QUALIFICATION_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_QUALIFICATION_FILE_DESCRIPTOR_LINK
+-- begin TSADV_PERSON_QUALIFICATION_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_QUALIFICATION_REQUEST_FILE_DESCRIPTOR_LINK (
+    PERSON_QUALIFICATION_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_QUALIFICATION_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_QUALIFICATION_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_PERSON_EXPERIENCE_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_EXPERIENCE_REQUEST_FILE_DESCRIPTOR_LINK (
+    PERSON_EXPERIENCE_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_EXPERIENCE_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_EXPERIENCE_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK
+create table TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK (
+    PERSON_EXPERIENCE_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (PERSON_EXPERIENCE_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK
+-- begin TSADV_ADDRESS_FILE_DESCRIPTOR_LINK
+create table TSADV_ADDRESS_FILE_DESCRIPTOR_LINK (
+    ADDRESS_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (ADDRESS_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_ADDRESS_FILE_DESCRIPTOR_LINK
+-- begin TSADV_BPROC_INSTANCE_ROLES_LINK
+create table TSADV_BPROC_INSTANCE_ROLES_LINK (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PROCESS_INSTANCE_ID varchar(255),
+    HR_ROLE_ID uuid,
+    USER_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_BPROC_INSTANCE_ROLES_LINK
+
+-- begin TSADV_AWARDS_REQUEST
+create table TSADV_AWARDS_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    PROMOTION_TYPE_ID uuid,
+    CALCULATED varchar(255),
+    SUR_CHARGE_TYPE integer,
+    VALUE_ integer,
+    AWARD_TYPE_ID uuid,
+    DATE_ date,
+    ORDER_NUM varchar(255),
+    ORDER_DATE date,
+    ASSIGNMENT_GROUP_ID uuid,
+    REASON varchar(255),
+    START_DATE date,
+    NOTE varchar(2500),
+    REQUEST_STATUS_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_AWARDS_REQUEST
+-- begin TSADV_MILITARY_FORM_FILE_DESCRIPTOR_LINK
+create table TSADV_MILITARY_FORM_FILE_DESCRIPTOR_LINK (
+    MILITARY_FORM_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (MILITARY_FORM_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_MILITARY_FORM_FILE_DESCRIPTOR_LINK
+-- begin TSADV_MILITARY_FORM_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_MILITARY_FORM_REQUEST_FILE_DESCRIPTOR_LINK (
+    MILITARY_FORM_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (MILITARY_FORM_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_MILITARY_FORM_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_CHILD_DESCRIPTION
+create table TSADV_CHILD_DESCRIPTION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid,
+    HAVE_DISABLED_CHILD varchar(50),
+    HAVE_LITTLE_CHILD varchar(50),
+    --
+    primary key (ID)
+)^
+-- end TSADV_CHILD_DESCRIPTION
+-- begin TSADV_DIC_CRIMINAL_LIABILITY_TYPE
+create table TSADV_DIC_CRIMINAL_LIABILITY_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_CRIMINAL_LIABILITY_TYPE
+-- begin TSADV_SCORE_SETTING
+create table TSADV_SCORE_SETTING (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PERFORMANCE_PLAN_ID uuid,
+    MIN_PERCENT double precision,
+    MAX_PERCENT double precision,
+    FINAL_SCORE integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_SCORE_SETTING
+-- begin TSADV_DIC_ASSESSMENT_EVENTS
+create table TSADV_DIC_ASSESSMENT_EVENTS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_EVENTS
+-- begin TSADV_DIC_ASSESSMENT_RESULT
+create table TSADV_DIC_ASSESSMENT_RESULT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_RESULT
+-- begin TSADV_DIC_ASSESSMENT_TYPE
+create table TSADV_DIC_ASSESSMENT_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_LEAVING_VACATION_REQUEST
+create table TSADV_LEAVING_VACATION_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    REQUEST_NUMBER bigint not null,
+    STATUS_REQUEST_ID uuid,
+    REQUEST_DATE date,
+    REQUEST_TYPE_ID uuid,
+    VACATION_ID uuid,
+    START_DATE date,
+    END_DATA date,
+    PLANNED_START_DATE date,
+    COMMENT_ varchar(2500),
+    --
+    primary key (ID)
+)^
+-- end TSADV_LEAVING_VACATION_REQUEST
+-- end TSADV_DIC_CRIMINAL_LIABILITY_TYPE
+-- begin TSADV_SCORE_SETTING
+create table TSADV_SCORE_SETTING (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PERFORMANCE_PLAN_ID uuid,
+    MIN_PERCENT double precision,
+    MAX_PERCENT double precision,
+    FINAL_SCORE integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_SCORE_SETTING
+-- begin TSADV_DIC_ASSESSMENT_EVENTS
+create table TSADV_DIC_ASSESSMENT_EVENTS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_EVENTS
+-- begin TSADV_DIC_ASSESSMENT_RESULT
+create table TSADV_DIC_ASSESSMENT_RESULT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_RESULT
+-- begin TSADV_DIC_ASSESSMENT_TYPE
+create table TSADV_DIC_ASSESSMENT_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_CORRECTION_COEFFICIENT
+create table TSADV_CORRECTION_COEFFICIENT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    GROUP_EFFICIENCY_PERCENT double precision,
+    COMPANY_RESULT double precision,
+    PERFORMANCE_PLAN_ID uuid,
+    COMPANY_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_CORRECTION_COEFFICIENT

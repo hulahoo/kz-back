@@ -1819,5 +1819,32 @@
         <entity class="kz.uco.tsadv.modules.personal.model.CertificateTemplate">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.entity.AdditionalFile">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.AwardsRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.ChildDescription">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.LeavingVacationRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.bproc.AbstractBprocRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.ScoreSetting">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.CorrectionCoefficient">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

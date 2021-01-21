@@ -61,8 +61,10 @@
                     <property name="code"/>
                 </property>
                 <property name="file" view="_minimal"/>
+                <property name="attachments" view="_minimal"/>
             </view>
             <loader/>
+            <collection id="attachmentsDc" property="attachments"/>
         </instance>
         <collection id="attitude_to_militariesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAttitudeToMilitary"
                     view="_minimal">
@@ -77,6 +79,7 @@
                 width="800"/>
     <layout expand="scrollBox" spacing="true">
         <scrollBox id="scrollBox" spacing="true">
+
             <form id="form" dataContainer="militaryFormRequestDc">
                 <column width="350px">
                     <pickerField id="personGroupField" property="personGroup" editable="false">
@@ -85,28 +88,40 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <dateField id="date_fromField" property="date_from"/>
-                    <dateField id="date_toField" property="date_to"/>
-                    <textField id="militaryDocumentTypeNameField" property="militaryDocumentTypeName"/>
-                    <textField id="document_numberField" property="document_number"/>
-                    <textField id="militaryTypeNameField" property="militaryTypeName"/>
                     <lookupPickerField id="attitude_to_militaryField" optionsContainer="attitude_to_militariesDc"
-                                       property="attitude_to_military"/>
+                                       property="attitude_to_military" required="true"/>
+                    <textField id="militaryDocumentTypeNameField" property="militaryDocumentTypeName" required="true"/>
+                    <textField id="document_numberField" property="document_number" required="true"/>
+                    <textField id="militaryTypeNameField" property="militaryTypeName" required="true"/>
                     <textField id="compositionMilitaryRegistrationField" property="compositionMilitaryRegistration"/>
-                    <textField id="militaryRankNameField" property="militaryRankName"/>
-                    <textField id="officerTypeNameField" property="officerTypeName"/>
-                    <textField id="specializationField" property="specialization"/>
-                    <dateField id="issueDocDateField" property="issueDocDate"/>
-                    <textField id="issuingAuthorityField" property="issuingAuthority"/>
+                    <textField id="militaryRankNameField" property="militaryRankName" required="true"/>
+                    <textField id="officerTypeNameField" property="officerTypeName" required="true"/>
+                    <textField id="specializationField" property="specialization" required="true"/>
+                    <dateField id="date_fromField" property="date_from" required="true"/>
+                    <dateField id="date_toField" property="date_to" required="true"/>
                     <pickerField id="requsetStatusField" property="requestStatus" editable="false">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"/>
                 </column>
             </form>
+            <groupBox>
+                <table id="fileDescriptorsTable" width="100%" dataContainer="attachmentsDc">
+                    <actions>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <buttonsPanel alwaysVisible="true">
+                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                stylename="primary"/>
+                        <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>
+                    </buttonsPanel>
+                    <columns>
+                        <column id="name" generator="generatorName" caption="mainMsg://fileName"/>
+                    </columns>
+                </table>
+            </groupBox>
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>

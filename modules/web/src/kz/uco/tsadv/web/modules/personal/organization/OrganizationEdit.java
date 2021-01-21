@@ -140,7 +140,7 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
         if (analyticsDs.getItem() != null) {
             getDsContext().addBeforeCommitListener(context -> context.addInstanceToCommit(analyticsDs.getItem()));
         }
-        goalsTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("organizationGroup", getItem()));
+        goalsTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("organizationGroup", getItem().getGroup()));
         orgHrUsersTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("organizationGroup", getItem().getGroup()));
         competenceOrgTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("organizationGroup", getItem().getGroup()));
     }

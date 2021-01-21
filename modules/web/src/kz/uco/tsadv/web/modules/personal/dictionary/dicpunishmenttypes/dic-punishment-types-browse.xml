@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicPunishmentTypesesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicPunishmentTypes"
-                         view="_local">
+                         view="dicPunishmentTypes-browse">
             <query>
                 <![CDATA[select e from tsadv$DicPunishmentTypes e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicPunishmentTypesesDs"/>
             <rowsCount/>
