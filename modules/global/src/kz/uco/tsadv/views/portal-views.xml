@@ -41,18 +41,38 @@
             <property name="performancePlanName"/>
             <property name="performancePlanNameEn"/>
             <property name="performancePlanNameKz"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
         </property>
-        <property name="startDate"/>
-        <property name="endDate"/>
         <property name="status"/>
-        <property name="assigned_by" view="_minimal">
-            <property name="assignments">
-                <property name="positionGroup" view="_minimal"/>
+        <property name="assignedPerson" view="_local">
+            <property name="person" view="_local"/>
+            <property name="assignments" view="_minimal">
+                <property name="personGroup">
+                    <property name="list" view="_local"/>
+                </property>
+                <property name="jobGroup">
+                    <property name="jobNameLang1"/>
+                </property>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="list" view="_local"/>
+                    <property name="organization" view="_minimal">
+                        <property name="organizationNameLang1"/>
+                    </property>
+                </property>
             </property>
         </property>
-        <property name="assignedPerson" view="_minimal"/>
     </view>
     <view entity="tsadv$AssignedGoal" name="assignedGoal-portal-kpi-create-default" extends="_local">
         <property name="category" view="_minimal"/>
+    </view>
+    <view entity="base$AssignmentExt" name="assignment-portal-kpi" extends="_local">
+        <property name="jobGroup" view="_local"/>
+        <property name="organizationGroup" view="_local">
+            <property name="list" view="_local"/>
+            <property name="organization" view="_local">
+                <property name="company" view="_local"/>
+            </property>
+        </property>
     </view>
 </views>

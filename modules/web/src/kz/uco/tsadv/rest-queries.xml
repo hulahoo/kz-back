@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <queries xmlns="http://schemas.haulmont.com/cuba/rest-queries.xsd">
-    <query name="usersActivities" entity="uactivity$Activity" view="portal.notification">
+    <query name="usersActivities" entity="uactivity$Activity" view="_local">
         <jpql>
             select e
             from uactivity$Activity e
@@ -15,13 +15,11 @@
             <param name="notificationCode" type="java.lang.String"/>
         </params>
     </query>
-    <query name="myProfile" entity="tsadv$PersonalDataRequest" view="_local">
+    <query name="myProfile" entity="base$PersonExt" view="_local">
         <jpql>
-            select e
-            from tsadv$PersonalDataRequest e
-                inner join tsadv$UserExt u
-                    on u.personGroup.id = e.personGroup.id
-            where u.id = :userId
+            select p
+            from base$PersonExt p
+            where p.group.id = :userId
         </jpql>
         <params>
             <param name="userId" type="java.util.UUID"/>
@@ -40,13 +38,18 @@
     </query>
     <query name="kpiEditPage" entity="tsadv$AssignedPerformancePlan" view="assignedPerformancePlan-myKpi-edit">
         <jpql>
-            select p
-            from tsadv$UserExt u
-                inner join u.personGroup p
-            where u.id = :userId
+            <![CDATA[select app
+            from tsadv$AssignedPerformancePlan app
+                left join app.assignedPerson ap
+                left join ap.assignments a
+            where app.id = :appId
+                and a.startDate <= CURRENT_DATE
+                and a.endDate >= CURRENT_DATE
+                and a.primaryFlag = true
+            ]]>
         </jpql>
         <params>
-            <param name="userId" type="java.util.UUID"/>
+            <param name="appId" type="java.util.UUID"/>
         </params>
     </query>
 </queries>
