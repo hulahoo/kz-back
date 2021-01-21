@@ -1,0 +1,2 @@
+alter table TSADV_JOB_GROUP add constraint FK_TSADV_JOB_GROUP_COMPANY foreign key (COMPANY_ID) references BASE_DIC_COMPANY(ID);
+create index IDX_TSADV_JOB_GROUP_COMPANY on TSADV_JOB_GROUP (COMPANY_ID);
