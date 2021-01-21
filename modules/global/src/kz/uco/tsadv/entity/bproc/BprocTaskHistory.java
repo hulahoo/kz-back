@@ -22,10 +22,10 @@ public class BprocTaskHistory extends BaseUuidEntity {
     protected UserExt user;
 
     @MetaProperty
-    protected String outcome;
+    protected Date startDate;
 
     @MetaProperty
-    protected Date startDate;
+    protected String outcome;
 
     @MetaProperty
     protected Date endDate;

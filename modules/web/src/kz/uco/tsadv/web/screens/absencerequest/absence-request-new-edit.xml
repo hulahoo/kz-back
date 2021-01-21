@@ -55,6 +55,7 @@
                 </hbox>
             </groupBox>
         </scrollBox>
+        <hbox id="procApproversBox"/>
         <hbox id="procActionsBox"
               align="BOTTOM_LEFT"
               spacing="true">

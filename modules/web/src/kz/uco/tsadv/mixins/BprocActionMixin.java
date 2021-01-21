@@ -22,11 +22,19 @@ import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.HBoxLayout;
+import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.components.data.table.ContainerTableItems;
+import com.haulmont.cuba.gui.model.CollectionContainer;
+import com.haulmont.cuba.gui.model.CollectionLoader;
+import com.haulmont.cuba.gui.model.DataComponents;
+import com.haulmont.cuba.gui.model.DataContext;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.entity.bproc.BprocTaskHistory;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
+import kz.uco.tsadv.service.BprocUtilService;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -67,6 +75,23 @@ public interface BprocActionMixin<T extends AbstractBprocRequest> extends Editor
                 outcomesPanel.setAfterTaskCompletedHandler(formOutcome -> screen.close(new StandardCloseAction("close")));
                 ((HBoxLayout) screen.getWindow().getComponentNN("procActionButtonHBox")).add(outcomesPanel);
             }
+
+            DataComponents dataComponents = beanLocator.get(DataComponents.class);
+            DataContext dataContext = dataComponents.createDataContext();
+            UiControllerUtils.getScreenData(screen).setDataContext(dataContext);
+
+            CollectionContainer<BprocTaskHistory> bprocTaskHistoryDc = dataComponents.createCollectionContainer(BprocTaskHistory.class);
+
+            CollectionLoader<BprocTaskHistory> bprocTaskHistoryDl = dataComponents.createCollectionLoader();
+            bprocTaskHistoryDl.setContainer(bprocTaskHistoryDc);
+            bprocTaskHistoryDl.setDataContext(dataContext);
+            bprocTaskHistoryDc.getMutableItems().addAll(beanLocator.get(BprocUtilService.class).getBprocTaskHistory(processInstanceData.getId()));
+
+            Table<BprocTaskHistory> table = uiComponents.create(Table.of(BprocTaskHistory.class));
+            table.setItems(new ContainerTableItems<>(bprocTaskHistoryDc));
+            HBoxLayout procApproversBox = ((HBoxLayout) screen.getWindow().getComponentNN("procApproversBox"));
+            procApproversBox.setWidthFull();
+            procApproversBox.add(table);
         } else {
             Button button = uiComponents.create(Button.class);
             button.setId("startProcess");

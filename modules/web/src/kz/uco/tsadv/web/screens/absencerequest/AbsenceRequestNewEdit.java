@@ -89,21 +89,7 @@ public class AbsenceRequestNewEdit extends StandardEditor<AbsenceRequest>
     @Subscribe
     public void onInit(InitEvent event) {
 
-        DataContext dataContext = dataComponents.createDataContext();
-        getScreenData().setDataContext(dataContext);
 
-        CollectionContainer<BprocTaskHistory> bprocTaskHistoryDc = dataComponents.createCollectionContainer(BprocTaskHistory.class);
-
-        CollectionLoader<BprocTaskHistory> bprocTaskHistoryDl = dataComponents.createCollectionLoader();
-        bprocTaskHistoryDl.setContainer(bprocTaskHistoryDc);
-        bprocTaskHistoryDl.setDataContext(dataContext);
-
-        ProcessInstanceData processInstanceData = bprocRuntimeService.createProcessInstanceDataQuery()
-                .processDefinitionKey(getProcDefinitionKey())
-                .variableValueEquals("entityId", getEditedEntity().getId().toString())
-                .list().stream().findFirst().orElse(null);
-
-        bprocTaskHistoryDc.getMutableItems().addAll(bprocUtilService.getBprocTaskHistory(processInstanceData.getId()));
 
 
         typeField.addValueChangeListener(e -> {
@@ -159,6 +145,22 @@ public class AbsenceRequestNewEdit extends StandardEditor<AbsenceRequest>
                 }
             }
         });
+
+        DataContext dataContext = dataComponents.createDataContext();
+        getScreenData().setDataContext(dataContext);
+
+        CollectionContainer<BprocTaskHistory> bprocTaskHistoryDc = dataComponents.createCollectionContainer(BprocTaskHistory.class);
+
+        CollectionLoader<BprocTaskHistory> bprocTaskHistoryDl = dataComponents.createCollectionLoader();
+        bprocTaskHistoryDl.setContainer(bprocTaskHistoryDc);
+        bprocTaskHistoryDl.setDataContext(dataContext);
+
+        ProcessInstanceData processInstanceData = bprocRuntimeService.createProcessInstanceDataQuery()
+                .processDefinitionKey(getProcDefinitionKey())
+                .variableValueEquals("entityId", getEditedEntity().getId().toString())
+                .list().stream().findFirst().orElse(null);
+
+        bprocTaskHistoryDc.getMutableItems().addAll(bprocUtilService.getBprocTaskHistory(processInstanceData.getId()));
     }
 
     protected boolean hasStatus(String requestStatus) {

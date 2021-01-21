@@ -1,5 +1,7 @@
 package kz.uco.tsadv.service;
 
+import com.haulmont.addon.bproc.data.Outcome;
+import com.haulmont.addon.bproc.data.OutcomesContainer;
 import com.haulmont.addon.bproc.entity.HistoricVariableInstanceData;
 import com.haulmont.addon.bproc.entity.TaskData;
 import com.haulmont.addon.bproc.service.BprocHistoricService;
@@ -344,8 +346,8 @@ public class BprocUtilServiceBean implements BprocUtilService {
             bprocTaskHistory.setProcInstanseId(procInstanceId);
             bprocTaskHistory.setUser(getUserExtForTaskHistory(task));
             bprocTaskHistory.setRole(getRoleForTaskHistory(task));
-            bprocTaskHistory.setStartDate(null); //todo
-            bprocTaskHistory.setEndDate(null); //todo
+            bprocTaskHistory.setStartDate(task.getCreateTime());
+            bprocTaskHistory.setEndDate(task.getEndTime());
             bprocTaskHistory.setOutcome(getOutcomeForTaskHistory(task));
             result.add(bprocTaskHistory);
         }
@@ -353,12 +355,26 @@ public class BprocUtilServiceBean implements BprocUtilService {
     }
 
     private String getOutcomeForTaskHistory(TaskData task) {
+        String outcomeId = null;
         HistoricVariableInstanceData historicVariableInstanceData
                 = bprocHistoricService.createHistoricVariableInstanceDataQuery()
-                .variableName(task.getId() + "_result")
+                .processInstanceId(task.getProcessInstanceId())
+                .variableName(task.getTaskDefinitionKey() + "_result")
                 .list().stream()
                 .findAny().orElse(null);
-        return null;
+        if (historicVariableInstanceData != null
+                && historicVariableInstanceData.getValue() != null
+                && historicVariableInstanceData.getValue() instanceof OutcomesContainer) {
+            OutcomesContainer outcomesContainer = (OutcomesContainer) historicVariableInstanceData.getValue();
+            if (outcomesContainer != null
+                    && outcomesContainer.getOutcomes() != null) {
+                Outcome outcome = outcomesContainer.getOutcomes().stream().findFirst().orElse(null);
+                if (outcome != null) {
+                    outcomeId = outcome.getOutcomeId();
+                }
+            }
+        }
+        return outcomeId;
     }
 
     private DicHrRole getRoleForTaskHistory(TaskData task) {
