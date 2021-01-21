@@ -16,6 +16,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
+import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 
@@ -40,64 +41,64 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     private TimeSource timeSource;
     @Inject
     private GroupTable<InsuredPerson> insuredPersonsTable;
-    @Inject
-    private Metadata metadata;
 
-//    public void joinVHI() {
-//        InsuredPerson item = dataManager.create(InsuredPerson.class);
-//        Date today = timeSource.currentTimestamp();
-//        item.setAttachDate(today);
-//        chekType(1, item);
-//        screenBuilders.editor(InsuredPerson.class, this)
-//                .editEntity(item)
-//                .build()
-//                .show();
-//    }
+
+    @Subscribe("insuredPersonsTable.joinVHI")
+    public void onInsuredPersonsTableJoinVHI(Action.ActionPerformedEvent event) {
+       joinMember(1);
+    }
 
     @Subscribe("insuredPersonsTable.joinFamilyMember")
-    public void onInsuredPersonsTableCreate(Action.ActionPerformedEvent event) {
+    public void onInsuredPersonsTableJoinFamilyMember(Action.ActionPerformedEvent event) {
+        joinMember(2);
+    }
+    public void joinMember(int type) {
         InsuredPerson item = dataManager.create(InsuredPerson.class);
         Date today = timeSource.currentTimestamp();
         item.setAttachDate(today);
-        chekType(1, item);
         screenBuilders.editor(insuredPersonsTable)
-                .newEntity(item)
+                .newEntity(chekType(type, item))
                 .build()
                 .show();
     }
 
-
-
-    public void joinFamilyMember() {
-    }
-
-    public void chekType(int type, InsuredPerson insuredPerson){
+    public InsuredPerson chekType(int type, InsuredPerson insuredPerson){
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
         insuredPerson.setType(type);
 
+        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
+                "from tsadv$UserExt e " +
+                "where e.id = :uId").parameter("uId", userSession.getUser().getId())
+                .view("personGroupExt-view")
+                .list().stream().findFirst().orElse(null);
+
+        DicCompany company = dataManager.load(DicCompany.class)
+                .query("select o.company " +
+                        "   from base$AssignmentExt a" +
+                        " join a.assignmentStatus s " +
+                        " join a.organizationGroup.list o " +
+                        " where a.personGroup.id = :pg " +
+                        "and current_date between a.startDate and a.endDate "+
+                        "and a.primaryFlag = 'TRUE' " +
+                        "and s.code in ('ACTIVE','SUSPENDED') " +
+                        " and current_date between o.startDate and o.endDate")
+                .parameter("pg", personGroupExt.getId()).view(View.LOCAL)
+                .list().stream().findFirst().orElse(null);
+
+        InsuranceContract contract = dataManager.load(InsuranceContract.class)
+                .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId ")
+                .parameter("companyId", company.getId())
+                .view("insuranceContract-editView")
+                .list().stream().findFirst().orElse(null);
+
+        PersonExt person = personGroupExt.getPerson();
+        AssignmentExt assignment = personGroupExt.getCurrentAssignment();
         if (type == 1){
-            PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
-                    "from tsadv$UserExt e " +
-                    "where e.id = :uId").parameter("uId", userSession.getUser().getId())
-                    .view("personGroupExt-view")
-                    .list().stream().findFirst().orElse(null);
-
-            DicCompany company = dataManager.load(DicCompany.class)
-                    .query("select o.company " +
-                            "   from base$AssignmentExt a" +
-                            " join a.assignmentStatus s " +
-                            " join a.organizationGroup.list o " +
-                            " where a.personGroup.id = :pg " +
-                            "and current_date between a.startDate and a.endDate "+
-                            "and a.primaryFlag = 'TRUE' " +
-                            "and s.code in ('ACTIVE','SUSPENDED') " +
-                            " and current_date between o.startDate and o.endDate")
-                    .parameter("pg", personGroupExt.getId()).view(View.LOCAL)
-                    .list().stream().findFirst().orElse(null);
-
-            PersonExt person = personGroupExt.getPerson();
-            AssignmentExt assignment = personGroupExt.getCurrentAssignment();
-
+            insuredPerson.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
+            if (contract != null){
+                insuredPerson.setInsuranceContract(contract);
+                insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
+            }
             insuredPerson.setEmployee(personGroupExt);
             insuredPerson.setFirstName(person.getFirstName());
             insuredPerson.setSecondName(person.getLastName());
@@ -109,6 +110,30 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             insuredPerson.setCompany(company);
             insuredPerson.setJob(assignment.getJobGroup());
 
+        }else if (type == 2 && insuredPersonsTable.getSingleSelected() != null){
+            InsuredPerson singleSelected = insuredPersonsTable.getSingleSelected();
+            isRelativeFamily(insuredPerson, singleSelected);
         }
+        return insuredPerson;
+    }
+
+    public void isRelativeFamily(InsuredPerson person, InsuredPerson singleSelected){
+        person.setEmployee(singleSelected.getEmployee());
+        person.setIin(singleSelected.getIin());
+        person.setSex(singleSelected.getSex());
+        person.setBirthdate(singleSelected.getBirthdate());
+        person.setRelative(singleSelected.getRelative());
+        person.setDocumentType(singleSelected.getDocumentType());
+        person.setDocumentNumber(singleSelected.getDocumentNumber());
+        person.setAddressType(singleSelected.getAddressType());
+        person.setAddress(singleSelected.getAddress());
+        person.setCompany(singleSelected.getCompany());
+        person.setJob(singleSelected.getJob());
+        person.setInsuranceContract(singleSelected.getInsuranceContract());
+        person.setAttachDate(singleSelected.getAttachDate());
+        person.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
+        person.setInsuranceProgram(singleSelected.getInsuranceProgram());
+        person.setRegion(singleSelected.getRegion());
+
     }
 }

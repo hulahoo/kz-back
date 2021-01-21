@@ -16563,7 +16563,6 @@ create table TSADV_INSURED_PERSON (
     DELETED_BY varchar(50),
     --
     ATTACH_DATE date not null,
-    ADDRESS varchar(255) not null,
     STATUS_REQUEST_ID uuid not null,
     INSURANCE_CONTRACT_ID uuid not null,
     COMPANY_ID uuid not null,
@@ -16579,7 +16578,8 @@ create table TSADV_INSURED_PERSON (
     DOCUMENT_TYPE_ID uuid not null,
     DOCUMENT_NUMBER integer not null,
     REGION_ID uuid not null,
-    ADDRESS_ID uuid not null,
+    ADDRESS_ID uuid,
+    ADDRESS varchar(255),
     INSURANCE_PROGRAM varchar(500) not null,
     FILE_ID uuid,
     TYPE integer not null,

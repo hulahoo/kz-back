@@ -55,7 +55,7 @@
         <collection id="insuranceContractDc" class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
                     view="_local">
             <loader id="insuranceContractDl">
-                <query><![CDATA[select e from tsadv$InsuranceContract e]]></query>
+                <query><![CDATA[select e from tsadv$InsuranceContract e where e.company.id = :companyId]]></query>
             </loader>
         </collection>
         <collection id="relativeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType" view="_local">
@@ -63,11 +63,12 @@
                 <query><![CDATA[select e from tsadv$DicRelationshipType e]]></query>
             </loader>
         </collection>
-        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType" view="_local">
+        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
             <loader id="addressDl">
-                <query><![CDATA[select e from tsadv$DicAddressType e]]></query>
+                <query><![CDATA[select e from tsadv$Address e where e.personGroup.id = :personGroupId]]></query>
             </loader>
         </collection>
+
 
     </data>
     <dialogMode height="600"
@@ -93,12 +94,16 @@
                         <textField id="iinField" property="iin"/>
                         <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
                         <dateField id="birthdateField" property="birthdate"/>
-                        <lookupField id="documentTypeField" property="documentType"
-                                     optionsContainer="documentTypeDc"/>
+                        <pickerField id="documentTypeField" property="documentType">
+                            <actions>
+                                <action id="lookup" type="picker_lookup"/>
+                                <action id="clear" type="picker_clear"/>
+                            </actions>
+                        </pickerField>
                         <field property="documentNumber" id="documentNumberType"/>
                         <lookupField id="addressTypeField" property="addressType"
                                      optionsContainer="addressDc"/>
-                        <field id="addressField" property="address"/>
+                        <textArea rows="3" id="addressField" caption="" property="address"/>
                         <lookupField id="companyField" property="company"
                                      optionsContainer="companyDc"/>
                         <lookupField id="jobField"

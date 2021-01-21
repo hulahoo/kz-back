@@ -7,7 +7,10 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.tsadv.entity.tb.Attachment;
-import kz.uco.tsadv.modules.personal.dictionary.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
+import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
+import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
+import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -26,10 +29,6 @@ public class InsuredPerson extends StandardEntity {
     @NotNull
     @Column(name = "ATTACH_DATE", nullable = false)
     private Date attachDate;
-
-    @NotNull
-    @Column(name = "ADDRESS", nullable = false)
-    private String address;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STATUS_REQUEST_ID")
@@ -90,19 +89,20 @@ public class InsuredPerson extends StandardEntity {
     @NotNull
     private DicDocumentType documentType;
 
-    @Column(name = "DOCUMENT_NUMBER", nullable = false)
-    @NotNull
-    private Integer documentNumber;
+    @Column(name = "DOCUMENT_NUMBER")
+    private String documentNumber;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "REGION_ID")
     private DicRegion region;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDRESS_ID")
-    @NotNull
-    private DicAddressType addressType;
+    private Address addressType;
+
+    @Column(name = "ADDRESS")
+    private String address;
 
     @NotNull
     @Column(name = "INSURANCE_PROGRAM", nullable = false, length = 500)
@@ -131,20 +131,28 @@ public class InsuredPerson extends StandardEntity {
     @Column(name = "COMMENT", length = 500)
     private String comment;
 
+    public void setAddressType(Address addressType) {
+        this.addressType = addressType;
+    }
+
+    public Address getAddressType() {
+        return addressType;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
+    }
+
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
+
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public void setAddressType(DicAddressType addressType) {
-        this.addressType = addressType;
-    }
-
-    public DicAddressType getAddressType() {
-        return addressType;
     }
 
     public void setJob(JobGroup job) {
@@ -161,14 +169,6 @@ public class InsuredPerson extends StandardEntity {
 
     public DicDocumentType getDocumentType() {
         return documentType;
-    }
-
-    public void setDocumentNumber(Integer documentNumber) {
-        this.documentNumber = documentNumber;
-    }
-
-    public Integer getDocumentNumber() {
-        return documentNumber;
     }
 
     public void setSex(DicSex sex) {

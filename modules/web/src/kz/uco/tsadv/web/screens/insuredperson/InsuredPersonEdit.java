@@ -4,19 +4,18 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.entity.dictionary.DicSex;
+import kz.uco.base.entity.shared.Address;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.personal.model.AssignmentExt;
-import kz.uco.tsadv.modules.personal.model.InsuranceContract;
-import kz.uco.tsadv.modules.personal.model.InsuredPerson;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.modules.personal.model.*;
 
 import javax.inject.Inject;
 import java.util.Date;
@@ -46,9 +45,9 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Inject
     private TextField<String> iinField;
     @Inject
-    private Field<Integer> documentNumberType;
+    private Field<String> documentNumberType;
     @Inject
-    private LookupField<DicDocumentType> documentTypeField;
+    private PickerField<DicDocumentType> documentTypeField;
     @Inject
     private PickerField<PersonGroupExt> employeeField;
     @Inject
@@ -67,15 +66,55 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private DateField<Date> endDateField;
     @Inject
     private DateField<Date> attachDateField;
+    @Inject
+    private InstanceContainer<InsuredPerson> insuredPersonDc;
+    @Inject
+    private LookupField<Address> addressTypeField;
+    @Inject
+    private TextArea<String> addressField;
+    @Inject
+    private CollectionLoader<kz.uco.tsadv.modules.personal.model.Address> addressDl;
+    @Inject
+    private CollectionContainer<kz.uco.tsadv.modules.personal.model.Address> addressDc;
+    @Inject
+    private CollectionContainer<DicDocumentType> documentTypeDc;
+    @Inject
+    private CollectionLoader<DicDocumentType> documentTypeDl;
+    @Inject
+    private TextArea<String> insuranceProgramField;
+
+
+    @Subscribe
+    public void onBeforeShow(BeforeShowEvent event) {
+        insuranceContractDl.setParameter("companyId", insuredPersonDc.getItem().getCompany().getId());
+        addressDl.setParameter("personGroupId", insuredPersonDc.getItem().getEmployee().getId());
+//        documentTypeDl.setParameter("personGroupId", insuredPersonDc.getItem().getEmployee().getPersonDocuments());
+        if (employeeField.getValue() != null && relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY")){
+            if (addressDc.getItems().size() == 0){
+                addressTypeField.setRequired(false);
+                addressTypeField.setVisible(false);
+                addressField.setRequired(true);
+                addressField.setCaption("Домашний адрес");
+            }
+            if (employeeField.getValue().getPersonDocuments().size() == 0){
+                documentNumberType.setEditable(true);
+//                documentTypeDl.setParameter("personGroupId", null);
+            }
+        }
+    }
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
         if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode())) {
             checkRelationType(true);
             iinField.setValue(null);
+            iinField.setEditable(true);
             birthdateField.setValue(null);
+            birthdateField.setEditable(true);
             sexField.setValue(null);
+            sexField.setEditable(true);
             jobField.setValue(null);
+            jobField.setEditable(true);
             typeField.setValue(2);
             PersonGroupExt personGroupExt = employeeField.getValue();
             if (personGroupExt == null){
@@ -86,16 +125,19 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             }
         } else if (event.getValue() != null && "PRIMARY".equals(event.getValue().getCode())) {
             checkRelationType(false);
+            jobField.setRequired(true);
+            typeField.setValue(1);
             PersonGroupExt personGroupExt = employeeField.getValue();
             if (personGroupExt != null){
                 PersonExt person = personGroupExt.getPerson();
                 AssignmentExt assignment = personGroupExt.getCurrentAssignment();
-
+                firstNameField.setValue(person.getFirstName());
+                secondNameField.setValue(person.getLastName());
+                middleNameField.setValue(person.getMiddleName());
                 iinField.setValue(person.getNationalIdentifier());
                 birthdateField.setValue(person.getDateOfBirth());
                 sexField.setValue(person.getSex());
                 jobField.setValue(assignment.getJobGroup());
-                typeField.setValue(1);
             }else {
                 iinField.setValue(null);
                 birthdateField.setValue(null);
@@ -124,8 +166,30 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             iinField.setEditable(false);
             companyField.setEditable(false);
             assignDateField.setEditable(false);
+            employeeField.setEditable(false);
+            relativeField.setEditable(false);
+            documentNumberType.setEditable(false);
         } else if (event.getValue() != null && !(1 == event.getValue())){
 
+        }
+    }
+
+
+
+    @Subscribe("documentTypeField")
+    public void onDocumentTypeFieldValueChange(HasValue.ValueChangeEvent<DicDocumentType> event) {
+        if (event.getValue() != null){
+            PersonDocument document = dataManager.load(PersonDocument.class)
+                    .query("select e from tsadv$PersonDocument e " +
+                            " where e.documentType.id = :documentTypeId")
+                    .parameter("documentTypeId", event.getValue().getId())
+                    .view("_local")
+                    .list().stream().findFirst().orElse(null);
+            if (employeeField.getValue() != null &&
+                    document != null &&
+                    document.getDocumentType().getId().equals(event.getValue().getId())){
+                documentNumberType.setValue(document.getDocumentNumber());
+            }
         }
     }
 
@@ -146,19 +210,22 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     .list().stream().findFirst().orElse(null);
 
 
-            PersonExt person = event.getValue().getPerson();
-            assignDateField.setValue(person.getHireDate());
+            PersonExt person = employeeField.getValue().getPerson();
+
             companyField.setValue(company);
             if (relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY")){
                 AssignmentExt assignment = event.getValue().getCurrentAssignment();
-
+                assignDateField.setValue(person.getHireDate());
+                firstNameField.setValue(person.getFirstName());
+                secondNameField.setValue(person.getLastName());
+                middleNameField.setValue(person.getMiddleName());
                 iinField.setValue(person.getNationalIdentifier());
                 birthdateField.setValue(person.getDateOfBirth());
                 sexField.setValue(person.getSex());
                 jobField.setValue(assignment.getJobGroup());
-                typeField.setValue(1);
+
             }
-        }else {
+        } else {
                 iinField.setValue(null);
                 birthdateField.setValue(null);
                 sexField.setValue(null);
@@ -167,10 +234,22 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         }
     }
 
+    @Subscribe("companyField")
+    public void onCompanyFieldValueChange(HasValue.ValueChangeEvent<DicCompany> event) {
+        if (event.getValue() != null){
+
+        }
+    }
+
+
     @Subscribe("insuranceContractField")
     public void onInsuranceContractFieldValueChange(HasValue.ValueChangeEvent<InsuranceContract> event) {
-        startDateField.setValue(event.getValue().getAvailabilityPeriodFrom());
-        endDateField.setValue(event.getValue().getAvailabilityPeriodTo());
+        if (event.getValue() != null){
+            insuranceProgramField.setValue(event.getValue().getInsuranceProgram());
+            startDateField.setValue(event.getValue().getAvailabilityPeriodFrom());
+            endDateField.setValue(event.getValue().getAvailabilityPeriodTo());
+        }
+
     }
 
 }

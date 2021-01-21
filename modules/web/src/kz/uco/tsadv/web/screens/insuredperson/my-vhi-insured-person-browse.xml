@@ -10,27 +10,33 @@
             <view extends="_local">
                 <property name="company" view="_local"/>
                 <property name="employee" view="_local">
+                    <property name="personDocuments" view="_local"/>
+                    <property name="addresses" view="_local"/>
+                    <property name="list" view="_local">
+                        <property name="sex" view="_local"/>
+                        <property name="nationality" view="_local"/>
+                    </property>
                     <property name="assignments" view="_local">
                         <property name="organizationGroup" view="_local">
-                            <property name="organization" view="_minimal">
-                                <property name="startDate"/>
+                            <property name="list" view="_local">
                                 <property name="company" view="_local"/>
                             </property>
                             <property name="company" view="_local"/>
                         </property>
                         <property name="jobGroup" view="_local">
-                            <property name="job" view="_minimal">
-                                <property name="startDate"/>
-                            </property>
+                            <property name="list" view="_local"/>
                         </property>
+                        <property name="assignmentStatus" view="_local"/>
                     </property>
                 </property>
+                <property name="relative" view="_local"/>
                 <property name="statusRequest" view="_minimal"/>
-                <property name="insuranceContract" view="_minimal">
-                    <property name="startDate"/>
-                    <property name="expirationDate"/>
-                </property>
-
+                <property name="insuranceContract" view="_local"/>
+                <property name="sex" view="_local"/>
+                <property name="documentType" view="_local"/>
+                <property name="addressType" view="_local"/>
+                <property name="job" view="_local"/>
+                <property name="region" view="_local"/>
             </view>
             <loader id="insuredPersonsDl">
                 <query>
@@ -52,34 +58,26 @@
                     width="100%"
                     dataContainer="insuredPersonsDc">
             <actions>
-                <action id="joinFamilyMember" type="create"/>
+                <action id="joinVHI" type="create"/>
+                <action id="joinFamilyMember" trackSelection="true"/>
             </actions>
             <columns>
+                <column id="insuranceContract.contract"/>
+                <column id="insuranceContract.availabilityPeriodFrom"/>
+                <column id="insuranceContract.availabilityPeriodTo"/>
                 <column id="attachDate"/>
                 <column id="statusRequest"/>
-                <column id="insuranceContract"/>
-                <column id="firstName"/>
-                <column id="secondName"/>
-                <column id="middleName"/>
-                <column id="iin"/>
-                <column id="birthdate"/>
-                <column id="documentNumber"/>
-                <column id="insuranceProgram"/>
-                <column id="type"/>
-                <column id="amount"/>
                 <column id="totalAmount"/>
-                <column id="exclusionDate"/>
-                <column id="comment"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn" stylename="primary"
-                        action="insuredPersonsTable.joinFamilyMember" caption="msg://joinVHI"/>
+                        action="insuredPersonsTable.joinVHI" caption="msg://joinVHI"/>
                 <button id="createBtnFamilyMember"
                         stylename="primary"
                         caption="msg://JoinTheMICFamilyMember"
-                        invoke="joinFamilyMember"/>
+                        action="insuredPersonsTable.joinFamilyMember"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

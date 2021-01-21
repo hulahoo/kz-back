@@ -20116,16 +20116,16 @@
     <view class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
           extends="_local"
           name="personGroupExt-view">
+        <property name="personDocuments" view="_local"/>
         <property name="assignments" view="_local">
             <property name="organizationGroup" view="_local">
-                <property name="company" view="_local"/>
-                <property name="organization" view="_local">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
+                <property name="list" view="_local">
                     <property name="company" view="_local"/>
                 </property>
             </property>
-            <property name="jobGroup" view="_local"/>
+            <property name="jobGroup" view="_local">
+                <property name="list" view="_local"/>
+            </property>
             <property name="assignmentStatus" view="_local"/>
         </property>
         <property name="list"
@@ -21959,23 +21959,20 @@
     </view>
     <view entity="tsadv$InsuredPerson" name="insuredPerson-editView" extends="_local">
         <property name="statusRequest" view="_minimal"/>
-        <property name="insuranceContract" view="_local">
-            <property name="defaultAddress" view="_local"/>
-            <property name="defaultDocumentType" view="_local"/>
-        </property>
+        <property name="insuranceContract" view="_local"/>
         <property name="company" view="_minimal"/>
         <property name="employee" view="_local">
+            <property name="addresses" view="_local"/>
+            <property name="personExperience" view="_local"/>
             <property name="list" view="_local">
                 <property name="sex" view="_local"/>
             </property>
             <property name="assignments" view="_local">
                 <property name="organizationGroup" view="_local">
-                    <property name="organization" view="_local"/>
+                    <property name="list" view="_local"/>
                 </property>
                 <property name="jobGroup" view="_local">
-                    <property name="job" view="_minimal">
-                        <property name="startDate"/>
-                    </property>
+                    <property name="list" view="_local"/>
                 </property>
                 <property name="assignmentStatus" view="_local"/>
             </property>
@@ -21983,7 +21980,7 @@
         <property name="relative" view="_minimal"/>
         <property name="job" view="_minimal"/>
         <property name="sex" view="_minimal"/>
-        <property name="documentType" view="_minimal"/>
+        <property name="documentType" view="_local"/>
         <property name="region" view="_minimal"/>
         <property name="addressType" view="_minimal"/>
         <property name="file" view="_minimal"/>

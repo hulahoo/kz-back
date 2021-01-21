@@ -9,16 +9,25 @@
                     class="kz.uco.tsadv.modules.personal.model.InsuredPerson">
             <view extends="_local">
                 <property name="statusRequest" view="_minimal"/>
-                <property name="employee" view="_minimal"/>
+                <property name="employee" view="_local">
+                    <property name="personExperience" view="_local"/>
+                    <property name="list" view="_local"/>
+                    <property name="assignments" view="_local">
+                        <property name="organizationGroup" view="_local">
+                            <property name="list" view="_local"/>
+                        </property>
+                    </property>
+                </property>
                 <property name="relative" view="_minimal"/>
                 <property name="sex" view="_minimal"/>
-                <property name="documentType" view="_minimal"/>
+                <property name="documentType" view="_local"/>
                 <property name="insuranceContract" view="_local">
                     <property name="defaultDocumentType" view="_local"/>
                     <property name="defaultAddress" view="_local"/>
                 </property>
                 <property name="region" view="_minimal"/>
                 <property name="addressType" view="_minimal"/>
+                <property name="job" view="_local"/>
             </view>
             <loader id="insuredPersonsDl">
                 <query>

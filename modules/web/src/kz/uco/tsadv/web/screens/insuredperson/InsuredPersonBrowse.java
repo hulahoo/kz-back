@@ -8,9 +8,6 @@ import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
-import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
-import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
@@ -51,7 +48,7 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     public void onInsuredPersonsTableCreate(Action.ActionPerformedEvent event) {
         InsuredPerson insuredPerson = metadata.create(InsuredPerson.class);
         insuredPerson.setInsuranceContract(insuranceContract);
-        insuredPerson.setAddressType(insuranceContract.getDefaultAddress());
+//        insuredPerson.setAddressType(insuranceContract.getDefaultAddress());
         insuredPerson.setDocumentType(insuranceContract.getDefaultDocumentType());
         insuredPerson.setAttachDate(timeSource.currentTimestamp());
         insuredPerson.setCompany(insuranceContract.getCompany());
