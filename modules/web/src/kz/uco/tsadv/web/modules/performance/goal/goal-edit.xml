@@ -1,29 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://Goal.editor"
-        class="kz.uco.tsadv.web.modules.performance.goal.GoalEdit"
-        datasource="goalDs"
-        focusComponent="fieldGroup">
-    <dsContext>
-        <datasource id="goalDs"
-                    class="kz.uco.tsadv.modules.performance.model.Goal"
-                    view="goal.edit"/>
-    </dsContext>
+        focusComponent="form">
+    <data>
+        <instance id="goalDc"
+                  class="kz.uco.tsadv.modules.performance.model.Goal"
+                  view="goal.edit">
+            <loader id="goalDl"/>
+        </instance>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="windowActions"
             spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="goalDs">
+        <form id="form" dataContainer="goalDc">
             <column width="250px">
-                <field property="goalName"/>
-                <field property="library"/>
-                <field property="parentGoal"/>
-                <field property="startDate"/>
-                <field property="endDate"/>
-                <field property="successCriteria" rows="4"/>
+                <textField id="goalName" property="goalName"/>
+                <pickerField id="library" property="library">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <pickerField id="parentGoal" property="parentGoal">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <dateField id="startDate" property="startDate"/>
+                <dateField id="endDate" property="endDate"/>
+                <textArea id="successCriteria" property="successCriteria" rows="4"/>
             </column>
-        </fieldGroup>
+        </form>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

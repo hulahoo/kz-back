@@ -69,6 +69,17 @@ public class AssignedPerformancePlan extends StandardEntity {
     @Column(name = "ADJUSTED_SCORE")
     protected Double adjustedScore;
 
+    @Column(name = "MAX_BONUS_PERCENT")
+    protected Double maxBonusPercent;
+
+    public Double getMaxBonusPercent() {
+        return maxBonusPercent;
+    }
+
+    public void setMaxBonusPercent(Double maxBonusPercent) {
+        this.maxBonusPercent = maxBonusPercent;
+    }
+
     public Double getAdjustedScore() {
         return adjustedScore;
     }

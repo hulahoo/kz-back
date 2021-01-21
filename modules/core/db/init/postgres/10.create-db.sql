@@ -3654,6 +3654,7 @@ create table TSADV_JOB_GROUP (
     JOB_NAME_LANG5 varchar(1000),
     EMPLOYEE_CATEGORY_ID uuid,
     JOB_CATEGORY_ID uuid,
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^
@@ -5344,6 +5345,7 @@ create table TSADV_ASSIGNED_PERFORMANCE_PLAN (
     MAX_BONUS decimal(19, 2),
     ADJUSTED_BONUS double precision,
     ADJUSTED_SCORE double precision,
+    MAX_BONUS_PERCENT double precision,
     --
     primary key (ID)
 )^
