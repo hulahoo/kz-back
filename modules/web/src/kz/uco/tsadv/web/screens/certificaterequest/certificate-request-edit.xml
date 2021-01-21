@@ -8,7 +8,7 @@
                   class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
             <view extends="_local">
                 <property name="personGroup" view="personGroupExt-view"/>
-                <property name="cretificateType" view="_minimal"/>
+                <property name="certificateType" view="_minimal"/>
                 <property name="receivingType" view="_minimal"/>
                 <property name="language" view="_minimal"/>
                 <property name="file" view="_minimal"/>
@@ -58,7 +58,7 @@
                 <pickerField id="personGroupField" property="personGroup" editable="false"/>
                 <pickerField id="positionField" property="personGroup.currentAssignment.positionGroup" editable="false"/>
                 <pickerField id="departmentField" property="personGroup.currentAssignment.organizationGroup.organization" caption="mainMsg://department" editable="false"/>
-                <lookupPickerField id="cretificateTypeField" optionsContainer="certTypesDc" property="cretificateType"/>
+                <lookupPickerField id="cretificateTypeField" optionsContainer="certTypesDc" property="certificateType"/>
                 <lookupPickerField id="languageField" optionsContainer="languageDc" property="language"/>
                 <checkBox id="showSalaryField" property="showSalary"/>
                 <textField id="numberOfCopyField" property="numberOfCopy"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<services xmlns="http://schemas.haulmont.com/cuba/rest-services-v2-ext.xsd">
+<services xmlns="http://schemas.haulmont.com/cuba/rest-services-v2.xsd">
     <service name="tsadv_RecognitionRestService">
         <method name="sendQuestionAnswer">
             <param name="questionId"/>
@@ -323,26 +323,26 @@
         </method>
     </service>
     <service name="tsadv_RcApiService">
-        <method name="getCountries" allowAnonymous="true">
+        <method name="getCountries" anonymousAllowed="true">
             <param name="lang"/>
         </method>
-        <method name="getCities" allowAnonymous="true">
+        <method name="getCities" anonymousAllowed="true">
             <param name="country"/>
             <param name="lang"/>
         </method>
-        <method name="getRequisitionCategories" allowAnonymous="true">
+        <method name="getRequisitionCategories" anonymousAllowed="true">
             <param name="lang"/>
         </method>
-        <method name="getSex" allowAnonymous="true">
+        <method name="getSex" anonymousAllowed="true">
             <param name="lang"/>
         </method>
-        <method name="getNationalities" allowAnonymous="true">
+        <method name="getNationalities" anonymousAllowed="true">
             <param name="lang"/>
         </method>
-        <method name="getCitizenship" allowAnonymous="true">
+        <method name="getCitizenship" anonymousAllowed="true">
             <param name="lang"/>
         </method>
-        <method name="getMaritalStatuses" allowAnonymous="true">
+        <method name="getMaritalStatuses" anonymousAllowed="true">
             <param name="lang"/>
         </method>
         <method name="getEducationDegrees">
@@ -364,7 +364,7 @@
             <param name="competence"/>
             <param name="lang"/>
         </method>
-        <method name="getRequisitions" allowAnonymous="true">
+        <method name="getRequisitions" anonymousAllowed="true">
             <param name="code"/>
             <param name="job"/>
             <param name="country"/>
@@ -382,17 +382,17 @@
             <param name="startDate"/>
             <param name="lang"/>
         </method>
-        <method name="getRequisition" allowAnonymous="true">
+        <method name="getRequisition" anonymousAllowed="true">
             <param name="requisition"/>
             <param name="lang"/>
         </method>
-        <method name="registerUser" allowAnonymous="true">
+        <method name="registerUser" anonymousAllowed="true">
             <param name="user"/>
         </method>
         <method name="getUserPerson">
             <param name="lang"/>
         </method>
-        <method name="checkFullProfile" allowAnonymous="true">
+        <method name="checkFullProfile" anonymousAllowed="true">
             <param name="user"/>
         </method>
         <method name="uploadUserPhoto">
@@ -459,17 +459,17 @@
         <method name="deleteCompetence">
             <param name="id"/>
         </method>
-        <method name="getAllObjectModel" allowAnonymous="true"/>
-        <method name="getSources" allowAnonymous="true">
+        <method name="getAllObjectModel" anonymousAllowed="true"/>
+        <method name="getSources" anonymousAllowed="true">
             <param name="lang"/>
         </method>
-        <method name="getInterviewStatusEnum" allowAnonymous="true">
+        <method name="getInterviewStatusEnum" anonymousAllowed="true">
             <param name="lang"/>
         </method>
-        <method name="getOfferStatusEnum" allowAnonymous="true">
+        <method name="getOfferStatusEnum" anonymousAllowed="true">
             <param name="lang"/>
         </method>
-        <method name="getJobRequestStatusEnum" allowAnonymous="true">
+        <method name="getJobRequestStatusEnum" anonymousAllowed="true">
             <param name="lang"/>
         </method>
         <method name="getOffers">
@@ -625,7 +625,7 @@
             <param name="oldPassword"/>
             <param name="newPassword"/>
         </method>
-        <method name="restorePassword" allowAnonymous="true">
+        <method name="restorePassword" anonymousAllowed="true">
             <param name="userLogin"/>
         </method>
         <method name="getCourseTrainers">
@@ -656,4 +656,11 @@
         </method>
         <method name="countUsersPerformancePlans"/>
     </service>
+
+    <service name="tsadv_PortalHelperService">
+        <method name="getNewEntity">
+            <param name="entityName" type="java.lang.String"/>
+        </method>
+    </service>
+
 </services>

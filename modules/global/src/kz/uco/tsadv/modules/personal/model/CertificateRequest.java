@@ -1,16 +1,23 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.BeanLocator;
+import com.haulmont.cuba.core.global.TimeSource;
+import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicCertificateType;
 import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.service.EmployeeNumberService;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -18,6 +25,7 @@ import java.util.Date;
 @PublishEntityChangedEvents
 @Table(name = "TSADV_CERTIFICATE_REQUEST")
 @Entity(name = "tsadv_CertificateRequest")
+@NamePattern("%s|requestNumber")
 public class CertificateRequest extends StandardEntity {
     private static final long serialVersionUID = -2710520566356850633L;
 
@@ -39,8 +47,8 @@ public class CertificateRequest extends StandardEntity {
     @Lookup(type = LookupType.SCREEN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "CRETIFICATE_TYPE_ID")
-    private DicCertificateType cretificateType;
+    @JoinColumn(name = "CERTIFICATE_TYPE_ID")
+    private DicCertificateType certificateType;
 
     @Lookup(type = LookupType.SCREEN, actions = "lookup")
     @NotNull
@@ -121,12 +129,12 @@ public class CertificateRequest extends StandardEntity {
         this.receivingType = receivingType;
     }
 
-    public DicCertificateType getCretificateType() {
-        return cretificateType;
+    public DicCertificateType getCertificateType() {
+        return certificateType;
     }
 
-    public void setCretificateType(DicCertificateType cretificateType) {
-        this.cretificateType = cretificateType;
+    public void setCertificateType(DicCertificateType certificateType) {
+        this.certificateType = certificateType;
     }
 
     public PersonGroupExt getPersonGroup() {
@@ -151,5 +159,16 @@ public class CertificateRequest extends StandardEntity {
 
     public void setRequestNumber(Long requestNumber) {
         this.requestNumber = requestNumber;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        BeanLocator beanLocator = AppBeans.get(BeanLocator.NAME);
+
+        this.setRequestNumber(beanLocator.get(EmployeeNumberService.class).generateNextRequestNumber());
+        this.setStatus(beanLocator.get(CommonService.class).getEntity(DicRequestStatus.class, "DRAFT"));
+        this.setRequestDate(beanLocator.get(TimeSource.class).currentTimestamp());
+        this.setShowSalary(false);
+        this.setNumberOfCopy(1);
     }
 }

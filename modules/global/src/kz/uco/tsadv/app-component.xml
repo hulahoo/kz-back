@@ -10,7 +10,7 @@
         <property name="cuba.metadataConfig"
                   value="+kz/uco/tsadv/metadata.xml"/>
         <property name="cuba.viewsConfig"
-                  value="+kz/uco/tsadv/views.xml"/>
+                  value="+kz/uco/tsadv/views.xml kz/uco/tsadv/portal-views.xml"/>
     </module>
     <module blocks="core"
             dependsOn="global"

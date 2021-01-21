@@ -9,7 +9,7 @@
                     class="kz.uco.tsadv.modules.personal.model.CertificateRequest">
             <view extends="certificateRequest-view">
                 <property name="personGroup" view="personGroupExt.edit"/>
-                <property name="cretificateType" view="_local"/>
+                <property name="certificateType" view="_local"/>
                 <property name="receivingType" view="_local"/>
                 <property name="language" view="_local"/>
                 <property name="status" view="_local"/>
@@ -45,7 +45,7 @@
                 <column id="personGroup"/>
                 <column id="personGroup.currentAssignment.organizationGroup"/>
                 <column id="personGroup.currentAssignment.positionGroup"/>
-                <column id="cretificateType"/>
+                <column id="certificateType"/>
                 <column id="receivingType"/>
             </columns>
             <rowsCount/>

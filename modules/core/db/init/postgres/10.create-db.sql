@@ -8518,6 +8518,7 @@ create table TSADV_DIC_SCHEDULE_ELEMENT_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -10086,6 +10087,7 @@ create table TSADV_DIC_QUALITY (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -14645,10 +14647,7 @@ update BASE_PERSON set DTYPE = 'base$PersonExt' where DTYPE is null ^
 -- end BASE_PERSON
 -- begin BASE_ORGANIZATION
 alter table BASE_ORGANIZATION add column GROUP_ID uuid ^
--- alter table BASE_ORGANIZATION add column COMPANY_ID uuid ^
--- update BASE_ORGANIZATION set COMPANY_ID = <default_value> ^
--- alter table BASE_ORGANIZATION alter column COMPANY_ID set not null ^
-alter table BASE_ORGANIZATION add column COMPANY_ID uuid not null ^
+alter table BASE_ORGANIZATION add column COMPANY_ID uuid ^
 alter table BASE_ORGANIZATION add column COST_CENTER_ID uuid ^
 alter table BASE_ORGANIZATION add column PAYROLL_ID uuid ^
 alter table BASE_ORGANIZATION add column INTERNAL boolean ^
@@ -15238,7 +15237,7 @@ create table TSADV_CERTIFICATE_REQUEST (
     REQUEST_NUMBER bigint not null,
     REQUEST_DATE date not null,
     PERSON_GROUP_ID uuid not null,
-    CRETIFICATE_TYPE_ID uuid not null,
+    CERTIFICATE_TYPE_ID uuid not null,
     RECEIVING_TYPE_ID uuid not null,
     LANGUAGE_ID uuid not null,
     SHOW_SALARY boolean not null,
