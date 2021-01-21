@@ -136,7 +136,7 @@ public class CourseBrowse extends AbstractLookup {
 
     public void createEnrollments() {
         Map<String, Object> param = new HashMap<>();
-        param.put("courseId", coursesTable.getSingleSelected());
+        param.put("courseId", coursesTable.getSingleSelected().getId());
         openWindow("enrollments-for-course", WindowManager.OpenType.THIS_TAB, param);
     }
 

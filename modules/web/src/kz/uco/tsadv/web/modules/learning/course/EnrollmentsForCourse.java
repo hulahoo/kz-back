@@ -1,6 +1,8 @@
 package kz.uco.tsadv.web.modules.learning.course;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
@@ -35,6 +37,8 @@ public class EnrollmentsForCourse extends AbstractWindow {
     protected DataGrid<Enrollment> enrollmentsDataGrid;
     @Inject
     protected CommonService commonService;
+    @Inject
+    private DataManager dataManager;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -48,7 +52,7 @@ public class EnrollmentsForCourse extends AbstractWindow {
     }
 
     protected void setCaptionAsCourseName(Map<String, Object> params) {
-        Course course = (Course) params.get("courseId");
+        Course course = dataManager.load(LoadContext.create(Course.class).setId(params.get("courseId")));
         if (course != null && course.getName() != null) {
             int courseNameLengthInBreadCrumbsPath = 45;
             if (course.getName().length() > courseNameLengthInBreadCrumbsPath)
@@ -86,7 +90,7 @@ public class EnrollmentsForCourse extends AbstractWindow {
 
     public void onCreateButtonClick() {
         Enrollment enrollment = metadata.create(Enrollment.class);
-        enrollment.setCourse(param.get("courseId") != null ? (Course) param.get("courseId") : null);
+        enrollment.setCourse(param.get("courseId") != null ? dataManager.load(LoadContext.create(Course.class).setId(param.get("courseId"))) : null);
         enrollment.setDate(CommonUtils.getSystemDate());
         AbstractEditor abstractEditor = openEditor("tsadv$Enrollment.single.for.course.edit", enrollment,
                 WindowManager.OpenType.THIS_TAB, ParamsMap.of("create", null,

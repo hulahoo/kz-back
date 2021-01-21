@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <include file="kz/uco/tsadv/views/portal-views.xml" />
-<!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
-<!--          extends="procTask-frame"-->
-<!--          name="procTask-frame-extended">-->
-<!--        <property name="procActor">-->
-<!--            <property name="procRole"-->
-<!--                      view="_local">-->
-<!--            </property>-->
-<!--            <property name="user"-->
-<!--                      view="_minimal">-->
-<!--                <property name="firstName"/>-->
-<!--                <property name="lastName"/>-->
-<!--                <property name="middleName"/>-->
-<!--            </property>-->
-<!--        </property>-->
-<!--    </view>-->
+    <include file="kz/uco/tsadv/views/portal-views.xml"/>
+    <!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
+    <!--          extends="procTask-frame"-->
+    <!--          name="procTask-frame-extended">-->
+    <!--        <property name="procActor">-->
+    <!--            <property name="procRole"-->
+    <!--                      view="_local">-->
+    <!--            </property>-->
+    <!--            <property name="user"-->
+    <!--                      view="_minimal">-->
+    <!--                <property name="firstName"/>-->
+    <!--                <property name="lastName"/>-->
+    <!--                <property name="middleName"/>-->
+    <!--            </property>-->
+    <!--        </property>-->
+    <!--    </view>-->
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_minimal"
           name="assignment-for-talents">
@@ -5319,6 +5319,7 @@
         <property name="image"/>
         <property name="isSystemRecord"/>
         <property name="code"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.LearningObject"
           extends="_local"
