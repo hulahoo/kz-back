@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicEventTypeDs"
                     class="kz.uco.tsadv.entity.tb.dictionary.DicEventType"
-                    view="_local"/>
+                    view="dicEventType-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -34,6 +34,7 @@
                     <field property="code"/>
                     <field property="legacyId"/>
                     <field property="isSystemRecord"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

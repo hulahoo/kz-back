@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicBusinessTripTypesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicBusinessTripType"
-                         view="_local">
+                         view="dicBusinessTripType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicBusinessTripType e]]>
             </query>
@@ -42,6 +42,7 @@
                 <column id="timesheetCode"/>
                 <column id="timecardWeekendCode"/>
                 <column id="workingDay"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicBusinessTripTypesDs"/>
             <rowsCount/>

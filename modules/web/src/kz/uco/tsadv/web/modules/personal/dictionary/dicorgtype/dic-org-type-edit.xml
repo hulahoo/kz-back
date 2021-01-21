@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicOrgTypeDs"
                     class="kz.uco.base.entity.dictionary.DicOrgType"
-                    view="_local"/>
+                    view="dicOrgType-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -24,7 +24,8 @@
                 <field property="langValue5"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicEmployeeCategoryDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory"
-                    view="_local"/>
+                    view="dicEmployeeCategory-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -26,7 +26,8 @@
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="code"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

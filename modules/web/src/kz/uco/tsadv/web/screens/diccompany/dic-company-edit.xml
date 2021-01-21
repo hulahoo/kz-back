@@ -6,7 +6,7 @@
     <data>
         <instance id="dicCompanyDc"
                   class="kz.uco.tsadv.modules.personal.dictionary.DicCompany"
-                  view="_local">
+                  view="dicCompany-edit">
             <loader/>
         </instance>
     </data>
@@ -24,6 +24,7 @@
                     <textField id="langValue5Field" property="langValue5"/>
                     <dateField id="startDateField" property="startDate"/>
                     <dateField id="endDateField" property="endDate"/>
+                    <pickerField id="companyField" property="company"/>
                 </column>
             </form>
         </scrollBox>

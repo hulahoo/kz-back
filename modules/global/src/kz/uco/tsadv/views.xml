@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <include file="kz/uco/tsadv/views/portal-views.xml" />
-<!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
-<!--          extends="procTask-frame"-->
-<!--          name="procTask-frame-extended">-->
-<!--        <property name="procActor">-->
-<!--            <property name="procRole"-->
-<!--                      view="_local">-->
-<!--            </property>-->
-<!--            <property name="user"-->
-<!--                      view="_minimal">-->
-<!--                <property name="firstName"/>-->
-<!--                <property name="lastName"/>-->
-<!--                <property name="middleName"/>-->
-<!--            </property>-->
-<!--        </property>-->
-<!--    </view>-->
+    <include file="kz/uco/tsadv/views/portal-views.xml"/>
+    <!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
+    <!--          extends="procTask-frame"-->
+    <!--          name="procTask-frame-extended">-->
+    <!--        <property name="procActor">-->
+    <!--            <property name="procRole"-->
+    <!--                      view="_local">-->
+    <!--            </property>-->
+    <!--            <property name="user"-->
+    <!--                      view="_minimal">-->
+    <!--                <property name="firstName"/>-->
+    <!--                <property name="lastName"/>-->
+    <!--                <property name="middleName"/>-->
+    <!--            </property>-->
+    <!--        </property>-->
+    <!--    </view>-->
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_minimal"
           name="assignment-for-talents">
@@ -2585,20 +2585,19 @@
     <view class="kz.uco.tsadv.modules.personal.group.GradeGroup"
           extends="_local"
           name="gradeGroup.browse">
-        <property name="list"
-                  view="_minimal">
-            <property name="startDate"/>
-            <property name="endDate"/>
+        <property name="list" view="_minimal">
+            <property name="recognitionNominate"/>
             <property name="updatedBy"/>
-            <property name="recognitionNominate"/>
             <property name="legacyId"/>
-        </property>
-        <property name="grade"
-                  view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
+        </property>
+        <property name="company" view="_minimal"/>
+        <property name="grade" view="_minimal">
             <property name="recognitionNominate"/>
             <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
@@ -2648,81 +2647,65 @@
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.OrganizationGroupExt"
           name="organizationGroup.browse">
-        <property name="list"
-                  view="_minimal">
-            <property name="payroll"
-                      view="_minimal">
+        <property name="organizationName"/>
+        <property name="list" view="_minimal">
+            <property name="group" view="_minimal"/>
+            <property name="costCenter" view="_minimal"/>
+            <property name="payroll" view="_minimal">
                 <property name="langValue1"/>
             </property>
-            <property name="location"
-                      view="_minimal"/>
-            <property name="type"
-                      view="_minimal"/>
-            <property name="costCenter"
-                      view="_minimal"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="updatedBy"/>
-            <property name="organizationNameLang1"/>
-            <property name="organizationNameLang2"/>
-            <property name="organizationNameLang3"/>
-            <property name="organizationNameLang4"/>
-            <property name="organizationNameLang5"/>
-            <property name="legacyId"/>
             <property name="internal"/>
-            <property name="group"
-                      view="_minimal"/>
-        </property>
-        <property name="organization"
-                  view="_minimal">
-            <property name="payroll"
-                      view="_minimal"/>
+            <property name="updatedBy"/>
+            <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
             <property name="organizationNameLang1"/>
             <property name="organizationNameLang2"/>
             <property name="organizationNameLang3"/>
             <property name="organizationNameLang4"/>
             <property name="organizationNameLang5"/>
+            <property name="location" view="_minimal"/>
+            <property name="type" view="_minimal"/>
+        </property>
+        <property name="company" view="_minimal"/>
+        <property name="organization" view="_minimal">
+            <property name="group" view="_minimal"/>
+            <property name="payroll" view="_minimal"/>
             <property name="legacyId"/>
             <property name="startDate"/>
             <property name="endDate"/>
-            <property name="group"
-                      view="_minimal"/>
+            <property name="organizationNameLang1"/>
+            <property name="organizationNameLang2"/>
+            <property name="organizationNameLang3"/>
+            <property name="organizationNameLang4"/>
+            <property name="organizationNameLang5"/>
         </property>
         <property name="analytics" view="_local"/>
-        <property name="organizationName"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.JobGroup"
           extends="_local"
           name="jobGroup.browse">
-        <property name="list"
-                  view="_local">
-            <property name="updatedBy"/>
-            <property name="employeeCategory"
-                      view="_minimal">
-                <property name="langValue1"/>
+        <property name="jobNameDefault"/>
+        <property name="list" view="_local">
+            <property name="employeeCategory" view="_minimal">
+                <property name="legacyId"/>
                 <property name="description1"/>
-                <property name="langValue2"/>
                 <property name="description2"/>
-                <property name="langValue3"/>
                 <property name="description3"/>
-                <property name="langValue4"/>
                 <property name="description4"/>
-                <property name="langValue5"/>
                 <property name="description5"/>
                 <property name="startDate"/>
                 <property name="endDate"/>
                 <property name="code"/>
-                <property name="legacyId"/>
             </property>
+            <property name="updatedBy"/>
         </property>
-        <property name="cases"
-                  view="_minimal">
-        </property>
-        <property name="jobNameDefault"/>
         <property name="job" view="_minimal">
             <property name="employeeCategory" view="_minimal"/>
         </property>
+        <property name="cases" view="_minimal"/>
         <property name="employeeCategory" view="_minimal"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.OrderGroup"
           name="orderGroup-view">
@@ -2751,19 +2734,11 @@
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.Goal"
           name="goal.browse">
+        <!--todo - заменить DicUOM на общий справочник kz.uco.tsadv.global.dictionary.DicUnitOfMeasure-->
         <property name="goalName"/>
         <property name="successCriteria"/>
-        <property name="measureType"
-                  view="dicMeasureType.browse"/>
-        <property name="uom"
-                  view="dicUOM.browse"/>
-        <!--todo - заменить DicUOM на общий справочник kz.uco.tsadv.global.dictionary.DicUnitOfMeasure-->
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="library"
-                  view="_minimal">
-            <property name="category"
-                      view="_minimal">
+        <property name="library" view="_minimal">
+            <property name="category" view="_minimal">
                 <property name="langValue1"/>
                 <property name="langValue2"/>
                 <property name="langValue3"/>
@@ -2774,6 +2749,11 @@
                 <property name="code"/>
             </property>
         </property>
+        <property name="measureType" view="dicMeasureType.browse"/>
+        <property name="uom" view="dicUOM.browse"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="parentGoal" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.Goal"
           name="goal.edit">
@@ -2798,6 +2778,7 @@
         <property name="uom" view="dicUOM.browse"/>
         <property name="startDate"/>
         <property name="endDate"/>
+        <property name="parentGoal" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.dictionary.DicMeasureType"
           name="dicMeasureType.browse">
@@ -2826,6 +2807,7 @@
         <property name="langValue4"/>
         <property name="langValue5"/>
         <property name="isSystemRecord"/>
+        <property name="code"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
           name="assignedGoal.browse">
@@ -3329,66 +3311,25 @@
     <view class="kz.uco.tsadv.modules.personal.model.OrganizationExt"
           extends="_minimal"
           name="organization.edit">
-        <property name="payroll"
-                  view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-        <property name="company"
-                  view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-        <property name="group"
-                  view="_minimal">
-            <property name="list"
-                      view="_local">
-            </property>
-            <property name="cases"
-                      view="_minimal"/>
-            <property name="competenceElements"
-                      view="competenceElement-view">
-            </property>
-            <property name="hrUsers"
-                      view="organizationHrUser.view"/>
-            <property name="goals"
-                      view="organizationGroupGoalLink-view"/>
-            <property name="analytics"
-                      view="_minimal">
-                <property name="calendar"
-                          view="_minimal">
+        <property name="group" view="_minimal">
+            <property name="list" view="_local"/>
+            <property name="company" view="_minimal"/>
+            <property name="competenceElements" view="competenceElement-view"/>
+            <property name="hrUsers" view="organizationHrUser.view"/>
+            <property name="cases" view="_minimal"/>
+            <property name="goals" view="organizationGroupGoalLink-view"/>
+            <property name="analytics" view="_minimal">
+                <property name="calendar" view="_minimal">
                     <property name="calendar"/>
                 </property>
-                <property name="workingCondition"
-                          view="_minimal"/>
-                <property name="offset"
-                          view="_minimal">
-                    <property name="standardSchedule"
-                              view="_minimal">
+                <property name="workingCondition" view="_minimal"/>
+                <property name="offset" view="_minimal">
+                    <property name="standardSchedule" view="_minimal">
                         <property name="scheduleName"/>
                     </property>
                     <property name="offsetDisplay"/>
                 </property>
             </property>
-        </property>
-        <property name="location">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
         </property>
         <property name="costCenter">
             <property name="langValue1"/>
@@ -3399,8 +3340,25 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
-        <property name="type"
-                  view="_minimal">
+        <property name="payroll" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="location">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="type" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -3456,37 +3414,29 @@
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
           name="positionGroup.list">
-        <property name="list"
-                  view="_minimal">
-            <property name="managerFlag"/>
-            <property name="fte"/>
-            <property name="maxPersons"/>
-            <property name="jobGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="job.view">
+        <property name="list" view="_minimal">
+            <property name="costCenter" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="jobGroup" view="_minimal">
+                <property name="list" view="job.view">
                     <property name="legacyId"/>
                 </property>
-                <property name="job"
-                          view="_minimal">
+                <property name="job" view="_minimal">
                     <property name="legacyId"/>
                 </property>
             </property>
-            <property name="gradeGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
+            <property name="gradeGroup" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="legacyId"/>
                     <property name="startDate"/>
                     <property name="endDate"/>
+                </property>
+                <property name="grade" view="_minimal">
                     <property name="legacyId"/>
                 </property>
-                <property name="grade"
-                          view="_minimal">
-                    <property name="legacyId"/>
-                </property>
             </property>
-            <property name="location"
-                      view="_minimal">
+            <property name="payroll" view="_minimal">
                 <property name="langValue1"/>
                 <property name="langValue2"/>
                 <property name="langValue3"/>
@@ -3495,8 +3445,7 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
-            <property name="payroll"
-                      view="_minimal">
+            <property name="positionStatus" view="_minimal">
                 <property name="langValue1"/>
                 <property name="langValue2"/>
                 <property name="langValue3"/>
@@ -3505,36 +3454,32 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
-            <property name="positionStatus"
-                      view="_minimal">
-                <property name="langValue1"/>
-                <property name="langValue2"/>
-                <property name="langValue3"/>
-                <property name="langValue4"/>
-                <property name="langValue5"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
-            <property name="startDate"/>
-            <property name="endDate"/>
             <property name="gradeRule">
                 <property name="ruleName"/>
             </property>
-            <property name="legacyId"/>
-            <property name="organizationGroupExt"
-                      view="organizationGroup.browse">
-                <property name="updatedBy"/>
-                <property name="analytics"
-                          view="_minimal">
-                    <property name="calendar"
-                              view="_minimal">
+            <property name="organizationGroupExt" view="organizationGroup.browse">
+                <property name="company" view="_minimal"/>
+                <property name="costCenter" view="_minimal"/>
+                <property name="payroll" view="_minimal"/>
+                <property name="organizationNameLang1"/>
+                <property name="organizationNameLang2"/>
+                <property name="organizationNameLang3"/>
+                <property name="organizationNameLang4"/>
+                <property name="organizationNameLang5"/>
+                <property name="location" view="_minimal"/>
+                <property name="analytics" view="_minimal">
+                    <property name="calendar" view="_minimal">
                         <property name="calendar"/>
                         <property name="description"/>
                     </property>
                 </property>
+                <property name="updatedBy"/>
                 <property name="legacyId"/>
             </property>
             <property name="updatedBy"/>
+            <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
             <property name="positionFullNameLang1"/>
             <property name="positionFullNameLang2"/>
             <property name="positionFullNameLang3"/>
@@ -3545,69 +3490,62 @@
             <property name="positionNameLang3"/>
             <property name="positionNameLang4"/>
             <property name="positionNameLang5"/>
-            <property name="costCenter"
-                      view="_minimal">
-                <property name="legacyId"/>
+            <property name="location" view="_minimal">
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
             </property>
+            <property name="managerFlag"/>
+            <property name="fte"/>
+            <property name="maxPersons"/>
         </property>
-        <property name="position"
-                  view="_minimal">
-            <property name="jobGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
-                    <property name="legacyId"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
-                <property name="job"
-                          view="_minimal">
-                    <property name="legacyId"/>
-                </property>
-            </property>
-            <property name="gradeGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
-                    <property name="legacyId"/>
-                </property>
-                <property name="grade"
-                          view="_minimal">
-                    <property name="legacyId"/>
-                </property>
-            </property>
-            <property name="organizationGroupExt"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
-                    <property name="legacyId"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
-                <property name="organization"
-                          view="_minimal">
-                    <property name="legacyId"/>
-                </property>
-            </property>
-        </property>
-        <property name="vacationConditionsList"
-                  view="_minimal">
+        <property name="vacationConditionsList" view="_minimal">
             <property name="additionalDays"/>
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="writeHistory"/>
         </property>
-        <property name="analytics"
-                  view="_minimal">
-            <property name="calendar"
-                      view="_minimal">
+        <property name="analytics" view="_minimal">
+            <property name="calendar" view="_minimal">
                 <property name="calendar"/>
                 <property name="description"/>
             </property>
-            <property name="positionGroup"
-                      view="_minimal">
-                <property name="analytics"
-                          view="_minimal"/>
+            <property name="positionGroup" view="_minimal">
+                <property name="analytics" view="_minimal"/>
+            </property>
+        </property>
+        <property name="position" view="_minimal">
+            <property name="jobGroup" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="legacyId"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
+                <property name="job" view="_minimal">
+                    <property name="legacyId"/>
+                </property>
+            </property>
+            <property name="gradeGroup" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="legacyId"/>
+                </property>
+                <property name="grade" view="_minimal">
+                    <property name="legacyId"/>
+                </property>
+            </property>
+            <property name="organizationGroupExt" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="legacyId"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
+                <property name="organization" view="_minimal">
+                    <property name="legacyId"/>
+                </property>
             </property>
         </property>
     </view>
@@ -5381,6 +5319,7 @@
         <property name="image"/>
         <property name="isSystemRecord"/>
         <property name="code"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.LearningObject"
           extends="_local"
@@ -6277,6 +6216,7 @@
                 </property>
                 <property name="gradeGroup" view="_minimal">
                     <property name="list" view="_minimal">
+                        <property name="bonusPercent"/>
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
@@ -6295,6 +6235,7 @@
                         <property name="organizationNameLang4"/>
                         <property name="organizationNameLang5"/>
                     </property>
+                    <property name="company" view="_minimal"/>
                     <property name="organizationNameLang1"/>
                     <property name="organizationNameLang2"/>
                     <property name="organizationNameLang3"/>
@@ -8274,39 +8215,32 @@
     <view class="kz.uco.tsadv.modules.personal.model.Job"
           extends="_local"
           name="job.edit">
-        <property name="group"
-                  view="_minimal">
-            <property name="vacationConditionsList"
-                      view="_minimal"/>
-            <property name="cases"
-                      view="case.view"/>
-            <property name="goals"
-                      view="_minimal">
-                <property name="weight"/>
-                <property name="jobGroup"
-                          view="_minimal"/>
-                <property name="goal"
-                          view="_local"/>
+        <property name="group" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="jobNameLang1"/>
+                <property name="jobNameLang2"/>
+                <property name="jobNameLang3"/>
+                <property name="jobNameLang4"/>
+                <property name="jobNameLang5"/>
+                <property name="employeeCategory" view="_minimal"/>
+                <property name="legacyId"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="writeHistory"/>
             </property>
-            <property name="competence"
-                      view="_minimal">
-                <property name="competenceGroup"
-                          view="_minimal">
-                    <property name="competence"
-                              view="_minimal">
-                        <property name="scale"
-                                  view="_minimal"/>
+            <property name="competence" view="_minimal">
+                <property name="competenceGroup" view="_minimal">
+                    <property name="competence" view="_minimal">
                         <property name="competenceNameLang1"/>
                         <property name="competenceNameLang2"/>
                         <property name="competenceNameLang3"/>
                         <property name="competenceNameLang4"/>
                         <property name="competenceNameLang5"/>
-                        <property name="competeceType"
-                                  view="_minimal"/>
+                        <property name="competeceType" view="_minimal"/>
+                        <property name="scale" view="_minimal"/>
                     </property>
                 </property>
-                <property name="scaleLevel"
-                          view="_minimal">
+                <property name="scaleLevel" view="_minimal">
                     <property name="levelNameLang1"/>
                     <property name="levelNameLang2"/>
                     <property name="levelNameLang3"/>
@@ -8314,47 +8248,29 @@
                     <property name="levelNameLang5"/>
                 </property>
             </property>
-            <property name="list"
-                      view="_minimal">
-                <property name="jobNameLang1"/>
-                <property name="jobNameLang2"/>
-                <property name="jobNameLang3"/>
-                <property name="jobNameLang4"/>
-                <property name="jobNameLang5"/>
-                <property name="legacyId"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="writeHistory"/>
-                <property name="employeeCategory" view="_minimal"/>
+            <property name="vacationConditionsList" view="_minimal"/>
+            <property name="cases" view="case.view"/>
+            <property name="goals" view="_minimal">
+                <property name="weight"/>
+                <property name="jobGroup" view="_minimal"/>
+                <property name="goal" view="_local"/>
             </property>
+            <property name="company" view="_minimal"/>
             <property name="legacyId"/>
         </property>
-        <property name="infoSalaryMarket"
-                  view="_local"/>
-        <property name="employeeCategory"
-                  view="_minimal">
-            <property name="langValue1"/>
+        <property name="infoSalaryMarket" view="_local"/>
+        <property name="employeeCategory" view="_minimal">
+            <property name="legacyId"/>
             <property name="description1"/>
-            <property name="langValue2"/>
             <property name="description2"/>
-            <property name="langValue3"/>
             <property name="description3"/>
-            <property name="langValue4"/>
             <property name="description4"/>
-            <property name="langValue5"/>
             <property name="description5"/>
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="code"/>
-            <property name="legacyId"/>
         </property>
-        <property name="jobCategory"
-                  view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
+        <property name="jobCategory" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="code"/>
@@ -8363,8 +8279,14 @@
     <view class="kz.uco.tsadv.modules.personal.model.Grade"
           extends="_local"
           name="grade.edit">
-        <property name="group"
-                  view="_minimal"/>
+        <property name="group" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="bonusPercent"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+            <property name="company" view="_minimal"/>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"
           extends="_local"
@@ -9115,9 +9037,8 @@
     <view class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
           extends="_local"
           name="dicAbsenceType.view">
-        <property name="absenceCategory"
-                  view="_local">
-        </property>
+        <property name="absenceCategory" view="_local"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Agreement"
           extends="_local"
@@ -12710,8 +12631,8 @@
     <view class="kz.uco.tsadv.modules.personal.dictionary.DicAccommodationClass"
           extends="_local"
           name="dicAccommodationClass.all">
-        <property name="dicAccommodationType"
-                  view="_local"/>
+        <property name="dicAccommodationType" view="_local"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Punishment"
           extends="_local"
@@ -13631,9 +13552,7 @@
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
-                    <property name="grade" view="_local">
-                        <property name="gradeName"/>
-                    </property>
+                    <property name="grade" view="_local"/>
                 </property>
                 <property name="group"
                           view="_local"/>
@@ -15650,8 +15569,8 @@
     <view class="kz.uco.tsadv.modules.learning.dictionary.DicAttestationEvent"
           extends="_local"
           name="dicAttestationEvent.edit">
-        <property name="dicAttestationResult"
-                  view="_local"/>
+        <property name="dicAttestationResult" view="_local"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.PositionExt"
           extends="_minimal"
@@ -16288,8 +16207,8 @@
     <view class="kz.uco.tsadv.modules.learning.dictionary.DicEducationalEstablishment"
           extends="_local"
           name="dicEducationalEstablishment.edit">
-        <property name="educationalEstablishmentType"
-                  view="_local"/>
+        <property name="educationalEstablishmentType" view="_local"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.JobRequest"
           extends="_local"
@@ -19745,8 +19664,8 @@
     <view class="kz.uco.tsadv.entity.tb.PositionBpmRole"
           extends="_local"
           name="positionBpmRole-view">
-<!--        <property name="procModel"-->
-<!--                  view="_minimal"/>-->
+        <!--        <property name="procModel"-->
+        <!--                  view="_minimal"/>-->
         <property name="bpmRolesLink"
                   view="_minimal">
             <!--<property name="bpmRole"
@@ -21375,28 +21294,28 @@
         <property name="personGroup" view="personGroupExt.edit"/>
     </view>
     <view entity="base$PersonGroupExt" name="personGroupExt.edit" extends="_minimal">
-<!--        <property name="list"-->
-<!--                  view="_minimal">-->
-<!--            <property name="startDate"/>-->
-<!--            <property name="endDate"/>-->
-<!--            <property name="image"-->
-<!--                      view="_minimal"/>-->
-<!--            <property name="firstNameLatin"/>-->
-<!--            <property name="middleNameLatin"/>-->
-<!--            <property name="lastNameLatin"/>-->
-<!--        </property>-->
-<!--        <property name="person"-->
-<!--                  view="_minimal">-->
-<!--            <property name="image"-->
-<!--                      view="_minimal"/>-->
-<!--            <property name="startDate"/>-->
-<!--            <property name="endDate"/>-->
-<!--            <property name="firstNameLatin"/>-->
-<!--            <property name="middleNameLatin"/>-->
-<!--            <property name="lastNameLatin"/>-->
-<!--        </property>-->
-<!--        <property name="fioWithEmployeeNumber"/>-->
-<!--        <property name="personLatinFioWithEmployeeNumber"/>-->
+        <!--        <property name="list"-->
+        <!--                  view="_minimal">-->
+        <!--            <property name="startDate"/>-->
+        <!--            <property name="endDate"/>-->
+        <!--            <property name="image"-->
+        <!--                      view="_minimal"/>-->
+        <!--            <property name="firstNameLatin"/>-->
+        <!--            <property name="middleNameLatin"/>-->
+        <!--            <property name="lastNameLatin"/>-->
+        <!--        </property>-->
+        <!--        <property name="person"-->
+        <!--                  view="_minimal">-->
+        <!--            <property name="image"-->
+        <!--                      view="_minimal"/>-->
+        <!--            <property name="startDate"/>-->
+        <!--            <property name="endDate"/>-->
+        <!--            <property name="firstNameLatin"/>-->
+        <!--            <property name="middleNameLatin"/>-->
+        <!--            <property name="lastNameLatin"/>-->
+        <!--        </property>-->
+        <!--        <property name="fioWithEmployeeNumber"/>-->
+        <!--        <property name="personLatinFioWithEmployeeNumber"/>-->
     </view>
     <view entity="base$HierarchyElementExt"
           extends="_local"
@@ -21663,9 +21582,49 @@
             <property name="endDate"/>
         </property>
         <property name="personGroup" view="_minimal"/>
-        <property name="organizationGroup" view="_minimal"/>
-        <property name="positionGroup" view="_minimal"/>
-        <property name="jobGroup" view="_minimal"/>
+        <property name="organizationGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="organizationNameLang1"/>
+                <property name="organizationNameLang2"/>
+                <property name="organizationNameLang3"/>
+                <property name="organizationNameLang4"/>
+                <property name="organizationNameLang5"/>
+            </property>
+        </property>
+        <property name="positionGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="positionFullNameLang1"/>
+                <property name="positionFullNameLang2"/>
+                <property name="positionFullNameLang3"/>
+                <property name="positionFullNameLang4"/>
+                <property name="positionFullNameLang5"/>
+                <property name="positionNameLang1"/>
+                <property name="positionNameLang2"/>
+                <property name="positionNameLang3"/>
+                <property name="positionNameLang4"/>
+                <property name="positionNameLang5"/>
+            </property>
+        </property>
+        <property name="jobGroup" view="_minimal">
+            <property name="jobNameLang1"/>
+            <property name="jobNameLang2"/>
+            <property name="jobNameLang3"/>
+            <property name="jobNameLang4"/>
+            <property name="jobNameLang5"/>
+            <property name="list" view="_minimal">
+                <property name="jobNameLang1"/>
+                <property name="jobNameLang2"/>
+                <property name="jobNameLang3"/>
+                <property name="jobNameLang4"/>
+                <property name="jobNameLang5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
         <property name="parentGoal" view="_minimal">
             <property name="successCriteria"/>
             <property name="startDate"/>
@@ -21690,6 +21649,7 @@
             <property name="personExperience" view="_minimal"/>
         </property>
         <property name="assignedPerformancePlan" view="_minimal">
+            <property name="performancePlan" view="_minimal"/>
             <property name="assignedPerson" view="_minimal">
                 <property name="list" view="_minimal"/>
                 <property name="assignments" view="_minimal">
@@ -21895,4 +21855,774 @@
         </property>
         <property name="user" view="_minimal"/>
     </view>
+    <view entity="tsadv_CorrectionCoefficient" name="correctionCoefficient.edit" extends="_local">
+        <property name="performancePlan" view="_minimal"/>
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttestationResult" name="dicAttestationResult-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttestationResult" name="dicAttestationResult-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequiredEducation" name="dicRequiredEducation-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequiredEducation" name="dicRequiredEducation-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAbsenceCategory" name="dicAbsenceCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAbsenceCategory" name="dicAbsenceCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAcceptedAction" name="dicAcceptedAction-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAcceptedAction" name="dicAcceptedAction-view" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAccommodationType" name="dicAccommodationType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAccommodationType" name="dicAccommodationType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicActionLikeType" name="dicActionLikeType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicActionLikeType" name="dicActionLikeType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAdditionalEducation" name="dicAdditionalEducation-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAdditionalEducation" name="dicAdditionalEducation-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAddressType" name="dicAddressType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAddressType" name="dicAddressType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAgreementStatus" name="dicAgreementStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAgreementStatus" name="dicAgreementStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAssessmentStatus" name="dicAssessmentStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAssessmentStatus" name="dicAssessmentStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAssignmentCategory" name="dicAssignmentCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAssignmentCategory" name="dicAssignmentCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAssignmentStatus" name="dicAssignmentStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAssignmentStatus" name="dicAssignmentStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttachmentCategory" name="dicAttachmentCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttachmentCategory" name="dicAttachmentCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttestationInterviewResult" name="dicAttestationInterviewResult-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttestationInterviewResult" name="dicAttestationInterviewResult-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttestationInterviewResult" name="dicAttestationInterviewResult-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttestationType" name="dicAttestationType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttestationType" name="dicAttestationType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicBookCategory" name="dicBookCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicBookCategory" name="dicBookCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicBudgetItem" name="dicBudgetItem-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicBudgetItem" name="dicBudgetItem-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCompetenceType" name="dicCompetenceType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCompetenceType" name="dicCompetenceType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicContactPersonType" name="dicContactPersonType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicContactPersonType" name="dicContactPersonType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDeliveryAddress" name="dicDeliveryAddress-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDeliveryAddress" name="dicDeliveryAddress-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEducationalEstablishmentType" name="dicEducationalEstablishmentType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEducationalEstablishmentType" name="dicEducationalEstablishmentType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEquipmentReplacementReason" name="dicEquipmentReplacementReason-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEquipmentReplacementReason" name="dicEquipmentReplacementReason-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEventType" name="dicEventType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEventType" name="dicEventType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicFireResistance" name="dicFireResistance-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicFireResistance" name="dicFireResistance-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicFireSafetyCategory" name="dicFireSafetyCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicFireSafetyCategory" name="dicFireSafetyCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicIncidentType" name="dicIncidentType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicIncidentType" name="dicIncidentType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLanguage" name="dicLanguage-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLanguage" name="dicLanguage-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningFeedbackQuestionType" name="dicLearningFeedbackQuestionType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningFeedbackQuestionType" name="dicLearningFeedbackQuestionType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningHistoryStatus" name="dicLearningHistoryStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningHistoryStatus" name="dicLearningHistoryStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonQualificationType" name="dicPersonQualificationType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonQualificationType" name="dicPersonQualificationType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicProtectionEquipmentCondition" name="dicProtectionEquipmentCondition-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicProtectionEquipmentCondition" name="dicProtectionEquipmentCondition-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicProtectionEquipmentType" name="dicProtectionEquipmentType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicProtectionEquipmentType" name="dicProtectionEquipmentType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicQuality" name="dicQuality-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicQuality" name="dicQuality-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicQuestionnaireQuestionSection" name="dicQuestionnaireQuestionSection-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicQuestionnaireQuestionSection" name="dicQuestionnaireQuestionSection-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRateType" name="dicRateType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRateType" name="dicRateType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicReasonForLearning" name="dicReasonForLearning-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicReasonForLearning" name="dicReasonForLearning-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicSalaryChangeReason" name="dicSalaryChangeReason-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicSalaryChangeReason" name="dicSalaryChangeReason-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTalentProgramRequestStatus" name="dicTalentProgramRequestStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTalentProgramRequestStatus" name="dicTalentProgramRequestStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTalentProgramSkill" name="dicTalentProgramSkill-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTalentProgramSkill" name="dicTalentProgramSkill-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTalentProgramStep" name="dicTalentProgramStep-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTalentProgramStep" name="dicTalentProgramStep-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTrainingMethod" name="dicTrainingMethod-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTrainingMethod" name="dicTrainingMethod-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicUdo" name="dicUdo-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicUdo" name="dicUdo-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicWorkingCondition" name="dicWorkingCondition-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicWorkingCondition" name="dicWorkingCondition-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCertificationStatus" name="dicCertificationStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCertificationStatus" name="dicCertificationStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCourseCycle" name="dicCourseCycle-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCourseCycle" name="dicCourseCycle-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCourseFormat" name="dicCourseFormat-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCourseFormat" name="dicCourseFormat-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEducationDegree" name="dicEducationDegree-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEducationDegree" name="dicEducationDegree-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEducationLevel" name="dicEducationLevel-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEducationLevel" name="dicEducationLevel-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicInternshipRating" name="dicInternshipRating-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicInternshipRating" name="dicInternshipRating-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicInternshipType" name="dicInternshipType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicInternshipType" name="dicInternshipType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningCenter" name="dicLearningCenter-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningCenter" name="dicLearningCenter-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningForm" name="dicLearningForm-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningForm" name="dicLearningForm-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningObjectType" name="dicLearningObjectType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningObjectType" name="dicLearningObjectType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningType" name="dicLearningType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLearningType" name="dicLearningType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicGoalCategory" name="dicGoalCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicNineBoxLevel" name="dicNineBoxLevel-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicNineBoxLevel" name="dicNineBoxLevel-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOverallRating" name="dicOverallRating-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOverallRating" name="dicOverallRating-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicParticipantType" name="dicParticipantType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicParticipantType" name="dicParticipantType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPriority" name="dicPriority-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPriority" name="dicPriority-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicUOM" name="dicUOM-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAssignmentStatus" name="dicAssignmentStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttitudeToMilitary" name="dicAttitudeToMilitary-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicAttitudeToMilitary" name="dicAttitudeToMilitary-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicBusinessTripType" name="dicBusinessTripType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicBusinessTripType" name="dicBusinessTripType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCitizenship" name="dicCitizenship-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCitizenship" name="dicCitizenship-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicContractsType" name="dicContractsType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicContractsType" name="dicContractsType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCostCenter" name="dicCostCenter-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCostCenter" name="dicCostCenter-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCostType" name="dicCostType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCostType" name="dicCostType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$DicCountry" name="dicCountry-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$DicCountry" name="dicCountry-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$DicCurrency" name="dicCurrency-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$DicCurrency" name="dicCurrency-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDisabilityType" name="dicDisabilityType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDisabilityType" name="dicDisabilityType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDismissalReason" name="dicDismissalReason-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDismissalReason" name="dicDismissalReason-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDismissalStatus" name="dicDismissalStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDismissalStatus" name="dicDismissalStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDocumentType" name="dicDocumentType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDocumentType" name="dicDocumentType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDuration" name="dicDuration-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicDuration" name="dicDuration-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEmployeeCategory" name="dicEmployeeCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEmploymentType" name="dicEmploymentType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicEmploymentType" name="dicEmploymentType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicHiringMemberType" name="dicHiringMemberType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicHiringMemberType" name="dicHiringMemberType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicHrRole" name="dicHrRole-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicHrRole" name="dicHrRole-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicJobCategory" name="dicJobCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicJobCategory" name="dicJobCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLCArticle" name="dicLCArticle-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicLCArticle" name="dicLCArticle-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMaritalStatus" name="dicMaritalStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMaritalStatus" name="dicMaritalStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMeasureType" name="dicMeasureType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMilitaryDocumentType" name="dicMilitaryDocumentType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMilitaryDocumentType" name="dicMilitaryDocumentType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMilitaryRank" name="dicMilitaryRank-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMilitaryType" name="dicMilitaryType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMilitaryType" name="dicMilitaryType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMonth" name="dicMonth-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicMonth" name="dicMonth-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicNationality" name="dicNationality-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicNationality" name="dicNationality-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicNonresidentType" name="dicNonresidentType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicNonresidentType" name="dicNonresidentType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOfficerType" name="dicOfficerType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOfficerType" name="dicOfficerType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOperatorCode" name="dicOperatorCode-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOperatorCode" name="dicOperatorCode-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOrderReason" name="dicOrderReason-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOrderReason" name="dicOrderReason-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOrderStatus" name="dicOrderStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOrderStatus" name="dicOrderStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOrderType" name="dicOrderType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicOrderType" name="dicOrderType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$DicOrgType" name="dicOrgType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$DicOrgType" name="dicOrgType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPayroll" name="dicPayroll-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPayroll" name="dicPayroll-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonType" name="dicPersonType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonType" name="dicPersonType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPhoneType" name="dicPhoneType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPhoneType" name="dicPhoneType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPositionStatus" name="dicPositionStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPositionStatus" name="dicPositionStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPostingChannel" name="dicPostingChannel-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPostingChannel" name="dicPostingChannel-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPromotionType" name="dicPromotionType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPromotionType" name="dicPromotionType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPunishmentTypes" name="dicPunishmentTypes-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPunishmentTypes" name="dicPunishmentTypes-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicReadinessLevel" name="dicReadinessLevel-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicReadinessLevel" name="dicReadinessLevel-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRegisterCategory" name="dicRegisterCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRegisterCategory" name="dicRegisterCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRegisterGroup" name="dicRegisterGroup-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRegisterGroup" name="dicRegisterGroup-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRelationshipType" name="dicRelationshipType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRelationshipType" name="dicRelationshipType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRetirementType" name="dicRetirementType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRetirementType" name="dicRetirementType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicScheduleType" name="dicScheduleType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicScheduleType" name="dicScheduleType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicSuitabilityToMilitary" name="dicSuitabilityToMilitary-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicSuitabilityToMilitary" name="dicSuitabilityToMilitary-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTradeUnion" name="dicTradeUnion-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTradeUnion" name="dicTradeUnion-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTransportType" name="dicTransportType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTransportType" name="dicTransportType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTroopsStructure" name="dicTroopsStructure-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTroopsStructure" name="dicTroopsStructure-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTroopType" name="dicTroopType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicTroopType" name="dicTroopType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonActionType" name="dicPersonActionType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonActionType" name="dicPersonActionType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonAwardType" name="dicPersonAwardType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonAwardType" name="dicPersonAwardType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonPreferenceType" name="dicPersonPreferenceType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicPersonPreferenceType" name="dicPersonPreferenceType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicQuestionnaireType" name="dicQuestionnaireType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicQuestionnaireType" name="dicQuestionnaireType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicInterviewReason" name="dicInterviewReason-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicInterviewReason" name="dicInterviewReason-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicInterviewStatus" name="dicInterviewStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicInterviewStatus" name="dicInterviewStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicJobRequestReason" name="dicJobRequestReason-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicJobRequestReason" name="dicJobRequestReason-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicJobRequestStatus" name="dicJobRequestStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicJobRequestStatus" name="dicJobRequestStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRcQuestionAccessibility" name="dicRcQuestionAccessibility-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRcQuestionAccessibility" name="dicRcQuestionAccessibility-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRcQuestionCategory" name="dicRcQuestionCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRcQuestionCategory" name="dicRcQuestionCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRcQuestionnaireCategory" name="dicRcQuestionnaireCategory-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRcQuestionnaireCategory" name="dicRcQuestionnaireCategory-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRcQuestionnaireStatus" name="dicRcQuestionnaireStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRcQuestionnaireStatus" name="dicRcQuestionnaireStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequestStatus" name="dicRequestStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequestStatus" name="dicRequestStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequisitionAccessLevel" name="dicRequisitionAccessLevel-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequisitionAccessLevel" name="dicRequisitionAccessLevel-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequisitionStatus" name="dicRequisitionStatus-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequisitionStatus" name="dicRequisitionStatus-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequisitionType" name="dicRequisitionType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicRequisitionType" name="dicRequisitionType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicScheduleElementType" name="dicScheduleElementType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicScheduleElementType" name="dicScheduleElementType-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCompany" name="dicCompany-browse" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$DicCompany" name="dicCompany-edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+
 </views>

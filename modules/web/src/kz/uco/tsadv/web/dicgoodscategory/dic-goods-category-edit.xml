@@ -19,7 +19,8 @@
             <column width="450px">
                 <field property="code" width="200px"/>
                 <field property="parent" width="300px"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <fieldGroup id="fieldGroup" datasource="dicGoodsCategoryDs" border="visible"
                     caption="msg://kz.uco.base.entity.abstraction/AbstractDictionary.langValue"

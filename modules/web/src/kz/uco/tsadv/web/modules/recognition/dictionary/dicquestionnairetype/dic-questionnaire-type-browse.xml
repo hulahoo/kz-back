@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicQuestionnaireTypesDs"
                          class="kz.uco.tsadv.modules.recognition.dictionary.DicQuestionnaireType"
-                         view="_local">
+                         view="dicQuestionnaireType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicQuestionnaireType e]]>
             </query>
@@ -50,6 +50,7 @@
                 <column id="code"/>
                 <column id="legacyId"/>
                 <column id="isSystemRecord"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicQuestionnaireTypesDs"/>
             <rowsCount/>

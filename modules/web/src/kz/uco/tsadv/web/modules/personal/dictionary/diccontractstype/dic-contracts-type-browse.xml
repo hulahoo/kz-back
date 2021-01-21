@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicContractsTypesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicContractsType"
-                         view="_local">
+                         view="dicContractsType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicContractsType e]]>
             </query>
@@ -37,6 +37,7 @@
                 <column id="langValue3"/>
                 <column id="langValue4"/>
                 <column id="langValue5"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicContractsTypesDs"/>
             <rowsCount/>

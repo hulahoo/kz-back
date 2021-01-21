@@ -42,6 +42,7 @@
                     <action id="excel"/>
                 </actions>
                 <columns>
+                    <column id="company"/>
                     <column id="grade.gradeName"/>
                 </columns>
                 <rows datasource="gradeGroupsDs"/>

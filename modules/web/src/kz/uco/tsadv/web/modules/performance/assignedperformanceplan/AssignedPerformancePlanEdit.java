@@ -1,6 +1,7 @@
 package kz.uco.tsadv.web.modules.performance.assignedperformanceplan;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Action;
@@ -38,6 +39,8 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected Notifications notifications;
     @Inject
     protected MessageBundle messageBundle;
+    @Inject
+    protected DataManager dataManager;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -61,15 +64,27 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected void onAfterShow(AfterShowEvent event) {
         assignedGoalDc.addItemPropertyChangeListener(assignedGoalItemPropertyChangeEvent -> {
                     if ("weight".equals(assignedGoalItemPropertyChangeEvent.getProperty())
-                            || "result".equals(assignedGoalItemPropertyChangeEvent.getProperty())) {
+                            || "result".equals(assignedGoalItemPropertyChangeEvent.getProperty())
+                            || "goalString".equals(assignedGoalItemPropertyChangeEvent.getProperty())) {
                         double result = 0.0;
                         for (AssignedGoal item : assignedGoalDc.getItems()) {
                             result += (item.getResult() != null ? item.getResult() : 0) * item.getWeight() / 100;
                         }
                         assignedPerformancePlanDc.getItem().setResult(result);
+                        dataManager.commit(assignedGoalDc.getItem());
+                        assignedGoalDl.load();
                     }
                 }
         );
+        assignedPerformancePlanDc.addItemPropertyChangeListener(assignedPerformancePlanItemPropertyChangeEvent -> {
+            if ("extraPoint".equals(assignedPerformancePlanItemPropertyChangeEvent.getProperty())) {
+                assignedPerformancePlanDc.getItem().setFinalScore(
+                        ((double) (assignedPerformancePlanItemPropertyChangeEvent.getValue() != null
+                                ? assignedPerformancePlanItemPropertyChangeEvent.getValue()
+                                : 0.0))
+                                + assignedPerformancePlanDc.getItem().getKpiScore());
+            }
+        });
     }
 
 
@@ -110,9 +125,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                                 .getCurrentAssignment().getPositionGroup().getId()
                                 : null)))
                 .build().show()
-                .addAfterCloseListener(afterCloseEvent -> {
-                    assignedGoalDl.load();
-                });
+                .addAfterCloseListener(afterCloseEvent -> assignedGoalDl.load());
     }
 
     @Subscribe("popup.individual")
@@ -124,9 +137,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                     assignedGoal.setAssignedPerformancePlan(assignedPerformancePlanDc.getItem());
                     assignedGoal.setGoalType(AssignedGoalTypeEnum.INDIVIDUAL);
                 }).build().show()
-                .addAfterCloseListener(afterCloseEvent -> {
-                    assignedGoalDl.load();
-                });
+                .addAfterCloseListener(afterCloseEvent -> assignedGoalDl.load());
     }
 
     @Subscribe("popup.cascade")
@@ -145,9 +156,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                     assignedGoal.setAssignedPerformancePlan(assignedPerformancePlanDc.getItem());
                     assignedGoal.setGoalType(AssignedGoalTypeEnum.CASCADE);
                 }).build().show()
-                .addAfterCloseListener(afterCloseEvent -> {
-                    assignedGoalDl.load();
-                });
+                .addAfterCloseListener(afterCloseEvent -> assignedGoalDl.load());
     }
 
     @Subscribe("popup.library")

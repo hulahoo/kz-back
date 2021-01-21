@@ -33,6 +33,7 @@
                     <field property="isSystemRecord"/>
                     <field property="active"/>
                     <field property="order"/>
+                    <pickerField id="companyField" property="company"/>
                 </column>
             </form>
         </scrollBox>

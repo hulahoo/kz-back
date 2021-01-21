@@ -45,6 +45,16 @@
                 </query>
             </loader>
         </collection>
+        <collection id="correctionCoefDc"
+                    class="kz.uco.tsadv.modules.performance.model.CorrectionCoefficient"
+                    view="correctionCoefficient.edit">
+            <loader id="correctionCoefDl">
+                <query>
+                    <![CDATA[select e from tsadv_CorrectionCoefficient e
+                             where e.performancePlan = :performancePlan]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -62,14 +72,6 @@
                         <textField id="performancePlanNameKz" property="performancePlanNameKz"/>
                         <textField id="performancePlanNameEn" property="performancePlanNameEn"/>
                         <textField id="description" property="description"/>
-                        <pickerField id="administratorPersonGroup"
-                                     captionProperty="personFioWithEmployeeNumber"
-                                     property="administratorPersonGroup">
-                            <actions>
-                                <action id="lookup" type="picker_lookup"/>
-                                <action id="clear" type="picker_clear"/>
-                            </actions>
-                        </pickerField>
                         <dateField id="startDate" property="startDate"/>
                         <dateField id="endDate" property="endDate"/>
                         <dateField id="accessibilityStartDate" property="accessibilityStartDate" required="true"/>
@@ -95,6 +97,7 @@
                         <action id="edit" type="edit"/>
                         <action id="remove" type="remove"/>
                         <action id="massGoals" caption="msg://massGoals" trackSelection="true"/>
+                        <action id="calculateGZP" caption="msg://calculateGZP" trackSelection="true"/>
                     </actions>
                     <columns>
                         <column property="assignedPerson"/>
@@ -107,11 +110,13 @@
                         <column property="gzp"/>
                         <column property="status"/>
                     </columns>
+                    <rowsCount/>
                     <buttonsPanel id="assignedPerformancePlanBtnPnl">
                         <button id="assignedCreate" action="assignedPerformancePlanTable.create"/>
                         <button id="assignedEdit" action="assignedPerformancePlanTable.edit"/>
                         <button id="assignedRemove" action="assignedPerformancePlanTable.remove"/>
                         <button id="assignedMass" action="assignedPerformancePlanTable.massGoals"/>
+                        <button id="assignedCalculateGZP" action="assignedPerformancePlanTable.calculateGZP"/>
                     </buttonsPanel>
                 </dataGrid>
             </tab>
@@ -152,6 +157,27 @@
                         <button id="scoreSettingCreateBtn" action="scoreSettingTable.create"/>
                         <button id="scoreSettingEditBtn" action="scoreSettingTable.edit"/>
                         <button id="scoreSettingRemoveBtn" action="scoreSettingTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="correctionCoef" caption="msg://correctionCoef" visible="false"
+                 spacing="true" margin="true, false, fasle, false">
+                <table id="correctionCoefTable" width="100%" height="100%" dataContainer="correctionCoefDc">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="company"/>
+                        <column id="groupEfficiencyPercent"/>
+                        <column id="companyResult"/>
+                    </columns>
+                    <rows/>
+                    <buttonsPanel id="correctionCoefBtnPanel">
+                        <button id="correctionCoefCreateBtn" action="correctionCoefTable.create"/>
+                        <button id="correctionCoefEditBtn" action="correctionCoefTable.edit"/>
+                        <button id="correctionCoefRemoveBtn" action="correctionCoefTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>

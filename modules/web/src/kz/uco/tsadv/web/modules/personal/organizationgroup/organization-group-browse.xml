@@ -94,6 +94,7 @@
                             caption="msg://kz.uco.tsadv.modules.personal.model/Address"/>
                     <column id="organization.internal"
                             caption="msg://Internal"/>
+                    <column id="company"/>
                 </columns>
                 <rows datasource="organizationGroupsDs"/>
                 <rowsCount/>

@@ -19,6 +19,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.VacationConditions;
+import kz.uco.tsadv.service.AbsenceService;
 import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 
@@ -67,6 +68,10 @@ public class AbsenceRequestNewEdit extends StandardEditor<AbsenceRequest>
     @Inject
     private ProcessFormScreens processFormScreens;
     public static final String PROCESS_DEFINITION_KEY = "universalProcess";
+    @Inject
+    private DateField<Date> dateFromField;
+    @Inject
+    private AbsenceService absenceService;
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -104,6 +109,26 @@ public class AbsenceRequestNewEdit extends StandardEditor<AbsenceRequest>
             absenceRequestDc.getItem().setRequestNumber(employeeNumberService.generateNextRequestNumber());
             getScreenData().getDataContext().commit();
         }
+
+        absenceRequestDc.addItemPropertyChangeListener(e -> {
+            if ("dateTo".equals(e.getProperty()))
+                dateFromField.setRangeEnd(getEditedEntity().getDateTo());
+            if ("dateFrom".equals(e.getProperty()) || "dateTo".equals(e.getProperty()) || "type".equals(e.getProperty())) {
+                Date dateFrom;
+                Date dateTo;
+                DicAbsenceType absenceType;
+                if (((dateFrom = getEditedEntity().getDateFrom()) != null) &&
+                        ((dateTo = getEditedEntity().getDateTo()) != null) &&
+                        ((absenceType = getEditedEntity().getType()) != null)) {
+                    //getItem().setAbsenceDays((int) ((getItem().getDateTo().getTime() - getItem().getDateFrom().getTime()) / MILLIS_IN_DAY + 1));
+
+                    Integer absenceDays = VacationDurationType.WORK.equals(getVacationDurationType())
+                            ? absenceService.countBusinessDays(dateFrom, dateTo, absenceType, getEditedEntity().getAssignmentGroup())
+                            : absenceService.countAbsenceDays(dateFrom, dateTo, absenceType, getEditedEntity().getAssignmentGroup());
+                    getEditedEntity().setAbsenceDays(absenceDays);
+                }
+            }
+        });
     }
 
     protected boolean hasStatus(String requestStatus) {

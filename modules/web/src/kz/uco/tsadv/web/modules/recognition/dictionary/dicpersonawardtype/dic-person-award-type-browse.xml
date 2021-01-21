@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicPersonAwardTypesDs"
                          class="kz.uco.tsadv.modules.recognition.dictionary.DicPersonAwardType"
-                         view="_local">
+                         view="dicPersonAwardType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicPersonAwardType e]]>
             </query>
@@ -46,6 +46,7 @@
                 <column id="code"/>
                 <column id="legacyId"/>
                 <column id="isSystemRecord"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicPersonAwardTypesDs"/>
             <rowsCount/>

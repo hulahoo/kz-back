@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicMonthsDs"
                          class="kz.uco.tsadv.global.dictionary.DicMonth"
-                         view="_local">
+                         view="dicMonth-browse">
             <query>
                 <![CDATA[select e from tsadv$DicMonth e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicMonthsDs"/>
             <rowsCount/>

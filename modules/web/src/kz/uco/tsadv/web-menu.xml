@@ -31,6 +31,7 @@
             </menu>
             <item id="hrDicPersonTypes"
                   screen="tsadv$DicPersonType.browse"/>
+            <item id="base_DicCompany" screen="base_DicCompany.browse"/>
             <item id="hrDicSexes"
                   screen="base$DicSex.browse"/>
             <item id="hrDicHierarchyTypes"

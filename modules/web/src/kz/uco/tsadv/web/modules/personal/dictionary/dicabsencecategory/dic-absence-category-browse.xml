@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicAbsenceCategoriesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceCategory"
-                         view="_local">
+                         view="dicAbsenceCategory-browse">
             <query>
                 <![CDATA[select e from tsadv$DicAbsenceCategory e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAbsenceCategoriesDs"/>
             <rowsCount/>

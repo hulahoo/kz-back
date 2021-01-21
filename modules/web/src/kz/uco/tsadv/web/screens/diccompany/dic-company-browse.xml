@@ -7,7 +7,7 @@
     <data readOnly="true">
         <collection id="dicCompaniesDc"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicCompany"
-                    view="_local">
+                    view="dicCompany-browse">
             <loader id="dicCompaniesDl">
                 <query>
                     <![CDATA[select e from tsadv$DicCompany e]]>
@@ -41,6 +41,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

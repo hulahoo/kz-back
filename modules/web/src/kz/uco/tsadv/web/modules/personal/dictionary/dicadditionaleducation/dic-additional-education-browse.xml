@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicAdditionalEducationsDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicAdditionalEducation"
-                         view="_base">
+                         view="dicAdditionalEducation-browse">
             <query>
                 <![CDATA[select e from tsadv$DicAdditionalEducation e]]>
             </query>
@@ -39,6 +39,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAdditionalEducationsDs"/>
             <rowsCount/>

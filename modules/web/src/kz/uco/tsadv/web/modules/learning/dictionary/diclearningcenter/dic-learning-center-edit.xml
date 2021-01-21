@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicLearningCenterDs"
                     class="kz.uco.tsadv.modules.learning.dictionary.DicLearningCenter"
-                    view="_local"/>
+                    view="dicLearningCenter-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -28,7 +28,8 @@
                 <field property="endDate"/>
                 <field property="code"/>
                 <field property="address"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
 
         <chart:mapViewer id="map"

@@ -1,48 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://Goal.editor"
-        class="kz.uco.tsadv.web.modules.performance.goal.GoalEdit"
-        datasource="goalDs"
-        focusComponent="fieldGroup">
-    <dsContext>
-        <datasource id="goalDs"
-                    class="kz.uco.tsadv.modules.performance.model.Goal"
-                    view="goal.edit"/>
-        <collectionDatasource id="measureTypesDs"
-                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
-                              class="kz.uco.tsadv.modules.personal.dictionary.DicMeasureType"
-                              view="dicMeasureType.browse">
-            <query>
-                <![CDATA[select e from tsadv$DicMeasureType e]]>
-            </query>
-        </collectionDatasource>
-        <collectionDatasource id="uomsDs"
-                              datasourceClass="kz.uco.base.web.abstraction.AbstractDictionaryDatasource"
-                              class="kz.uco.tsadv.modules.performance.dictionary.DicUOM"
-                              view="dicUOM.browse">
-            <query>
-                <![CDATA[select e from tsadv$DicUOM e]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+        focusComponent="form">
+    <data>
+        <instance id="goalDc"
+                  class="kz.uco.tsadv.modules.performance.model.Goal"
+                  view="goal.edit">
+            <loader id="goalDl"/>
+        </instance>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="windowActions"
             spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="goalDs">
+        <form id="form" dataContainer="goalDc">
             <column width="250px">
-                <field property="goalName"/>
-                <field property="successCriteria"/>
-                <field property="library"/>
-                <field optionsDatasource="measureTypesDs"
-                       property="measureType"/>
-                <field optionsDatasource="uomsDs"
-                       property="uom"/>
-                <field property="startDate"/>
-                <field property="endDate"/>
+                <textField id="goalName" property="goalName"/>
+                <pickerField id="library" property="library">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <pickerField id="parentGoal" property="parentGoal">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <dateField id="startDate" property="startDate"/>
+                <dateField id="endDate" property="endDate"/>
+                <textArea id="successCriteria" property="successCriteria" rows="4"/>
             </column>
-        </fieldGroup>
+        </form>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>

@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicBusinessTripTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicBusinessTripType"
-                    view="_local"/>
+                    view="dicBusinessTripType-edit"/>
     </dsContext>
     <dialogMode forceDialog="true"
                 height="AUTO"
@@ -29,7 +29,8 @@
                 <field property="timesheetCode"/>
                 <field property="timecardWeekendCode"/>
                 <field property="workingDay"/>
-            </column>
+                <field property="company"/>
+                </column>
         </fieldGroup>
         <frame id="windowActions"
                screen="editWindowActions"/>

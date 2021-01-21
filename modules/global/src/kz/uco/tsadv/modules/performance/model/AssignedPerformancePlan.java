@@ -60,6 +60,50 @@ public class AssignedPerformancePlan extends StandardEntity {
     @Column(name = "FINAL_BONUS")
     protected Double finalBonus;
 
+    @Column(name = "MAX_BONUS")
+    protected BigDecimal maxBonus;
+
+    @Column(name = "ADJUSTED_BONUS")
+    protected Double adjustedBonus;
+
+    @Column(name = "ADJUSTED_SCORE")
+    protected Double adjustedScore;
+
+    @Column(name = "MAX_BONUS_PERCENT")
+    protected Double maxBonusPercent;
+
+    public Double getMaxBonusPercent() {
+        return maxBonusPercent;
+    }
+
+    public void setMaxBonusPercent(Double maxBonusPercent) {
+        this.maxBonusPercent = maxBonusPercent;
+    }
+
+    public Double getAdjustedScore() {
+        return adjustedScore;
+    }
+
+    public void setAdjustedScore(Double adjustedScore) {
+        this.adjustedScore = adjustedScore;
+    }
+
+    public Double getAdjustedBonus() {
+        return adjustedBonus;
+    }
+
+    public void setAdjustedBonus(Double adjustedBonus) {
+        this.adjustedBonus = adjustedBonus;
+    }
+
+    public BigDecimal getMaxBonus() {
+        return maxBonus;
+    }
+
+    public void setMaxBonus(BigDecimal maxBonus) {
+        this.maxBonus = maxBonus;
+    }
+
     public Double getFinalBonus() {
         return finalBonus;
     }

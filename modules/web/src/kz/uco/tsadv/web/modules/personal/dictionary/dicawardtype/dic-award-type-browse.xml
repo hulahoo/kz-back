@@ -41,6 +41,7 @@
                 <column id="langValue5"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicAwardTypesDs"/>
             <rowsCount/>

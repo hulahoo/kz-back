@@ -41,6 +41,7 @@
                         <field property="endDate"/>
                         <field property="useInBalance"/>
                         <field property="availableForTimecard"/>
+                        <field property="company"/>
                     </column>
                 </fieldGroup>
                 <fieldGroup id="fieldGroup2"

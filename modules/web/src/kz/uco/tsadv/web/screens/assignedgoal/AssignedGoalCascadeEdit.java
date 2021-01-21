@@ -70,13 +70,11 @@ public class AssignedGoalCascadeEdit extends StandardEditor<AssignedGoal> {
             if (assignedGoalValueChangeEvent != null && assignedGoalValueChangeEvent.getValue() != null) {
                 item.setGoalString(assignedGoalValueChangeEvent.getValue().getGoalString());
                 item.setWeight(assignedGoalValueChangeEvent.getValue().getWeight());
-                item.setResult(assignedGoalValueChangeEvent.getValue().getResult());
                 item.setSuccessCritetia(assignedGoalValueChangeEvent.getValue().getSuccessCritetia());
                 item.setCategory(assignedGoalValueChangeEvent.getValue().getCategory());
             } else {
                 item.setGoalString(null);
                 item.setWeight(null);
-                item.setResult(null);
                 item.setSuccessCritetia(null);
                 item.setCategory(null);
             }
@@ -114,8 +112,10 @@ public class AssignedGoalCascadeEdit extends StandardEditor<AssignedGoal> {
                 .query("select e from tsadv$AssignedGoal e " +
                         " join e.assignedPerformancePlan app " +
                         " where app.assignedPerson = :personGroup " +
+                        " and app.performancePlan = :performancePlan " +
                         " and :currentDate between app.startDate and app.endDate ")
                 .parameter("personGroup", personGroupExt)
+                .parameter("performancePlan", assignedGoalDc.getItem().getAssignedPerformancePlan().getPerformancePlan())
                 .parameter("currentDate", BaseCommonUtils.getSystemDate())
                 .view("assignedGoalForKpi")
                 .list();

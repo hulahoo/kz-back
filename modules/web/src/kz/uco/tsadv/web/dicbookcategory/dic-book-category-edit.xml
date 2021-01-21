@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicBookCategoryDs"
                     class="kz.uco.tsadv.entity.DicBookCategory"
-                    view="_local"/>
+                    view="dicBookCategory-edit"/>
     </dsContext>
     <dialogMode height="800"
                 resizable="true"
@@ -37,6 +37,7 @@
                     <field property="isSystemRecord"/>
                     <field property="active"/>
                     <field property="order"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

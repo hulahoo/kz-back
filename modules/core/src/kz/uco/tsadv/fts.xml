@@ -1843,5 +1843,8 @@
         <entity class="kz.uco.tsadv.modules.performance.model.ScoreSetting">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.CorrectionCoefficient">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

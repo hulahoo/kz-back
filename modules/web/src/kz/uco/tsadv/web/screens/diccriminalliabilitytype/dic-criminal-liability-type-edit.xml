@@ -36,6 +36,7 @@
                     <checkBox id="activeField" property="active"/>
                     <checkBox id="isDefaultField" property="isDefault"/>
                     <textField id="orderField" property="order"/>
+                    <pickerField id="companyField" property="company"/>
                 </column>
             </form>
         </scrollBox>

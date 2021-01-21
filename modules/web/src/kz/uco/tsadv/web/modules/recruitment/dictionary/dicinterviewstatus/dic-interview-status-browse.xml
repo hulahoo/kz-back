@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicInterviewStatusesDs"
                          class="kz.uco.tsadv.modules.recruitment.dictionary.DicInterviewStatus"
-                         view="_local">
+                         view="dicInterviewStatus-browse">
             <query>
                 <![CDATA[select e from tsadv$DicInterviewStatus e]]>
             </query>
@@ -38,6 +38,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="code"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicInterviewStatusesDs"/>
             <rowsCount/>

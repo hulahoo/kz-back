@@ -8,7 +8,7 @@
     <dsContext>
         <datasource id="dicTalentProgramRequestStatusDs"
                     class="kz.uco.tsadv.entity.DicTalentProgramRequestStatus"
-                    view="_local"/>
+                    view="dicTalentProgramRequestStatus-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -36,6 +36,7 @@
                     <field property="isSystemRecord"/>
                     <field property="active"/>
                     <field property="order"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

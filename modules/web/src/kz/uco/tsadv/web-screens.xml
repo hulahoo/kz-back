@@ -151,10 +151,6 @@
             template="/kz/uco/tsadv/web/modules/performance/goallibrary/goal-library-browse.xml"/>
     <screen id="tsadv$GoalLibrary.edit"
             template="/kz/uco/tsadv/web/modules/performance/goallibrary/goal-library-edit.xml"/>
-    <screen id="tsadv$Goal.browse"
-            template="/kz/uco/tsadv/web/modules/performance/goal/goal-browse.xml"/>
-    <screen id="tsadv$Goal.edit"
-            template="/kz/uco/tsadv/web/modules/performance/goal/goal-edit.xml"/>
     <screen id="tsadv$AssignedGoal.browse"
             template="/kz/uco/tsadv/web/modules/performance/assignedgoal/assigned-goal-browse.xml"/>
     <screen id="tsadv$AssignedGoal.edit"

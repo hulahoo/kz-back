@@ -29,6 +29,7 @@
                     <field property="langValue5"/>
                     <field property="startDate"/>
                     <field property="endDate"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

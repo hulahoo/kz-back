@@ -41,6 +41,7 @@
                 <column id="endDate"/>
                 <column id="transportType"
                         caption="msg://transportType"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicTransportClassesDs"/>
             <rowsCount/>

@@ -29,6 +29,7 @@
                     <field property="endDate"/>
                     <field caption="msg://transportType"
                            property="transportType"/>
+                    <field property="company"/>
                 </column>
             </fieldGroup>
         </scrollBox>

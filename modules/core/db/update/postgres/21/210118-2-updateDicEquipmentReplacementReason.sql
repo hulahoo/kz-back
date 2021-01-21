@@ -1,0 +1,1 @@
+alter table TSADV_DIC_EQUIPMENT_REPLACEMENT_REASON add column COMPANY_ID uuid ;

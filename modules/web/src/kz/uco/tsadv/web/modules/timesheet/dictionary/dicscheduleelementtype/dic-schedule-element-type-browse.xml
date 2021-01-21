@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicScheduleElementTypesDs"
                          class="kz.uco.tsadv.modules.timesheet.dictionary.DicScheduleElementType"
-                         view="_local">
+                         view="dicScheduleElementType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicScheduleElementType e]]>
             </query>
@@ -52,6 +52,7 @@
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="displayOnTimecardEditScreen"/>
+                <column id="company"/>
             </columns>
             <rows datasource="dicScheduleElementTypesDs"/>
             <rowsCount/>

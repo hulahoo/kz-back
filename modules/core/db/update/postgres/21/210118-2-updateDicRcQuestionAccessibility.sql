@@ -1,0 +1,1 @@
+alter table TSADV_DIC_RC_QUESTION_ACCESSIBILITY add column COMPANY_ID uuid ;

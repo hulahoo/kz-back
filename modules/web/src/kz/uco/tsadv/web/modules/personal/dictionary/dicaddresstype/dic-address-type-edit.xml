@@ -7,7 +7,7 @@
     <dsContext>
         <datasource id="dicAddressTypeDs"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType"
-                    view="_local"/>
+                    view="dicAddressType-edit"/>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -24,6 +24,7 @@
                 <field property="startDate"/>
                 <field property="endDate"/>
                 <field property="code"/>
+                <field property="company"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"
