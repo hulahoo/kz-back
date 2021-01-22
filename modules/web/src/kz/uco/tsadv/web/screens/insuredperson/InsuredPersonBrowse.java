@@ -2,19 +2,23 @@ package kz.uco.tsadv.web.screens.insuredperson;
 
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.gui.BulkEditors;
 import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.actions.list.BulkEditAction;
+import com.haulmont.cuba.gui.app.core.bulk.ColumnsMode;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
+import groovy.lang.MetaProperty;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
 
 import javax.inject.Inject;
-import java.util.Objects;
+import javax.inject.Named;
+import java.util.*;
 
 @UiController("tsadv$InsuredPerson.browse")
 @UiDescriptor("insured-person-browse.xml")
@@ -34,10 +38,51 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     protected InsuranceContract insuranceContract;
     @Inject
     private TimeSource timeSource;
+    @Named("insuredPersonsTable.bulkEdit")
+    private BulkEditAction insuredPersonBulkEdit;
+    @Inject
+    private BulkEditors bulkEditors;
+
 
     @Subscribe
     public void onInit(InitEvent event) {
+        insuredPersonBulkEdit.setOpenMode(OpenMode.DIALOG);
+//        insuredPersonBulkEdit.setIncludeProperties(Arrays.asList("attachDate", "statusRequest", "exclusionDate", "comment"));
+        insuredPersonBulkEdit.setColumnsMode(ColumnsMode.TWO_COLUMNS);
     }
+
+//    @Subscribe("insuredPersonsTable.bulkEdit")
+//    public void onInsuredPersonsTableBulkEdit(Action.ActionPerformedEvent event) {
+//        bulkEditors(metadata.getClassNN(InsuredPerson.class), insuredPersonsTable.getSelected(), getWindow().getFrameOwner())
+//                .withListComponent(insuredPersonsTable)
+//                .withIncludeProperties("attachDate", "statusRequest", "exclusionDate", "comment")
+//            .create()
+//                .show();
+//    }
+
+//    @Install(to = "insuredPersonsTable.bulkEdit", subject = "fieldSorter")
+//    private Map<MetaProperty, Integer> insuredPersonsTableBulkEditFieldSorter(List<MetaProperty> properties){
+//        Map<MetaProperty, Integer> result = new HashMap<>();
+//        for (MetaProperty property : properties){
+//            switch (property.getName()) {
+//                case "attachDate":
+//                    result.put(property, 0);
+//                    break;
+//                case "statusRequest":
+//                    result.put(property, 1);
+//                    break;
+//                case "exclusionDate":
+//                    result.put(property, 2);
+//                    break;
+//                case "comment":
+//                    result.put(property, 3);
+//                    break;
+//            }
+//        }
+//        return result;
+//    }
+
+
 
     public void setParameter(InsuranceContract contract) {
         insuranceContract = contract;
@@ -60,4 +105,6 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 .build()
                 .show();
     }
+
+
 }

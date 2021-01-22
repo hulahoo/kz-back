@@ -49,7 +49,15 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
     @Subscribe
     public void onInit(InitEvent event) {
+
+        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
+                "from tsadv$UserExt e " +
+                "where e.id = :uId").parameter("uId", userSession.getUser().getId())
+                .view("personGroupExt-view")
+                .list().stream().findFirst().orElse(null);
+
         insuredPersonsDl.setParameter("relativeType", RelativeType.EMPLOYEE);
+        insuredPersonsDl.setParameter("employeeId", personGroupExt != null ? personGroupExt.getId() : null);
     }
 
 

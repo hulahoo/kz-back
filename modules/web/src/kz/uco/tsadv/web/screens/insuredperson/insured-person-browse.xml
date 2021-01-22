@@ -55,10 +55,17 @@
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
                 <action id="excel" type="excel"/>
-                <action id="bulkEdit" type="bulkEdit"/>
+                <action id="bulkEdit" type="bulkEdit">
+                    <properties>
+                        <property name="openMode" value="DIALOG"/>
+                        <property name="includeProperties" value="attachDate, statusRequest, exclusionDate, comment"/>
+                        <property name="columnsMode" value="ONE_COLUMN"/>
+                    </properties>
+                </action>
             </actions>
             <columns>
                 <column id="relative"/>
+                <column id="attachDate" visible="false"/>
                 <column id="employee"/>
                 <column id="statusRequest"/>
                 <column id="firstName"/>

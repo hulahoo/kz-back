@@ -42,7 +42,14 @@
             </view>
             <loader id="insuredPersonsDl">
                 <query>
-                    <![CDATA[select e from tsadv$InsuredPerson e where e.type = :relativeType]]>
+                    <![CDATA[select e from tsadv$InsuredPerson e ]]>
+                        <condition>
+                            <and>
+                                <c:jpql>
+                                    <c:where> e.type = :relativeType and e.employee.id = :employeeId</c:where>
+                                </c:jpql>
+                            </and>
+                        </condition>
                 </query>
             </loader>
         </collection>

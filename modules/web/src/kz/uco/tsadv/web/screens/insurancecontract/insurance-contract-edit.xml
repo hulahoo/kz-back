@@ -58,7 +58,8 @@
                                    contextHelpText="msg://attachingAnEmployeeField.helpText"/>
                         <textField id="attachingFamilyField" property="attachingFamily"
                                    contextHelpText="msg://attachingFamilyField.helpText"/>
-                        <textField id="countOfFreeMembersField" property="countOfFreeMembers"/>
+                        <textField id="countOfFreeMembersField" property="countOfFreeMembers"
+                                   contextHelpText="msg://countOfFreeMembers"/>
                         <lookupField id="documentTypeField" property="defaultDocumentType" optionsContainer="documentTypeDc"/>
                         <lookupField id="defaultAddress" property="defaultAddress" optionsContainer="addressDc"/>
                     </column>

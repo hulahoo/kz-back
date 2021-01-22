@@ -1,6 +1,7 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.*;
@@ -11,7 +12,6 @@ import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
@@ -67,29 +67,19 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Inject
     private DateField<Date> endDateField;
     @Inject
-    private DateField<Date> attachDateField;
-    @Inject
     private InstanceContainer<InsuredPerson> insuredPersonDc;
     @Inject
     private LookupField<Address> addressTypeField;
     @Inject
     private TextArea<String> addressField;
     @Inject
-    private CollectionLoader<Address> addressDl;
-    @Inject
     private CollectionContainer<Address> addressDc;
-    @Inject
-    private CollectionContainer<DicDocumentType> documentTypeDc;
-    @Inject
-    private CollectionLoader<DicDocumentType> documentTypeDl;
     @Inject
     private TextArea<String> insuranceProgramField;
     @Inject
     private LookupField<DicRegion> regionField;
     @Inject
     private TextField<BigDecimal> totalAmountField;
-    @Inject
-    private CollectionContainer<InsuredPerson> insuredPersonsDc;
     @Inject
     private CollectionLoader<InsuredPerson> insuredPersonsDl;
     @Inject
@@ -99,21 +89,18 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Inject
     private ScreenBuilders screenBuilders;
     @Inject
-    private GroupTable<InsuredPerson> insuredPersonTable;
-    @Inject
-    private LookupField<DicVHIAttachmentStatus> statusRequestField;
-    @Inject
     private CommonService commonService;
+    @Inject
+    private TimeSource timeSource;
 
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
 
-
-//        insuranceContractDl.setParameter("companyId", null);
-
-//        PersonGroupExt item = insuredPersonDc.getItem().getEmployee();
-//        insuranceContractDl.setParameter("value",
-//                item.getCurrentAssignment().getOrganizationGroup().getOrganization().getCompany().getId());
+        if (relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY") && employeeField.getValue() != null){
+            familyMemberInformationGroup.setVisible(false);
+        }else if (relativeField.getValue() != null && !relativeField.getValue().getCode().equals("PRIMARY") && employeeField.getValue() != null){
+            familyMemberInformationGroup.setVisible(true);
+        }
     }
 
 
@@ -177,58 +164,36 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             insuranceContractDl.setParameter("companyId", insuredPersonDc.getItem().getCompany());
         }
         InsuredPerson item = dataManager.create(InsuredPerson.class);
-
+//        ScreenBuilders screenBuilders = AppBeans.get(ScreenBuilders.class);
         screenBuilders.editor(InsuredPerson.class, this)
+                .withScreenClass(InsuredPersonMemberEdit.class)
                 .editEntity(newInsuredPersonMember(item))
-                .withLaunchMode(OpenMode.DIALOG)
+//                .withLaunchMode(OpenMode.DIALOG)
                 .build()
                 .show()
-                .addAfterCloseListener(afterCloseEvent -> {
-                    employeeField.setVisible(true);
-                    iinField.setVisible(true);
-                    sexField.setVisible(true);
-                    documentTypeField.setVisible(true);
-                    companyField.setVisible(true);
-                    attachDateField.setVisible(true);
-                    firstNameField.setVisible(false);
-                    secondNameField.setVisible(false);
-                    middleNameField.setVisible(false);
-                    addressTypeField.setVisible(false);
-                    informationOnVHI.setVisible(true);
+                .addAfterCloseListener(afterCloseEvent ->{
+                    insuredPersonsDl.load();
                 });
     }
 
-    protected InsuredPerson newInsuredPersonMember(InsuredPerson insuredPerson){
-        DicVHIAttachmentStatus status = commonService.getEntity(DicVHIAttachmentStatus.class, "PRIMARY");
-        insuredPerson.setEmployee(employeeField.getValue());
-        insuredPerson.setCompany(companyField.getValue());
-        employeeField.setVisible(false);
-        firstNameField.setVisible(true);
-        secondNameField.setVisible(true);
-        middleNameField.setVisible(true);
-        addressTypeField.setVisible(false);
-        addressField.setRequired(true);
-        assignDateField.setVisible(false);
-        insuranceContractField.setValue(insuranceContractField.getValue());
-        insuranceContractField.setVisible(false);
-        endDateField.setValue(insuranceContractField.getValue().getAvailabilityPeriodFrom());
-        startDateField.setValue(insuranceContractField.getValue().getAvailabilityPeriodTo());
-        endDateField.setVisible(false);
-        sexField.setVisible(false);
-        statusRequestField.setValue(status);
-        statusRequestField.setVisible(false);
-        addressField.setCaption("Домашний адрес");
-        companyField.setVisible(false);
-        typeField.setValue(RelativeType.MEMBER);
-        informationOnVHI.setVisible(false);
-        return insuredPerson;
+    protected InsuredPerson newInsuredPersonMember(InsuredPerson item){
+        DicVHIAttachmentStatus status = commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT");
+        item.setEmployee(employeeField.getValue());
+        item.setCompany(companyField.getValue());
+        Date today = timeSource.currentTimestamp();
+        item.setAttachDate(today);
+        item.setInsuranceContract(insuranceContractField.getValue());
+        item.setInsuranceProgram(insuranceProgramField.getValue());
+        item.setTotalAmount(new BigDecimal(0));
+        item.setStatusRequest(status);
+        item.setType(RelativeType.MEMBER);
+        return item;
     }
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
         if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode())){
             totalAmountField.setValue(new BigDecimal(0));
-//            typeField.setValue(RelativeType.MEMBER);
             addressTypeField.setEditable(true);
             addressField.setEditable(true);
 //            documentNumberField.setEditable(true);
@@ -299,20 +264,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 familyMemberInformationGroup.setVisible(false);
             }
         }
-//        boolean isEmployee = type == RelativeType.EMPLOYEE;
-//        addressTypeField.setEditable(!isEmployee);
-//        addressField.setEditable(!isEmployee);
-//        documentNumberField.setEditable(!isEmployee);
-//        documentTypeField.setEditable(!isEmployee);
-//        insuranceContractField.setEditable(!isEmployee);
-//        regionField.setEditable(!isEmployee);
-//        totalAmountField.setVisible(!isEmployee);
-
-//        if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode())) {
-//            isEmployeeRelativeAndEmployeeNotNull(RelativeType.EMPLOYEE, null);
-//        } else if (event.getValue() != null && "PRIMARY".equals(event.getValue().getCode())) {
-//            isEmployeeRelativeAndEmployeeNotNull(RelativeType.MEMBER, null);
-//        }
     }
 
     @Subscribe("documentTypeField")
@@ -410,11 +361,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         }else {
             insuranceContractDl.setParameter("companyId", null);
         }
-//        if (event.getValue() != null){
-//            insuranceContractDl.setParameter("companyId", event.getValue().getId());
-//        } else {
-//            insuranceContractDl.setParameter("companyId", null);
-//        }
     }
 
 
