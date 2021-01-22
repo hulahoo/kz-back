@@ -90,6 +90,17 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     }
 
     @Subscribe
+    protected void onInit(InitEvent event) {
+        assignedPerformancePlanTable.addRowStyleProvider(assignedPerformancePlan -> {
+            if (assignedPerformancePlan.getMaxBonusPercent() != null) {
+                return "orange-day";
+            }
+            return null;
+        });
+    }
+
+
+    @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
         if (PersistenceHelper.isNew(performancePlanDc.getItem())) {
             visibleTab(false);
@@ -119,18 +130,11 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
         Date accessibilityStartDate = performancePlanDc.getItem().getAccessibilityStartDate();
         Date startDate = performancePlanDc.getItem().getStartDate();
-        Date accessibilityEndDate = performancePlanDc.getItem().getAccessibilityEndDate();
-        Date endDate = performancePlanDc.getItem().getEndDate();
         if (accessibilityStartDate != null && startDate != null && accessibilityStartDate.before(startDate)) {
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
             event.preventCommit();
         }
-//        if (accessibilityEndDate != null && endDate != null && accessibilityEndDate.after(endDate)) {
-//            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-//                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
-//            event.preventCommit();
-//        }
     }
 
     @Subscribe("instructionTable.create")
@@ -183,15 +187,6 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         }
     }
 
-//    @Subscribe("endDate")
-//    protected void onEndDateValueChange(HasValue.ValueChangeEvent<Date> event) {
-//        Date accessibilityEndDate = performancePlanDc.getItem().getAccessibilityEndDate();
-//        if (accessibilityEndDate != null && event.getValue() != null && accessibilityEndDate.after(event.getValue())) {
-//            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-//                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
-//        }
-//    }
-
     @Subscribe("accessibilityStartDate")
     protected void onAccessibilityStartDateValueChange(HasValue.ValueChangeEvent<Date> event) {
         Date startDate = performancePlanDc.getItem().getStartDate();
@@ -201,15 +196,6 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     .withCaption(messageBundle.getMessage("accessStartDateNotBeEarlier")).show();
         }
     }
-
-//    @Subscribe("accessibilityEndDate")
-//    protected void onAccessibilityEndDateValueChange(HasValue.ValueChangeEvent<Date> event) {
-//        Date endDate = performancePlanDc.getItem().getEndDate();
-//        if (endDate != null && event.getValue() != null && event.getValue().after(endDate)) {
-//            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-//                    .withCaption(messageBundle.getMessage("accessEndDateNotBeAfter")).show();
-//        }
-//    }
 
     @Subscribe("assignedPerformancePlanTable.massGoals")
     protected void onAssignedPerformancePlanTableMassGoals(Action.ActionPerformedEvent event) {
@@ -306,7 +292,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                         : null,
                                 performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));
                 assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
-                        BigDecimal.valueOf(currentAssignment != null
+                        BigDecimal.valueOf(assignedPerformancePlan.getMaxBonusPercent() != null
+                                ? assignedPerformancePlan.getMaxBonusPercent()
+                                : currentAssignment != null
                                 && currentAssignment.getGradeGroup() != null
                                 && currentAssignment.getGradeGroup().getGrade() != null
                                 ? currentAssignment.getGradeGroup().getGrade().getBonusPercent()

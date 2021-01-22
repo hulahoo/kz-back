@@ -44,6 +44,7 @@
                 <textField id="kpiScore" property="kpiScore"/>
                 <textField id="extraPoint" property="extraPoint"/>
                 <textField id="finalScore" property="finalScore"/>
+                <textField id="maxBonusPercent" property="maxBonusPercent"/>
             </column>
             <column id="column2" width="300px">
                 <lookupField id="status" property="status"/>

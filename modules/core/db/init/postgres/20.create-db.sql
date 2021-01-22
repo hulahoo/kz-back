@@ -5393,8 +5393,10 @@ create index IDX_TSADV_LMS_SLIDER_IMAGE_SLIDER on TSADV_LMS_SLIDER_IMAGE (SLIDER
 -- begin TSADV_JOB_GROUP
                                                                                                                                    alter table TSADV_JOB_GROUP add constraint FK_TSADV_JOB_GROUP_EMPLOYEE_CATEGORY foreign key (EMPLOYEE_CATEGORY_ID) references TSADV_DIC_EMPLOYEE_CATEGORY(ID)^
 alter table TSADV_JOB_GROUP add constraint FK_TSADV_JOB_GROUP_JOB_CATEGORY foreign key (JOB_CATEGORY_ID) references TSADV_DIC_JOB_CATEGORY(ID)^
+alter table TSADV_JOB_GROUP add constraint FK_TSADV_JOB_GROUP_COMPANY foreign key (COMPANY_ID) references BASE_DIC_COMPANY(ID)^
 create index IDX_TSADV_JOB_GROUP_EMPLOYEE_CATEGORY on TSADV_JOB_GROUP (EMPLOYEE_CATEGORY_ID)^
 create index IDX_TSADV_JOB_GROUP_JOB_CATEGORY on TSADV_JOB_GROUP (JOB_CATEGORY_ID)^
+create index IDX_TSADV_JOB_GROUP_COMPANY on TSADV_JOB_GROUP (COMPANY_ID)^
 -- end TSADV_JOB_GROUP
 
 -- begin TSADV_APP_PROPERTY_ENTITY_DESCRIPTION

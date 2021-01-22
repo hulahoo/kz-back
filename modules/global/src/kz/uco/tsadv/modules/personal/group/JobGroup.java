@@ -12,6 +12,7 @@ import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.AbstractGroup;
 import kz.uco.base.entity.abstraction.IEntityGroup;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory;
 import kz.uco.tsadv.modules.personal.dictionary.DicJobCategory;
@@ -99,6 +100,18 @@ public class JobGroup extends AbstractGroup implements IEntityGroup<Job> {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(DeletePolicy.DENY)
     private DicJobCategory jobCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    protected DicCompany company;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
 
     public DicJobCategory getJobCategory() {
         return jobCategory;

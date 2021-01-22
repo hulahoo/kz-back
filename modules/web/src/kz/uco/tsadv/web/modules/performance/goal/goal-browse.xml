@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://Goal.browser"
-        class="kz.uco.tsadv.web.modules.performance.goal.GoalBrowse"
         focusComponent="goalsTable"
-        lookupComponent="goalsTable">
-    <dsContext>
-        <groupDatasource id="goalsDs"
-                         class="kz.uco.tsadv.modules.performance.model.Goal"
-                         view="goal.browse">
-            <query>
-                <![CDATA[select e from tsadv$Goal e]]>
-            </query>
-        </groupDatasource>
-    </dsContext>
+        messagesPack="kz.uco.tsadv.web.modules.performance.goal">
+    <data>
+        <collection id="goalsDc"
+                    class="kz.uco.tsadv.modules.performance.model.Goal"
+                    view="goal.browse">
+            <loader id="goalsDl">
+                <query>
+                    <![CDATA[select e from tsadv$Goal e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="goalsTable"
             spacing="true">
         <filter id="filter"
                 applyTo="goalsTable"
-                datasource="goalsDs">
+                dataLoader="goalsDl">
             <properties include=".*"/>
         </filter>
         <groupTable id="goalsTable"
-                    width="100%">
+                    width="100%"
+                    dataContainer="goalsDc">
             <actions>
-                <action id="create"/>
-                <action id="edit"/>
-                <action id="remove"/>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
             </actions>
             <columns>
                 <column id="goalName"/>
@@ -38,7 +40,6 @@
                 <column id="endDate"/>
                 <column id="successCriteria"/>
             </columns>
-            <rows datasource="goalsDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">

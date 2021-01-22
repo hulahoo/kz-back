@@ -18,15 +18,6 @@
                 </query>
             </loader>
         </collection>
-        <collection id="goalDc"
-                    class="kz.uco.tsadv.modules.performance.model.Goal"
-                    view="goal.edit">
-            <loader id="goalDl">
-                <query>
-                    <![CDATA[select e from tsadv$Goal e where e in :goalList]]>
-                </query>
-            </loader>
-        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -38,10 +29,14 @@
                         <lookupField id="goalLibraryField" property="goalLibrary"
                                      required="true"
                                      optionsContainer="goalLibraryDc"/>
-                        <lookupField id="parentGoalField" property="goal"
+                        <pickerField id="parentGoalField" property="goal"
                                      caption="msg://libraryGoals"
-                                     optionsContainer="goalDc"
-                                     required="true"/>
+                                     required="true">
+                            <actions>
+                                <action id="lookup" type="picker_lookup"/>
+                                <action id="clear" type="picker_clear"/>
+                            </actions>
+                        </pickerField>
                         <textField id="weightField" property="weight" required="true"/>
                         <textField id="resultField" property="result"/>
                     </column>
