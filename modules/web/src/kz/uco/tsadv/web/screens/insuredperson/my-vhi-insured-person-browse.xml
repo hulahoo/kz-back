@@ -31,7 +31,9 @@
                 </property>
                 <property name="relative" view="_local"/>
                 <property name="statusRequest" view="_minimal"/>
-                <property name="insuranceContract" view="_local"/>
+                <property name="insuranceContract" view="_local">
+                    <property name="company" view="_local"/>
+                </property>
                 <property name="sex" view="_local"/>
                 <property name="documentType" view="_local"/>
                 <property name="addressType" view="_local"/>
@@ -40,7 +42,7 @@
             </view>
             <loader id="insuredPersonsDl">
                 <query>
-                    <![CDATA[select e from tsadv$InsuredPerson e]]>
+                    <![CDATA[select e from tsadv$InsuredPerson e where e.type = :relativeType]]>
                 </query>
             </loader>
         </collection>

@@ -21959,7 +21959,9 @@
     </view>
     <view entity="tsadv$InsuredPerson" name="insuredPerson-editView" extends="_local">
         <property name="statusRequest" view="_minimal"/>
-        <property name="insuranceContract" view="_local"/>
+        <property name="insuranceContract" view="_local">
+            <property name="company" view="_local"/>
+        </property>
         <property name="company" view="_minimal"/>
         <property name="employee" view="_local">
             <property name="addresses" view="_local"/>
@@ -21977,7 +21979,7 @@
                 <property name="assignmentStatus" view="_local"/>
             </property>
         </property>
-        <property name="relative" view="_minimal"/>
+        <property name="relative" view="_local"/>
         <property name="job" view="_minimal"/>
         <property name="sex" view="_minimal"/>
         <property name="documentType" view="_local"/>

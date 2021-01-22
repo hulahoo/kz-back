@@ -28,6 +28,7 @@
                 <property name="region" view="_minimal"/>
                 <property name="addressType" view="_minimal"/>
                 <property name="job" view="_local"/>
+                <property name="company" view="_local"/>
             </view>
             <loader id="insuredPersonsDl">
                 <query>
@@ -47,12 +48,14 @@
         </filter>
         <groupTable id="insuredPersonsTable"
                     width="100%"
+                    multiselect="true"
                     dataContainer="insuredPersonsDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
                 <action id="excel" type="excel"/>
+                <action id="bulkEdit" type="bulkEdit"/>
             </actions>
             <columns>
                 <column id="relative"/>
@@ -79,6 +82,9 @@
                 <button id="editBtn" action="insuredPersonsTable.edit"/>
                 <button id="removeBtn" action="insuredPersonsTable.remove"/>
                 <button id="excelBtn" action="insuredPersonsTable.excel"/>
+                <button id="bulkEditButton"
+                        caption="Массовое изменени"
+                        action="insuredPersonsTable.bulkEdit"/>
             </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">

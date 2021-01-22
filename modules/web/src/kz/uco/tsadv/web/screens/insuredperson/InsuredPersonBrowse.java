@@ -11,8 +11,10 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
+import kz.uco.tsadv.modules.personal.model.PersonExt;
 
 import javax.inject.Inject;
+import java.util.Objects;
 
 @UiController("tsadv$InsuredPerson.browse")
 @UiDescriptor("insured-person-browse.xml")
@@ -35,7 +37,6 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
     @Subscribe
     public void onInit(InitEvent event) {
-        insuredPersonsDl.setParameter("myCompany",null);
     }
 
     public void setParameter(InsuranceContract contract) {

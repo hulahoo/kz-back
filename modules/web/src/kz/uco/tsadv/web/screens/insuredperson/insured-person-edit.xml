@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://insuredPersonEdit.caption"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         focusComponent="form"
         messagesPack="kz.uco.tsadv.web.screens.insuredperson">
     <data>
@@ -55,7 +56,15 @@
         <collection id="insuranceContractDc" class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
                     view="_local">
             <loader id="insuranceContractDl">
-                <query><![CDATA[select e from tsadv$InsuranceContract e where e.company.id = :companyId]]></query>
+                <query><![CDATA[select e from tsadv$InsuranceContract e ]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.company.id = :companyId</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
             </loader>
         </collection>
         <collection id="relativeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType" view="_local">
@@ -65,7 +74,21 @@
         </collection>
         <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
             <loader id="addressDl">
-                <query><![CDATA[select e from tsadv$Address e where e.personGroup.id = :personGroupId]]></query>
+                <query><![CDATA[select e from tsadv$Address e]]></query>
+            </loader>
+        </collection>
+        <collection id="insuredPersonsDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
+                    view="insuredPerson-editView">
+            <loader id="insuredPersonsDl">
+                <query><![CDATA[select e from tsadv$InsuredPerson e ]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.employee.id = :employeeId</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
             </loader>
         </collection>
 
@@ -100,20 +123,21 @@
                                 <action id="clear" type="picker_clear"/>
                             </actions>
                         </pickerField>
-                        <field property="documentNumber" id="documentNumberType"/>
+                        <field property="documentNumber" id="documentNumberField"/>
                         <lookupField id="addressTypeField" property="addressType"
                                      optionsContainer="addressDc"/>
                         <textArea rows="3" id="addressField" caption="" property="address"/>
                         <lookupField id="companyField" property="company"
-                                     optionsContainer="companyDc"/>
+                                     optionsContainer="companyDc" editable="false"/>
                         <lookupField id="jobField"
                                      optionsContainer="jobDc"
                                      property="job"/>
-                        <dateField id="assignDateField" resolution="DAY" caption="msg://assignDate"/>
+                        <dateField id="assignDateField" editable="false" resolution="DAY" caption="msg://assignDate"/>
                     </column>
                 </form>
             </groupBox>
             <groupBox caption="msg://informationOnVHI"
+                      id="informationOnVHI"
                       outerMargin="true, false, true, false">
                 <form id="form2" dataContainer="insuredPersonDc">
                     <column width="350">
@@ -140,11 +164,42 @@
                             </actions>
                         </pickerField>
                         <textField id="totalAmountField" property="totalAmount"/>
-                        <textField id="amountField" property="amount"/>
                         <dateField id="exclusionDateField" property="exclusionDate"/>
                         <textField id="commentField" property="comment"/>
                     </column>
                 </form>
+            </groupBox>
+            <groupBox caption="msg://familyMemberInformation"
+                      id="familyMemberInformationGroup"
+                      outerMargin="true, false, true, false">
+                <groupTable id="insuredPersonTable" dataContainer="insuredPersonsDc" >
+                    <actions>
+                        <action id="create" type="create" openType="DIALOG"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="relative"/>
+                        <column id="firstName"/>
+                        <column id="secondName"/>
+                        <column id="middleName"/>
+                        <column id="sex"/>
+                        <column id="birthdate"/>
+                        <column id="iin"/>
+                        <column id="documentType"/>
+                        <column id="file"/>
+                        <column id="region"/>
+                        <column id="insuranceProgram"/>
+                        <column id="address"/>
+                        <column id="amount"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button id="createButton" action="insuredPersonTable.create"/>
+                        <button id="editButton" action="insuredPersonTable.edit"/>
+                        <button id="removeButton" action="insuredPersonTable.remove"/>
+                    </buttonsPanel>
+                    <rows/>
+                </groupTable>
             </groupBox>
         </scrollBox>
         <hbox id="editActions" spacing="true">

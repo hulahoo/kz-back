@@ -8,12 +8,14 @@ import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.components.Table;
+import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
+import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
@@ -21,6 +23,7 @@ import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @UiController("tsadv$MyVHIInsuredPerson.browse")
@@ -41,18 +44,27 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     private TimeSource timeSource;
     @Inject
     private GroupTable<InsuredPerson> insuredPersonsTable;
+    @Inject
+    private CollectionLoader<InsuredPerson> insuredPersonsDl;
+
+    @Subscribe
+    public void onInit(InitEvent event) {
+        insuredPersonsDl.setParameter("relativeType", RelativeType.EMPLOYEE);
+    }
+
 
 
     @Subscribe("insuredPersonsTable.joinVHI")
     public void onInsuredPersonsTableJoinVHI(Action.ActionPerformedEvent event) {
-       joinMember(1);
+       joinMember(RelativeType.EMPLOYEE);
     }
 
     @Subscribe("insuredPersonsTable.joinFamilyMember")
     public void onInsuredPersonsTableJoinFamilyMember(Action.ActionPerformedEvent event) {
-        joinMember(2);
+        joinMember(RelativeType.MEMBER);
     }
-    public void joinMember(int type) {
+
+    public void joinMember(RelativeType type) {
         InsuredPerson item = dataManager.create(InsuredPerson.class);
         Date today = timeSource.currentTimestamp();
         item.setAttachDate(today);
@@ -62,7 +74,7 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 .show();
     }
 
-    public InsuredPerson chekType(int type, InsuredPerson insuredPerson){
+    public InsuredPerson chekType(RelativeType type, InsuredPerson insuredPerson){
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
         insuredPerson.setType(type);
 
@@ -93,7 +105,7 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
         PersonExt person = personGroupExt.getPerson();
         AssignmentExt assignment = personGroupExt.getCurrentAssignment();
-        if (type == 1){
+        if (type == RelativeType.EMPLOYEE){
             insuredPerson.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
             if (contract != null){
                 insuredPerson.setInsuranceContract(contract);
@@ -109,8 +121,9 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             insuredPerson.setRelative(relationshipType);
             insuredPerson.setCompany(company);
             insuredPerson.setJob(assignment.getJobGroup());
+            insuredPerson.setTotalAmount(new BigDecimal(0));
 
-        }else if (type == 2 && insuredPersonsTable.getSingleSelected() != null){
+        }else if (type == RelativeType.MEMBER && insuredPersonsTable.getSingleSelected() != null){
             InsuredPerson singleSelected = insuredPersonsTable.getSingleSelected();
             isRelativeFamily(insuredPerson, singleSelected);
         }
@@ -133,6 +146,7 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         person.setAttachDate(singleSelected.getAttachDate());
         person.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
         person.setInsuranceProgram(singleSelected.getInsuranceProgram());
+        person.setDocumentNumber(singleSelected.getDocumentNumber());
         person.setRegion(singleSelected.getRegion());
 
     }

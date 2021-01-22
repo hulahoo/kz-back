@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -11,8 +12,12 @@ import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
+import kz.uco.tsadv.modules.personal.enums.AnalyticsTypeEnum;
+import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.recognition.enums.LogActionType;
+import kz.uco.tsadv.modules.recruitment.enums.HS_AttemptsControlLevel;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -89,7 +94,8 @@ public class InsuredPerson extends StandardEntity {
     @NotNull
     private DicDocumentType documentType;
 
-    @Column(name = "DOCUMENT_NUMBER")
+    @Column(name = "DOCUMENT_NUMBER", nullable = false)
+    @NotNull
     private String documentNumber;
 
     @NotNull
@@ -113,9 +119,9 @@ public class InsuredPerson extends StandardEntity {
     @JoinColumn(name = "FILE_ID")
     private Attachment file;
 
-    @NotNull
     @Column(name = "TYPE", nullable = false)
-    private Integer type;
+    @NotNull
+    private String type;
 
     @Column(name = "AMOUNT")
     private BigDecimal amount;
@@ -130,6 +136,14 @@ public class InsuredPerson extends StandardEntity {
 
     @Column(name = "COMMENT", length = 500)
     private String comment;
+
+    public void setType(RelativeType type) {
+        this.type = type == null ? null : type.getId();
+    }
+
+    public RelativeType getType() {
+        return type == null ? null : RelativeType.fromId(type);
+    }
 
     public void setAddressType(Address addressType) {
         this.addressType = addressType;
@@ -217,14 +231,6 @@ public class InsuredPerson extends StandardEntity {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
     }
 
     public Attachment getFile() {
