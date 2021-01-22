@@ -656,11 +656,4 @@
         </method>
         <method name="countUsersPerformancePlans"/>
     </service>
-
-    <service name="tsadv_PortalHelperService">
-        <method name="getNewEntity">
-            <param name="entityName" type="java.lang.String"/>
-        </method>
-    </service>
-
 </services>

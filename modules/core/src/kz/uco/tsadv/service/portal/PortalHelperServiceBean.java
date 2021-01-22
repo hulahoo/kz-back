@@ -1,5 +1,6 @@
 package kz.uco.tsadv.service.portal;
 
+import com.haulmont.cuba.core.entity.BaseGenericIdEntity;
 import com.haulmont.cuba.core.global.Metadata;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +13,9 @@ public class PortalHelperServiceBean implements PortalHelperService {
     protected Metadata metadata;
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <T> T getNewEntity(String entityName) {
-        return (T) metadata.create(entityName);
+    public <T extends BaseGenericIdEntity<K>, K> T newEntity(String entityName) {
+        T entity = (T) metadata.create(entityName);
+        entity.setId(null);
+        return entity;
     }
 }

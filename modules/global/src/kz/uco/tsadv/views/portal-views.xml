@@ -55,4 +55,13 @@
     <view entity="tsadv$AssignedGoal" name="assignedGoal-portal-kpi-create-default" extends="_local">
         <property name="category" view="_minimal"/>
     </view>
+
+    <view entity="tsadv_CertificateRequest" name="portal.certificateRequest-edit" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+        <property name="status" view="_local"/>
+        <property name="receivingType" view="_local"/>
+        <property name="file" view="_local"/>
+        <property name="language" view="_local"/>
+        <property name="certificateType" view="_local"/>
+    </view>
 </views>
