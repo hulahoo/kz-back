@@ -70,8 +70,27 @@
         <property name="jobGroup" view="_local"/>
         <property name="organizationGroup" view="_local">
             <property name="list" view="_local"/>
-            <property name="organization" view="_local">
-                <property name="company" view="_local"/>
+        </property>
+    </view>
+    <view name="course-learning-history" entity="tsadv$Course" extends="_minimal">
+        <property name="sections">
+            <property name="session">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="trainer" view="_minimal">
+                    <property name="employee">
+                        <property name="person">
+                            <property name="fullName"/>
+                        </property>
+                    </property>
+                    <property name="trainerFullName"/>
+                </property>
+            </property>
+            <property name="course">
+                <property name="name"/>
+            </property>
+            <property name="courseSectionAttempts">
+                <property name="testResultPercent"/>
             </property>
         </property>
     </view>

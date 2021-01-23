@@ -2,6 +2,7 @@ package kz.uco.tsadv.modules.learning.model;
 
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -9,12 +10,11 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
+import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.List;
-import com.haulmont.chile.core.annotations.NamePattern;
-import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 
 @NamePattern("%s|name")
 @Table(name = "TSADV_COURSE")
@@ -24,6 +24,9 @@ public class Course extends AbstractParentEntity {
 
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @OneToMany(mappedBy = "course")
+    protected List<CourseTrainer> courseTrainers;
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
@@ -82,10 +85,19 @@ public class Course extends AbstractParentEntity {
     @MetaProperty
     protected Boolean completed;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LEARNING_TYPE_ID")
     protected DicLearningType learningType;
+
+    public List<CourseTrainer> getCourseTrainers() {
+        return courseTrainers;
+    }
+
+    public void setCourseTrainers(List<CourseTrainer> courseTrainers) {
+        this.courseTrainers = courseTrainers;
+    }
+
     public void setFeedbackTemplates(List<CourseFeedbackTemplate> feedbackTemplates) {
         this.feedbackTemplates = feedbackTemplates;
     }

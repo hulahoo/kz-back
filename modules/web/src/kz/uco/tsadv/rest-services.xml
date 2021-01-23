@@ -656,4 +656,9 @@
         </method>
         <method name="countUsersPerformancePlans"/>
     </service>
+    <service name="tsadv_LearningService">
+        <method name="learningHistory">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>
