@@ -45,6 +45,7 @@
                 <textField id="extraPoint" property="extraPoint"/>
                 <textField id="finalScore" property="finalScore"/>
                 <textField id="maxBonusPercent" property="maxBonusPercent"/>
+                <textField id="adjustedScore" property="adjustedScore"/>
             </column>
             <column id="column2" width="300px">
                 <lookupField id="status" property="status"/>
@@ -56,6 +57,7 @@
                 <textField id="personalBonus" property="personalBonus"/>
                 <textField id="companyBonus" property="companyBonus"/>
                 <textField id="finalBonus" property="finalBonus"/>
+                <textField id="adjustedBonus" property="adjustedBonus"/>
             </column>
         </form>
         <groupBox id="hbox" width="100%" spacing="true">
