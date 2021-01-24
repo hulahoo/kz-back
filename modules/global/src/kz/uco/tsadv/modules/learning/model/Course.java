@@ -2,6 +2,7 @@ package kz.uco.tsadv.modules.learning.model;
 
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -9,12 +10,11 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import com.haulmont.chile.core.annotations.NamePattern;
-import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 
 @NamePattern("%s|name")
 @Table(name = "TSADV_COURSE")
@@ -82,10 +82,36 @@ public class Course extends AbstractParentEntity {
     @MetaProperty
     protected Boolean completed;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LEARNING_TYPE_ID")
     protected DicLearningType learningType;
+
+    @NotNull
+    @Column(name = "IS_ONLINE", nullable = false)
+    protected Boolean isOnline = false;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "course")
+    protected List<CourseSchedule> courseSchedule;
+
+    public List<CourseSchedule> getCourseSchedule() {
+        return courseSchedule;
+    }
+
+    public void setCourseSchedule(List<CourseSchedule> courseSchedule) {
+        this.courseSchedule = courseSchedule;
+    }
+
+    public Boolean getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(Boolean isOnline) {
+        this.isOnline = isOnline;
+    }
+
     public void setFeedbackTemplates(List<CourseFeedbackTemplate> feedbackTemplates) {
         this.feedbackTemplates = feedbackTemplates;
     }

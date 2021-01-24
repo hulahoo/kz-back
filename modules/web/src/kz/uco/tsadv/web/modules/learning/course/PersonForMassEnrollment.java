@@ -34,7 +34,7 @@ public class PersonForMassEnrollment extends AbstractWindow {
         param = params;
         Map<String, Object> paramforDS = new HashMap<>();
         String select = "select distinct e from base$PersonGroup e join base$AssignmentExt ae on ae.personGroupId = e";
-        String where = " where ae.personGroupId.id not in (select en.personGroupId.id from " +
+        String where = " where ae.personGroup.id not in (select en.personGroup.id from " +
                 " tsadv$Enrollment en where en.course.id = :param$courseId ) ";
         if (params.containsKey("organizationGroup") && params.get("organizationGroup") != null) {
             if (params.containsKey("inOrganizaiton")) {

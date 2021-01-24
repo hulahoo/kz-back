@@ -10,7 +10,7 @@
                               view="enrollment.for.course">
             <query>
                 <![CDATA[select e from tsadv$Enrollment e
-                    where e.course.id=:param$courseId
+                    where e.course.id = :param$courseId
                     and e.deleteTs is null]]>
             </query>
         </collectionDatasource>
@@ -53,6 +53,7 @@
                 <button id="createButton"
                         caption="msg://createButton"
                         icon="CHILD"
+                        visible="false"
                         invoke="onCreateButtonClick"/>
                 <button id="massEnrollBtn"
                         caption="msg://massEnrollBtn"

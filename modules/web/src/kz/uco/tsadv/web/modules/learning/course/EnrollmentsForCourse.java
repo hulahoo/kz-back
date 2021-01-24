@@ -56,10 +56,10 @@ public class EnrollmentsForCourse extends AbstractWindow {
         if (course != null && course.getName() != null) {
             int courseNameLengthInBreadCrumbsPath = 45;
             if (course.getName().length() > courseNameLengthInBreadCrumbsPath)
-            setCaption(StringUtils.left(course.getName(), courseNameLengthInBreadCrumbsPath) + " ...");
+                setCaption(StringUtils.left(course.getName(), courseNameLengthInBreadCrumbsPath) + " ...");
             courseNameLabel.setValue(
                     getMessage("CourseSection.course") + ": " +
-                    course.getName());
+                            course.getName());
             courseNameLabel.setVisible(true);
         }
     }
@@ -104,8 +104,10 @@ public class EnrollmentsForCourse extends AbstractWindow {
 
     public void onMassEnrollBtnClick() {
         ForMassEnrollment massEnrollment = metadata.create(ForMassEnrollment.class);
-        massEnrollment.setCourse((Course)(param.containsKey("courseId") ?
-                param.get("courseId") : null));
+        massEnrollment.setCourse(dataManager.load(Course.class)
+                .query("select e from tsadv$Course e where e.id = :courseId")
+                .parameter("courseId", param.get("courseId"))
+                .list().stream().findFirst().orElse(null));
 
         AbstractEditor abstractEditor = openEditor("massenrollmentscreen", massEnrollment,
                 WindowManager.OpenType.THIS_TAB,

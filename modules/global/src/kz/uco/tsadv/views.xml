@@ -10070,20 +10070,25 @@
     <view class="kz.uco.tsadv.modules.learning.model.Course"
           name="course.edit.new">
         <property name="name"/>
+        <property name="feedbackTemplates" view="courseFeedbackTemplate.course"/>
+        <property name="party" view="_minimal">
+            <property name="course" view="_minimal">
+                <property name="party" view="_minimal">
+                    <property name="course" view="_minimal"/>
+                </property>
+            </property>
+        </property>
         <property name="description"/>
         <property name="logo"/>
-        <property name="category"
-                  view="_local"/>
+        <property name="category" view="_local"/>
         <property name="targetAudience"/>
         <property name="activeFlag"/>
-        <property name="sections"
-                  view="_minimal">
+        <property name="sections" view="_minimal">
+            <property name="mandatory"/>
             <property name="order"/>
             <property name="sectionObject">
-                <property name="objectType"
-                          view="_local"/>
-                <property name="content"
-                          view="_minimal">
+                <property name="objectType" view="_local"/>
+                <property name="content" view="_minimal">
                     <property name="objectName"/>
                     <property name="description"/>
                     <property name="url"/>
@@ -10091,8 +10096,7 @@
                 <property name="test">
                     <property name="name"/>
                     <property name="description"/>
-                    <property name="type"
-                              view="_local"/>
+                    <property name="type" view="_local"/>
                     <property name="active"/>
                     <property name="maxAttempt"/>
                     <property name="daysBetweenAttempts"/>
@@ -10101,67 +10105,51 @@
                     <property name="instruction"/>
                     <property name="targetScore"/>
                     <property name="showResults"/>
-                    <property name="sections"
-                              view="_minimal"/>
+                    <property name="sections" view="_minimal"/>
                 </property>
             </property>
-            <property name="format"
-                      view="_local"/>
+            <property name="format" view="_local"/>
             <property name="description"/>
             <property name="session">
                 <property name="startDate"/>
                 <property name="endDate"/>
-                <property name="learningCenter"
-                          view="_local"/>
+                <property name="learningCenter" view="_local"/>
                 <property name="maxPerson"/>
-                <property name="courseSection"
-                          view="_minimal"/>
+                <property name="courseSection" view="_minimal"/>
             </property>
-            <property name="courseSectionAttempts"
-                      view="_minimal">
+            <property name="courseSectionAttempts" view="_minimal">
                 <property name="attemptDate"/>
                 <property name="activeAttempt"/>
                 <property name="success"/>
-                <property name="enrollment"
-                          view="_minimal"/>
-                <property name="courseSectionSession"
-                          view="_minimal"/>
+                <property name="enrollment" view="_minimal"/>
+                <property name="courseSectionSession" view="_minimal"/>
             </property>
-            <property name="mandatory"/>
         </property>
         <property name="shortDescription"/>
-        <property name="competences"
-                  view="_minimal">
+        <property name="competences" view="_minimal">
             <property name="competenceGroup">
-                <property name="list"
-                          view="_minimal">
-                    <property name="scale"
-                              view="_minimal"/>
-                    <property name="attachment"
-                              view="_minimal"/>
+                <property name="list" view="_minimal">
+                    <property name="competenceNameLang1"/>
+                    <property name="competenceNameLang2"/>
+                    <property name="competenceNameLang3"/>
+                    <property name="competenceNameLang4"/>
+                    <property name="competenceNameLang5"/>
+                    <property name="competeceType" view="_minimal"/>
+                    <property name="scale" view="_minimal"/>
+                    <property name="attachment" view="_minimal"/>
                     <property name="startDate"/>
                     <property name="endDate"/>
-                    <property name="competenceNameLang1"/>
-                    <property name="competenceNameLang2"/>
-                    <property name="competenceNameLang3"/>
-                    <property name="competenceNameLang4"/>
-                    <property name="competenceNameLang5"/>
-                    <property name="competeceType"
-                              view="_minimal"/>
                 </property>
-                <property name="competence"
-                          view="_minimal">
+                <property name="competence" view="_minimal">
                     <property name="competenceNameLang1"/>
                     <property name="competenceNameLang2"/>
                     <property name="competenceNameLang3"/>
                     <property name="competenceNameLang4"/>
                     <property name="competenceNameLang5"/>
-                    <property name="competeceType"
-                              view="_minimal"/>
+                    <property name="competeceType" view="_minimal"/>
                 </property>
             </property>
-            <property name="scaleLevel"
-                      view="_minimal">
+            <property name="scaleLevel" view="_minimal">
                 <property name="levelNameLang1"/>
                 <property name="levelNameLang2"/>
                 <property name="levelNameLang3"/>
@@ -10170,12 +10158,10 @@
             </property>
         </property>
         <property name="preRequisition">
-            <property name="requisitionCourse"
-                      view="_minimal">
+            <property name="requisitionCourse" view="_minimal">
                 <property name="description"/>
                 <property name="logo"/>
-                <property name="category"
-                          view="_local"/>
+                <property name="category" view="_local"/>
                 <property name="targetAudience"/>
                 <property name="activeFlag"/>
                 <property name="shortDescription"/>
@@ -10184,21 +10170,9 @@
         </property>
         <property name="avgRate"/>
         <property name="selfEnrollment"/>
-        <property name="learningType"
-                  view="_minimal"/>
-        <property name="party"
-                  view="_minimal">
-            <property name="course"
-                      view="_minimal">
-                <property name="party"
-                          view="_minimal">
-                    <property name="course"
-                              view="_minimal"/>
-                </property>
-            </property>
-        </property>
-        <property name="feedbackTemplates"
-                  view="courseFeedbackTemplate.course"/>
+        <property name="learningType" view="_minimal"/>
+        <property name="isOnline"/>
+        <property name="courseSchedule" view="courseSchedule.edit"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CoursePreRequisition"
           name="coursePreRequisition.edit.new">
@@ -22624,5 +22598,12 @@
     <view entity="tsadv$DicCompany" name="dicCompany-edit" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
-
+    <view entity="tsadv_CourseSchedule" name="courseSchedule.edit" extends="_local">
+        <property name="course" view="_minimal"/>
+        <property name="learningCenter" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
 </views>
