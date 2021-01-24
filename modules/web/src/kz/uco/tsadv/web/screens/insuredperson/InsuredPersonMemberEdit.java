@@ -18,9 +18,8 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
     private CollectionLoader<DicRelationshipType> relativeDl;
 
     @Subscribe
-    public void onInit(InitEvent event) {
-        relativeDl.setParameter("employee", RelativeType.EMPLOYEE);
+    public void onBeforeShow(BeforeShowEvent event) {
+        relativeDl.setParameter("employee", "PRIMARY");
     }
-
 
 }

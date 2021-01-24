@@ -65,7 +65,7 @@
             </actions>
             <columns>
                 <column id="relative"/>
-                <column id="attachDate" visible="false"/>
+                <column id="attachDate" visible="false" resolution="DAY"/>
                 <column id="employee"/>
                 <column id="statusRequest"/>
                 <column id="firstName"/>
@@ -79,7 +79,7 @@
                 <column id="insuranceProgram"/>
                 <column id="address"/>
                 <column id="totalAmount"/>
-                <column id="exclusionDate"/>
+                <column id="exclusionDate" resolution="DAY"/>
                 <column id="comment"/>
             </columns>
             <rowsCount/>

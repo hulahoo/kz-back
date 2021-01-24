@@ -51,15 +51,6 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         insuredPersonBulkEdit.setColumnsMode(ColumnsMode.TWO_COLUMNS);
     }
 
-//    @Subscribe("insuredPersonsTable.bulkEdit")
-//    public void onInsuredPersonsTableBulkEdit(Action.ActionPerformedEvent event) {
-//        bulkEditors(metadata.getClassNN(InsuredPerson.class), insuredPersonsTable.getSelected(), getWindow().getFrameOwner())
-//                .withListComponent(insuredPersonsTable)
-//                .withIncludeProperties("attachDate", "statusRequest", "exclusionDate", "comment")
-//            .create()
-//                .show();
-//    }
-
 //    @Install(to = "insuredPersonsTable.bulkEdit", subject = "fieldSorter")
 //    private Map<MetaProperty, Integer> insuredPersonsTableBulkEditFieldSorter(List<MetaProperty> properties){
 //        Map<MetaProperty, Integer> result = new HashMap<>();

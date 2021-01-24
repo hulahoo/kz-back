@@ -141,7 +141,7 @@
                       outerMargin="true, false, true, false">
                 <form id="form2" dataContainer="insuredPersonDc">
                     <column width="350">
-                        <field property="type" id="typeField" visible="false"/>
+                        <field property="type" id="typeField" visible="true"/>
                         <lookupField id="insuranceContractField"
                                      editable="false"
                                      captionProperty="contract"

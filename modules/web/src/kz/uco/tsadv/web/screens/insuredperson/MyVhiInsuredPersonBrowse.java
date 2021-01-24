@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.builders.EditorBuilder;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.components.Table;
@@ -64,27 +65,28 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
     @Subscribe("insuredPersonsTable.joinVHI")
     public void onInsuredPersonsTableJoinVHI(Action.ActionPerformedEvent event) {
-       joinMember(RelativeType.EMPLOYEE);
+       joinMember(true);
     }
 
     @Subscribe("insuredPersonsTable.joinFamilyMember")
     public void onInsuredPersonsTableJoinFamilyMember(Action.ActionPerformedEvent event) {
-        joinMember(RelativeType.MEMBER);
+        joinMember(false);
     }
 
-    public void joinMember(RelativeType type) {
+    public void joinMember(boolean b) {
         InsuredPerson item = dataManager.create(InsuredPerson.class);
         Date today = timeSource.currentTimestamp();
         item.setAttachDate(today);
-        screenBuilders.editor(insuredPersonsTable)
-                .newEntity(chekType(type, item))
-                .build()
-                .show();
+        InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
+                .newEntity(chekType(item))
+                .build();
+
+        editorBuilder.setParameter(b);
+        editorBuilder.show();
     }
 
-    public InsuredPerson chekType(RelativeType type, InsuredPerson insuredPerson){
+    public InsuredPerson chekType(InsuredPerson insuredPerson){
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
-        insuredPerson.setType(type);
 
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +
@@ -113,7 +115,7 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
         PersonExt person = personGroupExt.getPerson();
         AssignmentExt assignment = personGroupExt.getCurrentAssignment();
-        if (type == RelativeType.EMPLOYEE){
+//        if (type == RelativeType.EMPLOYEE){
             insuredPerson.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
             if (contract != null){
                 insuredPerson.setInsuranceContract(contract);
@@ -131,10 +133,10 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             insuredPerson.setJob(assignment.getJobGroup());
             insuredPerson.setTotalAmount(new BigDecimal(0));
 
-        }else if (type == RelativeType.MEMBER && insuredPersonsTable.getSingleSelected() != null){
-            InsuredPerson singleSelected = insuredPersonsTable.getSingleSelected();
-            isRelativeFamily(insuredPerson, singleSelected);
-        }
+//        }else if (type == RelativeType.MEMBER && insuredPersonsTable.getSingleSelected() != null){
+//            InsuredPerson singleSelected = insuredPersonsTable.getSingleSelected();
+//            isRelativeFamily(insuredPerson, singleSelected);
+//        }
         return insuredPerson;
     }
 

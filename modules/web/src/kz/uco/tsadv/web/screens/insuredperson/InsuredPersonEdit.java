@@ -92,18 +92,26 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private CommonService commonService;
     @Inject
     private TimeSource timeSource;
+//    private boolean isHideTableMembers;
 
-    @Subscribe
-    public void onAfterShow(AfterShowEvent event) {
 
-        if (relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY") && employeeField.getValue() != null){
-            familyMemberInformationGroup.setVisible(false);
-        }else if (relativeField.getValue() != null && !relativeField.getValue().getCode().equals("PRIMARY") && employeeField.getValue() != null){
-            familyMemberInformationGroup.setVisible(true);
-        }
+//    @Subscribe
+//    public void onAfterShow(AfterShowEvent event) {
+//
+//        if (typeField.getValue() != null && typeField.getValue() == RelativeType.EMPLOYEE && employeeField.getValue() != null){
+//            familyMemberInformationGroup.setVisible(false);
+//        }else if (typeField.getValue() != null && typeField.getValue() == RelativeType.MEMBER && employeeField.getValue() != null){
+//            familyMemberInformationGroup.setVisible(true);
+//        }else if (typeField.getValue() != null && typeField.getValue() == RelativeType.EMPLOYEE && employeeField.getValue() == null){
+//            familyMemberInformationGroup.setVisible(false);
+//        } else if (typeField.getValue() == null && employeeField.getValue() == null){
+//            familyMemberInformationGroup.setVisible(false);
+//        }
+//    }
+
+    public void setParameter(boolean isHideTableMembers){
+        familyMemberInformationGroup.setVisible(!isHideTableMembers);
     }
-
-
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
@@ -126,7 +134,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             documentNumberField.setRequired(true);
 //            checkRelativeType(RelativeType.EMPLOYEE);
         } else if (typeField.getValue() != null && RelativeType.MEMBER == typeField.getValue()) {
-            familyMemberInformationGroup.setVisible(true);
             addressTypeField.setEditable(false);
             addressField.setEditable(false);
             documentNumberField.setEditable(false);
@@ -138,7 +145,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             employeeField.setEditable(false);
 //            checkRelativeType(RelativeType.MEMBER);
         }else if (typeField.getValue() == null){
-            familyMemberInformationGroup.setVisible(false);
             insuranceContractField.setEditable(true);
         }
 //        documentTypeDl.setParameter("personGroupId", insuredPersonDc.getItem().getEmployee().getPersonDocuments());
@@ -261,7 +267,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 //                documentTypeField.setEditable(false);
             }
             if (typeField.getValue() != null && RelativeType.EMPLOYEE == typeField.getValue()) {
-                familyMemberInformationGroup.setVisible(false);
+//                familyMemberInformationGroup.setVisible(false);
             }
         }
     }
