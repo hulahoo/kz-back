@@ -20141,6 +20141,7 @@
             <property name="dateOfBirth"/>
             <property name="sex"/>
         </property>
+        <property name="addresses" view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_local"

@@ -9,6 +9,7 @@ import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.service.common.CommonService;
@@ -106,6 +107,8 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private TextField<String> commentField;
     @Inject
     private DateField<Date> exclusionDateField;
+    @Inject
+    private UserSession userSession;
 
 
     public void setParameter(String whichButton){
@@ -312,7 +315,8 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
             }
         }
-        else if (event.getValue() != null && "PRIMARY".equals(event.getValue().getCode()) && !(whichButton.equals("joinHr") || whichButton.equals("editHr"))){
+        else if (event.getValue() != null
+                && "PRIMARY".equals(event.getValue().getCode())){
             totalAmountField.setValue(new BigDecimal(0));
 //            typeField.setValue(RelativeType.EMPLOYEE);
             firstNameField.setVisible(false);
@@ -424,6 +428,13 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("employeeField")
     public void onEmployeeFieldValueChange(HasValue.ValueChangeEvent<PersonGroupExt> event) {
+
+        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
+                "from tsadv$UserExt e " +
+                "where e.id = :uId").parameter("uId", userSession.getUser().getId())
+                .view("personGroupExt-view")
+                .list().stream().findFirst().orElse(null);
+
         if (event.getValue() != null && relativeField.getValue() != null
                 && relativeField.getValue().getCode().equals("PRIMARY")){
             DicCompany company = dataManager.load(DicCompany.class)
@@ -441,7 +452,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             companyField.setValue(company);
 
 
-            if (employeeField.getValue().getAddresses().size() == 0){
+            if (personGroupExt.getAddresses().size() == 0){
                 addressTypeField.setVisible(false);
                 addressField.setCaption("Домашний адрес");
                 addressField.setRequired(true);
@@ -481,7 +492,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 //            isEmployeeRelativeAndEmployeeNotNull(RelativeType.MEMBER, event.getValue());
         } else if (event.getValue() != null && relativeField.getValue() == null){
             assignDateField.setValue(event.getValue().getPerson().getHireDate());
-            if (event.getValue().getAddresses().size() == 0){
+            if (personGroupExt.getAddresses().size() == 0){
                 addressTypeField.setVisible(false);
                 addressField.setCaption("Домашний адрес");
                 addressField.setRequired(true);

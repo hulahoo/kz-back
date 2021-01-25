@@ -68,7 +68,7 @@
                     dataContainer="insuredPersonsDc">
             <actions>
                 <action id="joinMIC" type="create"/>
-                <action id="joinFamilyMember" type="edit" trackSelection="true"/>
+                <action id="joinFamilyMember" type="edit"/>
             </actions>
             <columns>
                 <column id="insuranceContract.contract"/>

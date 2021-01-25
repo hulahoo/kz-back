@@ -46,6 +46,8 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     private DateField<Date> expirationDateField;
     @Inject
     private TimeSource timeSource;
+    @Inject
+    private DateField<Date> availabilityPeriodToField;
 
     @Subscribe
     public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
@@ -113,30 +115,25 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
 
     @Subscribe("startDateField")
     public void onStartDateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-        if (event.getValue() != null && expirationDateField.getValue() != null){
-            if (event.getValue().after(expirationDateField.getValue())){
-                notifications.create()
-                        .withPosition(Notifications.Position.BOTTOM_RIGHT)
-                        .withCaption("Дата с: Не больше Дата по")
-                        .show();
-                return;
-            }
+
+        if (event.getValue() != null) {
+            Instant i = Instant.ofEpochMilli(event.getValue().getTime());
+            Date outRequestDate = Date.from(i);
+
+            expirationDateField.setRangeStart(outRequestDate);
         }
     }
 
+    @Subscribe("availabilityPeriodFromField")
+    public void onAvailabilityPeriodFromFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
+        if (event.getValue() != null){
+                Instant i = Instant.ofEpochMilli(event.getValue().getTime());
+                Date outRequestDate = Date.from(i);
 
-    @Subscribe("expirationDateField")
-    public void onExpirationDateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-        if (event.getValue() != null && startDateField.getValue() != null){
-            if (event.getValue().before(startDateField.getValue())){
-                notifications.create()
-                        .withPosition(Notifications.Position.BOTTOM_RIGHT)
-                        .withCaption("Дата по: Не меньше Дата с")
-                        .show();
-                return;
-            }
+                availabilityPeriodToField.setRangeStart(outRequestDate);
         }
     }
+
 
 
 }
