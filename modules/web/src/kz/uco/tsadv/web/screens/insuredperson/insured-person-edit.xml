@@ -110,7 +110,7 @@
                                 <action id="clear" type="picker_clear"/>
                             </actions>
                         </pickerField>
-                        <lookupField property="relative" optionsContainer="relativeDc" id="relativeField"   />
+                        <lookupField property="relative" optionsContainer="relativeDc" id="relativeField"/>
                         <textField id="firstNameField" property="firstName" visible="false"/>
                         <textField id="secondNameField" property="secondName" visible="false"/>
                         <textField id="middleNameField" property="middleName" visible="false"/>

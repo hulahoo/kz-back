@@ -358,10 +358,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 birthdateField.setEditable(false);
                 iinField.setEditable(false);
                 companyField.setEditable(false);
-//                addressTypeField.setEditable(false);
-//                addressField.setEditable(false);
-//                documentNumberField.setEditable(false);
-//                documentTypeField.setEditable(false);
             }
             if (typeField.getValue() != null && RelativeType.EMPLOYEE == typeField.getValue()) {
 //                familyMemberInformationGroup.setVisible(false);
@@ -369,9 +365,72 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         }
         else if (event.getValue() != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))){
             if ("PRIMARY".equals(relativeField.getValue().getCode())){
+                totalAmountField.setValue(new BigDecimal(0));
+//            typeField.setValue(RelativeType.EMPLOYEE);
+                firstNameField.setVisible(false);
+                middleNameField.setVisible(false);
+                secondNameField.setVisible(false);
+                documentTypeField.setValue(insuranceContractField.getValue() == null ?
+                        null : insuranceContractField.getValue().getDefaultDocumentType());
+                addressTypeField.setVisible(true);
+                addressField.setCaption("");
+                if (employeeField.getValue() != null){
+                    if (employeeField.getValue().getAddresses().size() == 0){
+                        addressTypeField.setVisible(false);
+                        addressField.setCaption("Домашний адрес");
+                        addressField.setRequired(true);
+                    }
+                    PersonExt personExt = employeeField.getValue().getPerson();
+                    AssignmentExt assignmentExt = employeeField.getValue().getCurrentAssignment();
+                    assignDateField.setValue(personExt.getHireDate());
+                    firstNameField.setValue(personExt.getFirstName());
+                    secondNameField.setValue(personExt.getLastName());
+                    middleNameField.setValue(personExt.getMiddleName());
+                    iinField.setValue(personExt.getNationalIdentifier());
+                    birthdateField.setValue(personExt.getDateOfBirth());
+                    sexField.setValue(personExt.getSex());
+                    jobField.setValue(assignmentExt.getJobGroup());
+                    jobField.setEditable(false);
+                    sexField.setEditable(false);
+                    birthdateField.setEditable(false);
+                    iinField.setEditable(false);
+                    companyField.setEditable(false);
+                }
                 typeField.setValue(RelativeType.EMPLOYEE);
             }else {
                 typeField.setValue(RelativeType.MEMBER);
+
+                totalAmountField.setValue(new BigDecimal(0));
+                addressTypeField.setEditable(true);
+                addressField.setEditable(true);
+//            documentNumberField.setEditable(true);
+                documentTypeField.setEditable(true);
+                insuranceContractField.setEditable(true);
+//            regionField.setEditable(true);
+                totalAmountField.setVisible(false);
+                firstNameField.setVisible(true);
+                middleNameField.setVisible(true);
+                secondNameField.setVisible(true);
+//            if (employeeField == null){
+                firstNameField.setValue(null);
+                secondNameField.setValue(null);
+                middleNameField.setValue(null);
+                iinField.setValue(null);
+                birthdateField.setValue(null);
+                sexField.setValue(null);
+                jobField.setValue(null);
+                documentTypeField.setValue(insuranceContractField.getValue() == null ?
+                        null : insuranceContractField.getValue().getDefaultDocumentType());
+                documentNumberField.setValue(null);
+                addressTypeField.setVisible(false);
+                addressField.setValue(null);
+                addressField.setRequired(true);
+                addressField.setCaption("Домашний адрес");
+                iinField.setEditable(true);
+                sexField.setEditable(true);
+                birthdateField.setEditable(true);
+                jobField.setEditable(true);
+
             }
         }
     }

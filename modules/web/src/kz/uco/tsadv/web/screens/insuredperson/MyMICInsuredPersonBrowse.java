@@ -24,6 +24,9 @@ import kz.uco.tsadv.modules.personal.model.PersonExt;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @UiController("tsadv$MyMICInsuredPerson.browse")
@@ -72,6 +75,16 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                     .list().stream().findFirst().orElse(null);
 
             insuredPersonsTableJoinMIC.setEnabled(contract != null);
+//            if (contract != null){
+//                Date today = timeSource.currentTimestamp();
+//                if(today.compareTo(personGroupExt.getCurrentAssignment().getAssignDate()) > contract.getAttachingAnEmployee()){
+//                    insuredPersonsTableJoinMIC.setEnabled(true);
+//                }else {
+//                    insuredPersonsTableJoinMIC.setEnabled(false);
+//                }
+//            }
+        }else {
+            insuredPersonsTableJoinMIC.setEnabled(false);
         }
     }
 

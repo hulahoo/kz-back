@@ -40,7 +40,6 @@
                 <column id="contract"/>
                 <column id="signDate"/>
                 <column id="company"/>
-                <column id="responsible"/>
                 <column id="insurer"/>
                 <column id="year"/>
             </columns>
