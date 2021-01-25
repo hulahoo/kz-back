@@ -40,7 +40,7 @@ public class AssignedGoalLibraryEdit extends StandardEditor<AssignedGoal> {
 
     @Subscribe("parentGoalField.lookup")
     protected void onParentGoalFieldLookup(Action.ActionPerformedEvent event) {
-        screenBuilders.lookup(Goal.class, this)
+        screenBuilders.lookup(parentGoalField)
                 .withOptions(new MapScreenOptions(
                         ParamsMap.of("library", assignedGoalDc.getItem().getGoalLibrary())))
                 .build().show();
