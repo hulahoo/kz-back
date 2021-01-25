@@ -327,6 +327,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
             });
             dataManager.commit(commitContext);
             assignedPerformancePlansDl.load();
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("calculatedSuccessfully")).show();
         } catch (Exception ignored) {
         }
     }
