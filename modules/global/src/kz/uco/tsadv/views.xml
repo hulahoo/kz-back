@@ -21965,7 +21965,9 @@
         </property>
         <property name="company" view="_minimal"/>
         <property name="employee" view="_local">
-            <property name="addresses" view="_local"/>
+            <property name="addresses" view="_local">
+                <property name="addressType" view="_local"/>
+            </property>
             <property name="personExperience" view="_local"/>
             <property name="list" view="_local">
                 <property name="sex" view="_local"/>

@@ -24,10 +24,8 @@ import kz.uco.tsadv.modules.personal.model.PersonExt;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
+
 
 @UiController("tsadv$MyMICInsuredPerson.browse")
 @UiDescriptor("my-mic-insured-person-browse.xml")

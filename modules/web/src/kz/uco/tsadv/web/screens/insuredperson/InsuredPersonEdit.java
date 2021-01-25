@@ -108,20 +108,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private DateField<Date> exclusionDateField;
 
 
-//    @Subscribe
-//    public void onAfterShow(AfterShowEvent event) {
-//
-//        if (typeField.getValue() != null && typeField.getValue() == RelativeType.EMPLOYEE && employeeField.getValue() != null){
-//            familyMemberInformationGroup.setVisible(false);
-//        }else if (typeField.getValue() != null && typeField.getValue() == RelativeType.MEMBER && employeeField.getValue() != null){
-//            familyMemberInformationGroup.setVisible(true);
-//        }else if (typeField.getValue() != null && typeField.getValue() == RelativeType.EMPLOYEE && employeeField.getValue() == null){
-//            familyMemberInformationGroup.setVisible(false);
-//        } else if (typeField.getValue() == null && employeeField.getValue() == null){
-//            familyMemberInformationGroup.setVisible(false);
-//        }
-//    }
-
     public void setParameter(String whichButton){
         this.whichButton = whichButton;
     }
@@ -454,6 +440,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     .list().stream().findFirst().orElse(null);
             companyField.setValue(company);
 
+
             if (employeeField.getValue().getAddresses().size() == 0){
                 addressTypeField.setVisible(false);
                 addressField.setCaption("Домашний адрес");
@@ -494,7 +481,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 //            isEmployeeRelativeAndEmployeeNotNull(RelativeType.MEMBER, event.getValue());
         } else if (event.getValue() != null && relativeField.getValue() == null){
             assignDateField.setValue(event.getValue().getPerson().getHireDate());
-            if (employeeField.getValue().getAddresses().size() == 0){
+            if (event.getValue().getAddresses().size() == 0){
                 addressTypeField.setVisible(false);
                 addressField.setCaption("Домашний адрес");
                 addressField.setRequired(true);
