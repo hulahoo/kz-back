@@ -1,6 +1,0 @@
-alter table TSADV_INSURANCE_CONTRACT rename column responsible_id to responsible_id__u36499 ;
-alter table TSADV_INSURANCE_CONTRACT drop constraint FK_TSADV_INSURANCE_CONTRACT_RESPONSIBLE ;
-drop index IDX_TSADV_INSURANCE_CONTRACT_RESPONSIBLE ;
-alter table TSADV_INSURANCE_CONTRACT add column AVAILABILITY_PERIOD_TO date ^
-update TSADV_INSURANCE_CONTRACT set AVAILABILITY_PERIOD_TO = current_date where AVAILABILITY_PERIOD_TO is null ;
-alter table TSADV_INSURANCE_CONTRACT alter column AVAILABILITY_PERIOD_TO set not null ;

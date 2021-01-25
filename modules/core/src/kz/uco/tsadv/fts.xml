@@ -1855,7 +1855,7 @@
         <entity class="kz.uco.tsadv.modules.personal.model.InsuredPerson">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus">
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus">
             <include re=".*"/>
         </entity>
     </entities>

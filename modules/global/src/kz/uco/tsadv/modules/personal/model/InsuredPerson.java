@@ -1,6 +1,5 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -11,13 +10,10 @@ import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
-import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
-import kz.uco.tsadv.modules.personal.enums.AnalyticsTypeEnum;
+import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.recognition.enums.LogActionType;
-import kz.uco.tsadv.modules.recruitment.enums.HS_AttemptsControlLevel;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,7 +34,7 @@ public class InsuredPerson extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STATUS_REQUEST_ID")
     @NotNull
-    private DicVHIAttachmentStatus statusRequest;
+    private DicMICAttachmentStatus statusRequest;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -305,11 +301,11 @@ public class InsuredPerson extends StandardEntity {
         this.relative = relative;
     }
 
-    public DicVHIAttachmentStatus getStatusRequest() {
+    public DicMICAttachmentStatus getStatusRequest() {
         return statusRequest;
     }
 
-    public void setStatusRequest(DicVHIAttachmentStatus statusRequest) {
+    public void setStatusRequest(DicMICAttachmentStatus statusRequest) {
         this.statusRequest = statusRequest;
     }
 

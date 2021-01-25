@@ -1,21 +1,19 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
 import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.builders.EditorBuilder;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.GroupTable;
-import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
+import kz.uco.base.cuba.actions.CreateActionExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
-import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
@@ -24,14 +22,15 @@ import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@UiController("tsadv$MyVHIInsuredPerson.browse")
-@UiDescriptor("my-vhi-insured-person-browse.xml")
+@UiController("tsadv$MyMICInsuredPerson.browse")
+@UiDescriptor("my-mic-insured-person-browse.xml")
 @LookupComponent("insuredPersonsTable")
 @LoadDataBeforeShow
-public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
+public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
     @Inject
     private UserSession userSession;
@@ -47,6 +46,8 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     private GroupTable<InsuredPerson> insuredPersonsTable;
     @Inject
     private CollectionLoader<InsuredPerson> insuredPersonsDl;
+    @Named("insuredPersonsTable.joinMIC")
+    private CreateActionExt insuredPersonsTableJoinMIC;
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -59,35 +60,54 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
         insuredPersonsDl.setParameter("relativeType", RelativeType.EMPLOYEE);
         insuredPersonsDl.setParameter("employeeId", personGroupExt != null ? personGroupExt.getId() : null);
+
+        DicCompany dicCompany = personGroupExt.getCurrentAssignment().getOrganizationGroup().getOrganization().getCompany();
+
+        if (dicCompany != null){
+            InsuranceContract contract = dataManager.load(InsuranceContract.class)
+                    .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId" +
+                            " and current_date between e.availabilityPeriodFrom and e.availabilityPeriodTo")
+                    .parameter("companyId", dicCompany.getId())
+                    .view("insuranceContract-browseView")
+                    .list().stream().findFirst().orElse(null);
+
+            insuredPersonsTableJoinMIC.setEnabled(contract != null);
+        }
     }
 
 
-
-    @Subscribe("insuredPersonsTable.joinVHI")
-    public void onInsuredPersonsTableJoinVHI(Action.ActionPerformedEvent event) {
-       joinMember(true);
+    @Subscribe("insuredPersonsTable.joinMIC")
+    public void onInsuredPersonsTablejoinMIC(Action.ActionPerformedEvent event) {
+       joinMember("joinEmployee");
     }
 
-    @Subscribe("insuredPersonsTable.joinFamilyMember")
-    public void onInsuredPersonsTableJoinFamilyMember(Action.ActionPerformedEvent event) {
-        joinMember(false);
-    }
+//    @Subscribe("insuredPersonsTable.joinFamilyMember")
+//    public void onInsuredPersonsTableJoinFamilyMember(Action.ActionPerformedEvent event) {
+//        joinMember("joinMember");
+////        InsuredPerson item = insuredPersonsTable.getSingleSelected();
+////        if (item !=null){
+////            InsuredPersonEdit editorBuilder = screenBuilders.screen(this)
+////                    .withScreenClass(InsuredPersonEdit.class)
+////                    .build();
+////            editorBuilder.setParameter("joinMember");
+////            editorBuilder.show();
+////        }
+//    }
 
-    public void joinMember(boolean b) {
+    public void joinMember(String whichButton) {
         InsuredPerson item = dataManager.create(InsuredPerson.class);
-        Date today = timeSource.currentTimestamp();
-        item.setAttachDate(today);
         InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
-                .newEntity(chekType(item))
+                .newEntity(chekType(item, whichButton))
                 .build();
 
-        editorBuilder.setParameter(b);
+        editorBuilder.setParameter(whichButton);
         editorBuilder.show();
     }
 
-    public InsuredPerson chekType(InsuredPerson insuredPerson){
+    public InsuredPerson chekType(InsuredPerson insuredPerson, String whichButton){
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
-
+        Date today = timeSource.currentTimestamp();
+        insuredPerson.setAttachDate(today);
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +
                 "where e.id = :uId").parameter("uId", userSession.getUser().getId())
@@ -115,8 +135,8 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
         PersonExt person = personGroupExt.getPerson();
         AssignmentExt assignment = personGroupExt.getCurrentAssignment();
-//        if (type == RelativeType.EMPLOYEE){
-            insuredPerson.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
+        if (whichButton.equals("joinEmployee")){
+            insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
             if (contract != null){
                 insuredPerson.setInsuranceContract(contract);
                 insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
@@ -133,10 +153,11 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             insuredPerson.setJob(assignment.getJobGroup());
             insuredPerson.setTotalAmount(new BigDecimal(0));
 
-//        }else if (type == RelativeType.MEMBER && insuredPersonsTable.getSingleSelected() != null){
-//            InsuredPerson singleSelected = insuredPersonsTable.getSingleSelected();
-//            isRelativeFamily(insuredPerson, singleSelected);
-//        }
+        }else if (whichButton.equals("joinMember")){
+            InsuredPerson singleSelected = insuredPersonsTable.getSingleSelected();
+            assert singleSelected != null;
+            isRelativeFamily(insuredPerson, singleSelected);
+        }
         return insuredPerson;
     }
 
@@ -153,8 +174,9 @@ public class MyVhiInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         person.setCompany(singleSelected.getCompany());
         person.setJob(singleSelected.getJob());
         person.setInsuranceContract(singleSelected.getInsuranceContract());
+        person.setType(singleSelected.getType());
         person.setAttachDate(singleSelected.getAttachDate());
-        person.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
+        person.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
         person.setInsuranceProgram(singleSelected.getInsuranceProgram());
         person.setDocumentNumber(singleSelected.getDocumentNumber());
         person.setRegion(singleSelected.getRegion());

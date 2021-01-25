@@ -2,12 +2,9 @@ package kz.uco.tsadv.web.screens.insurancecontract;
 
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.GroupTable;
-import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
-import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonBrowse;
-import kz.uco.tsadv.web.screens.insuredperson.MyVhiInsuredPersonBrowse;
 
 import javax.inject.Inject;
 

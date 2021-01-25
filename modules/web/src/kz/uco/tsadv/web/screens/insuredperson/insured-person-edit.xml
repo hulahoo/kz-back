@@ -10,10 +10,10 @@
                   view="insuredPerson-editView">
             <loader/>
         </instance>
-        <collection id="DicVHIAttachmentStatusDc"
-                    class="kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus" view="_local">
-            <loader id="DicVHIAttachmentStatusDl">
-                <query><![CDATA[select e from tsadv$DicVHIAttachmentStatus e]]></query>
+        <collection id="DicMICAttachmentStatusDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus" view="_local">
+            <loader id="DicMICAttachmentStatusDl">
+                <query><![CDATA[select e from tsadv$DicMICAttachmentStatus e]]></query>
             </loader>
         </collection>
         <collection id="regionDc"
@@ -60,7 +60,7 @@
                     <condition>
                         <and>
                             <c:jpql>
-                                <c:where>e.company.id = :companyId</c:where>
+                                <c:where>e.company.id = :companyId and current_date between e.availabilityPeriodFrom and e.availabilityPeriodTo</c:where>
                             </c:jpql>
                         </and>
                     </condition>
@@ -77,18 +77,18 @@
                 <query><![CDATA[select e from tsadv$Address e]]></query>
             </loader>
         </collection>
-        <collection id="insuredPersonsDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
-                    view="insuredPerson-editView">
-            <loader id="insuredPersonsDl">
-                <query><![CDATA[select e from tsadv$InsuredPerson e ]]>
+        <collection id="insuredPersonMemberDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson" view="insuredPerson-editView">
+            <loader id="insuredPersonMemberDl">
+                <query><![CDATA[select e from tsadv$InsuredPerson e]]>
                     <condition>
                         <and>
                             <c:jpql>
-                                <c:where>e.employee.id = :employeeId</c:where>
+                                <c:where>e.insuranceContract.id =:employeeContractId and e.employee.id =:employeeId and e.type = :relativeType</c:where>
                             </c:jpql>
                         </and>
                     </condition>
                 </query>
+
             </loader>
         </collection>
 
@@ -117,12 +117,8 @@
                         <textField id="iinField" property="iin"/>
                         <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
                         <dateField id="birthdateField" property="birthdate"/>
-                        <pickerField id="documentTypeField" property="documentType">
-                            <actions>
-                                <action id="lookup" type="picker_lookup"/>
-                                <action id="clear" type="picker_clear"/>
-                            </actions>
-                        </pickerField>
+                        <lookupField id="documentTypeField" optionsContainer="documentTypeDc"
+                                     property="documentType"/>
                         <field property="documentNumber" id="documentNumberField"/>
                         <lookupField id="addressTypeField" property="addressType"
                                      optionsContainer="addressDc"/>
@@ -136,8 +132,8 @@
                     </column>
                 </form>
             </groupBox>
-            <groupBox caption="msg://informationOnVHI"
-                      id="informationOnVHI"
+            <groupBox caption="msg://informationOnMIC"
+                      id="informationOnMIC"
                       outerMargin="true, false, true, false">
                 <form id="form2" dataContainer="insuredPersonDc">
                     <column width="350">
@@ -153,7 +149,7 @@
                         <dateField id="endDateField" resolution="DAY" caption="msg://endData" editable="false"/>
                         <dateField id="attachDateField" property="attachDate" editable="false"/>
                         <lookupField id="statusRequestField" editable="false"
-                                     optionsContainer="DicVHIAttachmentStatusDc" property="statusRequest"/>
+                                     optionsContainer="DicMICAttachmentStatusDc" property="statusRequest"/>
                         <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
                         <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
 
@@ -163,8 +159,8 @@
                                 <action id="clear" type="picker_clear"/>
                             </actions>
                         </pickerField>
-                        <textField id="totalAmountField" property="totalAmount"/>
-                        <dateField id="exclusionDateField" property="exclusionDate"/>
+                        <textField id="totalAmountField" property="totalAmount" editable="false"/>
+                        <dateField id="exclusionDateField" resolution="DAY" property="exclusionDate"/>
                         <textField id="commentField" property="comment"/>
                     </column>
                 </form>
@@ -172,7 +168,7 @@
             <groupBox caption="msg://familyMemberInformation"
                       id="familyMemberInformationGroup"
                       outerMargin="true, false, true, false">
-                <groupTable id="insuredPersonTable" dataContainer="insuredPersonsDc" >
+                <groupTable id="insuredPersonTable" dataContainer="insuredPersonMemberDc" >
                     <actions>
                         <action id="create" type="create" openType="DIALOG"/>
                         <action id="edit" type="edit"/>

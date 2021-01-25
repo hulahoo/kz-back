@@ -32,7 +32,7 @@
             </view>
             <loader id="insuredPersonsDl">
                 <query>
-                    <![CDATA[select e from tsadv$InsuredPerson e where e.company = :myCompany]]>
+                    <![CDATA[select e from tsadv$InsuredPerson e where e.insuranceContract.id = :insuranceContractId]]>
                 </query>
             </loader>
         </collection>

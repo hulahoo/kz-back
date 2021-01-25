@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
-        caption="msg://myVhiInsuredPersonBrowse.caption"
+        caption="msg://myMicInsuredPersonBrowse.caption"
         focusComponent="insuredPersonsTable"
         messagesPack="kz.uco.tsadv.web.screens.insuredperson">
     <data readOnly="true">
@@ -67,8 +67,8 @@
                     width="100%"
                     dataContainer="insuredPersonsDc">
             <actions>
-                <action id="joinVHI" type="create"/>
-                <action id="joinFamilyMember" trackSelection="true"/>
+                <action id="joinMIC" type="create"/>
+                <action id="joinFamilyMember" type="edit" trackSelection="true"/>
             </actions>
             <columns>
                 <column id="insuranceContract.contract"/>
@@ -82,7 +82,7 @@
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn" stylename="primary"
-                        action="insuredPersonsTable.joinVHI" caption="msg://joinVHI"/>
+                        action="insuredPersonsTable.joinMIC" caption="msg://joinTheMIC"/>
                 <button id="createBtnFamilyMember"
                         stylename="primary"
                         caption="msg://JoinTheMICFamilyMember"

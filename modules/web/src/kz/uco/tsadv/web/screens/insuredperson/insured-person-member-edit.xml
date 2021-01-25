@@ -10,10 +10,10 @@
                   view="insuredPersonMember-editView">
             <loader/>
         </instance>
-        <collection id="statusRequestDc" class="kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus"
+        <collection id="statusRequestDc" class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus"
                     view="_local">
             <loader id="statusRequestDl">
-                <query><![CDATA[select e from tsadv$DicVHIAttachmentStatus e]]></query>
+                <query><![CDATA[select e from tsadv$DicMICAttachmentStatus e]]></query>
             </loader>
         </collection>
         <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup" view="_local">
@@ -39,13 +39,6 @@
         <collection id="relativeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType" view="_local">
             <loader id="relativeDl">
                 <query><![CDATA[select e from tsadv$DicRelationshipType e where e.code <> :employee]]>
-<!--                    <condition>-->
-<!--                        <and>-->
-<!--                            <c:jpql>-->
-<!--                                <c:where>e.code <> :employee</c:where>-->
-<!--                            </c:jpql>-->
-<!--                        </and>-->
-<!--                    </condition>-->
                 </query>
             </loader>
         </collection>
@@ -58,10 +51,8 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form" dataContainer="insuredPersonDc">
                 <column width="350px">
-                    <dateField id="attachDateField" property="attachDate" visible="false"/>
                     <lookupField id="statusRequestField" optionsContainer="statusRequestDc"
                                  property="statusRequest" visible="false"/>
-
                     <pickerField id="insuranceContractField" visible="false" property="insuranceContract">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
@@ -87,8 +78,8 @@
                     <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
                     <textField id="iinField" property="iin"/>
                     <dateField id="birthdateField" property="birthdate"/>
-                    <lookupField id="" property="documentType" optionsContainer="documentTypeDc"/>
                     <lookupField id="relativeField" property="relative" optionsContainer="relativeDc"/>
+                    <lookupField id="" property="documentType" optionsContainer="documentTypeDc"/>
                     <textField id="documentNumberField" property="documentNumber"/>
                     <lookupField id="regionField" property="region" optionsContainer="regionFieldDc"/>
                     <textField rowspan="3" id="addressField" property="address" caption="msg://address" required="true"/>
@@ -99,6 +90,8 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
+                    <dateField id="attachDateField" property="attachDate"
+                               visible="true" editable="false"/>
                     <lookupField id="typeField" property="type" visible="false"/>
                     <textField id="amountField" property="amount" visible="false"/>
                     <textField id="totalAmountField" property="totalAmount" visible="false"/>

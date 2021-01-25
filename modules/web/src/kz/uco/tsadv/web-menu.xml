@@ -384,7 +384,7 @@
         </item>
         <item screen="tsadv$Absence.self.browse"/>
         <item screen="tsadv_PersonData" caption="mainMsg://menu_config.tsadv_PersonData"/>
-        <item screen="tsadv$MyVHIInsuredPerson.browse" caption="mainMsg://menu_config.tsadv$MyVHIInsuredPerson.browse"/>
+        <item screen="tsadv$MyMICInsuredPerson.browse" caption="mainMsg://menu_config.tsadv$MyMICInsuredPerson.browse"/>
     </menu>
     <menu id="performanceManagement"
           icon="font-icon:BAR_CHART_O"

@@ -1,2 +1,0 @@
-alter table TSADV_INSURANCE_CONTRACT add column DEFAULT_DOCUMENT_TYPE_ID uuid ;
-alter table TSADV_INSURANCE_CONTRACT add column DEFAULT_ADDRESS_ID uuid ;

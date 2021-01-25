@@ -10,15 +10,13 @@ import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
-import groovy.lang.MetaProperty;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
 
 @UiController("tsadv$InsuredPerson.browse")
 @UiDescriptor("insured-person-browse.xml")
@@ -73,11 +71,9 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 //        return result;
 //    }
 
-
-
     public void setParameter(InsuranceContract contract) {
         insuranceContract = contract;
-        insuredPersonsDl.setParameter("myCompany", contract.getCompany());
+        insuredPersonsDl.setParameter("insuranceContractId", contract.getId());
         insuredPersonsDl.load();
     }
 
@@ -90,11 +86,29 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         insuredPerson.setAttachDate(timeSource.currentTimestamp());
         insuredPerson.setCompany(insuranceContract.getCompany());
         insuredPerson.setInsuranceProgram(insuranceContract.getInsuranceProgram());
-        insuredPerson.setStatusRequest(commonService.getEntity(DicVHIAttachmentStatus.class, "DRAFT"));
-        screenBuilders.editor(insuredPersonsTable)
+//        insuredPerson.setAddressType(insuranceContract.getDefaultAddress());
+        insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
+
+        InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                 .newEntity(insuredPerson)
-                .build()
-                .show();
+                .build();
+
+        editorBuilder.setParameter("joinHr");
+        editorBuilder.show();
+
+    }
+
+    @Subscribe("insuredPersonsTable.edit")
+    public void onInsuredPersonsTableEdit(Action.ActionPerformedEvent event) {
+        InsuredPerson selectItem = insuredPersonsTable.getSingleSelected();
+        if (selectItem != null){
+            InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
+                    .newEntity(selectItem)
+                    .build();
+
+            editorBuilder.setParameter("editHr");
+            editorBuilder.show();
+        }
     }
 
 

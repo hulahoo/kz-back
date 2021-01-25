@@ -615,6 +615,6 @@
         <class>kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator</class>
         <class>kz.uco.tsadv.modules.personal.model.InsuranceContract</class>
         <class>kz.uco.tsadv.modules.personal.model.InsuredPerson</class>
-        <class>kz.uco.tsadv.modules.personal.dictionary.DicVHIAttachmentStatus</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus</class>
     </persistence-unit>
 </persistence>

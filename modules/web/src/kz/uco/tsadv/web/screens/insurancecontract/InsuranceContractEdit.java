@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.screens.insurancecontract;
 
 
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
@@ -13,6 +14,12 @@ import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator;
 
 import javax.inject.Inject;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.Objects;
 
 @UiController("tsadv$InsuranceContract.edit")
 @UiDescriptor("insurance-contract-edit.xml")
@@ -33,6 +40,12 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     private CollectionPropertyContainer<ContractConditions> programConditionsDc;
     @Inject
     private CollectionPropertyContainer<InsuranceContractAdministrator> contractAdministratorDc;
+    @Inject
+    private DateField<Date> startDateField;
+    @Inject
+    private DateField<Date> expirationDateField;
+    @Inject
+    private TimeSource timeSource;
 
     @Subscribe
     public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
@@ -41,6 +54,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
         programConditionsDc.getItems().forEach(dataContext::merge);
         attachmentsDc.getItems().forEach(dataContext::merge);
     }
+
 
     @Subscribe("programConditionsDataGrid.create")
     public void onProgramConditionsDataGridCreate(Action.ActionPerformedEvent event) {
@@ -55,6 +69,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
         programConditionsDataGrid.edit(contractCondition);
     }
 
+
     @Subscribe("programConditionsDataGrid.edit")
     public void onProgramConditionsDataGridEdit(Action.ActionPerformedEvent event) {
         ContractConditions selected = programConditionsDataGrid.getSingleSelected();
@@ -66,6 +81,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
                     .show();
         }
     }
+
 
     @Subscribe("contractAdministratorDataGrid.create")
     public void onContractAdministratorDataGridCreate(Action.ActionPerformedEvent event) {
@@ -81,6 +97,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
         contractAdministratorDataGrid.edit(contractAdministrator);
     }
 
+
     @Subscribe("contractAdministratorDataGrid.edit")
     public void onContractAdministratorDataGridEdit(Action.ActionPerformedEvent event) {
         InsuranceContractAdministrator selected = contractAdministratorDataGrid.getSingleSelected();
@@ -92,4 +109,34 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
                     .show();
         }
     }
+
+
+    @Subscribe("startDateField")
+    public void onStartDateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
+        if (event.getValue() != null && expirationDateField.getValue() != null){
+            if (event.getValue().after(expirationDateField.getValue())){
+                notifications.create()
+                        .withPosition(Notifications.Position.BOTTOM_RIGHT)
+                        .withCaption("Дата с: Не больше Дата по")
+                        .show();
+                return;
+            }
+        }
+    }
+
+
+    @Subscribe("expirationDateField")
+    public void onExpirationDateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
+        if (event.getValue() != null && startDateField.getValue() != null){
+            if (event.getValue().before(startDateField.getValue())){
+                notifications.create()
+                        .withPosition(Notifications.Position.BOTTOM_RIGHT)
+                        .withCaption("Дата по: Не меньше Дата с")
+                        .show();
+                return;
+            }
+        }
+    }
+
+
 }
