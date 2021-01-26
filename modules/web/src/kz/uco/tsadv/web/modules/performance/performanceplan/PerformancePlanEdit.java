@@ -7,6 +7,9 @@ import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.app.core.file.FileUploadDialog;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.export.ByteArrayDataProvider;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -14,7 +17,6 @@ import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.reports.entity.Report;
-import com.haulmont.reports.entity.ReportOutputType;
 import com.haulmont.reports.gui.ReportGuiManager;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicCompany;
@@ -24,16 +26,17 @@ import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.*;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.KpiService;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.inject.Inject;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -87,6 +90,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected FileUploadingAPI fileUploadingAPI;
     @Inject
     protected ReportGuiManager reportGuiManager;
+    @Inject
+    protected ExportDisplay exportDisplay;
     private FileInputStream inputStream;
 
     @Subscribe
@@ -447,16 +452,43 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         int rowCount = sheet.getLastRowNum();
 
         for (int i = 1; i <= rowCount; i++) {
-            if (sheet.getRow(i).getCell(Integer.parseInt(assignedPerformancePlanId)) != null
-                    && (sheet.getRow(i).getCell(adjustedScore).getNumericCellValue() > 0
-                    || sheet.getRow(i).getCell(adjustedBonus).getNumericCellValue() > 0)) {
-                addToBase(sheet.getRow(i).getCell(Integer.parseInt(assignedPerformancePlanId)).getStringCellValue(),
-                        sheet.getRow(i).getCell(adjustedScore).getNumericCellValue(),
-                        sheet.getRow(i).getCell(adjustedBonus).getNumericCellValue());
+            HSSFRow row = sheet.getRow(i);
+            try {
+                if (row.getCell(Integer.parseInt(assignedPerformancePlanId)) != null
+                        && (row.getCell(adjustedScore).getNumericCellValue() > 0
+                        || row.getCell(adjustedBonus).getNumericCellValue() > 0)) {
+                    boolean isTrue = addToBase(row.getCell(Integer.parseInt(assignedPerformancePlanId)).getStringCellValue(),
+                            row.getCell(adjustedScore).getNumericCellValue(),
+                            row.getCell(adjustedBonus).getNumericCellValue());
+                    Cell statusCell = createStatusCell(row);
+                    if (isTrue) {
+                        statusCell.setCellValue("OK");
+                    } else {
+                        statusCell.setCellValue(messageBundle.getMessage("xlsError")
+                                + messageBundle.getMessage("assignedPerformancePlanNotFound"));
+                    }
+                }
+            } catch (Exception e) {
+                Cell statusCell = createStatusCell(row);
+                statusCell.setCellValue(messageBundle.getMessage("xlsError") + e.getMessage());
             }
         }
         assignedPerformancePlansDl.load();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            hssfWorkbook.write(bos);
+        } finally {
+            bos.close();
+        }
+        byte[] bytes = bos.toByteArray();
+        exportDisplay.show(new ByteArrayDataProvider(bytes), "KPI CARD", ExportFormat.XLS);
         hssfWorkbook.close();
+    }
+
+    private HSSFCell createStatusCell(HSSFRow row) {
+        return row.getCell(12) != null
+                ? row.getCell(12)
+                : row.createCell(12);
     }
 
     private void xlsx(XSSFWorkbook xssfWorkbook) throws IOException {
@@ -469,36 +501,68 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         // Get first sheet from the workbook
         assert xssfWorkbook != null;
         XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
+
         String assignedPerformancePlanId = String.valueOf(sheet.getRow(1).getCell(0).getColumnIndex());
         int adjustedScore = sheet.getRow(1).getCell(10).getColumnIndex();
         int adjustedBonus = sheet.getRow(1).getCell(11).getColumnIndex();
         int rowCount = sheet.getLastRowNum();
 
         for (int i = 1; i <= rowCount; i++) {
-            if (sheet.getRow(i).getCell(Integer.parseInt(assignedPerformancePlanId)) != null
-                    && (sheet.getRow(i).getCell(adjustedScore).getNumericCellValue() > 0
-                    || sheet.getRow(i).getCell(adjustedBonus).getNumericCellValue() > 0)) {
-                addToBase(sheet.getRow(i).getCell(Integer.parseInt(assignedPerformancePlanId)).getStringCellValue(),
-                        sheet.getRow(i).getCell(adjustedScore).getNumericCellValue(),
-                        sheet.getRow(i).getCell(adjustedBonus).getNumericCellValue());
+            XSSFRow row = sheet.getRow(i);
+            try {
+                if (row.getCell(Integer.parseInt(assignedPerformancePlanId)) != null
+                        && (row.getCell(adjustedScore).getNumericCellValue() > 0
+                        || row.getCell(adjustedBonus).getNumericCellValue() > 0)) {
+                    boolean isTrue = addToBase(row.getCell(Integer.parseInt(assignedPerformancePlanId)).getStringCellValue(),
+                            row.getCell(adjustedScore).getNumericCellValue(),
+                            row.getCell(adjustedBonus).getNumericCellValue());
+                    Cell statusCell = createStatusCell(row);
+                    if (isTrue) {
+                        statusCell.setCellValue("OK");
+                    } else {
+                        statusCell.setCellValue(messageBundle.getMessage("xlsError")
+                                + messageBundle.getMessage("assignedPerformancePlanNotFound"));
+                    }
+                }
+            } catch (Exception e) {
+                Cell statusCell = createStatusCell(row);
+                statusCell.setCellValue(messageBundle.getMessage("xlsError") + e.getMessage());
             }
         }
         assignedPerformancePlansDl.load();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            xssfWorkbook.write(bos);
+        } finally {
+            bos.close();
+        }
+        byte[] bytes = bos.toByteArray();
+        exportDisplay.show(new ByteArrayDataProvider(bytes), "KPI CARD", ExportFormat.XLS);
         xssfWorkbook.close();
     }
 
-    private void addToBase(String assignedPerformancePlanId, double adjustedScore,
-                           double adjustedBonus) {
+    private Cell createStatusCell(XSSFRow row) {
+        return row.getCell(12) != null
+                ? row.getCell(12)
+                : row.createCell(12);
+    }
+
+    private Boolean addToBase(String assignedPerformancePlanId, double adjustedScore,
+                              double adjustedBonus) {
         AssignedPerformancePlan assignedPerformancePlan = dataManager.load(AssignedPerformancePlan.class)
                 .query("select e from tsadv$AssignedPerformancePlan e " +
-                        " where e.id = :assignedPerformancePlanId ")
+                        " where e.performancePlan = :performancePlan " +
+                        " and e.id = :assignedPerformancePlanId ")
+                .parameter("performancePlan", performancePlanDc.getItem())
                 .parameter("assignedPerformancePlanId", UUID.fromString(assignedPerformancePlanId))
                 .list().stream().findFirst().orElse(null);
         if (assignedPerformancePlan != null) {
             assignedPerformancePlan.setAdjustedScore(adjustedScore);
             assignedPerformancePlan.setAdjustedBonus(adjustedBonus);
             dataManager.commit(assignedPerformancePlan);
+            return true;
         }
+        return false;
     }
 
     @Subscribe("assignedPerformancePlanTable.exportExcel")
