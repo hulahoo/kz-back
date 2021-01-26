@@ -2,6 +2,7 @@ package kz.uco.tsadv.components;
 
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.gui.data.HierarchicalDatasource;
+import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.vaadin.v7.ui.Tree;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.MyTeamNew;

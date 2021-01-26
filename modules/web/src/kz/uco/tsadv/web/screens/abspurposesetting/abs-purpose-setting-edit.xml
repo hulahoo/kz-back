@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://absPurposeSettingEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.abspurposesetting">
+    <data>
+        <instance id="absPurposeSettingDc"
+                  class="kz.uco.tsadv.modules.personal.model.AbsPurposeSetting">
+            <view extends="_local">
+                <property name="absenceType" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="absencePurpose" view="_minimal"/>
+            </view>
+            <loader/>
+        </instance>
+        <collection id="dicAbsenceTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType">
+            <view extends="_local"/>
+            <loader id="dicAbsenceTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicAbsenceType e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicAbsencePurposesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose">
+            <view extends="_local"/>
+            <loader id="dicAbsencePurposesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicAbsencePurpose e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="absPurposeSettingDc">
+            <column width="350px">
+                <textField id="orderNumberField" property="orderNumber"/>
+                <lookupField id="absenceTypeField" property="absenceType" optionsContainer="dicAbsenceTypesDc"/>
+                <lookupField id="absencePurposeField" property="absencePurpose"
+                             optionsContainer="dicAbsencePurposesDc"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

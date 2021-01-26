@@ -139,7 +139,7 @@ public class AssessmentCreate extends AbstractEditor<Assessment> {
         map.put("systemDate", CommonUtils.getSystemDate());
         PositionGroupExt positionGroup = commonService.getEntity(PositionGroupExt.class,
                 "select e.positionGroup from base$AssignmentExt e " +
-                        " where e.personGroupId.id =  :personGroupId" +
+                        " where e.personGroup.id =  :personGroupId" +
                         "   and :systemDate between e.startDate and e.endDate", map,
                 "positionGroup.forAssess");
         if (positionGroup != null) {
@@ -153,7 +153,7 @@ public class AssessmentCreate extends AbstractEditor<Assessment> {
     private List<AssignedGoal> getAssignedGoals() {
         LoadContext<AssignedGoal> loadContext = LoadContext.create(AssignedGoal.class);
         loadContext.setQuery(LoadContext.createQuery("select e from tsadv$AssignedGoal e " +
-                "where e.personGroupId.id = :personGroupId" +
+                "where e.personGroup.id = :personGroupId" +
                 "  and e.performancePlan.id = :performancePlanId" +
                 "  and e.goal.deleteTs is null")
                 .setParameter("personGroupId", assessmentDs.getItem().getEmployeePersonGroup().getId())

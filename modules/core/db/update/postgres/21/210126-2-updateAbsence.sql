@@ -1,0 +1,11 @@
+alter table TSADV_ABSENCE add column TRANSFER_PERIOD_START timestamp ;
+alter table TSADV_ABSENCE add column PURPOSE_TEXT varchar(2000) ;
+alter table TSADV_ABSENCE add column TIME_OF_FINISHING timestamp ;
+alter table TSADV_ABSENCE add column COMPENCATION boolean ;
+alter table TSADV_ABSENCE add column TOTAL_HOURS integer ;
+alter table TSADV_ABSENCE add column TIME_OF_STARTING timestamp ;
+alter table TSADV_ABSENCE add column VACATION_DAY boolean ;
+alter table TSADV_ABSENCE add column PURPOSE_ID uuid ;
+alter table TSADV_ABSENCE add column TRANSFER_PERIOD_END timestamp ;
+alter table TSADV_ABSENCE add column AGREE boolean ;
+alter table TSADV_ABSENCE add column ACQUAINTED boolean ;

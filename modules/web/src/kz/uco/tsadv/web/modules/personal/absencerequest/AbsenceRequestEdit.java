@@ -376,7 +376,7 @@ public class AbsenceRequestEdit<T extends AbsenceRequest> extends AbstractBpmEdi
 //                        LoadContext.createQuery("select e " +
 //                                "from base$AssignmentGroupExt e" +
 //                                " join e.list a " +
-//                                "where a.personGroupId.id = :userPersonGroupId " +
+//                                "where a.personGroup.id = :userPersonGroupId " +
 //                                " and :systemDate between a.startDate and a.endDate" +
 //                                " and a.primaryFlag = 'TRUE' " +
 //                                "   and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")

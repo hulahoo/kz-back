@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://absPurposeSettingBrowse.caption"
+        focusComponent="absPurposeSettingsTable"
+        messagesPack="kz.uco.tsadv.web.screens.abspurposesetting">
+    <data readOnly="true">
+        <collection id="absPurposeSettingsDc"
+                    class="kz.uco.tsadv.modules.personal.model.AbsPurposeSetting">
+            <view extends="_local">
+                <property name="absenceType" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="absencePurpose" view="_minimal"/>
+            </view>
+            <loader id="absPurposeSettingsDl">
+                <query>
+                    <![CDATA[select e from tsadv_AbsPurposeSetting e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="absPurposeSettingsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="absPurposeSettingsTable"
+                dataLoader="absPurposeSettingsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="absPurposeSettingsTable"
+                    width="100%"
+                    dataContainer="absPurposeSettingsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="orderNumber"/>
+                <column id="absenceType"/>
+                <column id="absencePurpose"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="absPurposeSettingsTable.create"/>
+                <button id="editBtn" action="absPurposeSettingsTable.edit"/>
+                <button id="removeBtn" action="absPurposeSettingsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

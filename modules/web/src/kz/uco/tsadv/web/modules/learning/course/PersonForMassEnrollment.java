@@ -94,7 +94,7 @@ public class PersonForMassEnrollment extends AbstractWindow {
         map.put("personGroupExtId", personGroupExt != null ? personGroupExt.getId() : null);
         return commonService.getEntities(CourseSectionAttempt.class,
                 " select e from tsadv$CourseSectionAttempt e " +
-                        "where e.enrollment.personGroupId.id = :personGroupExtId " +
+                        "where e.enrollment.personGroup.id = :personGroupExtId " +
                         " order by e.attemptDate DESC", map, "courseSectionAttempt.edit");
     }
 

@@ -114,7 +114,7 @@ public class StoreStyleFilter {
                                     " then dc.langValue5 else '&' end)))))))) " +
                                     " from base$DicCity dc where dc.id = e.requisition.location.id)" +
                                     " like concat('%',concat((select ad.city from tsadv$Address ad " +
-                                    " where ad.personGroupId.id = cpg.id " +
+                                    " where ad.personGroup.id = cpg.id " +
                                     " and ad.addressType.code = 'RESIDENCE' " +
                                     " and current_date between ad.startDate and ad.endDate ),'%')))");
                         }
@@ -171,7 +171,7 @@ public class StoreStyleFilter {
                                             .append("(")
                                             .append("(select ce from tsadv$CompetenceElement ce " +
                                                     " where ce.competenceGroup.id = '" + ((Competence) entry.getKey().getValue()).getGroup().getId() + "'" +
-                                                    " and cpg.id = ce.personGroupId.id " +
+                                                    " and cpg.id = ce.personGroup.id " +
                                                     " and ce.scaleLevel.levelNumber >= " + ((ScaleLevel) entry.getValue().getValue()).getLevelNumber())
                                             .append(")")
                                             .append(" MEMBER OF cpg.competenceElements ")

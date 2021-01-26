@@ -821,7 +821,7 @@ public class AssessmentEdit extends AbstractEditor<Assessment> {
     private List<AssignedGoal> getAssignedGoals() {
         LoadContext<AssignedGoal> loadContext = LoadContext.create(AssignedGoal.class);
         loadContext.setQuery(LoadContext.createQuery("select e from tsadv$AssignedGoal e " +
-                "where e.personGroupId.id = :personId")
+                "where e.personGroup.id = :personId")
                 .setParameter("personId", person.getGroup().getId()))
                 .setView("assignedGoalForCard");
         return dataManager.loadList(loadContext);

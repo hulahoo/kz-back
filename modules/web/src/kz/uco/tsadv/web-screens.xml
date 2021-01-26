@@ -2256,4 +2256,5 @@
             template="kz/uco/tsadv/web/screens/extapppropertyentity/ext-app-property-entity-browse.xml"/>
     <screen id="tsadv_ExtAppPropertyEntity.edit"
             template="kz/uco/tsadv/web/screens/extapppropertyentity/ext-app-property-entity-edit.xml"/>
+    <screen id="tsadv_SsStructurePerson" template="kz/uco/tsadv/web/screens/ss-structure-person.xml"/>
 </screen-config>

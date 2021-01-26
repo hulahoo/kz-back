@@ -96,7 +96,7 @@ public class InterviewBrowse extends AbstractLookup {
         PersonExt person = commonService.getEntity(PersonExt.class,
                 "SELECT p " +
                         "FROM base$PersonExt p " +
-                        "join tsadv$UserExt user ON p.group.id = user.personGroupId.id " +
+                        "join tsadv$UserExt user ON p.group.id = user.personGroup.id " +
                         " where user.id = :userId " +
                         " and :sysDate between p.startDate and p.endDate ",
                 map,
