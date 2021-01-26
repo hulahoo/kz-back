@@ -14,6 +14,7 @@ import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @NamePattern("%s|name")
@@ -24,6 +25,13 @@ public class Course extends AbstractParentEntity {
 
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @NotNull
+    @Column(name = "IS_ISSUED_CERTIFICATE", nullable = false)
+    protected Boolean isIssuedCertificate = false;
+
+    @OneToMany(mappedBy = "course")
+    protected List<Enrollment> enrollments;
 
     @OneToMany(mappedBy = "course")
     protected List<CourseTrainer> courseTrainers;
@@ -89,6 +97,22 @@ public class Course extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LEARNING_TYPE_ID")
     protected DicLearningType learningType;
+
+    public Boolean getIsIssuedCertificate() {
+        return isIssuedCertificate;
+    }
+
+    public void setIsIssuedCertificate(Boolean isIssuedCertificate) {
+        this.isIssuedCertificate = isIssuedCertificate;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
 
     public List<CourseTrainer> getCourseTrainers() {
         return courseTrainers;

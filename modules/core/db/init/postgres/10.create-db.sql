@@ -4881,6 +4881,7 @@ create table TSADV_COURSE (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     NAME varchar(255) not null,
+    IS_ISSUED_CERTIFICATE boolean not null,
     PARTY_ID uuid,
     DESCRIPTION text,
     LOGO bytea,

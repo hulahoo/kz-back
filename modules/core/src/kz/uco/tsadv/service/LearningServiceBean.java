@@ -276,10 +276,17 @@ public class LearningServiceBean implements LearningService {
                         .getResultList());
         List<Course> coursesWithMaxSessionEndDate = courses.stream()
                 .peek(c -> {
-                    List<CourseSection> sections = c.getSections().stream().sorted((cs1, cs2) -> {
-                        CourseSectionSession courseSectionSession1 = cs1.getSession().stream().max(Comparator.comparing(CourseSectionSession::getEndDate)).orElseThrow(NullPointerException::new);
-                        CourseSectionSession courseSectionSession2 = cs2.getSession().stream().max(Comparator.comparing(CourseSectionSession::getEndDate)).orElseThrow(NullPointerException::new);
-
+                    List<CourseSection> sections = c.getSections().stream().filter(cs -> !cs.getSession().isEmpty()).sorted((cs1, cs2) -> {
+                        CourseSectionSession courseSectionSession1 = cs1.getSession().stream().max(Comparator.comparing(CourseSectionSession::getEndDate)).orElse(null);
+                        CourseSectionSession courseSectionSession2 = cs2.getSession().stream().max(Comparator.comparing(CourseSectionSession::getEndDate)).orElse(null);
+                        //TODO: убрать
+                        if (courseSectionSession1 == null && courseSectionSession2 == null) {
+                            return 0;
+                        } else if (courseSectionSession1 == null) {
+                            return -1;
+                        } else if (courseSectionSession2 == null) {
+                            return 1;
+                        }
                         return Objects.requireNonNull(courseSectionSession1).getEndDate().compareTo(Objects.requireNonNull(courseSectionSession2).getEndDate());
                     })
                             .peek(cs -> cs.setSession(Collections.singletonList(cs.getSession().get(0))))

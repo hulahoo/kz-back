@@ -3,6 +3,7 @@ package kz.uco.tsadv.service;
 
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.learning.model.*;
+import kz.uco.tsadv.pojo.CoursePojo;
 
 import java.util.List;
 import java.util.Map;
@@ -35,17 +36,21 @@ public interface CourseService {
 
     List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy);
 
-    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy, List<Map<String, String>> filter,String lang);
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy, List<Map<String, String>> filter, String lang);
 
     List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount);
 
-    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy,Map<String,Object> param);
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy, Map<String, Object> param);
 
-    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy, List<Map<String, String>> filter,String lang,Map<String,Object> param);
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, int paramsForOrderBy, List<Map<String, String>> filter, String lang, Map<String, Object> param);
 
-    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount,Map<String,Object> param);
+    List<AssignedTestPojo> loadAssignedTest(int firstResult, int maxResults, boolean forRowCount, Map<String, Object> param);
 
     void addEnrollment(AssignedTestPojo assignedTestPojo);
 
     void removeEnrollment(UUID enrollmentId);
+
+    CoursePojo courseInfo(UUID courseId);
+
+    Map<String, Object> courseTrainerInfo(UUID trainerId);
 }

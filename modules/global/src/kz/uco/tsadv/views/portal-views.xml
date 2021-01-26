@@ -94,4 +94,56 @@
             </property>
         </property>
     </view>
+    <view name="course-portal-browse" entity="tsadv$Course" extends="_minimal">
+        <property name="name"/>
+        <property name="avgRate"/>
+        <property name="logo"/>
+    </view>
+    <view name="category-courses" entity="tsadv$DicCategory">
+        <property name="langValue"/>
+        <property name="langValue1"/>
+        <property name="langValue2"/>
+        <property name="langValue3"/>
+        <property name="courses" view="course-portal-browse"/>
+    </view>
+    <view name="portal-course-edit" entity="tsadv$Course">
+        <property name="name"/>
+        <property name="avgRate"/>
+        <property name="preRequisition">
+            <property name="requisitionCourse">
+                <property name="name"/>
+            </property>
+        </property>
+        <property name="courseTrainers">
+            <property name="trainer">
+                <property name="employee">
+                    <property name="person">
+                        <property name="fullName"/>
+                    </property>
+                </property>
+            </property>
+        </property>
+        <property name="sections">
+            <property name="session">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="enrollments" view="_minimal"/>
+        <property name="logo"/>
+        <property name="isIssuedCertificate"/>
+    </view>
+    <view name="course-trainer-info" entity="tsadv$Trainer">
+        <property name="employee">
+            <property name="person">
+                <property name="fullName"/>
+                <property name="image" />
+            </property>
+        </property>
+        <property name="courseTrainer">
+            <property name="course">
+                <property name="enrollments" />
+            </property>
+        </property>
+    </view>
 </views>
