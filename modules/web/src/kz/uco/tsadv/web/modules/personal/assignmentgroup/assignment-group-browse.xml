@@ -13,7 +13,7 @@
                 <![CDATA[select e
                            from base$AssignmentGroupExt e
                            join base$AssignmentExt a on a.group.id = e.id
-                           join base$PersonGroupExt pg on pg.id = a.personGroupId.id
+                           join base$PersonGroupExt pg on pg.id = a.personGroup.id
                            join base$PersonExt p on p.group.id = pg.id
                            where :session$systemDate between a.startDate and a.endDate
                             and :session$systemDate between p.startDate and p.endDate

@@ -322,7 +322,7 @@ public class PersonMainDataEdit extends AbstractHrEditor<PersonExt> {
 
     private void checkForHireDateError() {
         Long assignmentExt = commonService.getCount(AssignmentExt.class,
-                "select a from base$AssignmentExt a WHERE a.personGroupId.id = :personGroupId",
+                "select a from base$AssignmentExt a WHERE a.personGroup.id = :personGroupId",
                 ParamsMap.of("personGroupId", personDs.getItem().getGroup().getId()));
         if (assignmentExt > 1) {
             hireDateError = true;

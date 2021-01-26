@@ -678,7 +678,7 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
                 userList = commonService.getEntities(UserExt.class,
                         "select e " +
                                 "    from tsadv$UserExt e " +
-                                "   where e.personGroupId.id = :mainInterviewerPersonGroupId ",
+                                "   where e.personGroup.id = :mainInterviewerPersonGroupId ",
                         Collections.singletonMap("mainInterviewerPersonGroupId", interview.getMainInterviewerPersonGroup().getId()),
                         "user.browse");
                 params.put("interview", getItem());
@@ -691,7 +691,7 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
                 userList = commonService.getEntities(UserExt.class,
                         "select e " +
                                 "    from tsadv$UserExt e " +
-                                "   where e.personGroupId.id = :candidatePersonGroupId",
+                                "   where e.personGroup.id = :candidatePersonGroupId",
                         Collections.singletonMap("candidatePersonGroupId", interview.getJobRequest().getCandidatePersonGroup().getId()),
                         "user.browse");
                 if (isSystemNotificationAllow) {

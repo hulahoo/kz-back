@@ -1,0 +1,10 @@
+alter table TSADV_ABSENCE_REQUEST add column PURPOSE_TEXT varchar(2000) ;
+alter table TSADV_ABSENCE_REQUEST add column TIME_OF_FINISHING timestamp ;
+alter table TSADV_ABSENCE_REQUEST add column COMPENCATION boolean ;
+alter table TSADV_ABSENCE_REQUEST add column TOTAL_HOURS integer ;
+alter table TSADV_ABSENCE_REQUEST add column TIME_OF_STARTING timestamp ;
+alter table TSADV_ABSENCE_REQUEST add column VACATION_DAY boolean ;
+alter table TSADV_ABSENCE_REQUEST add column PURPOSE_ID uuid ;
+alter table TSADV_ABSENCE_REQUEST add column AGREE boolean ;
+alter table TSADV_ABSENCE_REQUEST add column PERSON_GROUP_ID uuid ;
+alter table TSADV_ABSENCE_REQUEST add column ACQUAINTED boolean ;

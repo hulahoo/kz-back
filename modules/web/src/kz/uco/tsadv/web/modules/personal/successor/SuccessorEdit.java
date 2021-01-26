@@ -109,7 +109,7 @@ public class SuccessorEdit<T extends Successor> extends AbstractEditor<T> {
     private boolean hasDuplicate() {
         return commonService.getCount(Successor.class, "select e from tsadv$Successor e " +
                 "where e.succession.id = :successionId" +
-                "  and e.personGroupId.id = :personGroupId" +
+                "  and e.personGroup.id = :personGroupId" +
                 " and e.id <> :successorId", ParamsMap.of("successionId", getItem().getSuccession().getId(),
                 "personGroupId", getItem().getPersonGroup().getId(),
                 "successorId",getItem().getId())) > 0;

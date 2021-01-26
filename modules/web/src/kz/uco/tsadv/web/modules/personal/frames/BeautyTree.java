@@ -96,7 +96,7 @@ public class BeautyTree extends AbstractWindow {
                 "select e from base$AssignmentExt e " +
                         "where :sysDate between e.startDate and e.endDate " +
                         "  and e.primaryFlag = true " +
-                        "and e.personGroupId.id = (select p.group.id from base$PersonExt p where p.id = :pId)")
+                        "and e.personGroup.id = (select p.group.id from base$PersonExt p where p.id = :pId)")
                 .setParameter("pId", personId)
                 .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView("assignment.card");

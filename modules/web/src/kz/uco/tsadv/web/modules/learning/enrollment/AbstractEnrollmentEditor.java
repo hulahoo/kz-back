@@ -247,7 +247,7 @@ public abstract class AbstractEnrollmentEditor<T extends Enrollment> extends Abs
         loadContext.setQuery(LoadContext.createQuery(String.format(
                 "select e from tsadv$Enrollment e " +
                         "where e.course.id = :courseId " +
-                        "and e.personGroupId.id = :personGroupId " +
+                        "and e.personGroup.id = :personGroupId " +
                         "and e.status not in (4,5) %s",
                 isCreate ? "" : String.format("and e.id <> '%s'", getItem().getId())))
                 .setParameter("courseId", course.getId())
@@ -259,7 +259,7 @@ public abstract class AbstractEnrollmentEditor<T extends Enrollment> extends Abs
         LoadContext<CertificationEnrollment> loadContext = LoadContext.create(CertificationEnrollment.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$CertificationEnrollment e join e.certification c " +
-                        "where e.personGroupId.id = :pId " +
+                        "where e.personGroup.id = :pId " +
                         "and e.status = :status " +
                         "and c.course.id = :cId");
         query.setParameter("pId", personGroup.getId());

@@ -178,7 +178,7 @@ public class RegisterCourse extends AbstractLookup {
         LoadContext<CertificationEnrollment> loadContext = LoadContext.create(CertificationEnrollment.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$CertificationEnrollment e join e.certification c " +
-                        "where e.personGroupId.id = :pId " +
+                        "where e.personGroup.id = :pId " +
                         "and e.status = :status " +
                         "and c.course.id = :cId");
         query.setParameter("pId", personGroup.getId());
@@ -215,7 +215,7 @@ public class RegisterCourse extends AbstractLookup {
                 "select e from base$AssignmentExt e " +
                         "where :sysDate between e.startDate and e.endDate " +
                         "  and e.primaryFlag = true " +
-                        "and e.personGroupId.id = :personGroupId")
+                        "and e.personGroup.id = :personGroupId")
                 .setParameter("personGroupId", personGroupId)
                 .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView("assignment.card");
@@ -227,7 +227,7 @@ public class RegisterCourse extends AbstractLookup {
         loadContext.setQuery(LoadContext.createQuery(
                 "select e from tsadv$Enrollment e " +
                         "where e.course.id = :courseId " +
-                        "and e.personGroupId.id = :personGroupId " +
+                        "and e.personGroup.id = :personGroupId " +
                         "and e.status not in (4,5)")
                 .setParameter("courseId", course.getId())
                 .setParameter("personGroupId", personGroup.getId()));

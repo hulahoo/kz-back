@@ -56,6 +56,7 @@
                                caption="msg://vacationDurationType"/>
                         <field property="order"/>
                         <field property="isRequiredOrderNumber"/>
+                        <field property="availableToManager"/>
                     </column>
                 </fieldGroup>
             </groupBox>

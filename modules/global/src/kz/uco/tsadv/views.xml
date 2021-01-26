@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <include file="kz/uco/tsadv/views/portal-views.xml" />
-<!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
-<!--          extends="procTask-frame"-->
-<!--          name="procTask-frame-extended">-->
-<!--        <property name="procActor">-->
-<!--            <property name="procRole"-->
-<!--                      view="_local">-->
-<!--            </property>-->
-<!--            <property name="user"-->
-<!--                      view="_minimal">-->
-<!--                <property name="firstName"/>-->
-<!--                <property name="lastName"/>-->
-<!--                <property name="middleName"/>-->
-<!--            </property>-->
-<!--        </property>-->
-<!--    </view>-->
+    <include file="kz/uco/tsadv/views/portal-views.xml"/>
+    <!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
+    <!--          extends="procTask-frame"-->
+    <!--          name="procTask-frame-extended">-->
+    <!--        <property name="procActor">-->
+    <!--            <property name="procRole"-->
+    <!--                      view="_local">-->
+    <!--            </property>-->
+    <!--            <property name="user"-->
+    <!--                      view="_minimal">-->
+    <!--                <property name="firstName"/>-->
+    <!--                <property name="lastName"/>-->
+    <!--                <property name="middleName"/>-->
+    <!--            </property>-->
+    <!--        </property>-->
+    <!--    </view>-->
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_minimal"
           name="assignment-for-talents">
@@ -22643,6 +22643,61 @@
     </view>
     <view entity="tsadv$DicCompany" name="dicCompany-edit" extends="_local">
         <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv$Absence" name="absence-view" extends="_local"/>
+    <view entity="tsadv$AbsenceRequest" name="absenceRequest-for-ss-my-team" extends="_local"/>
+    <view entity="tsadv$Absence" name="absence-for-my-team" extends="_local">
+        <property name="type" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="absenceStatus" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="purpose" view="_minimal"/>
+    </view>
+    <view entity="tsadv$AbsenceRequest" name="absenceRequest-for-my-team" extends="_local">
+        <property name="type" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="purpose" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
     </view>
 
 </views>

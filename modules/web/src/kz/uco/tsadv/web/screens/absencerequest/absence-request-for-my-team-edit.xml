@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://absenceRequestForMyTeamEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.absencerequest">
+    <data>
+        <instance id="absenceRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.AbsenceRequest">
+            <view extends="_local">
+                <property name="type" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_minimal"/>
+                    <property name="assignments" view="_minimal">
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                        <property name="primaryFlag"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                </property>
+                <property name="purpose" view="_minimal"/>
+                <property name="status" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+            </view>
+            <loader/>
+        </instance>
+        <collection id="dicAbsenceTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType">
+            <view extends="_local"/>
+            <loader id="dicAbsenceTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicAbsenceType e where e.availableToManager = true]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicAbsencePurposesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose">
+            <view extends="_local"/>
+            <loader id="dicAbsencePurposesDl">
+                <query>
+                    <![CDATA[select e.absencePurpose from tsadv_AbsPurposeSetting e ]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.absenceType = :component_typeField</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="absenceRequestDc">
+                <column width="350px">
+                    <textField id="requestNumberField" property="requestNumber" editable="false"/>
+                    <dateField id="requestDateField" property="requestDate" editable="false"/>
+                    <pickerField id="statusField" property="status" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <pickerField id="personGroupField" property="personGroup" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <lookupField id="typeField" property="type" required="true"
+                                 optionsContainer="dicAbsenceTypesDc"/>
+                    <lookupField id="purposeField" property="purpose" required="true"
+                                 optionsContainer="dicAbsencePurposesDc"/>
+                    <textField id="purposeTextField" property="purposeText" visible="false" required="true"/>
+                    <dateField id="timeOfStartingField" property="timeOfStarting" required="true"/>
+                    <dateField id="timeOfFinishingField" property="timeOfFinishing" required="true"/>
+                    <textField id="totalHoursField" property="totalHours" required="true" editable="false"/>
+                    <checkBox id="compencationField" property="compencation" editable="false"
+                              stylename="check-to-radio"/>
+                    <checkBox id="vacationDayField" property="vacationDay" editable="false"
+                              stylename="check-to-radio"/>
+                    <checkBox id="acquaintedField" property="acquainted" visible="false"/>
+                    <checkBox id="agreeField" property="agree" visible="false"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

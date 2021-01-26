@@ -467,7 +467,7 @@ public class RcgFeedbackDialogEdit extends AbstractEditor<RcgFeedback> {
         LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
         LoadContext.Query loadContextQuery = LoadContext.createQuery(
                 "select e from base$AssignmentExt e " +
-                        "where e.personGroupId.id = :pgId " +
+                        "where e.personGroup.id = :pgId " +
                         "  and e.primaryFlag = true " +
                         "and :systemDate between e.startDate and e.endDate");
         loadContextQuery.setParameter("pgId", personGroupId);

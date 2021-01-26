@@ -83,7 +83,7 @@ public class AddressEdit extends AbstractEditor<Address> {
                     List<Address> existed = commonService.getEntities(Address.class,
                             "select e " +
                                     " from tsadv$Address e, tsadv$DicAddressType at " +
-                                    " where e.personGroupId.id = :personGroupId " +
+                                    " where e.personGroup.id = :personGroupId " +
                                     " and e.addressType.id = at.id " +
                                     " and at.code = 'BIRTHPLACE'" +
                                     " and e.id <> :id " +
@@ -146,7 +146,7 @@ public class AddressEdit extends AbstractEditor<Address> {
 
         List<Address> addresses = commonService.getEntities(Address.class, "select e " +
                         " from tsadv$Address e " +
-                        " where e.personGroupId.id = :personGroupId " +
+                        " where e.personGroup.id = :personGroupId " +
                         " and e.addressType.id = :addressTypeId " +
                         " and e.deleteTs is null " +
                         " and e.id <> :id " +
@@ -172,7 +172,7 @@ public class AddressEdit extends AbstractEditor<Address> {
         return commonService.getCount(Address.class,
                 "select e from tsadv$Address e " +
                         " where e.addressType.id = :typeId " +
-                        "   and e.personGroupId.id = :personGroupId " +
+                        "   and e.personGroup.id = :personGroupId " +
                         "   and e.startDate <= :endDate and e.endDate >= :startDate " +
                         "   and e.id <> :id",
                 ParamsMap.of("personGroupId", address.getPersonGroup().getId(),

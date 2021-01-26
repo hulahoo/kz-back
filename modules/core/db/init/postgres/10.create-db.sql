@@ -3129,7 +3129,7 @@ create table TSADV_DIC_ABSENCE_TYPE (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
-    COMPANY_ID uuid,
+    COMPANY_ID uuid not null,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),
@@ -3149,6 +3149,7 @@ create table TSADV_DIC_ABSENCE_TYPE (
     ORDER_ integer,
     --
     USE_IN_SELF_SERVICE boolean not null,
+    AVAILABLE_TO_MANAGER boolean,
     VACATION_DURATION_TYPE varchar(50),
     ELMA_TRANSFER boolean not null,
     USE_IN_BALANCE boolean not null,
@@ -3197,6 +3198,17 @@ create table TSADV_ABSENCE (
     PERIOD_START date,
     PERIOD_END date,
     USE_IN_BALANCE boolean,
+    PURPOSE_TEXT varchar(2000),
+    PURPOSE_ID uuid,
+    TIME_OF_STARTING timestamp,
+    TIME_OF_FINISHING timestamp,
+    TOTAL_HOURS integer,
+    COMPENCATION boolean,
+    VACATION_DAY boolean,
+    ACQUAINTED boolean,
+    AGREE boolean,
+    TRANSFER_PERIOD_START timestamp,
+    TRANSFER_PERIOD_END timestamp,
     --
     primary key (ID)
 )^
@@ -4574,18 +4586,28 @@ create table TSADV_ABSENCE_REQUEST (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
-    --
     REQUEST_NUMBER bigint,
+    STATUS_ID uuid,
+    REQUEST_DATE date,
+    --
     ASSIGNMENT_GROUP_ID uuid,
-    DATE_FROM date,
     ATTACHMENT_ID uuid,
+    DATE_FROM date,
     DATE_TO date,
     ABSENCE_DAYS integer,
     TYPE_ID uuid,
-    STATUS_ID uuid,
-    REQUEST_DATE date,
     COMMENT_ varchar(3000),
     DISTANCE_WORKING_CONFIRM boolean not null,
+    PERSON_GROUP_ID uuid,
+    PURPOSE_ID uuid,
+    PURPOSE_TEXT varchar(2000),
+    TIME_OF_STARTING timestamp,
+    TIME_OF_FINISHING timestamp,
+    TOTAL_HOURS integer,
+    COMPENCATION boolean,
+    VACATION_DAY boolean,
+    ACQUAINTED boolean,
+    AGREE boolean,
     --
     primary key (ID)
 )^
@@ -16865,3 +16887,94 @@ create table TSADV_CORRECTION_COEFFICIENT (
     primary key (ID)
 )^
 -- end TSADV_CORRECTION_COEFFICIENT
+-- begin TSADV_DIC_ABSENCE_PURPOSE
+create table TSADV_DIC_ABSENCE_PURPOSE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ABSENCE_PURPOSE
+-- begin TSADV_DIC_TYPE_OF_WORK
+create table TSADV_DIC_TYPE_OF_WORK (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_TYPE_OF_WORK
+-- begin TSADV_ABS_PURPOSE_SETTING
+create table TSADV_ABS_PURPOSE_SETTING (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    ABSENCE_TYPE_ID uuid,
+    ABSENCE_PURPOSE_ID uuid,
+    ORDER_NUMBER integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_ABS_PURPOSE_SETTING

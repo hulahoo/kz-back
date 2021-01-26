@@ -94,7 +94,7 @@ public class SelfLearning extends CourseCommon {
                         "where e.id in (" +
                         "   select e.learningPath.id " +
                         "   from tsadv$PersonLearningPath e " +
-                        "   where e.personGroupId.id = :pId)")
+                        "   where e.personGroup.id = :pId)")
                 .setParameter("pId", personGroupId));
         loadContext.setView("learningPath.browse");
 
@@ -112,7 +112,7 @@ public class SelfLearning extends CourseCommon {
         LoadContext.Query query = LoadContext.createQuery(
                 "select e " +
                         "from tsadv$Enrollment e " +
-                        "where e.personGroupId.id = :personGroupId " +
+                        "where e.personGroup.id = :personGroupId " +
                         "and e.status = :status");
 
         query.setParameter("personGroup", personGroupId);

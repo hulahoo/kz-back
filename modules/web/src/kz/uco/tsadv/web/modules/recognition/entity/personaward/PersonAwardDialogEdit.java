@@ -374,7 +374,7 @@ public class PersonAwardDialogEdit extends AbstractEditor<PersonAward> {
         LoadContext<AssignmentExt> loadContext = LoadContext.create(AssignmentExt.class);
         LoadContext.Query loadContextQuery = LoadContext.createQuery(
                 "select e from base$AssignmentExt e " +
-                        "where e.personGroupId.id = :pgId " +
+                        "where e.personGroup.id = :pgId " +
                         "and :systemDate between e.startDate and e.endDate and e.primaryFlag = True");
         loadContextQuery.setParameter("pgId", personGroupId);
         loadContextQuery.setParameter("systemDate", CommonUtils.getSystemDate());

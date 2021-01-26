@@ -24,7 +24,7 @@ order by e.dateFrom desc]]>
 <!--                <![CDATA[select e from bpm$ProcInstance e-->
 <!--where e.entity.entityId in ( select a.id from tsadv$AbsenceRequest a-->
 <!--                     where a.assignmentGroup in ( select s.group from base$AssignmentExt s-->
-<!--                                           where s.personGroupId.id = :session$userPersonGroupId ) )-->
+<!--                                           where s.personGroup.id = :session$userPersonGroupId ) )-->
 <!-- order by e.createTs desc]]>-->
 <!--            </query>-->
 <!--        </collectionDatasource>-->

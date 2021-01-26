@@ -1846,5 +1846,14 @@
         <entity class="kz.uco.tsadv.modules.performance.model.CorrectionCoefficient">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicTypeOfWork">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.AbsPurposeSetting">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
