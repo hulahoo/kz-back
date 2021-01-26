@@ -11,6 +11,7 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
@@ -41,6 +42,8 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected MessageBundle messageBundle;
     @Inject
     protected DataManager dataManager;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -143,7 +146,9 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     @Subscribe("popup.cascade")
     protected void onPopupCascade(Action.ActionPerformedEvent event) {
         screenBuilders.editor(assignedGoalTable)
-                .withScreenId("tsadv$AssignedGoalCascade.edit")
+                .withScreenId(extAppPropertiesConfig.getCascadeInPerson()
+                        ? "tsadv$AssignedGoalCascade.edit"
+                        : "tsadv$AssignedGoalCascadeForPosition.edit")
                 .newEntity()
                 .withOptions(new MapScreenOptions(ParamsMap.of("positionGroupId",
                         assignedPerformancePlanDc.getItem().getAssignedPerson().getCurrentAssignment() != null

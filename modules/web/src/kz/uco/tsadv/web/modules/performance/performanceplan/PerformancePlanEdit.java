@@ -551,7 +551,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                               double adjustedBonus) {
         AssignedPerformancePlan assignedPerformancePlan = dataManager.load(AssignedPerformancePlan.class)
                 .query("select e from tsadv$AssignedPerformancePlan e " +
-                        " where e.id = :assignedPerformancePlanId ")
+                        " where e.performancePlan = :performancePlan " +
+                        " and e.id = :assignedPerformancePlanId ")
+                .parameter("performancePlan", performancePlanDc.getItem())
                 .parameter("assignedPerformancePlanId", UUID.fromString(assignedPerformancePlanId))
                 .list().stream().findFirst().orElse(null);
         if (assignedPerformancePlan != null) {
