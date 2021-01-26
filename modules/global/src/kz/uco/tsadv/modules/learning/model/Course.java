@@ -11,6 +11,7 @@ import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
+import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,6 +25,16 @@ public class Course extends AbstractParentEntity {
 
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @NotNull
+    @Column(name = "IS_ISSUED_CERTIFICATE", nullable = false)
+    protected Boolean isIssuedCertificate = false;
+
+    @OneToMany(mappedBy = "course")
+    protected List<Enrollment> enrollments;
+
+    @OneToMany(mappedBy = "course")
+    protected List<CourseTrainer> courseTrainers;
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
@@ -110,6 +121,30 @@ public class Course extends AbstractParentEntity {
 
     public void setIsOnline(Boolean isOnline) {
         this.isOnline = isOnline;
+    }
+
+    public Boolean getIsIssuedCertificate() {
+        return isIssuedCertificate;
+    }
+
+    public void setIsIssuedCertificate(Boolean isIssuedCertificate) {
+        this.isIssuedCertificate = isIssuedCertificate;
+    }
+
+    public List<Enrollment> getEnrollments() {
+        return enrollments;
+    }
+
+    public void setEnrollments(List<Enrollment> enrollments) {
+        this.enrollments = enrollments;
+    }
+
+    public List<CourseTrainer> getCourseTrainers() {
+        return courseTrainers;
+    }
+
+    public void setCourseTrainers(List<CourseTrainer> courseTrainers) {
+        this.courseTrainers = courseTrainers;
     }
 
     public void setFeedbackTemplates(List<CourseFeedbackTemplate> feedbackTemplates) {
