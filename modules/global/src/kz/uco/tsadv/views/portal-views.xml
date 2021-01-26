@@ -132,12 +132,24 @@
         <property name="enrollments" view="_minimal"/>
         <property name="logo"/>
         <property name="isIssuedCertificate"/>
+        <property name="reviews" view="_local">
+            <property name="personGroup">
+                <property name="person">
+                    <property name="fullName"/>
+                </property>
+                <property name="fullName"/>
+            </property>
+        </property>
     </view>
     <view name="course-trainer-info" entity="tsadv$Trainer">
         <property name="employee">
             <property name="person">
                 <property name="fullName"/>
-                <property name="image" />
+                <property name="image" view="_local"/>
+            </property>
+            <property name="list">
+                <property name="fullName"/>
+                <property name="image" view="_local"/>
             </property>
         </property>
         <property name="courseTrainer">

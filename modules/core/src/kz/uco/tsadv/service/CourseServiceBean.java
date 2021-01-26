@@ -814,32 +814,42 @@ public class CourseServiceBean implements CourseService {
         coursePojo.setFinished((int) course.getEnrollments().stream().filter(e -> e.getStatus().equals(EnrollmentStatus.COMPLETED)).count());
         coursePojo.setIssuedCertificate(course.getIsIssuedCertificate());
 
-        List<CourseSection> courseSections = course.getSections();
-        coursePojo.setStartDate(CollectionUtils.isEmpty(courseSections)
-                ? null
-                : CollectionUtils.isEmpty(courseSections.get(0).getSession())
-                ? null
-                : courseSections.get(0).getSession().get(0).getStartDate());
+        Double avgRate = course.getReviews().isEmpty()
+                ? 0D
+                : course.getReviews().stream()
+                .map(CourseReview::getRate)
+                .reduce(Double::sum)
+                .orElseThrow(() -> new NullPointerException("Reviews is empty!")) / course.getReviews().size();
+        coursePojo.setAvgRate(avgRate);
 
-        coursePojo.setEndDate(CollectionUtils.isEmpty(courseSections)
+        List<CourseSection> courseSections = course.getSections();
+        List<CourseSection> courseSectionsWithSessions = courseSections.stream().filter(cs -> !cs.getSession().isEmpty()).collect(Collectors.toList());
+        coursePojo.setStartDate(CollectionUtils.isEmpty(courseSectionsWithSessions)
                 ? null
-                : CollectionUtils.isEmpty(courseSections.get(courseSections.size() - 1).getSession())
+                : CollectionUtils.isEmpty(courseSectionsWithSessions.get(0).getSession())
                 ? null
-                : courseSections.get(courseSections.size() - 1).getSession().get(0).getEndDate());
+                : courseSectionsWithSessions.get(0).getSession().get(0).getStartDate());
+
+        coursePojo.setEndDate(CollectionUtils.isEmpty(courseSectionsWithSessions)
+                ? null
+                : CollectionUtils.isEmpty(courseSectionsWithSessions.get(courseSectionsWithSessions.size() - 1).getSession())
+                ? null
+                : courseSectionsWithSessions.get(courseSectionsWithSessions.size() - 1).getSession().get(0).getEndDate());
         coursePojo.setPreRequisitions(course.getPreRequisition().stream().map(pr -> pr.getRequisitionCourse().getName()).collect(Collectors.joining(", ")));
         coursePojo.setTrainers(course.getCourseTrainers().stream().map(ct -> new PairPojo<>(ct.getTrainer().getId(), ct.getTrainer().getTrainerFullName())).collect(Collectors.toList()));
         coursePojo.setSections(courseSections.stream().map(cs -> new PairPojo<UUID, String>(cs.getId(), cs.getSectionName())).collect(Collectors.toList()));
         coursePojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
-        coursePojo.setComments(Arrays.asList(CommentPojo.CommentPojoBuilder.builder()
-                        .comment("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.")
-                        .date(new Date())
-                        .user("Маргарита")
-                        .build(),
-                CommentPojo.CommentPojoBuilder.builder()
-                        .comment("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.")
-                        .date(new Date())
-                        .user("Не Маргарита")
-                        .build()));
+        coursePojo.setRateReviewCount(course.getReviews().size());
+        coursePojo.setComments(course.getReviews().stream().map(r -> CommentPojo.CommentPojoBuilder.builder()
+                .user(r.getPersonGroup().getFullName())
+                .date(r.getCreateTs())
+                .comment(r.getText())
+                .build()).collect(Collectors.toList()));
+        coursePojo.setRating(course.getReviews().stream()
+                .collect(Collectors.groupingBy(CourseReview::getRate, Collectors.counting()))
+                .entrySet().stream()
+                .map(m -> new PairPojo<>(m.getKey(), m.getValue()))
+                .collect(Collectors.toList()));
         return coursePojo;
     }
 

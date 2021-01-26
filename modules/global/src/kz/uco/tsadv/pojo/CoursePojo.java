@@ -3,6 +3,7 @@ package kz.uco.tsadv.pojo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class CoursePojo implements Serializable {
@@ -17,6 +18,8 @@ public class CoursePojo implements Serializable {
     private List<PairPojo<UUID, String>> sections;
     private String logo;
     private List<CommentPojo> comments;
+    private List<PairPojo<Double, Long>> rating;
+    private Integer rateReviewCount;
 
     public List<CommentPojo> getComments() {
         return comments;
@@ -104,5 +107,21 @@ public class CoursePojo implements Serializable {
 
     public void setIssuedCertificate(Boolean issuedCertificate) {
         isIssuedCertificate = issuedCertificate;
+    }
+
+    public Integer getRateReviewCount() {
+        return rateReviewCount;
+    }
+
+    public void setRateReviewCount(Integer rateReviewCount) {
+        this.rateReviewCount = rateReviewCount;
+    }
+
+    public List<PairPojo<Double, Long>> getRating() {
+        return rating;
+    }
+
+    public void setRating(List<PairPojo<Double, Long>> rating) {
+        this.rating = rating;
     }
 }

@@ -98,6 +98,18 @@ public class Course extends AbstractParentEntity {
     @JoinColumn(name = "LEARNING_TYPE_ID")
     protected DicLearningType learningType;
 
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "course")
+    protected List<CourseReview> reviews;
+
+    public List<CourseReview> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<CourseReview> reviews) {
+        this.reviews = reviews;
+    }
+
     public Boolean getIsIssuedCertificate() {
         return isIssuedCertificate;
     }
