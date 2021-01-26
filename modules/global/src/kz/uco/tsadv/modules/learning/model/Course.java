@@ -98,6 +98,10 @@ public class Course extends AbstractParentEntity {
     @JoinColumn(name = "LEARNING_TYPE_ID")
     protected DicLearningType learningType;
 
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "course")
+    protected List<CourseReview> reviews;
+
     @NotNull
     @Column(name = "IS_ONLINE", nullable = false)
     protected Boolean isOnline = false;
@@ -106,6 +110,14 @@ public class Course extends AbstractParentEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "course")
     protected List<CourseSchedule> courseSchedule;
+
+    public List<CourseReview> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<CourseReview> reviews) {
+        this.reviews = reviews;
+    }
 
     public List<CourseSchedule> getCourseSchedule() {
         return courseSchedule;
