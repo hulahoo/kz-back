@@ -63,7 +63,7 @@
                 dataLoader="insuredPersonsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="insuredPersonsTable"
+        <dataGrid id="insuredPersonsTable"
                     width="100%"
                     dataContainer="insuredPersonsDc">
             <actions>
@@ -71,12 +71,13 @@
                 <action id="joinFamilyMember" type="edit"/>
             </actions>
             <columns>
-                <column id="insuranceContract.contract"/>
-                <column id="insuranceContract.availabilityPeriodFrom"/>
-                <column id="insuranceContract.availabilityPeriodTo"/>
-                <column id="attachDate"/>
-                <column id="statusRequest"/>
-                <column id="totalAmount"/>
+                <column id="code" caption="msg://code"/>
+                <column id="insuranceContract.contract" property="insuranceContract.contract"/>
+                <column id="insuranceContract.availabilityPeriodFrom" property="insuranceContract.availabilityPeriodFrom"/>
+                <column id="insuranceContract.availabilityPeriodTo" property="insuranceContract.availabilityPeriodTo"/>
+                <column id="attachDate" property="attachDate"/>
+                <column id="statusRequest" property="statusRequest"/>
+                <column id="totalAmount" property="totalAmount"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
@@ -88,7 +89,7 @@
                         caption="msg://JoinTheMICFamilyMember"
                         action="insuredPersonsTable.joinFamilyMember"/>
             </buttonsPanel>
-        </groupTable>
+        </dataGrid>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>

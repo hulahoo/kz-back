@@ -1,15 +1,23 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
+import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.GroupTable;
+import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.CollectionLoader;
+import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.screen.LookupComponent;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.cuba.actions.CreateActionExt;
+import kz.uco.base.cuba.actions.EditActionExt;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
@@ -20,11 +28,14 @@ import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.web.screens.insurancecontract.InsuranceContractBrowse;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 @UiController("tsadv$MyMICInsuredPerson.browse")
@@ -44,14 +55,41 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     @Inject
     private TimeSource timeSource;
     @Inject
-    private GroupTable<InsuredPerson> insuredPersonsTable;
+    private DataGrid<InsuredPerson> insuredPersonsTable;
     @Inject
     private CollectionLoader<InsuredPerson> insuredPersonsDl;
     @Named("insuredPersonsTable.joinMIC")
     private CreateActionExt insuredPersonsTableJoinMIC;
+    @Inject
+    private UiComponents uiComponents;
+    @Named("insuredPersonsTable.joinFamilyMember")
+    private EditActionExt insuredPersonsTableJoinFamilyMember;
 
     @Subscribe
     public void onInit(InitEvent event) {
+
+        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("code", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
+            @Override
+            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
+                LinkButton linkButton = uiComponents.create(LinkButton.class);
+                linkButton.setCaption(event.getItem().getIin());
+                linkButton.setAction(new BaseAction("code").withHandler(e->{
+                    InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
+                            .editEntity(event.getItem())
+                            .build();
+                    editorBuilder.setParameter("editHr");
+                    editorBuilder.show();
+                }));
+                return linkButton;
+            }
+
+            @Override
+            public Class<LinkButton> getType(){
+                return LinkButton.class;
+            }
+
+        }, 1);
+        column.setRenderer(insuredPersonsTable.createRenderer(DataGrid.ComponentRenderer.class));
 
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +
@@ -72,15 +110,15 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                     .view("insuranceContract-browseView")
                     .list().stream().findFirst().orElse(null);
 
+            long assignedDay = TimeUnit.DAYS.convert(
+                    Math.abs(timeSource.currentTimestamp().getTime() - personGroupExt.getCurrentAssignment().getAssignDate().getTime()),
+                    TimeUnit.MILLISECONDS);
+            if (contract != null && assignedDay > contract.getAttachingAnEmployee()){
+                insuredPersonsTableJoinMIC.setEnabled(true);
+            }else {
+                insuredPersonsTableJoinMIC.setEnabled(false);
+            }
             insuredPersonsTableJoinMIC.setEnabled(contract != null);
-//            if (contract != null){
-//                Date today = timeSource.currentTimestamp();
-//                if(today.compareTo(personGroupExt.getCurrentAssignment().getAssignDate()) > contract.getAttachingAnEmployee()){
-//                    insuredPersonsTableJoinMIC.setEnabled(true);
-//                }else {
-//                    insuredPersonsTableJoinMIC.setEnabled(false);
-//                }
-//            }
         }else {
             insuredPersonsTableJoinMIC.setEnabled(false);
         }
@@ -88,22 +126,27 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
 
     @Subscribe("insuredPersonsTable.joinMIC")
-    public void onInsuredPersonsTablejoinMIC(Action.ActionPerformedEvent event) {
+    public void onInsuredPersonsTableJoinMIC(Action.ActionPerformedEvent event) {
        joinMember("joinEmployee");
     }
 
-//    @Subscribe("insuredPersonsTable.joinFamilyMember")
-//    public void onInsuredPersonsTableJoinFamilyMember(Action.ActionPerformedEvent event) {
-//        joinMember("joinMember");
-////        InsuredPerson item = insuredPersonsTable.getSingleSelected();
-////        if (item !=null){
-////            InsuredPersonEdit editorBuilder = screenBuilders.screen(this)
-////                    .withScreenClass(InsuredPersonEdit.class)
-////                    .build();
-////            editorBuilder.setParameter("joinMember");
-////            editorBuilder.show();
-////        }
-//    }
+    @Subscribe(id = "insuredPersonsDc", target = Target.DATA_CONTAINER)
+    public void onInsuredPersonsDcItemChange(InstanceContainer.ItemChangeEvent<InsuredPerson> event) {
+        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
+                "from tsadv$UserExt e " +
+                "where e.id = :uId").parameter("uId", userSession.getUser().getId())
+                .view("personGroupExt-view")
+                .list().stream().findFirst().orElse(null);
+
+        long assignedDay = TimeUnit.DAYS.convert(
+                Math.abs(timeSource.currentTimestamp().getTime() - personGroupExt.getCurrentAssignment().getAssignDate().getTime()),
+                TimeUnit.MILLISECONDS);
+
+        if (event.getItem() != null && assignedDay < 45){
+            insuredPersonsTableJoinFamilyMember.setEnabled(false);
+        }
+    }
+
 
     public void joinMember(String whichButton) {
         InsuredPerson item = dataManager.create(InsuredPerson.class);
@@ -172,7 +215,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         return insuredPerson;
     }
 
-    public void isRelativeFamily(InsuredPerson person, InsuredPerson singleSelected){
+    public void isRelativeFamily(InsuredPerson person, InsuredPerson singleSelected) {
         person.setEmployee(singleSelected.getEmployee());
         person.setIin(singleSelected.getIin());
         person.setSex(singleSelected.getSex());
@@ -191,6 +234,6 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         person.setInsuranceProgram(singleSelected.getInsuranceProgram());
         person.setDocumentNumber(singleSelected.getDocumentNumber());
         person.setRegion(singleSelected.getRegion());
-
     }
+
 }

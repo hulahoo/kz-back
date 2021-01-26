@@ -2,11 +2,9 @@ package kz.uco.tsadv.web.screens.insurancecontract;
 
 
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.components.*;
-import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
-import com.haulmont.cuba.gui.model.DataContext;
+import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.model.ContractConditions;
@@ -15,11 +13,7 @@ import kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator;
 
 import javax.inject.Inject;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.Objects;
 
 @UiController("tsadv$InsuranceContract.edit")
 @UiDescriptor("insurance-contract-edit.xml")
@@ -28,7 +22,6 @@ import java.util.Objects;
 public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Inject
     private CollectionPropertyContainer<Attachment> attachmentsDc;
-
     @Inject
     private DataGrid<ContractConditions> programConditionsDataGrid;
     @Inject DataGrid<InsuranceContractAdministrator> contractAdministratorDataGrid;
@@ -37,23 +30,20 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Inject
     private Metadata metadata;
     @Inject
-    private CollectionPropertyContainer<ContractConditions> programConditionsDc;
-    @Inject
     private CollectionPropertyContainer<InsuranceContractAdministrator> contractAdministratorDc;
-    @Inject
-    private DateField<Date> startDateField;
     @Inject
     private DateField<Date> expirationDateField;
     @Inject
-    private TimeSource timeSource;
-    @Inject
     private DateField<Date> availabilityPeriodToField;
+    @Inject
+    private CollectionPropertyContainer<ContractConditions> conditionDc;
+
 
     @Subscribe
     public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
         DataContext dataContext = event.getDataContext();
         contractAdministratorDc.getItems().forEach(dataContext::merge);
-        programConditionsDc.getItems().forEach(dataContext::merge);
+        conditionDc.getItems().forEach(dataContext::merge);
         attachmentsDc.getItems().forEach(dataContext::merge);
     }
 
@@ -67,7 +57,8 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
             return;
         }
         ContractConditions contractCondition = metadata.create(ContractConditions.class);
-        programConditionsDc.getMutableItems().add(contractCondition);
+        contractCondition.setInsuranceContract(getEditedEntity());
+        conditionDc.getMutableItems().add(contractCondition);
         programConditionsDataGrid.edit(contractCondition);
     }
 
@@ -95,6 +86,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
         }
         InsuranceContractAdministrator contractAdministrator = metadata.create(InsuranceContractAdministrator.class);
         contractAdministrator.setNotifyAboutNewAttachments(true);
+        contractAdministrator.setInsuranceContract(getEditedEntity());
         contractAdministratorDc.getMutableItems().add(contractAdministrator);
         contractAdministratorDataGrid.edit(contractAdministrator);
     }
@@ -119,21 +111,18 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
         if (event.getValue() != null) {
             Instant i = Instant.ofEpochMilli(event.getValue().getTime());
             Date outRequestDate = Date.from(i);
-
             expirationDateField.setRangeStart(outRequestDate);
         }
     }
+
 
     @Subscribe("availabilityPeriodFromField")
     public void onAvailabilityPeriodFromFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
         if (event.getValue() != null){
                 Instant i = Instant.ofEpochMilli(event.getValue().getTime());
                 Date outRequestDate = Date.from(i);
-
                 availabilityPeriodToField.setRangeStart(outRequestDate);
         }
     }
-
-
 
 }

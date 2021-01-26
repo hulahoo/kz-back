@@ -1,15 +1,18 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.gui.BulkEditors;
-import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.*;
 import com.haulmont.cuba.gui.actions.list.BulkEditAction;
 import com.haulmont.cuba.gui.app.core.bulk.ColumnsMode;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.GroupTable;
+import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.screen.LookupComponent;
+import io.swagger.models.auth.In;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
@@ -17,6 +20,7 @@ import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.*;
 
 @UiController("tsadv$InsuredPerson.browse")
 @UiDescriptor("insured-person-browse.xml")
@@ -30,7 +34,7 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     @Inject
     private Metadata metadata;
     @Inject
-    private GroupTable<InsuredPerson> insuredPersonsTable;
+    private DataGrid<InsuredPerson> insuredPersonsTable;
     @Inject
     private CommonService commonService;
     protected InsuranceContract insuranceContract;
@@ -40,36 +44,38 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     private BulkEditAction insuredPersonBulkEdit;
     @Inject
     private BulkEditors bulkEditors;
+    @Inject
+    private UiComponents uiComponents;
+    @Inject
+    private Notifications notifications;
 
 
     @Subscribe
     public void onInit(InitEvent event) {
-        insuredPersonBulkEdit.setOpenMode(OpenMode.DIALOG);
-//        insuredPersonBulkEdit.setIncludeProperties(Arrays.asList("attachDate", "statusRequest", "exclusionDate", "comment"));
-        insuredPersonBulkEdit.setColumnsMode(ColumnsMode.TWO_COLUMNS);
+        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("code", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
+            @Override
+            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
+                LinkButton linkButton = uiComponents.create(LinkButton.class);
+                linkButton.setCaption(event.getItem().getIin());
+                linkButton.setAction(new BaseAction("code").withHandler(e->{
+                    InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
+                            .editEntity(event.getItem())
+                            .build();
+                    editorBuilder.setParameter("editHr");
+                    editorBuilder.show();
+                }));
+                return linkButton;
+            }
+
+            @Override
+            public Class<LinkButton> getType(){
+                return LinkButton.class;
+            }
+
+        }, 1);
+        column.setRenderer(insuredPersonsTable.createRenderer(DataGrid.ComponentRenderer.class));
     }
 
-//    @Install(to = "insuredPersonsTable.bulkEdit", subject = "fieldSorter")
-//    private Map<MetaProperty, Integer> insuredPersonsTableBulkEditFieldSorter(List<MetaProperty> properties){
-//        Map<MetaProperty, Integer> result = new HashMap<>();
-//        for (MetaProperty property : properties){
-//            switch (property.getName()) {
-//                case "attachDate":
-//                    result.put(property, 0);
-//                    break;
-//                case "statusRequest":
-//                    result.put(property, 1);
-//                    break;
-//                case "exclusionDate":
-//                    result.put(property, 2);
-//                    break;
-//                case "comment":
-//                    result.put(property, 3);
-//                    break;
-//            }
-//        }
-//        return result;
-//    }
 
     public void setParameter(InsuranceContract contract) {
         insuranceContract = contract;
@@ -111,5 +117,45 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         }
     }
 
+    @Subscribe("insuredPersonsTable.bulkEdit")
+    public void onInsuredPersonsTableBulkEdit(Action.ActionPerformedEvent event) {
+        bulkEditors.builder(metadata.getClassNN(InsuredPerson.class), insuredPersonsTable.getSelected(), this)
+                .withListComponent(insuredPersonsTable)
+                .withColumnsMode(ColumnsMode.TWO_COLUMNS)
+                .withIncludeProperties(Arrays.asList("attachDate", "statusRequest", "exclusionDate", "comment"))
+                .create()
 
+                .show();
+    }
+
+
+    public Component generateCode(InsuredPerson entity) {
+        LinkButton linkButton = uiComponents.create(LinkButton.class);
+        linkButton.setCaption("entity.getInsuranceContract().getContract()");
+        linkButton.setAction(new BaseAction("code").withHandler(e->{
+            screenBuilders.editor(insuredPersonsTable)
+                    .editEntity(entity)
+                    .build()
+                    .show();
+        }));
+        return linkButton;
+    }
+
+
+    public void bulkEdt() {
+        Set<InsuredPerson> bulks = insuredPersonsTable.getSelected();
+
+        InsuredPersonBulkEdit bulkEdit = screenBuilders.editor(InsuredPerson.class, this)
+                .withScreenClass(InsuredPersonBulkEdit.class)
+                .withAfterCloseListener(e->{
+                    int bulkItemSize = bulks.size();
+                    notifications.create().withCaption("Изменено " + bulkItemSize + " запись");
+                    insuredPersonsDl.load();
+                })
+                .build();
+        if (insuredPersonsTable.getSelected() != null && bulks.size() != 0){
+            bulkEdit.setParameter(bulks);
+            bulkEdit.show();
+        }
+    }
 }

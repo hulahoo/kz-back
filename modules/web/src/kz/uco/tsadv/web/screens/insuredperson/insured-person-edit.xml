@@ -153,24 +153,26 @@
                         <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
                         <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
 
-                        <pickerField id="fileField" property="file">
+                        <pickerField id="fileField" property="file" captionProperty="attachment.name">
                             <actions>
                                 <action id="lookup" type="picker_lookup"/>
                                 <action id="clear" type="picker_clear"/>
                             </actions>
                         </pickerField>
                         <textField id="totalAmountField" property="totalAmount" editable="false"/>
-                        <dateField id="exclusionDateField" resolution="DAY" property="exclusionDate"/>
-                        <textField id="commentField" property="comment"/>
+                        <dateField id="exclusionDateField" resolution="DAY" visible="false" property="exclusionDate"/>
+                        <textField id="commentField" property="comment" visible="false"/>
                     </column>
                 </form>
             </groupBox>
             <groupBox caption="msg://familyMemberInformation"
                       id="familyMemberInformationGroup"
                       outerMargin="true, false, true, false">
-                <groupTable id="insuredPersonTable" dataContainer="insuredPersonMemberDc" >
+                <groupTable id="insuredPersonTable"
+                            dataContainer="insuredPersonMemberDc"
+                            width="100%">
                     <actions>
-                        <action id="create" type="create" openType="DIALOG"/>
+                        <action id="create" type="create"/>
                         <action id="edit" type="edit"/>
                         <action id="remove" type="remove"/>
                     </actions>

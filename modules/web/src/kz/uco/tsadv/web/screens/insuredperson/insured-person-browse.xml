@@ -46,41 +46,43 @@
                 dataLoader="insuredPersonsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="insuredPersonsTable"
+        <dataGrid id="insuredPersonsTable"
+                  selectionMode="MULTI_CHECK"
                     width="100%"
-                    multiselect="true"
                     dataContainer="insuredPersonsDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
                 <action id="excel" type="excel"/>
-                <action id="bulkEdit" type="bulkEdit">
+                <action id="bulkEdit" type="bulkEdit" >
                     <properties>
                         <property name="openMode" value="DIALOG"/>
                         <property name="includeProperties" value="attachDate, statusRequest, exclusionDate, comment"/>
                         <property name="columnsMode" value="ONE_COLUMN"/>
                     </properties>
                 </action>
+                <action id="bulk" invoke="bulkEdt" icon="font-icon:TABLE" trackSelection="true"/>
             </actions>
             <columns>
-                <column id="relative"/>
-                <column id="attachDate" visible="false" resolution="DAY"/>
-                <column id="employee"/>
-                <column id="statusRequest"/>
-                <column id="firstName"/>
-                <column id="secondName"/>
-                <column id="middleName"/>
-                <column id="sex"/>
-                <column id="birthdate"/>
-                <column id="iin"/>
-                <column id="documentNumber"/>
-                <column id="region"/>
-                <column id="insuranceProgram"/>
-                <column id="address"/>
-                <column id="totalAmount"/>
-                <column id="exclusionDate" resolution="DAY"/>
-                <column id="comment"/>
+                <column id="code" caption="msg://code"/>
+                <column id="relative" property="relative"/>
+                <column id="attachDate" property="attachDate"/>
+                <column id="employee" property="employee" />
+                <column id="statusRequest" property="statusRequest"/>
+                <column id="firstName" property="firstName"/>
+                <column id="secondName" property="secondName"/>
+                <column id="middleName" property="middleName"/>
+                <column id="sex" property="sex"/>
+                <column id="birthdate" property="birthdate"/>
+                <column id="iin" property="iin"/>
+                <column id="documentNumber" property="documentNumber"/>
+                <column id="region" property="region"/>
+                <column id="insuranceProgram" property="insuranceProgram"/>
+                <column id="address" property="address"/>
+                <column id="totalAmount" property="totalAmount"/>
+                <column id="exclusionDate" property="exclusionDate"/>
+                <column id="comment" property="comment"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
@@ -92,8 +94,11 @@
                 <button id="bulkEditButton"
                         caption="Массовое изменени"
                         action="insuredPersonsTable.bulkEdit"/>
+                <button id="bulkButton"
+                        caption="Массовое изменени"
+                        action="insuredPersonsTable.bulk"/>
             </buttonsPanel>
-        </groupTable>
+        </dataGrid>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>

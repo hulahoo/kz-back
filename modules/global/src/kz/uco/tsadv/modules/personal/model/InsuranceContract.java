@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Table(name = "TSADV_INSURANCE_CONTRACT")
 @Entity(name = "tsadv$InsuranceContract")
+@NamePattern("%s|contract")
 public class InsuranceContract extends StandardEntity {
     private static final long serialVersionUID = 599161704312110269L;
 

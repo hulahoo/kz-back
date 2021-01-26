@@ -21929,6 +21929,9 @@
         <property name="company" view="_minimal"/>
         <property name="defaultDocumentType" view="_local"/>
         <property name="defaultAddress" view="_local"/>
+        <property name="programConditions" view="_local"/>
+        <property name="attachments" view="_local"/>
+        <property name="contractAdministrator" view="_local"/>
     </view>
     <view entity="tsadv$InsuranceContract" name="insuranceContract-editView" extends="_local">
         <property name="company" view="_minimal"/>
@@ -21939,10 +21942,9 @@
             <property name="isFree"/>
             <property name="costInKzt"/>
         </property>
-        <property name="contractAdministrator" view="_minimal">
-            <property name="notifyAboutNewAttachments"/>
-            <property name="employee" view="_minimal">
-                <property name="firstLastName"/>
+        <property name="contractAdministrator" view="_local">
+            <property name="employee" view="_local">
+                <property name="list" view="_local"/>
             </property>
         </property>
         <property name="attachments" view="_minimal">
@@ -21963,6 +21965,9 @@
         <property name="insuranceContract" view="_local">
             <property name="company" view="_local"/>
             <property name="defaultDocumentType"/>
+            <property name="programConditions" view="_local">
+                <property name="relationshipType" view="_local"/>
+            </property>
         </property>
         <property name="company" view="_minimal"/>
         <property name="employee" view="_local">
@@ -21989,16 +21994,15 @@
         <property name="documentType" view="_local"/>
         <property name="region" view="_minimal"/>
         <property name="addressType" view="_minimal"/>
-        <property name="file" view="_minimal"/>
+        <property name="file" view="_local">
+            <property name="attachment" view="_local"/>
+        </property>
     </view>
     <view entity="tsadv$InsuredPerson" name="insuredPersonMember-editView" extends="_local">
         <property name="relative" view="_local"/>
         <property name="statusRequest" view="_minimal"/>
-        <property name="insuranceContract" view="_minimal">
-            <property name="contract"/>
-            <property name="availabilityPeriodFrom"/>
-            <property name="availabilityPeriodTo"/>
-            <property name="insuranceProgram"/>
+        <property name="insuranceContract" view="_local">
+            <property name="programConditions" view="_local"/>
         </property>
         <property name="company" view="_minimal"/>
         <property name="employee" view="_minimal">
@@ -22011,5 +22015,8 @@
         <property name="addressType" view="_minimal"/>
         <property name="file" view="_minimal"/>
         <property name="documentType" view="_local"/>
+    </view>
+    <view entity="tsadv$InsuredPerson" name="insuredPerson-bulkEditView" extends="_local">
+        <property name="statusRequest" view="_minimal"/>
     </view>
 </views>

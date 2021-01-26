@@ -6,6 +6,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Table(name = "TSADV_CONTRACT_CONDITIONS")
 @Entity(name = "tsadv$ContractConditions")
@@ -22,9 +23,9 @@ public class ContractConditions extends StandardEntity {
     @Column(name = "AGE_MIN", nullable = false)
     private Integer ageMin;
 
-    @NotNull
     @Column(name = "AGE_MAX", nullable = false)
-    private String ageMax;
+    @NotNull
+    private Integer ageMax;
 
     @NotNull
     @Column(name = "IS_FREE", nullable = false)
@@ -32,11 +33,19 @@ public class ContractConditions extends StandardEntity {
 
     @NotNull
     @Column(name = "COST_IN_KZT", nullable = false)
-    private Double costInKzt;
+    private BigDecimal costInKzt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "INSURANCE_CONTRACT_ID")
     private InsuranceContract insuranceContract;
+
+    public void setAgeMax(Integer ageMax) {
+        this.ageMax = ageMax;
+    }
+
+    public Integer getAgeMax() {
+        return ageMax;
+    }
 
     public InsuranceContract getInsuranceContract() {
         return insuranceContract;
@@ -46,11 +55,11 @@ public class ContractConditions extends StandardEntity {
         this.insuranceContract = insuranceContract;
     }
 
-    public Double getCostInKzt() {
+    public BigDecimal getCostInKzt() {
         return costInKzt;
     }
 
-    public void setCostInKzt(Double costInKzt) {
+    public void setCostInKzt(BigDecimal costInKzt) {
         this.costInKzt = costInKzt;
     }
 
@@ -60,14 +69,6 @@ public class ContractConditions extends StandardEntity {
 
     public void setIsFree(Boolean isFree) {
         this.isFree = isFree;
-    }
-
-    public String getAgeMax() {
-        return ageMax;
-    }
-
-    public void setAgeMax(String ageMax) {
-        this.ageMax = ageMax;
     }
 
     public Integer getAgeMin() {
