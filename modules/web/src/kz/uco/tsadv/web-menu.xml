@@ -419,12 +419,12 @@
             <item id="pmScales"
                   screen="tsadv$Scale.browse"/>
         </menu>
-        <menu id="pmGoals">
+        <menu id="pmGoals3">
             <item id="pmGoalLibrary"
                   screen="tsadv$GoalLibrary.browse"/>
             <item id="pmPerformancePlans"
                   screen="tsadv$PerformancePlan.browse"/>
-            <item id="pmGoals"
+            <item id="pmGoals2"
                   screen="tsadv$Goal.browse"/>
             <item id="pmAssignedPerformancePlan"
                   screen="tsadv$AssignedPerformancePlan.browse"/>
@@ -690,7 +690,8 @@
         <item screen="bproc_AllTasks.browse"/>
         <item screen="bproc_DmnDecisionTableBrowse"/>
         <item screen="bproc_DecisionTableModelerScreen"/>
-        <item screen="tsadv$BpmRolesDefiner.browse"/>
+<!--        <item screen="tsadv$BpmRolesDefiner.browse"/>-->
+        <item screen="tsadv_BpmRolesDefinerCompany" caption="mainMsg://menu_config.tsadv_BpmRolesDefinerCompany"/>
     </menu>
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">

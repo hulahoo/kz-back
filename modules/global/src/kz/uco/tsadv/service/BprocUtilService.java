@@ -1,11 +1,8 @@
 package kz.uco.tsadv.service;
 
-import kz.uco.tsadv.entity.bproc.BprocTaskHistory;
-
-import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 
+//todo remove
 public interface BprocUtilService {
     String NAME = "tsadv_BprocUtilService";
 
@@ -35,5 +32,4 @@ public interface BprocUtilService {
 
     void approve(String entityName, String entityId);
 
-    List<? extends BprocTaskHistory> getBprocTaskHistory(String procInstanceId);
 }

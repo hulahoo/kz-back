@@ -25,13 +25,12 @@
                 </query>
             </loader>
         </collection>
-        <collection id="vacationScheduleRequestDc"
-                    class="kz.uco.tsadv.entity.VacationScheduleRequest"
-                    view="vacation-request-view">
-            <loader id="vacationScheduleRequestDl">
+        <collection id="absenceRequestDc"
+                    class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
+                    view="absenceRequest.view">
+            <loader id="absenceRequestDl">
                 <query>
-                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.personGroup.id = :session$userPersonGroupId
- order by e.startDate desc]]>
+                    <![CDATA[  select e from tsadv$AbsenceRequest e order by e.requestNumber desc ]]>
                 </query>
             </loader>
         </collection>
@@ -112,17 +111,18 @@
                         </vbox>
                     </tab>
                     <tab id="requestsTab" spacing="true" caption="msg://myRequests">
-                        <vbox id="vBox3"
+                        <vbox id="vBox4"
                               expand="vacationScheduleRequestTable"
                               height="100%"
                               spacing="true">
                             <table id="vacationScheduleRequestTable"
                                    sortable="false"
-                                   dataContainer="vacationScheduleRequestDc"
+                                   dataContainer="absenceRequestDc"
                                    width="100%">
                                 <columns>
-                                    <column id="startDate"/>
-                                    <column id="endDate"/>
+                                    <column id="requestNumber" link="true" linkInvoke="openRequest"/>
+                                    <column id="dateFrom"/>
+                                    <column id="dateTo"/>
                                     <column id="absenceDays"/>
                                     <column id="status"/>
                                 </columns>

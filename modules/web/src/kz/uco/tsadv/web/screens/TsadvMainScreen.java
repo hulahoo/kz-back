@@ -1,7 +1,9 @@
 package kz.uco.tsadv.web.screens;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.CssLayout;
@@ -18,6 +20,7 @@ import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @UiController("tsadvMainScreen")
 @UiDescriptor("tsadv-main-screen.xml")
@@ -115,8 +118,6 @@ public class TsadvMainScreen extends BaseMainScreen {
 
     protected void taskClickListener(Activity activity) {
         if (activity.getReferenceId() != null) {
-            Map<String, Object> queryParams = new HashMap<>();
-            queryParams.put("entityId", activity.getReferenceId());
             Map<String, Object> windowParams = new HashMap<>();
             windowParams.put("fromActivity", null);
             if ("REQUISITION_APPROVE".equals(activity.getType().getCode()))
@@ -126,9 +127,11 @@ public class TsadvMainScreen extends BaseMainScreen {
             }
             windowParams.put("activity", activity.getId().toString());
 
-            Entity entity = commonService.getEntity(metadata.getSession().getClassNN(activity.getType().getWindowProperty().getEntityName()).getJavaClass(),
-                    "select e from " + activity.getType().getWindowProperty().getEntityName() + " e " +
-                            "where e.id = :entityId", queryParams, activity.getType().getWindowProperty().getViewName()/*activity.getType().getWindowProperty().getViewName()*/);
+            MetaClass metaClass = metadata.getSession().getClassNN(activity.getType().getWindowProperty().getEntityName());
+            Entity<UUID> entity = dataManager.load(
+                    Id.of(activity.getReferenceId(), metaClass.getJavaClass()))
+                    .one();
+
             if (activity.getType().getCode().equals("KPI_APPROVE")) {
                 screenBuilders.screen(this)
                         .withScreenId(activity.getType().getWindowProperty().getScreenName())
@@ -156,8 +159,7 @@ public class TsadvMainScreen extends BaseMainScreen {
                         .build().show();
             } else {
                 Screen screen = screenBuilders.editor(
-                        metadata.getSession().getClassNN(activity.getType().getWindowProperty().getEntityName()).getJavaClass(),
-                        this)
+                        metaClass.getJavaClass(), this)
                         .withScreenId(activity.getType().getWindowProperty().getScreenName())
                         .editEntity(entity)
                         .withOpenMode(OpenMode.NEW_TAB)

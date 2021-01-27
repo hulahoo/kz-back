@@ -17443,31 +17443,14 @@
                 <property name="actModelId"/>
             </property>-->
         </property>
-        <property name="positionBpmRole"
-                  view="_minimal">
-            <!--<property name="procModel"
-                      view="_minimal"/>-->
-        </property>
     </view>
     <view class="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"
           extends="_local"
           name="bpmRolesDefiner-view">
-        <!--<property name="procModel"
-                  view="_minimal">
-            <property name="actModelId"/>
-        </property>-->
+        <property name="company" view="_local"/>
         <property name="links" view="_local">
             <property name="bpmRolesDefiner" view="_minimal"/>
-            <property name="hrRole" view="_minimal">
-                <property name="langValue1"/>
-                <property name="langValue2"/>
-                <property name="langValue3"/>
-                <property name="langValue4"/>
-                <property name="langValue5"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
+            <property name="hrRole" view="_local"/>
         </property>
     </view>
     <!--<view class="com.haulmont.bpm.entity.ProcDefinition"
@@ -19659,45 +19642,6 @@
         <property name="assignmentStatus"
                   view="_minimal">
             <property name="code"/>
-        </property>
-    </view>
-    <view class="kz.uco.tsadv.entity.tb.PositionBpmRole"
-          extends="_local"
-          name="positionBpmRole-view">
-        <!--        <property name="procModel"-->
-        <!--                  view="_minimal"/>-->
-        <property name="bpmRolesLink"
-                  view="_minimal">
-            <!--<property name="bpmRole"
-                      view="_minimal">
-                <property name="locName"/>
-                <property name="procDefinition"
-                          view="_local"/>
-            </property>-->
-            <property name="hrRole"
-                      view="_minimal">
-                <property name="langValue1"/>
-                <property name="langValue2"/>
-                <property name="langValue3"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
-            <property name="required"/>
-        </property>
-        <property name="positionGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="positionFullNameLang1"/>
-                <property name="positionFullNameLang2"/>
-                <property name="positionFullNameLang3"/>
-                <property name="positionNameLang1"/>
-                <property name="positionNameLang2"/>
-                <property name="positionNameLang3"/>
-            </property>
         </property>
     </view>
     <view class="kz.uco.tsadv.entity.dbview.PositionSsView"

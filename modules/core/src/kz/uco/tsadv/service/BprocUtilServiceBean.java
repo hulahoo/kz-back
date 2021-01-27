@@ -17,7 +17,6 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
-import kz.uco.tsadv.entity.bproc.BprocTaskHistory;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink;
@@ -337,22 +336,6 @@ public class BprocUtilServiceBean implements BprocUtilService {
 
     }
 
-    @Override
-    public List<? extends BprocTaskHistory> getBprocTaskHistory(String procInstanceId) {
-        List<BprocTaskHistory> result = new ArrayList<>();
-        List<TaskData> tasks = bprocHistoricService.createHistoricTaskDataQuery().processInstanceId(procInstanceId).list();
-        for (TaskData task : tasks) {
-            BprocTaskHistory bprocTaskHistory = metadata.create(BprocTaskHistory.class);
-            bprocTaskHistory.setProcInstanseId(procInstanceId);
-            bprocTaskHistory.setUser(getUserExtForTaskHistory(task));
-            bprocTaskHistory.setRole(getRoleForTaskHistory(task));
-            bprocTaskHistory.setStartDate(task.getCreateTime());
-            bprocTaskHistory.setEndDate(task.getEndTime());
-            bprocTaskHistory.setOutcome(getOutcomeForTaskHistory(task));
-            result.add(bprocTaskHistory);
-        }
-        return result;
-    }
 
     private String getOutcomeForTaskHistory(TaskData task) {
         String outcomeId = null;

@@ -18,7 +18,6 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
-import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -33,7 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @UiController("tsadv$Absence.self.browse")
@@ -67,8 +65,6 @@ public class SelfAbsence extends StandardLookup<Absence>
     @Inject
     protected TabSheet vacationTabSheet;
     @Inject
-    protected CollectionLoader<VacationScheduleRequest> vacationScheduleRequestDl;
-    @Inject
     private CollectionContainer<Absence> absencesDc;
     @Inject
     private CollectionLoader<Absence> absencesDl;
@@ -101,6 +97,7 @@ public class SelfAbsence extends StandardLookup<Absence>
         if (list != null && !list.isEmpty()) {
             absenceRequest = list.get(0);
         }
+        absenceRequest = null;
         if (absenceRequest == null) {
             absenceRequest = metadata.create(AbsenceRequest.class);
             absenceRequest.setId(UUID.randomUUID());
@@ -150,7 +147,7 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .build()
                 .show()
                 .addAfterCloseListener(afterCloseEvent -> {
-                    vacationScheduleRequestDl.load();
+//                    vacationScheduleRequestDl.load();
                     vacationTabSheet.setSelectedTab("requestsTab");
                 });
     }
@@ -171,6 +168,13 @@ public class SelfAbsence extends StandardLookup<Absence>
         screenBuilders.editor(LeavingVacationRequest.class, this)
                 .editEntity(item)
                 .build()
+                .show();
+    }
+
+    public void openRequest(AbsenceRequest absenceRequest, String columnId) {
+        screenBuilders.editor(AbsenceRequest.class, this)
+                .withScreenId("tsadv$AbsenceRequestNew.edit")
+                .editEntity(absenceRequest)
                 .show();
     }
 }

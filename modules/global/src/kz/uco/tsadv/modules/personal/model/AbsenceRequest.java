@@ -1,29 +1,24 @@
 package kz.uco.tsadv.modules.personal.model;
 
-import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
-import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import com.haulmont.cuba.core.global.Messages;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.haulmont.cuba.core.entity.FileDescriptor;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @NamePattern("%s (%s)|id,requestDate")
 @Table(name = "TSADV_ABSENCE_REQUEST")
 @Entity(name = "tsadv$AbsenceRequest")
 public class AbsenceRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = 5087051995273747332L;
+
+    public static final String PROCESS_DEFINITION_KEY = "absenceRequest";
 
     @OnDeleteInverse(DeletePolicy.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
@@ -49,9 +44,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @JoinColumn(name = "TYPE_ID")
     protected DicAbsenceType type;
 
-    @Column(name = "COMMENT_", length = 3000)
-    protected String comment;
-
     @NotNull
     @Column(name = "DISTANCE_WORKING_CONFIRM", nullable = false)
     protected Boolean distanceWorkingConfirm = false;
@@ -62,15 +54,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     public Boolean getDistanceWorkingConfirm() {
         return distanceWorkingConfirm;
-    }
-
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getComment() {
-        return comment;
     }
 
     public void setDateFrom(Date dateFrom) {
@@ -119,5 +102,10 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     public FileDescriptor getAttachment() {
         return attachment;
+    }
+
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
     }
 }

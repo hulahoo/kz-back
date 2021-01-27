@@ -28,7 +28,7 @@ public class BprocInstanceRolesLink extends StandardEntity {
     protected Boolean required;
 
     public Boolean isRequired() {
-        return required == null ? false : required;
+        return required != null && required;
     }
 
     public void setRequired(Boolean required) {
