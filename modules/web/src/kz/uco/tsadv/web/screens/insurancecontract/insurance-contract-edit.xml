@@ -13,12 +13,6 @@
             <collection id="attachmentsDc" property="attachments"/>
             <collection id="conditionDc" property="programConditions"/>
         </instance>
-        <collection id="companyDc"
-                    class="kz.uco.tsadv.modules.personal.dictionary.DicCompany" view="_local">
-            <loader id="companyDl">
-                <query><![CDATA[select e from tsadv$DicCompany e]]></query>
-            </loader>
-        </collection>
         <collection id="documentTypeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicDocumentType" view="_local">
             <loader id="documentTypeDl">
                 <query><![CDATA[select e from tsadv$DicDocumentType e]]></query>
@@ -40,6 +34,11 @@
                         </and>
                     </condition>
                 </query>
+            </loader>
+        </collection>
+        <collection id="companyDc" class="kz.uco.base.entity.dictionary.DicCompany" view="_local">
+            <loader id="companyDl">
+                <query><![CDATA[select e from base_DicCompany e]]></query>
             </loader>
         </collection>
     </data>

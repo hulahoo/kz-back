@@ -3,9 +3,9 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
-import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 
 import javax.persistence.*;

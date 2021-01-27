@@ -14,11 +14,12 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.Attachment;
-import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
+
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
@@ -523,18 +524,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
         if (event.getValue() != null && relativeField.getValue() != null
                 && relativeField.getValue().getCode().equals("PRIMARY")){
-            DicCompany company = dataManager.load(DicCompany.class)
-                    .query("select o.company " +
-                            "   from base$AssignmentExt a" +
-                            " join a.assignmentStatus s " +
-                            " join a.organizationGroup.list o " +
-                            " where a.personGroup.id = :pg " +
-                            "and current_date between a.startDate and a.endDate "+
-                            "and a.primaryFlag = 'TRUE' " +
-                            "and s.code in ('ACTIVE','SUSPENDED') " +
-                            " and current_date between o.startDate and o.endDate")
-                    .parameter("pg", event.getValue().getId()).view(View.LOCAL)
-                    .list().stream().findFirst().orElse(null);
+            DicCompany company = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
             companyField.setValue(company);
 
             if (personGroupExt.getAddresses().size() == 0){

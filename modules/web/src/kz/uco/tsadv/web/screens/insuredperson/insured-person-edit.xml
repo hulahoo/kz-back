@@ -37,12 +37,6 @@
                 <query><![CDATA[select e from tsadv$DicDocumentType e]]></query>
             </loader>
         </collection>
-
-        <collection id="companyDc" class="kz.uco.tsadv.modules.personal.dictionary.DicCompany" view="_local">
-            <loader id="companyDl">
-                <query><![CDATA[select e from tsadv$DicCompany e]]></query>
-            </loader>
-        </collection>
         <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup" view="_local">
             <loader id="jobDl">
                 <query><![CDATA[select e from tsadv$JobGroup e]]></query>
@@ -89,6 +83,11 @@
                     </condition>
                 </query>
 
+            </loader>
+        </collection>
+        <collection id="companyDc" class="kz.uco.base.entity.dictionary.DicCompany" view="_local">
+            <loader id="companyDl">
+                <query><![CDATA[select e from base_DicCompany e]]></query>
             </loader>
         </collection>
 

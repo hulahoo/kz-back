@@ -18,9 +18,7 @@
                     </property>
                     <property name="assignments" view="_local">
                         <property name="organizationGroup" view="_local">
-                            <property name="list" view="_local">
-                                <property name="company" view="_local"/>
-                            </property>
+                            <property name="list" view="_local"/>
                             <property name="company" view="_local"/>
                         </property>
                         <property name="jobGroup" view="_local">
