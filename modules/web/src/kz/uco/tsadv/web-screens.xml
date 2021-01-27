@@ -610,6 +610,8 @@
             template="/kz/uco/tsadv/web/modules/personal/person/frames/pcf-addresses.xml"/>
     <screen id="tsadv$Address.edit"
             template="/kz/uco/tsadv/web/modules/personal/address/address-edit.xml"/>
+    <screen id="tsadv_CourseSchedule.edit"
+            template="/kz/uco/tsadv/web/screens/courseschedule/course-schedule-edit.xml"/>
     <screen id="tsadv$DicAddressType.browse"
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicaddresstype/dic-address-type-browse.xml"/>
     <screen id="tsadv$DicAddressType.edit"
@@ -1922,8 +1924,8 @@
             template="kz/uco/tsadv/web/addressrequest/address-request-edit.xml"/>
     <screen id="tsadv$PersonalDataRequest.browse"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-browse.xml"/>
-<!--    <screen id="tsadv$PersonalDataRequest.edit"-->
-<!--            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-edit.xml"/>-->
+    <!--    <screen id="tsadv$PersonalDataRequest.edit"-->
+    <!--            template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-edit.xml"/>-->
     <screen id="TeamMemberFrame"
             template="/kz/uco/tsadv/web/modules/personal/person/team-member-frame.xml"/>
     <screen id="tsadv$Absence.lookup"
@@ -2086,10 +2088,6 @@
             template="kz/uco/tsadv/web/timecardlog/timecard-log-browse.xml"/>
     <screen id="bpm$ProcInstance.lookup"
             template="kz/uco/tsadv/web/bpm/form/ext-proc-instance-browse.xml"/>
-    <screen id="tsadv$PositionBpmRole.browse"
-            template="kz/uco/tsadv/web/positionbpmrole/position-bpm-role-browse.xml"/>
-    <screen id="tsadv$PositionBpmRole.edit"
-            template="kz/uco/tsadv/web/positionbpmrole/position-bpm-role-edit.xml"/>
     <screen id="base$PositionGroupExt.edit"
             template="kz/uco/tsadv/web/positiongroupext/position-group-ext-edit.xml"/>
     <screen id="ucoBpmStandardProcForm"
@@ -2254,4 +2252,5 @@
             template="kz/uco/tsadv/web/screens/extapppropertyentity/ext-app-property-entity-browse.xml"/>
     <screen id="tsadv_ExtAppPropertyEntity.edit"
             template="kz/uco/tsadv/web/screens/extapppropertyentity/ext-app-property-entity-edit.xml"/>
+    <screen id="tsadv_SsStructurePerson" template="kz/uco/tsadv/web/screens/ss-structure-person.xml"/>
 </screen-config>

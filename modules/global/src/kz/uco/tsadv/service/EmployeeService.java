@@ -2,6 +2,7 @@ package kz.uco.tsadv.service;
 
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
@@ -13,6 +14,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +48,10 @@ public interface EmployeeService {
 
     long countExPerson();
 
+    /**
+     * @see OrganizationHrUserService#getHrUsers(UUID, String, Integer)
+     */
+    //todo remove
     List<OrganizationHrUser> getHrUsers(UUID organizationGroupId, String roleCodes);
 
     String getTotalExperience(UUID personGroupId, Date onDate);
@@ -106,12 +112,9 @@ public interface EmployeeService {
 
     PersonGroupExt getDirector(PersonGroupExt personGroupExt);
 
-
     UserExt findManagerByPositionGroup(UUID positionGroupId, String hierarchyId);
 
     UserExt findManagerByPersonGroup(UUID personGroupId, String hierarchyId);
-
-    UUID getImmediateSupervisorByPersonGroup(UUID personGroupId);
 
     UUID getDirectorPositionByPersonGroup(UUID perosnGroupId);
 
@@ -138,4 +141,8 @@ public interface EmployeeService {
     String getFirstLastName(PersonExt personExt, String language);
 
     Map<String, String> getDicGoodsCategories();
+
+    OrganizationGroupExt getOrganizationGroupByPositionGroupId(@Nonnull UUID personGroupId, String viewName);
+
+    DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId);
 }

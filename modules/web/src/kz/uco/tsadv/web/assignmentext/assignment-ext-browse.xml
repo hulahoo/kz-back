@@ -11,7 +11,7 @@
                               view="assignment.view">
             <query>
                 <![CDATA[select e from base$AssignmentExt e 
-where e.personGroup.id = :param$personGroupId.id]]>
+where e.personGroup.id = :param$personGroup.id]]>
             </query>
         </collectionDatasource>
     </dsContext>

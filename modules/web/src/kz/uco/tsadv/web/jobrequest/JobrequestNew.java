@@ -486,7 +486,7 @@ public class JobrequestNew extends AbstractWindow {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$UserExt e " +
-                        "where e.personGroupId.id = :pgId");
+                        "where e.personGroup.id = :pgId");
         query.setParameter("pgId", personGroupId);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");

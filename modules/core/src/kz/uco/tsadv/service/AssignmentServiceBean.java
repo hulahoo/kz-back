@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.ValueLoadContext;
+import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.notification.NotificationSender;
 import kz.uco.base.service.common.CommonService;
@@ -20,6 +21,7 @@ import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.service.ActivityService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
@@ -35,6 +37,7 @@ import static kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus.ACTIV
 @Service(AssignmentService.NAME)
 public class AssignmentServiceBean implements AssignmentService {
 
+    protected static final Logger log = org.slf4j.LoggerFactory.getLogger(AssignmentServiceBean.class);
     @Inject
     protected CommonService commonService;
     @Inject
@@ -43,6 +46,8 @@ public class AssignmentServiceBean implements AssignmentService {
     protected ActivityService activityService;
     @Inject
     protected NotificationSender notificationSender;
+    @Inject
+    protected OrganizationHrUserService organizationHrUserService;
     @Inject
     protected DataManager dataManager;
 
@@ -183,11 +188,8 @@ public class AssignmentServiceBean implements AssignmentService {
 
         for (AssignmentExt assignmentExt : list) {
             try {
-                UUID managerId = employeeService.getImmediateSupervisorByPersonGroup(assignmentExt.getPersonGroup().getId());
-                UserExt manager = commonService.getEntity(UserExt.class,
-                        " select e from tsadv$UserExt e where e.personGroup.id = :managerId ",
-                        ParamsMap.of("managerId", managerId), "userExt.edit");
-                if (Objects.nonNull(manager)) {
+                for (User user : organizationHrUserService.getManager(assignmentExt.getPersonGroup().getId())) {
+                    UserExt manager = (UserExt) dataManager.reload(user, "userExt.edit");
                     PersonExt employee = employeeService.getPersonByPersonGroup(assignmentExt.getPersonGroup().getId(), CommonUtils.getSystemDate(), "person-edit");
 
                     Map<String, Object> param = new HashMap<>();
@@ -220,7 +222,7 @@ public class AssignmentServiceBean implements AssignmentService {
                     notificationSender.sendParametrizedNotification("assignment.notify.temporaryEndDate", manager, param);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("Error", e);
             }
         }
     }

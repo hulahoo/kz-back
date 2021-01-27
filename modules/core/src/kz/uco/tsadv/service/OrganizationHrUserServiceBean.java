@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
@@ -28,37 +29,37 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
     private CommonService commonService;
     @Inject
     private DataManager dataManager;
+    @Inject
+    private EmployeeService employeeService;
 
-    /**
-     * @see EmployeeService#getHrUsers(UUID, String)
-     */
     @Override
     public List<OrganizationHrUser> getHrUsers(@Nonnull UUID organizationGroupId, @Nonnull String roleCode, @Nullable Integer counter) {
         Map<Integer, Object> qParams = new HashMap<>();
         qParams.put(1, organizationGroupId);
         qParams.put(2, roleCode);
 
-        List listId = commonService.emNativeQueryResultList("select e.id from tsadv_organization_hr_user e  " +
-                " join sec_user p  " +
-                "  on e.user_id = p.id " +
-                "  and p.delete_ts is null  " +
-                " join base_assignment s  " +
-                "  on s.person_group_id = p.person_group_id " +
-                "  and s.primary_flag is true  " +
-                "  and s.delete_ts is null " +
-                "  and current_date between s.start_date and s.end_date " +
-                " join tsadv_dic_assignment_status ss  " +
-                "  on ss.id = s.assignment_status_id " +
-                "  and ss.code = 'ACTIVE' " +
-                "  and ss.delete_ts is null " +
-                " join tsadv_dic_hr_role r  " +
-                "  on r.id = e.hr_role_id " +
-                "  and r.delete_ts is null  " +
-                "  and r.code = ?2 " +
-                "where e.delete_ts is null  " +
-                "  and e.organization_group_id = ?1 " +
-                (counter != null ? "  and e.counter is not null " : "") +
-                " and current_date between e.date_from and e.date_to", qParams);
+        @SuppressWarnings("rawtypes") List listId = commonService.emNativeQueryResultList(
+                "select e.id from tsadv_organization_hr_user e  " +
+                        " join sec_user p  " +
+                        "  on e.user_id = p.id " +
+                        "  and p.delete_ts is null  " +
+                        " join base_assignment s  " +
+                        "  on s.person_group_id = p.person_group_id " +
+                        "  and s.primary_flag is true  " +
+                        "  and s.delete_ts is null " +
+                        "  and current_date between s.start_date and s.end_date " +
+                        " join tsadv_dic_assignment_status ss  " +
+                        "  on ss.id = s.assignment_status_id " +
+                        "  and ss.code = 'ACTIVE' " +
+                        "  and ss.delete_ts is null " +
+                        " join tsadv_dic_hr_role r  " +
+                        "  on r.id = e.hr_role_id " +
+                        "  and r.delete_ts is null  " +
+                        "  and r.code = ?2 " +
+                        "where e.delete_ts is null  " +
+                        "  and e.organization_group_id = ?1 " +
+                        (counter != null ? "  and e.counter is not null " : "") +
+                        " and current_date between e.date_from and e.date_to", qParams);
 
         if (!listId.isEmpty()) {
             return commonService.getEntities(OrganizationHrUser.class,
@@ -82,7 +83,6 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 return new ArrayList<>();
             }
         }
-//        return employeeService.getHrUsers(organizationGroupId, roleCode);   !!! no check assignment status !!!
     }
 
     @Override
@@ -146,6 +146,58 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                         .setParameter("userId", userId)
                         .setParameter("date", CommonUtils.getSystemDate())
                         .setViewName(View.LOCAL)
+                        .getResultList());
+    }
+
+    @Override
+    public List<? extends User> getHrUsersForPerson(@Nonnull UUID personGroupId, @Nonnull String roleCode) {
+        switch (roleCode) {
+            case "MANAGER":
+                return getManager(personGroupId);
+            default: {
+                OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupByPositionGroupId(personGroupId, View.MINIMAL);
+                if (organizationGroup != null)
+                    return getHrUsers(organizationGroup.getId(), roleCode, null)
+                            .stream()
+                            .map(OrganizationHrUser::getUser)
+                            .collect(Collectors.toList());
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<? extends User> getManager(@Nonnull UUID personGroupId) {
+        return persistence.callInTransaction(em ->
+                em.createNativeQuery("select su.* " +
+                        "from base_assignment s " +
+                        "join base_hierarchy_element child " +
+                        "       on child.position_group_id = s.position_group_id " +
+                        "       and #systemDate between child.start_date and child.end_date " +
+                        "       and child.delete_ts is null " +
+                        "join base_hierarchy_element parent " +
+                        "       on parent.GROUP_ID = child.PARENT_GROUP_ID " +
+                        "       and #systemDate between parent.start_date and parent.end_date " +
+                        "       and parent.delete_ts is null " +
+                        "join base_assignment ss " +
+                        "       on ss.position_group_id = parent.position_group_id " +
+                        "       and #systemDate between ss.start_date and ss.end_date " +
+                        "       and ss.primary_flag is true " +
+                        "       and ss.delete_ts is null " +
+                        "join tsadv_dic_assignment_status ssS " +
+                        "       on ss.assignment_status_id = ssS.id " +
+                        "       and ssS.code = 'ACTIVE' " +
+                        "       and ssS.delete_ts is null " +
+                        "join sec_user su " +
+                        "       on su.person_group_id = ss.person_group_id " +
+                        "       and su.active is true " +
+                        "       and su.delete_ts is null " +
+                        "where s.person_group_id = #personGroupId " +
+                        "       and #systemDate between s.start_date and s.end_date " +
+                        "       and s.primary_flag is true " +
+                        "       and s.delete_ts is null", User.class)
+                        .setParameter("systemDate", CommonUtils.getSystemDate())
+                        .setParameter("personGroupId", personGroupId)
                         .getResultList());
     }
 

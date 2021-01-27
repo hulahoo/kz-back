@@ -106,7 +106,7 @@ public class PersonBrowse extends AbstractLookup {
         if (personsTable != null && personsTable.getSingleSelected() != null) {
             UUID personGroupId = Optional.ofNullable(e.getItem()).map(PersonExt::getGroup).map(PersonGroupExt::getId).orElse(null);
             if (personGroupId != null) {
-                Dismissal dismis = commonService.getEntity(Dismissal.class, "select e from tsadv$Dismissal e where e.personGroupId.id = :personGroupId",
+                Dismissal dismis = commonService.getEntity(Dismissal.class, "select e from tsadv$Dismissal e where e.personGroup.id = :personGroupId",
                         ParamsMap.of("personGroupId", personGroupId), "dismissal.forNotification");
                 if (dismis != null) {
                     dismissal.setEnabled(false);

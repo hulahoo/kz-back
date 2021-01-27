@@ -166,7 +166,7 @@ public class PcfMainData extends EditableFrame {
     /*protected boolean isSecondAssignment() {
         List<Dismissal> dismissals = new ArrayList<>();
         String queryString = "SELECT e from tsadv$Dismissal e " +
-                "WHERE e.personGroupId.id = :personGroupId " +
+                "WHERE e.personGroup.id = :personGroupId " +
                 "AND e.dismissalDate < :currentAssignmentStartDate";
         Map<String, Object> queryParams = new HashMap<>();
         AssignmentExt currentAssignmentFirst = assignmentDs.getItem().getGroup().getList().get(0);

@@ -37,7 +37,27 @@ public class EventHandler {
     }
 
     public Object fillActivityType(EntityManager em) {
-        if (getCount(em, "REQUISITION_APPROVE") == 0) {
+        if (getCount(em, "ABSENCE_REQUEST_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("ABSENCE_REQUEST_APPROVE");
+            activityType.setScreen("tsadv$AbsenceRequestNew.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на отпуск ");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv$AbsenceRequest");
+            windowProperty.setScreenName("tsadv$AbsenceRequestNew.edit");
+            windowProperty.setViewName("absenceRequest.view");
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
+        if (getCount(em, "NOTIFICATION") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("NOTIFICATION");
+            activityType.setLangValue1("Уведомление");
+            activityType.setLangValue3("Notification");
+            em.persist(activityType);
+        }
+        /*if (getCount(em, "REQUISITION_APPROVE") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("REQUISITION_APPROVE");
             activityType.setScreen("tsadv$Requisition.edit");
@@ -48,12 +68,6 @@ public class EventHandler {
             windowProperty.setViewName("requisition.view");
             activityType.setWindowProperty(windowProperty);
             em.persist(windowProperty);
-            em.persist(activityType);
-        }
-        if (getCount(em, "NOTIFICATION") == 0) {
-            ActivityType activityType = metadata.create(ActivityType.class);
-            activityType.setCode("NOTIFICATION");
-            activityType.setLangValue1("Уведомление");
             em.persist(activityType);
         }
         if (getCount(em, "INTERVIEW_APPROVE") == 0) {
@@ -91,19 +105,6 @@ public class EventHandler {
             windowProperty.setEntityName("tsadv$MyAssignedGoal.browse");
             windowProperty.setScreenName("kms$PerformancePlanHeader");
             windowProperty.setViewName("performancePlanHeader-for-approve");
-            activityType.setWindowProperty(windowProperty);
-            em.persist(windowProperty);
-            em.persist(activityType);
-        }
-        if (getCount(em, "ABSENCE_REQUEST_APPROVE") == 0) {
-            ActivityType activityType = metadata.create(ActivityType.class);
-            activityType.setCode("ABSENCE_REQUEST_APPROVE");
-            activityType.setScreen("tsadv$AbsenceRequest.edit");
-            activityType.setLangValue1("Утверждение / отклонение заявление на отпуск ");
-            WindowProperty windowProperty = metadata.create(WindowProperty.class);
-            windowProperty.setEntityName("tsadv$AbsenceRequest");
-            windowProperty.setScreenName("tsadv$AbsenceRequest.edit");
-            windowProperty.setViewName("absenceRequest.view");
             activityType.setWindowProperty(windowProperty);
             em.persist(windowProperty);
             em.persist(activityType);
@@ -212,7 +213,7 @@ public class EventHandler {
             activityType.setWindowProperty(windowProperty);
             em.persist(windowProperty);
             em.persist(activityType);
-        }
+        }*/
         return em;
     }
 

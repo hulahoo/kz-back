@@ -20,19 +20,18 @@ public interface SelfServiceMixin {
     default void onSelfServiceMixinBeforeShow(Screen.BeforeShowEvent event) {
         Screen screen = event.getSource();
         ScreenData screenData = UiControllerUtils.getScreenData(screen);
+        BeanLocator beanLocator = Extensions.getBeanLocator(event.getSource());
+        UserSession userSession = beanLocator.get(UserSession.class);
 
         for (String loaderId : screenData.getLoaderIds()) {
             DataLoader loader = screenData.getLoader(loaderId);
             String query = loader.getQuery();
-            if (query == null || query.isEmpty()) {
-                continue;
-            }
+            if (query.isEmpty()) continue;
+
             Matcher matcher = CONTAINER_REF_PATTERN.matcher(query);
             while (matcher.find()) {
                 String paramName = matcher.group(1);
                 String sessionAttribute = matcher.group(2);
-                BeanLocator beanLocator = Extensions.getBeanLocator(event.getSource());
-                UserSession userSession = beanLocator.get(UserSession.class);
                 query = query.replace(paramName, sessionAttribute);
                 loader.setQuery(query);
                 loader.setParameter(sessionAttribute, userSession.getAttribute(sessionAttribute));

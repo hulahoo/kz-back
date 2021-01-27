@@ -35,7 +35,6 @@
                 <column id="goalName"/>
                 <column id="library.libraryName"/>
                 <column id="parentGoal"/>
-                <column id="uom"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="successCriteria"/>
@@ -51,5 +50,9 @@
                         action="goalsTable.remove"/>
             </buttonsPanel>
         </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
     </layout>
 </window>

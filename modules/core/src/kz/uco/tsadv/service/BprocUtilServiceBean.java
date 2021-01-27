@@ -1,8 +1,10 @@
 package kz.uco.tsadv.service;
 
-import com.haulmont.addon.bproc.entity.ExecutionData;
-import com.haulmont.addon.bproc.entity.ProcessInstanceData;
+import com.haulmont.addon.bproc.data.Outcome;
+import com.haulmont.addon.bproc.data.OutcomesContainer;
+import com.haulmont.addon.bproc.entity.HistoricVariableInstanceData;
 import com.haulmont.addon.bproc.entity.TaskData;
+import com.haulmont.addon.bproc.service.BprocHistoricService;
 import com.haulmont.addon.bproc.service.BprocRuntimeService;
 import com.haulmont.addon.bproc.service.BprocTaskService;
 import com.haulmont.bali.util.ParamsMap;
@@ -28,7 +30,6 @@ import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.service.ActivityService;
-import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +58,8 @@ public class BprocUtilServiceBean implements BprocUtilService {
     protected CommonService commonService;
     @Inject
     protected Persistence persistence;
+    @Inject
+    private BprocHistoricService bprocHistoricService;
 
     @Override
     @Transactional
@@ -167,13 +170,14 @@ public class BprocUtilServiceBean implements BprocUtilService {
         return transactionalDataManager.loadList(loadContext);
     }
 
-    protected Map<String, Object> getParamsMap(UserExt toWhom, String notificationCode, String entityName, String entityId) {
+    protected Map<String, Object> getParamsMap(UserExt toWhom, String notificationCode, String entityName,
+                                               String entityId) {
         Map<String, Object> resultMap = new HashMap<>();
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         AbstractBprocRequest abstractBprocRequest = null;
         //специфические параметры для каждого конкретного уведомления
         switch (notificationCode) {
-            case "absence.request.approver.notification" :
+            case "absence.request.approver.notification":
             case "absence.request.revision":
             case "absence.request.cancelled":
             case "absence.request.approved":
@@ -330,5 +334,39 @@ public class BprocUtilServiceBean implements BprocUtilService {
     @Override
     public void approve(String entityName, String entityId) {
 
+    }
+
+
+    private String getOutcomeForTaskHistory(TaskData task) {
+        String outcomeId = null;
+        HistoricVariableInstanceData historicVariableInstanceData
+                = bprocHistoricService.createHistoricVariableInstanceDataQuery()
+                .processInstanceId(task.getProcessInstanceId())
+                .variableName(task.getTaskDefinitionKey() + "_result")
+                .list().stream()
+                .findAny().orElse(null);
+        if (historicVariableInstanceData != null
+                && historicVariableInstanceData.getValue() != null
+                && historicVariableInstanceData.getValue() instanceof OutcomesContainer) {
+            OutcomesContainer outcomesContainer = (OutcomesContainer) historicVariableInstanceData.getValue();
+            if (outcomesContainer != null
+                    && outcomesContainer.getOutcomes() != null) {
+                Outcome outcome = outcomesContainer.getOutcomes().stream().findFirst().orElse(null);
+                if (outcome != null) {
+                    outcomeId = outcome.getOutcomeId();
+                }
+            }
+        }
+        return outcomeId;
+    }
+
+    private DicHrRole getRoleForTaskHistory(TaskData task) {
+        return null;
+    }
+
+    public UserExt getUserExtForTaskHistory(TaskData task) {
+        UserExt userExt = metadata.create(UserExt.class);
+        userExt.setId(UUID.fromString(task.getAssignee()));
+        return userExt;
     }
 }

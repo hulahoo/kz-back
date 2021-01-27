@@ -1543,9 +1543,6 @@
         <entity class="kz.uco.tsadv.modules.timesheet.model.TimecardLog">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.entity.tb.PositionBpmRole">
-            <include re=".*"/>
-        </entity>
         <entity class="kz.uco.tsadv.entity.dbview.PositionSsView">
             <include re=".*"/>
         </entity>
@@ -1844,6 +1841,21 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.performance.model.CorrectionCoefficient">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.bpm.BprocActors">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.CourseSchedule">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicTypeOfWork">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.AbsPurposeSetting">
             <include re=".*"/>
         </entity>
     </entities>

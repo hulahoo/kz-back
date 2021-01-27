@@ -98,6 +98,8 @@
                         <action id="remove" type="remove"/>
                         <action id="massGoals" caption="msg://massGoals" trackSelection="true"/>
                         <action id="calculateGZP" caption="msg://calculateGZP" trackSelection="true"/>
+                        <action id="exportExcel" caption="msg://exportExcel"/>
+                        <action id="importExcel" caption="msg://importExcel"/>
                     </actions>
                     <columns>
                         <column property="assignedPerson"/>
@@ -117,6 +119,8 @@
                         <button id="assignedRemove" action="assignedPerformancePlanTable.remove"/>
                         <button id="assignedMass" action="assignedPerformancePlanTable.massGoals"/>
                         <button id="assignedCalculateGZP" action="assignedPerformancePlanTable.calculateGZP"/>
+                        <button id="assignedExportBtn" action="assignedPerformancePlanTable.exportExcel"/>
+                        <button id="assignedImportExcel" action="assignedPerformancePlanTable.importExcel"/>
                     </buttonsPanel>
                 </dataGrid>
             </tab>

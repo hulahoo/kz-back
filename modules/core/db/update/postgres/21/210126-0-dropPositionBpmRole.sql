@@ -1,0 +1,1 @@
+alter table tsadv_position_bpm_role rename to TSADV_POSITION_BPM_ROLE__U48714 ;

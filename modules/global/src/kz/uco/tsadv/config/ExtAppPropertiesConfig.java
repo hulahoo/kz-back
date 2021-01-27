@@ -30,4 +30,8 @@ public interface ExtAppPropertiesConfig extends Config {
     @Property("tsadv.kpi.individualScore")
     @DefaultInteger(20)
     Integer getIndividualScore();
+
+    @Property("tsadv.kpi.cascadeInPerson")
+    @DefaultBoolean(true)
+    Boolean getCascadeInPerson();
 }
