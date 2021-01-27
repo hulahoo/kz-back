@@ -28,6 +28,7 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Service(LearningService.NAME)
 public class LearningServiceBean implements LearningService {
@@ -257,6 +258,52 @@ public class LearningServiceBean implements LearningService {
             return FileSystemUtils.deleteRecursively(new File(commonConfig.getScormPackageDirPath() + dirName));
         }
         return false;
+    }
+
+    @Override
+    public List<Course> learningHistory(UUID personGroupId) {
+        List<Course> courses = persistence.callInTransaction(em ->
+                em.createQuery("" +
+                        "select c  " +
+                        "from tsadv$Course c " +
+                        "   join c.sections cs " +
+                        "   join cs.session s " +
+                        "   join s.courseSessionEnrollmentList el  " +
+                        "   join el.enrollment e " +
+                        "where e.personGroup.id = :personGroupId", Course.class)
+                        .setParameter("personGroupId", personGroupId)
+                        .setView(Course.class, "course-learning-history")
+                        .getResultList());
+        List<Course> coursesWithMaxSessionEndDate = courses.stream()
+                .peek(c -> {
+                    List<CourseSection> sections = c.getSections().stream().filter(cs -> !cs.getSession().isEmpty()).sorted((cs1, cs2) -> {
+                        CourseSectionSession courseSectionSession1 = cs1.getSession().stream().max(Comparator.comparing(CourseSectionSession::getEndDate)).orElse(null);
+                        CourseSectionSession courseSectionSession2 = cs2.getSession().stream().max(Comparator.comparing(CourseSectionSession::getEndDate)).orElse(null);
+                        //TODO: убрать
+                        if (courseSectionSession1 == null && courseSectionSession2 == null) {
+                            return 0;
+                        } else if (courseSectionSession1 == null) {
+                            return -1;
+                        } else if (courseSectionSession2 == null) {
+                            return 1;
+                        }
+                        return Objects.requireNonNull(courseSectionSession1).getEndDate().compareTo(Objects.requireNonNull(courseSectionSession2).getEndDate());
+                    })
+                            .peek(cs -> cs.setSession(Collections.singletonList(cs.getSession().get(0))))
+                            .peek(cs -> {
+                                CourseSectionAttempt lastSectionAttempt = cs.getCourseSectionAttempts().stream().max(Comparator.comparing(CourseSectionAttempt::getAttemptDate)).orElse(null);
+                                if (lastSectionAttempt == null) {
+                                    cs.setCourseSectionAttempts(Collections.emptyList());
+                                } else {
+                                    cs.setCourseSectionAttempts(Collections.singletonList(lastSectionAttempt));
+                                }
+                            })
+                            .collect(Collectors.toList());
+                    c.setSections(sections);
+                })
+                .peek(c -> c.setSections(Collections.singletonList(c.getSections().stream().max(Comparator.comparing(cs -> cs.getSession().get(0).getEndDate())).orElseThrow(NullPointerException::new))))
+                .collect(Collectors.toList());
+        return coursesWithMaxSessionEndDate;
     }
 
     /**

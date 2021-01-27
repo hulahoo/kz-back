@@ -656,4 +656,17 @@
         </method>
         <method name="countUsersPerformancePlans"/>
     </service>
+    <service name="tsadv_LearningService">
+        <method name="learningHistory">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_CourseService">
+        <method name="courseInfo">
+            <param name="courseId" type="java.util.UUID"/>
+        </method>
+        <method name="courseTrainerInfo">
+            <param name="trainerId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>

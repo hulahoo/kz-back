@@ -487,7 +487,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
 
 //        Utils.customizeLookup(jobGroupConfig.getComponent(), null, WindowManager.OpenType.DIALOG, null);
         Map<String, Object> map = new HashMap<>();
-        map.put("roleCode", " and (e.id in (select u.personGroupId.id  " +
+        map.put("roleCode", " and (e.id in (select u.personGroup.id  " +
                 "                       from tsadv$HrUserRole r, tsadv$UserExt u" +
                 "                      where u.id = r.user.id" +
                 "                        and r.role.code = 'RECRUITING_SPECIALIST'" +
@@ -1146,7 +1146,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                     "    from tsadv$DicCostCenter e " +
                     "   where e.id in (select o.costCenter.id " +
                     "                    from base$AssignmentExt a, tsadv$PositionStructure ps, base$OrganizationExt o " +
-                    "                   where a.personGroupId.id = :personGroupId " +
+                    "                   where a.personGroup.id = :personGroupId " +
                     "                     and ps.positionGroup.id = a.positionGroup.id " +
                     "                     and o.group.id = ps.organizationGroup.id" +
                     "                     and a.primaryFlag = TRUE" +
@@ -1727,7 +1727,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         paramMap.put("case", caseName);
         Case personName = commonService.getEntity(Case.class,
                 "select c from tsadv$Case c " +
-                        "join base$PersonExt t on t.group.id = c.personGroupId.id " +
+                        "join base$PersonExt t on t.group.id = c.personGroup.id " +
                         "join tsadv$CaseType ct on ct.id = c.caseType.id " +
                         "and ct.language = :language " +
                         "and ct.name = :case " +
@@ -1763,7 +1763,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
     protected UserExt getUserExt(UUID personGroupId) {
         LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
         LoadContext.Query query = LoadContext.createQuery(
-                "select e from tsadv$UserExt e where e.personGroupId.id = :pgId");
+                "select e from tsadv$UserExt e where e.personGroup.id = :pgId");
         query.setParameter("pgId", personGroupId);
         loadContext.setQuery(query);
         loadContext.setView("user.browse");

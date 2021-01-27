@@ -2,10 +2,10 @@ package kz.uco.tsadv.modules.personal.dictionary;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import kz.uco.base.entity.abstraction.AbstractDictionary;
+import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 
 @NamePattern("%s %s|langValue,description")
 @Table(name = "TSADV_DIC_ABSENCE_TYPE")
@@ -15,6 +15,9 @@ public class DicAbsenceType extends AbstractDictionary {
 
     @Column(name = "USE_IN_SELF_SERVICE", nullable = false)
     protected Boolean useInSelfService = false;
+
+    @Column(name = "AVAILABLE_TO_MANAGER")
+    private Boolean availableToManager;
 
     @Column(name = "VACATION_DURATION_TYPE")
     protected String vacationDurationType;
@@ -61,6 +64,14 @@ public class DicAbsenceType extends AbstractDictionary {
     @NotNull
     @Column(name = "IS_REQUIRED_ORDER_NUMBER", nullable = false)
     protected Boolean isRequiredOrderNumber = false;
+
+    public Boolean getAvailableToManager() {
+        return availableToManager;
+    }
+
+    public void setAvailableToManager(Boolean availableToManager) {
+        this.availableToManager = availableToManager;
+    }
 
     public void setVacationDurationType(VacationDurationType vacationDurationType) {
         this.vacationDurationType = vacationDurationType == null ? null : vacationDurationType.getId();

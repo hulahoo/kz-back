@@ -305,7 +305,7 @@ public class PositionPersonCompetence extends AbstractWindow {
     private boolean hasSuccessor(UUID sPlannigId, UUID personGroupId) {
         LoadContext<Successor> loadContext = LoadContext.create(Successor.class);
         loadContext.setQuery(LoadContext.createQuery(
-                "select e from tsadv$Successor e where e.succession.id = :sPlannigId and e.personGroupId.id = :personGroupId")
+                "select e from tsadv$Successor e where e.succession.id = :sPlannigId and e.personGroup.id = :personGroupId")
                 .setParameter("sPlannigId", sPlannigId)
                 .setParameter("personGroupId", personGroupId))
                 .setView("successor.browse");
@@ -373,7 +373,7 @@ public class PositionPersonCompetence extends AbstractWindow {
         if (searchRequest != null && searchRequest.trim().length() != 0) {
             searchRequest = "%" + searchRequest.toLowerCase() + "%";
             String resolvedString = String.format("select e from base$AssignmentExt e, base$PersonExt p " +
-                    "where e.personGroupId.id = p.group.id " +
+                    "where e.personGroup.id = p.group.id " +
                     "and (lower(p.firstName) like '%s' " +
                     "   or lower(p.lastName) like '%s' " +
                     "   or lower(p.middleName) like '%s'" +
@@ -526,7 +526,7 @@ public class PositionPersonCompetence extends AbstractWindow {
                 "select e from base$AssignmentExt e " +
                         "where :sysDate between e.startDate and e.endDate " +
                         "  and e.primaryFlag = true " +
-                        "and e.personGroupId.id = :personGroupId")
+                        "and e.personGroup.id = :personGroupId")
                 .setParameter("personGroupId", personGroupId)
                 .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView("assignment.card");

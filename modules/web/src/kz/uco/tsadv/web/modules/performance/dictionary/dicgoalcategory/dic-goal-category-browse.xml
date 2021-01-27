@@ -30,6 +30,7 @@
                 <action id="remove"/>
             </actions>
             <columns>
+                <column id="order" caption="mainMsg://serialNumber"/>
                 <column id="langValue1"/>
                 <column id="langValue2"/>
                 <column id="langValue3"/>

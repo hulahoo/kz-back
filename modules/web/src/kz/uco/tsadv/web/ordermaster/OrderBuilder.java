@@ -447,7 +447,7 @@ public class OrderBuilder extends AbstractWindow {
         loadContext.setQuery(LoadContext.createQuery(
                 "select e from base$AssignmentGroupExt e join e.list a " +
                         "where :sysDate between a.startDate and a.endDate " +
-                        "and a.personGroupId.id = :personGroupId")
+                        "and a.personGroup.id = :personGroupId")
                 .setParameter("personGroupId", personGroupId)
                 .setParameter("sysDate", CommonUtils.getSystemDate()))
                 .setView("assignmentGroup.master");

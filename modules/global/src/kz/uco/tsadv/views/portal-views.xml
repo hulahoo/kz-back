@@ -41,18 +41,121 @@
             <property name="performancePlanName"/>
             <property name="performancePlanNameEn"/>
             <property name="performancePlanNameKz"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
         </property>
-        <property name="startDate"/>
-        <property name="endDate"/>
         <property name="status"/>
-        <property name="assigned_by" view="_minimal">
-            <property name="assignments">
-                <property name="positionGroup" view="_minimal"/>
+        <property name="assignedPerson" view="_local">
+            <property name="person" view="_local"/>
+            <property name="assignments" view="_minimal">
+                <property name="personGroup">
+                    <property name="list" view="_local"/>
+                </property>
+                <property name="jobGroup">
+                    <property name="jobNameLang1"/>
+                </property>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="list" view="_local"/>
+                    <property name="organization" view="_minimal">
+                        <property name="organizationNameLang1"/>
+                    </property>
+                </property>
             </property>
         </property>
-        <property name="assignedPerson" view="_minimal"/>
     </view>
     <view entity="tsadv$AssignedGoal" name="assignedGoal-portal-kpi-create-default" extends="_local">
         <property name="category" view="_minimal"/>
+    </view>
+    <view entity="base$AssignmentExt" name="assignment-portal-kpi" extends="_local">
+        <property name="jobGroup" view="_local"/>
+        <property name="organizationGroup" view="_local">
+            <property name="list" view="_local"/>
+        </property>
+    </view>
+    <view name="course-learning-history" entity="tsadv$Course" extends="_minimal">
+        <property name="sections">
+            <property name="session">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="trainer" view="_minimal">
+                    <property name="employee">
+                        <property name="person">
+                            <property name="fullName"/>
+                        </property>
+                    </property>
+                    <property name="trainerFullName"/>
+                </property>
+            </property>
+            <property name="course">
+                <property name="name"/>
+            </property>
+            <property name="courseSectionAttempts">
+                <property name="testResultPercent"/>
+            </property>
+        </property>
+    </view>
+    <view name="course-portal-browse" entity="tsadv$Course" extends="_minimal">
+        <property name="name"/>
+        <property name="avgRate"/>
+        <property name="logo"/>
+    </view>
+    <view name="category-courses" entity="tsadv$DicCategory">
+        <property name="langValue"/>
+        <property name="langValue1"/>
+        <property name="langValue2"/>
+        <property name="langValue3"/>
+        <property name="courses" view="course-portal-browse"/>
+    </view>
+    <view name="portal-course-edit" entity="tsadv$Course">
+        <property name="name"/>
+        <property name="avgRate"/>
+        <property name="preRequisition">
+            <property name="requisitionCourse">
+                <property name="name"/>
+            </property>
+        </property>
+        <property name="courseTrainers">
+            <property name="trainer">
+                <property name="employee">
+                    <property name="person">
+                        <property name="fullName"/>
+                    </property>
+                </property>
+            </property>
+        </property>
+        <property name="sections">
+            <property name="session">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="enrollments" view="_minimal"/>
+        <property name="logo"/>
+        <property name="isIssuedCertificate"/>
+        <property name="reviews" view="_local">
+            <property name="personGroup">
+                <property name="person">
+                    <property name="fullName"/>
+                </property>
+                <property name="fullName"/>
+            </property>
+        </property>
+    </view>
+    <view name="course-trainer-info" entity="tsadv$Trainer">
+        <property name="employee">
+            <property name="person">
+                <property name="fullName"/>
+                <property name="image" view="_local"/>
+            </property>
+            <property name="list">
+                <property name="fullName"/>
+                <property name="image" view="_local"/>
+            </property>
+        </property>
+        <property name="courseTrainer">
+            <property name="course">
+                <property name="enrollments" />
+            </property>
+        </property>
     </view>
 </views>

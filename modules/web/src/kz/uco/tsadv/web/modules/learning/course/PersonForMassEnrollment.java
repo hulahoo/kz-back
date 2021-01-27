@@ -34,7 +34,7 @@ public class PersonForMassEnrollment extends AbstractWindow {
         param = params;
         Map<String, Object> paramforDS = new HashMap<>();
         String select = "select distinct e from base$PersonGroup e join base$AssignmentExt ae on ae.personGroupId = e";
-        String where = " where ae.personGroupId.id not in (select en.personGroupId.id from " +
+        String where = " where ae.personGroup.id not in (select en.personGroup.id from " +
                 " tsadv$Enrollment en where en.course.id = :param$courseId ) ";
         if (params.containsKey("organizationGroup") && params.get("organizationGroup") != null) {
             if (params.containsKey("inOrganizaiton")) {
@@ -94,7 +94,7 @@ public class PersonForMassEnrollment extends AbstractWindow {
         map.put("personGroupExtId", personGroupExt != null ? personGroupExt.getId() : null);
         return commonService.getEntities(CourseSectionAttempt.class,
                 " select e from tsadv$CourseSectionAttempt e " +
-                        "where e.enrollment.personGroupId.id = :personGroupExtId " +
+                        "where e.enrollment.personGroup.id = :personGroupExtId " +
                         " order by e.attemptDate DESC", map, "courseSectionAttempt.edit");
     }
 

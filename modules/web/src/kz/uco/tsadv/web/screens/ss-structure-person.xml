@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+        class="kz.uco.tsadv.web.screens.SsStructurePerson"
+        messagesPack="kz.uco.tsadv.web.screens"
+        focusComponent="tree"
+        lookupComponent="tree"
+        caption="msg://ssStructurePerson.caption">
+    <dsContext>
+        <hierarchicalDatasource id="teamDs"
+                                allowCommit="false"
+                                class="kz.uco.tsadv.entity.MyTeamNew"
+                                hierarchyProperty="parent">
+            <query>
+                <![CDATA[select e from tsadv$MyTeamNew e where 1 <> 1]]>
+            </query>
+        </hierarchicalDatasource>
+        <datasource id="personExtDs"
+                    allowCommit="false"
+                    class="kz.uco.tsadv.modules.personal.model.PersonExt"
+                    view="person-edit"/>
+        <collectionDatasource id="assignmentExtsDs"
+                              allowCommit="false"
+                              class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+                              view="assignment.view">
+            <query>
+                <![CDATA[select e from base$AssignmentExt e
+where e.personGroup.id = :ds$personExtDs.group.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="absencesDs" class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence-for-my-team"
+                              allowCommit="false">
+            <query>
+                <![CDATA[select e from tsadv$Absence e  where e.personGroup.id = :param$personGroupId]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="absenceRequestsDs" class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
+                              allowCommit="false" view="absenceRequest-for-my-team">
+            <query>
+                <![CDATA[select e from tsadv$AbsenceRequest e
+                where e.personGroup.id = :ds$personExtDs.group.id ]]>
+            </query>
+        </collectionDatasource>
+    </dsContext>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true">
+        <split id="splitter"
+               height="100%"
+               orientation="horizontal"
+               pos="30"
+               width="100%">
+            <vbox expand="tree"
+                  height="100%"
+                  margin="false,true,false,false">
+                <hbox id="searchHbox"
+                      expand="searchField"
+                      margin="true"
+                      spacing="true"
+                      width="100%">
+                    <textField id="searchField"
+                               align="MIDDLE_CENTER"/>
+                    <button id="searchButton"
+                            icon="SEARCH"
+                            invoke="searchBtn"/>
+                </hbox>
+                <tree id="tree"
+                      width="100%">
+                    <treechildren captionProperty="fullName"
+                                  datasource="teamDs"/>
+                </tree>
+            </vbox>
+            <hbox id="hbox" spacing="true" width="100%" expand="tabSheet" height="100%">
+                <cssLayout id="cssLayout" width="0px" height="100%"/>
+                <tabSheet id="tabSheet" height="100%" width="100%">
+                    <tab id="personsTab" caption="msg://personsTab.caption">
+                        <vbox id="personVbox"
+                              expand="assignmentTable"
+                              height="100%"
+                              spacing="true">
+                            <groupBox id="mainInfo"
+                                      spacing="true">
+                                <fieldGroup id="mainFieldGroup"
+                                            editable="false"
+                                            fieldCaptionWidth="200px"
+                                            datasource="personExtDs">
+                                    <column id="column1" width="300px">
+                                        <field id="firstName">
+                                            <linkButton id="firstNameLink" invoke="openPersonCard"/>
+                                        </field>
+                                        <field id="middleName">
+                                            <linkButton id="middleNameLink" invoke="openPersonCard"/>
+                                        </field>
+                                        <field id="lastName">
+                                            <linkButton id="lastNameLink" invoke="openPersonCard"/>
+                                        </field>
+                                        <field property="maritalStatus"/>
+                                        <field property="type"/>
+                                    </column>
+                                    <column id="column2" width="300px">
+                                        <field property="nationality"/>
+                                        <field property="citizenship"/>
+                                        <field property="employeeNumber"/>
+                                        <field property="hireDate"/>
+                                        <field property="nonresidentType"/>
+                                    </column>
+                                </fieldGroup>
+                            </groupBox>
+                            <groupBox id="addInfo"
+                                      spacing="true">
+                                <fieldGroup id="addFieldGroup"
+                                            editable="false"
+                                            fieldCaptionWidth="200px"
+                                            datasource="personExtDs">
+                                    <column width="300px">
+                                        <field property="nationalIdentifier"/>
+                                        <field property="dateOfBirth"/>
+                                    </column>
+                                    <column width="250px">
+                                        <field property="sex"/>
+                                    </column>
+                                </fieldGroup>
+                            </groupBox>
+                            <table id="assignmentTable"
+                                   width="100%">
+                                <columns>
+                                    <column id="startDate"/>
+                                    <column id="endDate"/>
+                                    <column id="organizationGroup.organizationName"/>
+                                    <column id="positionGroup.fullName"/>
+                                    <column id="assignmentStatus"/>
+                                    <column id="gradeGroup.grade"/>
+                                </columns>
+                                <rows datasource="assignmentExtsDs"/>
+                            </table>
+                        </vbox>
+                    </tab>
+                    <tab id="RVDTab" caption="msg://RVDTab.caption" margin="true,false,false,false" spacing="true">
+                        <tabSheet id="RVDTabSheet" height="100%" width="100%">
+                            <tab id="absenceTab" caption="msg://absenceTab.caption" expand="absenceTable"
+                                 spacing="true">
+                                <filter id="absenceFilter" datasource="absencesDs" applyTo="absenceTable">
+                                    <properties include=".*"/>
+                                </filter>
+                                <table id="absenceTable" height="100%" width="100%">
+                                    <actions>
+                                        <action id="create" type="create" invoke="createRequest"
+                                                caption="msg://create.caption" icon="PLUS" primary="true"/>
+                                    </actions>
+                                    <buttonsPanel>
+                                        <button id="absenceTableCreateBtn" action="absenceTable.create"/>
+                                    </buttonsPanel>
+                                    <columns>
+                                        <column id="type"/>
+                                        <column id="dateFrom"/>
+                                        <column id="dateTo"/>
+                                        <column id="absenceDays"/>
+                                    </columns>
+                                    <rows datasource="absencesDs"/>
+                                </table>
+                            </tab>
+                            <tab id="requestsTab" caption="msg://requestsTab.caption">
+                                <vbox id="requestsVBox" width="100%" height="100%" spacing="true"
+                                      expand="absenceRequestTable">
+                                    <filter id="absenceRequestFilter" datasource="absenceRequestsDs"
+                                            applyTo="absenceRequestTable">
+                                        <properties include=".*"/>
+                                    </filter>
+                                    <table id="absenceRequestTable" height="100%" width="100%">
+                                        <columns>
+                                            <column id="requestNumber"/>
+                                            <column id="requestDate"/>
+                                            <column id="type"/>
+                                            <column id="dateFrom"/>
+                                            <column id="dateTo"/>
+                                            <column id="absenceDays"/>
+                                        </columns>
+                                        <rows datasource="absenceRequestsDs"/>
+                                    </table>
+                                </vbox>
+                            </tab>
+                        </tabSheet>
+                    </tab>
+                </tabSheet>
+            </hbox>
+        </split>
+    </layout>
+</window>

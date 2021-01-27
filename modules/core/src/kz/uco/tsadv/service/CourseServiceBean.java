@@ -12,13 +12,19 @@ import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
+import kz.uco.tsadv.modules.performance.model.Trainer;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.pojo.CommentPojo;
+import kz.uco.tsadv.pojo.CoursePojo;
+import kz.uco.tsadv.pojo.PairPojo;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service(CourseService.NAME)
 public class CourseServiceBean implements CourseService {
@@ -792,6 +798,73 @@ public class CourseServiceBean implements CourseService {
         }
     }
 
+    @Override
+    public CoursePojo courseInfo(UUID courseId) {
+        Course course = persistence.callInTransaction(em -> Objects.requireNonNull(em.find(Course.class, courseId, "portal-course-edit"), "Can not find course by id: " + courseId));
+        course.setSections(course.getSections()
+                .stream()
+                .sorted(Comparator.comparing(CourseSection::getOrder))
+                .peek(s -> s.setSession(s.getSession().stream().sorted(Comparator.comparing(CourseSectionSession::getEndDate))
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toList()));
+
+        CoursePojo coursePojo = new CoursePojo();
+        coursePojo.setName(course.getName());
+        coursePojo.setAvgRate(course.getAvgRate());
+        coursePojo.setFinished((int) course.getEnrollments().stream().filter(e -> e.getStatus().equals(EnrollmentStatus.COMPLETED)).count());
+        coursePojo.setIssuedCertificate(course.getIsIssuedCertificate());
+
+        Double avgRate = course.getReviews().isEmpty()
+                ? 0D
+                : course.getReviews().stream()
+                .map(CourseReview::getRate)
+                .reduce(Double::sum)
+                .orElseThrow(() -> new NullPointerException("Reviews is empty!")) / course.getReviews().size();
+        coursePojo.setAvgRate(avgRate);
+
+        List<CourseSection> courseSections = course.getSections();
+        List<CourseSection> courseSectionsWithSessions = courseSections.stream().filter(cs -> !cs.getSession().isEmpty()).collect(Collectors.toList());
+        coursePojo.setStartDate(CollectionUtils.isEmpty(courseSectionsWithSessions)
+                ? null
+                : CollectionUtils.isEmpty(courseSectionsWithSessions.get(0).getSession())
+                ? null
+                : courseSectionsWithSessions.get(0).getSession().get(0).getStartDate());
+
+        coursePojo.setEndDate(CollectionUtils.isEmpty(courseSectionsWithSessions)
+                ? null
+                : CollectionUtils.isEmpty(courseSectionsWithSessions.get(courseSectionsWithSessions.size() - 1).getSession())
+                ? null
+                : courseSectionsWithSessions.get(courseSectionsWithSessions.size() - 1).getSession().get(0).getEndDate());
+        coursePojo.setPreRequisitions(course.getPreRequisition().stream().map(pr -> pr.getRequisitionCourse().getName()).collect(Collectors.joining(", ")));
+        coursePojo.setTrainers(course.getCourseTrainers().stream().map(ct -> new PairPojo<>(ct.getTrainer().getId(), ct.getTrainer().getTrainerFullName())).collect(Collectors.toList()));
+        coursePojo.setSections(courseSections.stream().map(cs -> new PairPojo<UUID, String>(cs.getId(), cs.getSectionName())).collect(Collectors.toList()));
+        coursePojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
+        coursePojo.setRateReviewCount(course.getReviews().size());
+        coursePojo.setComments(course.getReviews().stream().map(r -> CommentPojo.CommentPojoBuilder.builder()
+                .user(r.getPersonGroup().getFullName())
+                .date(r.getCreateTs())
+                .comment(r.getText())
+                .build()).collect(Collectors.toList()));
+        coursePojo.setRating(course.getReviews().stream()
+                .collect(Collectors.groupingBy(CourseReview::getRate, Collectors.counting()))
+                .entrySet().stream()
+                .map(m -> new PairPojo<>(m.getKey(), m.getValue()))
+                .collect(Collectors.toList()));
+        return coursePojo;
+    }
+
+    @Override
+    public Map<String, Object> courseTrainerInfo(UUID trainerId) {
+        Trainer trainer = persistence.callInTransaction(em -> Objects.requireNonNull(em.find(Trainer.class, trainerId, "course-trainer-info"), "Can not find trainer by ID: " + trainerId));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("fullName", trainer.getTrainerFullName());
+        response.put("courseCount", trainer.getCourseTrainer().size());
+        response.put("finished", trainer.getCourseTrainer().stream().flatMap(ct -> ct.getCourse().getEnrollments().stream()).filter(e -> e.getStatus().equals(EnrollmentStatus.COMPLETED)).count());
+        response.put("image", trainer.getEmployee().getPerson().getImage());
+        return response;
+    }
+
     protected void completeEnrollment(UUID enrollmentId) {
         try (Transaction transaction = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
@@ -815,6 +888,4 @@ public class CourseServiceBean implements CourseService {
         loadContext.setView("courseSection.for.status");
         return dataManager.loadList(loadContext);
     }
-
-
 }

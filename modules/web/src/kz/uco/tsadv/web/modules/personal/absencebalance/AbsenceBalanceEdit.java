@@ -64,7 +64,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
         }
         if (person != null) {
             final List<AbsenceBalance> balances = commonService.getEntities(AbsenceBalance.class, "select e from tsadv$AbsenceBalance e\n" +
-                    "                where e.personGroupId.id = :id\n" +
+                    "                where e.personGroup.id = :id\n" +
                     "                order by e.dateTo DESC", ParamsMap.of("id", item.getPersonGroup().getId()), View.LOCAL);
             if (balances.isEmpty()) {
                 this.setDatesOnEmptyBalances(person.getHireDate(), item);

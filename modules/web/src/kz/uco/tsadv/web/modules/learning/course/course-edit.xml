@@ -19,6 +19,7 @@
                                   property="preRequisition"/>
             <collectionDatasource id="feedbackTemplatesDs"
                                   property="feedbackTemplates"/>
+            <collectionDatasource id="courseScheduleDs" property="courseSchedule"/>
         </datasource>
         <collectionDatasource id="dicLearningTypesDs"
                               class="kz.uco.tsadv.modules.learning.dictionary.DicLearningType"
@@ -68,11 +69,36 @@
                             <field property="activeFlag"/>
                             <field property="selfEnrollment"
                                    required="true"/>
+                            <field property="isOnline"/>
                             <field id="shortDescription" property="shortDescription"
                                    rows="5"/>
                         </column>
                     </fieldGroup>
                 </scrollBox>
+            </tab>
+            <tab id="courseSchedule" caption="msg://courseSchedule"
+                 margin="true, false, false, false">
+                <table id="courseScheduleTable" height="100%" width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="name"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="learningCenter"/>
+                        <column id="address"/>
+                        <column id="maxNumberOfPeople"/>
+                    </columns>
+                    <rows datasource="courseScheduleDs"/>
+                    <buttonsPanel id="courseScheduleBtnPanel">
+                        <button id="courseScheduleCreate" action="courseScheduleTable.create"/>
+                        <button id="courseScheduleEdit" action="courseScheduleTable.edit"/>
+                        <button id="courseScheduleRemove" action="courseScheduleTable.remove"/>
+                    </buttonsPanel>
+                </table>
             </tab>
             <tab id="sections"
                  caption="msg://Course.sections"

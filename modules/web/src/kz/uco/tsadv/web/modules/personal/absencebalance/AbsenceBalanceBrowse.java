@@ -103,7 +103,7 @@ public class AbsenceBalanceBrowse extends EditableFrame {
                 "select v from base$AssignmentExt a" +
                         "   join tsadv$VacationConditions v " +
                         "       on v.positionGroup = a.positionGroup " +
-                        " where a.personGroupId.id = :personGroupId" +
+                        " where a.personGroup.id = :personGroupId" +
                         "   and :sysDate between a.startDate and a.endDate " +
                         "   and a.primaryFlag = 'TRUE' " +
                         "   and :sysDate between v.startDate and v.endDate " +

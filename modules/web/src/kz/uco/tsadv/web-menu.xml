@@ -5,6 +5,9 @@
           insertBefore="reports">
         <menu id="hrDictionaries"
               icon="font-icon:BOOK">
+            <item screen="tsadv_DicAbsencePurpose.browse"/>
+            <item screen="tsadv_AbsPurposeSetting.browse"
+                  caption="mainMsg://menu_config.tsadv_AbsPurposeSetting.browse"/>
             <item id="countrye"
                   screen="base$DicCountry.browse"/>
             <menu id="militaryRegister">
@@ -189,6 +192,13 @@
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
           insertAfter="hr">
+        <!--        <item screen="tsadv_SsStructurePerson" caption="mainMsg://menu_config.tsadv_SsStructurePerson"/>-->
+        <item id="ssMyTeam2"
+              icon="font-icon:USERS"
+              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
+            <param name="screen"
+                   value="tsadv_SsStructurePerson"/>
+        </item>
         <item id="activityBrowseNew"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
             <param name="screen"

@@ -436,7 +436,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
         //PLEASE do not delete commented code
             /*Map<String, Object> templateParams = new HashMap<>();
             UserExt mainInterviewerUser = commonService.getEntity(UserExt.class,
-                    "select u from sec$User u where u.personGroupId.id = :personGroupId",
+                    "select u from sec$User u where u.personGroup.id = :personGroupId",
                     Collections.singletonMap("personGroupId", getItem().getMainInterviewerPersonGroup().getId()),
                     "user.edit");
             templateParams.put("interview", getItem());

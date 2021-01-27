@@ -52,7 +52,7 @@ public class InterviewerLookup extends AbstractLookup {
                     } else {
                         params.put("roleCode", hiringStepMember.getRole().getCode());
                         String qureyString = "select pg from base$PersonGroupExt pg " +
-                                " where pg.id in (select e1.personGroupId.id " +
+                                " where pg.id in (select e1.personGroup.id " +
                                 "   from tsadv$User e1 " +
                                 "   join tsadv$OrganizationHrUser e on e.user.id = e1.id " +
                                 "  where e.organizationGroup.id = :param$organizationGroupId " +

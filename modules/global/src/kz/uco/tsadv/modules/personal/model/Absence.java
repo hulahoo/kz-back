@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentCategorizedEntity;
+import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.group.OrderGroup;
@@ -26,6 +27,7 @@ import java.util.List;
 @Entity(name = "tsadv$Absence")
 public class Absence extends AbstractParentCategorizedEntity {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
     private static final long serialVersionUID = 2614557804382950349L;
 
     @Temporal(TemporalType.DATE)
@@ -77,7 +79,7 @@ public class Absence extends AbstractParentCategorizedEntity {
     protected OrderGroup order;
 
     @NotNull
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "TYPE_ID")
     protected DicAbsenceType type;
@@ -91,7 +93,7 @@ public class Absence extends AbstractParentCategorizedEntity {
     @JoinColumn(name = "ORD_ASSIGNMENT_ID")
     protected OrdAssignment ordAssignment;
 
-    @Lookup(type = LookupType.DROPDOWN)
+    @Lookup(type = LookupType.DROPDOWN, actions = {})
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ABSENCE_REQUEST_ID")
     protected AbsenceRequest absenceRequest;
@@ -108,7 +110,6 @@ public class Absence extends AbstractParentCategorizedEntity {
     @Column(name = "LEGACY_ID")
     protected String legacyId;
 
-
     @Temporal(TemporalType.DATE)
     @Column(name = "PERIOD_START")
     protected Date periodStart;
@@ -119,6 +120,133 @@ public class Absence extends AbstractParentCategorizedEntity {
 
     @Column(name = "USE_IN_BALANCE")
     protected Boolean useInBalance;
+
+    @Column(name = "PURPOSE_TEXT", length = 2000)
+    private String purposeText;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PURPOSE_ID")
+    protected DicAbsencePurpose purpose;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "TIME_OF_STARTING")
+    protected Date timeOfStarting;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "TIME_OF_FINISHING")
+    protected Date timeOfFinishing;
+
+    @Column(name = "TOTAL_HOURS")
+    protected Integer totalHours;
+
+    @Column(name = "COMPENCATION")
+    protected Boolean compencation = false;
+
+    @Column(name = "VACATION_DAY")
+    protected Boolean vacationDay;
+
+    @Column(name = "ACQUAINTED")
+    protected Boolean acquainted;
+
+    @Column(name = "AGREE")
+    protected Boolean agree;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "TRANSFER_PERIOD_START")
+    protected Date transferPeriodStart;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "TRANSFER_PERIOD_END")
+    protected Date transferPeriodEnd;
+
+    public Date getTransferPeriodEnd() {
+        return transferPeriodEnd;
+    }
+
+    public void setTransferPeriodEnd(Date transferPeriodEnd) {
+        this.transferPeriodEnd = transferPeriodEnd;
+    }
+
+    public Date getTransferPeriodStart() {
+        return transferPeriodStart;
+    }
+
+    public void setTransferPeriodStart(Date transferPeriodStart) {
+        this.transferPeriodStart = transferPeriodStart;
+    }
+
+    public Boolean getAgree() {
+        return agree;
+    }
+
+    public void setAgree(Boolean agree) {
+        this.agree = agree;
+    }
+
+    public Boolean getAcquainted() {
+        return acquainted;
+    }
+
+    public void setAcquainted(Boolean acquainted) {
+        this.acquainted = acquainted;
+    }
+
+    public Boolean getVacationDay() {
+        return vacationDay;
+    }
+
+    public void setVacationDay(Boolean vacationDay) {
+        this.vacationDay = vacationDay;
+    }
+
+    public Boolean getCompencation() {
+        return compencation;
+    }
+
+    public void setCompencation(Boolean compencation) {
+        this.compencation = compencation;
+    }
+
+    public Integer getTotalHours() {
+        return totalHours;
+    }
+
+    public void setTotalHours(Integer totalHours) {
+        this.totalHours = totalHours;
+    }
+
+    public Date getTimeOfFinishing() {
+        return timeOfFinishing;
+    }
+
+    public void setTimeOfFinishing(Date timeOfFinishing) {
+        this.timeOfFinishing = timeOfFinishing;
+    }
+
+    public Date getTimeOfStarting() {
+        return timeOfStarting;
+    }
+
+    public void setTimeOfStarting(Date timeOfStarting) {
+        this.timeOfStarting = timeOfStarting;
+    }
+
+    public DicAbsencePurpose getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(DicAbsencePurpose purpose) {
+        this.purpose = purpose;
+    }
+
+    public String getPurposeText() {
+        return purposeText;
+    }
+
+    public void setPurposeText(String purposeText) {
+        this.purposeText = purposeText;
+    }
+
 
     public void setUseInBalance(Boolean useInBalance) {
         this.useInBalance = useInBalance;
