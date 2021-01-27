@@ -153,13 +153,6 @@
                                          optionsContainer="DicMICAttachmentStatusDc" property="statusRequest"/>
                             <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
                             <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
-
-                            <pickerField id="fileField" property="file" captionProperty="attachment.name">
-                                <actions>
-                                    <action id="lookup" type="picker_lookup"/>
-                                    <action id="clear" type="picker_clear"/>
-                                </actions>
-                            </pickerField>
                             <textField id="totalAmountField" property="totalAmount" editable="false"/>
                             <dateField id="exclusionDateField" resolution="DAY" visible="false" property="exclusionDate"/>
                             <textField id="commentField" property="comment" visible="false"/>
@@ -200,6 +193,36 @@
                     </buttonsPanel>
                     <rows/>
                 </groupTable>
+<!--                <dataGrid id="insuredPersonTable"-->
+<!--                          dataContainer="insuredPersonMemberDc"-->
+<!--                          width="100%">-->
+<!--                    <actions>-->
+<!--                        <action id="create" type="create"/>-->
+<!--                        <action id="edit" type="edit"/>-->
+<!--                        <action id="remove" type="remove"/>-->
+<!--                    </actions>-->
+<!--                    <columns>-->
+<!--                        <column id="relativeField" property="relative"/>-->
+<!--                        <column id="firstNameField" property="firstName"/>-->
+<!--                        <column id="secondNameField" property="secondName"/>-->
+<!--                        <column id="middleNameField" property="middleName"/>-->
+<!--                        <column id="amountField" property="amount"/>-->
+<!--                        <column id="sexField" property="sex"/>-->
+<!--                        <column id="birthdateField" property="birthdate"/>-->
+<!--                        <column id="iinField" property="iin"/>-->
+<!--                        <column id="documentTypeField" property="documentType"/>-->
+<!--                        <column id="file"/>-->
+<!--                        <column id="regionField" property="region"/>-->
+<!--                        <column id="insuranceProgramField" property="insuranceProgram"/>-->
+<!--                        <column id="addressField" property="address"/>-->
+<!--                    </columns>-->
+<!--                    <buttonsPanel>-->
+<!--                        <button id="createButton" action="insuredPersonTable.create"/>-->
+<!--                        <button id="editButton" action="insuredPersonTable.edit"/>-->
+<!--                        <button id="removeButton" action="insuredPersonTable.remove"/>-->
+<!--                    </buttonsPanel>-->
+<!--                    <rows/>-->
+<!--                </dataGrid>-->
             </groupBox>
         </scrollBox>
         <hbox id="editActions" spacing="true">

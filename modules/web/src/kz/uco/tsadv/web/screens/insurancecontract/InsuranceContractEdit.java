@@ -98,6 +98,18 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     }
 
 
+    @Subscribe
+    public void onBeforeShow(BeforeShowEvent event) {
+
+    }
+//
+    @Subscribe
+    public void onAfterShow(AfterShowEvent event) {
+        insuredPersonsDl.setParameter("insuranceContractId", insuranceContractDc.getItem().getId());
+        insuredPersonsDl.load();
+    }
+
+
     @Subscribe("insuredPersonsTable.edit")
     public void onInsuredPersonsTableEdit(Action.ActionPerformedEvent event) {
         InsuredPerson selectItem = insuredPersonsTable.getSingleSelected();
@@ -129,15 +141,6 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
             bulkEdit.show();
         }
 
-    }
-
-
-    @Subscribe
-    public void onAfterShow(AfterShowEvent event) {
-        if(insuranceContractDc.getItem() == null){
-            createBtnPerson.setEnabled(false);
-        }
-        insuredPersonsDl.setParameter("insuranceContractId", insuranceContractDc.getItem().getId());
     }
 
 
@@ -231,7 +234,6 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
 
     @Subscribe("startDateField")
     public void onStartDateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-
         if (event.getValue() != null) {
             Instant i = Instant.ofEpochMilli(event.getValue().getTime());
             Date outRequestDate = Date.from(i);

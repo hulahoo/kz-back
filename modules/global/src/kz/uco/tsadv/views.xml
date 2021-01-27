@@ -21999,20 +21999,22 @@
         <property name="documentType" view="_local"/>
         <property name="region" view="_minimal"/>
         <property name="addressType" view="_minimal"/>
-        <property name="file" view="_local">
-            <property name="attachment" view="_local"/>
-        </property>
+        <property name="file" view="_local"/>
     </view>
     <view entity="tsadv$InsuredPerson" name="insuredPersonMember-editView" extends="_local">
         <property name="relative" view="_local"/>
         <property name="statusRequest" view="_minimal"/>
         <property name="insuranceContract" view="_local">
-            <property name="programConditions" view="_local"/>
+            <property name="programConditions" view="_local">
+                <property name="relationshipType" view="_local"/>
+            </property>
         </property>
         <property name="company" view="_minimal"/>
         <property name="employee" view="_minimal">
             <property name="list" view="_minimal"/>
-            <property name="assignments" view="_minimal"/>
+            <property name="assignments" view="_local">
+                <property name="assignmentStatus" view="_local"/>
+            </property>
         </property>
         <property name="job" view="_minimal"/>
         <property name="sex" view="_minimal"/>

@@ -7,6 +7,8 @@ import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -16,6 +18,7 @@ import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.Attachment;
+import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
@@ -23,6 +26,7 @@ import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.web.screens.insurancecontract.InsuranceContractEdit;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
@@ -106,8 +110,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private DateField<Date> attachDateField;
     private String whichButton;
     @Inject
-    private PickerField<Attachment> fileField;
-    @Inject
     private TextField<String> commentField;
     @Inject
     private DateField<Date> exclusionDateField;
@@ -119,6 +121,38 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private Form form2;
     @Inject
     private UiComponents uiComponents;
+    @Inject
+    private ExportDisplay exportDisplay;
+
+    @Subscribe
+    public void onInit(InitEvent event) {
+//        DataGrid.Column column = insuredPersonTable.addGeneratedColumn("file", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
+//            @Override
+//            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
+//                LinkButton linkButton = uiComponents.create(LinkButton.class);
+//                linkButton.setCaption(event.getItem().getFile().get(1).getName());
+//                linkButton.setAction(new BaseAction("file") {
+//                    @Override
+//                    public void actionPerform(Component component) {
+//                        super.actionPerform(component);
+//                        exportDisplay.show(event.getItem().getFile().get(1), ExportFormat.OCTET_STREAM);
+//                    }
+//                });
+//                return linkButton;
+//            }
+//
+//            @Override
+//            public Class<LinkButton> getType(){
+//                return LinkButton.class;
+//            }
+//
+//        }, 10);
+//        column.setRenderer(insuredPersonTable.createRenderer(DataGrid.ComponentRenderer.class));
+    }
+
+
+
+
 
     public void setParameter(String whichButton){
         this.whichButton = whichButton;
@@ -127,6 +161,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
+
         LocalDateTime ldt = LocalDateTime.ofInstant(timeSource.currentTimestamp().toInstant(), ZoneId.systemDefault());
         Date outRequestDate = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
         attachDateField.setRangeStart(outRequestDate);
@@ -142,10 +177,10 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             addressTypeField.setEditable(false);
             addressField.setEditable(false);
             regionField.setEditable(false);
-            fileField.setEditable(false);
+
             exclusionDateField.setVisible(false);
             commentField.setVisible(false);
-            fileField.setVisible(false);
+
         }
         else if ("joinEmployee".equals(whichButton)){
             familyMemberInformationGroup.setVisible(false);
@@ -159,7 +194,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             totalAmountField.setVisible(false);
             insuranceContractField.setEditable(true);
             documentNumberField.setRequired(true);
-            fileField.setVisible(false);
+
         }else if ("joinHr".equals(whichButton)){
             attachDateField.setEditable(true);
             familyMemberInformationGroup.setVisible(false);
@@ -181,7 +216,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         }
         else {
             familyMemberInformationGroup.setVisible(true);
-            fileField.setVisible(false);
+
             employeeField.setEditable(false);
             relativeField.setVisible(false);
             documentTypeField.setEditable(false);
@@ -189,7 +224,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             addressTypeField.setEditable(false);
             addressField.setEditable(false);
             regionField.setEditable(false);
-            fileField.setEditable(false);
+
             exclusionDateField.setVisible(false);
             commentField.setVisible(false);
             insuranceContractField.setEditable(false);
@@ -211,23 +246,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             insuredPersonMemberDl.load();
         }
     }
-
-
-    @Subscribe(id = "insuredPersonMemberDl", target = Target.DATA_LOADER)
-    public void onInsuredPersonMemberDlPostLoad(CollectionLoader.PostLoadEvent<InsuredPerson> event) {
-        if (insuranceContractField.getValue() != null && insuranceContractField.getValue().getCountOfFreeMembers() != null
-                && insuredPersonMemberDc.getItems().size() > insuranceContractField.getValue().getCountOfFreeMembers()){
-            totalAmountField.setValue(BigDecimal.valueOf(0));
-            BigDecimal totalAmount = totalAmountField.getValue();
-            for (InsuredPerson person : insuredPersonMemberDc.getItems()){
-                if (person.getAmount() != null){
-                    totalAmount = totalAmount.add(person.getAmount());
-                }
-            }
-            totalAmountField.setValue(totalAmount);
-        }
-    }
-
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
@@ -263,6 +281,21 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     }
 
 
+    @Subscribe(id = "insuredPersonMemberDl", target = Target.DATA_LOADER)
+    public void onInsuredPersonMemberDlPostLoad(CollectionLoader.PostLoadEvent<InsuredPerson> event) {
+        if (insuranceContractField.getValue() != null){
+            totalAmountField.setValue(BigDecimal.valueOf(0));
+            BigDecimal totalAmount = totalAmountField.getValue();
+            for (InsuredPerson person : insuredPersonMemberDc.getItems()){
+                if (person.getAmount() != null){
+                    totalAmount = totalAmount.add(person.getAmount());
+                }
+            }
+            totalAmountField.setValue(totalAmount);
+        }
+    }
+
+
     @Subscribe("insuredPersonTable.create")
     public void onInsuredPersonTableCreate(Action.ActionPerformedEvent event) {
         insuredPersonDc.getItem();
@@ -284,6 +317,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Subscribe("insuredPersonTable.edit")
     public void onInsuredPersonTableEdit(Action.ActionPerformedEvent event){
         InsuredPerson insuredPerson = insuredPersonTable.getSingleSelected();
+        assert insuredPerson != null;
         InsuredPersonMemberEdit insuredPersonMemberEdit =  screenBuilders.editor(InsuredPerson.class, this)
                 .withScreenClass(InsuredPersonMemberEdit.class)
                 .editEntity(insuredPerson)
@@ -291,14 +325,19 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     insuredPersonMemberDl.load();
                 })
                 .build();
-        setParameterAndShow(insuredPersonMemberEdit);
+        if (insuredPerson.getAmount() != BigDecimal.valueOf(0)){
+            insuredPersonMemberEdit.setParameter(false);
+        }else {
+            insuredPersonMemberEdit.setParameter(true);
+        }
+        insuredPersonMemberEdit.show();
 
     }
 
 
     protected void setParameterAndShow(InsuredPersonMemberEdit insuredPersonMemberEdit){
         if (insuranceContractField.getValue() != null && insuranceContractField.getValue().getCountOfFreeMembers() !=null &&
-                insuranceContractField.getValue().getCountOfFreeMembers() >= insuredPersonMemberDc.getItems().size()){
+                insuranceContractField.getValue().getCountOfFreeMembers() > insuredPersonMemberDc.getItems().size()){
             insuredPersonMemberEdit.setParameter(true);
             insuredPersonMemberEdit.show();
         }else if (insuranceContractField.getValue() != null && insuranceContractField.getValue().getCountOfFreeMembers() !=null &&
@@ -328,9 +367,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
-        if(event.getValue() != null && "PRIMARY".equals(event.getValue().getCode())) {
-            fileField.setVisible(false);
-        }
 
         if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode()) && !(whichButton.equals("joinHr") || whichButton.equals("editHr"))){
             totalAmountField.setValue(new BigDecimal(0));
@@ -491,7 +527,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     .query("select o.company " +
                             "   from base$AssignmentExt a" +
                             " join a.assignmentStatus s " +
-                            " join a.organizationGroup o " +
+                            " join a.organizationGroup.list o " +
                             " where a.personGroup.id = :pg " +
                             "and current_date between a.startDate and a.endDate "+
                             "and a.primaryFlag = 'TRUE' " +
@@ -579,10 +615,17 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 for (Attachment attachment : event.getValue().getAttachments()){
                     LinkButton linkButton = uiComponents.create(LinkButton.class);
                     linkButton.setCaption(attachment.getAttachment().getName());
-                    linkButton.setIcon("SAVE");
-                    linkButton.setAction(new BaseAction("contractField").withHandler(e->{
-                    }));
+                    linkButton.setIcon("");
+                    linkButton.setAction(new BaseAction("contractField"){
+                        @Override
+                        public void actionPerform(Component component) {
+                            super.actionPerform(component);
+                            exportDisplay.show(attachment.getAttachment(), ExportFormat.OCTET_STREAM);
+                        }
+                    });
                     form2.add(linkButton);
+
+
                 }
             }
         }

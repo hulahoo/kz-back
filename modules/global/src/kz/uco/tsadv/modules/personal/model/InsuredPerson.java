@@ -1,25 +1,25 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
-import kz.uco.tsadv.entity.tb.Attachment;
+import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
-import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.base.entity.dictionary.DicCompany;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_INSURED_PERSON")
 @Entity(name = "tsadv$InsuredPerson")
@@ -112,9 +112,11 @@ public class InsuredPerson extends StandardEntity {
     private String insuranceProgram;
 
     @OnDelete(DeletePolicy.CASCADE)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FILE_ID")
-    private Attachment file;
+    @ManyToMany
+    @JoinTable(name = "TSADV_INSURED_PERSON_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "INSURED_PERSON_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    private List<FileDescriptor> file;
 
     @Column(name = "TYPE", nullable = false)
     @NotNull
@@ -133,6 +135,14 @@ public class InsuredPerson extends StandardEntity {
 
     @Column(name = "COMMENT", length = 500)
     private String comment;
+
+    public void setFile(List<FileDescriptor> file) {
+        this.file = file;
+    }
+
+    public List<FileDescriptor> getFile() {
+        return file;
+    }
 
     public void setType(RelativeType type) {
         this.type = type == null ? null : type.getId();
@@ -228,14 +238,6 @@ public class InsuredPerson extends StandardEntity {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public Attachment getFile() {
-        return file;
-    }
-
-    public void setFile(Attachment file) {
-        this.file = file;
     }
 
     public String getInsuranceProgram() {

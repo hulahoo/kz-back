@@ -19,7 +19,8 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.cuba.actions.CreateActionExt;
 import kz.uco.base.cuba.actions.EditActionExt;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.base.entity.dictionary.DicCompany;
+
+import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
@@ -100,7 +101,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         insuredPersonsDl.setParameter("relativeType", RelativeType.EMPLOYEE);
         insuredPersonsDl.setParameter("employeeId", personGroupExt != null ? personGroupExt.getId() : null);
 
-        DicCompany dicCompany = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
+        DicCompany dicCompany = personGroupExt.getCurrentAssignment().getOrganizationGroup().getOrganization().getCompany();
 
         if (dicCompany != null){
             InsuranceContract contract = dataManager.load(InsuranceContract.class)
@@ -172,7 +173,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 .query("select o.company " +
                         "   from base$AssignmentExt a" +
                         " join a.assignmentStatus s " +
-                        " join a.organizationGroup o " +
+                        " join a.organizationGroup.list o " +
                         " where a.personGroup.id = :pg " +
                         "and current_date between a.startDate and a.endDate "+
                         "and a.primaryFlag = 'TRUE' " +

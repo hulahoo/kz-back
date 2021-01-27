@@ -16426,3 +16426,174 @@ create table TSADV_SCORE_SETTING (
     --
     primary key (ID)
 )^
+-- begin TSADV_SCORE_SETTING
+create table TSADV_SCORE_SETTING (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PERFORMANCE_PLAN_ID uuid,
+    MIN_PERCENT double precision,
+    MAX_PERCENT double precision,
+    FINAL_SCORE integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_SCORE_SETTING
+-- begin TSADV_DIC_MIC_ATTACHMENT_STATUS
+create table TSADV_DIC_MIC_ATTACHMENT_STATUS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_MIC_ATTACHMENT_STATUS
+-- begin TSADV_INSURED_PERSON
+create table TSADV_INSURED_PERSON (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    ATTACH_DATE date not null,
+    STATUS_REQUEST_ID uuid not null,
+    INSURANCE_CONTRACT_ID uuid not null,
+    COMPANY_ID uuid not null,
+    EMPLOYEE_ID uuid not null,
+    RELATIVE_ID uuid not null,
+    FIRST_NAME varchar(50) not null,
+    SECOND_NAME varchar(50) not null,
+    MIDDLE_NAME varchar(50),
+    JOB_ID uuid,
+    SEX_ID uuid not null,
+    IIN varchar(255) not null,
+    BIRTHDATE date not null,
+    DOCUMENT_TYPE_ID uuid not null,
+    DOCUMENT_NUMBER varchar(255) not null,
+    REGION_ID uuid not null,
+    ADDRESS_ID uuid,
+    ADDRESS varchar(255),
+    INSURANCE_PROGRAM varchar(500) not null,
+    TYPE varchar(50) not null,
+    AMOUNT decimal(19, 2),
+    TOTAL_AMOUNT decimal(19, 2) not null,
+    EXCLUSION_DATE date,
+    COMMENT varchar(500),
+    --
+    primary key (ID)
+)^
+-- end TSADV_INSURED_PERSON
+-- begin TSADV_CONTRACT_CONDITIONS
+create table TSADV_CONTRACT_CONDITIONS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    RELATIONSHIP_TYPE_ID uuid not null,
+    AGE_MIN integer not null,
+    AGE_MAX integer not null,
+    IS_FREE boolean not null,
+    COST_IN_KZT decimal(19, 2) not null,
+    INSURANCE_CONTRACT_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_CONTRACT_CONDITIONS
+-- begin TSADV_INSURANCE_CONTRACT_ADMINISTRATOR
+create table TSADV_INSURANCE_CONTRACT_ADMINISTRATOR (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NOTIFY_ABOUT_NEW_ATTACHMENTS boolean,
+    EMPLOYEE_ID uuid not null,
+    INSURANCE_CONTRACT_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_INSURANCE_CONTRACT_ADMINISTRATOR
+-- begin TSADV_INSURANCE_CONTRACT
+create table TSADV_INSURANCE_CONTRACT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    POLICY_NAME varchar(25) not null,
+    CONTRACT varchar(10) not null,
+    SIGN_DATE date not null,
+    COMPANY_ID uuid not null,
+    INSURER varchar(255),
+    DEFAULT_DOCUMENT_TYPE_ID uuid,
+    DEFAULT_ADDRESS_ID uuid,
+    YEAR integer,
+    START_DATE date not null,
+    EXPIRATION_DATE date not null,
+    AVAILABILITY_PERIOD_FROM date not null,
+    AVAILABILITY_PERIOD_TO date not null,
+    INSURANCE_PROGRAM varchar(500) not null,
+    INSURER_CONTACTS varchar(100),
+    NOTIFICATION_DATE date not null,
+    ATTACHING_AN_EMPLOYEE integer not null,
+    ATTACHING_FAMILY integer not null,
+    COUNT_OF_FREE_MEMBERS integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_INSURANCE_CONTRACT
+-- begin TSADV_INSURED_PERSON_FILE_DESCRIPTOR_LINK
+create table TSADV_INSURED_PERSON_FILE_DESCRIPTOR_LINK (
+    INSURED_PERSON_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (INSURED_PERSON_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_INSURED_PERSON_FILE_DESCRIPTOR_LINK

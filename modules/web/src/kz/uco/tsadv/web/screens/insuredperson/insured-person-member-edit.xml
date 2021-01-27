@@ -9,6 +9,7 @@
                   class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
                   view="insuredPersonMember-editView">
             <loader/>
+            <collection id="attachmentsDc" property="file"/>
         </instance>
         <collection id="statusRequestDc" class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus"
                     view="_local">
@@ -84,12 +85,6 @@
                     <lookupField id="regionField" property="region" optionsContainer="regionFieldDc"/>
                     <textField rowspan="3" id="addressField" property="address" caption="msg://address" required="true"/>
                     <textField id="insuranceProgramField" property="insuranceProgram" visible="false"/>
-                    <pickerField id="fileField" property="file">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
                     <textField id="amountField" property="amount" editable="false"/>
                     <dateField id="attachDateField" property="attachDate"
                                visible="true" editable="false"/>
@@ -97,6 +92,21 @@
                     <textField id="totalAmountField" property="totalAmount" visible="false"/>
                     <dateField id="exclusionDateField" property="exclusionDate" visible="false"/>
                     <textField id="commentField" property="comment" visible="false"/>
+                    <groupBox id="groupBox" caption="msg://file" width="100%" outerMargin="false, false, false, false">
+                        <table id="fileDescriptorsTable" width="100%" height="AUTO" dataContainer="attachmentsDc">
+                        <actions>
+                            <action id="remove" type="remove"/>
+                        </actions>
+                        <buttonsPanel alwaysVisible="true">
+                            <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                    stylename="primary"/>
+                            <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>
+                        </buttonsPanel>
+                        <columns>
+                            <column id="name" generator="generatorName" caption="mainMsg://fileName"/>
+                        </columns>
+                    </table>
+                    </groupBox>
                 </column>
             </form>
         </scrollBox>
