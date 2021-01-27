@@ -186,8 +186,9 @@
         <item screen="tsadv$TalentProgramExceptions.browse"/>
         <item screen="tsadv_CertificateRequestHR.browse"
               caption="mainMsg://menu_config.tsadv_CertificateRequestHR.browse"/>
-        <item screen="tsadv$LeavingVacationRequest.browse"
-              caption="mainMsg://menu_config.tsadv$LeavingVacationRequest.browse"/>
+        <menu id="dms" caption="mainMsg://dms">
+            <item screen="tsadv$InsuranceContract.browse" caption="mainMsg://menu_config.tsadv$InsuranceContract.browse"/>
+        </menu>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
@@ -394,6 +395,7 @@
         </item>
         <item screen="tsadv$Absence.self.browse"/>
         <item screen="tsadv_PersonData" caption="mainMsg://menu_config.tsadv_PersonData"/>
+        <item screen="tsadv$MyMICInsuredPerson.browse" caption="mainMsg://menu_config.tsadv$MyMICInsuredPerson.browse"/>
     </menu>
     <menu id="performanceManagement"
           icon="font-icon:BAR_CHART_O"

@@ -9,6 +9,9 @@
         <datasource id="attachmentDs"
                     class="kz.uco.tsadv.entity.tb.Attachment"
                     view="attachment-view"/>
+        <collectionDatasource id="attachmentTypeDs" view="_local"
+                              class="kz.uco.tsadv.entity.tb.dictionary.AttachmentType">
+        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -18,7 +21,7 @@
                     datasource="attachmentDs">
             <column width="250px">
                 <field property="attachment"/>
-                <field property="attachmentType"/>
+                <field property="attachmentType" optionsDatasource="attachmentTypeDs"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

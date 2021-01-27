@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://insuranceContractAdministratorBrowse.caption"
+        focusComponent="insuranceContractAdministratorsTable"
+        messagesPack="kz.uco.tsadv.web.screens.insurancecontractadministrator">
+    <data readOnly="true">
+        <collection id="insuranceContractAdministratorsDc"
+                    class="kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator"
+                    view="insuranceContractAdministrator-browseView">
+            <loader id="insuranceContractAdministratorsDl">
+                <query>
+                    <![CDATA[select e from tsadv$InsuranceContractAdministrator e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="insuranceContractAdministratorsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="insuranceContractAdministratorsTable"
+                dataLoader="insuranceContractAdministratorsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="insuranceContractAdministratorsTable"
+                    width="100%"
+                    dataContainer="insuranceContractAdministratorsDc">
+            <actions>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+                <action id="add" type="add"/>
+                <action id="create" type="create"/>
+            </actions>
+            <columns>
+                <column id="notifyAboutNewAttachments"/>
+                <column id="employee"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="editBtn" action="insuranceContractAdministratorsTable.edit"/>
+                <button id="removeBtn" action="insuranceContractAdministratorsTable.remove"/>
+                <button id="addBtn" action="insuranceContractAdministratorsTable.add"/>
+                <button id="createBtn" action="insuranceContractAdministratorsTable.create"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

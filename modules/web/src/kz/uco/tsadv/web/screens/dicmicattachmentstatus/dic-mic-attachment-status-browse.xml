@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://dicMICAttachmentStatusBrowse.caption"
+        focusComponent="dicMICAttachmentStatusesTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicmicattachmentstatus">
+    <data readOnly="true">
+        <collection id="dicMICAttachmentStatusesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus">
+            <view extends="_local"/>
+            <loader id="dicMICAttachmentStatusesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicMICAttachmentStatus e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicMICAttachmentStatusesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicMICAttachmentStatusesTable"
+                dataLoader="dicMICAttachmentStatusesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicMICAttachmentStatusesTable"
+                    width="100%"
+                    dataContainer="dicMICAttachmentStatusesDc">
+            <actions>
+            </actions>
+            <columns>
+                <column id="legacyId"/>
+                <column id="organizationBin"/>
+                <column id="integrationUserLogin"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="isDefault"/>
+                <column id="order"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

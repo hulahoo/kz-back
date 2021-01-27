@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://insuranceContractBrowse.caption"
+        focusComponent="insuranceContractsTable"
+        messagesPack="kz.uco.tsadv.web.screens.insurancecontract">
+    <data readOnly="true">
+        <collection id="insuranceContractsDc"
+                    class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
+                    view="insuranceContract-browseView">
+            <loader id="insuranceContractsDl">
+                <query>
+                    <![CDATA[select e from tsadv$InsuranceContract e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="insuranceContractsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="insuranceContractsTable"
+                dataLoader="insuranceContractsDl">
+            <properties include=".*"/>
+        </filter>
+        <dataGrid id="insuranceContractsTable"
+                    width="100%"
+                    dataContainer="insuranceContractsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="contractField" property="contract"/>
+                <column id="policyNameField" property="policyName"/>
+                <column id="signDateField" property="startDate"/>
+                <column id="companyField" property="company"/>
+                <column id="insurerField" property="insurer"/>
+                <column id="yearField" property="year"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="insuranceContractsTable.create"/>
+                <button id="editBtn" action="insuranceContractsTable.edit"/>
+                <button id="removeBtn" action="insuranceContractsTable.remove"/>
+            </buttonsPanel>
+        </dataGrid>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

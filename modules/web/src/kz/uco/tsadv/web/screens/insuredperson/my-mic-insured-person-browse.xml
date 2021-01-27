@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://myMicInsuredPersonBrowse.caption"
+        focusComponent="insuredPersonsTable"
+        messagesPack="kz.uco.tsadv.web.screens.insuredperson">
+    <data readOnly="true">
+        <collection id="insuredPersonsDc"
+                    class="kz.uco.tsadv.modules.personal.model.InsuredPerson">
+            <view extends="_local">
+                <property name="company" view="_local"/>
+                <property name="employee" view="_local">
+                    <property name="personDocuments" view="_local"/>
+                    <property name="addresses" view="_local"/>
+                    <property name="list" view="_local">
+                        <property name="sex" view="_local"/>
+                        <property name="nationality" view="_local"/>
+                    </property>
+                    <property name="assignments" view="_local">
+                        <property name="organizationGroup" view="_local">
+                            <property name="list" view="_local">
+                                <property name="company" view="_local"/>
+                            </property>
+                            <property name="company" view="_local"/>
+                        </property>
+                        <property name="jobGroup" view="_local">
+                            <property name="list" view="_local"/>
+                        </property>
+                        <property name="assignmentStatus" view="_local"/>
+                    </property>
+                </property>
+                <property name="relative" view="_local"/>
+                <property name="statusRequest" view="_minimal"/>
+                <property name="insuranceContract" view="_local">
+                    <property name="company" view="_local"/>
+                </property>
+                <property name="sex" view="_local"/>
+                <property name="documentType" view="_local"/>
+                <property name="addressType" view="_local"/>
+                <property name="job" view="_local"/>
+                <property name="region" view="_local"/>
+            </view>
+            <loader id="insuredPersonsDl">
+                <query>
+                    <![CDATA[select e from tsadv$InsuredPerson e ]]>
+                        <condition>
+                            <and>
+                                <c:jpql>
+                                    <c:where> e.type = :relativeType and e.employee.id = :employeeId</c:where>
+                                </c:jpql>
+                            </and>
+                        </condition>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="insuredPersonsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="insuredPersonsTable"
+                dataLoader="insuredPersonsDl">
+            <properties include=".*"/>
+        </filter>
+        <dataGrid id="insuredPersonsTable"
+                    width="100%"
+                    dataContainer="insuredPersonsDc">
+            <actions>
+                <action id="joinMIC" type="create"/>
+                <action id="joinFamilyMember" type="edit"/>
+            </actions>
+            <columns>
+                <column id="contractField" property="insuranceContract.contract"/>
+                <column id="startDateField" property="insuranceContract.startDate"/>
+                <column id="expirationDateField" property="insuranceContract.expirationDate"/>
+                <column id="attachDateField" property="attachDate"/>
+                <column id="statusRequestField" property="statusRequest"/>
+                <column id="totalAmountField" property="totalAmount"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" stylename="primary"
+                        action="insuredPersonsTable.joinMIC" caption="msg://joinTheMIC"/>
+                <button id="createBtnFamilyMember"
+                        stylename="primary"
+                        caption="msg://JoinTheMICFamilyMember"
+                        action="insuredPersonsTable.joinFamilyMember"/>
+            </buttonsPanel>
+        </dataGrid>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
