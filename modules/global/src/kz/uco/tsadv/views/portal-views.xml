@@ -65,6 +65,9 @@
     </view>
     <view entity="tsadv$AssignedGoal" name="assignedGoal-portal-kpi-create-default" extends="_local">
         <property name="category" view="_minimal"/>
+        <property name="goal" view="_minimal">
+            <property name="successCriteria"/>
+        </property>
     </view>
     <view entity="base$AssignmentExt" name="assignment-portal-kpi" extends="_local">
         <property name="jobGroup" view="_local"/>
@@ -154,8 +157,11 @@
         </property>
         <property name="courseTrainer">
             <property name="course">
-                <property name="enrollments" />
+                <property name="enrollments"/>
             </property>
         </property>
+    </view>
+    <view name="assigned-goal-weight" entity="tsadv$AssignedGoal" extends="_minimal">
+        <property name="weight"/>
     </view>
 </views>
