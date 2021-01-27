@@ -16,7 +16,9 @@ import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.Attachment;
-import kz.uco.tsadv.modules.personal.dictionary.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
+import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -489,7 +491,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     .query("select o.company " +
                             "   from base$AssignmentExt a" +
                             " join a.assignmentStatus s " +
-                            " join a.organizationGroup.list o " +
+                            " join a.organizationGroup o " +
                             " where a.personGroup.id = :pg " +
                             "and current_date between a.startDate and a.endDate "+
                             "and a.primaryFlag = 'TRUE' " +
