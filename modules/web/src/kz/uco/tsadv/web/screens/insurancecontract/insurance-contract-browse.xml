@@ -24,24 +24,21 @@
                 dataLoader="insuranceContractsDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="insuranceContractsTable"
+        <dataGrid id="insuranceContractsTable"
                     width="100%"
                     dataContainer="insuranceContractsDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
-                <action id="insuredPerson"
-                        trackSelection="true"
-                        invoke="showInsuredPersons"/>
             </actions>
             <columns>
-                <column id="policyName"/>
-                <column id="contract"/>
-                <column id="signDate"/>
-                <column id="company"/>
-                <column id="insurer"/>
-                <column id="year"/>
+                <column id="contractField" property="contract"/>
+                <column id="policyNameField" property="policyName"/>
+                <column id="signDateField" property="startDate"/>
+                <column id="companyField" property="company"/>
+                <column id="insurerField" property="insurer"/>
+                <column id="yearField" property="year"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
@@ -49,10 +46,8 @@
                 <button id="createBtn" action="insuranceContractsTable.create"/>
                 <button id="editBtn" action="insuranceContractsTable.edit"/>
                 <button id="removeBtn" action="insuranceContractsTable.remove"/>
-                <button id="click" caption="Список застрахованных"
-                        action="insuranceContractsTable.insuredPerson"/>
             </buttonsPanel>
-        </groupTable>
+        </dataGrid>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>

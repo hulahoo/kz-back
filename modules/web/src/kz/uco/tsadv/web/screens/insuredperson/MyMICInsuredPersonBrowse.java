@@ -68,16 +68,16 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     @Subscribe
     public void onInit(InitEvent event) {
 
-        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("code", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
+        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("contractField", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
             @Override
             public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
                 LinkButton linkButton = uiComponents.create(LinkButton.class);
-                linkButton.setCaption(event.getItem().getIin());
-                linkButton.setAction(new BaseAction("code").withHandler(e->{
+                linkButton.setCaption(event.getItem().getInsuranceContract().getContract());
+                linkButton.setAction(new BaseAction("contractField").withHandler(e->{
                     InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                             .editEntity(event.getItem())
                             .build();
-                    editorBuilder.setParameter("editHr");
+                    editorBuilder.setParameter("joinMember");
                     editorBuilder.show();
                 }));
                 return linkButton;
@@ -88,7 +88,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 return LinkButton.class;
             }
 
-        }, 1);
+        }, 0);
         column.setRenderer(insuredPersonsTable.createRenderer(DataGrid.ComponentRenderer.class));
 
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +

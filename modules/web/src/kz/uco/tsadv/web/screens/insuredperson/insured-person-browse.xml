@@ -55,17 +55,10 @@
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
                 <action id="excel" type="excel"/>
-                <action id="bulkEdit" type="bulkEdit" >
-                    <properties>
-                        <property name="openMode" value="DIALOG"/>
-                        <property name="includeProperties" value="attachDate, statusRequest, exclusionDate, comment"/>
-                        <property name="columnsMode" value="ONE_COLUMN"/>
-                    </properties>
-                </action>
-                <action id="bulk" invoke="bulkEdt" icon="font-icon:TABLE" trackSelection="true"/>
+                <action id="bulk" icon="font-icon:TABLE" trackSelection="true"/>
             </actions>
             <columns>
-                <column id="code" caption="msg://code"/>
+                <column id="contractField" property="insuranceContract.contract"/>
                 <column id="relative" property="relative"/>
                 <column id="attachDate" property="attachDate"/>
                 <column id="employee" property="employee" />
@@ -91,9 +84,6 @@
                 <button id="editBtn" action="insuredPersonsTable.edit"/>
                 <button id="removeBtn" action="insuredPersonsTable.remove"/>
                 <button id="excelBtn" action="insuredPersonsTable.excel"/>
-                <button id="bulkEditButton"
-                        caption="Массовое изменени"
-                        action="insuredPersonsTable.bulkEdit"/>
                 <button id="bulkButton"
                         caption="Массовое изменени"
                         action="insuredPersonsTable.bulk"/>

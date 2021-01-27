@@ -94,77 +94,79 @@
 
 
     </data>
-    <dialogMode height="600"
+    <dialogMode height="400"
                 width="800"/>
     <layout expand="scrollBox" spacing="true">
         <scrollBox id="scrollBox" spacing="true">
-            <groupBox caption="msg://generalInformation"
-                      outerMargin="true, false, true, false">
-                <form id="form" dataContainer="insuredPersonDc">
-                    <column width="350px">
-                        <pickerField
-                                id="employeeField"
-                                     property="employee">
-                            <actions>
-                                <action id="lookup" type="picker_lookup"/>
-                                <action id="clear" type="picker_clear"/>
-                            </actions>
-                        </pickerField>
-                        <lookupField property="relative" optionsContainer="relativeDc" id="relativeField"/>
-                        <textField id="firstNameField" property="firstName" visible="false"/>
-                        <textField id="secondNameField" property="secondName" visible="false"/>
-                        <textField id="middleNameField" property="middleName" visible="false"/>
-                        <textField id="iinField" property="iin"/>
-                        <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
-                        <dateField id="birthdateField" property="birthdate"/>
-                        <lookupField id="documentTypeField" optionsContainer="documentTypeDc"
-                                     property="documentType"/>
-                        <field property="documentNumber" id="documentNumberField"/>
-                        <lookupField id="addressTypeField" property="addressType"
-                                     optionsContainer="addressDc"/>
-                        <textArea rows="3" id="addressField" caption="" property="address"/>
-                        <lookupField id="companyField" property="company"
-                                     optionsContainer="companyDc" editable="false"/>
-                        <lookupField id="jobField"
-                                     optionsContainer="jobDc"
-                                     property="job"/>
-                        <dateField id="assignDateField" editable="false" resolution="DAY" caption="msg://assignDate"/>
-                    </column>
-                </form>
-            </groupBox>
-            <groupBox caption="msg://informationOnMIC"
-                      id="informationOnMIC"
-                      outerMargin="true, false, true, false">
-                <form id="form2" dataContainer="insuredPersonDc">
-                    <column width="350">
-                        <field property="type" id="typeField" visible="false"/>
-                        <lookupField id="insuranceContractField"
-                                     editable="false"
-                                     captionProperty="contract"
-                                     optionsContainer="insuranceContractDc"
-                                     property="insuranceContract"/>
-                        <dateField id="startDateField" caption="msg://startData"
-                                  resolution="DAY"
-                                   editable="false"/>
-                        <dateField id="endDateField" resolution="DAY" caption="msg://endData" editable="false"/>
-                        <dateField id="attachDateField" property="attachDate" editable="false"/>
-                        <lookupField id="statusRequestField" editable="false"
-                                     optionsContainer="DicMICAttachmentStatusDc" property="statusRequest"/>
-                        <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
-                        <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
+            <hbox width="100%" spacing="true">
+                <groupBox caption="msg://generalInformation"
+                          outerMargin="true, true, true, true">
+                    <form id="form" dataContainer="insuredPersonDc">
+                        <column width="350px">
+                            <pickerField
+                                    id="employeeField"
+                                    property="employee">
+                                <actions>
+                                    <action id="lookup" type="picker_lookup"/>
+                                    <action id="clear" type="picker_clear"/>
+                                </actions>
+                            </pickerField>
+                            <lookupField property="relative" optionsContainer="relativeDc" id="relativeField"/>
+                            <textField id="firstNameField" property="firstName" visible="false"/>
+                            <textField id="secondNameField" property="secondName" visible="false"/>
+                            <textField id="middleNameField" property="middleName" visible="false"/>
+                            <textField id="iinField" property="iin"/>
+                            <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
+                            <dateField id="birthdateField" property="birthdate"/>
+                            <lookupField id="documentTypeField" optionsContainer="documentTypeDc"
+                                         property="documentType"/>
+                            <field property="documentNumber" id="documentNumberField"/>
+                            <lookupField id="addressTypeField" property="addressType"
+                                         optionsContainer="addressDc"/>
+                            <textArea rows="3" id="addressField" caption="" property="address"/>
+                            <lookupField id="companyField" property="company"
+                                         optionsContainer="companyDc" editable="false"/>
+                            <lookupField id="jobField"
+                                         optionsContainer="jobDc"
+                                         property="job"/>
+                            <dateField id="assignDateField" editable="false" resolution="DAY" caption="msg://assignDate"/>
+                        </column>
+                    </form>
+                </groupBox>
+                <groupBox caption="msg://informationOnMIC"
+                          id="informationOnMIC"
+                          outerMargin="true, true, true, true">
+                    <form id="form2" dataContainer="insuredPersonDc">
+                        <column width="350">
+                            <field property="type" id="typeField" visible="false"/>
+                            <lookupField id="insuranceContractField"
+                                         editable="false"
+                                         captionProperty="contract"
+                                         optionsContainer="insuranceContractDc"
+                                         property="insuranceContract"/>
+                            <dateField id="startDateField" caption="msg://startData"
+                                       resolution="DAY"
+                                       editable="false"/>
+                            <dateField id="endDateField" resolution="DAY" caption="msg://endData" editable="false"/>
+                            <dateField id="attachDateField" property="attachDate" editable="false"/>
+                            <lookupField id="statusRequestField" editable="false"
+                                         optionsContainer="DicMICAttachmentStatusDc" property="statusRequest"/>
+                            <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
+                            <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
 
-                        <pickerField id="fileField" property="file" captionProperty="attachment.name">
-                            <actions>
-                                <action id="lookup" type="picker_lookup"/>
-                                <action id="clear" type="picker_clear"/>
-                            </actions>
-                        </pickerField>
-                        <textField id="totalAmountField" property="totalAmount" editable="false"/>
-                        <dateField id="exclusionDateField" resolution="DAY" visible="false" property="exclusionDate"/>
-                        <textField id="commentField" property="comment" visible="false"/>
-                    </column>
-                </form>
-            </groupBox>
+                            <pickerField id="fileField" property="file" captionProperty="attachment.name">
+                                <actions>
+                                    <action id="lookup" type="picker_lookup"/>
+                                    <action id="clear" type="picker_clear"/>
+                                </actions>
+                            </pickerField>
+                            <textField id="totalAmountField" property="totalAmount" editable="false"/>
+                            <dateField id="exclusionDateField" resolution="DAY" visible="false" property="exclusionDate"/>
+                            <textField id="commentField" property="comment" visible="false"/>
+                        </column>
+                    </form>
+                </groupBox>
+            </hbox>
             <groupBox caption="msg://familyMemberInformation"
                       id="familyMemberInformationGroup"
                       outerMargin="true, false, true, false">
@@ -181,6 +183,7 @@
                         <column id="firstName"/>
                         <column id="secondName"/>
                         <column id="middleName"/>
+                        <column id="amount"/>
                         <column id="sex"/>
                         <column id="birthdate"/>
                         <column id="iin"/>
@@ -189,7 +192,6 @@
                         <column id="region"/>
                         <column id="insuranceProgram"/>
                         <column id="address"/>
-                        <column id="amount"/>
                     </columns>
                     <buttonsPanel>
                         <button id="createButton" action="insuredPersonTable.create"/>

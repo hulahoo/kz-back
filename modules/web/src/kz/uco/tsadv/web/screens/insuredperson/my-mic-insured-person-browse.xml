@@ -71,13 +71,12 @@
                 <action id="joinFamilyMember" type="edit"/>
             </actions>
             <columns>
-                <column id="code" caption="msg://code"/>
-                <column id="insuranceContract.contract" property="insuranceContract.contract"/>
-                <column id="insuranceContract.availabilityPeriodFrom" property="insuranceContract.availabilityPeriodFrom"/>
-                <column id="insuranceContract.availabilityPeriodTo" property="insuranceContract.availabilityPeriodTo"/>
-                <column id="attachDate" property="attachDate"/>
-                <column id="statusRequest" property="statusRequest"/>
-                <column id="totalAmount" property="totalAmount"/>
+                <column id="contractField" property="insuranceContract.contract"/>
+                <column id="startDateField" property="insuranceContract.startDate"/>
+                <column id="expirationDateField" property="insuranceContract.expirationDate"/>
+                <column id="attachDateField" property="attachDate"/>
+                <column id="statusRequestField" property="statusRequest"/>
+                <column id="totalAmountField" property="totalAmount"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"

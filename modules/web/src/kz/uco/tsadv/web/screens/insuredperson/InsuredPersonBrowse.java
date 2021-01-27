@@ -40,8 +40,6 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     protected InsuranceContract insuranceContract;
     @Inject
     private TimeSource timeSource;
-    @Named("insuredPersonsTable.bulkEdit")
-    private BulkEditAction insuredPersonBulkEdit;
     @Inject
     private BulkEditors bulkEditors;
     @Inject
@@ -52,12 +50,12 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
     @Subscribe
     public void onInit(InitEvent event) {
-        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("code", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
+        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("contractField", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
             @Override
             public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
                 LinkButton linkButton = uiComponents.create(LinkButton.class);
-                linkButton.setCaption(event.getItem().getIin());
-                linkButton.setAction(new BaseAction("code").withHandler(e->{
+                linkButton.setCaption(event.getItem().getInsuranceContract().getContract());
+                linkButton.setAction(new BaseAction("contractField").withHandler(e->{
                     InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                             .editEntity(event.getItem())
                             .build();
@@ -111,51 +109,30 @@ public class InsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                     .newEntity(selectItem)
                     .build();
-
             editorBuilder.setParameter("editHr");
             editorBuilder.show();
         }
     }
 
-    @Subscribe("insuredPersonsTable.bulkEdit")
-    public void onInsuredPersonsTableBulkEdit(Action.ActionPerformedEvent event) {
-        bulkEditors.builder(metadata.getClassNN(InsuredPerson.class), insuredPersonsTable.getSelected(), this)
-                .withListComponent(insuredPersonsTable)
-                .withColumnsMode(ColumnsMode.TWO_COLUMNS)
-                .withIncludeProperties(Arrays.asList("attachDate", "statusRequest", "exclusionDate", "comment"))
-                .create()
 
-                .show();
-    }
-
-
-    public Component generateCode(InsuredPerson entity) {
-        LinkButton linkButton = uiComponents.create(LinkButton.class);
-        linkButton.setCaption("entity.getInsuranceContract().getContract()");
-        linkButton.setAction(new BaseAction("code").withHandler(e->{
-            screenBuilders.editor(insuredPersonsTable)
-                    .editEntity(entity)
-                    .build()
-                    .show();
-        }));
-        return linkButton;
-    }
+//    @Subscribe("insuredPersonsTable.bulk")
+//    public void onInsuredPersonsTableBulk(Action.ActionPerformedEvent event) {
+//        insuredPersonsTable.getSelected();
+//        Set<InsuredPerson> bulks = insuredPersonsTable.getSelected();
+//
+//        InsuredPersonBulkEdit bulkEdit = screenBuilders.editor(InsuredPerson.class, this)
+//                .withScreenClass(InsuredPersonBulkEdit.class)
+//                .withAfterCloseListener(e->{
+//                    int bulkItemSize = bulks.size();
+//                    notifications.create().withCaption("Изменено " + bulkItemSize + " запись");
+//                    insuredPersonsDl.load();
+//                })
+//                .build();
+//        if (bulks.size() != 0){
+//            bulkEdit.setParameter(bulks);
+//            bulkEdit.show();
+//        }
+//    }
 
 
-    public void bulkEdt() {
-        Set<InsuredPerson> bulks = insuredPersonsTable.getSelected();
-
-        InsuredPersonBulkEdit bulkEdit = screenBuilders.editor(InsuredPerson.class, this)
-                .withScreenClass(InsuredPersonBulkEdit.class)
-                .withAfterCloseListener(e->{
-                    int bulkItemSize = bulks.size();
-                    notifications.create().withCaption("Изменено " + bulkItemSize + " запись");
-                    insuredPersonsDl.load();
-                })
-                .build();
-        if (insuredPersonsTable.getSelected() != null && bulks.size() != 0){
-            bulkEdit.setParameter(bulks);
-            bulkEdit.show();
-        }
-    }
 }

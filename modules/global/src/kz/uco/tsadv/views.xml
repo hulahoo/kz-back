@@ -20119,6 +20119,7 @@
         <property name="personDocuments" view="_local"/>
         <property name="assignments" view="_local">
             <property name="organizationGroup" view="_local">
+                <property name="company" view="_local"/>
                 <property name="list" view="_local">
                     <property name="company" view="_local"/>
                 </property>
@@ -20128,6 +20129,7 @@
             </property>
             <property name="assignmentStatus" view="_local"/>
         </property>
+
         <property name="list"
                   view="_minimal">
             <property name="legacyId"/>
@@ -21968,6 +21970,9 @@
             <property name="programConditions" view="_local">
                 <property name="relationshipType" view="_local"/>
             </property>
+            <property name="attachments" view="_local">
+                <property name="attachment" view="_local"/>
+            </property>
         </property>
         <property name="company" view="_minimal"/>
         <property name="employee" view="_local">
@@ -22018,5 +22023,29 @@
     </view>
     <view entity="tsadv$InsuredPerson" name="insuredPerson-bulkEditView" extends="_local">
         <property name="statusRequest" view="_minimal"/>
+    </view>
+    <view entity="tsadv$InsuredPerson" name="insuredPerson-browseView" extends="_local">
+        <property name="statusRequest" view="_minimal"/>
+        <property name="employee" view="_local">
+            <property name="personExperience" view="_local"/>
+            <property name="list" view="_local"/>
+            <property name="assignments" view="_local">
+                <property name="assignmentStatus" view="_local"/>
+                <property name="organizationGroup" view="_local">
+                    <property name="list" view="_local"/>
+                </property>
+            </property>
+        </property>
+        <property name="relative" view="_minimal"/>
+        <property name="sex" view="_minimal"/>
+        <property name="documentType" view="_local"/>
+        <property name="insuranceContract" view="_local">
+            <property name="defaultDocumentType" view="_local"/>
+            <property name="defaultAddress" view="_local"/>
+        </property>
+        <property name="region" view="_minimal"/>
+        <property name="addressType" view="_minimal"/>
+        <property name="job" view="_local"/>
+        <property name="company" view="_local"/>
     </view>
 </views>

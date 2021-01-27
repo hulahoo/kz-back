@@ -4,7 +4,9 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -111,10 +113,15 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private UserSession userSession;
     @Inject
     private GroupTable<InsuredPerson> insuredPersonTable;
+    @Inject
+    private Form form2;
+    @Inject
+    private UiComponents uiComponents;
 
     public void setParameter(String whichButton){
         this.whichButton = whichButton;
     }
+
 
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
@@ -137,7 +144,8 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             exclusionDateField.setVisible(false);
             commentField.setVisible(false);
             fileField.setVisible(false);
-        }else if ("joinEmployee".equals(whichButton)){
+        }
+        else if ("joinEmployee".equals(whichButton)){
             familyMemberInformationGroup.setVisible(false);
             employeeField.setEditable(false);
             relativeField.setVisible(false);
@@ -154,7 +162,8 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             attachDateField.setEditable(true);
             familyMemberInformationGroup.setVisible(false);
             commentField.setVisible(false);
-        }else if ("editHr".equals(whichButton)){
+        }
+        else if ("editHr".equals(whichButton)){
             attachDateField.setEditable(true);
             exclusionDateField.setVisible(true);
             commentField.setVisible(true);
@@ -167,7 +176,8 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             }else if (!insuredPersonDc.getItemOrNull().getRelative().getCode().equals("PRIMARY")){
                 familyMemberInformationGroup.setVisible(false);
             }
-        }else {
+        }
+        else {
             familyMemberInformationGroup.setVisible(true);
             fileField.setVisible(false);
             employeeField.setEditable(false);
@@ -199,6 +209,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             insuredPersonMemberDl.load();
         }
     }
+
 
     @Subscribe(id = "insuredPersonMemberDl", target = Target.DATA_LOADER)
     public void onInsuredPersonMemberDlPostLoad(CollectionLoader.PostLoadEvent<InsuredPerson> event) {
@@ -263,16 +274,36 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     insuredPersonMemberDl.load();
                 })
                 .build();
+        setParameterAndShow(insuredPersonMemberEdit);
+
+    }
+
+
+    @Subscribe("insuredPersonTable.edit")
+    public void onInsuredPersonTableEdit(Action.ActionPerformedEvent event){
+        InsuredPerson insuredPerson = insuredPersonTable.getSingleSelected();
+        InsuredPersonMemberEdit insuredPersonMemberEdit =  screenBuilders.editor(InsuredPerson.class, this)
+                .withScreenClass(InsuredPersonMemberEdit.class)
+                .editEntity(insuredPerson)
+                .withAfterCloseListener(e ->{
+                    insuredPersonMemberDl.load();
+                })
+                .build();
+        setParameterAndShow(insuredPersonMemberEdit);
+
+    }
+
+
+    protected void setParameterAndShow(InsuredPersonMemberEdit insuredPersonMemberEdit){
         if (insuranceContractField.getValue() != null && insuranceContractField.getValue().getCountOfFreeMembers() !=null &&
                 insuranceContractField.getValue().getCountOfFreeMembers() >= insuredPersonMemberDc.getItems().size()){
-            insuredPersonMemberEdit.setParameter(false);
+            insuredPersonMemberEdit.setParameter(true);
             insuredPersonMemberEdit.show();
         }else if (insuranceContractField.getValue() != null && insuranceContractField.getValue().getCountOfFreeMembers() !=null &&
                 insuranceContractField.getValue().getCountOfFreeMembers() <= insuredPersonMemberDc.getItems().size()){
             insuredPersonMemberEdit.setParameter(false);
             insuredPersonMemberEdit.show();
         }
-
     }
 
 
@@ -503,12 +534,12 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             jobField.setValue(null);
             assignDateField.setValue(event.getValue().getPerson().getHireDate());
         } else if (event.getValue() != null && relativeField.getValue() == null){
-            assignDateField.setValue(event.getValue().getPerson().getHireDate());
-            if (personGroupExt.getAddresses().size() == 0){
-                addressTypeField.setVisible(false);
-                addressField.setCaption("Домашний адрес");
-                addressField.setRequired(true);
-            }
+//            assignDateField.setValue(event.getValue().getPerson().getHireDate());
+//            if (personGroupExt.getAddresses().size() == 0){
+//                addressTypeField.setVisible(false);
+//                addressField.setCaption("Домашний адрес");
+//                addressField.setRequired(true);
+//            }
         } else if (event.getValue() == null){
             assignDateField.setValue(null);
             iinField.setValue(null);
@@ -542,7 +573,16 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             insuranceProgramField.setValue(event.getValue().getInsuranceProgram());
             startDateField.setValue(event.getValue().getAvailabilityPeriodFrom());
             endDateField.setValue(event.getValue().getAvailabilityPeriodTo());
+            if (event.getValue().getAttachments().size() != 0){
+                for (Attachment attachment : event.getValue().getAttachments()){
+                    LinkButton linkButton = uiComponents.create(LinkButton.class);
+                    linkButton.setCaption(attachment.getAttachment().getName());
+                    linkButton.setIcon("SAVE");
+                    linkButton.setAction(new BaseAction("contractField").withHandler(e->{
+                    }));
+                    form2.add(linkButton);
+                }
+            }
         }
-
     }
 }

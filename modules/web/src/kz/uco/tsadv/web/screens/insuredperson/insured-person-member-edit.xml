@@ -79,7 +79,7 @@
                     <textField id="iinField" property="iin"/>
                     <dateField id="birthdateField" property="birthdate"/>
                     <lookupField id="relativeField" property="relative" optionsContainer="relativeDc"/>
-                    <lookupField id="" property="documentType" optionsContainer="documentTypeDc"/>
+                    <lookupField id="documentTypeField" property="documentType" optionsContainer="documentTypeDc"/>
                     <textField id="documentNumberField" property="documentNumber"/>
                     <lookupField id="regionField" property="region" optionsContainer="regionFieldDc"/>
                     <textField rowspan="3" id="addressField" property="address" caption="msg://address" required="true"/>
@@ -90,10 +90,10 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
+                    <textField id="amountField" property="amount" editable="false"/>
                     <dateField id="attachDateField" property="attachDate"
                                visible="true" editable="false"/>
                     <lookupField id="typeField" property="type" visible="false"/>
-                    <textField id="amountField" property="amount" visible="false"/>
                     <textField id="totalAmountField" property="totalAmount" visible="false"/>
                     <dateField id="exclusionDateField" property="exclusionDate" visible="false"/>
                     <textField id="commentField" property="comment" visible="false"/>

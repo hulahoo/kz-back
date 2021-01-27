@@ -24,16 +24,17 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form" dataContainer="insuredPersonDc">
                 <column width="350px">
-                    <dateField property="attachDate" id="attachDateField"/>
-                    <lookupField id="statusRequestField" property="statusRequest"
-                                 optionsContainer="statusRequestDc"/>
-                    <dateField id="exclusionDateField" property="exclusionDate"/>
-                    <textField id="commentField" property="comment"/>
+                    <dateField  id="attachDateField" resolution="DAY" caption="msg://attachDate"/>
+                    <lookupField id="statusRequestField"
+                                 optionsContainer="statusRequestDc" caption="msg://status"/>
+                    <dateField id="exclusionDateField" resolution="DAY" caption="msg://exclusionDate"/>
+                    <textArea rowspan="2" id="commentField" caption="msg://comment"/>
                 </column>
             </form>
         </scrollBox>
         <hbox id="editActions" spacing="true">
-            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="okBtn" caption="OK" icon="" stylename="primary"/>
+<!--            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>-->
             <button id="closeBtn" action="windowClose"/>
         </hbox>
     </layout>
