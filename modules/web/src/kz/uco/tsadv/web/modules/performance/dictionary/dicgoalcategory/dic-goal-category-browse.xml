@@ -7,7 +7,7 @@
     <dsContext>
         <groupDatasource id="dicGoalCategoriesDs"
                          class="kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory"
-                         view="_local">
+                         view="dicGoalCategory.browse">
             <query>
                 <![CDATA[select e from tsadv$DicGoalCategory e]]>
             </query>
@@ -30,6 +30,7 @@
                 <action id="remove"/>
             </actions>
             <columns>
+                <column id="order" caption="mainMsg://serialNumber"/>
                 <column id="langValue1"/>
                 <column id="langValue2"/>
                 <column id="langValue3"/>

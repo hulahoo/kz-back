@@ -2801,13 +2801,17 @@
     </view>
     <view class="kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory"
           name="dicGoalCategory.browse">
+        <property name="company" view="_minimal"/>
         <property name="langValue1"/>
+        <property name="order"/>
         <property name="langValue2"/>
         <property name="langValue3"/>
         <property name="langValue4"/>
         <property name="langValue5"/>
-        <property name="isSystemRecord"/>
         <property name="code"/>
+        <property name="isSystemRecord"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
           name="assignedGoal.browse">

@@ -21,6 +21,9 @@
                 <field property="langValue3"/>
                 <field property="langValue4"/>
                 <field property="langValue5"/>
+                <field property="order" caption="mainMsg://serialNumber"/>
+                <field property="startDate"/>
+                <field property="endDate"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"
