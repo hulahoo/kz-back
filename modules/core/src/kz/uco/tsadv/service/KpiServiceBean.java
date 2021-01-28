@@ -2,11 +2,15 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
+import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.model.Salary;
+import kz.uco.tsadv.pojo.PairPojo;
 import kz.uco.tsadv.pojo.kpi.AssignedPerformancePlanListPojo;
 import org.springframework.stereotype.Service;
 
@@ -114,5 +118,24 @@ public class KpiServiceBean implements KpiService {
                     / 365 * salary.getAmount() * 12;
         });
         return gzp[0];
+    }
+
+    @Override
+    public List kpiAssignedGoals(UUID appId) {
+        List<AssignedGoal> assignedGoals = dataManager.loadList(LoadContext.create(AssignedGoal.class)
+                .setQuery(LoadContext.createQuery("" +
+                        "select ag " +
+                        "            from tsadv$AssignedGoal ag " +
+                        "            where ag.assignedPerformancePlan.id = :appId " +
+                        "            order by ag.category.order, ag.weight desc")
+                        .setParameter("appId", appId))
+        .setView("assignedGoal-portal-kpi-create-default"));
+        List<PairPojo<String, List<AssignedGoal>>> responseAssignedGoals = assignedGoals.stream()
+                .collect(Collectors.groupingBy(ag -> ag.getCategory().getInstanceName()))
+                .entrySet()
+                .stream()
+                .map((e) -> new PairPojo<>(e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
+        return responseAssignedGoals;
     }
 }
