@@ -158,4 +158,10 @@
             </property>
         </property>
     </view>
+    <view entity="tsadv$StandardSchedule" name="standardSchedule-for-my-team" extends="_local">
+        <property name="baseStandardSchedule" view="_minimal"/>
+        <property name="calendar" view="_minimal"/>
+        <property name="standardOffsets" view="_minimal"/>
+        <property name="standardShifts" view="_minimal"/>
+    </view>
 </views>
