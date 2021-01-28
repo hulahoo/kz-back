@@ -30,7 +30,7 @@
                     view="absenceRequest.view">
             <loader id="absenceRequestDl">
                 <query>
-                    <![CDATA[  select e from tsadv$AbsenceRequest e order by e.requestNumber desc ]]>
+                    <![CDATA[  select e from tsadv$AbsenceRequest e where e.personGroup.id = :session$userPersonGroupId order by e.requestNumber desc ]]>
                 </query>
             </loader>
         </collection>

@@ -22776,5 +22776,10 @@
             <property name="code"/>
         </property>
     </view>
-
+    <view entity="base$PersonGroupExt" name="personGroupExt.mobile" extends="_minimal">
+        <property name="assignments" view="assignment.view">
+            <property name="positionGroup" view="positionGroup.list"/>
+        </property>
+        <property name="person" view="person.info"/>
+    </view>
 </views>
