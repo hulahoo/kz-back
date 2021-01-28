@@ -20,6 +20,8 @@ import java.util.Date;
 public class AbsenceRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = 5087051995273747332L;
 
+    public static final String PROCESS_DEFINITION_KEY = "absenceRequest";
+
     @OnDeleteInverse(DeletePolicy.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNMENT_GROUP_ID")
@@ -43,9 +45,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TYPE_ID")
     protected DicAbsenceType type;
-
-    @Column(name = "COMMENT_", length = 3000)
-    protected String comment;
 
     @NotNull
     @Column(name = "DISTANCE_WORKING_CONFIRM", nullable = false)
@@ -173,15 +172,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
         return distanceWorkingConfirm;
     }
 
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
     public void setDateFrom(Date dateFrom) {
         this.dateFrom = dateFrom;
     }
@@ -228,5 +218,10 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     public FileDescriptor getAttachment() {
         return attachment;
+    }
+
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
     }
 }

@@ -5,11 +5,9 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import kz.uco.base.entity.dictionary.DicCompany;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Table(name = "TSADV_BPM_ROLES_DEFINER")
@@ -21,10 +19,23 @@ public class BpmRolesDefiner extends StandardEntity {
     @Column(name = "PROCESS_DEFINITION_KEY")
     protected String processDefinitionKey;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    private DicCompany company;
+
     @Composition
+    @OrderBy("order")
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "bpmRolesDefiner")
     protected List<BpmRolesLink> links;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
 
     public String getProcessDefinitionKey() {
         return processDefinitionKey;
@@ -41,7 +52,6 @@ public class BpmRolesDefiner extends StandardEntity {
     public List<BpmRolesLink> getLinks() {
         return links;
     }
-
 
 
 }

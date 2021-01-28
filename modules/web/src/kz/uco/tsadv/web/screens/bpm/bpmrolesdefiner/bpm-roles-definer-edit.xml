@@ -10,13 +10,19 @@
             <loader/>
             <collection id="linksDc" property="links"/>
         </instance>
+        <collection id="processDefinitionsDc"
+                    class="com.haulmont.addon.bproc.entity.ProcessDefinitionData"/>
     </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="bpmRolesDefinerDc">
             <column width="250px">
-                <textField id="processDefinitionKeyField" property="processDefinitionKey"/>
+                <pickerField id="companyField" property="company" editable="false"/>
+                <lookupField id="processDefinitionKeyField"
+                             captionProperty="key"
+                             caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.procModel"
+                             optionsContainer="processDefinitionsDc"/>
             </column>
         </form>
         <groupBox id="linksBox" caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.links">
@@ -27,11 +33,11 @@
                     <action id="remove" type="remove"/>
                 </actions>
                 <columns>
-                    <column id="bpmRolesDefiner"/>
                     <column id="bprocUserTaskCode"/>
                     <column id="hrRole"/>
                     <column id="required"/>
-                    <column id="findByCounter"/>
+                    <column id="isAddableApprover"/>
+                    <column id="order"/>
                 </columns>
                 <buttonsPanel>
                     <button action="linksTable.create"/>

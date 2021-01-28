@@ -2088,10 +2088,6 @@
             template="kz/uco/tsadv/web/timecardlog/timecard-log-browse.xml"/>
     <screen id="bpm$ProcInstance.lookup"
             template="kz/uco/tsadv/web/bpm/form/ext-proc-instance-browse.xml"/>
-    <screen id="tsadv$PositionBpmRole.browse"
-            template="kz/uco/tsadv/web/positionbpmrole/position-bpm-role-browse.xml"/>
-    <screen id="tsadv$PositionBpmRole.edit"
-            template="kz/uco/tsadv/web/positionbpmrole/position-bpm-role-edit.xml"/>
     <screen id="base$PositionGroupExt.edit"
             template="kz/uco/tsadv/web/positiongroupext/position-group-ext-edit.xml"/>
     <screen id="ucoBpmStandardProcForm"

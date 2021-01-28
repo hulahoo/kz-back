@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://insuredPersonEdit.caption"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.insuredperson">
+    <data>
+        <instance id="insuredPersonDc"
+                  class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
+                  view="insuredPerson-editView">
+            <loader/>
+        </instance>
+        <collection id="DicMICAttachmentStatusDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus" view="_local">
+            <loader id="DicMICAttachmentStatusDl">
+                <query><![CDATA[select e from tsadv$DicMICAttachmentStatus e]]></query>
+            </loader>
+        </collection>
+        <collection id="regionDc"
+                    class="kz.uco.base.entity.dictionary.DicRegion"
+                    view="_local">
+            <loader id="regionDl">
+                <query><![CDATA[select e from base$DicRegion e]]></query>
+            </loader>
+        </collection>
+        <collection id="employeeDc"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
+                    view="_local">
+            <loader id="employee">
+                <query><![CDATA[select e from base$PersonGroupExt e]]></query>
+            </loader>
+        </collection>
+        <collection id="documentTypeDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicDocumentType"
+                    view="_local">
+            <loader id="documentTypeDl">
+                <query><![CDATA[select e from tsadv$DicDocumentType e]]></query>
+            </loader>
+        </collection>
+        <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup" view="_local">
+            <loader id="jobDl">
+                <query><![CDATA[select e from tsadv$JobGroup e]]></query>
+            </loader>
+        </collection>
+        <collection id="sexDc" class="kz.uco.base.entity.dictionary.DicSex" view="_local">
+            <loader id="sexDl">
+                <query><![CDATA[select e from base$DicSex e]]></query>
+            </loader>
+        </collection>
+        <collection id="insuranceContractDc" class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
+                    view="_local">
+            <loader id="insuranceContractDl">
+                <query><![CDATA[select e from tsadv$InsuranceContract e ]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.company.id = :companyId and current_date between e.availabilityPeriodFrom and e.availabilityPeriodTo</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+        <collection id="relativeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType" view="_local">
+            <loader id="relativeDl">
+                <query><![CDATA[select e from tsadv$DicRelationshipType e]]></query>
+            </loader>
+        </collection>
+        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
+            <loader id="addressDl">
+                <query><![CDATA[select e from tsadv$Address e]]></query>
+            </loader>
+        </collection>
+        <collection id="insuredPersonMemberDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson" view="insuredPerson-editView">
+            <loader id="insuredPersonMemberDl">
+                <query><![CDATA[select e from tsadv$InsuredPerson e]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.insuranceContract.id =:employeeContractId and e.employee.id =:employeeId and e.type = :relativeType</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+
+            </loader>
+        </collection>
+        <collection id="companyDc" class="kz.uco.base.entity.dictionary.DicCompany" view="_local">
+            <loader id="companyDl">
+                <query><![CDATA[select e from base_DicCompany e]]></query>
+            </loader>
+        </collection>
+
+
+    </data>
+    <dialogMode height="400"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <hbox width="100%" spacing="true">
+                <groupBox caption="msg://generalInformation"
+                          outerMargin="true, true, true, true">
+                    <form id="form" dataContainer="insuredPersonDc">
+                        <column width="350px">
+                            <pickerField
+                                    id="employeeField"
+                                    property="employee">
+                                <actions>
+                                    <action id="lookup" type="picker_lookup"/>
+                                    <action id="clear" type="picker_clear"/>
+                                </actions>
+                            </pickerField>
+                            <lookupField property="relative" optionsContainer="relativeDc" id="relativeField"/>
+                            <textField id="firstNameField" property="firstName" visible="false"/>
+                            <textField id="secondNameField" property="secondName" visible="false"/>
+                            <textField id="middleNameField" property="middleName" visible="false"/>
+                            <textField id="iinField" property="iin"/>
+                            <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
+                            <dateField id="birthdateField" property="birthdate"/>
+                            <lookupField id="documentTypeField" optionsContainer="documentTypeDc"
+                                         property="documentType"/>
+                            <field property="documentNumber" id="documentNumberField"/>
+                            <lookupField id="addressTypeField" property="addressType"
+                                         optionsContainer="addressDc"/>
+                            <textArea rows="3" id="addressField" caption="" property="address"/>
+                            <lookupField id="companyField" property="company"
+                                         optionsContainer="companyDc" editable="false"/>
+                            <lookupField id="jobField"
+                                         optionsContainer="jobDc"
+                                         property="job"/>
+                            <dateField id="assignDateField" editable="false" resolution="DAY" caption="msg://assignDate"/>
+                        </column>
+                    </form>
+                </groupBox>
+                <groupBox caption="msg://informationOnMIC"
+                          id="informationOnMIC"
+                          outerMargin="true, true, true, true">
+                    <form id="form2" dataContainer="insuredPersonDc">
+                        <column width="350">
+                            <field property="type" id="typeField" visible="false"/>
+                            <lookupField id="insuranceContractField"
+                                         editable="false"
+                                         captionProperty="contract"
+                                         optionsContainer="insuranceContractDc"
+                                         property="insuranceContract"/>
+                            <dateField id="startDateField" caption="msg://startData"
+                                       resolution="DAY"
+                                       editable="false"/>
+                            <dateField id="endDateField" resolution="DAY" caption="msg://endData" editable="false"/>
+                            <dateField id="attachDateField" property="attachDate" editable="false"/>
+                            <lookupField id="statusRequestField" editable="false"
+                                         optionsContainer="DicMICAttachmentStatusDc" property="statusRequest"/>
+                            <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
+                            <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
+                            <textField id="totalAmountField" property="totalAmount" editable="false"/>
+                            <dateField id="exclusionDateField" resolution="DAY" visible="false" property="exclusionDate"/>
+                            <textField id="commentField" property="comment" visible="false"/>
+                        </column>
+                    </form>
+                </groupBox>
+            </hbox>
+            <groupBox caption="msg://familyMemberInformation"
+                      id="familyMemberInformationGroup"
+                      outerMargin="true, false, true, false">
+                <groupTable id="insuredPersonTable"
+                            dataContainer="insuredPersonMemberDc"
+                            width="100%">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="relative"/>
+                        <column id="firstName"/>
+                        <column id="secondName"/>
+                        <column id="middleName"/>
+                        <column id="amount"/>
+                        <column id="sex"/>
+                        <column id="birthdate"/>
+                        <column id="iin"/>
+                        <column id="documentType"/>
+                        <column id="file"/>
+                        <column id="region"/>
+                        <column id="insuranceProgram"/>
+                        <column id="address"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button id="createButton" action="insuredPersonTable.create"/>
+                        <button id="editButton" action="insuredPersonTable.edit"/>
+                        <button id="removeButton" action="insuredPersonTable.remove"/>
+                    </buttonsPanel>
+                    <rows/>
+                </groupTable>
+<!--                <dataGrid id="insuredPersonTable"-->
+<!--                          dataContainer="insuredPersonMemberDc"-->
+<!--                          width="100%">-->
+<!--                    <actions>-->
+<!--                        <action id="create" type="create"/>-->
+<!--                        <action id="edit" type="edit"/>-->
+<!--                        <action id="remove" type="remove"/>-->
+<!--                    </actions>-->
+<!--                    <columns>-->
+<!--                        <column id="relativeField" property="relative"/>-->
+<!--                        <column id="firstNameField" property="firstName"/>-->
+<!--                        <column id="secondNameField" property="secondName"/>-->
+<!--                        <column id="middleNameField" property="middleName"/>-->
+<!--                        <column id="amountField" property="amount"/>-->
+<!--                        <column id="sexField" property="sex"/>-->
+<!--                        <column id="birthdateField" property="birthdate"/>-->
+<!--                        <column id="iinField" property="iin"/>-->
+<!--                        <column id="documentTypeField" property="documentType"/>-->
+<!--                        <column id="file"/>-->
+<!--                        <column id="regionField" property="region"/>-->
+<!--                        <column id="insuranceProgramField" property="insuranceProgram"/>-->
+<!--                        <column id="addressField" property="address"/>-->
+<!--                    </columns>-->
+<!--                    <buttonsPanel>-->
+<!--                        <button id="createButton" action="insuredPersonTable.create"/>-->
+<!--                        <button id="editButton" action="insuredPersonTable.edit"/>-->
+<!--                        <button id="removeButton" action="insuredPersonTable.remove"/>-->
+<!--                    </buttonsPanel>-->
+<!--                    <rows/>-->
+<!--                </dataGrid>-->
+            </groupBox>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

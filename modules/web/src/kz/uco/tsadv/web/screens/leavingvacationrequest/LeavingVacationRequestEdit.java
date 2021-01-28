@@ -47,7 +47,9 @@ public class LeavingVacationRequestEdit extends StandardEditor<LeavingVacationRe
         Date outPlannedStart = Date.from(ldt1.minusDays(-30).atZone(ZoneId.systemDefault()).toInstant());
 
         plannedStartDateField.setRangeStart(outPlannedStart);
+
     }
+
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {

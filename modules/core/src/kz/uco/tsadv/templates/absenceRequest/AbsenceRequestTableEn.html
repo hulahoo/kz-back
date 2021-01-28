@@ -1,0 +1,52 @@
+<html>
+<head>
+    <style>
+    table {
+        font-family: arial, serif;
+        border-collapse: collapse;
+        widht: 100%;
+        }
+    .tableHeader { background: #b9b9b9;}
+    .color { background: #eeeeee;}
+    .center { text-align: center; }
+    td, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    </style>
+    <meta charset="utf-8">
+</head>
+<body>
+<table>
+    <tr class=tableHeader>
+        <td/>
+        <td>Information about the absence</td>
+    </tr>
+    <tr class="color">
+        <td>Employee</td>
+        <td>${employeeFullName}</td>
+    </tr>
+    <tr>
+        <td>Type of absence</td>
+        <td>${absenceType}</td>
+    </tr>
+    <tr class="color">
+        <td>Date from</td>
+        <td>${dateFrom}</td>
+    </tr>
+    <tr>
+        <td>Date to</td>
+        <td>${dateTo}</td>
+    </tr>
+    <tr class="color">
+        <td>Days</td>
+        <td>${days}</td>
+    </tr>
+    <tr>
+        <td>Комментарий</td>
+        <td>${comment!''}</td>
+    </tr>
+</table>
+</body>
+</html>

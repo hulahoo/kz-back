@@ -28,7 +28,7 @@ public class CommonReportsServiceBean implements CommonReportsService {
                 .query("select e.report from tsadv_CertificateTemplate e where e.language=:langId and e.receivingType=:recTyId and e.showSalary = :salary and e.certificateType = :certType")
                 .parameter("langId", request.getLanguage())
                 .parameter("recTyId", request.getReceivingType())
-                .parameter("certType", request.getCretificateType())
+                .parameter("certType", request.getCertificateType())
                 .parameter("salary", request.getShowSalary())
                 .view("report.edit")
                 .optional().orElse(null);

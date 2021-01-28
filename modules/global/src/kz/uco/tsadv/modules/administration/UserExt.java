@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.administration;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Extends;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -10,6 +11,7 @@ import javax.persistence.ManyToOne;
 
 @Entity(name = "tsadv$UserExt")
 @Extends(kz.uco.base.entity.extend.UserExt.class)
+@NamePattern("%s|shortName,login")
 public class UserExt extends kz.uco.base.entity.extend.UserExt {
     private static final long serialVersionUID = 6933569044418446062L;
 

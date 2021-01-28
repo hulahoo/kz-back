@@ -52,4 +52,52 @@
             <param name="appId" type="java.util.UUID"/>
         </params>
     </query>
+    <query name="kpiAssignedGoals" entity="tsadv$AssignedGoal" view="assignedGoal-portal-kpi-create-default">
+        <jpql>
+            <![CDATA[select ag
+            from tsadv$AssignedGoal ag
+            where ag.assignedPerformancePlan.id = :appId
+            order by ag.category.order, ag.weight desc
+            ]]>
+        </jpql>
+        <params>
+            <param name="appId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="myAbsences" entity="tsadv$Absence" view="absence-for-my-team">
+        <jpql>
+            <![CDATA[
+                    select e from tsadv$Absence e
+                        where e.personGroup.id = :session$userPersonGroupId
+                            order by e.dateFrom desc
+            ]]>
+        </jpql>
+        <params>
+            <param name="session$userPersonGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="myAbsenceRequests" entity="tsadv$AbsenceRequest" view="absenceRequest.edit">
+        <jpql>
+            <![CDATA[
+                select e from tsadv$AbsenceRequest e
+                    where e.personGroup.id = :session$userPersonGroupId
+                        order by e.requestNumber desc
+            ]]>
+        </jpql>
+        <params>
+            <param name="session$userPersonGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+
+    <query name="myProfileFull" entity="base$PersonGroupExt" view="personGroupExt.mobile">
+        <jpql>
+            select p
+             from base$PersonGroupExt p
+                where p.id = :userId
+        </jpql>
+        <params>
+            <param name="userId" type="java.util.UUID"/>
+        </params>
+    </query>
+
 </queries>

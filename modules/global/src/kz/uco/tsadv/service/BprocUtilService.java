@@ -1,8 +1,8 @@
 package kz.uco.tsadv.service;
 
 import java.util.List;
-import java.util.UUID;
 
+//todo remove
 public interface BprocUtilService {
     String NAME = "tsadv_BprocUtilService";
 
@@ -31,4 +31,5 @@ public interface BprocUtilService {
     void reject();
 
     void approve(String entityName, String entityId);
+
 }

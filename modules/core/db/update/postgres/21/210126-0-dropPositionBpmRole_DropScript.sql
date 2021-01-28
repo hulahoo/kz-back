@@ -1,0 +1,1 @@
+drop table if exists TSADV_POSITION_BPM_ROLE__U48714 cascade ;
