@@ -22678,5 +22678,37 @@
             <property name="code"/>
         </property>
     </view>
+    <view entity="tsadv_AbsenceForRecall" name="absenceForRecall.edit" extends="_local">
+        <property name="absenceType" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="employee" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="nationalIdentifier"/>
+            </property>
+            <property name="fioWithEmployeeNumber"/>
+        </property>
+        <property name="vacation" view="_minimal"/>
+        <property name="purpose" view="_minimal">
+            <property name="company" view="_minimal"/>
+        </property>
+        <property name="file" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
 
 </views>

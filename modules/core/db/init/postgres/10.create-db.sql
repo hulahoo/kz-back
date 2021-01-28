@@ -17007,3 +17007,44 @@ create table TSADV_ABS_PURPOSE_SETTING (
     primary key (ID)
 )^
 -- end TSADV_ABS_PURPOSE_SETTING
+-- begin TSADV_ABSENCE_FOR_RECALL
+create table TSADV_ABSENCE_FOR_RECALL (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint,
+    STATUS_ID uuid,
+    REQUEST_DATE date,
+    --
+    ABSENCE_TYPE_ID uuid,
+    EMPLOYEE_ID uuid,
+    VACATION_ID uuid,
+    RECALL_DATE_FROM date,
+    RECALL_DATE_TO date,
+    DATE_FROM date,
+    DATE_TO date,
+    PURPOSE_ID uuid,
+    PURPOSE_TEXT varchar(255),
+    IS_AGREE boolean not null,
+    IS_FAMILIARIZATION boolean not null,
+    LEAVE_OTHER_TIME boolean not null,
+    COMPENSATION_PAYMENT boolean not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_ABSENCE_FOR_RECALL
+-- begin TSADV_ABSENCE_FOR_RECALL_FILE_DESCRIPTOR_LINK
+create table TSADV_ABSENCE_FOR_RECALL_FILE_DESCRIPTOR_LINK (
+    ABSENCE_FOR_RECALL_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (ABSENCE_FOR_RECALL_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_ABSENCE_FOR_RECALL_FILE_DESCRIPTOR_LINK

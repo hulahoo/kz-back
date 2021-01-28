@@ -22,13 +22,11 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
-import kz.uco.tsadv.modules.personal.model.Absence;
-import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
-import kz.uco.tsadv.modules.personal.model.AssignmentExt;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.MyTeamService;
+import kz.uco.tsadv.web.screens.absenceforrecall.AbsenceForRecallEdit;
 import kz.uco.tsadv.web.screens.absencerequest.AbsenceRequestForMyTeamEdit;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
@@ -307,6 +305,16 @@ public class SsStructurePerson extends AbstractWindow {
                     .withAfterCloseListener(absenceRequestForMyTeamEditAfterScreenCloseEvent -> {
                         refreshDss(personExtDs.getItem());
                     }).build().show();
+        }
+    }
+
+    public void createRequestForRecall() {
+        if (personExtDs.getItem() != null) {
+            AbsenceForRecall absenceForRecall = metadata.create(AbsenceForRecall.class);
+            absenceForRecall.setEmployee(personExtDs.getItem().getGroup());
+            screenBuilders.editor(AbsenceForRecall.class, this)
+                    .withScreenClass(AbsenceForRecallEdit.class).newEntity(absenceForRecall)
+                    .build().show();
         }
     }
 }

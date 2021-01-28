@@ -616,5 +616,6 @@
         <class>kz.uco.tsadv.modules.personal.dictionary.DicTypeOfWork</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose</class>
         <class>kz.uco.tsadv.modules.personal.model.AbsPurposeSetting</class>
+        <class>kz.uco.tsadv.modules.personal.model.AbsenceForRecall</class>
     </persistence-unit>
 </persistence>

@@ -1858,5 +1858,8 @@
         <entity class="kz.uco.tsadv.modules.personal.model.AbsPurposeSetting">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.AbsenceForRecall">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

@@ -41,6 +41,13 @@ where e.personGroup.id = :ds$personExtDs.group.id]]>
                 where e.personGroup.id = :ds$personExtDs.group.id ]]>
             </query>
         </collectionDatasource>
+        <collectionDatasource id="absencesForRecallDs" class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence-for-my-team"
+                              allowCommit="false">
+            <query>
+                <![CDATA[select e from tsadv$Absence e where e.personGroup.id = :param$personGroupId]]>
+            </query>
+        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -180,6 +187,31 @@ where e.personGroup.id = :ds$personExtDs.group.id]]>
                                 </vbox>
                             </tab>
                         </tabSheet>
+                    </tab>
+                    <tab id="absenceForRecallTab" caption="msg://absence" margin="true, false, false, false"
+                         spacing="true" expand="absenceForRecallTable">
+                        <filter id="absenceForRecallFilter" datasource="absencesForRecallDs"
+                                applyTo="absenceForRecallTable">
+                            <properties include=".*"/>
+                        </filter>
+                        <table id="absenceForRecallTable" height="100%" width="100%">
+                            <actions>
+                                <action id="create" type="create" invoke="createRequestForRecall"
+                                        caption="msg://createAbsenceForRecall"
+                                        icon="PLUS"/>
+                            </actions>
+                            <columns>
+                                <column id="type"/>
+                                <column id="dateFrom"/>
+                                <column id="dateTo"/>
+                                <column id="absenceDays"/>
+                            </columns>
+                            <buttonsPanel>
+                                <button id="absenceForRecallCreateBtn" action="absenceForRecallTable.create"/>
+                            </buttonsPanel>
+                            <rows datasource="absencesForRecallDs"/>
+                            <rowsCount/>
+                        </table>
                     </tab>
                 </tabSheet>
             </hbox>
