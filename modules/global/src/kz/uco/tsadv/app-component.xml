@@ -50,7 +50,7 @@
         <property name="cuba.dispatcherSpringContextConfig"
                   value="+kz/uco/tsadv/dispatcher-spring.xml"/>
         <property name="cuba.rest.servicesConfig"
-                  value="+kz/uco/tsadv/rest-services.xml"/>
+                  value="+kz/uco/tsadv/rest-services.xml kz/uco/tsadv/portal-rest-services.xml"/>
         <property name="cuba.windowConfig"
                   value="+kz/uco/tsadv/web-screens.xml"/>
         <property name="cuba.menuConfig"

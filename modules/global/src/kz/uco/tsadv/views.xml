@@ -21774,7 +21774,7 @@
         <property name="receivingType" view="_local"/>
         <property name="file" view="_local"/>
         <property name="language" view="_local"/>
-        <property name="cretificateType" view="_local"/>
+        <property name="certificateType" view="_local"/>
     </view>
     <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-editView" extends="_local">
         <property name="statusRequest" view="_minimal">

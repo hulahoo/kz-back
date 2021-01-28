@@ -21,6 +21,8 @@ public interface BprocService {
 
     <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest);
 
+    <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest, String notificationTemplateCode);
+
     <T> T getProcessVariable(String processInstanceDataId, String variableName);
 
     <T extends AbstractBprocRequest> void changeRequestStatus(T entity, String code);

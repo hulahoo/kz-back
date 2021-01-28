@@ -9,6 +9,7 @@
                     class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType">
             <view extends="_local">
                 <property name="langValue"/>
+                <property name="company" view="_minimal"/>
             </view>
             <loader id="dicReceivingTypesDl">
                 <query>
