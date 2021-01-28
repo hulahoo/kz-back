@@ -2,41 +2,27 @@ package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.BeanLocator;
-import com.haulmont.cuba.core.global.TimeSource;
-import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicCertificateType;
 import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.service.EmployeeNumberService;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @PublishEntityChangedEvents
 @Table(name = "TSADV_CERTIFICATE_REQUEST")
 @Entity(name = "tsadv_CertificateRequest")
 @NamePattern("%s|requestNumber")
-public class CertificateRequest extends StandardEntity {
+public class CertificateRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = -2710520566356850633L;
 
-    @NotNull
-    @Column(name = "REQUEST_NUMBER", nullable = false)
-    private Long requestNumber;
-
-    @Temporal(TemporalType.DATE)
-    @NotNull
-    @Column(name = "REQUEST_DATE", nullable = false)
-    private Date requestDate;
+    public static final String PROCESS_DEFINITION_KEY = "certificateRequest";
 
     @Lookup(type = LookupType.SCREEN, actions = "lookup")
     @NotNull
@@ -74,20 +60,6 @@ public class CertificateRequest extends StandardEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     private FileDescriptor file;
-
-    @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "STATUS_ID")
-    private DicRequestStatus status;
-
-    public DicRequestStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(DicRequestStatus status) {
-        this.status = status;
-    }
 
     public FileDescriptor getFile() {
         return file;
@@ -145,30 +117,15 @@ public class CertificateRequest extends StandardEntity {
         this.personGroup = personGroup;
     }
 
-    public Date getRequestDate() {
-        return requestDate;
-    }
-
-    public void setRequestDate(Date requestDate) {
-        this.requestDate = requestDate;
-    }
-
-    public Long getRequestNumber() {
-        return requestNumber;
-    }
-
-    public void setRequestNumber(Long requestNumber) {
-        this.requestNumber = requestNumber;
-    }
-
     @PostConstruct
     public void postConstruct() {
-        BeanLocator beanLocator = AppBeans.get(BeanLocator.NAME);
-
-        this.setRequestNumber(beanLocator.get(EmployeeNumberService.class).generateNextRequestNumber());
-        this.setStatus(beanLocator.get(CommonService.class).getEntity(DicRequestStatus.class, "DRAFT"));
-        this.setRequestDate(beanLocator.get(TimeSource.class).currentTimestamp());
+        super.postConstruct();
         this.setShowSalary(false);
         this.setNumberOfCopy(1);
+    }
+
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
     }
 }
