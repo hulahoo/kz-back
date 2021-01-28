@@ -1,0 +1,1 @@
+alter table TSADV_CERTIFICATE_REQUEST drop column CRETIFICATE_TYPE_ID__U64447 cascade ;

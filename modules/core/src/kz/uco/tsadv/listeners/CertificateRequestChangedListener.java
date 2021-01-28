@@ -16,6 +16,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import javax.inject.Inject;
 import java.util.UUID;
 
+//todo delete
 @Component("tsadv_CertificateRequestChangedListener")
 public class CertificateRequestChangedListener {
     @Inject
@@ -29,29 +30,30 @@ public class CertificateRequestChangedListener {
     @Inject
     protected CommonReportsService commonReportsService;
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void beforeCommit(EntityChangedEvent<CertificateRequest, UUID> event) {
-        CertificateRequest request = dataManager.load(CertificateRequest.class)
-                .id(event.getEntityId().getValue())
-                .view("certificateRequest-view").one();
-        DicReceivingType receivingType = request.getReceivingType();
-
-        try {
-            if ("SCAN_VERSION".equals(receivingType.getCode()) && "CERTIFICATE_OF_EMPLOYMENT".equals(request.getCretificateType().getCode())) {
-                approveScanVersion(request);
-            }
-        } catch (Exception e) {
-            log.error("Error on approving Scan version of Certificate", e);
-        }
-
-
-    }
-
-    private void approveScanVersion(CertificateRequest request) {
-        request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
-        request.setFile(commonReportsService.getReportByCertificateRequest(request));
-        dataManager.save(request);
-    }
+    //todo
+//    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+//    public void beforeCommit(EntityChangedEvent<CertificateRequest, UUID> event) {
+//        CertificateRequest request = dataManager.load(CertificateRequest.class)
+//                .id(event.getEntityId().getValue())
+//                .view("certificateRequest-view").one();
+//        DicReceivingType receivingType = request.getReceivingType();
+//
+//        try {
+//            if ("SCAN_VERSION".equals(receivingType.getCode()) && "CERTIFICATE_OF_EMPLOYMENT".equals(request.getCertificateType().getCode())) {
+//                approveScanVersion(request);
+//            }
+//        } catch (Exception e) {
+//            log.error("Error on approving Scan version of Certificate", e);
+//        }
+//
+//
+//    }
+//
+//    private void approveScanVersion(CertificateRequest request) {
+//        request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
+//        request.setFile(commonReportsService.getReportByCertificateRequest(request));
+//        dataManager.save(request);
+//    }
 
 
 }

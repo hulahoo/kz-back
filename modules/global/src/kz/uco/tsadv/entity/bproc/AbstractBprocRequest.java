@@ -9,6 +9,7 @@ import kz.uco.tsadv.service.EmployeeNumberService;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @MappedSuperclass
@@ -23,15 +24,18 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
 
     public static final String OUTCOME_REASSIGN = "REASSIGN";
 
-    @Column(name = "REQUEST_NUMBER")
+    @Column(name = "REQUEST_NUMBER", nullable = false)
+    @NotNull
     protected Long requestNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "STATUS_ID")
+    @NotNull
     protected DicRequestStatus status;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "REQUEST_DATE")
+    @Column(name = "REQUEST_DATE", nullable = false)
+    @NotNull
     protected Date requestDate;
 
     @Column(name = "COMMENT_", length = 3000)

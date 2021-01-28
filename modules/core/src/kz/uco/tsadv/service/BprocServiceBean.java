@@ -50,13 +50,9 @@ public class BprocServiceBean implements BprocService {
     @Inject
     protected NotificationSenderAPI notificationSender;
     @Inject
-    protected BprocTaskService bprocTaskService;
-    @Inject
     protected BprocHistoricService bprocHistoricService;
     @Inject
     protected Metadata metadata;
-    @Inject
-    private BprocRuntimeService bprocRuntimeService;
     @Inject
     protected Resources resources;
     @Inject
@@ -82,6 +78,11 @@ public class BprocServiceBean implements BprocService {
 
     @Override
     public <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest) {
+        sendNotificationToInitiator(bprocRequest, null);
+    }
+
+    @Override
+    public <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest, String notificationTemplateCode) {
         ProcessInstanceData processInstanceData = bprocHistoricService.createHistoricProcessInstanceDataQuery()
                 .processInstanceBusinessKey(bprocRequest.getId().toString())
                 .processDefinitionKey(bprocRequest.getProcessDefinitionKey())
@@ -89,7 +90,8 @@ public class BprocServiceBean implements BprocService {
 
         User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
 
-        String notificationTemplateCode = getProcessVariable(processInstanceData.getId(), "initiatorNotificationTemplateCode");
+        if (notificationTemplateCode == null)
+            notificationTemplateCode = getProcessVariable(processInstanceData.getId(), "initiatorNotificationTemplateCode");
 
         ActivityType activityType = dataManager.load(ActivityType.class)
                 .query("select e from uactivity$ActivityType e where e.code = :code")
@@ -230,14 +232,6 @@ public class BprocServiceBean implements BprocService {
         Map<String, Object> params = new HashMap<>();
         params.put("item", entity);
         params.put("entity", entity);
-
-        ExtTaskData taskData = (ExtTaskData) bprocTaskService.createTaskDataQuery()
-                .processInstanceBusinessKey(entity.getId().toString())
-                .includeProcessVariables()
-                .active()
-                .singleResult();
-
-        UserExt initiator = (UserExt) bprocRuntimeService.getVariable(taskData.getExecutionId(), "initiator");
 
         switch (templateCode) {
             case "bpm.absenceRequest.initiator.notification":
