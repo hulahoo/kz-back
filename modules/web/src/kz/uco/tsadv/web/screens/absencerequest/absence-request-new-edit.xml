@@ -91,9 +91,6 @@
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
             <button action="windowClose"/>
-            <!--<button id="askQuestionBtn"
-                    caption="mainMsg://askQuestion"
-                    invoke="onAskQuestion"/>-->
         </hbox>
     </layout>
 </window>

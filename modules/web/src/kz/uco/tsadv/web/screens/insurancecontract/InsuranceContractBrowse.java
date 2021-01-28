@@ -1,16 +1,15 @@
 package kz.uco.tsadv.web.screens.insurancecontract;
 
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.actions.list.RemoveAction;
-import com.haulmont.cuba.gui.components.Button;
-import com.haulmont.cuba.gui.components.DataGrid;
-import com.haulmont.cuba.gui.components.GroupTable;
-import com.haulmont.cuba.gui.components.LinkButton;
+import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.screen.LookupComponent;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonBrowse;
@@ -33,6 +32,8 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
     private Button removeBtn;
     @Inject
     private UiComponents uiComponents;
+    @Inject
+    private Metadata metadata;
 
 
     @Subscribe
@@ -68,6 +69,21 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
                 && event.getItem().getAttachments().size() == 0 && event.getItem().getContractAdministrator().size() == 0;
         removeBtn.setEnabled(isEnabled);
     }
+
+    @Subscribe("insuranceContractsTable.create")
+    public void onInsuranceContractsTableCreate(Action.ActionPerformedEvent event) {
+        InsuranceContract contract = metadata.create(InsuranceContract.class);
+        InsuranceContractEdit contractEdit = screenBuilders.editor(insuranceContractsTable)
+                .withScreenClass(InsuranceContractEdit.class)
+                .editEntity(contract)
+                .build();
+
+        contractEdit.setParameter(true);
+        contractEdit.show();
+    }
+
+
+
 
 //
 //    public void showInsuredPersons() {

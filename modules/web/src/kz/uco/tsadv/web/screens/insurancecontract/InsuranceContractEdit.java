@@ -69,6 +69,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     private CommonService commonService;
     @Inject
     private Button createBtnPerson;
+    protected boolean isCreateContract;
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -100,13 +101,19 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
-
+        if (isCreateContract){
+            createBtnPerson.setEnabled(false);
+        }
     }
 //
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
         insuredPersonsDl.setParameter("insuranceContractId", insuranceContractDc.getItem().getId());
         insuredPersonsDl.load();
+    }
+
+    public void setParameter(boolean isCreateContract){
+        this.isCreateContract = isCreateContract;
     }
 
 

@@ -6,7 +6,9 @@
     <data>
         <instance id="dicReceivingTypeDc"
                   class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType">
-            <view extends="_local"/>
+            <view extends="_local">
+                <property name="company" view="_minimal"/>
+            </view>
             <loader/>
         </instance>
     </data>
