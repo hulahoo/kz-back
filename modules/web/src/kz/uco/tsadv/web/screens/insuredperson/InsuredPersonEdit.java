@@ -124,6 +124,12 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private UiComponents uiComponents;
     @Inject
     private ExportDisplay exportDisplay;
+    @Inject
+    private Button createButton;
+    @Inject
+    private Button editButton;
+    @Inject
+    private Button removeButton;
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -181,7 +187,20 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
             exclusionDateField.setVisible(false);
             commentField.setVisible(false);
-
+        }else if ("openEmployee".equals(whichButton)){
+            editButton.setVisible(false);
+            removeButton.setVisible(false);
+            createButton.setVisible(false);
+            relativeField.setVisible(false);
+            if (addressTypeField.getValue() == null){
+                addressTypeField.setVisible(false);
+                addressField.setCaption("Домашний адрес");
+            }
+            if (insuredPersonMemberDc.getItems().size() != 0){
+                familyMemberInformationGroup.setVisible(true);
+            }else {
+                familyMemberInformationGroup.setVisible(false);
+            }
         }
         else if ("joinEmployee".equals(whichButton)){
             familyMemberInformationGroup.setVisible(false);
@@ -280,6 +299,17 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             }
         }
     }
+
+    @Subscribe(id = "insuredPersonMemberDc", target = Target.DATA_CONTAINER)
+    public void onInsuredPersonMemberDcItemChange(InstanceContainer.ItemChangeEvent<InsuredPerson> event) {
+        if ("openEmployee".equals(whichButton)){
+            editButton.setEnabled(false);
+            removeButton.setEnabled(false);
+        }
+    }
+
+
+
 
 
     @Subscribe(id = "insuredPersonMemberDl", target = Target.DATA_LOADER)
