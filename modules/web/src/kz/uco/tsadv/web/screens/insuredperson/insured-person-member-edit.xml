@@ -83,7 +83,7 @@
                     <lookupField id="documentTypeField" property="documentType" optionsContainer="documentTypeDc"/>
                     <textField id="documentNumberField" property="documentNumber"/>
                     <lookupField id="regionField" property="region" optionsContainer="regionFieldDc"/>
-                    <textField rowspan="3" id="addressField" property="address" caption="msg://address" required="true"/>
+                    <textArea rowspan="2" id="addressField" property="address" caption="msg://address" required="true"/>
                     <textField id="insuranceProgramField" property="insuranceProgram" visible="false"/>
                     <textField id="amountField" property="amount" editable="false"/>
                     <dateField id="attachDateField" property="attachDate"
