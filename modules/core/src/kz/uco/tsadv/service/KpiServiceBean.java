@@ -1,5 +1,6 @@
 package kz.uco.tsadv.service;
 
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
@@ -12,6 +13,7 @@ import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.model.Salary;
 import kz.uco.tsadv.pojo.PairPojo;
 import kz.uco.tsadv.pojo.kpi.AssignedPerformancePlanListPojo;
+import org.apache.fop.events.Event;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -131,10 +133,11 @@ public class KpiServiceBean implements KpiService {
                         .setParameter("appId", appId))
         .setView("assignedGoal-portal-kpi-create-default"));
         List<PairPojo<String, List<AssignedGoal>>> responseAssignedGoals = assignedGoals.stream()
-                .collect(Collectors.groupingBy(ag -> ag.getCategory().getInstanceName()))
+                .collect(Collectors.groupingBy(AssignedGoal::getCategory))
                 .entrySet()
                 .stream()
-                .map((e) -> new PairPojo<>(e.getKey(), e.getValue()))
+                .sorted(Comparator.comparingInt(c -> c.getKey().getOrder()))
+                .map((e) -> new PairPojo<>(e.getKey().getInstanceName(), e.getValue()))
                 .collect(Collectors.toList());
         return responseAssignedGoals;
     }
