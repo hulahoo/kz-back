@@ -1,7 +1,6 @@
 package kz.uco.tsadv.modules.bpm;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
-import kz.uco.tsadv.entity.tb.PositionBpmRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 
 import javax.persistence.*;
@@ -21,21 +20,39 @@ public class BpmRolesLink extends StandardEntity {
     @JoinColumn(name = "HR_ROLE_ID")
     protected DicHrRole hrRole;
 
-
     @Column(name = "BPROC_USER_TASK_CODE")
     protected String bprocUserTaskCode;
+
+    @Column(name = "ORDER_")
+    private Integer order;
 
     @NotNull
     @Column(name = "REQUIRED", nullable = false)
     protected Boolean required = false;
 
     @NotNull
+    @Column(name = "IS_ADDABLE_APPROVER", nullable = false)
+    private Boolean isAddableApprover = false;
+
+    @NotNull
     @Column(name = "FIND_BY_COUNTER", nullable = false)
     protected Boolean findByCounter = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POSITION_BPM_ROLE_ID")
-    protected PositionBpmRole positionBpmRole;
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    public Boolean getIsAddableApprover() {
+        return isAddableApprover;
+    }
+
+    public void setIsAddableApprover(Boolean isAddableApprover) {
+        this.isAddableApprover = isAddableApprover;
+    }
 
     public String getBprocUserTaskCode() {
         return bprocUserTaskCode;
@@ -53,16 +70,6 @@ public class BpmRolesLink extends StandardEntity {
         return findByCounter;
     }
 
-
-    public void setPositionBpmRole(PositionBpmRole positionBpmRole) {
-        this.positionBpmRole = positionBpmRole;
-    }
-
-    public PositionBpmRole getPositionBpmRole() {
-        return positionBpmRole;
-    }
-
-
     public void setRequired(Boolean required) {
         this.required = required;
     }
@@ -70,7 +77,6 @@ public class BpmRolesLink extends StandardEntity {
     public Boolean getRequired() {
         return required;
     }
-
 
     public void setBpmRolesDefiner(BpmRolesDefiner bpmRolesDefiner) {
         this.bpmRolesDefiner = bpmRolesDefiner;
@@ -87,7 +93,5 @@ public class BpmRolesLink extends StandardEntity {
     public DicHrRole getHrRole() {
         return hrRole;
     }
-
-
 
 }

@@ -9,6 +9,7 @@ import kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @NamePattern("%s|libraryName")
 @Table(name = "TSADV_GOAL_LIBRARY")
@@ -26,7 +27,6 @@ public class GoalLibrary extends AbstractParentEntity {
     @JoinColumn(name = "CATEGORY_ID")
     protected DicGoalCategory category;
 
-
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE")
     protected Date startDate;
@@ -34,6 +34,17 @@ public class GoalLibrary extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE")
     protected Date endDate;
+
+    @OneToMany(mappedBy = "library")
+    protected List<Goal> goals;
+
+    public List<Goal> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
+    }
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;

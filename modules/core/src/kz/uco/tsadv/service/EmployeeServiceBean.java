@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.IncludeExternalExperienceConfig;
@@ -31,9 +32,11 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
@@ -49,6 +52,7 @@ import java.util.*;
 @Service(EmployeeService.NAME)
 public class EmployeeServiceBean implements EmployeeService {
 
+    protected static final Logger log = org.slf4j.LoggerFactory.getLogger(EmployeeServiceBean.class);
     private Log logger = LogFactory.getLog(EmployeeServiceBean.class.getName());
 
     @Inject
@@ -1845,7 +1849,7 @@ public class EmployeeServiceBean implements EmployeeService {
                             "  and pg.delete_ts is null " +
                             "  and a.delete_ts is null " +
                             "  and das.delete_ts is null ) " +
-                            " select * from a t " + (showAll ? "" : " where t.level = (select max(level) from a)" ));
+                            " select * from a t " + (showAll ? "" : " where t.level = (select max(level) from a)"));
             query.setParameter(1, positionGroupId);
 
             List<Object[]> rows = query.getResultList();
@@ -2003,47 +2007,6 @@ public class EmployeeServiceBean implements EmployeeService {
             return leaders.get(0);
         }
         return null;
-    }
-
-    @Override
-    public UUID getImmediateSupervisorByPersonGroup(UUID personGroupId) {
-        UUID id = null;
-        try (Transaction tx = persistence.createTransaction()) {
-            EntityManager em = persistence.getEntityManager();
-
-            Query query = em.createNativeQuery(
-                    "select ss.person_group_id " +
-                            "from base_assignment s " +
-                            "join base_hierarchy_element child " +
-                            "       on child.position_group_id = s.position_group_id " +
-                            "       and ?1 between child.start_date and child.end_date " +
-                            "       and child.delete_ts is null " +
-                            "join base_hierarchy_element parent " +
-                            "       on parent.id = child.parent_id " +
-                            "       and ?1 between parent.start_date and parent.end_date " +
-                            "       and parent.delete_ts is null " +
-                            "join base_assignment ss " +
-                            "       on ss.position_group_id = parent.position_group_id " +
-                            "       and ?1 between ss.start_date and ss.end_date " +
-                            "       and ss.primary_flag is true " +
-                            "       and ss.delete_ts is null " +
-                            "join tsadv_dic_assignment_status ssS " +
-                            "       on ss.assignment_status_id = ssS.id " +
-                            "       and ssS.code = 'ACTIVE' " +
-                            "       and ssS.delete_ts is null " +
-                            "where s.person_group_id = ?2 " +
-                            "       and ?1 between s.start_date and s.end_date " +
-                            "       and s.primary_flag is true " +
-                            "       and s.delete_ts is null;");
-            query.setParameter(1, CommonUtils.getSystemDate());
-            query.setParameter(2, personGroupId);
-
-            List rows = query.getResultList();
-            if (rows != null && rows.size() == 1) {
-                id = (UUID) rows.get(0);
-            }
-        }
-        return id;
     }
 
     @Override
@@ -2451,26 +2414,49 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public Map<String, String> getDicGoodsCategories() {
-        Transaction tx = persistence.createTransaction();
-        Map<String, String> map = new HashMap();
-        try {
-            EntityManager em = persistence.getEntityManager();
-
-            Query query = em.createNativeQuery(String.format("select code, lang_value%d\n" +
-                            "from tsadv_dic_goods_category where delete_ts is null and code is not null",
-                    languageIndex(userSessionSource.getLocale().getLanguage())));
-            List<Object[]> rows = query.getResultList();
-            if (rows != null && !rows.isEmpty()) {
-                for (Object[] row : rows) {
+        Map<String, String> map = new HashMap<>();
+        //noinspection unchecked
+        persistence.callInTransaction(em ->
+                em.createNativeQuery(String.format("select code, lang_value%d\n" +
+                                "from tsadv_dic_goods_category where delete_ts is null and code is not null",
+                        languageIndex(userSessionSource.getLocale().getLanguage())))
+                        .getResultList())
+                .forEach(o -> {
+                    Object[] row = (Object[]) o;
                     map.put((String) row[0], (String) row[1]);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            tx.end();
-        }
+                });
         return map;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public OrganizationGroupExt getOrganizationGroupByPositionGroupId(@Nonnull UUID personGroupId, String viewName) {
+        return persistence.callInTransaction(em ->
+                em.createQuery("select e.organizationGroup from base$AssignmentExt e " +
+                        "  where e.personGroup.id = :personGroupId " +
+                        "   and :systemDate between e.startDate and e.endDate" +
+                        "   and e.assignmentStatus.code <> 'TERMINATED' " +
+                        "   and e.primaryFlag = 'TRUE' ", OrganizationGroupExt.class)
+                        .setParameter("personGroupId", personGroupId)
+                        .setParameter("systemDate", CommonUtils.getSystemDate())
+                        .setViewName(viewName != null ? viewName : View.MINIMAL)
+                        .getFirstResult());
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId) {
+        return persistence.callInTransaction(em ->
+                em.createQuery("select o.company from base$AssignmentExt e " +
+                        "   join e.organizationGroup o" +
+                        "   where e.personGroup.id = :personGroupId" +
+                        "   and :systemDate between e.startDate and e.endDate " +
+                        "   and e.assignmentStatus.code <> 'TERMINATED' " +
+//                        "   and :systemDate between o.startDate and o.endDate  " +
+                        "   and e.primaryFlag = 'TRUE' ", DicCompany.class)
+                        .setParameter("systemDate", CommonUtils.getSystemDate())
+                        .setParameter("personGroupId", personGroupId)
+                        .getFirstResult());
     }
 
 }

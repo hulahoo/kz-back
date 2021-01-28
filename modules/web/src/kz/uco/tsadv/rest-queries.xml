@@ -52,4 +52,16 @@
             <param name="appId" type="java.util.UUID"/>
         </params>
     </query>
+    <query name="kpiAssignedGoals" entity="tsadv$AssignedGoal" view="assignedGoal-portal-kpi-create-default">
+        <jpql>
+            <![CDATA[select ag
+            from tsadv$AssignedGoal ag
+            where ag.assignedPerformancePlan.id = :appId
+            order by ag.category.order, ag.weight desc
+            ]]>
+        </jpql>
+        <params>
+            <param name="appId" type="java.util.UUID"/>
+        </params>
+    </query>
 </queries>

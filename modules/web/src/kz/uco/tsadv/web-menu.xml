@@ -187,8 +187,9 @@
         <item screen="tsadv$TalentProgramExceptions.browse"/>
         <item screen="tsadv_CertificateRequestHR.browse"
               caption="mainMsg://menu_config.tsadv_CertificateRequestHR.browse"/>
-        <item screen="tsadv$LeavingVacationRequest.browse"
-              caption="mainMsg://menu_config.tsadv$LeavingVacationRequest.browse"/>
+        <menu id="dms" caption="mainMsg://dms">
+            <item screen="tsadv$InsuranceContract.browse" caption="mainMsg://menu_config.tsadv$InsuranceContract.browse"/>
+        </menu>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
@@ -395,6 +396,7 @@
         </item>
         <item screen="tsadv$Absence.self.browse"/>
         <item screen="tsadv_PersonData" caption="mainMsg://menu_config.tsadv_PersonData"/>
+        <item screen="tsadv$MyMICInsuredPerson.browse" caption="mainMsg://menu_config.tsadv$MyMICInsuredPerson.browse"/>
     </menu>
     <menu id="performanceManagement"
           icon="font-icon:BAR_CHART_O"
@@ -430,12 +432,12 @@
             <item id="pmScales"
                   screen="tsadv$Scale.browse"/>
         </menu>
-        <menu id="pmGoals">
+        <menu id="pmGoals3">
             <item id="pmGoalLibrary"
                   screen="tsadv$GoalLibrary.browse"/>
             <item id="pmPerformancePlans"
                   screen="tsadv$PerformancePlan.browse"/>
-            <item id="pmGoals"
+            <item id="pmGoals2"
                   screen="tsadv$Goal.browse"/>
             <item id="pmAssignedPerformancePlan"
                   screen="tsadv$AssignedPerformancePlan.browse"/>
@@ -701,7 +703,8 @@
         <item screen="bproc_AllTasks.browse"/>
         <item screen="bproc_DmnDecisionTableBrowse"/>
         <item screen="bproc_DecisionTableModelerScreen"/>
-        <item screen="tsadv$BpmRolesDefiner.browse"/>
+<!--        <item screen="tsadv$BpmRolesDefiner.browse"/>-->
+        <item screen="tsadv_BpmRolesDefinerCompany" caption="mainMsg://menu_config.tsadv_BpmRolesDefinerCompany"/>
     </menu>
     <menu id="application-uactivity" insertBefore="administration">
         <menu id="Tasks">

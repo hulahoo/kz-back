@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://bpmRolesDefinerCompany.caption"
+        messagesPack="kz.uco.tsadv.web.screens.bpmrolesdefiner">
+    <data>
+        <collection id="companyDc" class="kz.uco.base.entity.dictionary.DicCompany"
+                    view="_base">
+            <loader id="companyDl">
+                <query>
+                    <![CDATA[select e from base_DicCompany e]]>
+                </query>
+            </loader>
+        </collection>
+
+        <collection id="bpmRolesDefinersDc"
+                    class="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"
+                    view="_local">
+            <loader id="bpmRolesDefinersDl">
+                <query>
+                    <![CDATA[select e from tsadv$BpmRolesDefiner e where e.company.id = :companyId]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <layout width="100%" height="100%">
+        <split width="100%" height="100%">
+            <table dataContainer="companyDc" width="100%" height="100%">
+                <columns>
+                    <column id="langValue"/>
+                    <column id="code"/>
+                </columns>
+                <rows/>
+            </table>
+            <table id="bpmRolesDefinersTable" dataContainer="bpmRolesDefinersDc" width="100%" height="100%">
+                <actions>
+                    <action id="create" type="create"/>
+                    <action id="edit" type="edit"/>
+                    <action id="remove" type="remove"/>
+                </actions>
+                <columns>
+                    <column id="processDefinitionKey"/>
+                </columns>
+                <buttonsPanel>
+                <button action="bpmRolesDefinersTable.create"/>
+                <button action="bpmRolesDefinersTable.edit"/>
+                <button action="bpmRolesDefinersTable.remove"/>
+            </buttonsPanel>
+                <rows/>
+            </table>
+        </split>
+    </layout>
+</window>

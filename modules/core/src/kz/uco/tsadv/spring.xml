@@ -19,12 +19,18 @@
 
     <bean id="tsadv_CalendarService" class="kz.uco.tsadv.service.CalendarServiceBean">
         <property name="organizationService">
-            <ref bean="tsadv_OrganizationService" />
+            <ref bean="tsadv_OrganizationService"/>
         </property>
     </bean>
 
     <bean id="cuba_Persistence" class="kz.uco.tsadv.beans.PersistenceImpl"/>
 
     <bean id="cuba_EclipseLinkDescriptorEventListener" class="kz.uco.tsadv.beans.EclipseLinkDescriptorEventListener"/>
+
+    <bean id="bproc_UserTaskCreatedEventListener" class="kz.uco.tsadv.bproc.beans.ExtUserTaskCreatedEventListener"/>
+
+    <bean id="bproc_UserTaskCompletedEventListener" class="kz.uco.tsadv.bproc.beans.ExtUserTaskCompletedEventListener"/>
+
+    <bean id="bproc_ProcessStartedEventListener" class="kz.uco.tsadv.bproc.beans.ExtProcessStartedEventListener"/>
 
 </beans>

@@ -20,6 +20,10 @@
                 </query>
             </loader>
         </collection>
+
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -32,11 +36,13 @@
                     <column width="750px">
                         <textField id="requestNumberField" property="requestNumber" editable="false"/>
                         <textField id="statusField" property="status" editable="false"/>
-                        <lookupPickerField id="typeField" required="true" property="type" optionsContainer="dicAbsenceTypesDc"/>
+                        <lookupPickerField id="typeField" required="true" property="type"
+                                           optionsContainer="dicAbsenceTypesDc"/>
                         <dateField id="dateFromField" property="dateFrom" required="true"/>
                         <dateField id="dateToField" property="dateTo" required="true"/>
                         <textField id="absenceDaysField" property="absenceDays" editable="false"/>
-                        <textField id="vacationDurationTypeField" caption="msg://vacationDurationType" editable="false"/>
+                        <textField id="vacationDurationTypeField" caption="msg://vacationDurationType"
+                                   editable="false"/>
                         <dateField id="requestDateField" property="requestDate" editable="false"/>
                         <field id="attachmentField" property="attachment" caption="msg://file"/>
                         <textArea id="commentField" property="comment"/>
@@ -54,6 +60,30 @@
                            value="msg://kz.uco.tsadv.modules.personal.model/AbsenceRequest.distanceWorkingConfirm"/>
                 </hbox>
             </groupBox>
+
+            <vbox id="bpmActorsVBox"
+                  width="1000px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
+                           width="100%">
+                        <columns>
+                            <column id="name"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome"
+                                    generator="generateOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                        </columns>
+                    </table>
+                </groupBox>
+            </vbox>
         </scrollBox>
         <hbox id="procActionsBox"
               align="BOTTOM_LEFT"

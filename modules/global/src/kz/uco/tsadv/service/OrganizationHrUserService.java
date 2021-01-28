@@ -1,5 +1,6 @@
 package kz.uco.tsadv.service;
 
+import com.haulmont.cuba.security.entity.User;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 
@@ -22,4 +23,8 @@ public interface OrganizationHrUserService {
     void setNextCounter(OrganizationHrUser currentHrUser, String roleCode);
 
     List<DicHrRole> getDicHrRoles(UUID userId);
+
+    List<? extends User> getHrUsersForPerson(@Nonnull UUID personGroupId, @Nonnull String roleCode);
+
+    List<? extends User> getManager(@Nonnull UUID personGroupId);
 }

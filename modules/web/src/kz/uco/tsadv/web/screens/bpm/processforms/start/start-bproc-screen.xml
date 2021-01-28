@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://startBprocScreen.caption"
+        messagesPack="kz.uco.tsadv.web.screens.bpm.processforms.start">
+    <data>
+        <instance id="bpmRolesDefinerDc"
+                  class="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"
+                  view="_local">
+            <loader/>
+            <collection id="linksDc" property="links"/>
+        </instance>
+        <collection id="notPersisitBprocActorsDc" class="kz.uco.tsadv.modules.bpm.NotPersisitBprocActors"/>
+        <collection id="hrRolesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicHrRole"/>
+    </data>
+    <layout>
+        <table multiselect="false"
+               id="bprocActorsTable"
+               dataContainer="notPersisitBprocActorsDc">
+            <actions>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="hrRole"/>
+                <column id="users" generator="usersGenerator"/>
+            </columns>
+            <buttonsPanel>
+                <hbox spacing="true" id="addHrRoleHbox">
+                    <label value="msg://table.btn.add"/>
+                    <lookupField id="addHrRoleLookup" optionsContainer="hrRolesDc"/>
+                </hbox>
+                <button action="bprocActorsTable.remove"/>
+            </buttonsPanel>
+            <rows/>
+        </table>
+        <buttonsPanel>
+            <button id="ok" caption="OK" icon="OK"/>
+            <button id="cancel" caption="mainMsg://table.btn.cancel" icon="BAN"/>
+        </buttonsPanel>
+    </layout>
+</window>
