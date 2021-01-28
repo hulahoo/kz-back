@@ -655,6 +655,9 @@
             <param name="pageSize" type="java.lang.Integer"/>
         </method>
         <method name="countUsersPerformancePlans"/>
+        <method name="kpiAssignedGoals">
+            <param name="appId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_LearningService">
         <method name="learningHistory">

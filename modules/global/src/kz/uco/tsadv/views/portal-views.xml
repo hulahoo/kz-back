@@ -164,4 +164,7 @@
     <view name="assigned-goal-weight" entity="tsadv$AssignedGoal" extends="_minimal">
         <property name="weight"/>
     </view>
+    <view name="goal-library-category" entity="tsadv$GoalLibrary" extends="_local">
+        <property name="category" view="_minimal"/>
+    </view>
 </views>

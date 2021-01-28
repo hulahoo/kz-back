@@ -6,6 +6,7 @@ import kz.uco.tsadv.pojo.kpi.AssignedPerformancePlanListPojo;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public interface KpiService {
     String NAME = "tsadv_KpiService";
@@ -15,4 +16,6 @@ public interface KpiService {
     Long countUsersPerformancePlans();
 
     double calculationOfGZP(AssignmentGroupExt assignmentGroupExt, Date startDate, Date endDate);
+
+    List kpiAssignedGoals(UUID appId);
 }
