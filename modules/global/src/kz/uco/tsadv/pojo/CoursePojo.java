@@ -20,6 +20,9 @@ public class CoursePojo implements Serializable {
     private List<CommentPojo> comments;
     private List<PairPojo<Double, Long>> rating;
     private Integer rateReviewCount;
+    private String description;
+    private Long educationDuration;
+    private Long educationPeriod;
 
     public List<CommentPojo> getComments() {
         return comments;
@@ -123,5 +126,29 @@ public class CoursePojo implements Serializable {
 
     public void setRating(List<PairPojo<Double, Long>> rating) {
         this.rating = rating;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getEducationDuration() {
+        return educationDuration;
+    }
+
+    public void setEducationDuration(Long educationDuration) {
+        this.educationDuration = educationDuration;
+    }
+
+    public Long getEducationPeriod() {
+        return educationPeriod;
+    }
+
+    public void setEducationPeriod(Long educationPeriod) {
+        this.educationPeriod = educationPeriod;
     }
 }

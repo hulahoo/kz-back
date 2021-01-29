@@ -4915,6 +4915,8 @@ create table TSADV_COURSE (
     SELF_ENROLLMENT boolean,
     LEARNING_TYPE_ID uuid,
     IS_ONLINE boolean not null,
+    EDUCATION_PERIOD bigint,
+    EDUCATION_DURATION bigint,
     --
     primary key (ID)
 )^
