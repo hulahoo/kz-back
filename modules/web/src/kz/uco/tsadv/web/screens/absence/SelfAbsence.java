@@ -27,6 +27,7 @@ import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
 import kz.uco.tsadv.modules.recruitment.dictionary.DicRequisitionType;
 import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeNumberService;
+import kz.uco.tsadv.service.EmployeeService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -45,33 +46,35 @@ public class SelfAbsence extends StandardLookup<Absence>
     @Inject
     protected EmployeeNumberService employeeNumberService;
     @Inject
-    private UserSession userSession;
+    protected UserSession userSession;
     @Inject
-    private AssignmentService assignmentService;
+    protected AssignmentService assignmentService;
     @Inject
-    private Notifications notifications;
+    protected Notifications notifications;
     @Inject
-    private Messages messages;
+    protected Messages messages;
     @Inject
-    private MessageBundle messageBundle;
+    protected MessageBundle messageBundle;
     @Inject
-    private DataManager dataManager;
+    protected DataManager dataManager;
     @Inject
-    private Metadata metadata;
+    protected Metadata metadata;
     @Inject
-    private CommonService commonService;
+    protected CommonService commonService;
     @Inject
-    private ScreenBuilders screenBuilders;
+    protected ScreenBuilders screenBuilders;
     @Inject
     protected TabSheet vacationTabSheet;
     @Inject
-    private CollectionContainer<Absence> absencesDc;
+    protected CollectionContainer<Absence> absencesDc;
     @Inject
-    private CollectionLoader<Absence> absencesDl;
+    protected CollectionLoader<Absence> absencesDl;
     @Named("absencesTable.newLeavingVacationRequest")
-    private BaseAction absencesTableNewLeavingVacationRequest;
+    protected BaseAction absencesTableNewLeavingVacationRequest;
     @Inject
-    private Table<Absence> absencesTable;
+    protected Table<Absence> absencesTable;
+    @Inject
+    protected EmployeeService employeeService;
 
     @Subscribe("addBtn")
     public void onAddBtnClick(Button.ClickEvent event) {
@@ -103,6 +106,7 @@ public class SelfAbsence extends StandardLookup<Absence>
             absenceRequest.setId(UUID.randomUUID());
             absenceRequest.setAssignmentGroup(assignmentGroup);
             absenceRequest.setStatus(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
+            absenceRequest.setPersonGroup(employeeService.getPersonGroupByUserId(userSession.getUser().getId()));
         }
 
         screenBuilders.editor(AbsenceRequest.class, this)
