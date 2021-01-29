@@ -22,14 +22,13 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
-import kz.uco.tsadv.modules.personal.model.Absence;
-import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
-import kz.uco.tsadv.modules.personal.model.AssignmentExt;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.MyTeamService;
 import kz.uco.tsadv.web.screens.absencerequest.AbsenceRequestForMyTeamEdit;
+import kz.uco.tsadv.web.screens.scheduleoffsetsrequest.ScheduleOffsetsRequestSsMyTeamEdit;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
@@ -91,6 +90,8 @@ public class SsStructurePerson extends AbstractWindow {
     protected ScreenBuilders screenBuilders;
     @Inject
     protected DataManager dataManager;
+    @Inject
+    protected CollectionDatasource<ScheduleOffsetsRequest, UUID> scheduleOffsetsRequestsDs;
 
 
     @Override
@@ -167,9 +168,11 @@ public class SsStructurePerson extends AbstractWindow {
             params.put("personGroupId", person.getGroup().getId());
             absencesDs.refresh(params);
             absenceRequestsDs.refresh(params);
+            scheduleOffsetsRequestsDs.refresh(params);
         } else {
             absencesDs.clear();
             absenceRequestsDs.clear();
+            scheduleOffsetsRequestsDs.clear();
         }
     }
 
@@ -289,7 +292,7 @@ public class SsStructurePerson extends AbstractWindow {
     }
 
 
-    public void createRequest() {
+    public void createAbsenceRequest() {
         if (personExtDs.getItem() != null) {
             AbsenceRequest absenceRequest = metadata.create(AbsenceRequest.class);
             PersonGroupExt personGroupExt = dataManager.reload(personExtDs.getItem().getGroup(), "personGroup.person.info");
@@ -305,6 +308,31 @@ public class SsStructurePerson extends AbstractWindow {
             screenBuilders.editor(AbsenceRequest.class, this)
                     .withScreenClass(AbsenceRequestForMyTeamEdit.class).newEntity(absenceRequest)
                     .withAfterCloseListener(absenceRequestForMyTeamEditAfterScreenCloseEvent -> {
+                        refreshDss(personExtDs.getItem());
+                    }).build().show();
+        }
+    }
+
+    public void createScheduleOffsetRequest() {
+        if (personExtDs.getItem() != null) {
+            ScheduleOffsetsRequest request = metadata.create(ScheduleOffsetsRequest.class);
+            PersonGroupExt personGroupExt = dataManager.reload(personExtDs.getItem().getGroup(), "personGroup.person.info");
+            request.setPersonGroup(personGroupExt);
+            DicRequestStatus status = commonService.getEntity(DicRequestStatus.class, "DRAFT");
+            request.setStatus(status);
+            StandardSchedule standardSchedule = commonService.getEntities(StandardSchedule.class,
+                    "select e.schedule from tsadv$AssignmentSchedule e " +
+                            " where current_date between e.startDate and e.endDate and e.assignmentGroup.id in " +
+                            "(select a.group.id from base$AssignmentExt a where current_date between a.startDate and a.endDate " +
+                            "and a.personGroup.id = :personGroupId) ",
+                    ParamsMap.of("personGroupId", personGroupExt.getId()),
+                    "standardSchedule-for-my-team").stream().findFirst().orElse(null);
+            request.setCurrentSchedule(standardSchedule);
+            request.setRequestDate(CommonUtils.getSystemDate());
+            request.setRequestNumber(employeeNumberService.generateNextRequestNumber());
+            screenBuilders.editor(ScheduleOffsetsRequest.class, this)
+                    .withScreenClass(ScheduleOffsetsRequestSsMyTeamEdit.class).newEntity(request)
+                    .withAfterCloseListener(offsetsRequestSsMyTeamEditAfterScreenCloseEvent -> {
                         refreshDss(personExtDs.getItem());
                     }).build().show();
         }

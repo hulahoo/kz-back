@@ -5,6 +5,7 @@
           insertBefore="reports">
         <menu id="hrDictionaries"
               icon="font-icon:BOOK">
+            <item screen="tsadv_DicSchedulePurpose.browse"/>
             <item screen="tsadv_DicAbsencePurpose.browse"/>
             <item screen="tsadv_AbsPurposeSetting.browse"
                   caption="mainMsg://menu_config.tsadv_AbsPurposeSetting.browse"/>

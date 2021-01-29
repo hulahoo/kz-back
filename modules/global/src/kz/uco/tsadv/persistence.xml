@@ -621,5 +621,7 @@
         <class>kz.uco.tsadv.modules.personal.model.InsuranceContract</class>
         <class>kz.uco.tsadv.modules.personal.model.InsuredPerson</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus</class>
+        <class>kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicSchedulePurpose</class>
     </persistence-unit>
 </persistence>

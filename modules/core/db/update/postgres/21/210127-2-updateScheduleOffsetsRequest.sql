@@ -1,0 +1,1 @@
+alter table TSADV_SCHEDULE_OFFSETS_REQUEST add column PURPOSE_TEXT varchar(2000) ;

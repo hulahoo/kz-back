@@ -1873,5 +1873,11 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicSchedulePurpose">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
