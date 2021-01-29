@@ -180,7 +180,7 @@
                         <column id="birthdate"/>
                         <column id="iin"/>
                         <column id="documentType"/>
-                        <column id="file" generator="generatorName"/>
+                        <column id="file"/>
                         <column id="region"/>
                         <column id="insuranceProgram"/>
                         <column id="address"/>
