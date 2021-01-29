@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class TimecardSelf extends AbstractWindow {
 
@@ -49,11 +48,8 @@ public class TimecardSelf extends AbstractWindow {
             showNotification("There is no personGroupId for user", NotificationType.ERROR);
             return;
         }
-        UUID positionGroupId = employeeService.getPersonPositionGroup(personGroupExt.getId());
 
-
-        PositionGroupExt positionGroupExt = metadata.create(PositionGroupExt.class);
-        positionGroupExt.setId(positionGroupId);
+        PositionGroupExt positionGroupExt = employeeService.getPositionGroupByPersonGroupId(personGroupExt.getId(), View.MINIMAL);
 
         OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupExtByPositionGroup(positionGroupExt, View.MINIMAL);
 

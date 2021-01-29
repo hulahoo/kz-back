@@ -88,8 +88,6 @@ public interface EmployeeService {
 
     PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, String view);
 
-    UUID getPersonPositionGroup(UUID personGroupId);
-
     AssignmentGroupExt getAssignmentGroupByPersonGroup(PersonGroupExt personGroupExt);
 
     PersonGroupExt getPersonGroupByAssignmentGroupId(UUID assignmentGroupId);
@@ -145,4 +143,6 @@ public interface EmployeeService {
     OrganizationGroupExt getOrganizationGroupByPositionGroupId(@Nonnull UUID personGroupId, String viewName);
 
     DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId);
+
+    List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);
 }

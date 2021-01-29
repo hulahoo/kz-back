@@ -9,6 +9,7 @@ import kz.uco.uactivity.entity.ActivityType;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface BprocService {
@@ -40,4 +41,6 @@ public interface BprocService {
     List<? extends User> getActors(UUID bprocRequestId, String bprocUserTaskCode,String viewName);
 
     void approveAbsence(AbsenceRequest absenceRequest);
+
+    Map<String, String> getActivityIdMap(String processDefinitionKey);
 }

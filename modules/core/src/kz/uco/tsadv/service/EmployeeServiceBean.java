@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.haulmont.bali.db.QueryRunner;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.*;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
@@ -39,7 +40,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -112,7 +112,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public UserExt findManagerByPersonGroup(UUID personGroupId, String hierarchyId) {
-        UUID positionGroupId = getPersonPositionGroup(personGroupId);
+        UUID positionGroupId = Optional.ofNullable(getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL))
+                .map(BaseUuidEntity::getId)
+                .orElse(null);
         if (positionGroupId == null) {
             throw new RuntimeException("Position for person not found!");
         }
@@ -190,31 +192,6 @@ public class EmployeeServiceBean implements EmployeeService {
                     }
                 }
             }
-        }
-        return null;
-    }
-
-    @Override
-    public UUID getPersonPositionGroup(UUID personGroupId) {
-        if (personGroupId != null) {
-            return persistence.callInTransaction(em -> {
-                try {
-                    Query query = em.createNativeQuery(
-                            "SELECT " +
-                                    "a.position_group_id " +
-                                    "FROM base_assignment a " +
-                                    "WHERE a.delete_ts IS NULL " +
-                                    "      AND current_date BETWEEN a.start_date AND a.end_date " +
-                                    "      AND a.primary_flag = TRUE " +
-                                    "      AND a.person_group_id = ?1");
-
-                    query.setParameter(1, personGroupId);
-
-                    return (UUID) query.getSingleResult();
-                } catch (NoResultException noResultException) {
-                    return null;
-                }
-            });
         }
         return null;
     }
@@ -2457,6 +2434,19 @@ public class EmployeeServiceBean implements EmployeeService {
                         .setParameter("systemDate", CommonUtils.getSystemDate())
                         .setParameter("personGroupId", personGroupId)
                         .getFirstResult());
+    }
+
+    @Override
+    public List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName) {
+        return dataManager.load(PersonGroupExt.class)
+                .query("select e.personGroup from base$AssignmentExt e " +
+                        "   where e.positionGroup.id = :positionGroupId" +
+                        "       and #systemDate between e.startDate and e.endDate " +
+                        "       and e.primaryFlag = 'TRUE' " +
+                        "       and e.assignmentStatus.code <> 'TERMINATED' ")
+                .setParameters(ParamsMap.of("positionGroupId", positionGroupId, "systemDate", CommonUtils.getSystemDate()))
+                .view(viewName != null ? viewName : View.MINIMAL)
+                .list();
     }
 
 }

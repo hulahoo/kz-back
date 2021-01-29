@@ -12,6 +12,7 @@ import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.app.serialization.EntitySerializationAPI;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
@@ -3185,7 +3186,9 @@ public class RecognitionServiceBean implements RecognitionService {
     public void sendCheckoutNotification(GoodsOrder goodsOrder) {
         PersonGroupExt buyerPersonGroup = goodsOrder.getPersonGroup();
 
-        UUID buyerPositionGroupId = employeeService.getPersonPositionGroup(buyerPersonGroup.getId());
+        UUID buyerPositionGroupId = Optional.ofNullable(employeeService.getPositionGroupByPersonGroupId(buyerPersonGroup.getId(), View.MINIMAL))
+                .map(BaseUuidEntity::getId)
+                .orElse(null);
 
         if (buyerPositionGroupId == null) {
             throw new NullPointerException(getMessage("buyer.position.null"));
@@ -3212,7 +3215,9 @@ public class RecognitionServiceBean implements RecognitionService {
         for (GoodsOrder goodsOrder : goodsOrderList) {
             PersonGroupExt buyerPersonGroup = goodsOrder.getPersonGroup();
 
-            UUID buyerPositionGroupId = employeeService.getPersonPositionGroup(buyerPersonGroup.getId());
+            UUID buyerPositionGroupId = Optional.ofNullable(employeeService.getPositionGroupByPersonGroupId(buyerPersonGroup.getId(),View.MINIMAL))
+                    .map(BaseUuidEntity::getId)
+                    .orElse(null);
 
             if (buyerPositionGroupId == null) {
                 throw new NullPointerException(getMessage("buyer.position.null"));

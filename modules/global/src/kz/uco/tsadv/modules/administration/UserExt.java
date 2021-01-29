@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.Locale;
 
 @Entity(name = "tsadv$UserExt")
 @Extends(kz.uco.base.entity.extend.UserExt.class)
@@ -43,5 +44,19 @@ public class UserExt extends kz.uco.base.entity.extend.UserExt {
     public String getFullNameWithLogin() {
         String fullName = getFullName();
         return String.format("%s [%s]", fullName, login);
+    }
+
+    public String getFullNameWithLogin(Locale locale) {
+        String fullName = getFullName(locale);
+        return String.format("%s [%s]", fullName, login);
+    }
+
+    protected String getFullName(Locale locale) {
+        if (PersistenceHelper.isLoaded(this, "personGroup")) {
+            if (personGroup != null && PersistenceHelper.isLoaded(personGroup, "list")) {
+                return personGroup.getFullName(locale);
+            }
+        }
+        return super.getFullName();
     }
 }

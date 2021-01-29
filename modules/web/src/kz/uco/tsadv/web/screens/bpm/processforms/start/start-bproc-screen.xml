@@ -12,7 +12,9 @@
         <collection id="notPersisitBprocActorsDc" class="kz.uco.tsadv.modules.bpm.NotPersisitBprocActors"/>
         <collection id="hrRolesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicHrRole"/>
     </data>
-    <dialogMode resizable="true"/>
+    <dialogMode forceDialog="true"
+                width="600px"
+                resizable="true"/>
     <layout spacing="true" expand="buttonsPanel">
         <table multiselect="false"
                id="bprocActorsTable"

@@ -5,10 +5,10 @@ import com.haulmont.cuba.core.entity.KeyValueEntity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.ValueLoadContext;
-import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.notification.NotificationSender;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
@@ -47,7 +47,7 @@ public class AssignmentServiceBean implements AssignmentService {
     @Inject
     protected NotificationSender notificationSender;
     @Inject
-    protected OrganizationHrUserService organizationHrUserService;
+    protected PositionStructureConfig positionStructureConfig;
     @Inject
     protected DataManager dataManager;
 
@@ -188,39 +188,38 @@ public class AssignmentServiceBean implements AssignmentService {
 
         for (AssignmentExt assignmentExt : list) {
             try {
-                for (User user : organizationHrUserService.getManager(assignmentExt.getPersonGroup().getId())) {
-                    UserExt manager = (UserExt) dataManager.reload(user, "userExt.edit");
-                    PersonExt employee = employeeService.getPersonByPersonGroup(assignmentExt.getPersonGroup().getId(), CommonUtils.getSystemDate(), "person-edit");
+                UserExt user = employeeService.findManagerByPersonGroup(assignmentExt.getPersonGroup().getId(), positionStructureConfig.getPositionStructureId().toString());
+                UserExt manager = dataManager.reload(user, "userExt.edit");
+                PersonExt employee = employeeService.getPersonByPersonGroup(assignmentExt.getPersonGroup().getId(), CommonUtils.getSystemDate(), "person-edit");
 
-                    Map<String, Object> param = new HashMap<>();
-                    param.put("managerRu", Optional.ofNullable(manager.getPersonGroup().getPerson() != null ? manager.getPersonGroup().getPerson().getFullName() : manager.getFullName()).orElse(""));
-                    param.put("managerEn", Optional.ofNullable(manager.getPersonGroup().getPerson() != null ? manager.getPersonGroup().getPerson().getFullNameLatin() : manager.getFullName()).orElse(""));
+                Map<String, Object> param = new HashMap<>();
+                param.put("managerRu", Optional.ofNullable(manager.getPersonGroup().getPerson() != null ? manager.getPersonGroup().getPerson().getFullName() : manager.getFullName()).orElse(""));
+                param.put("managerEn", Optional.ofNullable(manager.getPersonGroup().getPerson() != null ? manager.getPersonGroup().getPerson().getFullNameLatin() : manager.getFullName()).orElse(""));
 
-                    param.put("employeeRu", Optional.ofNullable(employee.getFullNameLatin("ru")).orElse(""));
-                    param.put("employeeEn", Optional.ofNullable(employee.getFullNameLatin("en")).orElse(""));
+                param.put("employeeRu", Optional.ofNullable(employee.getFullNameLatin("ru")).orElse(""));
+                param.put("employeeEn", Optional.ofNullable(employee.getFullNameLatin("en")).orElse(""));
 
-                    if (Objects.nonNull(assignmentExt.getPositionGroup())
-                            && Objects.nonNull(assignmentExt.getPositionGroup().getPosition())) {
-                        param.put("positionNameRu", Optional.ofNullable(assignmentExt.getPositionGroup().getPosition().getPositionFullNameLang1()).orElse(""));
-                        param.put("positionNameEn", Optional.ofNullable(assignmentExt.getPositionGroup().getPosition().getPositionFullNameLang3()).orElse(""));
-                    }
-                    param.put("temporaryEndDate", dateFormat.format(assignmentExt.getTemporaryEndDate()));
-
-                    activityService.createActivity(
-                            manager,
-                            null,
-                            commonService.getEntity(ActivityType.class, "NOTIFICATION"),
-                            StatusEnum.active,
-                            "description",
-                            null,
-                            new Date(),
-                            null,
-                            null,
-                            null,
-                            "assignment.notify.temporaryEndDate",
-                            param);
-                    notificationSender.sendParametrizedNotification("assignment.notify.temporaryEndDate", manager, param);
+                if (Objects.nonNull(assignmentExt.getPositionGroup())
+                        && Objects.nonNull(assignmentExt.getPositionGroup().getPosition())) {
+                    param.put("positionNameRu", Optional.ofNullable(assignmentExt.getPositionGroup().getPosition().getPositionFullNameLang1()).orElse(""));
+                    param.put("positionNameEn", Optional.ofNullable(assignmentExt.getPositionGroup().getPosition().getPositionFullNameLang3()).orElse(""));
                 }
+                param.put("temporaryEndDate", dateFormat.format(assignmentExt.getTemporaryEndDate()));
+
+                activityService.createActivity(
+                        manager,
+                        null,
+                        commonService.getEntity(ActivityType.class, "NOTIFICATION"),
+                        StatusEnum.active,
+                        "description",
+                        null,
+                        new Date(),
+                        null,
+                        null,
+                        null,
+                        "assignment.notify.temporaryEndDate",
+                        param);
+                notificationSender.sendParametrizedNotification("assignment.notify.temporaryEndDate", manager, param);
             } catch (Exception e) {
                 log.error("Error", e);
             }

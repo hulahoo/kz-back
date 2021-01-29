@@ -6,6 +6,7 @@ import com.haulmont.addon.bproc.entity.HistoricVariableInstanceData;
 import com.haulmont.addon.bproc.entity.ProcessInstanceData;
 import com.haulmont.addon.bproc.service.BprocHistoricService;
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.entity.contracts.Id;
@@ -27,6 +28,9 @@ import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.entity.WindowProperty;
 import kz.uco.uactivity.service.ActivityService;
+import org.flowable.bpmn.model.BpmnModel;
+import org.flowable.bpmn.model.UserTask;
+import org.flowable.engine.ProcessEngines;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -57,9 +61,13 @@ public class BprocServiceBean implements BprocService {
     @Inject
     protected Metadata metadata;
     @Inject
+    protected Messages messages;
+    @Inject
     protected Resources resources;
     @Inject
     protected BprocUserListProvider bprocUserListProvider;
+
+    protected String templateFolder = "classpath:kz/uco/tsadv/templates/";
 
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
@@ -179,22 +187,26 @@ public class BprocServiceBean implements BprocService {
                 .map(taskData -> (ExtTaskData) taskData)
                 .peek(taskData -> {
                     if (taskData.getEndTime() == null) {
-                        @SuppressWarnings("unchecked") List<User> taskCandidates = (List<User>) getTaskCandidates(taskData.getExecutionId(), "user-fioWithLogin");
+                        @SuppressWarnings("unchecked") List<UserExt> taskCandidates = (List<UserExt>) getTaskCandidates(taskData.getExecutionId(), "user-fioWithLogin");
                         taskData.setAssigneeOrCandidates(taskCandidates);
                     } else if (taskData.getAssignee() != null) {
-                        User user = dataManager.load(Id.of(UUID.fromString(taskData.getAssignee()), UserExt.class)).view("user-fioWithLogin").one();
+                        UserExt user = dataManager.load(Id.of(UUID.fromString(taskData.getAssignee()), UserExt.class)).view("user-fioWithLogin").one();
                         taskData.setAssigneeOrCandidates(Collections.singletonList(user));
                     }
                 })
                 .peek(taskData -> {
-                    OutcomesContainer outcomesContainer = getProcessVariable(processInstanceData.getId(), taskData.getTaskDefinitionKey() + "_result");
-                    if (outcomesContainer != null && !CollectionUtils.isEmpty(outcomesContainer.getOutcomes()))
-                        for (Outcome outcome : outcomesContainer.getOutcomes()) {
-                            if (Objects.equals(outcome.getUser(), taskData.getAssignee())) {
-                                taskData.setOutcome(outcome.getOutcomeId());
-                                break;
+                    if (taskData.getEndTime() != null) {
+                        OutcomesContainer outcomesContainer = getProcessVariable(processInstanceData.getId(), taskData.getTaskDefinitionKey() + "_result");
+                        if (outcomesContainer != null && !CollectionUtils.isEmpty(outcomesContainer.getOutcomes()))
+                            for (Outcome outcome : outcomesContainer.getOutcomes()) {
+                                if (Objects.equals(outcome.getUser(), taskData.getAssignee())
+                                        && Math.abs(outcome.getDate().getTime() - taskData.getEndTime().getTime()) < 2000) {
+                                    taskData.setOutcome(outcome.getOutcomeId());
+                                    taskData.setComment(getProcessVariable(processInstanceData.getId(), ExtTaskData.getUniqueCommentKey(outcome)));
+                                    break;
+                                }
                             }
-                        }
+                    }
                 })
                 .peek(taskData -> {
                     if (taskData.getTaskDefinitionKey().equals("initiator_task"))
@@ -283,10 +295,23 @@ public class BprocServiceBean implements BprocService {
         sendNotificationToInitiator(absenceRequest);
     }
 
+    @Override
+    public Map<String, String> getActivityIdMap(String processDefinitionKey) {
+        BpmnModel bpmnModel = ProcessEngines.getDefaultProcessEngine().getRepositoryService()
+                .getBpmnModel(processDefinitionKey);
+        Map<String, String> activityIdMap = new HashMap<>();
+        bpmnModel.getProcesses().forEach(process -> process.getFlowElements().stream()
+                .filter(flowElement -> flowElement instanceof UserTask)
+                .forEach(flowElement -> activityIdMap.put(flowElement.getName(), flowElement.getId())));
+        return activityIdMap;
+    }
+
     protected <T extends AbstractBprocRequest> Map<String, Object> getNotificationParams(String templateCode, T entity) {
         Map<String, Object> params = new HashMap<>();
         params.put("item", entity);
         params.put("entity", entity);
+
+        ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getId().toString(), entity.getProcessDefinitionKey());
 
         switch (templateCode) {
             case "bpm.absenceRequest.initiator.notification":
@@ -300,12 +325,83 @@ public class BprocServiceBean implements BprocService {
             }
         }
 
+        params.put("approversTableRu", getApproversTable("Ru", processInstanceData));
+        params.put("approversTableEn", getApproversTable("En", processInstanceData));
+
         return params;
+    }
+
+    protected String getApproversTable(String lang, ProcessInstanceData processInstanceData) {
+        Locale locale = Locale.forLanguageTag(lang.toLowerCase());
+
+        String table = resources.getResourceAsString(String.format(templateFolder + "approversTable/ApproversTable.html", lang));
+        String tableTr = resources.getResourceAsString(String.format(templateFolder + "approversTable/ApproversTableTr.html", lang));
+
+        assert tableTr != null;
+        assert table != null;
+
+        StringBuilder builder = new StringBuilder();
+
+        MessageTools tools = messages.getTools();
+        MetaClass taskMetaClass = metadata.getClassNN(ExtTaskData.class);
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("class", "class=\"tableHeader\"");
+        params.put("role", tools.getPropertyCaption(taskMetaClass, "hrRole", locale));
+        params.put("user", tools.getPropertyCaption(taskMetaClass, "assignee", locale));
+        params.put("createTime", tools.getPropertyCaption(taskMetaClass, "createTime", locale));
+        params.put("endTime", tools.getPropertyCaption(taskMetaClass, "endTime", locale));
+        params.put("outcome", tools.getPropertyCaption(taskMetaClass, "outcome", locale));
+        params.put("comment", tools.getPropertyCaption(taskMetaClass, "comment", locale));
+
+        builder.append(TemplateHelper.processTemplate(tableTr, params));
+
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat(messages.getMainMessage("dateTimeFormat", locale));
+
+        boolean isColor = false;
+        List<ExtTaskData> processTasks = getProcessTasks(processInstanceData);
+        for (ExtTaskData processTask : processTasks) {
+            params.clear();
+            params.put("class", isColor ? "class=\"color\"" : "");
+            params.put("role", processTask.getHrRole().getLangValue());
+            params.put("user", getCreateUsersPopup(locale, processTask));
+            params.put("createTime", dateTimeFormat.format(processTask.getCreateTime()));
+            params.put("endTime", processTask.getEndTime() != null ? dateTimeFormat.format(processTask.getEndTime()) : "");
+            params.put("outcome", processTask.getOutcome() != null ? messages.getMainMessage("OUTCOME_" + processTask.getOutcome(), locale) : "");
+            params.put("comment", processTask.getComment());
+
+            builder.append("\n").append(TemplateHelper.processTemplate(tableTr, params));
+
+            isColor = !isColor;
+        }
+
+        return TemplateHelper.processTemplate(table, ParamsMap.of("trs", builder.toString()));
+    }
+
+    protected String getCreateUsersPopup(Locale locale, ExtTaskData processTask) {
+        List<UserExt> assigneeOrCandidates = processTask.getAssigneeOrCandidates();
+        if (assigneeOrCandidates == null || assigneeOrCandidates.size() <= 1) {
+            if (assigneeOrCandidates == null || assigneeOrCandidates.isEmpty()) return "";
+            return assigneeOrCandidates.get(0).getFullNameWithLogin(locale);
+        }
+        String popup = resources.getResourceAsString(templateFolder + "approversTable/Popup.html");
+        assert popup != null;
+        StringBuilder builder = new StringBuilder();
+        builder.append("<table>");
+        for (UserExt assigneeOrCandidate : assigneeOrCandidates) {
+            builder.append("<tr><td>")
+                    .append(assigneeOrCandidate.getFullNameWithLogin(locale))
+                    .append("</td></tr>");
+        }
+        builder.append("</table>");
+        Map<String, Object> params = ParamsMap.of("minValue", assigneeOrCandidates.get(0).getFullNameWithLogin(locale) + " +" + (assigneeOrCandidates.size() - 1),
+                "value", builder.toString());
+        return TemplateHelper.processTemplate(popup, params);
     }
 
     protected String createTableAbsence(AbsenceRequest absenceRequest, String lang) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        boolean isRussian = !lang.equals("en");
+        boolean isRussian = !lang.equals("En");
 
         PersonExt person = commonService.getEntity(PersonExt.class,
                 "select p from base$AssignmentExt e " +
@@ -327,7 +423,7 @@ public class BprocServiceBean implements BprocService {
         params.put("days", absenceRequest.getAbsenceDays());
         params.put("comment", absenceRequest.getComment());
 
-        String templateContents = resources.getResourceAsString(String.format("classpath:kz/uco/tsadv/templates/absenceRequest/AbsenceRequestTable%s.html", lang));
+        String templateContents = resources.getResourceAsString(String.format(templateFolder + "absenceRequest/AbsenceRequestTable%s.html", lang));
         Assert.notNull(templateContents, "templateContents not found!");
         return TemplateHelper.processTemplate(templateContents, params);
     }

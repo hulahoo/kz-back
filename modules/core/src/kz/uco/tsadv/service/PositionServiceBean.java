@@ -1,27 +1,29 @@
 package kz.uco.tsadv.service;
 
+import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.PositionExt;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service(PositionService.NAME)
 public class PositionServiceBean implements PositionService {
 
     @Inject
     private CommonService commonService;
+    @Inject
+    protected Persistence persistence;
 
     @Override
     public List<Job> getExistingJobsInactiveInNearFuture(PositionExt position) {
         List<Job> jobs = new ArrayList<>();
-        if (position==null || position.getJobGroup()==null) {
+        if (position == null || position.getJobGroup() == null) {
             return jobs;
         }
         String queryString = "select e from tsadv$Job e " +
@@ -35,42 +37,24 @@ public class PositionServiceBean implements PositionService {
         jobs = commonService.getEntities(Job.class, queryString, params, View.LOCAL);
         return jobs;
     }
-/*
-    @Override
-    public String generateNextRequestNumber() {
-        return persistence.callInTransaction(em -> {
-            Query query = em.createQuery(
-                    "select MAX(e.requestNumber) from tsadv$PositionChangeRequest e " +
-                            " where LENGTH(e.requestNumber) = ( select MAX(LENGTH(a.requestNumber)) from tsadv$PositionChangeRequest a )");
-            int requestNum = 0;
-            String lastNum = (String) query.getSingleResult();
-            if (lastNum!= null){
-                requestNum = Integer.parseInt(lastNum);
-            }
-            return String.valueOf(( requestNum + 1));
-        });
-    }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
-    public boolean hasRequestNumber(String requestNumber) {
-        return persistence.callInTransaction(em -> {
-            Query query = em.createQuery(
-                    "select count(e) from tsadv$PositionChangeRequest e " +
-                            "where e.requestNumber = :requestNumber");
-            query.setParameter("requestNumber", requestNumber);
-            return (Long) query.getSingleResult() > 0;
-        });
+    public PositionGroupExt getManager(UUID positionGroupId) {
+        return persistence.callInTransaction(em ->
+                em.createNativeQuery("select p.* from base_hierarchy_element child " +
+                        "   join base_hierarchy_element parent " +
+                        "       on parent.GROUP_ID = child.PARENT_GROUP_ID " +
+                        "       and #systemDate between parent.start_date and parent.end_date " +
+                        "       and parent.delete_ts is null " +
+                        "   join base_position_group p " +
+                        "       on p.id = parent.position_group_id " +
+                        "       and p.delete_ts is null " +
+                        "   where child.position_group_id = #positionGroupId " +
+                        "       and #systemDate between child.start_date and child.end_date " +
+                        "       and child.delete_ts is null ", PositionGroupExt.class)
+                        .setParameter("positionGroupId", positionGroupId)
+                        .setParameter("systemDate", CommonUtils.getSystemDate())
+                        .getFirstResult());
     }
-
-    @Override
-    public boolean hasRequestNumber(String requestNumber, UUID id) {
-        return persistence.callInTransaction(em -> {
-            Query query = em.createQuery(
-                    "select count(e) from tsadv$PositionChangeRequest e " +
-                            "where e.requestNumber = :requestNumber and e.id <> :id ");
-            query.setParameter("requestNumber", requestNumber);
-            query.setParameter("id", id);
-            return (Long) query.getSingleResult() > 0;
-        });
-    }*/
 }

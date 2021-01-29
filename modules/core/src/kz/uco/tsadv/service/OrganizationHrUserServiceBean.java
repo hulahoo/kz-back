@@ -9,10 +9,14 @@ import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,6 +35,8 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
     private DataManager dataManager;
     @Inject
     private EmployeeService employeeService;
+    @Inject
+    private PositionService positionService;
 
     @Override
     public List<OrganizationHrUser> getHrUsers(@Nonnull UUID organizationGroupId, @Nonnull String roleCode, @Nullable Integer counter) {
@@ -152,8 +158,20 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
     @Override
     public List<? extends User> getHrUsersForPerson(@Nonnull UUID personGroupId, @Nonnull String roleCode) {
         switch (roleCode) {
-            case "MANAGER":
-                return getManager(personGroupId);
+            case "MANAGER": {
+                PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
+                PositionGroupExt manager = positionService.getManager(positionGroup.getId());
+                if (manager == null) return new ArrayList<>();
+                return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(manager.getId(), null));
+            }
+            case "SUP_MANAGER": {
+                PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
+                PositionGroupExt manager = positionService.getManager(positionGroup.getId());
+                if (manager == null) return new ArrayList<>();
+                PositionGroupExt supManager = positionService.getManager(manager.getId());
+                if (supManager == null) return new ArrayList<>();
+                return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(supManager.getId(), null));
+            }
             default: {
                 OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupByPositionGroupId(personGroupId, View.MINIMAL);
                 if (organizationGroup != null)
@@ -166,39 +184,12 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
         return new ArrayList<>();
     }
 
-    @Override
-    public List<? extends User> getManager(@Nonnull UUID personGroupId) {
-        return persistence.callInTransaction(em ->
-                em.createNativeQuery("select su.* " +
-                        "from base_assignment s " +
-                        "join base_hierarchy_element child " +
-                        "       on child.position_group_id = s.position_group_id " +
-                        "       and #systemDate between child.start_date and child.end_date " +
-                        "       and child.delete_ts is null " +
-                        "join base_hierarchy_element parent " +
-                        "       on parent.GROUP_ID = child.PARENT_GROUP_ID " +
-                        "       and #systemDate between parent.start_date and parent.end_date " +
-                        "       and parent.delete_ts is null " +
-                        "join base_assignment ss " +
-                        "       on ss.position_group_id = parent.position_group_id " +
-                        "       and #systemDate between ss.start_date and ss.end_date " +
-                        "       and ss.primary_flag is true " +
-                        "       and ss.delete_ts is null " +
-                        "join tsadv_dic_assignment_status ssS " +
-                        "       on ss.assignment_status_id = ssS.id " +
-                        "       and ssS.code = 'ACTIVE' " +
-                        "       and ssS.delete_ts is null " +
-                        "join sec_user su " +
-                        "       on su.person_group_id = ss.person_group_id " +
-                        "       and su.active is true " +
-                        "       and su.delete_ts is null " +
-                        "where s.person_group_id = #personGroupId " +
-                        "       and #systemDate between s.start_date and s.end_date " +
-                        "       and s.primary_flag is true " +
-                        "       and s.delete_ts is null", User.class)
-                        .setParameter("systemDate", CommonUtils.getSystemDate())
-                        .setParameter("personGroupId", personGroupId)
-                        .getResultList());
+    protected List<? extends User> getUsersByPersonGroups(List<? extends PersonGroupExt> personGroups) {
+        if (CollectionUtils.isEmpty(personGroups)) return new ArrayList<>();
+        return dataManager.load(UserExt.class)
+                .query("select e from tsadv$UserExt e where e.personGroup in :personGroups and e.active = 'TRUE'")
+                .setParameters(ParamsMap.of("personGroups", personGroups))
+                .list();
     }
 
 }

@@ -24,6 +24,8 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
 
     public static final String OUTCOME_REASSIGN = "REASSIGN";
 
+    public static final String OUTCOME_SEND_FOR_APPROVAL = "SEND_FOR_APPROVAL";
+
     @Column(name = "REQUEST_NUMBER", nullable = false)
     @NotNull
     protected Long requestNumber;

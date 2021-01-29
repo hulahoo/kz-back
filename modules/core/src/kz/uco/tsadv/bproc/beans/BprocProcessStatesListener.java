@@ -71,9 +71,11 @@ public class BprocProcessStatesListener {
     }
 
     @EventListener
-    protected <T extends AbstractBprocRequest> void onTaskCreated(ExtUserTaskCreatedEvent event) {
-        notifyApprovers(event);
-        notifyInitiator(event);
+    protected void onTaskCreated(ExtUserTaskCreatedEvent event) {
+        if (!event.getTaskData().getTaskDefinitionKey().equals("initiator_task")) {
+            notifyApprovers(event);
+            notifyInitiator(event);
+        }
     }
 
     protected <T extends AbstractBprocRequest> void notifyInitiator(ExtUserTaskCreatedEvent event) {
@@ -130,6 +132,7 @@ public class BprocProcessStatesListener {
         userList.forEach(user -> bprocService.sendNotificationAndActivity(bprocRequest, user, activityType, notificationTemplateCode));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @EventListener
     @Transactional
     protected <T extends AbstractBprocRequest> void onTaskCompleted(UserTaskCompletedEvent event) {

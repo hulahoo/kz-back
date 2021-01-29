@@ -12,18 +12,15 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.components.data.table.ContainerTableItems;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.DataComponents;
-import com.haulmont.cuba.gui.screen.Screen;
-import com.haulmont.cuba.gui.screen.StandardCloseAction;
-import com.haulmont.cuba.gui.screen.StandardEditor;
-import com.haulmont.cuba.gui.screen.Subscribe;
+import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.util.OperationResult;
-import com.haulmont.cuba.security.entity.User;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
@@ -32,13 +29,16 @@ import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.service.BprocService;
 import kz.uco.tsadv.service.EmployeeNumberService;
+import kz.uco.tsadv.web.screens.bpm.processforms.outcome.BprocOutcomeDialog;
 import kz.uco.tsadv.web.screens.bpm.processforms.start.StartBprocScreen;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.inject.Inject;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * @author Alibek Berdaulet
@@ -89,6 +89,8 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
 
     protected TaskData activeTaskData;
     protected ProcessInstanceData processInstanceData;
+    @Inject
+    protected Screens screens;
 
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
@@ -135,7 +137,13 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
                 bprocTaskService.setAssignee(taskData.getId(), userSession.getUser().getId().toString());
                 return equals;
             });
-            outcomesPanel.setAfterTaskCompletedHandler(formOutcome -> close(new StandardCloseAction("close")));
+            outcomesPanel.setAfterTaskCompletedHandler(formOutcome -> {
+                notifications.create(Notifications.NotificationType.HUMANIZED)
+                        .withPosition(Notifications.Position.MIDDLE_CENTER)
+                        .withDescription(messages.getMainMessage("user.answer." + formOutcome.getId()))
+                        .show();
+                close(new StandardCloseAction("close"));
+            });
 
             //override captions
             List<Action> actions = outcomesPanel.getActions();
@@ -147,32 +155,48 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
             for (Component component : outcomesPanel.getLayout().getComponents()) {
                 if (component instanceof Button) {
                     Button button = (Button) component;
-                    //noinspection ConstantConditions
-                    if (AbstractBprocRequest.OUTCOME_REASSIGN.equals(button.getAction().getId())) {
-                        button.setAction(new BaseAction(AbstractBprocRequest.OUTCOME_REASSIGN)
-                                .withCaption(messages.getMainMessage("OUTCOME_" + AbstractBprocRequest.OUTCOME_REASSIGN))
-                                .withHandler(event -> {
-                                    bprocTaskService.setAssignee(taskData.getId(), userSession.getUser().getId().toString());
-                                    if (outcomesPanel.getAfterTaskCompletedHandler() != null)
-                                        outcomesPanel.getAfterTaskCompletedHandler().accept(reassign);
-                                }));
-                        button.setVisible(false);
-                    }
 
                     Action action = button.getAction();
-                    //noinspection ConstantConditions
-//                    button.setAction(new BaseAction(action.getId() + "_DIALOG")
-//                            .withCaption(action.getCaption())
-//                            .withHandler(event -> {
-//                                notifications.create(Notifications.NotificationType.SYSTEM)
-//                                        .withCaption(action.getCaption())
-//                                        .withPosition(Notifications.Position.MIDDLE_CENTER)
-//                                        .show();
-//                            })
-//                    );
+//                    noinspection ConstantConditions
+                    button.setAction(new BaseAction(action.getId() + "_DIALOG")
+                            .withCaption(action.getCaption())
+                            .withHandler(event -> {
+                                BprocOutcomeDialog outcomeDialog = (BprocOutcomeDialog) screens.create("tsadv_BprocOutcomeDialog", OpenMode.DIALOG);
+                                String outcome = action.getId();
+
+                                Supplier<UserExt> userSupplier = outcomeDialog.getUserSupplier();
+                                outcomesPanel.setProcessVariablesSupplier(() -> {
+                                    Map<String, Object> params = new HashMap<>();
+                                    params.put("comment", outcomeDialog.getComment());
+                                    return params;
+                                });
+
+                                //noinspection ConstantConditions
+                                outcomeDialog.setCommentRequired(isCommentRequired(outcome));
+                                outcomeDialog.setOutcome(outcome);
+                                if (!AbstractBprocRequest.OUTCOME_REASSIGN.equals(action.getId()))
+                                    outcomeDialog.setAction(action);
+                                else outcomeDialog.setAction(new BaseAction(AbstractBprocRequest.OUTCOME_REASSIGN)
+                                        .withCaption(messages.getMainMessage("OUTCOME_" + AbstractBprocRequest.OUTCOME_REASSIGN))
+                                        .withHandler(e -> {
+                                            bprocTaskService.setAssignee(taskData.getId(), userSupplier.get().getId().toString());
+                                            if (outcomesPanel.getAfterTaskCompletedHandler() != null)
+                                                outcomesPanel.getAfterTaskCompletedHandler().accept(reassign);
+                                        }));
+                                outcomeDialog.setAction(action);
+                                outcomeDialog.setOutcomesPanel(outcomesPanel);
+
+                                outcomeDialog.show();
+                            })
+                    );
                 }
             }
         }
+    }
+
+    protected boolean isCommentRequired(String outcome) {
+        return !outcome.equals(AbstractBprocRequest.OUTCOME_APPROVE)
+                && !outcome.equals(AbstractBprocRequest.OUTCOME_SEND_FOR_APPROVAL);
     }
 
     protected void initEditableFields() {
@@ -243,19 +267,19 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
 
     @SuppressWarnings({"unchecked", "UnstableApiUsage"})
     public Component generateAssignee(ExtTaskData taskData) {
-        List<? extends User> assigneeOrCandidates = taskData.getAssigneeOrCandidates();
+        List<UserExt> assigneeOrCandidates = taskData.getAssigneeOrCandidates();
         if (!CollectionUtils.isEmpty(assigneeOrCandidates)) {
             if (assigneeOrCandidates.size() == 1) {
                 Label<String> lbl = uiComponents.create(Label.TYPE_STRING);
-                lbl.setValue(((UserExt) assigneeOrCandidates.get(0)).getFullNameWithLogin());
+                lbl.setValue(assigneeOrCandidates.get(0).getFullNameWithLogin());
                 return lbl;
             } else {
                 PopupView popupView = uiComponents.create(PopupView.class);
-                popupView.setMinimizedValue(((UserExt) assigneeOrCandidates.get(0)).getFullNameWithLogin() + " +" + (assigneeOrCandidates.size() - 1));
+                popupView.setMinimizedValue(assigneeOrCandidates.get(0).getFullNameWithLogin() + " +" + (assigneeOrCandidates.size() - 1));
 
                 CollectionContainer<UserExt> container = dataComponents.createCollectionContainer(UserExt.class);
 
-                container.setItems((Collection<UserExt>) assigneeOrCandidates);
+                container.setItems(assigneeOrCandidates);
 
                 Table<UserExt> table = uiComponents.create(Table.class);
                 table.addGeneratedColumn("fullNameWithLogin", entity -> {

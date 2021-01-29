@@ -2,6 +2,7 @@ package kz.uco.tsadv.listener;
 
 import com.drew.lang.annotations.NotNull;
 import com.haulmont.cuba.core.EntityManager;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
@@ -208,7 +209,9 @@ public class RecognitionListener implements BeforeInsertEntityListener<Recogniti
                 notificationParameters);
 
         if (BooleanUtils.isTrue(recognition.getNotifyManager())) {
-            UUID receiverPositionGroupId = employeeService.getPersonPositionGroup(receiverPersonGroup.getId());
+            UUID receiverPositionGroupId = Optional.ofNullable(employeeService.getPositionGroupByPersonGroupId(receiverPersonGroup.getId(), View.MINIMAL))
+                    .map(BaseUuidEntity::getId)
+                    .orElse(null);
 
             if (receiverPositionGroupId == null) {
                 throw new NullPointerException("Receiver doesn't have position group!");
