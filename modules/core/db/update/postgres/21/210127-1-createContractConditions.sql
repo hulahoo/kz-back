@@ -10,9 +10,9 @@ create table TSADV_CONTRACT_CONDITIONS (
     --
     RELATIONSHIP_TYPE_ID uuid not null,
     AGE_MIN integer not null,
-    AGE_MAX integer not null,
+    AGE_MAX varchar(255) not null,
     IS_FREE boolean not null,
-    COST_IN_KZT decimal(19, 2) not null,
+    COST_IN_KZT double precision not null,
     INSURANCE_CONTRACT_ID uuid,
     --
     primary key (ID)

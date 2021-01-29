@@ -27,6 +27,7 @@ create table TSADV_INSURED_PERSON (
     ADDRESS_ID uuid,
     ADDRESS varchar(255),
     INSURANCE_PROGRAM varchar(500) not null,
+    FILE_ID uuid,
     TYPE varchar(50) not null,
     AMOUNT decimal(19, 2),
     TOTAL_AMOUNT decimal(19, 2) not null,
