@@ -22776,6 +22776,19 @@
             <property name="code"/>
         </property>
     </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt.mobile" extends="_minimal">
+        <property name="assignments" view="assignment.view">
+            <property name="positionGroup" view="positionGroup.list"/>
+        </property>
+        <property name="person" view="person.info"/>
+    </view>
+    <view class="kz.uco.tsadv.modules.administration.UserExt"
+          extends="_local"
+          name="user-fioWithLogin">
+        <property name="personGroup">
+            <property name="list" view="_local"/>
+        </property>
+    </view>
     <view entity="tsadv$AssignmentSchedule" name="assignmentSchedule-for-my-team" extends="_local">
         <property name="assignmentGroup" view="_minimal">
             <property name="list" view="_minimal">

@@ -1,17 +1,17 @@
 package kz.uco.tsadv.web.abstraction.bproc;
 
-import com.haulmont.addon.bproc.data.Outcome;
-import com.haulmont.addon.bproc.data.OutcomesContainer;
 import com.haulmont.addon.bproc.entity.ProcessDefinitionData;
 import com.haulmont.addon.bproc.entity.ProcessInstanceData;
 import com.haulmont.addon.bproc.entity.TaskData;
 import com.haulmont.addon.bproc.form.FormData;
+import com.haulmont.addon.bproc.form.FormOutcome;
 import com.haulmont.addon.bproc.service.*;
 import com.haulmont.addon.bproc.web.processform.ProcessFormScreens;
 import com.haulmont.addon.bproc.web.uicomponent.outcomespanel.OutcomesPanel;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
@@ -39,7 +39,6 @@ import org.springframework.util.CollectionUtils;
 import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Alibek Berdaulet
@@ -80,6 +79,8 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     protected EmployeeNumberService employeeNumberService;
     @Inject
     protected CommonService commonService;
+    @Inject
+    protected Notifications notifications;
 
     @Inject
     protected HBoxLayout procActionButtonHBox;
@@ -118,14 +119,59 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
             Assert.notNull(formData, "FormData not found!");
 
             OutcomesPanel outcomesPanel = uiComponents.create(OutcomesPanel.class);
-            outcomesPanel.createLayout(taskData, formData.getOutcomes());
+            List<FormOutcome> outcomes = formData.getOutcomes();
+
+            //adding reassign
+            FormOutcome reassign = new FormOutcome();
+            reassign.setId(AbstractBprocRequest.OUTCOME_REASSIGN);
+            outcomes.stream()
+                    .filter(formOutcome -> formOutcome.getId().equals(AbstractBprocRequest.OUTCOME_REVISION))
+                    .findAny().
+                    ifPresent(revision -> outcomes.add(outcomes.indexOf(revision) + 1, reassign));
+
+            outcomesPanel.createLayout(taskData, outcomes);
             outcomesPanel.setBeforeTaskCompletedPredicate(formOutcome -> {
                 boolean equals = OperationResult.Status.SUCCESS.equals(commitChanges().getStatus());
                 bprocTaskService.setAssignee(taskData.getId(), userSession.getUser().getId().toString());
                 return equals;
             });
             outcomesPanel.setAfterTaskCompletedHandler(formOutcome -> close(new StandardCloseAction("close")));
+
+            //override captions
+            List<Action> actions = outcomesPanel.getActions();
+            actions.remove(new BaseAction(AbstractBprocRequest.OUTCOME_REASSIGN));
+            actions.forEach(action -> action.setCaption(messages.getMainMessage("OUTCOME_" + action.getId())));
             procActionButtonHBox.add(outcomesPanel);
+
+            //override reassign action
+            for (Component component : outcomesPanel.getLayout().getComponents()) {
+                if (component instanceof Button) {
+                    Button button = (Button) component;
+                    //noinspection ConstantConditions
+                    if (AbstractBprocRequest.OUTCOME_REASSIGN.equals(button.getAction().getId())) {
+                        button.setAction(new BaseAction(AbstractBprocRequest.OUTCOME_REASSIGN)
+                                .withCaption(messages.getMainMessage("OUTCOME_" + AbstractBprocRequest.OUTCOME_REASSIGN))
+                                .withHandler(event -> {
+                                    bprocTaskService.setAssignee(taskData.getId(), userSession.getUser().getId().toString());
+                                    if (outcomesPanel.getAfterTaskCompletedHandler() != null)
+                                        outcomesPanel.getAfterTaskCompletedHandler().accept(reassign);
+                                }));
+                        button.setVisible(false);
+                    }
+
+                    Action action = button.getAction();
+                    //noinspection ConstantConditions
+//                    button.setAction(new BaseAction(action.getId() + "_DIALOG")
+//                            .withCaption(action.getCaption())
+//                            .withHandler(event -> {
+//                                notifications.create(Notifications.NotificationType.SYSTEM)
+//                                        .withCaption(action.getCaption())
+//                                        .withPosition(Notifications.Position.MIDDLE_CENTER)
+//                                        .show();
+//                            })
+//                    );
+                }
+            }
         }
     }
 
@@ -143,8 +189,9 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
 
     protected void initStartBtn() {
         Button startBtn = uiComponents.create(Button.class);
-        startBtn.setAction(new BaseAction("start").withHandler(this::startProcess));
-        startBtn.setCaption("Start");
+        startBtn.setAction(new BaseAction("START")
+                .withCaption(messages.getMainMessage("OUTCOME_START"))
+                .withHandler(this::startProcess));
         procActionButtonHBox.add(startBtn);
     }
 
@@ -200,20 +247,20 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         if (!CollectionUtils.isEmpty(assigneeOrCandidates)) {
             if (assigneeOrCandidates.size() == 1) {
                 Label<String> lbl = uiComponents.create(Label.TYPE_STRING);
-                lbl.setValue(((UserExt) assigneeOrCandidates.get(0)).getFullName());
+                lbl.setValue(((UserExt) assigneeOrCandidates.get(0)).getFullNameWithLogin());
                 return lbl;
             } else {
                 PopupView popupView = uiComponents.create(PopupView.class);
-                popupView.setMinimizedValue(((UserExt) assigneeOrCandidates.get(0)).getFullName() + ", ...");
+                popupView.setMinimizedValue(((UserExt) assigneeOrCandidates.get(0)).getFullNameWithLogin() + " +" + (assigneeOrCandidates.size() - 1));
 
                 CollectionContainer<UserExt> container = dataComponents.createCollectionContainer(UserExt.class);
 
                 container.setItems((Collection<UserExt>) assigneeOrCandidates);
 
                 Table<UserExt> table = uiComponents.create(Table.class);
-                table.addGeneratedColumn("fullName", entity -> {
+                table.addGeneratedColumn("fullNameWithLogin", entity -> {
                     Label<String> lbl = uiComponents.create(Label.TYPE_STRING);
-                    lbl.setValue(entity.getFullName());
+                    lbl.setValue(entity.getFullNameWithLogin());
                     return lbl;
                 });
                 table.setItems(new ContainerTableItems<>(container));
@@ -228,20 +275,13 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         return null;
     }
 
+
     @SuppressWarnings("UnstableApiUsage")
-    public Component generateOutcome(TaskData taskData) {
+    public Component generateOutcome(ExtTaskData taskData) {
         Label<String> label = uiComponents.create(Label.TYPE_STRING);
-        if (taskData.getTaskDefinitionKey().equals("initiator")) {
-            label.setValue("Start process");
-        } else if (taskData.getEndTime() != null) {
-            OutcomesContainer outcomesContainer = bprocService.getProcessVariable(processInstanceData.getId(), taskData.getTaskDefinitionKey() + "_result");
-            if (!CollectionUtils.isEmpty(outcomesContainer.getOutcomes()))
-                for (Outcome outcome : outcomesContainer.getOutcomes()) {
-                    if (Objects.equals(outcome.getUser(), taskData.getAssignee())) {
-                        label.setValue(outcome.getOutcomeId());
-                    }
-                }
-        }
+        String outcome = taskData.getOutcome();
+        if (outcome != null)
+            label.setValue(messages.getMainMessage("OUTCOME_" + outcome));
         return label;
     }
 

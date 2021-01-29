@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.screens.absencerequest;
 
 import com.haulmont.addon.bproc.web.processform.Outcome;
 import com.haulmont.addon.bproc.web.processform.ProcessForm;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.*;

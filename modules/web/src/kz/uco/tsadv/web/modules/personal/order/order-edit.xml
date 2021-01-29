@@ -126,7 +126,7 @@
                                    width="100%"/>
                         </groupBox>
                         <groupBox id="bpmActorsBox"
-                                  caption="msg://TransferRequest.approvalProcess.actors"
+                                  caption="mainMsg://bproc.participants"
                                   width="100%">
                             <table id="procTasksTable"
                                    height="100%"

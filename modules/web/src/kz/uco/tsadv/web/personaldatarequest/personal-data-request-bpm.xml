@@ -78,7 +78,7 @@ where e.procInstance.entity.entityId = :ds$personalDataRequestDs.id
             </table>
             <vbox id="bpmActorsVBox">
                 <groupBox id="bpmActorsBox"
-                          caption="msg://TransferRequest.approvalProcess.actors"
+                          caption="mainMsg://bproc.participants"
                           spacing="true">
                     <table id="procTasksTable"
                            width="100%">

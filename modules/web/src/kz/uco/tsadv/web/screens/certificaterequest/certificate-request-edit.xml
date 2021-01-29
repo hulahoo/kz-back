@@ -80,7 +80,7 @@
                   width="1000px"
                   spacing="true">
                 <groupBox id="bpmActorsBox"
-                          caption="msg://TransferRequest.approvalProcess.actors"
+                          caption="mainMsg://bproc.participants"
                           spacing="true">
                     <table id="procTasksTable"
                            height="100%"
@@ -92,9 +92,7 @@
                             <column id="assignee" generator="generateAssignee"/>
                             <column id="createTime"/>
                             <column id="endTime"/>
-                            <column id="outcome"
-                                    generator="generateOutcome"
-                                    caption="msg://ProcActor.decision"/>
+                            <column id="outcome"/>
                         </columns>
                     </table>
                 </groupBox>

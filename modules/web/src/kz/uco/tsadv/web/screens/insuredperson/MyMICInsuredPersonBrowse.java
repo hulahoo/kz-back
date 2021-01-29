@@ -78,7 +78,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                     InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                             .editEntity(event.getItem())
                             .build();
-                    editorBuilder.setParameter("joinMember");
+                    editorBuilder.setParameter("openEmployee");
                     editorBuilder.show();
                 }));
                 return linkButton;
@@ -169,17 +169,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 .view("personGroupExt-view")
                 .list().stream().findFirst().orElse(null);
 
-        DicCompany company = dataManager.load(DicCompany.class)
-                .query("select o.company " +
-                        "   from base$AssignmentExt a" +
-                        " join a.assignmentStatus s " +
-                        " join a.organizationGroup o " +
-                        " where a.personGroup.id = :pg " +
-                        "and current_date between a.startDate and a.endDate "+
-                        "and a.primaryFlag = 'TRUE' " +
-                        "and s.code in ('ACTIVE','SUSPENDED'")
-                .parameter("pg", personGroupExt.getId()).view(View.LOCAL)
-                .list().stream().findFirst().orElse(null);
+        DicCompany company = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
 
         InsuranceContract contract = dataManager.load(InsuranceContract.class)
                 .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId ")
