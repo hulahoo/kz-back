@@ -90,6 +90,8 @@ public class SsStructurePerson extends AbstractWindow {
     protected ScreenBuilders screenBuilders;
     @Inject
     protected DataManager dataManager;
+    @Inject
+    protected CollectionDatasource<ScheduleOffsetsRequest, UUID> scheduleOffsetsRequestsDs;
 
 
     @Override
@@ -166,9 +168,11 @@ public class SsStructurePerson extends AbstractWindow {
             params.put("personGroupId", person.getGroup().getId());
             absencesDs.refresh(params);
             absenceRequestsDs.refresh(params);
+            scheduleOffsetsRequestsDs.refresh(params);
         } else {
             absencesDs.clear();
             absenceRequestsDs.clear();
+            scheduleOffsetsRequestsDs.clear();
         }
     }
 
