@@ -110,6 +110,27 @@ public class Course extends AbstractParentEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "course")
     protected List<CourseSchedule> courseSchedule;
+    @Column(name = "EDUCATION_PERIOD")
+    protected Long educationPeriod;
+
+    @Column(name = "EDUCATION_DURATION")
+    protected Long educationDuration;
+
+    public Long getEducationDuration() {
+        return educationDuration;
+    }
+
+    public void setEducationDuration(Long educationDuration) {
+        this.educationDuration = educationDuration;
+    }
+
+    public Long getEducationPeriod() {
+        return educationPeriod;
+    }
+
+    public void setEducationPeriod(Long educationPeriod) {
+        this.educationPeriod = educationPeriod;
+    }
 
     public List<CourseReview> getReviews() {
         return reviews;

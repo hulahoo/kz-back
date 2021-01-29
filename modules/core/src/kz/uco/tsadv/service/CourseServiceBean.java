@@ -20,6 +20,7 @@ import kz.uco.tsadv.pojo.CoursePojo;
 import kz.uco.tsadv.pojo.PairPojo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -837,7 +838,6 @@ public class CourseServiceBean implements CourseService {
                 : courseSectionsWithSessions.get(courseSectionsWithSessions.size() - 1).getSession().get(0).getEndDate());
         coursePojo.setPreRequisitions(course.getPreRequisition().stream().map(pr -> pr.getRequisitionCourse().getName()).collect(Collectors.joining(", ")));
         coursePojo.setTrainers(course.getCourseTrainers().stream().map(ct -> new PairPojo<>(ct.getTrainer().getId(), ct.getTrainer().getTrainerFullName())).collect(Collectors.toList()));
-        coursePojo.setSections(courseSections.stream().map(cs -> new PairPojo<UUID, String>(cs.getId(), cs.getSectionName())).collect(Collectors.toList()));
         coursePojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
         coursePojo.setRateReviewCount(course.getReviews().size());
         coursePojo.setComments(course.getReviews().stream().map(r -> CommentPojo.CommentPojoBuilder.builder()
@@ -850,6 +850,9 @@ public class CourseServiceBean implements CourseService {
                 .entrySet().stream()
                 .map(m -> new PairPojo<>(m.getKey(), m.getValue()))
                 .collect(Collectors.toList()));
+        coursePojo.setDescription(course.getDescription());
+        coursePojo.setEducationDuration(ObjectUtils.defaultIfNull(course.getEducationDuration(), 0L));
+        coursePojo.setEducationPeriod(ObjectUtils.defaultIfNull(course.getEducationPeriod(), 0L));
         return coursePojo;
     }
 
