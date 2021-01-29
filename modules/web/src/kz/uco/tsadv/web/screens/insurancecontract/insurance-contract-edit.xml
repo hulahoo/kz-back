@@ -153,51 +153,56 @@
                 </tab>
                 <tab id="insuredPersonsTab"
                      caption="msg://insuredPersons">
-                    <hbox id="insuredPersonsHbox" margin="true" width="100%">
-                        <dataGrid id="insuredPersonsTable"
-                                  selectionMode="MULTI_CHECK"
-                                  width="100%"
-                                  dataContainer="insuredPersonsDc">
-                            <actions>
-                                <action id="create" type="create"/>
-                                <action id="edit" type="edit"/>
-                                <action id="remove" type="remove"/>
-                                <action id="excel" type="excel"/>
-                                <action id="bulk" icon="font-icon:TABLE" trackSelection="true"/>
-                            </actions>
-                            <columns>
-                                <column id="contractFieldPerson" property="insuranceContract.contract"/>
-                                <column id="relativeFieldPerson" property="relative"/>
-                                <column id="attachDateFieldPerson" property="attachDate"/>
-                                <column id="employeeFieldPerson" property="employee" />
-                                <column id="statusRequestFieldPerson" property="statusRequest"/>
-                                <column id="firstNameFieldPerson" property="firstName"/>
-                                <column id="secondNameFieldPerson" property="secondName"/>
-                                <column id="middleNameFieldPerson" property="middleName"/>
-                                <column id="sexFieldPerson" property="sex"/>
-                                <column id="birthdateFieldPerson" property="birthdate"/>
-                                <column id="iinFieldPerson" property="iin"/>
-                                <column id="documentNumberFieldPerson" property="documentNumber"/>
-                                <column id="regionFieldPerson" property="region"/>
-                                <column id="insuranceProgramFieldPerson" property="insuranceProgram"/>
-                                <column id="addressFieldPerson" property="address"/>
-                                <column id="totalAmountFieldPerson" property="totalAmount"/>
-                                <column id="exclusionDateFieldPerson" property="exclusionDate"/>
-                                <column id="commentFieldPerson" property="comment"/>
-                            </columns>
-                            <rowsCount/>
-                            <buttonsPanel id="buttonsPanel"
-                                          alwaysVisible="true">
-                                <button id="createBtnPerson" action="insuredPersonsTable.create"/>
-                                <button id="editBtnPerson" action="insuredPersonsTable.edit"/>
-                                <button id="removeBtnPerson" action="insuredPersonsTable.remove"/>
-                                <button id="excelBtn" action="insuredPersonsTable.excel"/>
-                                <button id="bulkButton"
-                                        caption="msg://bulkButton"
-                                        action="insuredPersonsTable.bulk"/>
-                            </buttonsPanel>
-                        </dataGrid>
-                    </hbox>
+                    <hbox width="100%"/>
+                    <filter id="filter"
+                            applyTo="insuredPersonsTable"
+                            dataLoader="insuredPersonsDl">
+                        <properties include=".*"/>
+                    </filter>
+                    <hbox width="100%"/>
+                    <dataGrid id="insuredPersonsTable"
+                              selectionMode="MULTI_CHECK"
+                              width="100%"
+                              dataContainer="insuredPersonsDc">
+                        <actions>
+                            <action id="create" type="create"/>
+                            <action id="edit" type="edit"/>
+                            <action id="remove" type="remove"/>
+                            <action id="excel" type="excel"/>
+                            <action id="bulk" icon="font-icon:TABLE" trackSelection="true"/>
+                        </actions>
+                        <columns>
+                            <column id="contractFieldPerson" property="insuranceContract.contract"/>
+                            <column id="relativeFieldPerson" property="relative"/>
+                            <column id="attachDateFieldPerson" property="attachDate"/>
+                            <column id="employeeFieldPerson" property="employee" />
+                            <column id="statusRequestFieldPerson" property="statusRequest"/>
+                            <column id="firstNameFieldPerson" property="firstName"/>
+                            <column id="secondNameFieldPerson" property="secondName"/>
+                            <column id="middleNameFieldPerson" property="middleName"/>
+                            <column id="sexFieldPerson" property="sex"/>
+                            <column id="birthdateFieldPerson" property="birthdate"/>
+                            <column id="iinFieldPerson" property="iin"/>
+                            <column id="documentNumberFieldPerson" property="documentNumber"/>
+                            <column id="regionFieldPerson" property="region"/>
+                            <column id="insuranceProgramFieldPerson" property="insuranceProgram"/>
+                            <column id="addressFieldPerson" property="address"/>
+                            <column id="totalAmountFieldPerson" property="totalAmount"/>
+                            <column id="exclusionDateFieldPerson" property="exclusionDate"/>
+                            <column id="commentFieldPerson" property="comment"/>
+                        </columns>
+                        <rowsCount/>
+                        <buttonsPanel id="buttonsPanel"
+                                      alwaysVisible="true">
+                            <button id="createBtnPerson" action="insuredPersonsTable.create"/>
+                            <button id="editBtnPerson" action="insuredPersonsTable.edit"/>
+                            <button id="removeBtnPerson" action="insuredPersonsTable.remove"/>
+                            <button id="excelBtn" action="insuredPersonsTable.excel"/>
+                            <button id="bulkButton"
+                                    caption="msg://bulkButton"
+                                    action="insuredPersonsTable.bulk"/>
+                        </buttonsPanel>
+                    </dataGrid>
                 </tab>
             </tabSheet>
         </scrollBox>

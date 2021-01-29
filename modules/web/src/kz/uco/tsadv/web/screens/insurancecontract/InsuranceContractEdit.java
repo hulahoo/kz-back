@@ -36,8 +36,6 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     private CollectionPropertyContainer<Attachment> attachmentsDc;
     @Inject
     private DataGrid<ContractConditions> programConditionsDataGrid;
-    @Inject
-    private HBoxLayout insuredPersonsHbox;
     @Inject DataGrid<InsuranceContractAdministrator> contractAdministratorDataGrid;
     @Inject
     private Notifications notifications;

@@ -138,32 +138,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Inject
     private ComponentsFactory componentsFactory;
 
-    @Subscribe
-    public void onInit(InitEvent event) {
-//        DataGrid.Column column = insuredPersonTable.addGeneratedColumn("file", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
-//            @Override
-//            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
-//                LinkButton linkButton = uiComponents.create(LinkButton.class);
-//                linkButton.setCaption(event.getItem().getFile().get(1).getName());
-//                linkButton.setAction(new BaseAction("file") {
-//                    @Override
-//                    public void actionPerform(Component component) {
-//                        super.actionPerform(component);
-//                        exportDisplay.show(event.getItem().getFile().get(1), ExportFormat.OCTET_STREAM);
-//                    }
-//                });
-//                return linkButton;
-//            }
-//
-//            @Override
-//            public Class<LinkButton> getType(){
-//                return LinkButton.class;
-//            }
-//
-//        }, 10);
-//        column.setRenderer(insuredPersonTable.createRenderer(DataGrid.ComponentRenderer.class));
-    }
-
 
     public void setParameter(String whichButton) {
         this.whichButton = whichButton;
