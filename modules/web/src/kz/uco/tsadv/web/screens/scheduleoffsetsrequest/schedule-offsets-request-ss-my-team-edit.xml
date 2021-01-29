@@ -118,13 +118,12 @@
                            dataContainer="tasksDc"
                            width="100%">
                         <columns>
-                            <column id="name"/>
+                            <column id="hrRole"/>
                             <column id="assignee" generator="generateAssignee"/>
                             <column id="createTime"/>
                             <column id="endTime"/>
-                            <column id="outcome"
-                                    generator="generateOutcome"
-                                    caption="msg://ProcActor.decision"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
                         </columns>
                     </table>
                 </groupBox>
