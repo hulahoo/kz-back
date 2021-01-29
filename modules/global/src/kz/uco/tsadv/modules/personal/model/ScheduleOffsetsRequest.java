@@ -7,6 +7,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicSchedulePurpose;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.util.Date;
 
@@ -14,6 +15,8 @@ import java.util.Date;
 @Entity(name = "tsadv_ScheduleOffsetsRequest")
 public class ScheduleOffsetsRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = -3632866466350404079L;
+
+    public static final String PROCESS_DEFINITION_KEY = "scheduleOffsetsRequest";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_GROUP_ID")
@@ -130,5 +133,15 @@ public class ScheduleOffsetsRequest extends AbstractBprocRequest {
 
     public void setPurpose(DicSchedulePurpose purpose) {
         this.purpose = purpose;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        super.postConstruct();
+    }
+
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
     }
 }

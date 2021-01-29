@@ -22832,5 +22832,47 @@
             <property name="endDate"/>
         </property>
     </view>
+    <view entity="tsadv_ScheduleOffsetsRequest" name="scheduleOffsetsRequest-for-my-team" extends="_local">
+        <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+            <property name="assignments" view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+            <property name="personExperience" view="_minimal"/>
+        </property>
+        <property name="purpose" view="_minimal"/>
+        <property name="currentSchedule" view="_minimal">
+            <property name="scheduleName"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="scheduleType"/>
+        </property>
+        <property name="newSchedule" view="_minimal">
+            <property name="scheduleName"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="scheduleType"/>
+        </property>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
 
 </views>

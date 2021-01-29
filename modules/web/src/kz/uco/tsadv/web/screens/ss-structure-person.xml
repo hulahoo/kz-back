@@ -49,6 +49,14 @@ where e.personGroup.id = :ds$personExtDs.group.id]]>
 and a.personGroup.id = :ds$personExtDs.group.id)]]>
             </query>
         </collectionDatasource>
+        <collectionDatasource id="scheduleOffsetsRequestsDs"
+                              class="kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest"
+                              view="scheduleOffsetsRequest-for-my-team">
+            <query>
+                <![CDATA[select e from tsadv_ScheduleOffsetsRequest e
+                where e.personGroup.id = :ds$personExtDs.group.id]]>
+            </query>
+        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -192,9 +200,10 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                     <tab id="scheduleTab" caption="msg://scheduleTab.caption" margin="true,false,false,false"
                          spacing="true">
                         <tabSheet id="scheduleTabSheet" height="100%" width="100%">
-                            <tab id="assignmentScheduleTab" caption="msg://assignmentScheduleTab">
+                            <tab id="assignmentScheduleTab" caption="msg://assignmentScheduleTab"
+                                 expand="assignmentScheduleTable" spacing="true">
                                 <filter id="assignmentScheduleFilter" datasource="assignmentSchedulesDs"
-                                        applyTo="absenceTable">
+                                        applyTo="absenceTable" collapsed="true">
                                     <properties include=".*"/>
                                 </filter>
                                 <table id="assignmentScheduleTable" height="100%" width="100%">
@@ -214,8 +223,30 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                                     <rows datasource="assignmentSchedulesDs"/>
                                 </table>
                             </tab>
-                            <tab id="scheduleRequestTab" caption="msg://scheduleRequestTab.caption">
-
+                            <tab id="scheduleRequestTab" caption="msg://scheduleRequestTab.caption"
+                                 expand="scheduleOffsetsRequestTable" spacing="true">
+                                <filter id="scheduleOffsetsRequestFilter" applyTo="scheduleOffsetsRequestTable"
+                                        datasource="scheduleOffsetsRequestsDs" collapsed="true">
+                                    <properties include=".*"/>
+                                </filter>
+                                <table id="scheduleOffsetsRequestTable" height="100%" width="100%">
+                                    <columns>
+                                        <column id="requestNumber"/>
+                                        <column id="status"/>
+                                        <column id="requestDate"/>
+                                        <column id="comment"/>
+                                        <column id="purpose"/>
+                                        <column id="purposeText"/>
+                                        <column id="currentSchedule"/>
+                                        <column id="newSchedule"/>
+                                        <column id="dateOfNewSchedule"/>
+                                        <column id="dateOfStartNewSchedule"/>
+                                        <column id="detailsOfActualWork"/>
+                                        <column id="agree"/>
+                                        <column id="acquainted"/>
+                                    </columns>
+                                    <rows datasource="scheduleOffsetsRequestsDs"/>
+                                </table>
                             </tab>
                         </tabSheet>
                     </tab>

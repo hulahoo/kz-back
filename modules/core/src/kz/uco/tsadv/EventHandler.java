@@ -64,6 +64,19 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        if (getCount(em, "SCHEDULE_OFFSETS_REQUEST_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("SCHEDULE_OFFSETS_REQUEST_APPROVE");
+            activityType.setScreen("tsadv_ScheduleOffsetsRequestSsMyTeam.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на ");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv_ScheduleOffsetsRequest");
+            windowProperty.setScreenName("tsadv_ScheduleOffsetsRequestSsMyTeam.edit");
+            windowProperty.setViewName(View.LOCAL);
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
         if (getCount(em, "NOTIFICATION") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("NOTIFICATION");

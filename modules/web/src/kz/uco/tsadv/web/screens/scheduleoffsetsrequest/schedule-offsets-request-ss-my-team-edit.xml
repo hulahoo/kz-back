@@ -56,6 +56,8 @@
                 </query>
             </loader>
         </collection>
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -104,10 +106,36 @@
                     <checkBox id="acquaintedField" property="acquainted" visible="false"/>
                 </column>
             </form>
+            <vbox id="bpmActorsVBox"
+                  width="1000px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
+                           width="100%">
+                        <columns>
+                            <column id="name"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome"
+                                    generator="generateOutcome"
+                                    caption="msg://ProcActor.decision"/>
+                        </columns>
+                    </table>
+                </groupBox>
+            </vbox>
         </scrollBox>
-        <hbox id="editActions" spacing="true">
-            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
-            <button id="closeBtn" action="windowClose"/>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button action="windowClose"/>
         </hbox>
     </layout>
 </window>
