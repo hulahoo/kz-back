@@ -21,9 +21,9 @@ import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.entity.User;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.entity.dictionary.DicCompany;
-import kz.uco.base.entity.extend.UserExt;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.bpm.BpmRolesDefiner;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.bpm.BprocActors;
@@ -46,9 +46,8 @@ import java.util.stream.Collectors;
 @UiController("tsadv_StartBprocScreen")
 @UiDescriptor("start-bproc-screen.xml")
 @ProcessForm(params = {
-        @Param(name = "notificationTemplateCode")
-        , @Param(name = "approverNotificationTemplateCode")
-        , @Param(name = "initiatorNotificationTemplateCode")
+        @Param(name = "approverNotificationTemplateCode"),
+        @Param(name = "initiatorNotificationTemplateCode")
 })
 public class StartBprocScreen extends Screen {
 
@@ -80,10 +79,10 @@ public class StartBprocScreen extends Screen {
     @Inject
     protected Notifications notifications;
     @ProcessFormParam
-    private String notificationTemplateCode;
-    @ProcessFormParam
+    @SuppressWarnings("unused")
     private String approverNotificationTemplateCode;
     @ProcessFormParam
+    @SuppressWarnings("unused")
     private String initiatorNotificationTemplateCode;
     @Inject
     protected MessageBundle messageBundle;
@@ -121,9 +120,16 @@ public class StartBprocScreen extends Screen {
         List<NotPersisitBprocActors> actors = new ArrayList<>();
         BpmRolesDefiner definer = bpmRolesDefinerDc.getItem();
         List<BpmRolesLink> links = definer.getLinks();
+
         for (BpmRolesLink link : links) {
             DicHrRole hrRole = link.getHrRole();
             List<? extends User> hrUsersForPerson = organizationHrUserService.getHrUsersForPerson(personGroupId, hrRole.getCode());
+
+            hrUsersForPerson = dataManager.load(UserExt.class)
+                    .query("select e from tsadv$UserExt e where e in :users")
+                    .setParameters(ParamsMap.of("users", hrUsersForPerson))
+                    .view("user-fioWithLogin")
+                    .list();
 
             if (hrUsersForPerson.isEmpty()) {
                 if (!link.getIsAddableApprover())
@@ -215,7 +221,7 @@ public class StartBprocScreen extends Screen {
                 .withBusinessKey(entityId.toString())
                 .addProcessVariable("entity", entity)
                 .addProcessVariable("initiator", userSession.getUser())
-                .addProcessVariable("notificationTemplateCode", notificationTemplateCode)
+                .addProcessVariable("rolesLinks", linksDc.getItems())
                 .addProcessVariable("approverNotificationTemplateCode", approverNotificationTemplateCode)
                 .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode)
                 .start();
@@ -255,27 +261,28 @@ public class StartBprocScreen extends Screen {
             pickerField.setMetaClass(metadata.getClassNN(UserExt.class));
             pickerField.addAction(PickerField.LookupAction.create(pickerField));
             pickerField.addAction(PickerField.ClearAction.create(pickerField));
+            pickerField.setOptionCaptionProvider(userExt -> StringUtils.defaultString(userExt != null ? userExt.getFullNameWithLogin() : null, ""));
             if (users != null && !users.isEmpty()) pickerField.setValue(users.get(0));
             else pickerField.setValue(null);
-            pickerField.setOptionCaptionProvider(userExt -> StringUtils.defaultString(userExt != null ? userExt.getFullName() : null, ""));
             pickerField.addValueChangeListener(event -> {
                 UserExt value = event.getValue();
-                if (value != null) entity.setUsers(Collections.singletonList(value));
-                else entity.setUsers(null);
+                if (value != null) {
+                    entity.setUsers(Collections.singletonList(dataManager.reload(value, "user-fioWithLogin")));
+                } else entity.setUsers(null);
             });
             return pickerField;
         } else {
             PopupView popupView = uiComponents.create(PopupView.class);
-            popupView.setMinimizedValue(users.get(0).getFullName() + ", ...");
+            popupView.setMinimizedValue(users.get(0).getFullNameWithLogin() + " +" + (users.size() - 1));
 
             CollectionContainer<UserExt> container = dataComponents.createCollectionContainer(UserExt.class);
 
             container.setItems(users);
 
             Table<UserExt> table = uiComponents.create(Table.class);
-            table.addGeneratedColumn("fullName", user -> {
+            table.addGeneratedColumn("fullNameWithLogin", user -> {
                 Label<String> lbl = uiComponents.create(Label.TYPE_STRING);
-                lbl.setValue(user.getFullName());
+                lbl.setValue(user.getFullNameWithLogin());
                 return lbl;
             });
             table.setItems(new ContainerTableItems<>(container));
@@ -298,18 +305,25 @@ public class StartBprocScreen extends Screen {
     protected void onAddHrRoleLookupValueChange(HasValue.ValueChangeEvent<DicHrRole> event) {
         DicHrRole role = event.getValue();
         if (role != null) {
-            NotPersisitBprocActors bprocActors = metadata.create(NotPersisitBprocActors.class);
-            bprocActors.setHrRole(role);
-            bprocActors.setBprocUserTaskCode(getBprocUserTaskCode(role));
             Integer order = linksDc.getItems().stream()
                     .filter(bpmRolesLink -> bpmRolesLink.getHrRole().equals(role))
                     .findAny().get().getOrder();
+            NotPersisitBprocActors bprocActors = metadata.create(NotPersisitBprocActors.class);
+            bprocActors.setHrRole(role);
+            bprocActors.setBprocUserTaskCode(getBprocUserTaskCode(role));
+            bprocActors.setOrder(order);
             List<NotPersisitBprocActors> mutableItems = notPersisitBprocActorsDc.getMutableItems();
+            boolean isAdded = false;
             for (int i = mutableItems.size() - 1; i >= 0; i--) {
                 NotPersisitBprocActors actor = mutableItems.get(i);
-                if (Objects.equals(order, actor.getOrder()))
-                    mutableItems.add(i, bprocActors);
+                if (Objects.equals(order, actor.getOrder())
+                        || order >= actor.getOrder()) {
+                    mutableItems.add(i + 1, bprocActors);
+                    isAdded = true;
+                    break;
+                }
             }
+            if (!isAdded) mutableItems.add(bprocActors);
             addHrRoleLookup.setValue(null);
         }
     }
