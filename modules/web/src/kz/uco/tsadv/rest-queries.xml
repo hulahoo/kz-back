@@ -92,11 +92,24 @@
     <query name="myProfileFull" entity="base$PersonGroupExt" view="personGroupExt.mobile">
         <jpql>
             select p
-             from base$PersonGroupExt p
-                where p.id = :userId
+            from base$PersonGroupExt p
+            where p.id = :userId
         </jpql>
         <params>
             <param name="userId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="searchCourses" entity="tsadv$DicCategory" view="category-courses">
+        <jpql>
+            <![CDATA[
+            select c
+            from tsadv$DicCategory c
+            join c.courses cc
+            where (lower ( cc.name) like :courseName)
+            ]]>
+        </jpql>
+        <params>
+            <param name="courseName" type="java.lang.String"/>
         </params>
     </query>
 
