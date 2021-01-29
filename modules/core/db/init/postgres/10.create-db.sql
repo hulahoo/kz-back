@@ -13296,7 +13296,7 @@ create table TSADV_BPM_ROLES_LINK (
     BPM_ROLES_DEFINER_ID uuid,
     HR_ROLE_ID uuid not null,
     BPROC_USER_TASK_CODE varchar(255),
-    ORDER_ integer,
+    ORDER_ integer not null,
     REQUIRED boolean not null,
     IS_ADDABLE_APPROVER boolean not null,
     FIND_BY_COUNTER boolean not null,
@@ -15236,7 +15236,19 @@ create table TSADV_APP_PROPERTY_ENTITY_DESCRIPTION (
 -- end TSADV_APP_PROPERTY_ENTITY_DESCRIPTION
 -- begin SEC_USER
 alter table SEC_USER add column PERSON_GROUP_ID uuid ^
-update SEC_USER set DTYPE='tsadv$UserExt' ^
+alter table SEC_USER add column FULLNAMEWITHLOGIN varchar(255) ^
+alter table SEC_USER add column IMAGE_ID uuid ^
+alter table SEC_USER add column ATS_CODE varchar(255) ^
+alter table SEC_USER add column INNER_NUMBER varchar(255) ^
+alter table SEC_USER add column AVAILABILITY boolean ^
+update SEC_USER set AVAILABILITY = false where AVAILABILITY is null ^
+alter table SEC_USER alter column AVAILABILITY set not null ^
+alter table SEC_USER add column MOBILE_PHONE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CODE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CHAT_ID varchar(255) ^
+alter table SEC_USER add column PASSWORD_CHANGE_DATE date ^
+alter table SEC_USER add column SHORT_NAME varchar(100) ^
+alter table SEC_USER add column FULL_NAME varchar(100) ^
 -- end SEC_USER
 -- begin TSADV_DIC_COMPANY
 create table TSADV_DIC_COMPANY (
@@ -16847,6 +16859,7 @@ create table TSADV_DIC_MIC_ATTACHMENT_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),

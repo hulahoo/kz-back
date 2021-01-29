@@ -102,7 +102,7 @@ order by e.order desc]]>
                   width="1000px"
                   spacing="true">
                 <groupBox id="bpmActorsBox"
-                          caption="msg://TransferRequest.approvalProcess.actors"
+                          caption="mainMsg://bproc.participants"
                           spacing="true">
                     <table id="procTasksTable"
                            height="100%"

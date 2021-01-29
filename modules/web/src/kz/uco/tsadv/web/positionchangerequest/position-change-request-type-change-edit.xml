@@ -234,7 +234,7 @@ where e.procInstance.entity.entityId = :ds$positionChangeRequestDs
                 </fieldGroup>
             </groupBox>
             <groupBox id="bpmActorsBox"
-                      caption="msg://TransferRequest.approvalProcess.actors"
+                      caption="mainMsg://bproc.participants"
                       spacing="true">
                 <table id="procTasksTable"
                        width="100%">

@@ -1,10 +1,10 @@
 package kz.uco.tsadv.service;
 
+import com.haulmont.addon.bproc.data.Outcome;
+import com.haulmont.addon.bproc.data.OutcomesContainer;
 import com.haulmont.addon.bproc.entity.HistoricVariableInstanceData;
 import com.haulmont.addon.bproc.entity.ProcessInstanceData;
 import com.haulmont.addon.bproc.service.BprocHistoricService;
-import com.haulmont.addon.bproc.service.BprocRuntimeService;
-import com.haulmont.addon.bproc.service.BprocTaskService;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
@@ -17,7 +17,9 @@ import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
+import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -59,8 +62,13 @@ public class BprocServiceBean implements BprocService {
     protected BprocUserListProvider bprocUserListProvider;
 
     @Override
-    public List<User> getTaskCandidates(String executionId) {
-        return bprocUserListProvider.get(executionId);
+    public List<? extends User> getTaskCandidates(String executionId, String viewName) {
+        List<User> users = bprocUserListProvider.get(executionId);
+        return dataManager.load(UserExt.class)
+                .query("select e from tsadv$UserExt e where e.id in :users")
+                .setParameters(ParamsMap.of("users", users))
+                .view(viewName != null ? viewName : View.MINIMAL)
+                .list();
     }
 
     @Override
@@ -106,13 +114,17 @@ public class BprocServiceBean implements BprocService {
     }
 
     @SuppressWarnings("unchecked")
+    @Nullable
     public <T> T getProcessVariable(String processInstanceDataId, String variableName) {
-        return (T) bprocHistoricService
-                .createHistoricVariableInstanceDataQuery()
-                .processInstanceId(processInstanceDataId)
-                .variableName(variableName)
-                .singleResult()
-                .getValue();
+        return (T) Optional.ofNullable(
+                bprocHistoricService
+                        .createHistoricVariableInstanceDataQuery()
+                        .processInstanceId(processInstanceDataId)
+                        .variableName(variableName)
+                        .singleResult()
+        )
+                .map(HistoricVariableInstanceData::getValue)
+                .orElse(null);
     }
 
     @Override
@@ -128,7 +140,7 @@ public class BprocServiceBean implements BprocService {
 
     @Override
     public <T extends AbstractBprocRequest> boolean hasActor(T entity, String taskCode) {
-        return !getActors(entity.getId(), taskCode).isEmpty();
+        return !getActors(entity.getId(), taskCode, View.MINIMAL).isEmpty();
     }
 
     @Override
@@ -146,6 +158,18 @@ public class BprocServiceBean implements BprocService {
         ExtTaskData initiatorTask = initInitiatorTask(processInstanceData);
         if (initiatorTask != null) tasks.add(initiatorTask);
 
+        List<BpmRolesLink> rolesLinks = getProcessVariable(processInstanceData.getId(), "rolesLinks");
+        List<BpmRolesLink> links = rolesLinks == null
+                ? null
+                : dataManager.load(BpmRolesLink.class)
+                .query("select e from tsadv$BpmRolesLink e where e.id in :links ")
+                .setParameters(ParamsMap.of("links", rolesLinks))
+                .view(new View(BpmRolesLink.class)
+                        .addProperty("bprocUserTaskCode")
+                        .addProperty("hrRole", new View(DicHrRole.class)
+                                .addProperty("langValue")))
+                .list();
+
         bprocHistoricService
                 .createHistoricTaskDataQuery()
                 .processInstanceId(processInstanceData.getId())
@@ -154,12 +178,33 @@ public class BprocServiceBean implements BprocService {
                 .stream()
                 .map(taskData -> (ExtTaskData) taskData)
                 .peek(taskData -> {
-                    if (taskData.getEndTime() == null)
-                        taskData.setAssigneeOrCandidates(getTaskCandidates(taskData.getExecutionId()));
-                    else if (taskData.getAssignee() == null) {
-                        User user = dataManager.load(Id.of(UUID.fromString(taskData.getAssignee()), User.class)).view(View.BASE).one();
+                    if (taskData.getEndTime() == null) {
+                        @SuppressWarnings("unchecked") List<User> taskCandidates = (List<User>) getTaskCandidates(taskData.getExecutionId(), "user-fioWithLogin");
+                        taskData.setAssigneeOrCandidates(taskCandidates);
+                    } else if (taskData.getAssignee() != null) {
+                        User user = dataManager.load(Id.of(UUID.fromString(taskData.getAssignee()), UserExt.class)).view("user-fioWithLogin").one();
                         taskData.setAssigneeOrCandidates(Collections.singletonList(user));
                     }
+                })
+                .peek(taskData -> {
+                    OutcomesContainer outcomesContainer = getProcessVariable(processInstanceData.getId(), taskData.getTaskDefinitionKey() + "_result");
+                    if (outcomesContainer != null && !CollectionUtils.isEmpty(outcomesContainer.getOutcomes()))
+                        for (Outcome outcome : outcomesContainer.getOutcomes()) {
+                            if (Objects.equals(outcome.getUser(), taskData.getAssignee())) {
+                                taskData.setOutcome(outcome.getOutcomeId());
+                                break;
+                            }
+                        }
+                })
+                .peek(taskData -> {
+                    if (taskData.getTaskDefinitionKey().equals("initiator_task"))
+                        taskData.setHrRole(getInitiatorHrRole());
+                    if (links != null)
+                        links.stream()
+                                .filter(bpmRolesLink -> bpmRolesLink.getBprocUserTaskCode().equals(taskData.getTaskDefinitionKey()))
+                                .findAny()
+                                .map(BpmRolesLink::getHrRole)
+                                .ifPresent(taskData::setHrRole);
                 })
                 .forEach(tasks::add);
 
@@ -175,7 +220,7 @@ public class BprocServiceBean implements BprocService {
                     .list();
 
             if (!CollectionUtils.isEmpty(initiatorVariableList)) {
-                UserExt initiator = (UserExt) initiatorVariableList.get(0).getValue();
+                UserExt initiator = dataManager.reload((UserExt) initiatorVariableList.get(0).getValue(), "user-fioWithLogin");
 
                 ExtTaskData initiatorTask = metadata.create(ExtTaskData.class);
                 initiatorTask.setId(UUID.randomUUID().toString());
@@ -185,10 +230,19 @@ public class BprocServiceBean implements BprocService {
                 initiatorTask.setAssigneeOrCandidates(Collections.singletonList(initiator));
                 initiatorTask.setCreateTime(processInstanceData.getStartTime());
                 initiatorTask.setEndTime(processInstanceData.getStartTime());
+                initiatorTask.setHrRole(getInitiatorHrRole());
+                initiatorTask.setOutcome("START");
                 return initiatorTask;
             }
         }
         return null;
+    }
+
+    protected DicHrRole getInitiatorHrRole() {
+        DicHrRole dicHrRole = metadata.create(DicHrRole.class);
+        dicHrRole.setLangValue1("Инициатор");
+        dicHrRole.setLangValue3("Initiator");
+        return dicHrRole;
     }
 
     @Override
@@ -215,10 +269,11 @@ public class BprocServiceBean implements BprocService {
     }
 
     @Override
-    public List<? extends User> getActors(UUID bprocRequestId, String bprocUserTaskCode) {
+    public List<? extends User> getActors(UUID bprocRequestId, String bprocUserTaskCode, String viewName) {
         return dataManager.load(User.class)
                 .query("select e.user from tsadv_BprocActors e where e.entityId = :entityId and e.bprocUserTaskCode = :bprocUserTaskCode ")
                 .setParameters(ParamsMap.of("entityId", bprocRequestId, "bprocUserTaskCode", bprocUserTaskCode))
+                .view(viewName != null ? viewName : View.MINIMAL)
                 .list();
     }
 

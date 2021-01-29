@@ -22782,4 +22782,11 @@
         </property>
         <property name="person" view="person.info"/>
     </view>
+    <view class="kz.uco.tsadv.modules.administration.UserExt"
+          extends="_local"
+          name="user-fioWithLogin">
+        <property name="personGroup">
+            <property name="list" view="_local"/>
+        </property>
+    </view>
 </views>
