@@ -65,7 +65,7 @@
                   width="1000px"
                   spacing="true">
                 <groupBox id="bpmActorsBox"
-                          caption="msg://TransferRequest.approvalProcess.actors"
+                          caption="msg://kz.uco.tsadv.bproc/bproc.participants"
                           spacing="true">
                     <table id="procTasksTable"
                            height="100%"
@@ -73,13 +73,11 @@
                            dataContainer="tasksDc"
                            width="100%">
                         <columns>
-                            <column id="name"/>
+                            <column id="hrRole"/>
                             <column id="assignee" generator="generateAssignee"/>
                             <column id="createTime"/>
                             <column id="endTime"/>
-                            <column id="outcome"
-                                    generator="generateOutcome"
-                                    caption="msg://ProcActor.decision"/>
+                            <column id="outcome" type="string" generator="generateOutcome"/>
                         </columns>
                     </table>
                 </groupBox>
@@ -91,9 +89,6 @@
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
             <button action="windowClose"/>
-            <!--<button id="askQuestionBtn"
-                    caption="mainMsg://askQuestion"
-                    invoke="onAskQuestion"/>-->
         </hbox>
     </layout>
 </window>

@@ -64,7 +64,9 @@
         </property>
     </view>
     <view entity="tsadv$AssignedGoal" name="assignedGoal-portal-kpi-create-default" extends="_local">
-        <property name="category" view="_minimal"/>
+        <property name="category" view="_minimal">
+            <property name="order"/>
+        </property>
         <property name="goal" view="_minimal">
             <property name="successCriteria"/>
         </property>
@@ -163,5 +165,27 @@
     </view>
     <view name="assigned-goal-weight" entity="tsadv$AssignedGoal" extends="_minimal">
         <property name="weight"/>
+    </view>
+    <view entity="tsadv_CertificateRequest" name="portal.certificateRequest-edit" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+        <property name="status" view="_local"/>
+        <property name="receivingType" view="_local"/>
+        <property name="file" view="_local"/>
+        <property name="language" view="_local"/>
+        <property name="certificateType" view="_local"/>
+    </view>
+    <view name="goal-library-category" entity="tsadv$GoalLibrary" extends="_local">
+        <property name="category" view="_minimal"/>
+    </view>
+    <view entity="tsadv$AssignedGoal" name="assignedGoal-view" extends="_minimal">
+        <property name="goal" view="_minimal"/>
+        <property name="weight"/>
+        <property name="assignedPerformancePlan" view="_minimal"/>
+        <property name="goalLibrary" view="_minimal"/>
+    </view>
+    <view entity="tsadv$AssignedGoal" name="assignedGoal-library" extends="_minimal">
+        <property name="goal" view="_minimal"/>
+        <property name="weight"/>
+        <property name="goalLibrary" view="_minimal"/>
     </view>
 </views>

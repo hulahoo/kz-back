@@ -21774,7 +21774,7 @@
         <property name="receivingType" view="_local"/>
         <property name="file" view="_local"/>
         <property name="language" view="_local"/>
-        <property name="cretificateType" view="_local"/>
+        <property name="certificateType" view="_local"/>
     </view>
     <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-editView" extends="_local">
         <property name="statusRequest" view="_minimal">
@@ -22776,5 +22776,17 @@
             <property name="code"/>
         </property>
     </view>
-
+    <view entity="base$PersonGroupExt" name="personGroupExt.mobile" extends="_minimal">
+        <property name="assignments" view="assignment.view">
+            <property name="positionGroup" view="positionGroup.list"/>
+        </property>
+        <property name="person" view="person.info"/>
+    </view>
+    <view class="kz.uco.tsadv.modules.administration.UserExt"
+          extends="_local"
+          name="user-fioWithLogin">
+        <property name="personGroup">
+            <property name="list" view="_local"/>
+        </property>
+    </view>
 </views>

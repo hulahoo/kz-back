@@ -4588,9 +4588,10 @@ create table TSADV_ABSENCE_REQUEST (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
-    REQUEST_NUMBER bigint,
-    STATUS_ID uuid,
-    REQUEST_DATE date,
+    REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
     --
     ASSIGNMENT_GROUP_ID uuid,
     ATTACHMENT_ID uuid,
@@ -4598,7 +4599,6 @@ create table TSADV_ABSENCE_REQUEST (
     DATE_TO date,
     ABSENCE_DAYS integer,
     TYPE_ID uuid,
-    COMMENT_ varchar(3000),
     DISTANCE_WORKING_CONFIRM boolean not null,
     PERSON_GROUP_ID uuid,
     PURPOSE_ID uuid,
@@ -13296,7 +13296,7 @@ create table TSADV_BPM_ROLES_LINK (
     BPM_ROLES_DEFINER_ID uuid,
     HR_ROLE_ID uuid not null,
     BPROC_USER_TASK_CODE varchar(255),
-    ORDER_ integer,
+    ORDER_ integer not null,
     REQUIRED boolean not null,
     IS_ADDABLE_APPROVER boolean not null,
     FIND_BY_COUNTER boolean not null,
@@ -15236,7 +15236,19 @@ create table TSADV_APP_PROPERTY_ENTITY_DESCRIPTION (
 -- end TSADV_APP_PROPERTY_ENTITY_DESCRIPTION
 -- begin SEC_USER
 alter table SEC_USER add column PERSON_GROUP_ID uuid ^
-update SEC_USER set DTYPE='tsadv$UserExt' ^
+alter table SEC_USER add column FULLNAMEWITHLOGIN varchar(255) ^
+alter table SEC_USER add column IMAGE_ID uuid ^
+alter table SEC_USER add column ATS_CODE varchar(255) ^
+alter table SEC_USER add column INNER_NUMBER varchar(255) ^
+alter table SEC_USER add column AVAILABILITY boolean ^
+update SEC_USER set AVAILABILITY = false where AVAILABILITY is null ^
+alter table SEC_USER alter column AVAILABILITY set not null ^
+alter table SEC_USER add column MOBILE_PHONE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CODE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CHAT_ID varchar(255) ^
+alter table SEC_USER add column PASSWORD_CHANGE_DATE date ^
+alter table SEC_USER add column SHORT_NAME varchar(100) ^
+alter table SEC_USER add column FULL_NAME varchar(100) ^
 -- end SEC_USER
 -- begin TSADV_DIC_COMPANY
 create table TSADV_DIC_COMPANY (
@@ -15459,17 +15471,21 @@ create table TSADV_CERTIFICATE_REQUEST (
     UPDATED_BY varchar(50),
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
-    --
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
     REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
     REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
+    --
     PERSON_GROUP_ID uuid not null,
-    CRETIFICATE_TYPE_ID uuid not null,
+    CERTIFICATE_TYPE_ID uuid not null,
     RECEIVING_TYPE_ID uuid not null,
     LANGUAGE_ID uuid not null,
     SHOW_SALARY boolean not null,
     NUMBER_OF_COPY integer not null,
     FILE_ID uuid,
-    STATUS_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -16694,40 +16710,7 @@ create table TSADV_BPROC_ACTORS (
     primary key (ID)
 )^
 -- end TSADV_BPROC_ACTORS
--- begin TSADV_DIC_ASSESSMENT_TYPE
-create table TSADV_DIC_ASSESSMENT_TYPE (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_TYPE
+
 -- begin TSADV_CORRECTION_COEFFICIENT
 create table TSADV_CORRECTION_COEFFICIENT (
     ID uuid,
@@ -16876,6 +16859,7 @@ create table TSADV_DIC_MIC_ATTACHMENT_STATUS (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
     LANG_VALUE1 varchar(255) not null,
     DESCRIPTION1 varchar(2000),
     LANG_VALUE2 varchar(255),

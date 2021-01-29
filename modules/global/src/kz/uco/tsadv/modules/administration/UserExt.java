@@ -1,7 +1,9 @@
 package kz.uco.tsadv.modules.administration;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Extends;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.Entity;
@@ -27,5 +29,19 @@ public class UserExt extends kz.uco.base.entity.extend.UserExt {
         this.personGroup = personGroup;
     }
 
+    @Override
+    public String getFullName() {
+        if (PersistenceHelper.isLoaded(this, "personGroup")) {
+            if (personGroup != null && PersistenceHelper.isLoaded(personGroup, "list")) {
+                return personGroup.getFullName();
+            }
+        }
+        return super.getFullName();
+    }
 
+    @MetaProperty(related = {"personGroup", "login", "fullName"})
+    public String getFullNameWithLogin() {
+        String fullName = getFullName();
+        return String.format("%s [%s]", fullName, login);
+    }
 }

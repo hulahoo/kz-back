@@ -4,6 +4,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.app.UniqueNumbersService;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.service.common.CommonService;
@@ -28,7 +29,7 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
 
     public static final String BPM_REQUEST_NUMBER = "bpmRequestNumber";
 
-    private static final List<Class> listClassWithRequestNumber =
+    private static final List<Class<? extends Entity<?>>> listClassWithRequestNumber =
             Arrays.asList(PositionChangeRequest.class,
                     AssignmentRequest.class,
                     AssignmentSalaryRequest.class,
@@ -133,17 +134,12 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
         String[] splitted = previousAssignmentNumber.split("-");
 
         if (splitted.length == 1) {
-            return (new StringBuilder(splitted[0])
-                    .append("-")
-                    .append("1"))
-                    .toString();
+            return splitted[0] + "-" + "1";
         }
 
         if (splitted.length > 1) {
             splitted[splitted.length - 1] = String.valueOf((Integer.parseInt(splitted[splitted.length - 1])) + 1);
-            return (new StringBuilder(splitted[0])
-                    .append("-")
-                    .append(splitted[splitted.length - 1])).toString();
+            return splitted[0] + "-" + splitted[splitted.length - 1];
         } else {
             return "";
         }
@@ -169,7 +165,6 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
             } else return "";
         });
     }
-
 
     @Override
     public String getRegularExpressionForEmployeeNumber(GeneratorEmployeeNumber generatorEmployeeNumber) {
@@ -213,14 +208,13 @@ public class EmployeeNumberServiceBean implements EmployeeNumberService {
         for (int i = 0; i < listClassWithRequestNumber.size(); i++) {
             queryBuilder.append(i != 0 ? " + " : "")
                     .append(" ( select count(*) from ")
-                    .append(metadata.getTools().getDatabaseTable(metadata.getClass(listClassWithRequestNumber.get(i))))
+                    .append(metadata.getTools().getDatabaseTable(metadata.getClassNN(listClassWithRequestNumber.get(i))))
                     .append(" where request_number = ?1 ")
                     .append(needCheckId ? " and id <> ?2 " : " ")
                     .append(')').append('\n');
         }
         return queryBuilder.toString();
     }
-
 
     @Override
     public String getConvertedEmployeeNumber(@Nullable String employeeNumber) {
