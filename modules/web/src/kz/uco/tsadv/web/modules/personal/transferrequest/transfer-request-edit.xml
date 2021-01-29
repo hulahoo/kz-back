@@ -49,7 +49,7 @@
                            screen="procActionsFrame"/>
                 </groupBox>
             </hbox>
-            <groupBox id="bpmActorsBox" width="100%" caption="msg://TransferRequest.approvalProcess.actors">
+            <groupBox id="bpmActorsBox" width="100%" caption="mainMsg://bproc.participants">
                 <table id="procTasksTable"
                        height="100%"
                        width="100%">

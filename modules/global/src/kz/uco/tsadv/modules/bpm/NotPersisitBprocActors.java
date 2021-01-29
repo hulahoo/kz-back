@@ -4,7 +4,7 @@ import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
-import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 
 import javax.validation.constraints.NotNull;
