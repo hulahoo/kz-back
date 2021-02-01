@@ -15,7 +15,6 @@ import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@PublishEntityChangedEvents
 @Table(name = "TSADV_CERTIFICATE_REQUEST")
 @Entity(name = "tsadv_CertificateRequest")
 @NamePattern("%s|requestNumber")

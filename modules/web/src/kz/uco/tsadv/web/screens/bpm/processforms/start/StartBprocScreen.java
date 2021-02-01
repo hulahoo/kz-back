@@ -1,9 +1,6 @@
 package kz.uco.tsadv.web.screens.bpm.processforms.start;
 
-import com.haulmont.addon.bproc.web.processform.Param;
-import com.haulmont.addon.bproc.web.processform.ProcessForm;
-import com.haulmont.addon.bproc.web.processform.ProcessFormContext;
-import com.haulmont.addon.bproc.web.processform.ProcessFormParam;
+import com.haulmont.addon.bproc.web.processform.*;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
@@ -38,6 +35,7 @@ import org.springframework.util.Assert;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -96,6 +94,7 @@ public class StartBprocScreen extends Screen {
 
     protected AbstractBprocRequest entity;
     protected UUID personGroupId;
+    protected Supplier<Map<String, Object>> processVariableSupplier;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -210,21 +209,25 @@ public class StartBprocScreen extends Screen {
             for (UserExt user : notPersisitBprocActors.getUsers()) {
                 BprocActors copy = metadata.getTools().copy(bprocActors);
                 copy.setId(UUID.randomUUID());
-                bprocActors.setUser(user);
-                commitContext.addInstanceToCommit(bprocActors);
+                copy.setUser(user);
+                commitContext.addInstanceToCommit(copy);
             }
         }
 
         dataManager.commit(commitContext);
 
-        processFormContext.processStarting()
+        ProcessStarting processStarting = processFormContext.processStarting()
                 .withBusinessKey(entityId.toString())
                 .addProcessVariable("entity", entity)
                 .addProcessVariable("initiator", userSession.getUser())
                 .addProcessVariable("rolesLinks", linksDc.getItems())
                 .addProcessVariable("approverNotificationTemplateCode", approverNotificationTemplateCode)
-                .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode)
-                .start();
+                .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode);
+
+        Map<String, Object> params = processVariableSupplier.get();
+        if (params != null && !params.isEmpty()) params.forEach(processStarting::addProcessVariable);
+
+        processStarting.start();
 
         close(WINDOW_COMMIT_AND_CLOSE_ACTION);
     }
@@ -249,6 +252,10 @@ public class StartBprocScreen extends Screen {
     //todo personGroupId is session user person group id
     public void setPersonGroupId(UUID personGroupId) {
         this.personGroupId = personGroupId;
+    }
+
+    public void setProcessVariableSupplier(Supplier<Map<String, Object>> processVariableSupplier) {
+        this.processVariableSupplier = processVariableSupplier;
     }
 
     @SuppressWarnings({"UnstableApiUsage", "unchecked"})

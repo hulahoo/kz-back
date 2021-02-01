@@ -8,12 +8,14 @@ import com.haulmont.addon.bproc.form.FormOutcome;
 import com.haulmont.addon.bproc.service.*;
 import com.haulmont.addon.bproc.web.processform.ProcessFormScreens;
 import com.haulmont.addon.bproc.web.uicomponent.outcomespanel.OutcomesPanel;
+import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.components.data.table.ContainerTableItems;
@@ -24,6 +26,7 @@ import com.haulmont.cuba.gui.util.OperationResult;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.components.GroupsComponent;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.UserExt;
@@ -31,13 +34,13 @@ import kz.uco.tsadv.service.BprocService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.web.screens.bpm.processforms.outcome.BprocOutcomeDialog;
 import kz.uco.tsadv.web.screens.bpm.processforms.start.StartBprocScreen;
+import kz.uco.uactivity.entity.Activity;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -81,6 +84,13 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     protected CommonService commonService;
     @Inject
     protected Notifications notifications;
+    @Inject
+    protected Screens screens;
+    @Inject
+    protected GroupsComponent groupsComponent;
+
+    @WindowParam
+    protected String activityId;
 
     @Inject
     protected HBoxLayout procActionButtonHBox;
@@ -89,8 +99,6 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
 
     protected TaskData activeTaskData;
     protected ProcessInstanceData processInstanceData;
-    @Inject
-    protected Screens screens;
 
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
@@ -101,6 +109,13 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     }
 
     protected void initVariables() {
+        if (activityId != null) {
+            Activity activity = dataManager.load(Id.of(UUID.fromString(activityId), Activity.class))
+                    .view("activity.view.tsadv")
+                    .one();
+
+            groupsComponent.addActivityHeaderToScreen(this, activity);
+        }
         processInstanceData = getProcessInstanceData();
         fillTasksDc();
         activeTaskData = getActiveTaskData();
@@ -121,15 +136,15 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
             Assert.notNull(formData, "FormData not found!");
 
             OutcomesPanel outcomesPanel = uiComponents.create(OutcomesPanel.class);
-            List<FormOutcome> outcomes = formData.getOutcomes();
+            List<FormOutcome> outcomes = filterOutcomes(formData);
 
             //adding reassign
-            FormOutcome reassign = new FormOutcome();
-            reassign.setId(AbstractBprocRequest.OUTCOME_REASSIGN);
-            outcomes.stream()
-                    .filter(formOutcome -> formOutcome.getId().equals(AbstractBprocRequest.OUTCOME_REVISION))
-                    .findAny().
-                    ifPresent(revision -> outcomes.add(outcomes.indexOf(revision) + 1, reassign));
+//            FormOutcome reassign = new FormOutcome();
+//            reassign.setId(AbstractBprocRequest.OUTCOME_REASSIGN);
+//            outcomes.stream()
+//                    .filter(formOutcome -> formOutcome.getId().equals(AbstractBprocRequest.OUTCOME_REVISION))
+//                    .findAny().
+//                    ifPresent(revision -> outcomes.add(outcomes.indexOf(revision) + 1, reassign));
 
             outcomesPanel.createLayout(taskData, outcomes);
             outcomesPanel.setBeforeTaskCompletedPredicate(formOutcome -> {
@@ -159,39 +174,51 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
                     Action action = button.getAction();
 //                    noinspection ConstantConditions
                     button.setAction(new BaseAction(action.getId() + "_DIALOG")
-                            .withCaption(action.getCaption())
-                            .withHandler(event -> {
-                                BprocOutcomeDialog outcomeDialog = (BprocOutcomeDialog) screens.create("tsadv_BprocOutcomeDialog", OpenMode.DIALOG);
-                                String outcome = action.getId();
+                                    .withCaption(action.getCaption())
+                                    .withHandler(event -> {
+                                        BprocOutcomeDialog outcomeDialog = (BprocOutcomeDialog) screens.create("tsadv_BprocOutcomeDialog", OpenMode.DIALOG);
+                                        String outcome = action.getId();
 
-                                Supplier<UserExt> userSupplier = outcomeDialog.getUserSupplier();
-                                outcomesPanel.setProcessVariablesSupplier(() -> {
-                                    Map<String, Object> params = new HashMap<>();
-                                    params.put("comment", outcomeDialog.getComment());
-                                    return params;
-                                });
+                                        Supplier<UserExt> userSupplier = outcomeDialog.getUserSupplier();
+                                        outcomesPanel.setProcessVariablesSupplier(() -> {
+                                            Map<String, Object> params = new HashMap<>();
+                                            params.put("comment", outcomeDialog.getComment());
+                                            return params;
+                                        });
 
-                                //noinspection ConstantConditions
-                                outcomeDialog.setCommentRequired(isCommentRequired(outcome));
-                                outcomeDialog.setOutcome(outcome);
-                                if (!AbstractBprocRequest.OUTCOME_REASSIGN.equals(action.getId()))
-                                    outcomeDialog.setAction(action);
-                                else outcomeDialog.setAction(new BaseAction(AbstractBprocRequest.OUTCOME_REASSIGN)
-                                        .withCaption(messages.getMainMessage("OUTCOME_" + AbstractBprocRequest.OUTCOME_REASSIGN))
-                                        .withHandler(e -> {
-                                            bprocTaskService.setAssignee(taskData.getId(), userSupplier.get().getId().toString());
-                                            if (outcomesPanel.getAfterTaskCompletedHandler() != null)
-                                                outcomesPanel.getAfterTaskCompletedHandler().accept(reassign);
-                                        }));
-                                outcomeDialog.setAction(action);
-                                outcomeDialog.setOutcomesPanel(outcomesPanel);
+                                        //noinspection ConstantConditions
+                                        outcomeDialog.setCommentRequired(isCommentRequired(outcome));
+                                        outcomeDialog.setOutcome(outcome);
+                                        if (!AbstractBprocRequest.OUTCOME_REASSIGN.equals(action.getId()))
+                                            outcomeDialog.setAction(action);
+                                        else outcomeDialog.setAction(new BaseAction(AbstractBprocRequest.OUTCOME_REASSIGN)
+                                                .withCaption(messages.getMainMessage("OUTCOME_" + AbstractBprocRequest.OUTCOME_REASSIGN))
+                                                .withHandler(e -> {
+                                                    bprocTaskService.setAssignee(taskData.getId(), userSupplier.get().getId().toString());
+//                                            if (outcomesPanel.getAfterTaskCompletedHandler() != null)
+//                                                outcomesPanel.getAfterTaskCompletedHandler().accept(reassign);
+                                                }));
+                                        outcomeDialog.setAction(action);
+                                        outcomeDialog.setOutcomesPanel(outcomesPanel);
 
-                                outcomeDialog.show();
-                            })
+                                        outcomeDialog.show();
+                                    })
                     );
                 }
             }
         }
+    }
+
+    protected List<FormOutcome> filterOutcomes(FormData formData) {
+        List<FormOutcome> list = new ArrayList<>();
+        for (FormOutcome outcome : formData.getOutcomes()) {
+            if (!isHiddenOutcome(outcome)) list.add(outcome);
+        }
+        return list;
+    }
+
+    protected boolean isHiddenOutcome(FormOutcome outcome) {
+        return false;
     }
 
     protected boolean isCommentRequired(String outcome) {
@@ -257,12 +284,18 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         if (startProcessForm instanceof StartBprocScreen) {
             ((StartBprocScreen) startProcessForm).setEntity(getEditedEntity());
             ((StartBprocScreen) startProcessForm).setPersonGroupId(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
+            ((StartBprocScreen) startProcessForm).setProcessVariableSupplier(this::getProcessVariables);
         }
         startProcessForm.addAfterCloseListener(afterCloseEvent -> {
             if (afterCloseEvent.getCloseAction().equals(WINDOW_COMMIT_AND_CLOSE_ACTION))
                 closeWithDefaultAction();
         });
         startProcessForm.show();
+    }
+
+    @Nullable
+    protected Map<String, Object> getProcessVariables() {
+        return null;
     }
 
     @SuppressWarnings({"unchecked", "UnstableApiUsage"})

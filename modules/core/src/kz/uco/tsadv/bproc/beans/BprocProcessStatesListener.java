@@ -15,7 +15,6 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.events.ExtProcessStartedEvent;
 import kz.uco.tsadv.bproc.events.ExtUserTaskCreatedEvent;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
-import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.service.BprocService;
 import kz.uco.uactivity.entity.Activity;
@@ -107,11 +106,7 @@ public class BprocProcessStatesListener {
             userList.addAll(dataManager.load(User.class)
                     .query("select e from sec$User e where e.id in :idList ")
                     .setParameters(ParamsMap.of("idList", uuidList))
-                    .view(new View(UserExt.class)
-                            .addProperty("email")
-                            .addProperty("language")
-                            .addProperty("mobilePhone")
-                            .addProperty("telegramChatId"))
+                    .view("user-fioWithLogin")
                     .list());
 
         ActivityType activityType = dataManager.load(ActivityType.class)
