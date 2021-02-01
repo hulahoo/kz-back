@@ -34,7 +34,7 @@
                 <action id="create" type="create"/>
             </actions>
             <columns>
-                <column id="requestNumber"/>
+                <column id="requestNumber" link="true" linkInvoke="openRequest"/>
                 <column id="requestDate"/>
                 <column id="status"/>
                 <column id="file" link="true" linkInvoke="printReport"/>
