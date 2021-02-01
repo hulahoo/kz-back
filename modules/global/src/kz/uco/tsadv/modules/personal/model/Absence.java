@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 @Listeners("tsadv_AbsenceListener")
-@NamePattern("%s %s  %s %s %s %s %s|absenceDays,absenceStatus,dateFrom,dateTo,notificationDate,order,type")
+@NamePattern("%s - %s|dateFrom,dateTo,absenceDays,absenceStatus,notificationDate,order,type")
 @Table(name = "TSADV_ABSENCE")
 @Entity(name = "tsadv$Absence")
 public class Absence extends AbstractParentCategorizedEntity {

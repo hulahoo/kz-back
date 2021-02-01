@@ -187,4 +187,9 @@ public class AbsenceForRecall extends AbstractBprocRequest {
     public void setAbsenceType(DicAbsenceType absenceType) {
         this.absenceType = absenceType;
     }
+
+    @Override
+    public String getProcessDefinitionKey() {
+        return null;
+    }
 }

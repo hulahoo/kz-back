@@ -22724,6 +22724,12 @@
     <view entity="tsadv$Absence" name="absence-view" extends="_local"/>
     <view entity="tsadv$AbsenceRequest" name="absenceRequest-for-ss-my-team" extends="_local"/>
     <view entity="tsadv$Absence" name="absence-for-my-team" extends="_local">
+        <property name="order" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
         <property name="type" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>

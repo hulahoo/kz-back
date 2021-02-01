@@ -45,8 +45,8 @@
                     </pickerField>
                     <dateField id="recallDateFromField" property="recallDateFrom"/>
                     <dateField id="recallDateToField" property="recallDateTo"/>
-                    <checkBox id="leaveOtherTimeField" property="leaveOtherTime" stylename="check-to-radio"/>
-                    <checkBox id="compensationPaymentField" property="compensationPayment" stylename="check-to-radio"/>
+                    <checkBox id="leaveOtherTimeField" property="leaveOtherTime"/>
+                    <checkBox id="compensationPaymentField" property="compensationPayment"/>
                     <dateField id="dateFromField" property="dateFrom" editable="false"/>
                     <dateField id="dateToField" property="dateTo" editable="false"/>
                     <pickerField id="purposeField" property="purpose">

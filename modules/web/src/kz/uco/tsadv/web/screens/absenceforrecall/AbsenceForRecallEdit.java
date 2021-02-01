@@ -86,6 +86,7 @@ public class AbsenceForRecallEdit extends StandardEditor<AbsenceForRecall> {
             dateToField.setRequired(false);
             absenceForRecallDc.getItem().setDateFrom(null);
             absenceForRecallDc.getItem().setDateTo(null);
+            absenceForRecallDc.getItem().setCompensationPayment(true);
         }
     }
 
@@ -95,6 +96,8 @@ public class AbsenceForRecallEdit extends StandardEditor<AbsenceForRecall> {
             dateFromField.setEditable(false);
             dateToField.setEditable(false);
             absenceForRecallDc.getItem().setLeaveOtherTime(false);
+        } else {
+            absenceForRecallDc.getItem().setLeaveOtherTime(true);
         }
     }
 }
