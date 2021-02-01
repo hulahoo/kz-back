@@ -1,5 +1,6 @@
 package kz.uco.tsadv.web.screens.certificaterequest;
 
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.GroupTable;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.model.CollectionContainer;
@@ -36,6 +37,10 @@ public class CertificateRequestBrowse extends StandardLookup<CertificateRequest>
     protected UserSession userSession;
     @Inject
     protected ExportDisplay exportDisplay;
+    @Inject
+    protected ScreenBuilders screenBuilders;
+    @Inject
+    protected GroupTable<CertificateRequest> certificateRequestsTable;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -47,5 +52,12 @@ public class CertificateRequestBrowse extends StandardLookup<CertificateRequest>
 
     public void printReport(CertificateRequest item, String columnId) {
         exportDisplay.show(item.getFile());
+    }
+
+    public void openRequest(CertificateRequest certificateRequest, String columnId) {
+        screenBuilders.editor(certificateRequestsTable)
+                .editEntity(certificateRequest)
+                .build()
+                .show();
     }
 }
