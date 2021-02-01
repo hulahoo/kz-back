@@ -1,0 +1,31 @@
+create table TSADV_ABSENCE_FOR_RECALL (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint,
+    STATUS_ID uuid,
+    REQUEST_DATE date,
+    --
+    ABSENCE_TYPE_ID uuid,
+    EMPLOYEE_ID uuid,
+    VACATION_ID uuid,
+    RECALL_DATE_FROM date,
+    RECALL_DATE_TO date,
+    DATE_FROM date,
+    DATE_TO date,
+    PURPOSE_ID uuid,
+    IS_AGREE boolean not null,
+    IS_FAMILIARIZATION boolean not null,
+    LEAVE_OTHER_TIME boolean not null,
+    COMPENSATION_PAYMENT boolean not null,
+    --
+    primary key (ID)
+);
