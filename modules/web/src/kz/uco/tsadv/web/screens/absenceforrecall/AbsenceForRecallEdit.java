@@ -18,9 +18,12 @@ import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @UiController("tsadv_AbsenceForRecall.edit")
 @UiDescriptor("absence-for-recall-edit.xml")
@@ -117,5 +120,13 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
     @Override
     protected void initEditableFields() {
         super.initEditableFields();
+    }
+
+    @Nullable
+    @Override
+    protected Map<String, Object> getProcessVariables() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("employee", absenceForRecallDc.getItem().getEmployee());
+        return map;
     }
 }
