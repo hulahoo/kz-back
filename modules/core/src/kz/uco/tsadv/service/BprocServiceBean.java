@@ -24,6 +24,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.entity.WindowProperty;
@@ -68,6 +69,8 @@ public class BprocServiceBean implements BprocService {
     protected BprocUserListProvider bprocUserListProvider;
 
     protected String templateFolder = "classpath:kz/uco/tsadv/templates/";
+    @Inject
+    protected GlobalConfig globalConfig;
 
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
@@ -104,10 +107,12 @@ public class BprocServiceBean implements BprocService {
                 .processDefinitionKey(bprocRequest.getProcessDefinitionKey())
                 .singleResult();
 
-        User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
-
         if (notificationTemplateCode == null)
             notificationTemplateCode = getProcessVariable(processInstanceData.getId(), "initiatorNotificationTemplateCode");
+
+        if (notificationTemplateCode == null) return;
+
+        User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
 
         ActivityType activityType = dataManager.load(ActivityType.class)
                 .query("select e from uactivity$ActivityType e where e.code = :code")
@@ -118,7 +123,8 @@ public class BprocServiceBean implements BprocService {
                                 new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
                 .one();
 
-        sendNotificationAndActivity(bprocRequest, initiator, activityType, notificationTemplateCode);
+        assert initiator != null;
+        sendNotificationAndActivity(bprocRequest, dataManager.reload(initiator, "user-fioWithLogin"), activityType, notificationTemplateCode);
     }
 
     @SuppressWarnings("unchecked")
@@ -263,7 +269,14 @@ public class BprocServiceBean implements BprocService {
         User sessionUser = userSessionSource.getUserSession().getUser();
 
         Map<String, Object> notificationParams = getNotificationParams(notificationTemplateCode, entity);
-        activityService.createActivity(
+
+        notificationParams.put("userRu", ((UserExt) user).getFullNameWithLogin(Locale.forLanguageTag("ru")));
+        notificationParams.put("userEn", ((UserExt) user).getFullNameWithLogin(Locale.forLanguageTag("en")));
+
+        notificationParams.put("requestLinkRu", "");
+        notificationParams.put("requestLinkEn", "");
+
+        Activity activity = activityService.createActivity(
                 user,
                 sessionUser,
                 activityType,
@@ -277,7 +290,33 @@ public class BprocServiceBean implements BprocService {
                 notificationTemplateCode,
                 notificationParams);
 
+        String requestLink = getRequestLink(entity, activity);
+        notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
+        notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
+
         notificationSender.sendParametrizedNotification(notificationTemplateCode, (UserExt) user, notificationParams);
+    }
+
+    protected <T extends AbstractBprocRequest> String getRequestLink(T entity, Activity activity) {
+        if (!"NOTIFICATION".equals(activity.getType().getCode())) {
+            ActivityType activityType = activity.getType();
+            if (activityType.getWindowProperty() != null) {
+                return "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" + activity.getType().getWindowProperty().getScreenName() +
+                        "&item=" + activityType.getWindowProperty().getEntityName() + "-" + activity.getReferenceId() +
+                        "&params=activityId:" + activity.getId() +
+                        "\" target=\"_blank\">%s " + "</a>";
+            }
+        }
+
+        String entityName = entity.getMetaClass().getName();
+        WindowProperty windowProperty = dataManager.load(WindowProperty.class)
+                .query("select e from uactivity$WindowProperty e where e.entityName = :entityName")
+                .setParameters(ParamsMap.of("entityName", entityName))
+                .one();
+
+        return "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" + windowProperty.getScreenName() +
+                "&item=" + entityName + "-" + entity.getId() +
+                "\" target=\"_blank\">%s " + "</a>";
     }
 
     @Override
@@ -310,8 +349,14 @@ public class BprocServiceBean implements BprocService {
         Map<String, Object> params = new HashMap<>();
         params.put("item", entity);
         params.put("entity", entity);
+        params.put("requestNumber", entity.getRequestNumber());
 
         ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getId().toString(), entity.getProcessDefinitionKey());
+        UserExt initiator = getProcessVariable(processInstanceData.getId(), "initiator");
+        Assert.notNull(initiator, "Initiator not found!");
+        initiator = dataManager.reload(initiator, "user-fioWithLogin");
+        params.put("initiatorRu", initiator.getFullNameWithLogin(Locale.forLanguageTag("ru")));
+        params.put("initiatorEn", initiator.getFullNameWithLogin(Locale.forLanguageTag("en")));
 
         switch (templateCode) {
             case "bpm.absenceRequest.initiator.notification":
@@ -327,6 +372,7 @@ public class BprocServiceBean implements BprocService {
 
         params.put("approversTableRu", getApproversTable("Ru", processInstanceData));
         params.put("approversTableEn", getApproversTable("En", processInstanceData));
+        params.put("comment", getProcessVariable(processInstanceData.getId(), "comment"));
 
         return params;
     }

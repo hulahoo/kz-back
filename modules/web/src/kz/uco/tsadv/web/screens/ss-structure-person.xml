@@ -23,8 +23,7 @@
                               class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
                               view="assignment.view">
             <query>
-                <![CDATA[select e from base$AssignmentExt e
-where e.personGroup.id = :ds$personExtDs.group.id]]>
+                <![CDATA[select e from base$AssignmentExt e where e.personGroup.id = :ds$personExtDs.group.id]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="absencesDs" class="kz.uco.tsadv.modules.personal.model.Absence"
@@ -39,6 +38,20 @@ where e.personGroup.id = :ds$personExtDs.group.id]]>
             <query>
                 <![CDATA[select e from tsadv$AbsenceRequest e
                 where e.personGroup.id = :ds$personExtDs.group.id ]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="absenceDs" class="kz.uco.tsadv.modules.personal.model.Absence"
+                              view="absence-for-my-team"
+                              allowCommit="false">
+            <query>
+                <![CDATA[select e from tsadv$Absence e where e.personGroup.id = :ds$personExtDs.group.id]]>
+            </query>
+        </collectionDatasource>
+        <collectionDatasource id="absenceForRecallDs"
+                              class="kz.uco.tsadv.modules.personal.model.AbsenceForRecall"
+                              view="absenceForRecall.edit">
+            <query>
+                <![CDATA[select e from tsadv_AbsenceForRecall e where e.employee.id = :ds$personExtDs.group.id]]>
             </query>
         </collectionDatasource>
         <collectionDatasource id="assignmentSchedulesDs" class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
@@ -246,6 +259,51 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                                         <column id="acquainted"/>
                                     </columns>
                                     <rows datasource="scheduleOffsetsRequestsDs"/>
+                                </table>
+                            </tab>
+                        </tabSheet>
+                    </tab>
+                    <tab id="absenceForRecallTab" caption="msg://absence" margin="true, false, false, false"
+                         spacing="true" expand="absenceForRecallTabsheet">
+                        <tabSheet id="absenceForRecallTabsheet" height="100%" width="100%">
+                            <tab id="absence" caption="msg://absence" margin="true, false, false, false" spacing="true"
+                                 expand="absenceTable1">
+                                <filter id="absenceForRecallFilter" datasource="absenceDs"
+                                        applyTo="absenceForRecallTable">
+                                    <properties include=".*"/>
+                                </filter>
+                                <table id="absenceTable1" height="100%" width="100%">
+                                    <actions>
+                                        <action id="recallCreate" type="create" invoke="createRequestForRecall"
+                                                trackSelection="true"
+                                                caption="msg://createAbsenceForRecall"
+                                                icon="PLUS"/>
+                                    </actions>
+                                    <columns>
+                                        <column id="type"/>
+                                        <column id="dateFrom"/>
+                                        <column id="dateTo"/>
+                                        <column id="absenceDays"/>
+                                    </columns>
+                                    <buttonsPanel>
+                                        <button id="absenceForRecallCreateBtn" action="absenceTable1.recallCreate"/>
+                                    </buttonsPanel>
+                                    <rows datasource="absenceDs"/>
+                                    <rowsCount/>
+                                </table>
+                            </tab>
+                            <tab id="recallTab" caption="msg://recall" margin="true, false, false, false"
+                                 spacing="true">
+                                <table id="absenceForRecallTable" height="100%" width="100%">
+                                    <columns>
+                                        <column id="requestNumber"/>
+                                        <column id="requestDate"/>
+                                        <column id="absenceType"/>
+                                        <column id="leaveOtherTime"/>
+                                        <column id="compensationPayment"/>
+                                    </columns>
+                                    <rows datasource="absenceForRecallDs"/>
+                                    <rowsCount/>
                                 </table>
                             </tab>
                         </tabSheet>

@@ -27,6 +27,7 @@ import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.MyTeamService;
+import kz.uco.tsadv.web.screens.absenceforrecall.AbsenceForRecallEdit;
 import kz.uco.tsadv.web.screens.absencerequest.AbsenceRequestForMyTeamEdit;
 import kz.uco.tsadv.web.screens.scheduleoffsetsrequest.ScheduleOffsetsRequestSsMyTeamEdit;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +36,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -92,6 +94,10 @@ public class SsStructurePerson extends AbstractWindow {
     protected DataManager dataManager;
     @Inject
     protected CollectionDatasource<ScheduleOffsetsRequest, UUID> scheduleOffsetsRequestsDs;
+    @Inject
+    protected CollectionDatasource<Absence, UUID> absenceDs;
+    @Inject
+    protected Table<Absence> absenceTable1;
 
 
     @Override
@@ -335,6 +341,19 @@ public class SsStructurePerson extends AbstractWindow {
                     .withAfterCloseListener(offsetsRequestSsMyTeamEditAfterScreenCloseEvent -> {
                         refreshDss(personExtDs.getItem());
                     }).build().show();
+        }
+    }
+
+    public void createRequestForRecall() {
+        if (personExtDs.getItem() != null) {
+            AbsenceForRecall absenceForRecall = metadata.create(AbsenceForRecall.class);
+            absenceForRecall.setEmployee(personExtDs.getItem().getGroup());
+            absenceForRecall.setLeaveOtherTime(true);
+            absenceForRecall.setVacation(absenceTable1.getSingleSelected());
+            absenceForRecall.setAbsenceType(absenceTable1.getSingleSelected().getType());
+            screenBuilders.editor(AbsenceForRecall.class, this)
+                    .withScreenClass(AbsenceForRecallEdit.class).newEntity(absenceForRecall)
+                    .build().show();
         }
     }
 }
