@@ -3,7 +3,9 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicRegion;
@@ -21,6 +23,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+@PublishEntityChangedEvents
+@Listeners("tsadv_InsuredPersonChangedListener")
 @Table(name = "TSADV_INSURED_PERSON")
 @Entity(name = "tsadv$InsuredPerson")
 @NamePattern("%s|firstName")
@@ -71,6 +75,9 @@ public class InsuredPerson extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JOB_ID")
     private JobGroup job;
+
+    @Column(name = "JOB_MEMBER")
+    private String jobMember;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "SEX_ID")
@@ -135,6 +142,14 @@ public class InsuredPerson extends StandardEntity {
 
     @Column(name = "COMMENT", length = 500)
     private String comment;
+
+    public String getJobMember() {
+        return jobMember;
+    }
+
+    public void setJobMember(String jobMember) {
+        this.jobMember = jobMember;
+    }
 
     public void setFile(List<FileDescriptor> file) {
         this.file = file;

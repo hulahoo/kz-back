@@ -16904,6 +16904,7 @@ create table TSADV_INSURED_PERSON (
     SECOND_NAME varchar(50) not null,
     MIDDLE_NAME varchar(50),
     JOB_ID uuid,
+    JOB_MEMBER varchar(255),
     SEX_ID uuid not null,
     IIN varchar(255) not null,
     BIRTHDATE date not null,
