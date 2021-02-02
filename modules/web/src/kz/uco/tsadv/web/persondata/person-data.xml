@@ -385,6 +385,11 @@
                     <property name="code"/>
                 </property>
                 <property name="attachments" view="_minimal"/>
+                <property name="city" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
             </view>
             <loader id="addressesDl">
                 <query>

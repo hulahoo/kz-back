@@ -256,6 +256,8 @@ public class PersonData extends Screen implements SelfServiceMixin {
         addressTableCreate.setInitializer(o -> {
             Address address = (Address) o;
             address.setPersonGroup(personExtDc.getItem().getGroup());
+            address.setStartDate(CommonUtils.getSystemDate());
+            address.setEndDate(CommonUtils.getEndOfTime());
         });
         personContactTableCreate.setScreenClass(PersonContactPersonDataEdit.class);
         personContactTableEdit.setScreenClass(PersonContactPersonDataEdit.class);

@@ -45,8 +45,12 @@
                             <action id="clear" type="picker_clear"/>
                         </actions>
                     </pickerField>
-                    <lookupField id="haveDisabledChildField" property="haveDisabledChild"/>
-                    <lookupField id="haveLittleChildField" property="haveLittleChild"/>
+                    <lookupField id="haveDisabledChildField" property="haveDisabledChild"
+                                 contextHelpText="msg://haveDisabledChildField.contextHelpText"
+                                 description="msg://haveDisabledChildField.contextHelpText"/>
+                    <lookupField id="haveLittleChildField" property="haveLittleChild"
+                                 contextHelpText="msg://haveLittleChildField.contextHelpText"
+                                 description="msg://haveLittleChildField.contextHelpText"/>
                 </column>
             </form>
         </scrollBox>
