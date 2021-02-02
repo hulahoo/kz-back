@@ -16,6 +16,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Nonnull;
@@ -157,6 +158,7 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
 
     @Override
     public List<? extends User> getHrUsersForPerson(@Nonnull UUID personGroupId, @Nonnull String roleCode) {
+        Assert.isTrue(!roleCode.equals("EMPLOYEE"), roleCode + " Wrong argument code !");
         switch (roleCode) {
             case "MANAGER": {
                 PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
