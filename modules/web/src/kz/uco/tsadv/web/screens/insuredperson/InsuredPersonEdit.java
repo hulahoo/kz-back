@@ -1,10 +1,11 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
-import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.RemoveOperation;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
@@ -14,6 +15,7 @@ import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
+import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
@@ -23,6 +25,7 @@ import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.Attachment;
 
+import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
@@ -30,13 +33,13 @@ import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
-import kz.uco.tsadv.web.screens.insurancecontract.InsuranceContractEdit;
+import kz.uco.tsadv.service.EmployeeService;
+import org.checkerframework.common.subtyping.qual.Bottom;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -137,6 +140,18 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private Button removeButton;
     @Inject
     private ComponentsFactory componentsFactory;
+    @Inject
+    private Field<String> jobMemberField;
+    @Inject
+    private LookupField<DicAddressType> addressTypeTempField;
+    @Inject
+    private Notifications notifications;
+    @Inject
+    private InstanceLoader<InsuredPerson> insuredPersonDl;
+    @Inject
+    private TextField<BigDecimal> amountField;
+    @Inject
+    private EmployeeService employeeService;
 
 
     public void setParameter(String whichButton) {
@@ -152,66 +167,22 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         attachDateField.setRangeStart(outRequestDate);
         Date today = timeSource.currentTimestamp();
         attachDateField.setValue(today);
+        if (addressTypeField.getValue() != null){
+            addressTypeTempField.setValue(addressTypeField.getValue().getAddressType());
+        }
 
-        if ("joinMember".equals(whichButton)) {
-            familyMemberInformationGroup.setVisible(true);
-            employeeField.setEditable(false);
-            relativeField.setVisible(false);
-            documentTypeField.setEditable(false);
-            documentNumberField.setEditable(false);
-            addressTypeField.setEditable(false);
-            addressField.setEditable(false);
-            regionField.setEditable(false);
-
-            exclusionDateField.setVisible(false);
-            commentField.setVisible(false);
-        } else if ("openEmployee".equals(whichButton)) {
-            editButton.setVisible(false);
-            removeButton.setVisible(false);
-            createButton.setVisible(false);
-            relativeField.setVisible(false);
-            if (addressTypeField.getValue() == null) {
-                addressTypeField.setVisible(false);
-                addressField.setCaption("Домашний адрес");
-            }
-            if (insuredPersonMemberDc.getItems().size() != 0) {
-                familyMemberInformationGroup.setVisible(true);
-            } else {
-                familyMemberInformationGroup.setVisible(false);
-            }
+        if ("openEmployee".equals(whichButton)) {
+           isOpenEmployeeBtn();
         } else if ("joinEmployee".equals(whichButton)) {
-            familyMemberInformationGroup.setVisible(false);
-            employeeField.setEditable(false);
-            relativeField.setVisible(false);
-            addressTypeField.setEditable(true);
-            regionField.setEditable(true);
-            addressField.setEditable(true);
-            documentNumberField.setEditable(true);
-            documentTypeField.setEditable(true);
-            totalAmountField.setVisible(false);
-            insuranceContractField.setEditable(true);
-            documentNumberField.setRequired(true);
-
+            isJoinEmployeeBtn();
         } else if ("joinHr".equals(whichButton)) {
             attachDateField.setEditable(true);
             familyMemberInformationGroup.setVisible(false);
             commentField.setVisible(false);
         } else if ("editHr".equals(whichButton)) {
-            attachDateField.setEditable(true);
-            exclusionDateField.setVisible(true);
-            commentField.setVisible(true);
-            if (addressTypeField.getValue() == null) {
-                addressTypeField.setVisible(false);
-                addressField.setCaption("Домашний адрес");
-            }
-            if (insuredPersonDc.getItemOrNull().getRelative().getCode().equals("PRIMARY")) {
-                familyMemberInformationGroup.setVisible(true);
-            } else if (!insuredPersonDc.getItemOrNull().getRelative().getCode().equals("PRIMARY")) {
-                familyMemberInformationGroup.setVisible(false);
-            }
+            isEditHrBtn();
         } else {
             familyMemberInformationGroup.setVisible(true);
-
             employeeField.setEditable(false);
             relativeField.setVisible(false);
             documentTypeField.setEditable(false);
@@ -219,14 +190,9 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             addressTypeField.setEditable(false);
             addressField.setEditable(false);
             regionField.setEditable(false);
-
             exclusionDateField.setVisible(false);
             commentField.setVisible(false);
             insuranceContractField.setEditable(false);
-            if (addressTypeField.getValue() == null) {
-                addressTypeField.setVisible(false);
-                addressField.setCaption("Домашний адрес");
-            }
         }
 
         if (insuredPersonDc.getItemOrNull() != null && insuredPersonDc.getItem().getEmployee() != null) {
@@ -242,38 +208,55 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         }
     }
 
-    @Subscribe
-    public void onBeforeShow(BeforeShowEvent event) {
-
-        if (typeField.getValue() != null && RelativeType.EMPLOYEE == typeField.getValue()) {
-        } else if (typeField.getValue() != null && RelativeType.MEMBER == typeField.getValue()) {
-            addressTypeField.setEditable(false);
-            addressField.setEditable(false);
-            documentNumberField.setEditable(false);
-            documentTypeField.setEditable(false);
-            insuranceContractField.setEditable(false);
-            regionField.setEditable(false);
-            totalAmountField.setVisible(false);
-            relativeField.setVisible(false);
-            employeeField.setEditable(false);
-        } else if (typeField.getValue() == null) {
-            insuranceContractField.setEditable(true);
+    private void isEditHrBtn() {
+        attachDateField.setEditable(true);
+        exclusionDateField.setVisible(true);
+        commentField.setVisible(true);
+        if (addressTypeField.getValue() == null) {
+            addressTypeField.setVisible(false);
         }
-//        documentTypeDl.setParameter("personGroupId", insuredPersonDc.getItem().getEmployee().getPersonDocuments());
-        if (employeeField.getValue() != null &&
-                relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY")) {
-            if (addressDc.getItems().size() == 0) {
-                addressTypeField.setRequired(false);
-                addressTypeField.setVisible(false);
-                addressField.setRequired(true);
-                addressField.setCaption("Домашний адрес");
+        if (insuredPersonDc.getItemOrNull().getRelative().getCode().equals("PRIMARY")) {
+            familyMemberInformationGroup.setVisible(true);
+            if (addressTypeField.getValue() != null){
+                addressTypeTempField.setValue(addressTypeField.getValue().getAddressType());
             }
-            if (employeeField.getValue().getPersonDocuments().size() == 0) {
-//                documentNumberField.setEditable(true);
-//                documentTypeDl.setParameter("personGroupId", null);
-            }
+        } else if (!insuredPersonDc.getItemOrNull().getRelative().getCode().equals("PRIMARY")) {
+            familyMemberInformationGroup.setVisible(false);
+            jobField.setVisible(false);
+            jobMemberField.setVisible(true);
         }
     }
+
+    private void isJoinEmployeeBtn() {
+        familyMemberInformationGroup.setVisible(false);
+        employeeField.setEditable(false);
+        relativeField.setVisible(false);
+        addressTypeField.setEditable(true);
+        regionField.setEditable(true);
+        addressField.setEditable(true);
+        documentNumberField.setEditable(true);
+        documentTypeField.setEditable(true);
+        totalAmountField.setVisible(false);
+        insuranceContractField.setEditable(true);
+        documentNumberField.setRequired(true);
+    }
+
+    private void isOpenEmployeeBtn() {
+        editButton.setVisible(false);
+        removeButton.setVisible(false);
+        createButton.setVisible(false);
+        relativeField.setVisible(false);
+        if (addressTypeField.getValue() == null) {
+            addressTypeField.setVisible(false);
+        }
+        if (insuredPersonMemberDc.getItems().size() != 0) {
+            familyMemberInformationGroup.setVisible(true);
+        } else {
+            familyMemberInformationGroup.setVisible(false);
+        }
+    }
+
+
 
     @Subscribe(id = "insuredPersonMemberDc", target = Target.DATA_CONTAINER)
     public void onInsuredPersonMemberDcItemChange(InstanceContainer.ItemChangeEvent<InsuredPerson> event) {
@@ -286,16 +269,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe(id = "insuredPersonMemberDl", target = Target.DATA_LOADER)
     public void onInsuredPersonMemberDlPostLoad(CollectionLoader.PostLoadEvent<InsuredPerson> event) {
-        if (insuranceContractField.getValue() != null) {
-            totalAmountField.setValue(BigDecimal.valueOf(0));
-            BigDecimal totalAmount = totalAmountField.getValue();
-            for (InsuredPerson person : insuredPersonMemberDc.getItems()) {
-                if (person.getAmount() != null) {
-                    totalAmount = totalAmount.add(person.getAmount());
-                }
-            }
-            totalAmountField.setValue(totalAmount);
-        }
+        insuredPersonDl.load();
     }
 
 
@@ -305,14 +279,14 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         if (insuredPersonDc.getItem().getCompany() != null) {
             insuranceContractDl.setParameter("companyId", insuredPersonDc.getItem().getCompany());
         }
-        InsuredPersonMemberEdit insuredPersonMemberEdit = screenBuilders.editor(InsuredPerson.class, this)
+        InsuredPersonMemberEdit insuredPersonMemberEdit = (InsuredPersonMemberEdit) screenBuilders.editor(InsuredPerson.class, this)
                 .withScreenClass(InsuredPersonMemberEdit.class)
                 .editEntity(newInsuredPersonMember())
                 .withAfterCloseListener(e -> {
                     insuredPersonMemberDl.load();
                 })
-                .build();
-        setParameterAndShow(insuredPersonMemberEdit);
+                .build()
+                .show();
 
     }
 
@@ -321,33 +295,13 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     public void onInsuredPersonTableEdit(Action.ActionPerformedEvent event) {
         InsuredPerson insuredPerson = insuredPersonTable.getSingleSelected();
         assert insuredPerson != null;
-        InsuredPersonMemberEdit insuredPersonMemberEdit = screenBuilders.editor(InsuredPerson.class, this)
+        InsuredPersonMemberEdit insuredPersonMemberEdit = (InsuredPersonMemberEdit) screenBuilders.editor(InsuredPerson.class, this)
                 .withScreenClass(InsuredPersonMemberEdit.class)
                 .editEntity(insuredPerson)
                 .withAfterCloseListener(e -> {
                     insuredPersonMemberDl.load();
                 })
-                .build();
-        if (insuredPerson.getAmount() != BigDecimal.valueOf(0)) {
-            insuredPersonMemberEdit.setParameter(false);
-        } else {
-            insuredPersonMemberEdit.setParameter(true);
-        }
-        insuredPersonMemberEdit.show();
-
-    }
-
-
-    protected void setParameterAndShow(InsuredPersonMemberEdit insuredPersonMemberEdit) {
-        if (insuranceContractField.getValue() != null && insuranceContractField.getValue().getCountOfFreeMembers() != null &&
-                insuranceContractField.getValue().getCountOfFreeMembers() > insuredPersonMemberDc.getItems().size()) {
-            insuredPersonMemberEdit.setParameter(true);
-            insuredPersonMemberEdit.show();
-        } else if (insuranceContractField.getValue() != null && insuranceContractField.getValue().getCountOfFreeMembers() != null &&
-                insuranceContractField.getValue().getCountOfFreeMembers() <= insuredPersonMemberDc.getItems().size()) {
-            insuredPersonMemberEdit.setParameter(false);
-            insuredPersonMemberEdit.show();
-        }
+                .build().show();
     }
 
 
@@ -370,8 +324,24 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
+        if (!"joinEmployee".equals(whichButton)) {
+            checkDocumentIsEmpty();
+            setAddressField();
+        }
+
+        if (event.getValue() != null){
+            if (event.getValue().getCode().equals("PRIMARY")){
+                amountField.setVisible(false);
+            }else {
+                amountField.setVisible(true);
+                if (whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))){
+                    calculatedAmount();
+                }
+            }
+        }
 
         if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode()) && !(whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
+            //joinEmployee
             totalAmountField.setValue(new BigDecimal(0));
             addressTypeField.setEditable(true);
             addressField.setEditable(true);
@@ -389,8 +359,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             birthdateField.setValue(null);
             sexField.setValue(null);
             jobField.setValue(null);
-            documentTypeField.setValue(insuranceContractField.getValue() == null ?
-                    null : insuranceContractField.getValue().getDefaultDocumentType());
             documentNumberField.setValue(null);
             addressTypeField.setVisible(false);
             addressField.setValue(null);
@@ -403,22 +371,18 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             if (employeeField == null) {
 
             }
-        } else if (event.getValue() != null
-                && "PRIMARY".equals(event.getValue().getCode())) {
+        }
+        else if (event.getValue() != null
+                && "PRIMARY".equals(event.getValue().getCode())
+                && whichButton != null
+                && !(whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
+            addressTypeTempField.setVisible(true);
             totalAmountField.setValue(new BigDecimal(0));
             firstNameField.setVisible(false);
             middleNameField.setVisible(false);
             secondNameField.setVisible(false);
-            documentTypeField.setValue(insuranceContractField.getValue() == null ?
-                    null : insuranceContractField.getValue().getDefaultDocumentType());
-            addressTypeField.setVisible(true);
             addressField.setCaption("");
             if (employeeField.getValue() != null) {
-                if (employeeField.getValue().getAddresses().size() == 0) {
-                    addressTypeField.setVisible(false);
-                    addressField.setCaption("Домашний адрес");
-                    addressField.setRequired(true);
-                }
                 typeField.setValue(RelativeType.EMPLOYEE);
                 PersonExt personExt = employeeField.getValue().getPerson();
                 AssignmentExt assignmentExt = employeeField.getValue().getCurrentAssignment();
@@ -439,22 +403,17 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             if (typeField.getValue() != null && RelativeType.EMPLOYEE == typeField.getValue()) {
 
             }
-        } else if (event.getValue() != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
+        } else if (event.getValue() != null && whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
             if ("PRIMARY".equals(relativeField.getValue().getCode())) {
+                addressTypeTempField.setVisible(true);
                 totalAmountField.setValue(new BigDecimal(0));
                 firstNameField.setVisible(false);
                 middleNameField.setVisible(false);
                 secondNameField.setVisible(false);
-                documentTypeField.setValue(insuranceContractField.getValue() == null ?
-                        null : insuranceContractField.getValue().getDefaultDocumentType());
-                addressTypeField.setVisible(true);
-                addressField.setCaption("");
+                jobMemberField.setVisible(false);
+                jobMemberField.setValue(null);
+                jobField.setVisible(true);
                 if (employeeField.getValue() != null) {
-                    if (employeeField.getValue().getAddresses().size() == 0) {
-                        addressTypeField.setVisible(false);
-                        addressField.setCaption("Домашний адрес");
-                        addressField.setRequired(true);
-                    }
                     PersonExt personExt = employeeField.getValue().getPerson();
                     AssignmentExt assignmentExt = employeeField.getValue().getCurrentAssignment();
                     assignDateField.setValue(personExt.getHireDate());
@@ -472,21 +431,21 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     companyField.setEditable(false);
                 }
                 typeField.setValue(RelativeType.EMPLOYEE);
-            } else {
+            }
+            else {
                 typeField.setValue(RelativeType.MEMBER);
-
-                totalAmountField.setValue(new BigDecimal(0));
+                jobMemberField.setVisible(true);
+                jobField.setValue(null);
+                jobField.setVisible(false);
+                totalAmountField.setValue(BigDecimal.valueOf(0));
                 addressTypeField.setEditable(true);
                 addressField.setEditable(true);
-//            documentNumberField.setEditable(true);
                 documentTypeField.setEditable(true);
                 insuranceContractField.setEditable(true);
-//            regionField.setEditable(true);
                 totalAmountField.setVisible(false);
                 firstNameField.setVisible(true);
                 middleNameField.setVisible(true);
                 secondNameField.setVisible(true);
-//            if (employeeField == null){
                 firstNameField.setValue(null);
                 secondNameField.setValue(null);
                 middleNameField.setValue(null);
@@ -500,7 +459,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 addressTypeField.setVisible(false);
                 addressField.setValue(null);
                 addressField.setRequired(true);
-                addressField.setCaption("Домашний адрес");
                 iinField.setEditable(true);
                 sexField.setEditable(true);
                 birthdateField.setEditable(true);
@@ -509,12 +467,135 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             }
         } else if (event.getValue() != null && !"PRIMARY".equals(event.getValue().getCode())) {
 
+        } else if (whichButton == null) {
+            iinField.setEditable(false);
+            sexField.setEditable(false);
+            birthdateField.setEditable(false);
+            addressTypeTempField.setEditable(false);
+            jobField.setEditable(false);
+        }
+    }
+
+
+    protected void calculatedAmount(){
+
+        if (insuranceContractField.getValue() != null){
+            int age = employeeService.calculateAge(birthdateField.getValue());
+            List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
+                    "from tsadv$InsuredPerson e " +
+                    " where e.insuranceContract.id = :insuranceContractId" +
+                    " and e.employee.id = :employeeId " +
+                    " and e.relative.code <> 'PRIMARY'")
+                    .parameter("insuranceContractId", insuranceContractField.getValue().getId())
+                    .parameter("employeeId", employeeField.getValue().getId())
+                    .view("insuredPerson-editView")
+                    .list();
+
+            if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size()){
+                amountField.setValue(BigDecimal.valueOf(0));
+            }else {
+                for (ContractConditions condition : insuranceContractField.getValue().getProgramConditions()){
+                    if (condition.getRelationshipType().getId() == relativeField.getValue().getId()){
+                        if (condition.getAgeMin() <= age && condition.getAgeMax() >= age){
+                            amountField.setValue(condition.getCostInKzt());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    @Subscribe("birthdateField")
+    public void onBirthdateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
+        if (event.getValue() != null && whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))){
+            calculatedAmount();
+        }
+    }
+
+
+    private void setAddressField() {
+        if (insuranceContractField.getValue() != null) {
+            if (employeeField.getValue() != null && relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY")){
+                if (employeeField.getValue().getAddresses().isEmpty()){
+                    addressTypeTempField.setValue(insuranceContractField.getValue().getDefaultAddress());
+                }else {
+                    addressTypeTempField.setValue(employeeField.getValue().getAddresses().get(0).getAddressType());
+                }
+            } else {
+                addressTypeTempField.setValue(insuranceContractField.getValue().getDefaultAddress());
+            }
+        }
+    }
+
+
+    @Subscribe("addressTypeTempField")
+    public void onAddressTypeTempFieldValueChange(HasValue.ValueChangeEvent<DicAddressType> event) {
+        if (event != null) {
+            if (employeeField.getValue() != null && relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY")) {
+                if (employeeField.getValue().getAddresses().isEmpty()){
+                    addressTypeField.setValue(null);
+                    addressField.setValue(null);
+                } else {
+                    boolean setAddress = false;
+                    for (Address address : employeeField.getValue().getAddresses()){
+                       if (event.getValue().equals(address.getAddressType())){
+                           addressTypeField.setValue(address);
+                           addressField.setValue(address.getAddress());
+                           setAddress = true;
+                           break;
+                       }
+                    }
+                    if (!setAddress){
+                        addressTypeField.setValue(null);
+                        addressField.setValue(null);
+                    }
+                }
+            } else {
+                addressField.setValue(null);
+                addressTypeField.setValue(null);
+            }
+        }
+    }
+
+
+    private void checkDocumentIsEmpty() {
+
+        if (insuranceContractField.getValue() != null){
+            if (employeeField.getValue() != null && relativeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY")) {
+                if (employeeField.getValue().getPersonDocuments().isEmpty()){
+                    documentNumberField.setValue(null);
+                }else {
+                    boolean setDocument = false;
+                    for (PersonDocument document : employeeField.getValue().getPersonDocuments()){
+                        if (insuranceContractField.getValue() != null &&
+                                insuranceContractField.getValue().getDefaultDocumentType().getId().equals(document.getDocumentType().getId())){
+                            documentTypeField.setValue(document.getDocumentType());
+                            documentNumberField.setValue(document.getDocumentNumber());
+                            setDocument = true;
+                            break;
+                        }
+                    }
+                    if (!setDocument){
+                        documentTypeField.setValue(employeeField.getValue().getPersonDocuments().get(0).getDocumentType());
+                        documentNumberField.setValue(employeeField.getValue().getPersonDocuments().get(0).getDocumentNumber());
+                    }
+                }
+            }else {
+                documentTypeField.setValue(insuranceContractField.getValue().getDefaultDocumentType());
+                documentNumberField.setValue(null);
+            }
         }
     }
 
 
     @Subscribe("employeeField")
     public void onEmployeeFieldValueChange(HasValue.ValueChangeEvent<PersonGroupExt> event) {
+        if (!"joinEmployee".equals(whichButton)) {
+            checkDocumentIsEmpty();
+            setAddressField();
+        }
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +
                 "where e.id = :uId").parameter("uId", userSession.getUser().getId())
@@ -526,11 +607,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             DicCompany company = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
             companyField.setValue(company);
 
-            if (personGroupExt.getAddresses().size() == 0) {
-                addressTypeField.setVisible(false);
-                addressField.setCaption("Домашний адрес");
-                addressField.setRequired(true);
-            }
             PersonExt personExt = event.getValue().getPerson();
             AssignmentExt assignmentExt = event.getValue().getCurrentAssignment();
             insuranceContractField.setEditable(true);
@@ -577,6 +653,9 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             birthdateField.setEditable(true);
             jobField.setValue(null);
             jobField.setEditable(true);
+            documentNumberField.setValue(null);
+            addressTypeField.setValue(null);
+            addressField.setValue(null);
         }
     }
 
@@ -613,19 +692,64 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                         }
                     });
                     form2.add(linkButton);
-
-
                 }
             }
         }
     }
 
 
-    @Subscribe("removeButton")
-    public void onRemoveButtonClick(Button.ClickEvent event) {
+    @Install(to = "insuredPersonTable.remove", subject = "afterActionPerformedHandler")
+    private void insuredPersonTableRemoveAfterActionPerformedHandler(RemoveOperation.AfterActionPerformedEvent<InsuredPerson> afterActionPerformedEvent) {
         insuredPersonMemberDl.load();
     }
 
+
+    @Subscribe("documentTypeField")
+    public void onDocumentTypeFieldValueChange(HasValue.ValueChangeEvent<DicDocumentType> event) {
+        if (event.getValue() != null){
+            if(employeeField.getValue() != null){
+                if (employeeField.getValue().getPersonDocuments().isEmpty()){
+                    documentNumberField.setValue(null);
+                } else {
+                    boolean setDocument = false;
+                    for (PersonDocument document : employeeField.getValue().getPersonDocuments()){
+                        if (event.getValue().getId().equals(document.getDocumentType().getId())){
+                            documentNumberField.setValue(document.getDocumentNumber());
+                            setDocument = true;
+                            break;
+                        }
+                    }
+                    if (!setDocument){
+                        documentNumberField.setValue(null);
+                    }
+                }
+            }else {
+                documentNumberField.setValue(null);
+            }
+        }else {
+            documentNumberField.setValue(null);
+        }
+    }
+
+    @Subscribe
+    public void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
+        InsuredPerson person = dataManager.load(InsuredPerson.class).query("select e " +
+                "from tsadv$InsuredPerson e " +
+                "where e.insuranceContract.id = :contractId " +
+                " and e.employee.id = :employeeId " +
+                " and e.relative.code = 'PRIMARY' ")
+                .parameter("contractId", insuranceContractField.getValue().getId())
+                .parameter("employeeId", employeeField.getValue().getId())
+                .view("insuredPerson-editView")
+                .list().stream().findFirst().orElse(null);
+        if (person != null && relativeField.getValue().getCode().equals("PRIMARY")){
+            event.preventCommit();
+            notifications.create()
+                    .withCaption("Данный сотрудник уже прикрплен к договору страхования Номер: '" + person.getInsuranceContract().getPolicyName() + "' прикреплен").
+                    withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .show();
+        }
+    }
 
 
     public Component generatorName(InsuredPerson entity) {

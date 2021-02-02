@@ -1,19 +1,20 @@
 package kz.uco.tsadv.web.screens.insurancecontract;
 
 
+import com.haulmont.cuba.core.global.CommitContext;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.gui.Notifications;
-import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.Screens;
-import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.gui.*;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.components.data.ValueSource;
 import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.model.ContractConditions;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator;
@@ -50,8 +51,6 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Inject
     private CollectionPropertyContainer<ContractConditions> conditionDc;
     @Inject
-    private Screens screens;
-    @Inject
     private CollectionLoader<InsuredPerson> insuredPersonsDl;
     @Inject
     private InstanceContainer<InsuranceContract> insuranceContractDc;
@@ -68,6 +67,8 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Inject
     private Button createBtnPerson;
     protected boolean isCreateContract;
+    @Inject
+    private CollectionContainer<DicRelationshipType> relationTypeDc;
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -94,6 +95,16 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
 
         }, 0);
         column.setRenderer(insuredPersonsTable.createRenderer(DataGrid.ComponentRenderer.class));
+
+//        programConditionsDataGrid.getColumnNN("aaa")
+//                .setEditFieldGenerator(programConditionsEditorFieldGenerationContext ->{
+//                    LookupField<DicRelationshipType> lookupField = uiComponents.create(LookupField.NAME);
+//                    lookupField.setValueSource((ValueSource<DicRelationshipType>) programConditionsEditorFieldGenerationContext
+//                    .getValueSourceProvider().getValueSource("aaa"));
+//                    lookupField.setOptionsList(relationTypeDc.getItems());
+//
+//                   return lookupField;
+//                });
     }
 
 
@@ -120,7 +131,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
         InsuredPerson selectItem = insuredPersonsTable.getSingleSelected();
         if (selectItem != null){
             InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
-                    .newEntity(selectItem)
+                    .editEntity(selectItem)
                     .build();
             editorBuilder.setParameter("editHr");
             editorBuilder.show();
@@ -141,7 +152,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
                     insuredPersonsDl.load();
                 })
                 .build();
-        if (bulks.size() != 0){
+        if (!bulks.isEmpty()){
             bulkEdit.setParameter(bulks);
             bulkEdit.show();
         }
@@ -162,16 +173,18 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     public void onInsuredPersonsTableCreate(Action.ActionPerformedEvent event) {
         InsuredPerson insuredPerson = metadata.create(InsuredPerson.class);
         insuredPerson.setInsuranceContract(insuranceContractDc.getItem());
-//        insuredPerson.setAddressType(insuranceContract.getDefaultAddress());
         insuredPerson.setDocumentType(insuranceContractDc.getItem().getDefaultDocumentType());
         insuredPerson.setAttachDate(timeSource.currentTimestamp());
         insuredPerson.setCompany(insuranceContractDc.getItem().getCompany());
         insuredPerson.setInsuranceProgram(insuranceContractDc.getItem().getInsuranceProgram());
-//        insuredPerson.setAddressType(insuranceContract.getDefaultAddress());
         insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
 
-        InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
+        InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(InsuredPerson.class, this)
+                .withScreenClass(InsuredPersonEdit.class)
                 .newEntity(insuredPerson)
+                .withAfterCloseListener(e->{
+                    insuredPersonsDl.load();
+                })
                 .build();
 
         editorBuilder.setParameter("joinHr");
@@ -255,5 +268,17 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
                 availabilityPeriodToField.setRangeStart(outRequestDate);
         }
     }
+
+    @Subscribe("commitBtn")
+    public void onCommitBtnClick(Button.ClickEvent event) {
+        createBtnPerson.setEnabled(true);
+    }
+
+    @Install(to = "programConditionsDataGrid.remove", subject = "afterActionPerformedHandler")
+    private void programConditionsDataGridRemoveAfterActionPerformedHandler(RemoveOperation.AfterActionPerformedEvent<ContractConditions> afterActionPerformedEvent) {
+        insuredPersonsDl.load();
+    }
+
+
 
 }

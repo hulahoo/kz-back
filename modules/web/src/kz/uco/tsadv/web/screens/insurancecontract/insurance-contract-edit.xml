@@ -8,7 +8,7 @@
         <instance id="insuranceContractDc"
                   class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
                   view="insuranceContract-editView">
-            <loader/>
+            <loader id="insuranceContractDl"/>
             <collection id="contractAdministratorDc" property="contractAdministrator"/>
             <collection id="attachmentsDc" property="attachments"/>
             <collection id="conditionDc" property="programConditions"/>
@@ -39,6 +39,12 @@
         <collection id="companyDc" class="kz.uco.base.entity.dictionary.DicCompany" view="_local">
             <loader id="companyDl">
                 <query><![CDATA[select e from base_DicCompany e]]></query>
+            </loader>
+        </collection>
+        <collection id="relationTypeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType"
+                    view="_local">
+            <loader id="relationTypeDl">
+                <query><![CDATA[select e from tsadv$DicRelationshipType e]]></query>
             </loader>
         </collection>
     </data>
@@ -208,6 +214,7 @@
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="commitBtn" action="windowCommit" caption="Сохранить"/>
             <button id="closeBtn" action="windowClose"/>
         </hbox>
     </layout>

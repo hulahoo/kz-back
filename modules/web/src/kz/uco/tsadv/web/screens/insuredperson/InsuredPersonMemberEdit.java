@@ -16,6 +16,7 @@ import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.ContractConditions;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
@@ -30,6 +31,7 @@ import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @UiController("tsadv$InsuredPerson.MemberEdit")
 @UiDescriptor("insured-person-member-edit.xml")
@@ -39,7 +41,6 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
     @Inject
     private CollectionLoader<DicRelationshipType> relativeDl;
-    private boolean isFree;
     @Inject
     private DateField<Date> birthdateField;
     @Inject
@@ -68,6 +69,8 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
     private InstanceContainer<InsuredPerson> insuredPersonDc;
     @Inject
     private CollectionPropertyContainer<FileDescriptor> attachmentsDc;
+    @Inject
+    private PickerField<PersonGroupExt> employeeField;
 
 
     @Subscribe
@@ -75,17 +78,10 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
         relativeDl.setParameter("employee", "PRIMARY");
     }
 
-
-    public void setParameter(boolean isFree){
-        this.isFree = isFree;
-    }
-
-
     @Subscribe("birthdateField")
     public void onBirthdateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
         if (event.getValue() != null && relativeField.getValue() != null && insuranceContractField.getValue() != null){
-            amountField.setValue(BigDecimal.valueOf(0));
-            calculatedAmount(isFree);
+            calculatedAmount();
         }
     }
 
@@ -93,17 +89,27 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
         if (event.getValue() != null && birthdateField.getValue() != null && insuranceContractField.getValue() != null){
-            amountField.setValue(BigDecimal.valueOf(0));
-            calculatedAmount(isFree);
+            calculatedAmount();
         }
     }
 
 
-    protected void calculatedAmount(boolean isFree){
+    protected void calculatedAmount(){
 
         int age = employeeService.calculateAge(birthdateField.getValue());
+        List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
+                "from tsadv$InsuredPerson e " +
+                " where e.insuranceContract.id = :insuranceContractId" +
+                " and e.employee.id = :employeeId " +
+                " and e.relative.code <> 'PRIMARY'")
+                .parameter("insuranceContractId", insuranceContractField.getValue().getId())
+                .parameter("employeeId", employeeField.getValue().getId())
+                .view("insuredPerson-editView")
+                .list();
 
-        if (!isFree && insuranceContractField.getValue().getProgramConditions().size() >=1){
+        if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size()){
+            amountField.setValue(BigDecimal.valueOf(0));
+        }else {
             for (ContractConditions condition : insuranceContractField.getValue().getProgramConditions()){
                 if (condition.getRelationshipType().getId() == relativeField.getValue().getId()){
                     if (condition.getAgeMin() <= age && condition.getAgeMax() >= age){

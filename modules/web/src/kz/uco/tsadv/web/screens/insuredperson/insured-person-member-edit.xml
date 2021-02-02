@@ -17,11 +17,6 @@
                 <query><![CDATA[select e from tsadv$DicMICAttachmentStatus e]]></query>
             </loader>
         </collection>
-        <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup" view="_local">
-            <loader id="jobDl">
-                <query><![CDATA[select e from tsadv$JobGroup e]]></query>
-            </loader>
-        </collection>
         <collection id="sexDc" class="kz.uco.base.entity.dictionary.DicSex" view="_local">
             <loader id="sexDl">
                 <query><![CDATA[select e from base$DicSex e]]></query>
@@ -75,7 +70,7 @@
                     <textField id="firstNameField" property="firstName"/>
                     <textField id="secondNameField" property="secondName"/>
                     <textField id="middleNameField" property="middleName"/>
-                    <lookupField id="jobField" property="job" optionsContainer="jobDc"/>
+                    <field id="jobField" property="jobMember"/>
                     <lookupField id="sexField" property="sex" optionsContainer="sexDc"/>
                     <textField id="iinField" property="iin"/>
                     <dateField id="birthdateField" property="birthdate"/>
