@@ -15,6 +15,7 @@ import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
@@ -22,8 +23,6 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @UiController("tsadv_AbsenceForRecall.edit")
 @UiDescriptor("absence-for-recall-edit.xml")
@@ -116,7 +115,6 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
         }
     }
 
-
     @Override
     protected void initEditableFields() {
         super.initEditableFields();
@@ -124,9 +122,12 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
 
     @Nullable
     @Override
-    protected Map<String, Object> getProcessVariables() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("employee", absenceForRecallDc.getItem().getEmployee());
-        return map;
+    protected UserExt getEmployee() {
+        return dataManager.load(UserExt.class)
+                .query("select e from tsadv$UserExt e " +
+                        " where e.personGroup = :personGroup")
+                .parameter("personGroup", absenceForRecallDc.getItem().getEmployee())
+                .view("userExt.edit")
+                .list().stream().findFirst().orElse(null);
     }
 }

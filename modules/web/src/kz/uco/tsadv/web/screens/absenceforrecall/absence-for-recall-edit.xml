@@ -51,15 +51,9 @@
                     <checkBox id="compensationPaymentField" property="compensationPayment"/>
                     <dateField id="dateFromField" property="dateFrom" editable="false"/>
                     <dateField id="dateToField" property="dateTo" editable="false"/>
-                    <pickerField id="purposeField" property="purpose">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
                     <textField id="purposeTextField" property="purposeText"/>
-                    <checkBox id="isAgreeField" property="isAgree"/>
-                    <checkBox id="isFamiliarizationField" property="isFamiliarization"/>
+                    <checkBox id="isAgreeField" property="isAgree" visible="false"/>
+                    <checkBox id="isFamiliarizationField" property="isFamiliarization" visible="false"/>
                 </column>
             </form>
             <groupBox id="fileBox" caption="msg://kz.uco.tsadv.modules.personal.model/AbsenceForRecall.file">
