@@ -201,4 +201,25 @@
         <property name="standardOffsets" view="_minimal"/>
         <property name="standardShifts" view="_minimal"/>
     </view>
+    <view name="category-enrollment" entity="tsadv$DicCategory" extends="_minimal">
+        <property name="langValue"/>
+        <property name="langValue1"/>
+        <property name="langValue2"/>
+        <property name="langValue3"/>
+        <property name="courses" view="course-portal-browse">
+            <property name="enrollments" view="_minimal">
+                <property name="personGroup" view="_minimal"/>
+            </property>
+        </property>
+    </view>
+    <view name="enrollment-course" entity="tsadv$Enrollment" extends="_minimal">
+        <property name="course" view="_minimal">
+            <property name="sections" view="_minimal">
+                <property name="courseSectionAttempts" view="_minimal">
+                    <property name="enrollment" view="_minimal"/>
+                </property>
+            </property>
+            <property name="logo"/>
+        </property>
+    </view>
 </views>
