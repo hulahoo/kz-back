@@ -753,7 +753,9 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 .parameter("employeeId", employeeField.getValue().getId())
                 .view("insuredPerson-editView")
                 .list().stream().findFirst().orElse(null);
-        if (person != null && relativeField.getValue().getCode().equals("PRIMARY")){
+        if (person != null && relativeField.getValue().getCode().equals("PRIMARY")
+                && !whichButton.equals("joinMember")
+                && !whichButton.equals("editHr")){
             event.preventCommit();
             notifications.create()
                     .withCaption("Данный сотрудник уже прикрплен к договору страхования Номер: '" + person.getInsuranceContract().getPolicyName() + "' прикреплен").
