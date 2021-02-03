@@ -74,8 +74,8 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                             result += (item.getResult() != null ? item.getResult() : 0) * item.getWeight() / 100;
                         }
                         assignedPerformancePlanDc.getItem().setResult(result);
-                        dataManager.commit(assignedGoalDc.getItem());
-                        assignedGoalDl.load();
+                        getScreenData().getDataContext().merge(assignedGoalDc.getItem());
+                        getScreenData().getDataContext().commit();
                     }
                 }
         );

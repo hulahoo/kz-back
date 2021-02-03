@@ -98,6 +98,8 @@ public class SsStructurePerson extends AbstractWindow {
     protected CollectionDatasource<Absence, UUID> absenceDs;
     @Inject
     protected Table<Absence> absenceTable1;
+    @Named("absenceTable1.recallCreate")
+    protected Action absenceTable1RecallCreate;
 
 
     @Override
@@ -135,6 +137,16 @@ public class SsStructurePerson extends AbstractWindow {
         }
 
         tree.collapseTree();
+
+        absenceTable1.addSelectionListener(absenceSelectionEvent -> {
+            Set<Absence> absence = absenceSelectionEvent.getSelected();
+            if (absence.size() > 0 && absence.iterator().next().getType() != null
+                    && absence.iterator().next().getType().getCode().equals("ANNUAL")) {
+                absenceTable1RecallCreate.setEnabled(true);
+            } else {
+                absenceTable1RecallCreate.setEnabled(false);
+            }
+        });
     }
 
     protected String getValue(PersonExt personExt, String property, boolean isEng) {

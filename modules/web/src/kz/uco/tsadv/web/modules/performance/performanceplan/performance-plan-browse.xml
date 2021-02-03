@@ -32,7 +32,7 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="performancePlanName"/>
+                <column id="performancePlanName" link="true"/>
                 <column id="startDate"/>
                 <column id="endDate"/>
                 <column id="accessibilityStartDate"/>

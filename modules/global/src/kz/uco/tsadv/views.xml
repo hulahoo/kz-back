@@ -5347,6 +5347,7 @@
         <property name="endDate"/>
         <property name="code"/>
         <property name="isSystemRecord"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Test"
           extends="_local"
@@ -9089,6 +9090,7 @@
         <property name="endDate"/>
         <property name="code"/>
         <property name="isSystemRecord"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.SurCharge"
           extends="_local"
@@ -11961,6 +11963,7 @@
         </property>
         <property name="categoryComposition"
                   view="_local"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.MilitaryForm"
           extends="_local"
@@ -12148,6 +12151,7 @@
           name="dicAwardType.all">
         <property name="promotionType"
                   view="_local"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_local"
@@ -22927,6 +22931,9 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+    </view>
+    <view entity="tsadv$DicOffenceType" name="dicOffenceType-browse" extends="_local">
+        <property name="company" view="_minimal"/>
     </view>
 
 </views>

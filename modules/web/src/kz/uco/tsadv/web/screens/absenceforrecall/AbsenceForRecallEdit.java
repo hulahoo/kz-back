@@ -1,5 +1,7 @@
 package kz.uco.tsadv.web.screens.absenceforrecall;
 
+import com.haulmont.addon.bproc.web.processform.Outcome;
+import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
@@ -12,8 +14,12 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
+import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +28,15 @@ import java.util.Date;
 @UiDescriptor("absence-for-recall-edit.xml")
 @EditedEntityContainer("absenceForRecallDc")
 @LoadDataBeforeShow
-public class AbsenceForRecallEdit extends StandardEditor<AbsenceForRecall> {
+@ProcessForm(
+        outcomes = {
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
+        }
+)
+
+public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> {
     @Inject
     protected FileUploadingAPI fileUploadingAPI;
     @Inject
@@ -99,5 +113,21 @@ public class AbsenceForRecallEdit extends StandardEditor<AbsenceForRecall> {
         } else {
             absenceForRecallDc.getItem().setLeaveOtherTime(true);
         }
+    }
+
+    @Override
+    protected void initEditableFields() {
+        super.initEditableFields();
+    }
+
+    @Nullable
+    @Override
+    protected TsadvUser getEmployee() {
+        return dataManager.load(TsadvUser.class)
+                .query("select e from tsadv$UserExt e " +
+                        " where e.personGroup = :personGroup")
+                .parameter("personGroup", absenceForRecallDc.getItem().getEmployee())
+                .view("userExt.edit")
+                .list().stream().findFirst().orElse(null);
     }
 }
