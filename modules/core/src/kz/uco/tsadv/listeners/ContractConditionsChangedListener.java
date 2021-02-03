@@ -40,7 +40,9 @@ public class ContractConditionsChangedListener {
                 BigDecimal oldValue = event.getChanges().getOldValue("costInKzt");
                 List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
                         "from tsadv$InsuredPerson e " +
-                        " where e.relative.id = :relativeId")
+                        " where e.relative.id = :relativeId " +
+                        " and e.insuranceContract.id = :insuranceContractId")
+                        .parameter("insuranceContractId", contractConditions.getInsuranceContract().getId())
                         .parameter("relativeId", contractConditions.getRelationshipType().getId())
                         .view("insuredPerson-editView")
                         .list();

@@ -329,7 +329,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             setAddressField();
         }
 
-        if (event.getValue() != null){
+        if (event.getValue() != null && employeeField.getValue() != null){
             if (event.getValue().getCode().equals("PRIMARY")){
                 amountField.setVisible(false);
             }else {
@@ -595,6 +595,17 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         if (!"joinEmployee".equals(whichButton)) {
             checkDocumentIsEmpty();
             setAddressField();
+        }
+
+        if (relativeField.getValue() != null && employeeField.getValue() != null){
+            if (relativeField.getValue().getCode().equals("PRIMARY")){
+                amountField.setVisible(false);
+            }else {
+                amountField.setVisible(true);
+                if (whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))){
+                    calculatedAmount();
+                }
+            }
         }
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +

@@ -32,44 +32,47 @@ public class InsuredPersonChangedListener {
             Id<InsuredPerson, UUID> entityId = event.getEntityId();
             InsuredPerson person = dataManager.load(entityId).view("insuredPerson-editView").one();
 
-            List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
-                    "from tsadv$InsuredPerson e " +
-                    " where e.insuranceContract.id = :insuranceContractId" +
-                    " and e.employee.id = :employeeId " +
-                    " and e.relative.code <> 'PRIMARY' " +
-                    " ORDER BY e.attachDate")
-                    .parameter("insuranceContractId", person.getInsuranceContract().getId())
-                    .parameter("employeeId", person.getEmployee().getId())
-                    .view("insuredPerson-editView")
-                    .list();
+            if (!person.getRelative().getCode().equals("PRIMARY")){
+                List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
+                        "from tsadv$InsuredPerson e " +
+                        " where e.insuranceContract.id = :insuranceContractId" +
+                        " and e.employee.id = :employeeId " +
+                        " and e.relative.code <> 'PRIMARY' " +
+                        " ORDER BY e.attachDate")
+                        .parameter("insuranceContractId", person.getInsuranceContract().getId())
+                        .parameter("employeeId", person.getEmployee().getId())
+                        .view("insuredPerson-editView")
+                        .list();
 
-            InsuredPerson employee = dataManager.load(InsuredPerson.class).query("select e " +
-                    "from tsadv$InsuredPerson e " +
-                    " where e.insuranceContract.id = :insuranceContractId" +
-                    " and e.employee.id = :employeeId " +
-                    " and e.relative.code = 'PRIMARY'")
-                    .parameter("insuranceContractId", person.getInsuranceContract().getId())
-                    .parameter("employeeId", person.getEmployee().getId())
-                    .view("insuredPerson-editView")
-                    .list().stream().findFirst().orElse(null);
+                InsuredPerson employee = dataManager.load(InsuredPerson.class).query("select e " +
+                        "from tsadv$InsuredPerson e " +
+                        " where e.insuranceContract.id = :insuranceContractId" +
+                        " and e.employee.id = :employeeId " +
+                        " and e.relative.code = 'PRIMARY'")
+                        .parameter("insuranceContractId", person.getInsuranceContract().getId())
+                        .parameter("employeeId", person.getEmployee().getId())
+                        .view("insuredPerson-editView")
+                        .list().stream().findFirst().orElse(null);
 
-
-            if (person.getAmount().signum() > 0){
-                BigDecimal temp = employee.getTotalAmount();
-                employee.setTotalAmount(temp.subtract(person.getAmount()));
-                txDataManager.save(employee);
-            }
-            else {
-                for (InsuredPerson insuredPerson : personList) {
-                    if (insuredPerson.getAmount().signum() > 0 && !insuredPerson.getId().equals(person.getId())){
-                        BigDecimal minusAmount = insuredPerson.getAmount();
+                if (employee != null) {
+                    if (person.getAmount().signum() > 0){
                         BigDecimal temp = employee.getTotalAmount();
-
-                        insuredPerson.setAmount(BigDecimal.valueOf(0));
-                        txDataManager.save(insuredPerson);
-                        employee.setTotalAmount(temp.subtract(minusAmount));
+                        employee.setTotalAmount(temp.subtract(person.getAmount()));
                         txDataManager.save(employee);
-                        break;
+                    }
+                    else {
+                        for (InsuredPerson insuredPerson : personList) {
+                            if (insuredPerson.getAmount().signum() > 0 && !insuredPerson.getId().equals(person.getId())){
+                                BigDecimal minusAmount = insuredPerson.getAmount();
+                                BigDecimal temp = employee.getTotalAmount();
+
+                                insuredPerson.setAmount(BigDecimal.valueOf(0));
+                                txDataManager.save(insuredPerson);
+                                employee.setTotalAmount(temp.subtract(minusAmount));
+                                txDataManager.save(employee);
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -100,7 +103,7 @@ public class InsuredPersonChangedListener {
                     .list().stream().findFirst().orElse(null);
 
 
-            if (person.getAmount().signum() > 0){
+            if (employee != null && person.getAmount().signum() > 0){
                 employee.setTotalAmount(employee.getTotalAmount().add(person.getAmount()));
                 txDataManager.save(employee);
             }
@@ -120,8 +123,10 @@ public class InsuredPersonChangedListener {
                         .view("insuredPerson-editView")
                         .list().stream().findFirst().orElse(null);
 
-                employee.setTotalAmount((employee.getTotalAmount().subtract(oldVal)).add(person.getAmount()));
-                txDataManager.save(employee);
+                if (employee != null){
+                    employee.setTotalAmount((employee.getTotalAmount().subtract(oldVal)).add(person.getAmount()));
+                    txDataManager.save(employee);
+                }
             }
 
         }
