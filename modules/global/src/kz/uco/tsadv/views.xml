@@ -21388,6 +21388,33 @@
             <property name="attachments" view="_minimal"/>
             <property name="prevJobNDA"/>
             <property name="prevJobObligation"/>
+            <property name="haveConviction"/>
+            <property name="convictionAttachments" view="_minimal"/>
+            <property name="registeredDispensary"/>
+            <property name="dispensaryAttachments" view="_minimal"/>
+            <property name="dispensaryPeriod"/>
+            <property name="disability"/>
+            <property name="disabilityAttachments" view="_minimal"/>
+            <property name="disabilityGroup"/>
+            <property name="contraindicationsHealth"/>
+            <property name="contraindicationsHealthAttachments" view="_minimal"/>
+            <property name="contraindicationsHealthText"/>
+            <property name="childUnder18WithoutFatherOrMother"/>
+            <property name="childUnder18WithoutFatherOrMotherAttachments" view="_minimal"/>
+            <property name="childUnder14WithoutFatherOrMother"/>
+            <property name="childUnder14WithoutFatherOrMotherAttachments" view="_minimal"/>
+            <property name="criminalAdministrativeLiability"/>
+            <property name="criminalAdministrativeLiabilityAttachments" view="_minimal"/>
+            <property name="criminalAdministrativeLiabilityPerioidReason"/>
+            <property name="commitmentsFromPrevJob"/>
+            <property name="commitmentsAttachments" view="_minimal"/>
+            <property name="commitmentsLoan"/>
+            <property name="commitmentsCredit"/>
+            <property name="commitmentsNotSurMatValues"/>
+            <property name="haveNDA"/>
+            <property name="ndaAttachments" view="_minimal"/>
+            <property name="reasonForDismissal"/>
+            <property name="prevJobHr"/>
         </property>
         <property name="person" view="_minimal">
             <property name="nationality" view="_minimal">
