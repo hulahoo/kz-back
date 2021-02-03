@@ -81,7 +81,10 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
                 linkButton.setAction(new BaseAction("contractFieldPerson").withHandler(e->{
                     InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                             .editEntity(event.getItem())
-                            .build();
+                            .build()
+                            .addAfterCloseListener(a->{
+                                insuredPersonsDl.load();
+                            });
                     editorBuilder.setParameter("editHr");
                     editorBuilder.show();
                 }));
