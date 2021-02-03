@@ -70,7 +70,7 @@
                                 <dateField id="expirationDateField" property="expirationDate"/>
                                 <textField id="insurerField" property="insurer"/>
                                 <dateField id="notificationDateField" property="notificationDate"
-                                           contextHelpText="msg://DateOfSendingReminderNotificationToUpdateDataAndApplyForEnrollmentOfFamilyMembers"/>
+                                           contextHelpText="msg://DateOfSendingOfFamilyMembers"/>
                             </column>
                             <column width="350px">
                                 <dateField id="availabilityPeriodFromField" property="availabilityPeriodFrom"/>
