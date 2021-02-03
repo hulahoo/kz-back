@@ -103,7 +103,7 @@ public class InsuredPersonChangedListener {
                     .list().stream().findFirst().orElse(null);
 
 
-            if (person.getAmount().signum() > 0){
+            if (employee != null && person.getAmount().signum() > 0){
                 employee.setTotalAmount(employee.getTotalAmount().add(person.getAmount()));
                 txDataManager.save(employee);
             }
@@ -123,8 +123,10 @@ public class InsuredPersonChangedListener {
                         .view("insuredPerson-editView")
                         .list().stream().findFirst().orElse(null);
 
-                employee.setTotalAmount((employee.getTotalAmount().subtract(oldVal)).add(person.getAmount()));
-                txDataManager.save(employee);
+                if (employee != null){
+                    employee.setTotalAmount((employee.getTotalAmount().subtract(oldVal)).add(person.getAmount()));
+                    txDataManager.save(employee);
+                }
             }
 
         }
