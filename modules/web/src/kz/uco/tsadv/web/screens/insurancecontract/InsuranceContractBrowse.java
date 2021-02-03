@@ -1,5 +1,6 @@
 package kz.uco.tsadv.web.screens.insurancecontract;
 
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
@@ -10,6 +11,7 @@ import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.screen.LookupComponent;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonBrowse;
@@ -34,6 +36,8 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
     private UiComponents uiComponents;
     @Inject
     private Metadata metadata;
+    @Inject
+    private DataManager dataManager;
 
 
     @Subscribe
@@ -64,10 +68,15 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
 
     @Subscribe(id = "insuranceContractsDc", target = Target.DATA_CONTAINER)
     protected void onInsuranceContractsDcItemChange(InstanceContainer.ItemChangeEvent<InsuranceContract> event) {
-
-        boolean isEnabled = event.getItem() != null && event.getItem().getProgramConditions().size() == 0
-                && event.getItem().getAttachments().size() == 0 && event.getItem().getContractAdministrator().size() == 0;
-        removeBtn.setEnabled(isEnabled);
+        if (event.getItem() != null){
+            InsuredPerson person = dataManager.load(InsuredPerson.class)
+                    .query("select e from tsadv$InsuredPerson e " +
+                    "where e.insuranceContract.id = :contractId")
+                    .parameter("contractId", event.getItem().getId())
+                    .view("insuredPerson-editView")
+                    .list().stream().findFirst().orElse(null);
+            removeBtn.setEnabled(person == null);
+        }
     }
 
     @Subscribe("insuranceContractsTable.create")
