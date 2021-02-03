@@ -15,7 +15,7 @@ import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
@@ -122,8 +122,8 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
 
     @Nullable
     @Override
-    protected UserExt getEmployee() {
-        return dataManager.load(UserExt.class)
+    protected TsadvUser getEmployee() {
+        return dataManager.load(TsadvUser.class)
                 .query("select e from tsadv$UserExt e " +
                         " where e.personGroup = :personGroup")
                 .parameter("personGroup", absenceForRecallDc.getItem().getEmployee())
