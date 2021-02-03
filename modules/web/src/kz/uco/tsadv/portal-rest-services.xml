@@ -5,4 +5,13 @@
             <param name="entityName" type="java.lang.String"/>
         </method>
     </service>
+    <service name="tsadv_EnrollmentService">
+        <method name="searchEnrollment">
+            <param name="userId" type="java.util.UUID"/>
+        </method>
+        <method name="searchEnrollment">
+            <param name="courseName" type="java.lang.String"/>
+            <param name="userId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>

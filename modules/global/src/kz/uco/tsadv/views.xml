@@ -21019,7 +21019,7 @@
             </property>
             <property name="test" view="_local"/>
         </property>
-        <property name="course" view="_local"/>
+        <property name="course" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Test" extends="_local" name="test.course.lms">
         <property name="sections" view="_local">
