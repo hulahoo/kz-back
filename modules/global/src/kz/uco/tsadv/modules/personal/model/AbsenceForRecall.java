@@ -18,6 +18,8 @@ import java.util.List;
 public class AbsenceForRecall extends AbstractBprocRequest {
     private static final long serialVersionUID = 1213611202573439060L;
 
+    public static final String PROCESS_DEFINITION_KEY = "absenceForRecallRequest";
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ABSENCE_TYPE_ID")
     protected DicAbsenceType absenceType;
@@ -190,6 +192,6 @@ public class AbsenceForRecall extends AbstractBprocRequest {
 
     @Override
     public String getProcessDefinitionKey() {
-        return null;
+        return PROCESS_DEFINITION_KEY;
     }
 }

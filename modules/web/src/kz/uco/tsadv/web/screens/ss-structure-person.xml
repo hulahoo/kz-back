@@ -275,7 +275,7 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                                 <table id="absenceTable1" height="100%" width="100%">
                                     <actions>
                                         <action id="recallCreate" type="create" invoke="createRequestForRecall"
-                                                trackSelection="true"
+                                                enable="false"
                                                 caption="msg://createAbsenceForRecall"
                                                 icon="PLUS"/>
                                     </actions>
@@ -301,6 +301,7 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                                         <column id="absenceType"/>
                                         <column id="leaveOtherTime"/>
                                         <column id="compensationPayment"/>
+                                        <column id="status"/>
                                     </columns>
                                     <rows datasource="absenceForRecallDs"/>
                                     <rowsCount/>
