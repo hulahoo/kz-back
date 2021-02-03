@@ -754,6 +754,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 .view("insuredPerson-editView")
                 .list().stream().findFirst().orElse(null);
         if (person != null && relativeField.getValue().getCode().equals("PRIMARY")
+                && whichButton != null
                 && !whichButton.equals("joinMember")
                 && !whichButton.equals("editHr")){
             event.preventCommit();
