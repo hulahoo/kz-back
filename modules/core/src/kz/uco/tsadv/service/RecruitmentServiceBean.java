@@ -8,7 +8,7 @@ import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
@@ -198,9 +198,9 @@ public class RecruitmentServiceBean implements RecruitmentService {
 
 
             for (Requisition requisition : list) {
-                UserExt manager;
-                UserExt recruiter;
-                UserExt personGroupList;
+                TsadvUser manager;
+                TsadvUser recruiter;
+                TsadvUser personGroupList;
                 List<OrganizationHrUser> rmPersonGroupIdList = getRmPersonGroupId(requisition.getOrganizationGroup().getId());
                 if (requisition.getManagerPersonGroup() != null) {
                     manager = getUserExt(requisition.getManagerPersonGroup().getId());
@@ -260,7 +260,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
                 .filter(organizationHrUser -> organizationHrUser.getUser().getLogin().equals(userLogin))
                 .count() > 0;
 
-        UserExt manager = employeeService.getUserExtByPersonGroupId(requisition.getManagerPersonGroup().getId());
+        TsadvUser manager = employeeService.getUserExtByPersonGroupId(requisition.getManagerPersonGroup().getId());
         boolean isM = manager != null ? manager.getLogin().equals(userLogin) : false;
 
         boolean changeStatus =
@@ -290,8 +290,8 @@ public class RecruitmentServiceBean implements RecruitmentService {
                     requisition.setRequisitionStatus(RequisitionStatus.CLOSED);
                     commitContext.addInstanceToCommit(requisition);
 
-                    UserExt manager;
-                    UserExt recruiter;
+                    TsadvUser manager;
+                    TsadvUser recruiter;
                     if (requisition.getRecruiterPersonGroup() != null) {
                         recruiter = getUserExt(requisition.getRecruiterPersonGroup().getId());
                         sendMessage(recruiter, requisition);
@@ -300,7 +300,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
                         manager = getUserExt(requisition.getManagerPersonGroup().getId());
                         sendMessage(manager, requisition);
                     }
-                    UserExt candidate;
+                    TsadvUser candidate;
                     for (JobRequest jobRequest : requisition.getJobRequests()) {
                         if (jobRequest.getRequestStatus() != JobRequestStatus.HIRED && jobRequest.getRequestStatus() != JobRequestStatus.REJECTED) {
                             sendNotificationForCandidate(jobRequest.getCandidatePersonGroup().getId(),
@@ -321,7 +321,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
         String errorMessage = "";
 
         try {
-            UserExt userExt = candidateId != null ? getUserExt(candidateId) : getUserExtByLogin(login);
+            TsadvUser userExt = candidateId != null ? getUserExt(candidateId) : getUserExtByLogin(login);
 
             if (userExt != null) {
                 Map<String, Object> paramsMap = new HashMap<>();
@@ -361,7 +361,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
                         userExt,
                         paramsMap);
             } else {
-                errorMessage = "UserExt is null!";
+                errorMessage = "TsadvUser is null!";
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -386,7 +386,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
         return personFullNameEn;
     }
 
-    protected Case getCasePersonName(UserExt userExt, String language, String caseName) {
+    protected Case getCasePersonName(TsadvUser userExt, String language, String caseName) {
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("personGroupId", employeeService.getPersonGroupByUserId(userExt.getId()).getId()); //TODO: personGroup need to test
         paramMap.put("systemDate", CommonUtils.getSystemDate());
@@ -438,12 +438,12 @@ public class RecruitmentServiceBean implements RecruitmentService {
             if (requisitionList != null && !requisitionList.isEmpty()) {
                 for (Requisition requisition : requisitionList) {
                     if (requisition.getManagerPersonGroup() != null) {
-                        UserExt manager;
+                        TsadvUser manager;
                         manager = getUserExt(requisition.getManagerPersonGroup().getId());
                         sendMessageFinalCollectDate(manager, requisition);
                     }
                     if (requisition.getRecruiterPersonGroup() != null) {
-                        UserExt recruiter;
+                        TsadvUser recruiter;
                         recruiter = getUserExt(requisition.getRecruiterPersonGroup().getId());
                         sendMessageFinalCollectDate(recruiter, requisition);
                     }
@@ -453,7 +453,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
         }
     }
 
-    private void sendMessage(UserExt userExt, Requisition requisition) {
+    private void sendMessage(TsadvUser userExt, Requisition requisition) {
         try {
             if (userExt != null && requisition.getCode() != null) {
                 Map<String, Object> paramsMap = new HashMap<>();
@@ -473,7 +473,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
         }
     }
 
-    private void sendMessageFinalCollectDate(UserExt userExt, Requisition requisition) {
+    private void sendMessageFinalCollectDate(TsadvUser userExt, Requisition requisition) {
         try {
             if (userExt != null && requisition.getCode() != null && requisition.getFinalCollectDate() != null) {
                 Map<String, Object> paramsMap = new HashMap<>();
@@ -493,7 +493,7 @@ public class RecruitmentServiceBean implements RecruitmentService {
         }
     }
 
-    private void sendMessageStartDate(UserExt userExt, Requisition requisition) {
+    private void sendMessageStartDate(TsadvUser userExt, Requisition requisition) {
         try {
             if (userExt != null && requisition.getCode() != null) {
                 Map<String, Object> paramsMap = new HashMap<>();
@@ -513,8 +513,8 @@ public class RecruitmentServiceBean implements RecruitmentService {
     }
 
 
-    protected UserExt getUserExt(UUID personGroupId) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    protected TsadvUser getUserExt(UUID personGroupId) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
 //        loadContext.setQuery(LoadContext.createQuery("select e from tsadv$UserExt e where e.personGroup.id = :pgId")
 //                .setParameter("pgId", personGroupId));
         LoadContext.Query query = LoadContext.createQuery(
@@ -526,8 +526,8 @@ public class RecruitmentServiceBean implements RecruitmentService {
         return dataManager.load(loadContext);
     }
 
-    protected UserExt getUserExtByLogin(String login) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    protected TsadvUser getUserExtByLogin(String login) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$UserExt e where e.login = :login");
         query.setParameter("login", login);

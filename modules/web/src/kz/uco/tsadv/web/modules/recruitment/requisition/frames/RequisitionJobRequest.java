@@ -30,7 +30,7 @@ import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.filter.StoreStyleFilter;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.administration.enums.RuleStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
@@ -69,7 +69,7 @@ public class RequisitionJobRequest extends AbstractFrame {
     protected static SimpleDateFormat dateFormat;
     protected static SimpleDateFormat periodFormat;
     private boolean ignoreCheckBoxValueCHange;
-    protected List<UserExt> userExtList;
+    protected List<TsadvUser> userExtList;
     protected List<Offer> offers;
     protected List<JobRequest> allJobRequests;
     protected List<InterviewQuestionnaire> allInterviewQuestionnaire;
@@ -271,7 +271,7 @@ public class RequisitionJobRequest extends AbstractFrame {
 
             if (!removeConfig.getEnabled()) {
                 if (notNull) {
-                    UserExt userExt = getUserExt(jobRequest.getCandidatePersonGroup().getId());
+                    TsadvUser userExt = getUserExt(jobRequest.getCandidatePersonGroup().getId());
                     Map<String, Object> paramsMap = new HashMap<>();
                     paramsMap.put("idJobRequest", jobRequest.getId());
                     Offer offer = commonService.getEntity(Offer.class, "select e from tsadv$Offer e where e.jobRequest.id = :idJobRequest", paramsMap, "offer.browse");
@@ -2158,7 +2158,7 @@ public class RequisitionJobRequest extends AbstractFrame {
             });
             if (!(configuration.getConfig(JobRequestRemoveCandidateConfig.class).getEnabled())) {
                 if (model != null) {
-                    UserExt userExt = getUserExt(model.getCandidatePersonGroup().getId());
+                    TsadvUser userExt = getUserExt(model.getCandidatePersonGroup().getId());
                     Map<String, Object> paramsMap = new HashMap<>();
                     paramsMap.put("idJobRequest", model.getId());
 
@@ -3176,7 +3176,7 @@ public class RequisitionJobRequest extends AbstractFrame {
     protected void sendNotificationForCandidate(PersonGroupExt candidatePersonGroup, String
             templateCode, Requisition requisition) {
         try {
-            UserExt userExt = getUserExt(candidatePersonGroup.getId());
+            TsadvUser userExt = getUserExt(candidatePersonGroup.getId());
 
             if (userExt != null) {
                 Map<String, Object> paramsMap = new HashMap<>();
@@ -3210,9 +3210,9 @@ public class RequisitionJobRequest extends AbstractFrame {
         }
     }
 
-    protected UserExt getUserExt(UUID personGroupId) {
+    protected TsadvUser getUserExt(UUID personGroupId) {
         if (userExtList != null && userExtList.size() > 0) {
-            for (UserExt extPersonGroup : userExtList) {
+            for (TsadvUser extPersonGroup : userExtList) {
                 if (extPersonGroup.getPersonGroup().getId().equals(personGroupId)) {
                     return extPersonGroup;
                 }
@@ -3220,7 +3220,7 @@ public class RequisitionJobRequest extends AbstractFrame {
         } else {
             loadLists();
             if (userExtList != null && userExtList.size() > 0) {
-                for (UserExt extPersonGroup : userExtList) {
+                for (TsadvUser extPersonGroup : userExtList) {
                     if (extPersonGroup.getPersonGroup().getId().equals(personGroupId)) {
                         return extPersonGroup;
                     }
@@ -3239,7 +3239,7 @@ public class RequisitionJobRequest extends AbstractFrame {
         List<UUID> jrId = jobRequestsDs.getItems().stream().map(jobRequest ->
                 jobRequest.getId()
         ).collect(Collectors.toList());
-        userExtList = commonService.getEntities(UserExt.class,
+        userExtList = commonService.getEntities(TsadvUser.class,
                 "select e from tsadv$UserExt e " +
                         " where e.personGroup.id in :personGroupId",
                 ParamsMap.of("personGroupId", personGroupId),
@@ -3261,8 +3261,8 @@ public class RequisitionJobRequest extends AbstractFrame {
                 ParamsMap.of("jrId", jrId), "interviewQuestionnaire.weight");
     }
 
-    protected UserExt getUserExtByLogin(String login) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    protected TsadvUser getUserExtByLogin(String login) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$UserExt e where e.login = :login");
         query.setParameter("login", login);

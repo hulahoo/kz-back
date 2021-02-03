@@ -5,7 +5,7 @@ import com.haulmont.addon.bproc.entity.TaskData;
 import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.cuba.core.entity.annotation.Extends;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 
 import java.util.List;
@@ -16,7 +16,7 @@ public class ExtTaskData extends TaskData {
     private static final long serialVersionUID = 4783014765359912908L;
 
     @MetaProperty
-    private List<UserExt> assigneeOrCandidates;
+    private List<TsadvUser> assigneeOrCandidates;
 
     @MetaProperty
     private String outcome;
@@ -51,11 +51,11 @@ public class ExtTaskData extends TaskData {
         this.outcome = outcome;
     }
 
-    public List<UserExt> getAssigneeOrCandidates() {
+    public List<TsadvUser> getAssigneeOrCandidates() {
         return assigneeOrCandidates;
     }
 
-    public void setAssigneeOrCandidates(List<UserExt> assigneeOrCandidates) {
+    public void setAssigneeOrCandidates(List<TsadvUser> assigneeOrCandidates) {
         this.assigneeOrCandidates = assigneeOrCandidates;
     }
 

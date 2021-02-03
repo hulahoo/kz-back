@@ -2,7 +2,7 @@ package kz.uco.tsadv.service;
 
 
 import kz.uco.tsadv.global.entity.OrganizationTree;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
@@ -28,7 +28,7 @@ public interface OrganizationService extends kz.uco.base.service.OrganizationSer
     String getOrganizationPathToHint(UUID organizationGroupId, Date date);
 
     @Nonnull
-    Set<OrganizationGroupExt> getOrganizationsWhereUserIsHr(UserExt userExt);
+    Set<OrganizationGroupExt> getOrganizationsWhereUserIsHr(TsadvUser userExt);
 
     Map<UUID,String> getOrganizationPathToHintForList(List<UUID> organizationGroupIds,Date date);
 }

@@ -29,7 +29,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.components.GroupsComponent;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.service.BprocService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.web.screens.bpm.processforms.outcome.BprocOutcomeDialog;
@@ -179,7 +179,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
                                         BprocOutcomeDialog outcomeDialog = (BprocOutcomeDialog) screens.create("tsadv_BprocOutcomeDialog", OpenMode.DIALOG);
                                         String outcome = action.getId();
 
-                                        Supplier<UserExt> userSupplier = outcomeDialog.getUserSupplier();
+                                        Supplier<TsadvUser> userSupplier = outcomeDialog.getUserSupplier();
                                         outcomesPanel.setProcessVariablesSupplier(() -> {
                                             Map<String, Object> params = new HashMap<>();
                                             params.put("comment", outcomeDialog.getComment());
@@ -295,7 +295,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     }
 
     @Nullable
-    protected UserExt getEmployee() {
+    protected TsadvUser getEmployee() {
         return null;
     }
 
@@ -306,7 +306,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
 
     @SuppressWarnings({"unchecked", "UnstableApiUsage"})
     public Component generateAssignee(ExtTaskData taskData) {
-        List<UserExt> assigneeOrCandidates = taskData.getAssigneeOrCandidates();
+        List<TsadvUser> assigneeOrCandidates = taskData.getAssigneeOrCandidates();
         if (!CollectionUtils.isEmpty(assigneeOrCandidates)) {
             if (assigneeOrCandidates.size() == 1) {
                 Label<String> lbl = uiComponents.create(Label.TYPE_STRING);
@@ -316,11 +316,11 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
                 PopupView popupView = uiComponents.create(PopupView.class);
                 popupView.setMinimizedValue(assigneeOrCandidates.get(0).getFullNameWithLogin() + " +" + (assigneeOrCandidates.size() - 1));
 
-                CollectionContainer<UserExt> container = dataComponents.createCollectionContainer(UserExt.class);
+                CollectionContainer<TsadvUser> container = dataComponents.createCollectionContainer(TsadvUser.class);
 
                 container.setItems(assigneeOrCandidates);
 
-                Table<UserExt> table = uiComponents.create(Table.class);
+                Table<TsadvUser> table = uiComponents.create(Table.class);
                 table.addGeneratedColumn("fullNameWithLogin", entity -> {
                     Label<String> lbl = uiComponents.create(Label.TYPE_STRING);
                     lbl.setValue(entity.getFullNameWithLogin());

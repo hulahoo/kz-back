@@ -10,7 +10,7 @@ import kz.uco.base.notification.NotificationSender;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
@@ -188,8 +188,8 @@ public class AssignmentServiceBean implements AssignmentService {
 
         for (AssignmentExt assignmentExt : list) {
             try {
-                UserExt user = employeeService.findManagerByPersonGroup(assignmentExt.getPersonGroup().getId(), positionStructureConfig.getPositionStructureId().toString());
-                UserExt manager = dataManager.reload(user, "userExt.edit");
+                TsadvUser user = employeeService.findManagerByPersonGroup(assignmentExt.getPersonGroup().getId(), positionStructureConfig.getPositionStructureId().toString());
+                TsadvUser manager = dataManager.reload(user, "userExt.edit");
                 PersonExt employee = employeeService.getPersonByPersonGroup(assignmentExt.getPersonGroup().getId(), CommonUtils.getSystemDate(), "person-edit");
 
                 Map<String, Object> param = new HashMap<>();

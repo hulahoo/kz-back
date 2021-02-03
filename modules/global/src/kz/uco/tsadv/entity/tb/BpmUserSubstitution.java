@@ -1,7 +1,7 @@
 package kz.uco.tsadv.entity.tb;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,12 +15,12 @@ public class BpmUserSubstitution extends StandardEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "SUBSTITUTED_USER_ID")
-    protected UserExt substitutedUser;
+    protected TsadvUser substitutedUser;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USER_ID")
-    protected UserExt user;
+    protected TsadvUser user;
 
     @Temporal(TemporalType.DATE)
     @NotNull
@@ -32,19 +32,19 @@ public class BpmUserSubstitution extends StandardEntity {
     @Column(name = "END_DATE", nullable = false)
     protected Date endDate;
 
-    public void setSubstitutedUser(UserExt substitutedUser) {
+    public void setSubstitutedUser(TsadvUser substitutedUser) {
         this.substitutedUser = substitutedUser;
     }
 
-    public UserExt getSubstitutedUser() {
+    public TsadvUser getSubstitutedUser() {
         return substitutedUser;
     }
 
-    public void setUser(UserExt user) {
+    public void setUser(TsadvUser user) {
         this.user = user;
     }
 
-    public UserExt getUser() {
+    public TsadvUser getUser() {
         return user;
     }
 

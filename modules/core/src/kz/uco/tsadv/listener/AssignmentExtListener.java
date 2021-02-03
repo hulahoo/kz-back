@@ -1,15 +1,11 @@
 package kz.uco.tsadv.listener;
 
 import com.haulmont.cuba.core.Persistence;
-import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.listener.AfterDeleteEntityListener;
 import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
 import kz.uco.tsadv.IntegrationException;
 import kz.uco.tsadv.config.IntegrationConfig;
-import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
-import kz.uco.tsadv.service.BpmService;
 import kz.uco.tsadv.service.IntegrationService;
 import org.springframework.stereotype.Component;
 

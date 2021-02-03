@@ -561,7 +561,7 @@
         <class>kz.uco.tsadv.lms.entity.LmsSlider</class>
         <class>kz.uco.tsadv.lms.entity.LmsSliderImage</class>
         <class>kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription</class>
-        <class>kz.uco.tsadv.modules.administration.UserExt</class>
+        <class>kz.uco.tsadv.modules.administration.TsadvUser</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCompany</class>
         <class>kz.uco.tsadv.modules.personal.model.HierarchyElementGroup</class>
         <class>kz.uco.tsadv.modules.performance.dictionary.DicJobGroup</class>
@@ -607,7 +607,6 @@
         <class>kz.uco.tsadv.modules.personal.model.ChildDescription</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCriminalLiabilityType</class>
         <class>kz.uco.tsadv.modules.personal.model.LeavingVacationRequest</class>
-        <class>kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink</class>
         <class>kz.uco.tsadv.entity.bproc.AbstractBprocRequest</class>
         <class>kz.uco.tsadv.modules.performance.model.ScoreSetting</class>
         <class>kz.uco.tsadv.modules.performance.model.CorrectionCoefficient</class>

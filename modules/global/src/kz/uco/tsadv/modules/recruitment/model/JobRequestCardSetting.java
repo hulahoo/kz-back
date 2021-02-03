@@ -1,7 +1,7 @@
 package kz.uco.tsadv.modules.recruitment.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 
 import javax.persistence.*;
 
@@ -15,16 +15,16 @@ public class JobRequestCardSetting extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    protected UserExt user;
+    protected TsadvUser user;
 
     @Column(name = "PROPERTY_VALUE")
     protected Boolean propertyValue;
 
-    public void setUser(UserExt user) {
+    public void setUser(TsadvUser user) {
         this.user = user;
     }
 
-    public UserExt getUser() {
+    public TsadvUser getUser() {
         return user;
     }
 

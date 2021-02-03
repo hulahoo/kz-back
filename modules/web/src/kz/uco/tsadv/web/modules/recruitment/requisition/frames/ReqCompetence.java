@@ -12,7 +12,7 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import com.haulmont.cuba.web.gui.components.renderers.WebComponentRenderer;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.CompetenceGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -152,7 +152,7 @@ public class ReqCompetence extends AbstractFrame {
         String query = "SELECT e FROM tsadv$UserExt e " +
                 "JOIN base$PersonGroupExt t ON t.id = e.personGroup.id " +
                 "where e.id = :userSessionID AND e.personGroup.id = :userSessionManagerID";
-        List<UserExt> extList = commonService.getEntities(UserExt.class, query, map, null);
+        List<TsadvUser> extList = commonService.getEntities(TsadvUser.class, query, map, null);
         ButtonsPanel panel = (ButtonsPanel) getComponent("competencesButtonsPanel");
         if (extList.size() > 0) {
             competencesTable.setEditorEnabled(false);

@@ -6,7 +6,7 @@ import com.haulmont.cuba.gui.components.*;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.BpmUserSubstitution;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.service.BpmUserSubstitutionService;
 import org.springframework.util.StringUtils;
 
@@ -41,8 +41,8 @@ public class BpmUserSubstitutionEdit extends AbstractEditor<BpmUserSubstitution>
         substitutedUserPickerField.getLookupAction().setLookupScreenParamsSupplier(() -> ParamsMap.of("EMPLOYEE", true));
         userPickerField.getLookupAction().setLookupScreenParamsSupplier(() -> ParamsMap.of("EMPLOYEE", true));
 
-        substitutedUserPickerField.addValueChangeListener(e -> getItem().setSubstitutedUser(e.getValue() != null ? (UserExt) e.getValue() : null));
-        userPickerField.addValueChangeListener(e -> getItem().setUser(e.getValue() != null ? (UserExt) e.getValue() : null));
+        substitutedUserPickerField.addValueChangeListener(e -> getItem().setSubstitutedUser(e.getValue() != null ? (TsadvUser) e.getValue() : null));
+        userPickerField.addValueChangeListener(e -> getItem().setUser(e.getValue() != null ? (TsadvUser) e.getValue() : null));
     }
 
     @Override

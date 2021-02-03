@@ -15,7 +15,7 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 /*import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.activiti.engine.runtime.ProcessInstance;*/
 import org.apache.commons.lang3.BooleanUtils;

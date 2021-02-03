@@ -20881,7 +20881,7 @@
             <property name="nationalIdentifier"/>
         </property>
     </view>
-    <view class="kz.uco.tsadv.modules.administration.UserExt"
+    <view class="kz.uco.tsadv.modules.administration.TsadvUser"
           extends="user.browse"
           name="user.browse">
         <property name="image"
@@ -20889,7 +20889,7 @@
             <property name="size"/>
         </property>
     </view>
-    <view class="kz.uco.tsadv.modules.administration.UserExt"
+    <view class="kz.uco.tsadv.modules.administration.TsadvUser"
           extends="user.edit"
           name="user.edit">
         <property name="image"
@@ -20905,7 +20905,7 @@
         <property name="atsCode"/>
         <property name="personGroup" view="personGroupExt.edit"/>
     </view>
-    <view class="kz.uco.tsadv.modules.administration.UserExt"
+    <view class="kz.uco.tsadv.modules.administration.TsadvUser"
           extends="_minimal"
           name="user.roles">
         <property name="userRoles"
@@ -21807,12 +21807,6 @@
         <property name="statusRequest" view="_minimal"/>
         <property name="requestType" view="_minimal"/>
         <property name="vacation" view="_minimal"/>
-    </view>
-    <view entity="tsadv_BprocInstanceRolesLink" name="bprocInstanceRolesLink-getAssignee" extends="_local">
-        <property name="hrRole" view="_minimal">
-            <property name="code"/>
-        </property>
-        <property name="user" view="_minimal"/>
     </view>
     <view entity="tsadv$ContractConditions" name="contractConditions-browseView" extends="_local">
         <property name="relationshipType" view="_minimal"/>
@@ -22788,7 +22782,7 @@
         </property>
         <property name="person" view="person.info"/>
     </view>
-    <view class="kz.uco.tsadv.modules.administration.UserExt"
+    <view class="kz.uco.tsadv.modules.administration.TsadvUser"
           extends="_local"
           name="user-fioWithLogin">
         <property name="personGroup">

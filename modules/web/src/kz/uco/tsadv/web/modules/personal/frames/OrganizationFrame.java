@@ -7,7 +7,7 @@ import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.HierarchicalDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
@@ -140,7 +140,7 @@ public class OrganizationFrame extends AbstractFrame {
 
     private void openCastomizeEditor(OrganizationHrUser organizationHrUser) {
         Map<String, Object> map = new HashMap<>();
-        List<UserExt> excludedUsersList = new ArrayList<>();
+        List<TsadvUser> excludedUsersList = new ArrayList<>();
 
         for (OrganizationHrUser orgHrUser : orgHrUsersDs.getItems()) {
             if (!orgHrUser.getUser().equals(organizationHrUser.getUser())) {

@@ -19,7 +19,7 @@ import kz.uco.base.common.TokenHelper;
 import kz.uco.base.common.WebCommonUtils;
 import kz.uco.tsadv.components.RcgEventBean;
 import kz.uco.tsadv.config.RecognitionConfig;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.recognition.RecognitionProfileSetting;
 import kz.uco.tsadv.service.RecognitionService;
@@ -85,7 +85,7 @@ public class RecognitionWindow extends AbstractTopLevelWindow {
 
     private String selectedSideMenuItemId = "main";
 
-    private UserExt userExt;
+    private TsadvUser userExt;
 
     private boolean isTablet = false, isMobile = false;
 

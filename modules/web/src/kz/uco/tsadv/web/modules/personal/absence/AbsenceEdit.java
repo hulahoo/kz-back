@@ -13,7 +13,7 @@ import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.AbsenceNotificationConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -394,7 +394,7 @@ public class AbsenceEdit extends AbstractEditor<Absence> {
             if (absenceNotificationConfig.getEmployeeNotifyEnable()) {
                 /*Отправить уведомление владельцу карточки*/
                 Map<String, Object> map = new HashMap<>();
-                UserExt userExt = employeeService.getUserExtByPersonGroupId(absence.getPersonGroup().getId());
+                TsadvUser userExt = employeeService.getUserExtByPersonGroupId(absence.getPersonGroup().getId());
                 if (userExt != null && absence.getOrderNum() == null) {
                     notificationService.sendParametrizedNotification("absence.assets", userExt, map);
                 }

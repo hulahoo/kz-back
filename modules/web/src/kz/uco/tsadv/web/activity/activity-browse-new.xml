@@ -51,7 +51,7 @@ and e.endDateTime is not null]]>
             </query>
         </groupDatasource>
         <groupDatasource id="userExtsDs"
-                         class="kz.uco.tsadv.modules.administration.UserExt"
+                         class="kz.uco.tsadv.modules.administration.TsadvUser"
                          view="user.browse">
             <query>
                 <![CDATA[select e from tsadv$UserExt e]]>

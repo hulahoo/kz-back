@@ -15,7 +15,7 @@ import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.dbview.AbsenceBalanceV;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -556,7 +556,7 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                 if (Objects.isNull(positionGroupExt)) {
                     throw new RuntimeException(String.format("Scheduler_sendNotificationBeforeEndLongAbsence: In Absence[%s] not found position!", absence.getId()));
                 }
-                List<UserExt> receiverManager = employeeService.recursiveFindManager(positionGroupExt.getId());
+                List<TsadvUser> receiverManager = employeeService.recursiveFindManager(positionGroupExt.getId());
                 if (CollectionUtils.isEmpty(receiverManager)) {
                     throw new RuntimeException(String.format("Scheduler_sendNotificationBeforeEndLongAbsence: In Absence[%s] not found manager!", absence.getId()));
                 }
@@ -568,7 +568,7 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                 paramsMap.put("typeRu", absence.getType().getLangValue1());
                 paramsMap.put("typeEn", absence.getType().getLangValue3());
 
-                for (UserExt userExt : receiverManager) {
+                for (TsadvUser userExt : receiverManager) {
                     if (userExt == null) continue;
                     if (absence.getPersonGroup().getPersonLatinFioWithEmployeeNumber() != null) {
                         paramsMap.put("fullNameLatin", absence.getPersonGroup().getPersonLatinFioWithEmployeeNumber(userExt.getLanguage()));

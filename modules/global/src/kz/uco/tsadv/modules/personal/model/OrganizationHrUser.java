@@ -4,7 +4,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 
@@ -30,7 +30,7 @@ public class OrganizationHrUser extends AbstractParentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    protected UserExt user;
+    protected TsadvUser user;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE_FROM", nullable = false)
@@ -63,15 +63,13 @@ public class OrganizationHrUser extends AbstractParentEntity {
         return counter;
     }
 
-
-    public void setUser(UserExt user) {
+    public void setUser(TsadvUser user) {
         this.user = user;
     }
 
-    public UserExt getUser() {
+    public TsadvUser getUser() {
         return user;
     }
-
 
     public void setRequestedTs(Date requestedTs) {
         this.requestedTs = requestedTs;
@@ -80,7 +78,6 @@ public class OrganizationHrUser extends AbstractParentEntity {
     public Date getRequestedTs() {
         return requestedTs;
     }
-
 
     public void setOrganizationGroup(OrganizationGroupExt organizationGroup) {
         this.organizationGroup = organizationGroup;
@@ -105,6 +102,5 @@ public class OrganizationHrUser extends AbstractParentEntity {
     public Date getDateTo() {
         return dateTo;
     }
-
 
 }

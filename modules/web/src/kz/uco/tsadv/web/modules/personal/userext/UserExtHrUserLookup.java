@@ -7,7 +7,7 @@ import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.HrUserRole;
 
 import javax.inject.Inject;
@@ -26,7 +26,7 @@ public class UserExtHrUserLookup extends AbstractLookup {
     public Component generateRolesList(Entity entity) {
         Label label = componentsFactory.createComponent(Label.class);
         List<String> userRoles;
-        if (!(userRoles = getUserRoles((UserExt) entity)).isEmpty()) {
+        if (!(userRoles = getUserRoles((TsadvUser) entity)).isEmpty()) {
             if (userRoles.size() == 1) {
                 label.setValue(userRoles.get(0));
             } else {
@@ -43,7 +43,7 @@ public class UserExtHrUserLookup extends AbstractLookup {
         return label;
     }
 
-    protected List<String> getUserRoles(UserExt user) {
+    protected List<String> getUserRoles(TsadvUser user) {
         List<String> result = new ArrayList<>();
         if (user != null) {
             String queryString = "SELECT e FROM tsadv$HrUserRole e " +

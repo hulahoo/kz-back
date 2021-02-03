@@ -10,7 +10,7 @@ import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.recruitment.config.RecruitmentConfig;
 import kz.uco.tsadv.modules.recruitment.dictionary.DicInterviewReason;
@@ -148,7 +148,7 @@ public class JobRequestFastInterviewEdit extends AbstractEditor<JobRequest> {
                     if (!interviewPojo.isDeleted() && interviewPojo.getLatestInterview().getInterviewStatus().equals(InterviewStatus.FAILED)) {
                         if (interviewPojo.getLatestInterview().getRequisitionHiringStep().getOrder() == toIntExact(order)) {
                             if (interviewPojo.getInterview().getJobRequest() != null) {
-                                UserExt user = employeeService.getUserExtByPersonGroupId(interviewPojo.getInterview().getJobRequest().getCandidatePersonGroup() != null ?
+                                TsadvUser user = employeeService.getUserExtByPersonGroupId(interviewPojo.getInterview().getJobRequest().getCandidatePersonGroup() != null ?
                                         interviewPojo.getInterview().getJobRequest().getCandidatePersonGroup().getId() : null);
                                 Requisition requisition = interviewPojo.getLatestInterview().getJobRequest().getRequisition();
                                 if (user != null && requisition != null && requisition.getJobGroup() != null) {

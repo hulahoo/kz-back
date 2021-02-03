@@ -24,7 +24,7 @@ import kz.uco.tsadv.lms.factory.*;
 import kz.uco.tsadv.lms.pojo.AnswerPojo;
 import kz.uco.tsadv.lms.pojo.QuestionPojo;
 import kz.uco.tsadv.lms.pojo.*;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.ContentType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
@@ -626,11 +626,11 @@ public class LmsServiceBean implements LmsService {
             response.setMessage("passwordRestore.noLogin.caption");
             return response;
         }
-        LoadContext<UserExt> lc = LoadContext.create(UserExt.class);
+        LoadContext<TsadvUser> lc = LoadContext.create(TsadvUser.class);
         lc.setView("user.edit");
         lc.setQueryString("select u from tsadv$UserExt u where u.loginLowerCase = :login and (u.active = true or u.active is null)")
                 .setParameter("login", userLogin);
-        UserExt targetUser = dataManager.load(lc);
+        TsadvUser targetUser = dataManager.load(lc);
         if (targetUser == null) {
             response.setStatus(ResponsePojo.Response.ERROR);
             response.setMessage("passwordRestore.noUser.caption");

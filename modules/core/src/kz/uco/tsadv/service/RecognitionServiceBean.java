@@ -27,7 +27,7 @@ import kz.uco.tsadv.api.QRCodeInt;
 import kz.uco.tsadv.config.RecognitionConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.entity.*;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -575,7 +575,7 @@ public class RecognitionServiceBean implements RecognitionService {
     }
 
     @Override
-    public Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId, UUID receiverPersonGroupId) {
+    public Map<TsadvUser, PersonExt> findManagerByPositionGroup(UUID positionGroupId, UUID receiverPersonGroupId) {
         try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
 
@@ -649,7 +649,7 @@ public class RecognitionServiceBean implements RecognitionService {
                     UUID userId = (UUID) row[3];
                     if (userId != null) {
                         try {
-                            UserExt userExt = em.find(UserExt.class, userId, View.LOCAL);
+                            TsadvUser userExt = em.find(TsadvUser.class, userId, View.LOCAL);
                             if (userExt != null) {
                                 PersonExt personExt = metadata.create(PersonExt.class);
                                 personExt.setId((UUID) row[4]);
@@ -3194,7 +3194,7 @@ public class RecognitionServiceBean implements RecognitionService {
             throw new NullPointerException(getMessage("buyer.position.null"));
         }
 
-        UserExt buyerManagerUser = employeeService.findManagerByPositionGroup(buyerPositionGroupId, recognitionConfig.getHierarchyId());
+        TsadvUser buyerManagerUser = employeeService.findManagerByPositionGroup(buyerPositionGroupId, recognitionConfig.getHierarchyId());
         if (buyerManagerUser == null) {
             throw new RuntimeException(getMessage("buyer.manager.null"));
         }
@@ -3223,7 +3223,7 @@ public class RecognitionServiceBean implements RecognitionService {
                 throw new NullPointerException(getMessage("buyer.position.null"));
             }
 
-            UserExt buyerManagerUser = employeeService.findManagerByPositionGroup(buyerPositionGroupId, recognitionConfig.getHierarchyId());
+            TsadvUser buyerManagerUser = employeeService.findManagerByPositionGroup(buyerPositionGroupId, recognitionConfig.getHierarchyId());
             if (buyerManagerUser == null) {
                 throw new RuntimeException(getMessage("buyer.manager.null"));
             }

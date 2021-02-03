@@ -9,7 +9,7 @@ import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -175,7 +175,7 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(supManager.getId(), null));
             }
             default: {
-                OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupByPositionGroupId(personGroupId, View.MINIMAL);
+                OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupByPersonGroupId(personGroupId, View.MINIMAL);
                 if (organizationGroup != null)
                     return getHrUsers(organizationGroup.getId(), roleCode, null)
                             .stream()
@@ -188,7 +188,7 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
 
     protected List<? extends User> getUsersByPersonGroups(List<? extends PersonGroupExt> personGroups) {
         if (CollectionUtils.isEmpty(personGroups)) return new ArrayList<>();
-        return dataManager.load(UserExt.class)
+        return dataManager.load(TsadvUser.class)
                 .query("select e from tsadv$UserExt e where e.personGroup in :personGroups and e.active = 'TRUE'")
                 .setParameters(ParamsMap.of("personGroups", personGroups))
                 .list();

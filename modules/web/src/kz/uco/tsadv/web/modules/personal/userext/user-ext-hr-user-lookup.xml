@@ -6,7 +6,7 @@
         lookupComponent="userExtsTable">
     <dsContext>
         <groupDatasource id="userExtsDs"
-                         class="kz.uco.tsadv.modules.administration.UserExt"
+                         class="kz.uco.tsadv.modules.administration.TsadvUser"
                          view="user.browse"
                          cacheable="false">
 

@@ -3,7 +3,7 @@ package kz.uco.tsadv.modules.personal.model;
 //import com.haulmont.bpm.entity.ProcInstance;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.uactivity.entity.Activity;
 
 import javax.persistence.*;
@@ -37,11 +37,11 @@ public class BpmRequestMessage extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNED_USER_ID")
-    protected UserExt assignedUser;
+    protected TsadvUser assignedUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNED_BY_ID")
-    protected UserExt assignedBy;
+    protected TsadvUser assignedBy;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -70,19 +70,19 @@ public class BpmRequestMessage extends StandardEntity {
         return activity;
     }
 
-    public UserExt getAssignedUser() {
+    public TsadvUser getAssignedUser() {
         return assignedUser;
     }
 
-    public void setAssignedUser(UserExt assignedUser) {
+    public void setAssignedUser(TsadvUser assignedUser) {
         this.assignedUser = assignedUser;
     }
 
-    public UserExt getAssignedBy() {
+    public TsadvUser getAssignedBy() {
         return assignedBy;
     }
 
-    public void setAssignedBy(UserExt assignedBy) {
+    public void setAssignedBy(TsadvUser assignedBy) {
         this.assignedBy = assignedBy;
     }
 

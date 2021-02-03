@@ -8,7 +8,7 @@ import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import kz.uco.base.service.GoogleTranslateService;
 import kz.uco.base.service.NotificationService;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.recognition.*;
@@ -202,7 +202,7 @@ public class RecognitionListener implements BeforeInsertEntityListener<Recogniti
         /**
          * send notification to receiver
          * */
-        UserExt userExt = employeeService.getUserExtByPersonGroupId(receiverPersonGroup.getId(), View.LOCAL);
+        TsadvUser userExt = employeeService.getUserExtByPersonGroupId(receiverPersonGroup.getId(), View.LOCAL);
         notificationService.sendParametrizedNotification(
                 "recognition.notify.receiver",
                 userExt,
@@ -217,9 +217,9 @@ public class RecognitionListener implements BeforeInsertEntityListener<Recogniti
                 throw new NullPointerException("Receiver doesn't have position group!");
             }
 
-            Map<UserExt, PersonExt> receiverManager = recognitionService.findManagerByPositionGroup(receiverPositionGroupId, receiverPersonGroup.getId());
+            Map<TsadvUser, PersonExt> receiverManager = recognitionService.findManagerByPositionGroup(receiverPositionGroupId, receiverPersonGroup.getId());
             if (receiverManager != null) {
-                Map.Entry<UserExt, PersonExt> entry = receiverManager.entrySet().iterator().next();
+                Map.Entry<TsadvUser, PersonExt> entry = receiverManager.entrySet().iterator().next();
                 PersonExt personExt = entry.getValue();
 
                 notificationParameters.put("managerNameRu", getFirstLastName(personExt, "ru"));

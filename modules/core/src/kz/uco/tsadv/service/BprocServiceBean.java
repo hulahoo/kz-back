@@ -17,7 +17,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
@@ -75,7 +75,7 @@ public class BprocServiceBean implements BprocService {
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
         List<User> users = bprocUserListProvider.get(executionId);
-        return dataManager.load(UserExt.class)
+        return dataManager.load(TsadvUser.class)
                 .query("select e from tsadv$UserExt e where e.id in :users")
                 .setParameters(ParamsMap.of("users", users))
                 .view(viewName != null ? viewName : View.MINIMAL)
@@ -193,10 +193,10 @@ public class BprocServiceBean implements BprocService {
                 .map(taskData -> (ExtTaskData) taskData)
                 .peek(taskData -> {
                     if (taskData.getEndTime() == null) {
-                        @SuppressWarnings("unchecked") List<UserExt> taskCandidates = (List<UserExt>) getTaskCandidates(taskData.getExecutionId(), "user-fioWithLogin");
+                        @SuppressWarnings("unchecked") List<TsadvUser> taskCandidates = (List<TsadvUser>) getTaskCandidates(taskData.getExecutionId(), "user-fioWithLogin");
                         taskData.setAssigneeOrCandidates(taskCandidates);
                     } else if (taskData.getAssignee() != null) {
-                        UserExt user = dataManager.load(Id.of(UUID.fromString(taskData.getAssignee()), UserExt.class)).view("user-fioWithLogin").one();
+                        TsadvUser user = dataManager.load(Id.of(UUID.fromString(taskData.getAssignee()), TsadvUser.class)).view("user-fioWithLogin").one();
                         taskData.setAssigneeOrCandidates(Collections.singletonList(user));
                     }
                 })
@@ -238,7 +238,7 @@ public class BprocServiceBean implements BprocService {
                     .list();
 
             if (!CollectionUtils.isEmpty(initiatorVariableList)) {
-                UserExt initiator = dataManager.reload((UserExt) initiatorVariableList.get(0).getValue(), "user-fioWithLogin");
+                TsadvUser initiator = dataManager.reload((TsadvUser) initiatorVariableList.get(0).getValue(), "user-fioWithLogin");
 
                 ExtTaskData initiatorTask = metadata.create(ExtTaskData.class);
                 initiatorTask.setId(UUID.randomUUID().toString());
@@ -270,8 +270,8 @@ public class BprocServiceBean implements BprocService {
 
         Map<String, Object> notificationParams = getNotificationParams(notificationTemplateCode, entity);
 
-        notificationParams.put("userRu", ((UserExt) user).getFullNameWithLogin(Locale.forLanguageTag("ru")));
-        notificationParams.put("userEn", ((UserExt) user).getFullNameWithLogin(Locale.forLanguageTag("en")));
+        notificationParams.put("userRu", ((TsadvUser) user).getFullNameWithLogin(Locale.forLanguageTag("ru")));
+        notificationParams.put("userEn", ((TsadvUser) user).getFullNameWithLogin(Locale.forLanguageTag("en")));
 
         notificationParams.put("requestLinkRu", "");
         notificationParams.put("requestLinkEn", "");
@@ -294,7 +294,7 @@ public class BprocServiceBean implements BprocService {
         notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
 
-        notificationSender.sendParametrizedNotification(notificationTemplateCode, (UserExt) user, notificationParams);
+        notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
     }
 
     protected <T extends AbstractBprocRequest> String getRequestLink(T entity, Activity activity) {
@@ -352,7 +352,7 @@ public class BprocServiceBean implements BprocService {
         params.put("requestNumber", entity.getRequestNumber());
 
         ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getId().toString(), entity.getProcessDefinitionKey());
-        UserExt initiator = getProcessVariable(processInstanceData.getId(), "initiator");
+        TsadvUser initiator = getProcessVariable(processInstanceData.getId(), "initiator");
         Assert.notNull(initiator, "Initiator not found!");
         initiator = dataManager.reload(initiator, "user-fioWithLogin");
         params.put("initiatorRu", initiator.getFullNameWithLogin(Locale.forLanguageTag("ru")));
@@ -425,7 +425,7 @@ public class BprocServiceBean implements BprocService {
     }
 
     protected String getCreateUsersPopup(Locale locale, ExtTaskData processTask) {
-        List<UserExt> assigneeOrCandidates = processTask.getAssigneeOrCandidates();
+        List<TsadvUser> assigneeOrCandidates = processTask.getAssigneeOrCandidates();
         if (assigneeOrCandidates == null || assigneeOrCandidates.size() <= 1) {
             if (assigneeOrCandidates == null || assigneeOrCandidates.isEmpty()) return "";
             return assigneeOrCandidates.get(0).getFullNameWithLogin(locale);
@@ -434,7 +434,7 @@ public class BprocServiceBean implements BprocService {
         assert popup != null;
         StringBuilder builder = new StringBuilder();
         builder.append("<table>");
-        for (UserExt assigneeOrCandidate : assigneeOrCandidates) {
+        for (TsadvUser assigneeOrCandidate : assigneeOrCandidates) {
             builder.append("<tr><td>")
                     .append(assigneeOrCandidate.getFullNameWithLogin(locale))
                     .append("</td></tr>");

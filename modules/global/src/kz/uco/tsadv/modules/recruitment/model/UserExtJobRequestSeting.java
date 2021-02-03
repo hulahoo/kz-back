@@ -1,7 +1,7 @@
 package kz.uco.tsadv.modules.recruitment.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 
 import javax.persistence.*;
 
@@ -16,18 +16,18 @@ public class UserExtJobRequestSeting extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_EXT_ID")
-    protected UserExt userExt;
+    protected TsadvUser userExt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JOB_REQUEST_ID")
     protected kz.uco.tsadv.modules.recruitment.model.JobRequest jobRequest;
 
 
-    public void setUserExt(UserExt userExt) {
+    public void setUserExt(TsadvUser userExt) {
         this.userExt = userExt;
     }
 
-    public UserExt getUserExt() {
+    public TsadvUser getUserExt() {
         return userExt;
     }
 

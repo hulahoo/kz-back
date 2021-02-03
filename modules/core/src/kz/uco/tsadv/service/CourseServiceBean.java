@@ -9,7 +9,7 @@ import com.haulmont.cuba.core.global.*;
 import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.performance.model.Trainer;
@@ -207,7 +207,7 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public void sendParametrizedNotification(String notificationCode, UserExt user, Map<String, Object> params) {
+    public void sendParametrizedNotification(String notificationCode, TsadvUser user, Map<String, Object> params) {
         notificationSenderAPI.sendParametrizedNotification(notificationCode, user, params);
     }
 

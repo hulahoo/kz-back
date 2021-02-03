@@ -7,7 +7,7 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -37,7 +37,7 @@ public class LoadAttributsBean {
     }
 
     protected void loadAttributes(UserSession userSession) {
-        UserExt userExt = (UserExt) userSession.getUser();
+        TsadvUser userExt = (TsadvUser) userSession.getUser();
         PersonGroupExt personGroup = getPersonGroup(userExt);
 
         if (personGroup != null) {
@@ -89,7 +89,7 @@ public class LoadAttributsBean {
 
     }
 
-    protected PersonGroupExt getPersonGroup(UserExt userExt) {
+    protected PersonGroupExt getPersonGroup(TsadvUser userExt) {
         LoadContext<PersonGroupExt> loadContext = LoadContext.create(PersonGroupExt.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select user.personGroup " +

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
-        class="kz.uco.tsadv.web.bpm.form.UcoBpmStandardProcForm"
-        extends="/com/haulmont/bpm/gui/form/standard/standard-proc-form.xml"
-        messagesPack="kz.uco.tsadv.web.bpm.form">
-    <layout/>
-</window>

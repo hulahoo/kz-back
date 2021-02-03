@@ -13,7 +13,7 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.entity.core.notification.NotificationTemplate;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.administration.enums.HiringStepType;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 import kz.uco.tsadv.modules.recruitment.enums.InterviewStatus;
@@ -109,7 +109,7 @@ public class InterviewListener implements AfterInsertEntityListener<Interview>, 
                     interview.getRequisitionHiringStep().getHiringStep().getType(), null);
             if (interview.getInterviewStatus().equals(InterviewStatus.COMPLETED) &&
                     hiringStepType.equals(HiringStepType.test)) {
-                UserExt creator = employeeService.getUserByLogin(interview.getCreatedBy());
+                TsadvUser creator = employeeService.getUserByLogin(interview.getCreatedBy());
                 Map<String, Object> mapForNotification = new HashMap<>();
                 mapForNotification.put(
                         "candidateFullName",

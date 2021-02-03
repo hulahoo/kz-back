@@ -10,7 +10,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.OrganizationStructureConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.entity.OrganizationTree;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.model.HrUserRole;
@@ -305,7 +305,7 @@ public class OrganizationServiceBean extends kz.uco.base.service.OrganizationSer
 
     @Nonnull
     @Override
-    public Set<OrganizationGroupExt> getOrganizationsWhereUserIsHr(UserExt userExt) {
+    public Set<OrganizationGroupExt> getOrganizationsWhereUserIsHr(TsadvUser userExt) {
         Set<OrganizationGroupExt> organizationsWhereUserIsHr = new HashSet<>();
         HrUserRole timekeeperRoleForUser = commonService.getEntity(HrUserRole.class,
                 "select e from tsadv$HrUserRole e where e.role.code = 'TIMEKEEPER' and e.user.id = :userExtId and :currentDate <= e.dateTo and :currentDate >= e.dateFrom",

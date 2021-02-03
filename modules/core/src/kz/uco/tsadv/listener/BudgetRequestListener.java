@@ -6,7 +6,7 @@ import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
 import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
 import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.model.BudgetRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +53,7 @@ public class BudgetRequestListener implements AfterInsertEntityListener<BudgetRe
         Map<String, Object> userParams = new HashMap<>();
         userParams.put("initiatorPersonGroupId", budgetRequest.getInitiatorPersonGroup().getId());
 
-        for (UserExt user : commonService.getEntities(UserExt.class,
+        for (TsadvUser user : commonService.getEntities(TsadvUser.class,
                 "select e " +
                         "    from tsadv$UserExt e " +
                         "   where e.personGroup.id = :initiatorPersonGroupId ",

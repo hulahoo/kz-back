@@ -4,6 +4,7 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Extends;
 import com.haulmont.cuba.core.global.PersistenceHelper;
+import kz.uco.base.entity.extend.UserExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.Entity;
@@ -13,9 +14,9 @@ import javax.persistence.ManyToOne;
 import java.util.Locale;
 
 @Entity(name = "tsadv$UserExt")
-@Extends(kz.uco.base.entity.extend.UserExt.class)
+@Extends(UserExt.class)
 @NamePattern("%s|shortName,login")
-public class UserExt extends kz.uco.base.entity.extend.UserExt {
+public class TsadvUser extends UserExt {
     private static final long serialVersionUID = 6933569044418446062L;
 
     @ManyToOne(fetch = FetchType.LAZY)

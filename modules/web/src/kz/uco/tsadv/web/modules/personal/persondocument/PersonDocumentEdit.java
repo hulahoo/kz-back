@@ -9,7 +9,7 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicApprovalStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonDocument;
@@ -81,7 +81,7 @@ public class PersonDocumentEdit extends AbstractEditor<PersonDocument> {
         }
         if (isFromSelfService) {
             Optional.ofNullable(this.userSession.getAttribute("user"))
-                    .map(obj -> (UserExt) obj)
+                    .map(obj -> (TsadvUser) obj)
                     .map(userExt -> this.employeeService.getPersonGroupByUserId(userExt.getId()))
                     .ifPresent(item::setPersonGroup);
         }

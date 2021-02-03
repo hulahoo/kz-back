@@ -81,8 +81,6 @@
                        value="kz.uco.tsadv.service.PersonDataService"/>
                 <entry key="tsadv_RestIntegrationLogService"
                        value="kz.uco.tsadv.service.RestIntegrationLogService"/>
-                <entry key="tsadv_BpmService"
-                       value="kz.uco.tsadv.service.BpmService"/>
                 <entry key="tsadv_TimecardHierarchyService"
                        value="kz.uco.tsadv.service.TimecardHierarchyService"/>
                 <entry key="tsadv_HierarchyService"
@@ -109,8 +107,6 @@
                        value="kz.uco.tsadv.service.RcgFeedbackService"/>
                 <entry key="tsadv_MyTeamService"
                        value="kz.uco.tsadv.service.MyTeamService"/>
-                <entry key="tsadv_BpmProcActorsService"
-                       value="kz.uco.tsadv.service.BpmProcActorsService"/>
                 <entry key="tsadv_UserService"
                        value="kz.uco.tsadv.service.UserService"/>
                 <entry key="tsadv_CalendarService"
@@ -133,7 +129,6 @@
                        value="kz.uco.tsadv.service.ScheduledNotificationsService"/>
                 <entry key="tsadv_KpiService" value="kz.uco.tsadv.service.KpiService"/>
                 <entry key="tsadv_CommonReportsService" value="kz.uco.tsadv.service.CommonReportsService"/>
-                <entry key="tsadv_BprocUtilService" value="kz.uco.tsadv.service.BprocUtilService"/>
                 <entry key="tsadv_BprocService" value="kz.uco.tsadv.service.BprocService"/>
                 <entry key="tsadv_PortalHelperService" value="kz.uco.tsadv.service.portal.PortalHelperService"/>
             </map>

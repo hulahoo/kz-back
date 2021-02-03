@@ -7,7 +7,7 @@ import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
 import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.model.Budget;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Case;
@@ -61,7 +61,7 @@ public class BudgetListener implements AfterInsertEntityListener<Budget>, AfterU
         userParams.put("sysdate", CommonUtils.getSystemDate());
 
 
-        for (UserExt user : commonService.getEntities(UserExt.class,
+        for (TsadvUser user : commonService.getEntities(TsadvUser.class,
                 "   select e from tsadv$UserExt e, tsadv$PositionStructure ps, base$AssignmentExt a " +
                         "              where a.positionGroup.id = ps.positionGroup.id " +
                         "              and e.personGroup.id = a.personGroup.id " +

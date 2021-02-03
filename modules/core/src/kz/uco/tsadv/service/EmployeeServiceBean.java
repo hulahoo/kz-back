@@ -17,7 +17,7 @@ import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.config.RecognitionConfig;
 import kz.uco.tsadv.entity.dbview.MyTeam;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.enums.MatrixType;
@@ -111,7 +111,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public UserExt findManagerByPersonGroup(UUID personGroupId, String hierarchyId) {
+    public TsadvUser findManagerByPersonGroup(UUID personGroupId, String hierarchyId) {
         UUID positionGroupId = Optional.ofNullable(getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL))
                 .map(BaseUuidEntity::getId)
                 .orElse(null);
@@ -122,7 +122,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public UserExt findManagerByPositionGroup(UUID positionGroupId, String hierarchyId) {
+    public TsadvUser findManagerByPositionGroup(UUID positionGroupId, String hierarchyId) {
         try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
 
@@ -185,7 +185,7 @@ public class EmployeeServiceBean implements EmployeeService {
                     UUID userId = (UUID) row[0];
                     if (userId != null) {
                         try {
-                            return em.find(UserExt.class, userId, View.LOCAL);
+                            return em.find(TsadvUser.class, userId, View.LOCAL);
                         } catch (Exception ex) {
                             logger.warn(String.format("Manager User by ID: %s not found!", userId.toString()));
                         }
@@ -358,26 +358,26 @@ public class EmployeeServiceBean implements EmployeeService {
     private ViewRepository viewRepository;
 
     @Override
-    public UserExt getUserByLogin(String login, @Nullable String view) {
-        if (view != null && viewRepository.getView(UserExt.class, view) == null) {
+    public TsadvUser getUserByLogin(String login, @Nullable String view) {
+        if (view != null && viewRepository.getView(TsadvUser.class, view) == null) {
             view = null;
         }
-        return commonService.getEntity(UserExt.class, "select e from tsadv$UserExt e where e.login = :userLogin",
+        return commonService.getEntity(TsadvUser.class, "select e from tsadv$UserExt e where e.login = :userLogin",
                 Collections.singletonMap("userLogin", login), view);
     }
 
     @Override
-    public UserExt getUserByLogin(String login) {
+    public TsadvUser getUserByLogin(String login) {
         return getUserByLogin(login, null);
     }
 
     @Override
-    public UserExt getSystemUser(@Nullable String view) {
+    public TsadvUser getSystemUser(@Nullable String view) {
         return getUserByLogin("admin", view);
     }
 
     @Override
-    public UserExt getSystemUser() {
+    public TsadvUser getSystemUser() {
         return getSystemUser(null);
     }
 
@@ -461,18 +461,18 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public UserExt getUserExtByPersonGroupId(UUID personGroupId) {
+    public TsadvUser getUserExtByPersonGroupId(UUID personGroupId) {
         return getUserExtByPersonGroupId(personGroupId, null);
     }
 
     @Override
-    public UserExt getUserExtByPersonGroupId(UUID personGroupId, String viewName) {
+    public TsadvUser getUserExtByPersonGroupId(UUID personGroupId, String viewName) {
         return persistence.callInTransaction(em -> {
             Query query = em.createQuery("select e from tsadv$UserExt e where e.personGroup.id = :personGroupId")
                     .setParameter("personGroupId", personGroupId);
-            query.setView(UserExt.class, viewName != null ? viewName : View.MINIMAL);
+            query.setView(TsadvUser.class, viewName != null ? viewName : View.MINIMAL);
             List list = query.getResultList();
-            return (UserExt) (list.isEmpty() ? null : list.get(0));
+            return (TsadvUser) (list.isEmpty() ? null : list.get(0));
         });
     }
 
@@ -1658,12 +1658,12 @@ public class EmployeeServiceBean implements EmployeeService {
         }
     }
 
-    public Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId) {
+    public Map<TsadvUser, PersonExt> findManagerByPositionGroup(UUID positionGroupId) {
         return findManagerByPositionGroup(positionGroupId, false);
     }
 
     @Override
-    public Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId, boolean showAll) {
+    public Map<TsadvUser, PersonExt> findManagerByPositionGroup(UUID positionGroupId, boolean showAll) {
         try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
 
@@ -1737,12 +1737,12 @@ public class EmployeeServiceBean implements EmployeeService {
 
             List<Object[]> rows = query.getResultList();
             if (rows != null && !rows.isEmpty()) {
-                Map<UserExt, PersonExt> resultMap = new HashMap<>();
+                Map<TsadvUser, PersonExt> resultMap = new HashMap<>();
                 for (Object[] row : rows) {
                     UUID userId = (UUID) row[3];
                     if (userId != null) {
                         try {
-                            UserExt userExt = em.find(UserExt.class, userId, View.LOCAL);
+                            TsadvUser userExt = em.find(TsadvUser.class, userId, View.LOCAL);
                             if (userExt != null) {
                                 PersonExt personExt = metadata.create(PersonExt.class);
                                 personExt.setId((UUID) row[4]);
@@ -1845,9 +1845,9 @@ public class EmployeeServiceBean implements EmployeeService {
 
 
     @Override
-    public List<UserExt> recursiveFindManager(UUID positionGroupId) {
+    public List<TsadvUser> recursiveFindManager(UUID positionGroupId) {
         return persistence.callInTransaction(em -> {
-            List<UserExt> userList = new ArrayList<>();
+            List<TsadvUser> userList = new ArrayList<>();
             searchPosition(userList,
                     positionGroupId,
                     em,
@@ -1858,9 +1858,9 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public List<UserExt> recursiveFindManagerInActiveOne(UUID positionGroupId) {
+    public List<TsadvUser> recursiveFindManagerInActiveOne(UUID positionGroupId) {
         return persistence.callInTransaction(em -> {
-            List<UserExt> userList = new ArrayList<>();
+            List<TsadvUser> userList = new ArrayList<>();
             searchPosition(userList,
                     positionGroupId,
                     em,
@@ -1870,7 +1870,7 @@ public class EmployeeServiceBean implements EmployeeService {
         });
     }
 
-    private void searchPosition(List<UserExt> userList, UUID positionGroupId, EntityManager em, UUID hierarchyId, boolean onlyOneInPosition) {
+    private void searchPosition(List<TsadvUser> userList, UUID positionGroupId, EntityManager em, UUID hierarchyId, boolean onlyOneInPosition) {
         Query query = em.createNativeQuery(
                 String.format(
                         "SELECT " +
@@ -1908,7 +1908,7 @@ public class EmployeeServiceBean implements EmployeeService {
             for (Object[] row : rows) {
                 UUID userId = (UUID) row[2];
                 if (userId != null) {
-                    UserExt userExt = em.reload(em.getReference(UserExt.class, userId), View.LOCAL);
+                    TsadvUser userExt = em.reload(em.getReference(TsadvUser.class, userId), View.LOCAL);
                     if (userExt != null) userList.add(userExt);
                 }
             }
@@ -2407,7 +2407,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @SuppressWarnings("ConstantConditions")
     @Override
-    public OrganizationGroupExt getOrganizationGroupByPositionGroupId(@Nonnull UUID personGroupId, String viewName) {
+    public OrganizationGroupExt getOrganizationGroupByPersonGroupId(@Nonnull UUID personGroupId, String viewName) {
         return persistence.callInTransaction(em ->
                 em.createQuery("select e.organizationGroup from base$AssignmentExt e " +
                         "  where e.personGroup.id = :personGroupId " +

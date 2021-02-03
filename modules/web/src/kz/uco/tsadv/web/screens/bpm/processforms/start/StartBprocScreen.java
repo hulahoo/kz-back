@@ -20,7 +20,7 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesDefiner;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.bpm.BprocActors;
@@ -94,7 +94,7 @@ public class StartBprocScreen extends Screen {
 
     protected AbstractBprocRequest entity;
     protected UUID personGroupId;
-    protected UserExt employee;
+    protected TsadvUser employee;
     protected Supplier<Map<String, Object>> processVariableSupplier;
 
     @Subscribe
@@ -126,15 +126,15 @@ public class StartBprocScreen extends Screen {
             String roleCode = hrRole.getCode();
             List<? extends User> hrUsersForPerson = new ArrayList<>();
 
-            if (roleCode.equals("EMPLOYEE"))
+            if (roleCode.equals("EMPLOYEE")) {
                 if (employee != null)
                     hrUsersForPerson = Collections.singletonList(dataManager.reload(employee, "user-fioWithLogin"));
-                else
-                    hrUsersForPerson = dataManager.load(UserExt.class)
-                            .query("select e from tsadv$UserExt e where e in :users")
-                            .setParameters(ParamsMap.of("users", organizationHrUserService.getHrUsersForPerson(personGroupId, roleCode)))
-                            .view("user-fioWithLogin")
-                            .list();
+            } else
+                hrUsersForPerson = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e where e in :users")
+                        .setParameters(ParamsMap.of("users", organizationHrUserService.getHrUsersForPerson(personGroupId, roleCode)))
+                        .view("user-fioWithLogin")
+                        .list();
 
             if (hrUsersForPerson.isEmpty()) {
                 if (!link.getIsAddableApprover())
@@ -148,7 +148,7 @@ public class StartBprocScreen extends Screen {
             } else {
                 NotPersisitBprocActors bprocActors = createNotPersisitBprocActors(link, hrRole);
                 bprocActors.setIsEditable(false);
-                bprocActors.setUsers((List<UserExt>) hrUsersForPerson);
+                bprocActors.setUsers((List<TsadvUser>) hrUsersForPerson);
                 actors.add(bprocActors);
             }
         }
@@ -212,7 +212,7 @@ public class StartBprocScreen extends Screen {
             bprocActors.setBprocUserTaskCode(notPersisitBprocActors.getBprocUserTaskCode());
             bprocActors.setHrRole(notPersisitBprocActors.getHrRole());
 
-            for (UserExt user : notPersisitBprocActors.getUsers()) {
+            for (TsadvUser user : notPersisitBprocActors.getUsers()) {
                 BprocActors copy = metadata.getTools().copy(bprocActors);
                 copy.setId(UUID.randomUUID());
                 copy.setUser(user);
@@ -240,7 +240,7 @@ public class StartBprocScreen extends Screen {
 
     protected boolean validate() {
         for (NotPersisitBprocActors item : notPersisitBprocActorsDc.getItems()) {
-            List<UserExt> users = item.getUsers();
+            List<TsadvUser> users = item.getUsers();
             if (users == null || users.isEmpty()) {
                 notifications.create(Notifications.NotificationType.TRAY)
                         .withDescription(messageBundle.getMessage("fill.user"))
@@ -255,7 +255,7 @@ public class StartBprocScreen extends Screen {
         this.entity = entity;
     }
 
-    public void setEmployee(UserExt employee) {
+    public void setEmployee(TsadvUser employee) {
         this.employee = employee;
     }
 
@@ -270,19 +270,19 @@ public class StartBprocScreen extends Screen {
 
     @SuppressWarnings({"UnstableApiUsage", "unchecked"})
     public Component usersGenerator(NotPersisitBprocActors entity) {
-        List<UserExt> users = entity.getUsers();
+        List<TsadvUser> users = entity.getUsers();
         if (users == null || users.size() == 1) {
-            PickerField<UserExt> pickerField = uiComponents.create(PickerField.NAME);
+            PickerField<TsadvUser> pickerField = uiComponents.create(PickerField.NAME);
             pickerField.setEditable(entity.getIsEditable());
             pickerField.setRequired(true);
-            pickerField.setMetaClass(metadata.getClassNN(UserExt.class));
+            pickerField.setMetaClass(metadata.getClassNN(TsadvUser.class));
             pickerField.addAction(PickerField.LookupAction.create(pickerField));
             pickerField.addAction(PickerField.ClearAction.create(pickerField));
             pickerField.setOptionCaptionProvider(userExt -> StringUtils.defaultString(userExt != null ? userExt.getFullNameWithLogin() : null, ""));
             if (users != null && !users.isEmpty()) pickerField.setValue(users.get(0));
             else pickerField.setValue(null);
             pickerField.addValueChangeListener(event -> {
-                UserExt value = event.getValue();
+                TsadvUser value = event.getValue();
                 if (value != null) {
                     entity.setUsers(Collections.singletonList(dataManager.reload(value, "user-fioWithLogin")));
                 } else entity.setUsers(null);
@@ -292,11 +292,11 @@ public class StartBprocScreen extends Screen {
             PopupView popupView = uiComponents.create(PopupView.class);
             popupView.setMinimizedValue(users.get(0).getFullNameWithLogin() + " +" + (users.size() - 1));
 
-            CollectionContainer<UserExt> container = dataComponents.createCollectionContainer(UserExt.class);
+            CollectionContainer<TsadvUser> container = dataComponents.createCollectionContainer(TsadvUser.class);
 
             container.setItems(users);
 
-            Table<UserExt> table = uiComponents.create(Table.class);
+            Table<TsadvUser> table = uiComponents.create(Table.class);
             table.addGeneratedColumn("fullNameWithLogin", user -> {
                 Label<String> lbl = uiComponents.create(Label.TYPE_STRING);
                 lbl.setValue(user.getFullNameWithLogin());

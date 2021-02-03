@@ -17,7 +17,7 @@ import kz.uco.tsadv.entity.TalentProgramRequest;
 import kz.uco.tsadv.entity.tb.dictionary.DicTalentProgramStep;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.EmployeeService;
 import org.apache.commons.lang3.StringUtils;
@@ -157,7 +157,7 @@ public class TalentProgramPersonStepInvite extends AbstractEditor<TalentProgramP
             param.put("candidateRu", candidate != null ? candidate.getPersonLatinFioWithEmployeeNumber("ru") : "");
             param.put("candidateEn", candidate != null ? candidate.getPersonLatinFioWithEmployeeNumber("en") : "");
             TalentProgramPersonStep talentProgramRequest = ((TalentProgramPersonStep) entity);
-            UserExt userExt = employeeService.getUserExtByPersonGroupId(talentProgramRequest.getPersonGroup().getId(), View.LOCAL);
+            TsadvUser userExt = employeeService.getUserExtByPersonGroupId(talentProgramRequest.getPersonGroup().getId(), View.LOCAL);
             if (userExt != null && userExt.getEmail() != null && userExt.getLanguage() != null) {
                 notificationService.sendNotification(userExt.getEmail(),
                         notificationTemplateDs.getItem().getValue("emailCaptionLang" + getIndexLang(userExt.getLanguage())),
@@ -184,7 +184,7 @@ public class TalentProgramPersonStepInvite extends AbstractEditor<TalentProgramP
         param.put("candidateRu", Optional.ofNullable(candidate.getPersonLatinFioWithEmployeeNumber("ru")).orElse(""));
         param.put("candidateEn", Optional.ofNullable(candidate.getPersonLatinFioWithEmployeeNumber("en")).orElse(""));
 
-        UserExt userExt = employeeService.getUserExtByPersonGroupId(candidate.getId(), View.LOCAL);
+        TsadvUser userExt = employeeService.getUserExtByPersonGroupId(candidate.getId(), View.LOCAL);
 
         TalentProgramPersonStep personStep = metadata.getTools().deepCopy(getItem());
         personStep.setId(UUID.randomUUID());

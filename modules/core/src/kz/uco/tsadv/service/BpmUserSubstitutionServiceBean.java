@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import kz.uco.tsadv.entity.tb.BpmUserSubstitution;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ public class BpmUserSubstitutionServiceBean implements BpmUserSubstitutionServic
     private Persistence persistence;
 
     @Override
-    public String getBpmUserSubstitution(UserExt userExt, Date date, boolean path) {
+    public String getBpmUserSubstitution(TsadvUser userExt, Date date, boolean path) {
         Object res = persistence.callInTransaction(em ->
                 em.createNativeQuery("with recursive SubstitutedUser as ( " +
                         "  select e.user_id                   as current_user_id, " +
@@ -52,7 +52,7 @@ public class BpmUserSubstitutionServiceBean implements BpmUserSubstitutionServic
     }
 
     @Override
-    public String getCurrentBpmUserSubstitution(UserExt userExt, boolean path) {
+    public String getCurrentBpmUserSubstitution(TsadvUser userExt, boolean path) {
         return getBpmUserSubstitution(userExt, CommonUtils.getSystemDate(), path);
     }
 
@@ -62,7 +62,7 @@ public class BpmUserSubstitutionServiceBean implements BpmUserSubstitutionServic
     }
 
     @Override
-    public List<BpmUserSubstitution> getBpmUserSubstitutionList(UserExt userExt) {
+    public List<BpmUserSubstitution> getBpmUserSubstitutionList(TsadvUser userExt) {
         return persistence.callInTransaction(em ->
                 em.createQuery("select e from tsadv$BpmUserSubstitution e where e.user.id = :userId",
                         BpmUserSubstitution.class)
@@ -72,7 +72,7 @@ public class BpmUserSubstitutionServiceBean implements BpmUserSubstitutionServic
     }
 
     @Override
-    public boolean hasBpmUserSubstitution(UUID entityId, UserExt user, Date startDate, Date endDate) {
+    public boolean hasBpmUserSubstitution(UUID entityId, TsadvUser user, Date startDate, Date endDate) {
         return persistence.callInTransaction(em -> {
             Query query = em.createQuery(" select count(e) from tsadv$BpmUserSubstitution e " +
                     " where e.user.id = :userId " +

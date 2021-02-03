@@ -12,7 +12,7 @@ import com.haulmont.cuba.gui.screen.Subscribe;
 import com.haulmont.cuba.gui.screen.UiController;
 import com.haulmont.cuba.gui.screen.UiDescriptor;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
@@ -32,7 +32,7 @@ public class BprocOutcomeDialog extends Screen {
     protected Messages messages;
 
     @Inject
-    protected PickerField<UserExt> userPicker;
+    protected PickerField<TsadvUser> userPicker;
     @Inject
     protected TextArea<String> commentField;
 
@@ -57,7 +57,7 @@ public class BprocOutcomeDialog extends Screen {
         this.outcomesPanel = outcomesPanel;
     }
 
-    public Supplier<UserExt> getUserSupplier() {
+    public Supplier<TsadvUser> getUserSupplier() {
         return () -> userPicker.getValue();
     }
 

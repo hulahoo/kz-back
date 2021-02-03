@@ -6,7 +6,7 @@ import com.haulmont.cuba.security.entity.User;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -45,7 +45,7 @@ public class UserSessionManager extends com.haulmont.cuba.security.sys.UserSessi
     }
 
     private void loadAttributes(UserSession userSession) {
-        UserExt userExt = (UserExt) userSession.getUser();
+        TsadvUser userExt = (TsadvUser) userSession.getUser();
         PersonGroupExt personGroup = getPersonGroup(userExt);
 
         if (personGroup != null) {
@@ -96,7 +96,7 @@ public class UserSessionManager extends com.haulmont.cuba.security.sys.UserSessi
 
     }
 
-    private PersonGroupExt getPersonGroup(UserExt userExt) {
+    private PersonGroupExt getPersonGroup(TsadvUser userExt) {
         LoadContext<PersonGroupExt> loadContext = LoadContext.create(PersonGroupExt.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select user.personGroup " +

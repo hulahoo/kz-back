@@ -15,7 +15,7 @@ import com.haulmont.cuba.gui.data.Datasource;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.entity.OrganizationTree;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.model.Budget;
 import kz.uco.tsadv.modules.learning.model.BudgetHeader;
 import kz.uco.tsadv.modules.learning.model.BudgetHeaderHistory;
@@ -196,7 +196,7 @@ public class BudgetHeaderEdit extends AbstractEditor<BudgetHeader> {
                 if (getItem().getResponsiblePerson() != null) {
                     Map<String, Object> param = new HashMap<>();
                     param.put("budgetHeaderName", getItem().getHeaderName());
-                    UserExt userExt = employeeService.getUserExtByPersonGroupId(e.getItem().getResponsiblePerson().getId());
+                    TsadvUser userExt = employeeService.getUserExtByPersonGroupId(e.getItem().getResponsiblePerson().getId());
                     notificationService.sendParametrizedNotification("budgetHeaderChanges", userExt, param);
                 }
             });

@@ -11,7 +11,7 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.CertificationStatus;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
@@ -198,7 +198,7 @@ public class RegisterCourse extends AbstractLookup {
             maps.put("person", assignment.getPersonGroup().getPerson());
 
             for (OrganizationHrUser hrUser : hrUsers) {
-                UserExt userExt = hrUser.getUser();
+                TsadvUser userExt = hrUser.getUser();
                 maps.put("user", userExt);
                 try {
                     courseService.sendParametrizedNotification(notificationCode, userExt, maps);

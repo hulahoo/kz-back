@@ -18,7 +18,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.*;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -287,9 +287,9 @@ public class TalentProgramRequestEdit extends AbstractEditor<TalentProgramReques
     }
 
     protected void notifyManagerAndTalentAdmin(Map<String, Object> dictionary) {
-        UserExt employee = (UserExt) userSession.getUser();
+        TsadvUser employee = (TsadvUser) userSession.getUser();
         List<OrganizationHrUser> hrUser = getHrUsers(dictionary);
-        List<UserExt> managerList = employeeService.recursiveFindManagerInActiveOne(userSession.getAttribute(StaticVariable.POSITION_GROUP_ID));
+        List<TsadvUser> managerList = employeeService.recursiveFindManagerInActiveOne(userSession.getAttribute(StaticVariable.POSITION_GROUP_ID));
 
         PersonGroupExt personGroupExt = employeeService.getPersonGroupByUserId(userSession.getUser().getId());
         dictionary.put("fullName", personGroupExt.getFullName());
@@ -302,7 +302,7 @@ public class TalentProgramRequestEdit extends AbstractEditor<TalentProgramReques
 //        dictionary.put("managerNameRu", personGroupManager.getPersonLatinFioWithEmployeeNumber("ru"));
 //        dictionary.put("managerNameEn", personGroupManager.getPersonLatinFioWithEmployeeNumber("en"));
 
-        UserExt adminUser = employeeService.getSystemUser();
+        TsadvUser adminUser = employeeService.getSystemUser();
         ActivityType notification = commonService.getEntity(ActivityType.class, "NOTIFICATION");
 
         //notificate employee
@@ -323,7 +323,7 @@ public class TalentProgramRequestEdit extends AbstractEditor<TalentProgramReques
 
         //notificate manager
         if (managerList != null)
-            for (UserExt manager : managerList) {
+            for (TsadvUser manager : managerList) {
                 PersonGroupExt personManager = employeeService.getPersonGroupByUserId(manager.getId());
 
                 dictionary.put("managerName", Optional.ofNullable(personManager).map(PersonGroupExt::getFirstLastName).orElse(""));
@@ -348,7 +348,7 @@ public class TalentProgramRequestEdit extends AbstractEditor<TalentProgramReques
 
         //notificate talent admin
         hrUser.forEach(userToNotify -> {
-            UserExt user = userToNotify.getUser();
+            TsadvUser user = userToNotify.getUser();
             notificationService.sendParametrizedNotification(dictionary.get("notificationAdminCode").toString(), user, dictionary);
             activityService.createActivity(
                     user,

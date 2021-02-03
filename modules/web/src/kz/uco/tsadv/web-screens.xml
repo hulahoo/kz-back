@@ -1912,10 +1912,6 @@
             template="kz/uco/tsadv/web/modules/personal/calculationSheet/calculationSheet.xml"/>
     <screen id="tsadv$SalaryRequest.edit"
             template="kz/uco/tsadv/web/modules/selfservice/salaryrequest/salary-request-edit.xml"/>
-    <screen id="ucoBpmStartProcForm"
-            template="kz/uco/tsadv/web/bpm/form/uco-bpm-start-proc-form.xml"/>
-    <screen id="ucoBpmReassignProcForm"
-            template="kz/uco/tsadv/web/bpm/form/uco-bpm-reassign-proc-form.xml"/>
     <screen id="tsadv$PersonalDataRequest.show"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request.xml"/>
     <screen id="tsadv$PersonalDataRequest.bpm"
@@ -1942,8 +1938,6 @@
             template="kz/uco/tsadv/web/positionchangerequest/position-change-request-edit.xml"/>
     <screen id="goods-image-gallery"
             template="kz/uco/tsadv/web/modules/recognition/entity/goods/goods-image-gallery.xml"/>
-    <screen id="UcoBpmProcActorsFrame"
-            template="kz/uco/tsadv/web/bpm/form/uco-bpm-proc-actors-frame.xml"/>
     <screen id="report$ReportInputParameter.edit"
             template="kz/uco/tsadv/web/report/parameter-edit-ext.xml"/>
     <screen id="report$inputParametersFrame"
@@ -2068,8 +2062,6 @@
             template="kz/uco/tsadv/web/modules/learning/assignedtestenrollment/assigned-test-enrollment-browse.xml"/>
     <screen id="pcf-person-learning-contract"
             template="/kz/uco/tsadv/web/modules/personal/person/frames/pcf-person-learning-contract.xml"/>
-    <screen id="procActionsFrame"
-            template="kz/uco/tsadv/web/bpm/form/ext-proc-actions-frame.xml"/>
     <screen id="tsadv$BpmUserSubstitution.browse"
             template="kz/uco/tsadv/web/bpmusersubstitution/bpm-user-substitution-browse.xml"/>
     <screen id="tsadv$BpmUserSubstitution.edit"
@@ -2086,12 +2078,8 @@
             template="kz/uco/tsadv/web/organizationssview/organization-ss-view-browse.xml"/>
     <screen id="tsadv$TimecardLog.browse"
             template="kz/uco/tsadv/web/timecardlog/timecard-log-browse.xml"/>
-    <screen id="bpm$ProcInstance.lookup"
-            template="kz/uco/tsadv/web/bpm/form/ext-proc-instance-browse.xml"/>
     <screen id="base$PositionGroupExt.edit"
             template="kz/uco/tsadv/web/positiongroupext/position-group-ext-edit.xml"/>
-    <screen id="ucoBpmStandardProcForm"
-            template="kz/uco/tsadv/web/bpm/form/uco-bpm-standard-proc-form.xml"/>
     <screen id="tsadv$GradeSsView.browse"
             template="kz/uco/tsadv/web/gradessview/grade-ss-view-browse.xml"/>
     <screen id="tsadv$JobSsView.browse"
@@ -2210,8 +2198,6 @@
             template="kz/uco/tsadv/web/report/ext-report-run.xml"/>
     <screen id="tsadv$ProcInstanceV.browse"
             template="kz/uco/tsadv/web/procinstancev/proc-instance-v-browse.xml"/>
-    <screen id="bpm$ProcActor.browse"
-            template="kz/uco/tsadv/web/bpm/procactor/proc-actor-browse.xml"/>
     <screen id="tsadv$Book.browse"
             template="kz/uco/tsadv/web/book/book-browse.xml"/>
     <screen id="tsadv$Book.edit"

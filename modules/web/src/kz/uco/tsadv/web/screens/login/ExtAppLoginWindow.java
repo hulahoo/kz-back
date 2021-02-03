@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.service.EmployeeService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
@@ -66,7 +66,7 @@ public class ExtAppLoginWindow extends kz.uco.base.web.template.BaseLoginWindowO
     }
 
     protected boolean isAnyRoleExistsForTheUser() {
-        UserExt user = employeeService.getUserByLogin(loginField.getValue(), "user.roles");
+        TsadvUser user = employeeService.getUserByLogin(loginField.getValue(), "user.roles");
         if (user != null && user.getUserRoles().size() == 0){
             showNotification(getMessage("userHasNotAnyRole.message"), NotificationType.ERROR);
             return false;
