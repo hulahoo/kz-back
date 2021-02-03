@@ -9476,6 +9476,7 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="city" view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
           extends="_local"
@@ -19971,7 +19972,9 @@
     <view class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
           extends="_local"
           name="personGroupExt-view">
-        <property name="personDocuments" view="_local"/>
+        <property name="personDocuments" view="_local">
+            <property name="documentType" view="_local"/>
+        </property>
         <property name="assignments" view="_local">
             <property name="organizationGroup" view="_local">
                 <property name="company" view="_local"/>
@@ -19996,7 +19999,9 @@
             <property name="dateOfBirth"/>
             <property name="sex"/>
         </property>
-        <property name="addresses" view="_local"/>
+        <property name="addresses" view="_local">
+            <property name="addressType" view="_local"/>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_local"
@@ -21851,7 +21856,7 @@
         <property name="defaultAddress" view="_local"/>
     </view>
     <view entity="tsadv$ContractConditions" name="contractConditions-editView" extends="_local">
-        <property name="relationshipType" view="_minimal"/>
+        <property name="relationshipType" view="_local"/>
     </view>
     <view entity="tsadv$InsuranceContractAdministrator" name="insuranceContractAdministrator-editView" extends="_local">
         <property name="employee" view="_minimal"/>
@@ -21885,6 +21890,9 @@
                     <property name="list" view="_local"/>
                 </property>
                 <property name="assignmentStatus" view="_local"/>
+            </property>
+            <property name="personDocuments" view="_local">
+                <property name="documentType" view="_local"/>
             </property>
         </property>
         <property name="relative" view="_local"/>

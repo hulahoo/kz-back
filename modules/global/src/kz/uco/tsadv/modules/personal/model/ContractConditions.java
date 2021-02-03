@@ -2,12 +2,16 @@ package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+@PublishEntityChangedEvents
+@Listeners("tsadv_ContractConditionsChangedListener")
 @Table(name = "TSADV_CONTRACT_CONDITIONS")
 @Entity(name = "tsadv$ContractConditions")
 @NamePattern("%s|id")

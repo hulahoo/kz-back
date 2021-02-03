@@ -284,6 +284,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         if (startProcessForm instanceof StartBprocScreen) {
             ((StartBprocScreen) startProcessForm).setEntity(getEditedEntity());
             ((StartBprocScreen) startProcessForm).setPersonGroupId(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
+            ((StartBprocScreen) startProcessForm).setEmployee(getEmployee());
             ((StartBprocScreen) startProcessForm).setProcessVariableSupplier(this::getProcessVariables);
         }
         startProcessForm.addAfterCloseListener(afterCloseEvent -> {
@@ -291,6 +292,11 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
                 closeWithDefaultAction();
         });
         startProcessForm.show();
+    }
+
+    @Nullable
+    protected UserExt getEmployee() {
+        return null;
     }
 
     @Nullable

@@ -11,7 +11,9 @@
                 <property name="company" view="_local"/>
                 <property name="employee" view="_local">
                     <property name="personDocuments" view="_local"/>
-                    <property name="addresses" view="_local"/>
+                    <property name="addresses" view="_local">
+                        <property name="addressType" view="_local"/>
+                    </property>
                     <property name="list" view="_local">
                         <property name="sex" view="_local"/>
                         <property name="nationality" view="_local"/>

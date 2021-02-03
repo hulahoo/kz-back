@@ -125,6 +125,8 @@
                   caption="mainMsg://menu_config.tsadv_DicPrevJobObligation.browse"/>
             <item screen="tsadv_DicCriminalLiabilityType.browse"
                   caption="mainMsg://menu_config.tsadv_DicCriminalLiabilityType.browse"/>
+            <item screen="tsadv$DicMICAttachmentStatus.browse"
+                  caption="mainMsg://dms"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">

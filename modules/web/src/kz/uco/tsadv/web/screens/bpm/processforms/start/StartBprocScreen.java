@@ -94,6 +94,7 @@ public class StartBprocScreen extends Screen {
 
     protected AbstractBprocRequest entity;
     protected UUID personGroupId;
+    protected UserExt employee;
     protected Supplier<Map<String, Object>> processVariableSupplier;
 
     @Subscribe
@@ -122,13 +123,18 @@ public class StartBprocScreen extends Screen {
 
         for (BpmRolesLink link : links) {
             DicHrRole hrRole = link.getHrRole();
-            List<? extends User> hrUsersForPerson = organizationHrUserService.getHrUsersForPerson(personGroupId, hrRole.getCode());
+            String roleCode = hrRole.getCode();
+            List<? extends User> hrUsersForPerson = new ArrayList<>();
 
-            hrUsersForPerson = dataManager.load(UserExt.class)
-                    .query("select e from tsadv$UserExt e where e in :users")
-                    .setParameters(ParamsMap.of("users", hrUsersForPerson))
-                    .view("user-fioWithLogin")
-                    .list();
+            if (roleCode.equals("EMPLOYEE"))
+                if (employee != null)
+                    hrUsersForPerson = Collections.singletonList(dataManager.reload(employee, "user-fioWithLogin"));
+                else
+                    hrUsersForPerson = dataManager.load(UserExt.class)
+                            .query("select e from tsadv$UserExt e where e in :users")
+                            .setParameters(ParamsMap.of("users", organizationHrUserService.getHrUsersForPerson(personGroupId, roleCode)))
+                            .view("user-fioWithLogin")
+                            .list();
 
             if (hrUsersForPerson.isEmpty()) {
                 if (!link.getIsAddableApprover())
@@ -247,6 +253,10 @@ public class StartBprocScreen extends Screen {
 
     public void setEntity(AbstractBprocRequest entity) {
         this.entity = entity;
+    }
+
+    public void setEmployee(UserExt employee) {
+        this.employee = employee;
     }
 
     //todo personGroupId is session user person group id
