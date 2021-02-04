@@ -22935,5 +22935,50 @@
     <view entity="tsadv$DicOffenceType" name="dicOffenceType-browse" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
-
+    <view entity="base$OrganizationGroupExt" name="organizationGroupExt-for-integration-rest" extends="_minimal">
+        <property name="list" view="_minimal">
+            <property name="group" view="_minimal"/>
+            <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="writeHistory"/>
+            <property name="organizationNameLang1"/>
+            <property name="organizationNameLang2"/>
+            <property name="organizationNameLang3"/>
+            <property name="organizationNameLang4"/>
+            <property name="organizationNameLang5"/>
+            <property name="location" view="_minimal">
+                <property name="legacyId"/>
+                <property name="company" view="_minimal">
+                    <property name="legacyId"/>
+                </property>
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+            <property name="type" view="_minimal">
+                <property name="legacyId"/>
+                <property name="company" view="_minimal">
+                    <property name="legacyId"/>
+                </property>
+                <property name="langValue1"/>
+                <property name="langValue2"/>
+                <property name="langValue3"/>
+                <property name="langValue4"/>
+                <property name="langValue5"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+        </property>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="legacyId"/>
+    </view>
 </views>
