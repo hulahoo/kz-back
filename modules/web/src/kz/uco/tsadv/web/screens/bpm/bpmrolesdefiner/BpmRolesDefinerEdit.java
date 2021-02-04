@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.screens.bpm.bpmrolesdefiner;
 
 import com.haulmont.addon.bproc.entity.ProcessDefinitionData;
 import com.haulmont.addon.bproc.service.BprocRepositoryService;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.actions.list.CreateAction;
 import com.haulmont.cuba.gui.components.HasValue;
 import com.haulmont.cuba.gui.components.LookupField;
@@ -34,6 +35,8 @@ public class BpmRolesDefinerEdit extends StandardEditor<BpmRolesDefiner> {
     protected CreateAction<BpmRolesLink> linksTableCreate;
     @Inject
     protected PickerField<DicCompany> companyField;
+    @Inject
+    protected Metadata metadata;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -72,5 +75,12 @@ public class BpmRolesDefinerEdit extends StandardEditor<BpmRolesDefiner> {
         }
         getEditedEntity().setProcessDefinitionKey(definitionData != null ? definitionData.getKey() : null);
         linksTableCreate.setEnabled(getEditedEntity().getProcessDefinitionKey() != null);
+    }
+
+    @Install(to = "linksTable.create", subject = "newEntitySupplier")
+    protected BpmRolesLink linksTableCreateNewEntitySupplier() {
+        BpmRolesLink bpmRolesLink = metadata.create(BpmRolesLink.class);
+        bpmRolesLink.setBpmRolesDefiner(getEditedEntity());
+        return bpmRolesLink;
     }
 }

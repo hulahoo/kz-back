@@ -4,7 +4,7 @@ import com.haulmont.chile.core.annotations.MetaClass;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
-import kz.uco.base.entity.extend.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 
 import javax.validation.constraints.NotNull;
@@ -19,7 +19,7 @@ public class NotPersisitBprocActors extends BaseUuidEntity {
     private DicHrRole hrRole;
 
     @MetaProperty
-    private List<UserExt> users;
+    private List<TsadvUser> users;
 
     @MetaProperty
     private String bprocUserTaskCode;
@@ -59,11 +59,11 @@ public class NotPersisitBprocActors extends BaseUuidEntity {
         this.isSystemRecord = isSystemRecord;
     }
 
-    public void setUsers(List<UserExt> users) {
+    public void setUsers(List<TsadvUser> users) {
         this.users = users;
     }
 
-    public List<UserExt> getUsers() {
+    public List<TsadvUser> getUsers() {
         return users;
     }
 

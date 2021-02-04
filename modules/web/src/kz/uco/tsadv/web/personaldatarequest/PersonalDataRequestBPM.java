@@ -1,21 +1,7 @@
 package kz.uco.tsadv.web.personaldatarequest;
 
-import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.gui.components.*;
-import com.haulmont.cuba.gui.components.actions.BaseAction;
-import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.cuba.gui.export.ExportDisplay;
-import com.haulmont.cuba.gui.export.ExportFormat;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.personal.model.PersonalDataRequest;
-import kz.uco.tsadv.service.BpmService;
-import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.web.bpm.editor.AbstractBpmEditor;
-
-import javax.inject.Inject;
-import java.util.Objects;
-import java.util.UUID;
 
 public class PersonalDataRequestBPM<T extends PersonalDataRequest> extends AbstractBpmEditor<T> {
 

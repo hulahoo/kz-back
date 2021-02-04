@@ -8,7 +8,7 @@
         <instance id="insuredPersonDc"
                   class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
                   view="insuredPerson-editView">
-            <loader/>
+            <loader id="insuredPersonDl"/>
         </instance>
         <collection id="DicMICAttachmentStatusDc"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus" view="_local">
@@ -68,9 +68,26 @@
         </collection>
         <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
             <loader id="addressDl">
-                <query><![CDATA[select e from tsadv$Address e]]></query>
+                <query><![CDATA[select e from tsadv$Address e]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>current_date between e.startDate and e.endDate</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
             </loader>
         </collection>
+        <collection id="addressTypeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType"
+                    view="_local">
+            <loader id="addressTypeDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicAddressType e]]>
+                </query>
+            </loader>
+        </collection>
+
         <collection id="insuredPersonMemberDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson" view="insuredPerson-editView">
             <loader id="insuredPersonMemberDl">
                 <query><![CDATA[select e from tsadv$InsuredPerson e]]>
@@ -120,14 +137,16 @@
                             <lookupField id="documentTypeField" optionsContainer="documentTypeDc"
                                          property="documentType"/>
                             <field property="documentNumber" id="documentNumberField"/>
+                            <lookupField id="addressTypeTempField" optionsContainer="addressTypeDc" caption="Адрес"/>
                             <lookupField id="addressTypeField" property="addressType"
-                                         optionsContainer="addressDc"/>
-                            <textArea rows="3" id="addressField" caption="" property="address"/>
+                                         optionsContainer="addressDc" captionProperty="addressType.langValue" visible="false"/>
+                            <textArea rows="3" id="addressField" caption=""  required="true" property="address"/>
                             <lookupField id="companyField" property="company"
-                                         optionsContainer="companyDc" editable="false"/>
+                                         optionsContainer="companyDc" editable="false" />
                             <lookupField id="jobField"
                                          optionsContainer="jobDc"
                                          property="job"/>
+                            <field id="jobMemberField" property="jobMember" visible="false"/>
                             <dateField id="assignDateField" editable="false" resolution="DAY" caption="msg://assignDate"/>
                         </column>
                     </form>
@@ -152,6 +171,7 @@
                                          optionsContainer="DicMICAttachmentStatusDc" property="statusRequest"/>
                             <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
                             <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
+                            <textField id="amountField" property="amount" visible="false" editable="false"/>
                             <textField id="totalAmountField" property="totalAmount" editable="false"/>
                             <dateField id="exclusionDateField" resolution="DAY" visible="false" property="exclusionDate"/>
                             <textField id="commentField" property="comment" visible="false"/>
@@ -180,7 +200,7 @@
                         <column id="birthdate"/>
                         <column id="iin"/>
                         <column id="documentType"/>
-                        <column id="file"/>
+                        <column id="file" generator="generatorName"/>
                         <column id="region"/>
                         <column id="insuranceProgram"/>
                         <column id="address"/>
@@ -192,36 +212,6 @@
                     </buttonsPanel>
                     <rows/>
                 </groupTable>
-<!--                <dataGrid id="insuredPersonTable"-->
-<!--                          dataContainer="insuredPersonMemberDc"-->
-<!--                          width="100%">-->
-<!--                    <actions>-->
-<!--                        <action id="create" type="create"/>-->
-<!--                        <action id="edit" type="edit"/>-->
-<!--                        <action id="remove" type="remove"/>-->
-<!--                    </actions>-->
-<!--                    <columns>-->
-<!--                        <column id="relativeField" property="relative"/>-->
-<!--                        <column id="firstNameField" property="firstName"/>-->
-<!--                        <column id="secondNameField" property="secondName"/>-->
-<!--                        <column id="middleNameField" property="middleName"/>-->
-<!--                        <column id="amountField" property="amount"/>-->
-<!--                        <column id="sexField" property="sex"/>-->
-<!--                        <column id="birthdateField" property="birthdate"/>-->
-<!--                        <column id="iinField" property="iin"/>-->
-<!--                        <column id="documentTypeField" property="documentType"/>-->
-<!--                        <column id="file"/>-->
-<!--                        <column id="regionField" property="region"/>-->
-<!--                        <column id="insuranceProgramField" property="insuranceProgram"/>-->
-<!--                        <column id="addressField" property="address"/>-->
-<!--                    </columns>-->
-<!--                    <buttonsPanel>-->
-<!--                        <button id="createButton" action="insuredPersonTable.create"/>-->
-<!--                        <button id="editButton" action="insuredPersonTable.edit"/>-->
-<!--                        <button id="removeButton" action="insuredPersonTable.remove"/>-->
-<!--                    </buttonsPanel>-->
-<!--                    <rows/>-->
-<!--                </dataGrid>-->
             </groupBox>
         </scrollBox>
         <hbox id="editActions" spacing="true">

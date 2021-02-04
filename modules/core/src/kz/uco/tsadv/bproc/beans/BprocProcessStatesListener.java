@@ -15,7 +15,6 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.events.ExtProcessStartedEvent;
 import kz.uco.tsadv.bproc.events.ExtUserTaskCreatedEvent;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
-import kz.uco.tsadv.modules.administration.UserExt;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.service.BprocService;
 import kz.uco.uactivity.entity.Activity;
@@ -71,9 +70,11 @@ public class BprocProcessStatesListener {
     }
 
     @EventListener
-    protected <T extends AbstractBprocRequest> void onTaskCreated(ExtUserTaskCreatedEvent event) {
-        notifyApprovers(event);
-        notifyInitiator(event);
+    protected void onTaskCreated(ExtUserTaskCreatedEvent event) {
+        if (!event.getTaskData().getTaskDefinitionKey().equals("initiator_task")) {
+            notifyApprovers(event);
+            notifyInitiator(event);
+        }
     }
 
     protected <T extends AbstractBprocRequest> void notifyInitiator(ExtUserTaskCreatedEvent event) {
@@ -105,11 +106,7 @@ public class BprocProcessStatesListener {
             userList.addAll(dataManager.load(User.class)
                     .query("select e from sec$User e where e.id in :idList ")
                     .setParameters(ParamsMap.of("idList", uuidList))
-                    .view(new View(UserExt.class)
-                            .addProperty("email")
-                            .addProperty("language")
-                            .addProperty("mobilePhone")
-                            .addProperty("telegramChatId"))
+                    .view("user-fioWithLogin")
                     .list());
 
         ActivityType activityType = dataManager.load(ActivityType.class)
@@ -130,6 +127,7 @@ public class BprocProcessStatesListener {
         userList.forEach(user -> bprocService.sendNotificationAndActivity(bprocRequest, user, activityType, notificationTemplateCode));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @EventListener
     @Transactional
     protected <T extends AbstractBprocRequest> void onTaskCompleted(UserTaskCompletedEvent event) {

@@ -1,7 +1,7 @@
 package kz.uco.tsadv.service;
 
 
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.pojo.CoursePojo;
 
@@ -26,7 +26,7 @@ public interface CourseService {
 
     void deleteAllAttempt(Enrollment enrollment);
 
-    void sendParametrizedNotification(String notificationCode, UserExt user, Map<String, Object> params);
+    void sendParametrizedNotification(String notificationCode, TsadvUser user, Map<String, Object> params);
 
     void updateEnrollmentStatus(CourseSectionAttempt courseSectionAttempt);
 

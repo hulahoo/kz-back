@@ -7,7 +7,7 @@ import com.haulmont.cuba.gui.WindowManagerProvider;
 import com.haulmont.cuba.gui.components.Frame;
 import com.haulmont.cuba.security.global.UserSession;
 import com.vaadin.server.Page;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.service.OrganizationService;
 
 import java.net.MalformedURLException;
@@ -30,7 +30,7 @@ public class TimecardWindowOpener implements Runnable {
             e.printStackTrace();
         }
 
-        if (organizationService.getOrganizationsWhereUserIsHr((UserExt) userSession.getUser()).isEmpty()) {
+        if (organizationService.getOrganizationsWhereUserIsHr((TsadvUser) userSession.getUser()).isEmpty()) {
             windowManager.showNotification(messages.getMessage(this.getClass(), "no.rights"), Frame.NotificationType.ERROR_HTML);
         } else {
             windowManager.showWebPage(urlShort + "open?screen=tsadv$Timecard.browse&openType=DIALOG", null);

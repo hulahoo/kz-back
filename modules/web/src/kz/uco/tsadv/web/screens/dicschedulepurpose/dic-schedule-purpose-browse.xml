@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="dicSchedulePurposesTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicschedulepurpose">
+    <data readOnly="true">
+        <collection id="dicSchedulePurposesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicSchedulePurpose"
+                    view="_local">
+            <loader id="dicSchedulePurposesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicSchedulePurpose e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicSchedulePurposesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicSchedulePurposesTable"
+                dataLoader="dicSchedulePurposesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicSchedulePurposesTable"
+                    width="100%"
+                    dataContainer="dicSchedulePurposesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue"/>
+                <column id="description"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicSchedulePurposesTable.create"/>
+                <button id="editBtn" action="dicSchedulePurposesTable.edit"/>
+                <button id="removeBtn" action="dicSchedulePurposesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

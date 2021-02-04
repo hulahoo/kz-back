@@ -80,7 +80,7 @@
                     </groupBox>
                 </hbox>
                 <groupBox id="bpmActorsBox"
-                          caption="msg://TransferRequest.approvalProcess.actors">
+                          caption="mainMsg://bproc.participants">
                     <table id="procTasksTable"
                            height="280px"
                            width="100%">

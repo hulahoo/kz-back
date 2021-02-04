@@ -3,7 +3,7 @@ package kz.uco.tsadv.service;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.DataManager;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.service.ActivityService;
@@ -30,7 +30,7 @@ public class ScheduledNotificationsServiceBean implements ScheduledNotifications
     @Override
     public void automaticReminderApplyingVacationSchedule() {
 
-        List<UserExt> userExtList = dataManager.load(UserExt.class)
+        List<TsadvUser> userExtList = dataManager.load(TsadvUser.class)
                 .query("select e from base$UserExt e join e.userRoles r where  r.role.name = :roleId")
                 .parameter("roleId", "EMPLOYEE_SELF_SERVICE")
                 .view("userExt.edit")

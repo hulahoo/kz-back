@@ -25,6 +25,4 @@ public interface OrganizationHrUserService {
     List<DicHrRole> getDicHrRoles(UUID userId);
 
     List<? extends User> getHrUsersForPerson(@Nonnull UUID personGroupId, @Nonnull String roleCode);
-
-    List<? extends User> getManager(@Nonnull UUID personGroupId);
 }

@@ -16,7 +16,7 @@ import com.haulmont.reports.gui.ReportGuiManager;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.administration.enums.RuleStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -448,7 +448,7 @@ public class JobrequestNew extends AbstractWindow {
     protected void sendNotificationForCandidate(PersonGroupExt candidatePersonGroup, String
             templateCode, Requisition requisition) {
         try {
-            UserExt userExt = getUserExt(candidatePersonGroup.getId());
+            TsadvUser userExt = getUserExt(candidatePersonGroup.getId());
 
             if (userExt != null) {
                 Map<String, Object> paramsMap = new HashMap<>();
@@ -482,8 +482,8 @@ public class JobrequestNew extends AbstractWindow {
         }
     }
 
-    protected UserExt getUserExt(UUID personGroupId) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    protected TsadvUser getUserExt(UUID personGroupId) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$UserExt e " +
                         "where e.personGroup.id = :pgId");

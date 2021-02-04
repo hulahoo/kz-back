@@ -23,6 +23,7 @@ import org.eclipse.persistence.annotations.Customizer;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Listeners("tsadv_PersonGroupListener")
 @NamePattern("%s|person")
@@ -657,5 +658,9 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
     @Transient
     public String getPersonFirstLastNameLatin() {
         return getPerson() != null ? getPerson().getFistLastNameLatin() : null;
+    }
+
+    public String getFullName(Locale locale) {
+        return getPerson() != null ? getPerson().getFullNameLatin(locale.getLanguage()) : null;
     }
 }

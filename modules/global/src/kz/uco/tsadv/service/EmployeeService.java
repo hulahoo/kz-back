@@ -3,7 +3,7 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.base.entity.dictionary.DicCompany;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
@@ -62,13 +62,13 @@ public interface EmployeeService {
 
     AssignmentExt findManagerUserByPosition(UUID positionGroupId);
 
-    UserExt getUserByLogin(String login, @Nullable String view);
+    TsadvUser getUserByLogin(String login, @Nullable String view);
 
-    UserExt getUserByLogin(String login);
+    TsadvUser getUserByLogin(String login);
 
-    UserExt getSystemUser(@Nullable String view);
+    TsadvUser getSystemUser(@Nullable String view);
 
-    UserExt getSystemUser();
+    TsadvUser getSystemUser();
 
     void changePersonType(PersonGroupExt personGroup, String dicPersonTypeCode);
 
@@ -78,9 +78,9 @@ public interface EmployeeService {
 
     PersonGroupExt getPersonGroupByUserIdExtendedView(UUID userId);
 
-    UserExt getUserExtByPersonGroupId(UUID personGroupId);
+    TsadvUser getUserExtByPersonGroupId(UUID personGroupId);
 
-    UserExt getUserExtByPersonGroupId(UUID personGroupId, String viewName);
+    TsadvUser getUserExtByPersonGroupId(UUID personGroupId, String viewName);
 
     OrganizationGroupExt getOrganizationGroupExtByPositionGroup(PositionGroupExt positionGroupExt, String viewName);
 
@@ -88,23 +88,21 @@ public interface EmployeeService {
 
     PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, String view);
 
-    UUID getPersonPositionGroup(UUID personGroupId);
-
     AssignmentGroupExt getAssignmentGroupByPersonGroup(PersonGroupExt personGroupExt);
 
     PersonGroupExt getPersonGroupByAssignmentGroupId(UUID assignmentGroupId);
 
     PersonGroupExt getPersonGroupByEmployeeNumber(String employeeNumber);
 
-    Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId);
+    Map<TsadvUser, PersonExt> findManagerByPositionGroup(UUID positionGroupId);
 
-    Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId, boolean showAll);
+    Map<TsadvUser, PersonExt> findManagerByPositionGroup(UUID positionGroupId, boolean showAll);
 
     List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll);
 
-    List<UserExt> recursiveFindManager(UUID positionGroupId);
+    List<TsadvUser> recursiveFindManager(UUID positionGroupId);
 
-    List<UserExt> recursiveFindManagerInActiveOne(UUID positionGroupId);
+    List<TsadvUser> recursiveFindManagerInActiveOne(UUID positionGroupId);
 
     String getExperienceOnCurrentPosition(PersonGroupExt personGroup);
 
@@ -112,9 +110,9 @@ public interface EmployeeService {
 
     PersonGroupExt getDirector(PersonGroupExt personGroupExt);
 
-    UserExt findManagerByPositionGroup(UUID positionGroupId, String hierarchyId);
+    TsadvUser findManagerByPositionGroup(UUID positionGroupId, String hierarchyId);
 
-    UserExt findManagerByPersonGroup(UUID personGroupId, String hierarchyId);
+    TsadvUser findManagerByPersonGroup(UUID personGroupId, String hierarchyId);
 
     UUID getDirectorPositionByPersonGroup(UUID perosnGroupId);
 
@@ -142,7 +140,9 @@ public interface EmployeeService {
 
     Map<String, String> getDicGoodsCategories();
 
-    OrganizationGroupExt getOrganizationGroupByPositionGroupId(@Nonnull UUID personGroupId, String viewName);
+    OrganizationGroupExt getOrganizationGroupByPersonGroupId(@Nonnull UUID personGroupId, String viewName);
 
     DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId);
+
+    List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);
 }

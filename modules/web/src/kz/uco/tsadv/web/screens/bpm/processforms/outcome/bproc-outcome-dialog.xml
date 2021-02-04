@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://bprocOutcomeDialog.caption"
+        messagesPack="kz.uco.tsadv.web.screens.bpm.processforms.outcome">
+    <dialogMode forceDialog="true"
+                resizable="true"
+                width="500px"/>
+    <layout expand="buttonsPanel" spacing="true">
+        <pickerField id="userPicker"
+                     metaClass="tsadv$UserExt"
+                     required="true"
+                     width="100%"
+                     caption="msg://kz.uco.tsadv.modules.administration/UserExt">
+            <actions>
+                <action id="lookup" type="picker_lookup"/>
+                <action id="clear" type="picker_clear"/>
+            </actions>
+        </pickerField>
+        <textArea id="commentField" width="100%" caption="msg://com.haulmont.addon.bproc.entity/comment"/>
+        <buttonsPanel id="buttonsPanel">
+            <button id="ok" caption="OK" icon="OK"/>
+            <button id="cancel" caption="mainMsg://table.btn.cancel" icon="BAN"/>
+        </buttonsPanel>
+    </layout>
+</window>

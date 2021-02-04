@@ -8,7 +8,7 @@ import kz.uco.tsadv.config.NotificationConfig;
 import kz.uco.tsadv.entity.dbview.OrganizationSsView;
 import kz.uco.tsadv.entity.dbview.PositionSsView;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonDocument;
@@ -76,10 +76,10 @@ public class SelfServiceBean implements SelfService {
             paramMap.put("expiredDate", new SimpleDateFormat("dd.MM.yyyy").format(personDocument.getExpiredDate()));
             if (personDocument.getPersonGroup().getCurrentAssignment() != null) {
                 if (personDocument.getPersonGroup().getCurrentAssignment().getPositionGroup() != null) {
-                    List<UserExt> userExts = employeeService.recursiveFindManager(personDocument.getPersonGroup().getCurrentAssignment().getPositionGroup().getId());
+                    List<TsadvUser> userExts = employeeService.recursiveFindManager(personDocument.getPersonGroup().getCurrentAssignment().getPositionGroup().getId());
                     if (userExts != null && !userExts.isEmpty()) {
                         if (userExts.size() == 1) {
-                            UserExt userExt = userExts.get(0);
+                            TsadvUser userExt = userExts.get(0);
                             if (personDocument.getPersonGroup() != null) {
                                 if (personDocument.getPersonGroup().getPersonLatinFioWithEmployeeNumber() != null) {
                                     paramMap.put("personFullNameLatin", personDocument.getPersonGroup().getPersonLatinFioWithEmployeeNumber(userExt.getLanguage()));
@@ -88,7 +88,7 @@ public class SelfServiceBean implements SelfService {
                             notificationService.sendParametrizedNotification("document.expiredDateIsOver.forManager", userExt, paramMap);
                         } else {
                             if (notificationConfig.getAllManager()) {
-                                for (UserExt userExt : userExts) {
+                                for (TsadvUser userExt : userExts) {
                                     notificationService.sendParametrizedNotification("document.expiredDateIsOver.forManager", userExt, paramMap);
                                 }
                             }
@@ -96,7 +96,7 @@ public class SelfServiceBean implements SelfService {
                     }
                 }
             }
-            UserExt userExt = employeeService.getUserExtByPersonGroupId(personDocument.getPersonGroup().getId());
+            TsadvUser userExt = employeeService.getUserExtByPersonGroupId(personDocument.getPersonGroup().getId());
             notificationService.sendParametrizedNotification("document.expiredDateIsOver.forPerson", userExt, paramMap);
         });
     }

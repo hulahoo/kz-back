@@ -31,7 +31,7 @@
         <scrollBox id="scrollBox" spacing="true">
             <groupBox id="fieldGroupGroupBox"
                       spacing="true"
-                      width="1000px">
+                      width="1300px">
                 <form id="form" dataContainer="absenceRequestDc" childrenCaptionWidth="200px">
                     <column width="750px">
                         <textField id="requestNumberField" property="requestNumber" editable="false"/>
@@ -62,10 +62,10 @@
             </groupBox>
 
             <vbox id="bpmActorsVBox"
-                  width="1000px"
+                  width="1300px"
                   spacing="true">
                 <groupBox id="bpmActorsBox"
-                          caption="msg://TransferRequest.approvalProcess.actors"
+                          caption="msg://kz.uco.tsadv.bproc/bproc.participants"
                           spacing="true">
                     <table id="procTasksTable"
                            height="100%"
@@ -73,13 +73,12 @@
                            dataContainer="tasksDc"
                            width="100%">
                         <columns>
-                            <column id="name"/>
+                            <column id="hrRole"/>
                             <column id="assignee" generator="generateAssignee"/>
                             <column id="createTime"/>
                             <column id="endTime"/>
-                            <column id="outcome"
-                                    generator="generateOutcome"
-                                    caption="msg://ProcActor.decision"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
                         </columns>
                     </table>
                 </groupBox>

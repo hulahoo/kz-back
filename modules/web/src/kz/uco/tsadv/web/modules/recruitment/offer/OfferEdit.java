@@ -18,7 +18,7 @@ import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCurrency;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.recruitment.enums.OfferStatus;
 import kz.uco.tsadv.modules.recruitment.model.Offer;
@@ -373,7 +373,7 @@ public class OfferEdit extends AbstractEditor<Offer> {
                     "select e.managerPersonGroup from tsadv$Requisition e where e.id = :recId",
                     mapReqId, "personGroupId.browse"));
 
-            UserExt user = commonService.getEntity(UserExt.class,
+            TsadvUser user = commonService.getEntity(TsadvUser.class,
                     "select e from tsadv$UserExt e " +
                             "where e.personGroup.id = :keyValue",
                     map,

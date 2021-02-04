@@ -23,7 +23,7 @@ import kz.uco.base.entity.abstraction.AbstractDictionary;
 import kz.uco.base.entity.abstraction.AbstractGroup;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.entity.FieldChangeEntity;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.recruitment.enums.RequisitionStatus;
 import kz.uco.tsadv.modules.recruitment.enums.RequisitionType;
@@ -136,7 +136,7 @@ public class RequisitionEdit extends RequisitionCommonEdit {
                 "WHERE hrRule.role.code = :code " +
                 "AND su.id = :sessionUserID " +
                 "and :systemDate between hrRule.dateFrom and hrRule.dateTo";
-        Long extList = commonService.getCount(UserExt.class, query, map);
+        Long extList = commonService.getCount(TsadvUser.class, query, map);
         if (extList > 0) {
             tabSheet.getTab("members").setVisible(true);
         } else {

@@ -13,7 +13,7 @@ import kz.uco.base.service.NotificationService;
 import kz.uco.tsadv.config.AbsenceConfig;
 import kz.uco.tsadv.config.AbsenceNotificationConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;

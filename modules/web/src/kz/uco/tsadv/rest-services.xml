@@ -672,4 +672,12 @@
             <param name="trainerId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="tsadv_IntegrationRestService">
+        <method name="createOrUpdateOrganization">
+            <param name="organizationData" type="kz.uco.tsadv.modules.integration.jsonobject.OrganizationDataJson"/>
+        </method>
+        <method name="deleteOrganization">
+            <param name="organizationData" type="kz.uco.tsadv.modules.integration.jsonobject.OrganizationDataJson"/>
+        </method>
+    </service>
 </services>

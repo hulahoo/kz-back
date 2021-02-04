@@ -23,7 +23,7 @@ import kz.uco.base.entity.core.notification.SendingNotification;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -1232,7 +1232,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                                 getItem().getCreatedBy(),
                                 "requisition.notify.close");
                         if (sendingNotification != null) {
-                            UserExt assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
+                            TsadvUser assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
                             activityService.createActivity(
                                     getUserExtByLogin(getItem().getCreatedBy()),
                                     assignedBy != null ? assignedBy : employeeService.getSystemUser(),
@@ -1258,7 +1258,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                                             null,
                                             "requisition.notify.candidate.close");
                                     if (sendingNotification != null && getUserExt(jobRequest.getCandidatePersonGroup().getId()) != null) {
-                                        UserExt assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
+                                        TsadvUser assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
                                         activityService.createActivity(
                                                 getUserExt(jobRequest.getCandidatePersonGroup().getId()),
                                                 assignedBy != null ? assignedBy : employeeService.getSystemUser(),
@@ -1321,7 +1321,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                                                     null,
                                                     "requisition.notify.change.approve");
                                             if (sendingNotification != null) {
-                                                UserExt assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
+                                                TsadvUser assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
                                                 activityService.createActivity(
                                                         getUserExt(getItem().getRecruiterPersonGroup().getId()),
                                                         assignedBy != null ? assignedBy : employeeService.getSystemUser(),
@@ -1349,7 +1349,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                                             SendingNotification sendingNotification = sendNotificationAndSave(null,
                                                     getItem().getCreatedBy(),
                                                     "requisition.notify.approve");
-                                            UserExt assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
+                                            TsadvUser assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
                                             activityService.createActivity(
                                                     getUserExtByLogin(getItem().getCreatedBy()),
                                                     assignedBy != null ? assignedBy : employeeService.getSystemUser(),
@@ -1442,7 +1442,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                                 null,
                                 "requisition.notify.change.reject");
                         if (sendingNotification != null) {
-                            UserExt assigndeBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
+                            TsadvUser assigndeBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
                             activityService.createActivity(
                                     getUserExt(getItem().getRecruiterPersonGroup().getId()),
                                     assigndeBy != null ? assigndeBy : employeeService.getSystemUser(),
@@ -1472,7 +1472,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                                 getItem().getCreatedBy(),
                                 "requisition.notify.reject");
                         if (sendingNotification != null) {
-                            UserExt assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
+                            TsadvUser assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
                             activityService.createActivity(
                                     getUserExtByLogin(getItem().getCreatedBy()),
                                     assignedBy != null ? assignedBy : employeeService.getSystemUser(),
@@ -1542,7 +1542,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                                                 ohu.getUser(),
                                                 paramsMap);
                                         NotificationTemplate notificationTemplate = notificationService.getNotificationTemplate(notificationCode);
-                                        UserExt assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
+                                        TsadvUser assignedBy = employeeService.getUserExtByPersonGroupId(getItem().getManagerPersonGroup().getId());
                                         Activity activity = activityService.createActivityWithoutCommit(
                                                 ohu.getUser(),
                                                 assignedBy != null ? assignedBy : employeeService.getSystemUser(),
@@ -1603,7 +1603,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         String errorMessage = "";
 
         try {
-            UserExt userExt = personGroupId != null ? getUserExt(personGroupId) : getUserExtByLogin(login);
+            TsadvUser userExt = personGroupId != null ? getUserExt(personGroupId) : getUserExtByLogin(login);
             if (userExt != null) {
                 Map<String, Object> paramsMap = getParamsMap(userExt);
                 sendingNotification = notificationService.sendParametrizedNotification(
@@ -1613,7 +1613,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
 
                 success = true;
             } else {
-                errorMessage = "UserExt is null!";
+                errorMessage = "TsadvUser is null!";
             }
         } catch (Exception ex) {
             errorMessage = ex.getMessage();
@@ -1631,7 +1631,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         return sendingNotification;
     }
 
-    protected Map<String, Object> getParamsMap(UserExt userExt) {
+    protected Map<String, Object> getParamsMap(TsadvUser userExt) {
         Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("code", getItem().getCode());
         Case personNameEn = getCasePersonName(userExt, "en", "Nominative");
@@ -1653,7 +1653,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         String errorMessage = "";
 
         try {
-            UserExt userExt = candidateId != null ? getUserExt(candidateId) : getUserExtByLogin(login);
+            TsadvUser userExt = candidateId != null ? getUserExt(candidateId) : getUserExtByLogin(login);
             if (userExt != null) {
                 Map<String, Object> paramsMap = new HashMap<>();
                 Case personNameEn = getCasePersonName(userExt, "en", "Nominative");
@@ -1692,7 +1692,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
                         userExt,
                         paramsMap);
             } else {
-                errorMessage = "UserExt is null!";
+                errorMessage = "TsadvUser is null!";
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -1717,7 +1717,7 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         return personFullNameEn;
     }
 
-    protected Case getCasePersonName(UserExt userExt, String language, String caseName) {
+    protected Case getCasePersonName(TsadvUser userExt, String language, String caseName) {
         PersonGroupExt personGroupExt = employeeService.getPersonGroupByUserId(userExt.getId());
         if (personGroupExt == null) return null;
         Map<String, Object> paramMap = new HashMap<>();
@@ -1760,8 +1760,8 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         return jobName;
     }
 
-    protected UserExt getUserExt(UUID personGroupId) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    protected TsadvUser getUserExt(UUID personGroupId) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$UserExt e where e.personGroup.id = :pgId");
         query.setParameter("pgId", personGroupId);
@@ -1770,8 +1770,8 @@ public class RequisitionCommonEdit extends AbstractEditor<Requisition> {
         return dataManager.load(loadContext);
     }
 
-    protected UserExt getUserExtByLogin(String login) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    protected TsadvUser getUserExtByLogin(String login) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$UserExt e where LOWER(e.login) = :login ");
         query.setParameter("login", login != null ? login.toLowerCase() : null);

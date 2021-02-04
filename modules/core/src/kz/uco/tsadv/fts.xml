@@ -1669,7 +1669,7 @@
         <entity class="kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.administration.UserExt">
+        <entity class="kz.uco.tsadv.modules.administration.TsadvUser">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicCompany">
@@ -1831,9 +1831,6 @@
         <entity class="kz.uco.tsadv.modules.personal.model.LeavingVacationRequest">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.bpm.BprocInstanceRolesLink">
-            <include re=".*"/>
-        </entity>
         <entity class="kz.uco.tsadv.entity.bproc.AbstractBprocRequest">
             <include re=".*"/>
         </entity>
@@ -1871,6 +1868,15 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicSchedulePurpose">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.AbsenceForRecall">
             <include re=".*"/>
         </entity>
     </entities>

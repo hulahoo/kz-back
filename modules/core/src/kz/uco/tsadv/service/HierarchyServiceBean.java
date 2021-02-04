@@ -9,7 +9,7 @@ import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 import org.springframework.stereotype.Service;
@@ -206,8 +206,8 @@ public class HierarchyServiceBean implements HierarchyService {
      * Возвращает список пользователей руководителей для заданной штатной единицы в заданной иерархии
      */
     @Override
-    public List<UserExt> findManagerUsers(UUID positionGroupId, UUID hierarchyId) {
-        return commonService.getEntities(UserExt.class,
+    public List<TsadvUser> findManagerUsers(UUID positionGroupId, UUID hierarchyId) {
+        return commonService.getEntities(TsadvUser.class,
                 "" +
                         "select e " +
                         "  from tsadv$UserExt e " +

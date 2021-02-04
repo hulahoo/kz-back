@@ -12,7 +12,7 @@ import com.haulmont.cuba.gui.data.GroupDatasource;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.base.web.components.CustomFilter;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.recruitment.dictionary.DicJobRequestReason;
@@ -184,7 +184,7 @@ public class InterviewBrowseTablet extends AbstractWindow {
 
     private void sendNotification(Interview interview, boolean success) {
         try {
-            UserExt candidateUser = commonService.getEntity(UserExt.class,
+            TsadvUser candidateUser = commonService.getEntity(TsadvUser.class,
                     "select e from tsadv$UserExt e " +
                             "where e.personGroup.id = (select jr.candidatePersonGroup.id from tsadv$JobRequest jr where jr.id = :jrId)",
                     Collections.singletonMap("jrId", interview.getJobRequest().getId()),

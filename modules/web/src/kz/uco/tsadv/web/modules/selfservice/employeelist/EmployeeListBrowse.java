@@ -12,7 +12,7 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.base.web.components.CustomFilter;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.service.EmployeeService;
@@ -74,7 +74,7 @@ public class EmployeeListBrowse extends AbstractLookup {
     public void init(Map<String, Object> params) {
         super.init(params);
         if (params.containsKey("restrictToLeader")) {
-            UserExt leader = (UserExt) params.get("restrictToLeader");
+            TsadvUser leader = (TsadvUser) params.get("restrictToLeader");
 
             PersonGroupExt currentPersonGroup = employeeService.getPersonGroupByUserId(leader.getId());
             if (currentPersonGroup != null) {

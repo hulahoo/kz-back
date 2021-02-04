@@ -5,6 +5,7 @@
           insertBefore="reports">
         <menu id="hrDictionaries"
               icon="font-icon:BOOK">
+            <item screen="tsadv_DicSchedulePurpose.browse"/>
             <item screen="tsadv_DicAbsencePurpose.browse"/>
             <item screen="tsadv_AbsPurposeSetting.browse"
                   caption="mainMsg://menu_config.tsadv_AbsPurposeSetting.browse"/>
@@ -124,6 +125,8 @@
                   caption="mainMsg://menu_config.tsadv_DicPrevJobObligation.browse"/>
             <item screen="tsadv_DicCriminalLiabilityType.browse"
                   caption="mainMsg://menu_config.tsadv_DicCriminalLiabilityType.browse"/>
+            <item screen="tsadv$DicMICAttachmentStatus.browse"
+                  caption="mainMsg://dms"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">
@@ -238,10 +241,7 @@
         </item>
         <item id="ssAbsenceLookupId"
               icon="font-icon:CHILD"
-              class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
-            <param name="screen"
-                   value="tsadv$Absence.lookup"/>
-        </item>
+              screen="tsadv$Absence.self.browse"/>
         <item id="ssAbsenceBalance"
               icon="font-icon:CAB"
               class="kz.uco.tsadv.components.EmployeeMenuItemRunner">
@@ -393,7 +393,6 @@
             <param name="screen"
                    value="tsadv$BpmUserSubstitutionSs.browse"/>
         </item>
-        <item screen="tsadv$Absence.self.browse"/>
         <item screen="tsadv_PersonData" caption="mainMsg://menu_config.tsadv_PersonData"/>
         <item screen="tsadv$MyMICInsuredPerson.browse" caption="mainMsg://menu_config.tsadv$MyMICInsuredPerson.browse"/>
     </menu>

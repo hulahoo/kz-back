@@ -1,20 +1,15 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
-import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
-import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.screen.LookupComponent;
-import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.cuba.actions.CreateActionExt;
 import kz.uco.base.cuba.actions.EditActionExt;
@@ -25,13 +20,8 @@ import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.personal.model.AssignmentExt;
-import kz.uco.tsadv.modules.personal.model.InsuranceContract;
-import kz.uco.tsadv.modules.personal.model.InsuredPerson;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
-import kz.uco.tsadv.web.screens.insurancecontract.InsuranceContractBrowse;
+import kz.uco.tsadv.modules.personal.model.*;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
@@ -128,7 +118,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
     @Subscribe("insuredPersonsTable.joinMIC")
     public void onInsuredPersonsTableJoinMIC(Action.ActionPerformedEvent event) {
-       joinMember("joinEmployee");
+       joinEmployee("joinEmployee");
     }
 
     @Subscribe(id = "insuredPersonsDc", target = Target.DATA_CONTAINER)
@@ -149,7 +139,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     }
 
 
-    public void joinMember(String whichButton) {
+    public void joinEmployee(String whichButton) {
         InsuredPerson item = dataManager.create(InsuredPerson.class);
         InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                 .newEntity(chekType(item, whichButton))
@@ -185,6 +175,33 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 insuredPerson.setInsuranceContract(contract);
                 insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
             }
+
+            Address address = dataManager.load(Address.class).query("select e " +
+                    "from tsadv$Address e " +
+                    "where e.personGroup.id = :personGroupId " +
+                    " and current_date between e.startDate and e.endDate")
+                    .parameter("personGroupId", personGroupExt.getId())
+                    .view("address.view")
+                    .list().stream().findFirst().orElse(null);
+
+            boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
+            if (isEmptyDocument){
+                insuredPerson.setDocumentType(contract.getDefaultDocumentType());
+            }else {
+                boolean isSetDocument = false;
+                for (PersonDocument document : personGroupExt.getPersonDocuments()){
+                    if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())){
+                        insuredPerson.setDocumentType(document.getDocumentType());
+                        insuredPerson.setDocumentNumber(document.getDocumentNumber());
+                        isEmptyDocument = true;
+                        break;
+                    }
+                }
+                if (!isEmptyDocument){
+                    insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
+                    insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
+                }
+            }
             insuredPerson.setEmployee(personGroupExt);
             insuredPerson.setFirstName(person.getFirstName());
             insuredPerson.setSecondName(person.getLastName());
@@ -196,34 +213,11 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             insuredPerson.setCompany(company);
             insuredPerson.setJob(assignment.getJobGroup());
             insuredPerson.setTotalAmount(new BigDecimal(0));
+            insuredPerson.setAddressType(address);
+            insuredPerson.setAddress(address.getAddress());
 
-        }else if (whichButton.equals("joinMember")){
-            InsuredPerson singleSelected = insuredPersonsTable.getSingleSelected();
-            assert singleSelected != null;
-            isRelativeFamily(insuredPerson, singleSelected);
         }
         return insuredPerson;
-    }
-
-    public void isRelativeFamily(InsuredPerson person, InsuredPerson singleSelected) {
-        person.setEmployee(singleSelected.getEmployee());
-        person.setIin(singleSelected.getIin());
-        person.setSex(singleSelected.getSex());
-        person.setBirthdate(singleSelected.getBirthdate());
-        person.setRelative(singleSelected.getRelative());
-        person.setDocumentType(singleSelected.getDocumentType());
-        person.setDocumentNumber(singleSelected.getDocumentNumber());
-        person.setAddressType(singleSelected.getAddressType());
-        person.setAddress(singleSelected.getAddress());
-        person.setCompany(singleSelected.getCompany());
-        person.setJob(singleSelected.getJob());
-        person.setInsuranceContract(singleSelected.getInsuranceContract());
-        person.setType(singleSelected.getType());
-        person.setAttachDate(singleSelected.getAttachDate());
-        person.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
-        person.setInsuranceProgram(singleSelected.getInsuranceProgram());
-        person.setDocumentNumber(singleSelected.getDocumentNumber());
-        person.setRegion(singleSelected.getRegion());
     }
 
 }

@@ -9,7 +9,7 @@ import com.haulmont.cuba.gui.components.PickerField;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.exceptions.ItemNotFoundException;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.BpmRequestMessage;
 
 import javax.annotation.Nonnull;
@@ -84,9 +84,9 @@ public class BpmRequestMessageEdit extends AbstractEditor<BpmRequestMessage> {
         });
     }
 
-    private boolean isNotApprover(UserExt assignedUser) {
+    private boolean isNotApprover(TsadvUser assignedUser) {
         return assignedUser != null
-                && commonService.getCount(UserExt.class,
+                && commonService.getCount(TsadvUser.class,
                 "select e from tsadv$UserExt e " +
                         "   join bpm$ProcActor a on a.user.id = e.id " +
                         "   where a.procInstance.id = :procInstanceId " +
@@ -96,8 +96,8 @@ public class BpmRequestMessageEdit extends AbstractEditor<BpmRequestMessage> {
     }
 
     @Nonnull
-    protected UserExt getSessionUser() {
-        UserExt userExt = commonService.getEntity(UserExt.class,
+    protected TsadvUser getSessionUser() {
+        TsadvUser userExt = commonService.getEntity(TsadvUser.class,
                 "select e from tsadv$UserExt e where e.id = :userId",
                 ParamsMap.of("userId", userSession.getUser().getId()),
                 "userExt.edit");

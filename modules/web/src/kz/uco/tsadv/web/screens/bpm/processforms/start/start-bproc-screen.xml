@@ -12,9 +12,13 @@
         <collection id="notPersisitBprocActorsDc" class="kz.uco.tsadv.modules.bpm.NotPersisitBprocActors"/>
         <collection id="hrRolesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicHrRole"/>
     </data>
-    <layout>
+    <dialogMode forceDialog="true"
+                width="600px"
+                resizable="true"/>
+    <layout spacing="true" expand="buttonsPanel">
         <table multiselect="false"
                id="bprocActorsTable"
+               width="100%"
                dataContainer="notPersisitBprocActorsDc">
             <actions>
                 <action id="remove" type="remove"/>
@@ -32,7 +36,7 @@
             </buttonsPanel>
             <rows/>
         </table>
-        <buttonsPanel>
+        <buttonsPanel id="buttonsPanel">
             <button id="ok" caption="OK" icon="OK"/>
             <button id="cancel" caption="mainMsg://table.btn.cancel" icon="BAN"/>
         </buttonsPanel>

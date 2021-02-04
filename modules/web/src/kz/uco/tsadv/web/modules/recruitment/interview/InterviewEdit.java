@@ -19,7 +19,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.base.web.abstraction.AbstractDictionaryDatasource;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.common.EnableDraftStatusInterview;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.administration.enums.HiringStepType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Case;
@@ -287,7 +287,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
                     Long order = commonService.getCount(RequisitionHiringStep.class, "select e from tsadv$RequisitionHiringStep e where e.requisition.id = :reqId", Collections.singletonMap("reqId", reqId));
                     if (getItem().getRequisitionHiringStep().getOrder() == toIntExact(order)) {
                         if (getItem().getJobRequest() != null) {
-                            UserExt user = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getCandidatePersonGroup() != null ?
+                            TsadvUser user = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getCandidatePersonGroup() != null ?
                                     getItem().getJobRequest().getCandidatePersonGroup().getId() : null);
                             if (user != null && getItem().getJobRequest().getRequisition() != null) {
                                 notificationService.sendParametrizedNotification("candidate.selection.process.completed",
@@ -363,7 +363,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
         getItem().setInterviewReason(null);
         isApprovalNotification = true;
         Map<String, Object> params = new HashMap<>();
-        UserExt candidateUser = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getCandidatePersonGroup().getId());
+        TsadvUser candidateUser = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getCandidatePersonGroup().getId());
         if (candidateUser == null) {
             showNotification(getMessage("InterviewEdit.candidateUser.notExists"));
         } else if (candidateUser.getEmail() == null && candidateUser.getMobilePhone() == null) {
@@ -435,7 +435,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
 
         //PLEASE do not delete commented code
             /*Map<String, Object> templateParams = new HashMap<>();
-            UserExt mainInterviewerUser = commonService.getEntity(UserExt.class,
+            TsadvUser mainInterviewerUser = commonService.getEntity(TsadvUser.class,
                     "select u from sec$User u where u.personGroup.id = :personGroupId",
                     Collections.singletonMap("personGroupId", getItem().getMainInterviewerPersonGroup().getId()),
                     "user.edit");
@@ -454,7 +454,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
     //Принять интервью
     public void planInterview() {
         Map<String, Object> params = new HashMap<>();
-        UserExt userExt = null;
+        TsadvUser userExt = null;
         if (getItem().getJobRequest().getRequisition().getRecruiterPersonGroup() != null) {
             userExt = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getRequisition().getRecruiterPersonGroup().getId());
         }
@@ -510,7 +510,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
 
     public void cancelInterview() {
         Map<String, Object> params = new HashMap<>();
-        UserExt candidateUser = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getCandidatePersonGroup().getId());
+        TsadvUser candidateUser = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getCandidatePersonGroup().getId());
         if (candidateUser == null) {
             showNotification(getMessage("InterviewEdit.candidateUser.notExists"));
         } else if (candidateUser.getEmail() == null && candidateUser.getMobilePhone() == null)
@@ -545,7 +545,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
         }
 //                sendNotification("interview.mainInterviewer.cancel.notification");
         params.clear();
-        UserExt mainInterviewerUser = employeeService.getUserExtByPersonGroupId(getItem().getMainInterviewerPersonGroup().getId());
+        TsadvUser mainInterviewerUser = employeeService.getUserExtByPersonGroupId(getItem().getMainInterviewerPersonGroup().getId());
         params.put("interview", getItem());
 
         params.put("reason", getItem().getComment() != null ? getItem().getComment() : "");
@@ -564,7 +564,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
 
     protected void sendNotificationCompleteInterview() {
         try {
-            UserExt recruiter = employeeService.getUserExtByPersonGroupId(
+            TsadvUser recruiter = employeeService.getUserExtByPersonGroupId(
                     getItem().getJobRequest().getCandidatePersonGroup().getId(),
                     "user.browse");
             if (recruiter != null) {
@@ -605,7 +605,7 @@ public class InterviewEdit<T extends Interview> extends AbstractEditor<T> {
 
     protected void sendNotificationFailInterview() {
         try {
-            UserExt recruiter = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getCandidatePersonGroup().getId(), "user.browse");
+            TsadvUser recruiter = employeeService.getUserExtByPersonGroupId(getItem().getJobRequest().getCandidatePersonGroup().getId(), "user.browse");
             if (recruiter != null) {
                 Map<String, Object> params = new HashMap<>();
                 params.put("personName", getItem().getJobRequest().getCandidatePersonGroup().getPerson().getFullName() != null ?

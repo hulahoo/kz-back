@@ -3,7 +3,7 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.entity.shared.Hierarchy;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 
@@ -35,7 +35,7 @@ public interface HierarchyService {
     /**
      * Возвращает список пользователей руководителей для заданной штатной единицы в заданной иерархии
      */
-    List<UserExt> findManagerUsers(UUID positionGroupId, UUID hierarchyId);
+    List<TsadvUser> findManagerUsers(UUID positionGroupId, UUID hierarchyId);
 
     List<UUID> getHierarchyException();
 

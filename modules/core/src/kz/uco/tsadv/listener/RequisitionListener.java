@@ -11,7 +11,7 @@ import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 import kz.uco.tsadv.modules.recruitment.enums.RequisitionStatus;
 import kz.uco.tsadv.modules.recruitment.model.*;
@@ -85,7 +85,7 @@ public class RequisitionListener implements AfterUpdateEntityListener<Requisitio
                     Map<String, Object> params = new HashMap<>();
                     params.put("requisition", entity);
 
-                    UserExt recruiterUser = commonService.getEntity(UserExt.class,
+                    TsadvUser recruiterUser = commonService.getEntity(TsadvUser.class,
                             "select e from tsadv$UserExt e " +
                                     "where e.personGroup.id = :personGroupId",
                             Collections.singletonMap("personGroupId", entity.getRecruiterPersonGroup().getId()),
@@ -98,7 +98,7 @@ public class RequisitionListener implements AfterUpdateEntityListener<Requisitio
                     notificationService.sendParametrizedNotification("requisition.changed.notification", recruiterUser, params);
 
                     for (OrganizationHrUser hrUser : employeeService.getHrUsers(entity.getOrganizationGroup().getId(), "RECRUITING_MANAGER")) {
-                        UserExt recruiterManagerUser = commonService.getEntity(UserExt.class,
+                        TsadvUser recruiterManagerUser = commonService.getEntity(TsadvUser.class,
                                 "select e from tsadv$UserExt e where e.id = :userId",
                                 Collections.singletonMap("userId", hrUser.getUser().getId()),
                                 "user.browse");
@@ -115,7 +115,7 @@ public class RequisitionListener implements AfterUpdateEntityListener<Requisitio
             if (entity.getRecruiterPersonGroup() != null) {
                 try (Transaction tx = persistence.createTransaction()) {
                     Map<String, Object> params = new HashMap<>();
-                    UserExt recruiterManagerUser = employeeService.getUserExtByPersonGroupId(entity.getRecruiterPersonGroup().getId());
+                    TsadvUser recruiterManagerUser = employeeService.getUserExtByPersonGroupId(entity.getRecruiterPersonGroup().getId());
                     params.put("jobName", entity.getJobGroup().getJob() != null ? entity.getJobGroup().getJob().getJobName() : "");
                     params.put("code", entity.getCode());
                     params.put("requisitionNameRu", entity.getNameForSiteLang1());

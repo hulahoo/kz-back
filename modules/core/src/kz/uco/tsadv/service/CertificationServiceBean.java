@@ -8,7 +8,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import kz.uco.base.notification.NotificationSenderAPI;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.CertificationPeriod;
 import kz.uco.tsadv.modules.learning.enums.CertificationStatus;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
@@ -104,7 +104,7 @@ public class CertificationServiceBean implements CertificationService {
     }
 
     private void sendNotification(Enrollment enrollment, String notificationCode, Map<String, Object> params) {
-        UserExt userExt = getUserExt(enrollment);
+        TsadvUser userExt = getUserExt(enrollment);
 
         Map<String, Object> maps = params == null ? new HashMap<>() : params;
         maps.put("user", userExt);
@@ -113,8 +113,8 @@ public class CertificationServiceBean implements CertificationService {
         notificationSenderAPI.sendParametrizedNotification(notificationCode, userExt, maps);
     }
 
-    private UserExt getUserExt(Enrollment enrollment) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    private TsadvUser getUserExt(Enrollment enrollment) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
         loadContext.setQuery(LoadContext.createQuery("select e from sec$User e where e.personGroup.id = :pId")
                 .setParameter("pId", enrollment.getPersonGroup().getId()))
                 .setView("user.edit");

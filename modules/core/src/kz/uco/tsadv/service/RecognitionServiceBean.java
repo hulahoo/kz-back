@@ -12,6 +12,7 @@ import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.app.serialization.EntitySerializationAPI;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
@@ -26,7 +27,7 @@ import kz.uco.tsadv.api.QRCodeInt;
 import kz.uco.tsadv.config.RecognitionConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.entity.*;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -574,7 +575,7 @@ public class RecognitionServiceBean implements RecognitionService {
     }
 
     @Override
-    public Map<UserExt, PersonExt> findManagerByPositionGroup(UUID positionGroupId, UUID receiverPersonGroupId) {
+    public Map<TsadvUser, PersonExt> findManagerByPositionGroup(UUID positionGroupId, UUID receiverPersonGroupId) {
         try (Transaction tx = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
 
@@ -648,7 +649,7 @@ public class RecognitionServiceBean implements RecognitionService {
                     UUID userId = (UUID) row[3];
                     if (userId != null) {
                         try {
-                            UserExt userExt = em.find(UserExt.class, userId, View.LOCAL);
+                            TsadvUser userExt = em.find(TsadvUser.class, userId, View.LOCAL);
                             if (userExt != null) {
                                 PersonExt personExt = metadata.create(PersonExt.class);
                                 personExt.setId((UUID) row[4]);
@@ -3185,13 +3186,15 @@ public class RecognitionServiceBean implements RecognitionService {
     public void sendCheckoutNotification(GoodsOrder goodsOrder) {
         PersonGroupExt buyerPersonGroup = goodsOrder.getPersonGroup();
 
-        UUID buyerPositionGroupId = employeeService.getPersonPositionGroup(buyerPersonGroup.getId());
+        UUID buyerPositionGroupId = Optional.ofNullable(employeeService.getPositionGroupByPersonGroupId(buyerPersonGroup.getId(), View.MINIMAL))
+                .map(BaseUuidEntity::getId)
+                .orElse(null);
 
         if (buyerPositionGroupId == null) {
             throw new NullPointerException(getMessage("buyer.position.null"));
         }
 
-        UserExt buyerManagerUser = employeeService.findManagerByPositionGroup(buyerPositionGroupId, recognitionConfig.getHierarchyId());
+        TsadvUser buyerManagerUser = employeeService.findManagerByPositionGroup(buyerPositionGroupId, recognitionConfig.getHierarchyId());
         if (buyerManagerUser == null) {
             throw new RuntimeException(getMessage("buyer.manager.null"));
         }
@@ -3212,13 +3215,15 @@ public class RecognitionServiceBean implements RecognitionService {
         for (GoodsOrder goodsOrder : goodsOrderList) {
             PersonGroupExt buyerPersonGroup = goodsOrder.getPersonGroup();
 
-            UUID buyerPositionGroupId = employeeService.getPersonPositionGroup(buyerPersonGroup.getId());
+            UUID buyerPositionGroupId = Optional.ofNullable(employeeService.getPositionGroupByPersonGroupId(buyerPersonGroup.getId(),View.MINIMAL))
+                    .map(BaseUuidEntity::getId)
+                    .orElse(null);
 
             if (buyerPositionGroupId == null) {
                 throw new NullPointerException(getMessage("buyer.position.null"));
             }
 
-            UserExt buyerManagerUser = employeeService.findManagerByPositionGroup(buyerPositionGroupId, recognitionConfig.getHierarchyId());
+            TsadvUser buyerManagerUser = employeeService.findManagerByPositionGroup(buyerPositionGroupId, recognitionConfig.getHierarchyId());
             if (buyerManagerUser == null) {
                 throw new RuntimeException(getMessage("buyer.manager.null"));
             }

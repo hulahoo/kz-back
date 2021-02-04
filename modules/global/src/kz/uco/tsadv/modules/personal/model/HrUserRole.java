@@ -4,7 +4,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class HrUserRole extends AbstractParentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USER_ID")
-    protected UserExt user;
+    protected TsadvUser user;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE_FROM", nullable = false)
@@ -33,11 +33,11 @@ public class HrUserRole extends AbstractParentEntity {
     @Column(name = "DATE_TO", nullable = false)
     protected Date dateTo;
 
-    public void setUser(UserExt user) {
+    public void setUser(TsadvUser user) {
         this.user = user;
     }
 
-    public UserExt getUser() {
+    public TsadvUser getUser() {
         return user;
     }
 

@@ -23,7 +23,7 @@ import com.haulmont.cuba.web.gui.components.WebComponentsHelper;
 import com.vaadin.ui.ComboBox;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dto.LinkedinProfileDTO;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.EmployeeService;
@@ -50,7 +50,7 @@ public class StandartSettings extends AbstractFrame {
     protected boolean isLinkedinAccessTokenValidAndNotExpired;
     protected PersonGroupExt personGroup;
 
-    protected UserExt userExt;
+    protected TsadvUser userExt;
 
     private final Logger log = LoggerFactory.getLogger(StandartSettings.class);
 
@@ -143,7 +143,7 @@ public class StandartSettings extends AbstractFrame {
 
         UUID userExtId = userSession.getAttribute(StaticVariable.USER_EXT_ID);
 
-        userExt = dataManager.load(LoadContext.create(UserExt.class).setId(userExtId).setView("user.edit"));
+        userExt = dataManager.load(LoadContext.create(TsadvUser.class).setId(userExtId).setView("user.edit"));
 
         getFreshPersonGroup();
         telegramCodeField.setValue(userExt.getTelegramCode());

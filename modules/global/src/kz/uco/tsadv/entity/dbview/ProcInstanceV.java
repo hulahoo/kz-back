@@ -10,7 +10,7 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DesignSupport;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -48,7 +48,7 @@ public class ProcInstanceV extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STARTED_BY_ID")
-    protected UserExt startedBy;
+    protected TsadvUser startedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STARTED_BY_PERSON_GROUP_ID")
@@ -79,7 +79,7 @@ public class ProcInstanceV extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CURRENT_APPROVER_ID")
-    protected UserExt currentApprover;
+    protected TsadvUser currentApprover;
 
     @Column(name = "DETAIL_RU")
     protected String detailRu;
@@ -196,11 +196,11 @@ public class ProcInstanceV extends StandardEntity {
         return processEn;
     }
 
-    public void setCurrentApprover(UserExt currentApprover) {
+    public void setCurrentApprover(TsadvUser currentApprover) {
         this.currentApprover = currentApprover;
     }
 
-    public UserExt getCurrentApprover() {
+    public TsadvUser getCurrentApprover() {
         return currentApprover;
     }
 
@@ -269,11 +269,11 @@ public class ProcInstanceV extends StandardEntity {
         return active;
     }
 
-    public void setStartedBy(UserExt startedBy) {
+    public void setStartedBy(TsadvUser startedBy) {
         this.startedBy = startedBy;
     }
 
-    public UserExt getStartedBy() {
+    public TsadvUser getStartedBy() {
         return startedBy;
     }
 }

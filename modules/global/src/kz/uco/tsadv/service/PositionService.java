@@ -1,10 +1,12 @@
 package kz.uco.tsadv.service;
 
 
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.PositionExt;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PositionService {
     String NAME = "tsadv_PositionService";
@@ -19,9 +21,5 @@ public interface PositionService {
      */
     List<Job> getExistingJobsInactiveInNearFuture(PositionExt position);
 
-/*    String generateNextRequestNumber();
-
-    boolean hasRequestNumber(String requestNumber);
-
-    boolean hasRequestNumber(String requestNumber, UUID id);*/
+    PositionGroupExt getManager(UUID positionGroupId);
 }

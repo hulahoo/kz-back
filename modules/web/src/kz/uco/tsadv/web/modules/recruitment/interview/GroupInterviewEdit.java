@@ -17,7 +17,7 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
@@ -670,12 +670,12 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
 
     private void sendNotification(String notificationCode, Interview interview) {
         Map<String, Object> params = new HashMap<>();
-        List<UserExt> userList = null;
+        List<TsadvUser> userList = null;
         SimpleDateFormat tf = new SimpleDateFormat("HH:mm");
 
         switch (notificationCode) {
             case "interview.planned.mainInterviewer.notification":
-                userList = commonService.getEntities(UserExt.class,
+                userList = commonService.getEntities(TsadvUser.class,
                         "select e " +
                                 "    from tsadv$UserExt e " +
                                 "   where e.personGroup.id = :mainInterviewerPersonGroupId ",
@@ -688,7 +688,7 @@ public class GroupInterviewEdit extends AbstractEditor<Interview> {
                 params.put("personFullNameRu", interview.getMainInterviewerPersonGroup() != null ? interview.getMainInterviewerPersonGroup().getPerson().getFullName() : "");
                 break;
             case "interview.candidate.approve.notification":
-                userList = commonService.getEntities(UserExt.class,
+                userList = commonService.getEntities(TsadvUser.class,
                         "select e " +
                                 "    from tsadv$UserExt e " +
                                 "   where e.personGroup.id = :candidatePersonGroupId",

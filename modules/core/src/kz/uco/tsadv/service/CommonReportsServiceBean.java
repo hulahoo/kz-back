@@ -8,6 +8,7 @@ import com.haulmont.reports.entity.Report;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
 @Service(CommonReportsService.NAME)
@@ -18,12 +19,7 @@ public class CommonReportsServiceBean implements CommonReportsService {
     @Inject
     protected DataManager dataManager;
 
-
-    public FileDescriptor getReportByCertificateRequest(CertificateRequest request) {
-        if (request == null) {
-            throw new NullPointerException("report is null");
-        }
-
+    public FileDescriptor getReportByCertificateRequest(@Nonnull CertificateRequest request) {
         Report report = dataManager.load(Report.class)
                 .query("select e.report from tsadv_CertificateTemplate e where e.language=:langId and e.receivingType=:recTyId and e.showSalary = :salary and e.certificateType = :certType")
                 .parameter("langId", request.getLanguage())
@@ -37,8 +33,7 @@ public class CommonReportsServiceBean implements CommonReportsService {
             return null;
         }
 
-        FileDescriptor file = reportingApi.createAndSaveReport(report, ParamsMap.of("req_id", report), report.getName());
-        return file;
+        return reportingApi.createAndSaveReport(report, ParamsMap.of("req_id", report), report.getName());
     }
 
 

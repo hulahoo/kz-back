@@ -14,7 +14,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.datasource.TimecardDatasource;
 import kz.uco.tsadv.datasource.TimecardHierarchyDatasource;
 import kz.uco.tsadv.entity.TimecardHierarchy;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -180,7 +180,7 @@ public class TimecardBrowse extends AbstractLookup {
 
     protected Set<String> getAllowedTimecardHierarchies() {
         if (allowedTimecardHierarchies == null) {
-            organizationsWhereUserIsHr = organizationService.getOrganizationsWhereUserIsHr(((UserExt) userSession.getUser()));
+            organizationsWhereUserIsHr = organizationService.getOrganizationsWhereUserIsHr(((TsadvUser) userSession.getUser()));
             Set<String> list = new HashSet<>();
             for (OrganizationGroupExt organizationGroupExt : organizationsWhereUserIsHr) {
                 TimecardHierarchy parent =

@@ -33,4 +33,6 @@
 
     <bean id="bproc_ProcessStartedEventListener" class="kz.uco.tsadv.bproc.beans.ExtProcessStartedEventListener"/>
 
+    <bean id="bproc_BprocTaskService" class="kz.uco.tsadv.bproc.beans.ExtBprocTaskServiceBean"/>
+
 </beans>

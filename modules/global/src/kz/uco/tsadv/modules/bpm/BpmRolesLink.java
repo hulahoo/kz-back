@@ -23,7 +23,8 @@ public class BpmRolesLink extends StandardEntity {
     @Column(name = "BPROC_USER_TASK_CODE")
     protected String bprocUserTaskCode;
 
-    @Column(name = "ORDER_")
+    @Column(name = "ORDER_", nullable = false)
+    @NotNull
     private Integer order;
 
     @NotNull

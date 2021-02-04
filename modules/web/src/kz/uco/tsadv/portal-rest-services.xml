@@ -5,6 +5,15 @@
             <param name="entityName" type="java.lang.String"/>
         </method>
     </service>
+    <service name="tsadv_BprocService">
+        <method name="getProcessInstanceData">
+            <param name="processInstanceBusinessKey" type="java.lang.String"/>
+            <param name="processDefinitionKey" type="java.lang.String"/>
+        </method>
+        <method name="getProcessTasks">
+            <param name="processInstanceData" type="com.haulmont.addon.bproc.entity.ProcessInstanceData"/>
+        </method>
+    </service>
     <service name="tsadv_EnrollmentService">
         <method name="searchEnrollment">
             <param name="userId" type="java.util.UUID"/>

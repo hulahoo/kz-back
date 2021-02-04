@@ -15,7 +15,7 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="bpmRolesLinkDc">
             <column width="250px">
-                <textField id="bprocUserTaskCodeField" required="true" property="bprocUserTaskCode"/>
+                <lookupField id="bprocUserTaskCodeField" required="true" property="bprocUserTaskCode"/>
                 <pickerField id="hrRoleField" property="hrRole">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>

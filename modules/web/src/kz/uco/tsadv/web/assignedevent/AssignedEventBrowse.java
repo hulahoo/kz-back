@@ -13,7 +13,7 @@ import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.AssignedEvent;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
@@ -128,7 +128,7 @@ public class AssignedEventBrowse extends AbstractLookup {
                 assignedEvent.setSafetyPlanEvent(assignedEventDb.getSafetyPlanEvent());
                 assignedEvent.setStatus(assignedEventDb.getStatus());
 
-                UserExt assignedBy = employeeService.getUserExtByPersonGroupId(assignedEvent.getAssigned() == null ? null : assignedEvent.getAssigned().getId());
+                TsadvUser assignedBy = employeeService.getUserExtByPersonGroupId(assignedEvent.getAssigned() == null ? null : assignedEvent.getAssigned().getId());
                 activityService.createActivity(
                         assignedEvent.getSafetyEvent().getName(),
                         assignedEvent.getSafetyEvent().getName(),

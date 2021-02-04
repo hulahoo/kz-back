@@ -29,7 +29,7 @@ import kz.uco.tsadv.api.*;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.common.EnableDraftStatusInterview;
 import kz.uco.tsadv.global.dictionary.DicNationality;
-import kz.uco.tsadv.modules.administration.UserExt;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.dictionary.DicEducationDegree;
 import kz.uco.tsadv.modules.learning.dictionary.DicEducationLevel;
 import kz.uco.tsadv.modules.personal.dictionary.*;
@@ -940,7 +940,7 @@ public class RcApiServiceBean implements RcApiService {
         if (user.getLogin() == null || user.getLogin().length() == 0)
             errorMessages.add("Login is required!");
         else {
-            List<UserExt> users = commonService.getEntities(UserExt.class,
+            List<TsadvUser> users = commonService.getEntities(TsadvUser.class,
                     "select e from tsadv$UserExt e where LOWER(e.login) = :login",
                     Collections.singletonMap("login", user.getLogin().toLowerCase()), View.LOCAL);
             if (users != null && !users.isEmpty())
@@ -955,7 +955,7 @@ public class RcApiServiceBean implements RcApiService {
         if (user.getEmail() != null && user.getEmail().length() > 0) {
             try {
                 map.put("email", user.getEmail());
-                UserExt userExt = commonService.getEntity(UserExt.class,
+                TsadvUser userExt = commonService.getEntity(TsadvUser.class,
                         "select e from tsadv$UserExt e where e.email = :email ",
                         map,
                         "user.edit");
@@ -981,7 +981,7 @@ public class RcApiServiceBean implements RcApiService {
             result.setErrorMessage(errorMessages.stream().reduce((e1, e2) -> e1.concat(" ").concat(e2)).orElse(""));
         } else {
             try {
-                UserExt userExt = metadata.create(UserExt.class);
+                TsadvUser userExt = metadata.create(TsadvUser.class);
                 userExt.setLogin(user.getLogin());
                 PersonGroupExt personGroup = metadata.create(PersonGroupExt.class);
                 dataManager.commit(personGroup);
@@ -1158,7 +1158,7 @@ public class RcApiServiceBean implements RcApiService {
                     jobRequest.setRequestStatus(JobRequestStatus.ON_APPROVAL);
                     commitInstances.add(jobRequest);
                     if (jobRequest.getRequestStatus() != JobRequestStatus.DRAFT) {
-                        UserExt userExt = employeeService.getUserExtByPersonGroupId(candidatePersonGroup.getId(), "user.browse");
+                        TsadvUser userExt = employeeService.getUserExtByPersonGroupId(candidatePersonGroup.getId(), "user.browse");
                         notificationService.sendParametrizedNotification(
                                 "requisition.notify.application.candidate",
                                 userExt,
@@ -2054,7 +2054,7 @@ public class RcApiServiceBean implements RcApiService {
                 commitInstances.add(jobRequest);
                 dataManager.commit(new CommitContext(commitInstances));
                 if (jobRequest.getRequestStatus() != JobRequestStatus.DRAFT) {
-                    UserExt userExt = employeeService.getUserExtByPersonGroupId(candidatePersonGroup.getId(), "user.browse");
+                    TsadvUser userExt = employeeService.getUserExtByPersonGroupId(candidatePersonGroup.getId(), "user.browse");
                     notificationService.sendParametrizedNotification(
                             "requisition.notify.application.candidate",
                             userExt,
@@ -2109,8 +2109,8 @@ public class RcApiServiceBean implements RcApiService {
         return personName;
     }
 
-    protected UserExt getUserExt(UUID personGroupId) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    protected TsadvUser getUserExt(UUID personGroupId) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$UserExt e " +
                         "where e.personGroup.id = :pgId");
@@ -2159,8 +2159,8 @@ public class RcApiServiceBean implements RcApiService {
         return jobName;
     }
 
-    protected UserExt getUserExtByLogin(String login) {
-        LoadContext<UserExt> loadContext = LoadContext.create(UserExt.class);
+    protected TsadvUser getUserExtByLogin(String login) {
+        LoadContext<TsadvUser> loadContext = LoadContext.create(TsadvUser.class);
         LoadContext.Query query = LoadContext.createQuery(
                 "select e from tsadv$UserExt e where e.login = :login");
         query.setParameter("login", login);
@@ -2199,14 +2199,14 @@ public class RcApiServiceBean implements RcApiService {
                 interview.setInterviewStatus(InterviewStatus.PLANNED);
                 jobRequest.setRequestStatus(JobRequestStatus.INTERVIEW);
 
-                List<UserExt> mainInterviewerUsers = commonService.getEntities(UserExt.class,
+                List<TsadvUser> mainInterviewerUsers = commonService.getEntities(TsadvUser.class,
                         "select e from tsadv$UserExt e" +
                                 " where e.personGroup.id = :mainInterviewerPersonGroupId",
                         Collections.singletonMap("mainInterviewerPersonGroupId", interview.getMainInterviewerPersonGroup().getId()),
                         "user.browse");
 
                 if (mainInterviewerUsers != null && !mainInterviewerUsers.isEmpty()) {
-                    UserExt mainInterviewerUser = mainInterviewerUsers.get(0);
+                    TsadvUser mainInterviewerUser = mainInterviewerUsers.get(0);
 
                     if (mainInterviewerUser.getEmail() != null || mainInterviewerUser.getMobilePhone() != null) {
                         Map<String, Object> params = new HashMap<>();
@@ -2302,7 +2302,7 @@ public class RcApiServiceBean implements RcApiService {
             result.setErrorMessage(errorMessages.stream().reduce((e1, e2) -> e1.concat(" ").concat(e2)).orElse(""));
         } else {
             try {
-                UserExt user = commonService.getEntity(UserExt.class,
+                TsadvUser user = commonService.getEntity(TsadvUser.class,
                         "select e from tsadv$UserExt e where e.id = :id",
                         Collections.singletonMap("id", userSessionSource.getUserSession().getUser().getId()),
                         "user.edit");
@@ -2310,7 +2310,7 @@ public class RcApiServiceBean implements RcApiService {
                 Map<String, Object> map = new HashMap<>();
                 map.put("email", userInt.getEmail());
                 map.put("itemId", user.getId());
-                UserExt userExt = commonService.getEntity(UserExt.class,
+                TsadvUser userExt = commonService.getEntity(TsadvUser.class,
                         "select e from tsadv$UserExt e where e.email = :email " +
                                 "   and e.id <> :itemId",
                         map,
@@ -2376,7 +2376,7 @@ public class RcApiServiceBean implements RcApiService {
             errorMessages.add("New password is required!");
 
         try {
-            UserExt user = commonService.getEntity(UserExt.class,
+            TsadvUser user = commonService.getEntity(TsadvUser.class,
                     "select e from tsadv$UserExt e where e.id = :id",
                     Collections.singletonMap("id", userSessionSource.getUserSession().getUser().getId()),
                     "user.edit");
@@ -2504,7 +2504,7 @@ public class RcApiServiceBean implements RcApiService {
             procTaskList.forEach(procTask -> {
                 if (procTask.getProcActor().getUser() != null) {
                     paramsMap.put("fioPerson", personGroup.getFullName());
-                    UserExt userExt = (UserExt) procTask.getProcActor().getUser();
+                    TsadvUser userExt = (TsadvUser) procTask.getProcActor().getUser();
                     notificationService.sendParametrizedNotification("offer.accepted.notification",
                             userExt,
                             paramsMap);
@@ -2562,7 +2562,7 @@ public class RcApiServiceBean implements RcApiService {
             procTaskList.forEach(procTask -> {
                 if (procTask.getProcActor().getUser() != null) {
                     paramsMap.put("fioPerson", personGroup.getFullName());
-                    UserExt userExt = (UserExt) procTask.getProcActor().getUser();
+                    TsadvUser userExt = (TsadvUser) procTask.getProcActor().getUser();
                     notificationService.sendParametrizedNotification("offer.rejected.notification",
                             userExt,
                             paramsMap);
@@ -3674,7 +3674,7 @@ public class RcApiServiceBean implements RcApiService {
                 if (checkPrescreeningTest(candidateInt).isSuccess()) {
                     jobRequest.setRequestStatus(JobRequestStatus.ON_APPROVAL);
                     if (jobRequest.getRequestStatus() != JobRequestStatus.DRAFT) {
-                        UserExt userExt = employeeService.getUserExtByPersonGroupId(candidatePersonGroup.getId(), "user.browse");
+                        TsadvUser userExt = employeeService.getUserExtByPersonGroupId(candidatePersonGroup.getId(), "user.browse");
                         notificationService.sendParametrizedNotification(
                                 "requisition.notify.application.candidate",
                                 userExt,

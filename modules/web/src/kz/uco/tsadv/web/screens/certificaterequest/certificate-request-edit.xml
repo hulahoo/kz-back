@@ -9,13 +9,16 @@
             <view extends="_local">
                 <property name="personGroup" view="personGroupExt-view"/>
                 <property name="certificateType" view="_minimal"/>
-                <property name="receivingType" view="_minimal"/>
+                <property name="receivingType" view="_local"/>
                 <property name="language" view="_minimal"/>
                 <property name="file" view="_minimal"/>
                 <property name="status" view="_local"/>
             </view>
             <loader/>
         </instance>
+        <instance id="assignmentDc"
+                  class="kz.uco.tsadv.modules.personal.model.AssignmentExt"/>
+
         <collection id="statusesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus" view="_minimal">
             <loader id="statusesDl">
                 <query>
@@ -32,7 +35,7 @@
             </loader>
         </collection>
         <collection id="receivingTypeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicReceivingType"
-                    view="_minimal">
+                    view="_local">
             <loader id="receivingTypeDl">
                 <query>
                     <![CDATA[select e from tsadv_DicReceivingType e]]>
@@ -63,11 +66,15 @@
                     <lookupField id="receivingTypeField" optionsContainer="receivingTypeDc" property="receivingType"/>
                     <dateField id="requestDateField" property="requestDate" editable="false"/>
                     <pickerField id="personGroupField" property="personGroup" editable="false"/>
-                    <pickerField id="positionField" property="personGroup.currentAssignment.positionGroup"
+                    <pickerField id="positionField"
+                                 dataContainer="assignmentDc"
+                                 property="positionGroup"
                                  editable="false"/>
                     <pickerField id="departmentField"
-                                 property="personGroup.currentAssignment.organizationGroup.organization"
-                                 caption="mainMsg://department" editable="false"/>
+                                 dataContainer="assignmentDc"
+                                 property="organizationGroup.organization"
+                                 caption="mainMsg://department"
+                                 editable="false"/>
                     <lookupPickerField id="cretificateTypeField" optionsContainer="certTypesDc"
                                        property="certificateType"/>
                     <lookupPickerField id="languageField" optionsContainer="languageDc" property="language"/>
@@ -80,7 +87,7 @@
                   width="1000px"
                   spacing="true">
                 <groupBox id="bpmActorsBox"
-                          caption="msg://TransferRequest.approvalProcess.actors"
+                          caption="msg://kz.uco.tsadv.bproc/bproc.participants"
                           spacing="true">
                     <table id="procTasksTable"
                            height="100%"
@@ -88,13 +95,12 @@
                            dataContainer="tasksDc"
                            width="100%">
                         <columns>
-                            <column id="name"/>
+                            <column id="hrRole"/>
                             <column id="assignee" generator="generateAssignee"/>
                             <column id="createTime"/>
                             <column id="endTime"/>
-                            <column id="outcome"
-                                    generator="generateOutcome"
-                                    caption="msg://ProcActor.decision"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
                         </columns>
                     </table>
                 </groupBox>
@@ -106,6 +112,7 @@
               spacing="true">
             <hbox id="procActionButtonHBox"
                   spacing="true"/>
+            <button id="getReferenceBtn" caption="msg://getReference" visible="false"/>
             <button action="windowClose"/>
         </hbox>
     </layout>
