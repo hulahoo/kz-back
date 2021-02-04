@@ -22984,4 +22984,21 @@
         </property>
         <property name="legacyId"/>
     </view>
+    <view entity="tsadv$JobGroup" name="jobGroup-for-integration-rest" extends="_minimal">
+        <property name="list" view="_minimal">
+            <property name="jobNameLang1"/>
+            <property name="jobNameLang2"/>
+            <property name="jobNameLang3"/>
+            <property name="jobNameLang4"/>
+            <property name="jobNameLang5"/>
+            <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="writeHistory"/>
+        </property>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="legacyId"/>
+    </view>
 </views>

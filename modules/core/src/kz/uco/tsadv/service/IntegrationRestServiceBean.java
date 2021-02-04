@@ -11,9 +11,13 @@ import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.modules.integration.jsonobject.JobDataJson;
+import kz.uco.tsadv.modules.integration.jsonobject.JobJson;
 import kz.uco.tsadv.modules.integration.jsonobject.OrganizationDataJson;
 import kz.uco.tsadv.modules.integration.jsonobject.OrganizationJson;
+import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
+import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.OrganizationExt;
 import org.springframework.stereotype.Service;
 
@@ -84,13 +88,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     organizationGroupExt = dataManager.commit(organizationGroupExt);
                     organizationGroupExt = dataManager.reload(organizationGroupExt,
                             "organizationGroupExt-for-integration-rest");
-//                    entityManager.persist(organizationGroupExt);
-//                    organizationGroupExt = dataManager.load(OrganizationGroupExt.class)
-//                            .query("select e from base$OrganizationGroupExt e " +
-//                                    " where e.legacyId = :legacyId and e.company.legacyId = :company")
-//                            .setParameters(ParamsMap.of("legacyId", organization.getLegacyId(),
-//                                    "company", organization.getCompanyCode()))
-//                            .view("organizationGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
                     organizationGroupExts.add(organizationGroupExt);
                 }
 
@@ -175,6 +172,124 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, organizations);
+    }
+
+    @Override
+    public BaseResult createOrUpdateJob(JobDataJson jobData) {
+        String methodName = "createOrUpdateJob";
+        ArrayList<JobJson> jobs = new ArrayList<>();
+        if (jobData.getJobs() != null) {
+            jobs = jobData.getJobs();
+        }
+        BaseResult result = new BaseResult();
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            List<JobGroup> jobGroups = new ArrayList<>();
+            for (JobJson jobJson : jobs) {
+                if (jobJson.getLegacyId() == null || jobJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, jobs,
+                            "no legacyId ");
+                }
+                if (jobJson.getCompanyCode() == null || jobJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, jobs,
+                            "no companyCode");
+                }
+                JobGroup jobGroup = jobGroups.stream().filter(jobGroup1 ->
+                        jobGroup1.getCompany().getLegacyId().equals(jobJson.getCompanyCode())
+                                && jobGroup1.getLegacyId().equals(jobJson.getLegacyId()))
+                        .findFirst().orElse(null);
+                if (jobGroup == null) {
+                    jobGroup = dataManager.load(JobGroup.class)
+                            .query("select e from tsadv$JobGroup e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", jobJson.getLegacyId(),
+                                    "company", jobJson.getCompanyCode()))
+                            .view("jobGroup-for-integration-rest").list().stream().findFirst().orElse(null);
+                }
+                if (jobGroup == null) {
+                    jobGroup = metadata.create(JobGroup.class);
+                    DicCompany company = dataManager.load(DicCompany.class).query("select e from base_DicCompany e " +
+                            " where e.legacyId = :legacyId").parameter("legacyId", jobJson.getCompanyCode())
+                            .view(View.MINIMAL).list().stream().findFirst().orElse(null);
+                    if (company == null) {
+                        return prepareError(result, methodName, jobs,
+                                "no base$DicCompany with legacyId " + jobJson.getCompanyCode());
+                    }
+                    jobGroup.setCompany(company);
+                    jobGroup.setLegacyId(jobJson.getLegacyId());
+                    jobGroup.setId(UUID.randomUUID());
+                    jobGroup.setList(new ArrayList<>());
+                    jobGroup = dataManager.commit(jobGroup);
+                    jobGroup = dataManager.reload(jobGroup,
+                            "jobGroup-for-integration-rest");
+                    jobGroups.add(jobGroup);
+                }
+
+                for (Job job : jobGroup.getList()) {
+                    entityManager.remove(job);
+                }
+                Job job = metadata.create(Job.class);
+                job.setJobNameLang1(jobJson.getJobNameLang1());
+                job.setJobNameLang1(jobJson.getJobNameLang1());
+                job.setJobNameLang1(jobJson.getJobNameLang1());
+                job.setLegacyId(jobJson.getLegacyId());
+                job.setStartDate(formatter.parse(jobJson.getStartDate()));
+                job.setEndDate(formatter.parse(jobJson.getEndDate()));
+                job.setLegacyId(jobJson.getLegacyId());
+                job.setGroup(jobGroup);
+                entityManager.persist(job);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, jobs, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, jobs);
+    }
+
+    @Override
+    public BaseResult deleteJob(JobDataJson jobData) {
+        String methodName = "deleteJob";
+        BaseResult result = new BaseResult();
+        ArrayList<JobJson> jobJsons = new ArrayList<>();
+        if (jobData.getJobs() != null) {
+            jobJsons = jobData.getJobs();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            for (JobJson jobJson : jobJsons) {
+                if (jobJson.getLegacyId() == null || jobJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, jobJsons,
+                            "no legacyId ");
+                }
+                if (jobJson.getCompanyCode() == null || jobJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, jobJsons,
+                            "no companyCode");
+                }
+                JobGroup jobGroup = dataManager.load(JobGroup.class)
+                        .query("select e from tsadv$JobGroup e " +
+                                " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                        .setParameters(ParamsMap.of("legacyId", jobJson.getLegacyId(),
+                                "company", jobJson.getCompanyCode()))
+                        .view("jobGroup-for-integration-rest").list().stream().findFirst().orElse(null);
+                if (jobGroup == null) {
+                    return prepareError(result, methodName, jobData,
+                            "no job with legacyId and companyCode : "
+                                    + jobJson.getLegacyId() + " , " + jobJson.getCompanyCode());
+                }
+                for (Job job : jobGroup.getList()) {
+                    entityManager.remove(job);
+                }
+                entityManager.remove(jobGroup);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, jobData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, jobJsons);
     }
 
     protected <T extends Serializable> BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {

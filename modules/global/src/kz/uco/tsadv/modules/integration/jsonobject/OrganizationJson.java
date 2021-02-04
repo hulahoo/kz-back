@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 public class OrganizationJson implements Serializable {
+
     private String organizationNameLang1;
     private String organizationNameLang2;
     private String organizationNameLang3;

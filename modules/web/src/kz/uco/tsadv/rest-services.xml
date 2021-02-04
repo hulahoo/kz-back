@@ -679,5 +679,11 @@
         <method name="deleteOrganization">
             <param name="organizationData" type="kz.uco.tsadv.modules.integration.jsonobject.OrganizationDataJson"/>
         </method>
+        <method name="createOrUpdateJob">
+            <param name="jobData" type="kz.uco.tsadv.modules.integration.jsonobject.JobDataJson"/>
+        </method>
+        <method name="deleteJob">
+            <param name="jobData" type="kz.uco.tsadv.modules.integration.jsonobject.JobDataJson"/>
+        </method>
     </service>
 </services>
