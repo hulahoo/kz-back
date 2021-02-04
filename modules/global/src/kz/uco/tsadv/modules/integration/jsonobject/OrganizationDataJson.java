@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class OrganizationDataJson implements Serializable {
+
     public ArrayList<OrganizationJson> getOrganizations() {
         return organizations;
     }
