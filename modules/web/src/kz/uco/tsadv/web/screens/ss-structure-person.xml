@@ -269,7 +269,7 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                             <tab id="absence" caption="msg://absence" margin="true, false, false, false" spacing="true"
                                  expand="absenceTable1">
                                 <filter id="absenceForRecallFilter" datasource="absenceDs"
-                                        applyTo="absenceForRecallTable">
+                                        applyTo="absenceTable1">
                                     <properties include=".*"/>
                                 </filter>
                                 <table id="absenceTable1" height="100%" width="100%">
@@ -293,10 +293,14 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                                 </table>
                             </tab>
                             <tab id="recallTab" caption="msg://recall" margin="true, false, false, false"
-                                 spacing="true">
+                                 spacing="true" expand="absenceForRecallTable">
+                                <filter id="recallFilter" datasource="absenceForRecallDs"
+                                        applyTo="absenceForRecallTable">
+                                    <properties include=".*"/>
+                                </filter>
                                 <table id="absenceForRecallTable" height="100%" width="100%">
                                     <columns>
-                                        <column id="requestNumber"/>
+                                        <column id="requestNumber" link="true"/>
                                         <column id="requestDate"/>
                                         <column id="absenceType"/>
                                         <column id="leaveOtherTime"/>

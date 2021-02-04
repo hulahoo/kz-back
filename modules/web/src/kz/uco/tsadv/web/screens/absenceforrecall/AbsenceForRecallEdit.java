@@ -5,6 +5,7 @@ import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.export.ExportDisplay;
@@ -17,6 +18,7 @@ import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
+import kz.uco.tsadv.service.DatesService;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
 import javax.annotation.Nullable;
@@ -55,6 +57,10 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
     protected DateField<Date> dateFromField;
     @Inject
     protected DateField<Date> dateToField;
+    @Inject
+    protected MessageBundle messageBundle;
+    @Inject
+    protected DatesService datesService;
 
     @Subscribe("upload")
     protected void onUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
@@ -129,5 +135,33 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
                 .parameter("personGroup", absenceForRecallDc.getItem().getEmployee())
                 .view("userExt.edit")
                 .list().stream().findFirst().orElse(null);
+    }
+
+    @Override
+    protected void startProcess(Action.ActionPerformedEvent event) {
+        AbsenceForRecall item = absenceForRecallDc.getItem();
+        if (item.getRecallDateFrom() != null && item.getRecallDateTo() != null) {
+            if (item.getDateFrom() != null && item.getDateTo() != null) {
+                if (!areDaysCorrect(item)) {
+                    notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                            .withCaption(messageBundle.getMessage("daysNotCorrect")).show();
+                    return;
+                }
+            }
+            if (item.getRecallDateFrom().before(item.getVacation().getDateFrom())
+                    || item.getRecallDateTo().after(item.getVacation().getDateTo())
+                    || item.getRecallDateFrom().after(item.getRecallDateTo())) {
+                notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                        .withCaption(messageBundle.getMessage("recallDateNotCorrect")).show();
+            } else {
+                super.startProcess(event);
+            }
+        }
+    }
+
+    private boolean areDaysCorrect(AbsenceForRecall item) {
+        int shouldBe = datesService.getFullDaysCount(item.getRecallDateFrom(), item.getRecallDateTo());
+        int thereIs = datesService.getFullDaysCount(item.getDateFrom(), item.getDateTo());
+        return shouldBe >= thereIs;
     }
 }

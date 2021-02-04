@@ -22920,7 +22920,10 @@
             </property>
             <property name="fioWithEmployeeNumber"/>
         </property>
-        <property name="vacation" view="_minimal"/>
+        <property name="vacation" view="_minimal">
+            <property name="orderNum"/>
+            <property name="orderDate"/>
+        </property>
         <property name="purpose" view="_minimal">
             <property name="company" view="_minimal"/>
         </property>
