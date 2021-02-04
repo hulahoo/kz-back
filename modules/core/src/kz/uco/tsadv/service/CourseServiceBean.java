@@ -800,7 +800,7 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public CoursePojo courseInfo(UUID courseId) {
+    public CoursePojo courseInfo(UUID courseId, UUID personGroupId) {
         Course course = persistence.callInTransaction(em -> Objects.requireNonNull(em.find(Course.class, courseId, "portal-course-edit"), "Can not find course by id: " + courseId));
         course.setSections(course.getSections()
                 .stream()
@@ -838,7 +838,9 @@ public class CourseServiceBean implements CourseService {
                 : courseSectionsWithSessions.get(courseSectionsWithSessions.size() - 1).getSession().get(0).getEndDate());
         coursePojo.setPreRequisitions(course.getPreRequisition().stream().map(pr -> pr.getRequisitionCourse().getName()).collect(Collectors.joining(", ")));
         coursePojo.setTrainers(course.getCourseTrainers().stream().map(ct -> new PairPojo<>(ct.getTrainer().getId(), ct.getTrainer().getTrainerFullName())).collect(Collectors.toList()));
-        coursePojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
+        if (course.getLogo() != null) {
+            coursePojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
+        }
         coursePojo.setRateReviewCount(course.getReviews().size());
         coursePojo.setComments(course.getReviews().stream().map(r -> CommentPojo.CommentPojoBuilder.builder()
                 .user(r.getPersonGroup().getFullName())
@@ -853,6 +855,10 @@ public class CourseServiceBean implements CourseService {
         coursePojo.setDescription(course.getDescription());
         coursePojo.setEducationDuration(ObjectUtils.defaultIfNull(course.getEducationDuration(), 0L));
         coursePojo.setEducationPeriod(ObjectUtils.defaultIfNull(course.getEducationPeriod(), 0L));
+        coursePojo.setHasEnrollment(course.getEnrollments().stream().anyMatch(e -> e.getPersonGroup().getId().equals(personGroupId)));
+
+        coursePojo.setSelfEnrollment(course.getSelfEnrollment());
+
         return coursePojo;
     }
 

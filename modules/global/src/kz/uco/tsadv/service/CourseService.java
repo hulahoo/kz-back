@@ -50,7 +50,7 @@ public interface CourseService {
 
     void removeEnrollment(UUID enrollmentId);
 
-    CoursePojo courseInfo(UUID courseId);
+    CoursePojo courseInfo(UUID courseId, UUID personGroupId);
 
     Map<String, Object> courseTrainerInfo(UUID trainerId);
 }

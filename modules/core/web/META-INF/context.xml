@@ -5,9 +5,9 @@
               maxTotal="20"
               maxWaitMillis="5000"
               name="jdbc/CubaDS"
-              password="JAVjm4gTqe"
+              password="tal"
               type="javax.sql.DataSource"
-              url="jdbc:postgresql://dev.uco.kz/kazminhr_dev"
+              url="jdbc:postgresql://localhost/kazminhr_dev"
               username="tal"/>
     <!-- Switch off session serialization -->
     <Manager pathname=""/>

@@ -14,4 +14,10 @@
             <param name="userId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="tsadv_CourseService">
+        <method name="courseInfo">
+            <param name="courseId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>
