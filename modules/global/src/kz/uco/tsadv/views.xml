@@ -23102,5 +23102,41 @@
             <property name="gradeGroup" view="_local"/>
         </property>
     </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-for-integration-rest" extends="_local">
+        <property name="list" view="_minimal">
+            <property name="dateOfDeath"/>
+            <property name="group" view="_minimal"/>
+            <property name="type" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="nationality" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="citizenship" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="birthPlace"/>
+            <property name="haveNDA"/>
+            <property name="criminalAdministrativeLiability"/>
+            <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="writeHistory"/>
+            <property name="firstNameLatin"/>
+            <property name="middleNameLatin"/>
+            <property name="lastNameLatin"/>
+            <property name="hireDate"/>
+            <property name="nationalIdentifier"/>
+            <property name="dateOfBirth"/>
+            <property name="sex" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="commitmentsLoan"/>
+            <property name="commitmentsCredit"/>
+        </property>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
 
 </views>

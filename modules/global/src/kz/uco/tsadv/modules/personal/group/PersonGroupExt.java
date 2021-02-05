@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.IEntityGroup;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.PersonGroup;
 import kz.uco.tsadv.modules.learning.model.Attestation;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
@@ -198,6 +199,18 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "personGroup")
     protected List<CandidateRequirement> candidateRequirement;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    protected DicCompany company;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
 
     public void setRelevantPerson(PersonExt relevantPerson) {
         this.relevantPerson = relevantPerson;
