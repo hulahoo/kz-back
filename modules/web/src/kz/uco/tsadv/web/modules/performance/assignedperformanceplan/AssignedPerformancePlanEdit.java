@@ -113,13 +113,14 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     @Subscribe("assignedGoalTable.edit")
     protected void onAssignedGoalTableEdit(Action.ActionPerformedEvent event) {
         screenBuilders.editor(assignedGoalTable)
-                .withScreenId(assignedGoalTable.getSingleSelected().getGoalType().equals(AssignedGoalTypeEnum.CASCADE)
-                        ? "tsadv$AssignedGoalCascade.edit"
-                        : assignedGoalTable.getSingleSelected().getGoalType().equals(AssignedGoalTypeEnum.INDIVIDUAL) ?
-                        "tsadv$AssignedGoalIndividual.edit"
+                .withScreenId(assignedGoalTable.getSingleSelected().getGoalType().equals(AssignedGoalTypeEnum.INDIVIDUAL)
+                        ? "tsadv$AssignedGoalIndividual.edit"
                         : assignedGoalTable.getSingleSelected().getGoalType().equals(AssignedGoalTypeEnum.LIBRARY)
                         ? "tsadv$AssignedGoalLibrary.edit"
-                        : "")
+                        : assignedGoalTable.getSingleSelected().getGoalType().equals(AssignedGoalTypeEnum.CASCADE)
+                        && extAppPropertiesConfig.getCascadeInPerson()
+                        ? "tsadv$AssignedGoalCascade.edit"
+                        : "tsadv$AssignedGoalCascadeForPosition.edit")
                 .withOptions(new MapScreenOptions(ParamsMap.of("positionGroupId",
                         assignedPerformancePlanDc.getItem().getAssignedPerson().getCurrentAssignment() != null
                                 && assignedPerformancePlanDc.getItem().getAssignedPerson()
