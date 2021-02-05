@@ -3,6 +3,7 @@ package kz.uco.tsadv.service;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.modules.integration.jsonobject.JobDataJson;
 import kz.uco.tsadv.modules.integration.jsonobject.OrganizationDataJson;
+import kz.uco.tsadv.modules.integration.jsonobject.PositionDataJson;
 
 public interface IntegrationRestService {
     String NAME = "tsadv_IntegrationRestService";
@@ -14,4 +15,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdateJob(JobDataJson jobData);
 
     BaseResult deleteJob(JobDataJson jobData);
+
+    BaseResult createOrUpdatePosition(PositionDataJson positionData);
+
+    BaseResult deletePosition(PositionDataJson positionData);
 }

@@ -685,5 +685,11 @@
         <method name="deleteJob">
             <param name="jobData" type="kz.uco.tsadv.modules.integration.jsonobject.JobDataJson"/>
         </method>
+        <method name="deletePosition">
+            <param name="positionData" type="kz.uco.tsadv.modules.integration.jsonobject.PositionDataJson"/>
+        </method>
+        <method name="createOrUpdatePosition">
+            <param name="positionData" type="kz.uco.tsadv.modules.integration.jsonobject.PositionDataJson"/>
+        </method>
     </service>
 </services>

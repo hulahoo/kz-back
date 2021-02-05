@@ -22983,6 +22983,24 @@
             <property name="legacyId"/>
         </property>
         <property name="legacyId"/>
+        <property name="location" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="organizationType" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="createdBy"/>
+        <property name="createTs"/>
+        <property name="updateTs"/>
+        <property name="updatedBy"/>
+        <property name="costCenter" view="_minimal"/>
+        <property name="payroll" view="_minimal"/>
+        <property name="organizationNameLang1"/>
+        <property name="organizationNameLang2"/>
+        <property name="organizationNameLang3"/>
+        <property name="organizationNameLang4"/>
+        <property name="organizationNameLang5"/>
+        <property name="analytics" view="_minimal"/>
     </view>
     <view entity="tsadv$JobGroup" name="jobGroup-for-integration-rest" extends="_minimal">
         <property name="list" view="_minimal">
@@ -23000,5 +23018,44 @@
             <property name="legacyId"/>
         </property>
         <property name="legacyId"/>
+    </view>
+    <view entity="base$PositionGroupExt" name="positionGroupExt-for-integration-rest" extends="_local">
+        <property name="list" view="_minimal">
+            <property name="jobGroup" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="gradeGroup" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="group" view="_minimal"/>
+            <property name="positionStatus" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="organizationGroupExt" view="_minimal">
+                <property name="company" view="_minimal">
+                    <property name="legacyId"/>
+                </property>
+                <property name="legacyId"/>
+            </property>
+            <property name="employeeCategory" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="writeHistory"/>
+            <property name="positionFullNameLang1"/>
+            <property name="positionFullNameLang2"/>
+            <property name="positionFullNameLang3"/>
+            <property name="positionFullNameLang4"/>
+            <property name="positionFullNameLang5"/>
+            <property name="positionNameLang1"/>
+            <property name="positionNameLang2"/>
+            <property name="positionNameLang3"/>
+            <property name="positionNameLang4"/>
+            <property name="positionNameLang5"/>
+            <property name="fte"/>
+            <property name="maxPersons"/>
+        </property>
     </view>
 </views>
