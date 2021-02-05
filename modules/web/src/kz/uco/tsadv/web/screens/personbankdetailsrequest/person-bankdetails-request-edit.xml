@@ -75,13 +75,14 @@
                     </pickerField>
                     <textField id="fullNameBankCardField" property="fullNameBankCard">
                         <validators>
-                            <regexp message="msg://fullNameBankCardField.regexp" regexp="[A-Za-z\s]"/>
+                            <regexp message="msg://fullNameBankCardField.regexp" regexp="^[\p{L} \.'\-]+$"/>
                         </validators>
                     </textField>
                     <textField id="ibanField" property="iban"/>
                     <textField id="bicBankField" property="bicBank">
                         <validators>
-                            <regexp message="msg://bicBankField.regexp" regexp="[0-9a-zA-Z]"/>
+                            <regexp message="msg://bicBankField.regexp"
+                                    regexp="[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}"/>
                         </validators>
                     </textField>
                     <pickerField id="requestStatusField" property="requestStatus" editable="false">

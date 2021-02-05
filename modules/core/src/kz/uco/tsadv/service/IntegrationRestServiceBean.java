@@ -10,16 +10,19 @@ import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
+import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
 import kz.uco.tsadv.modules.personal.dictionary.DicEmployeeCategory;
+import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.dictionary.DicPositionStatus;
-import kz.uco.tsadv.modules.personal.group.GradeGroup;
-import kz.uco.tsadv.modules.personal.group.JobGroup;
-import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
+import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
+import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.OrganizationExt;
+import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.personal.model.PositionExt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -529,6 +532,205 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, positionJsons);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePerson(PersonDataJson personData) {
+        String methodName = "createOrUpdatePerson";
+        ArrayList<PersonJson> personJsons = new ArrayList<>();
+        if (personData.getPersons() != null) {
+            personJsons = personData.getPersons();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            List<PersonGroupExt> personGroupExts = new ArrayList<>();
+            for (PersonJson personJson : personJsons) {
+                if (personJson.getLegacyId() == null || personJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personJsons,
+                            "no legacyId ");
+                }
+                if (personJson.getCompanyCode() == null || personJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personJsons,
+                            "no companyCode");
+                }
+                PersonGroupExt personGroupExt = personGroupExts.stream().filter(personGroupExt1 ->
+                        personGroupExt1.getCompany().getLegacyId().equals(personJson.getCompanyCode())
+                                && personGroupExt1.getLegacyId().equals(personJson.getLegacyId()))
+                        .findFirst().orElse(null);
+                if (personGroupExt == null) {
+                    personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getLegacyId(),
+                                    "company", personJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        for (PersonExt personExt : personGroupExt.getList()) {
+                            commitContext.addInstanceToRemove(personExt);
+                        }
+                        personGroupExt.getList().clear();
+                        personGroupExts.add(personGroupExt);
+                    }
+                }
+                if (personGroupExt == null) {
+                    personGroupExt = metadata.create(PersonGroupExt.class);
+                    DicCompany company = dataManager.load(DicCompany.class).query("select e from base_DicCompany e " +
+                            " where e.legacyId = :legacyId").parameter("legacyId", personJson.getCompanyCode())
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                    if (company == null) {
+                        return prepareError(result, methodName, personJsons,
+                                "no base$DicCompany with legacyId " + personJson.getCompanyCode());
+                    }
+                    personGroupExt.setCompany(company);
+                    personGroupExt.setLegacyId(personJson.getLegacyId());
+                    personGroupExt.setId(UUID.randomUUID());
+                    personGroupExt.setList(new ArrayList<>());
+                    personGroupExts.add(personGroupExt);
+                }
+                PersonExt personExt = metadata.create(PersonExt.class);
+                personExt.setLastName(personJson.getLastName());
+                personExt.setFirstName(personJson.getFirstName());
+                personExt.setMiddleName(personJson.getMiddleName());
+                personExt.setLastNameLatin(personJson.getLastNameLatin());
+                personExt.setFirstNameLatin(personJson.getFirstNameLatin());
+                personExt.setStartDate(personJson.getStartDate() != null
+                        ? formatter.parse(personJson.getStartDate()) : null);
+                personExt.setEndDate(personJson.getEndDate() != null
+                        ? formatter.parse(personJson.getEndDate()) : null);
+                personExt.setDateOfDeath(personJson.getDateOfDeath() != null
+                        ? formatter.parse(personJson.getDateOfDeath()) : null);
+                personExt.setDateOfBirth(personJson.getDateOfBirth() != null
+                        ? formatter.parse(personJson.getDateOfBirth()) : null);
+                personExt.setHireDate(personJson.getHireDate() != null
+                        ? formatter.parse(personJson.getHireDate()) : null);
+                personExt.setEmployeeNumber(personJson.getEmployeeNumber());
+                personExt.setBirthPlace(personJson.getPlaceOfBirth());
+                personExt.setNationalIdentifier(personJson.getNationalIdentifier());
+                personExt.setCommitmentsFromPrevJob(personJson.getHasWealthFromPrevEmployer() != null
+                        ? Boolean.parseBoolean(personJson.getHasWealthFromPrevEmployer()) ? YesNoEnum.YES
+                        : YesNoEnum.NO : null);
+                personExt.setHaveNDA(personJson.getHasNdaFromPrevEmployer() != null
+                        ? Boolean.parseBoolean(personJson.getHasNdaFromPrevEmployer()) ? YesNoEnum.YES
+                        : YesNoEnum.NO : null);
+                personExt.setCommitmentsLoan(personJson.getHasLoanFromPrevEmployer() != null
+                        ? Boolean.parseBoolean(personJson.getHasLoanFromPrevEmployer()) : null);
+                personExt.setCriminalAdministrativeLiability(personJson.getHasCriminalRecord() != null
+                        ? Boolean.parseBoolean(personJson.getHasCriminalRecord()) ? YesNoEnum.YES : YesNoEnum.NO : null);
+                personExt.setCommitmentsCredit(personJson.getHasCreditFromPrevEmployer() != null
+                        ? Boolean.parseBoolean(personJson.getHasCreditFromPrevEmployer()) : null);
+                personExt.setLegacyId(personJson.getLegacyId());
+                personExt.setWriteHistory(false);
+                DicPersonType personType = null;
+                if (personJson.getPersonTypeId() != null && !personJson.getPersonTypeId().isEmpty()) {
+                    personType = dataManager.load(DicPersonType.class)
+                            .query("select e from tsadv$DicPersonType e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
+                                    "companyCode", personJson.getCompanyCode()))
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                }
+                personExt.setType(personType);
+                DicCitizenship citizenship = null;
+                if (personJson.getCitizenshipId() != null && !personJson.getCitizenshipId().isEmpty()) {
+                    citizenship = dataManager.load(DicCitizenship.class)
+                            .query("select e from tsadv$DicCitizenship e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getCitizenshipId(),
+                                    "companyCode", personJson.getCompanyCode()))
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                }
+                personExt.setCitizenship(citizenship);
+                DicNationality nationality = null;
+                if (personJson.getNationalityId() != null && !personJson.getNationalityId().isEmpty()) {
+                    nationality = dataManager.load(DicNationality.class)
+                            .query("select e from tsadv$DicNationality e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getNationalityId(),
+                                    "companyCode", personJson.getCompanyCode()))
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                }
+                personExt.setNationality(nationality);
+                DicSex sex = null;
+                if (personJson.getSexId() != null && !personJson.getSexId().isEmpty()) {
+                    sex = dataManager.load(DicSex.class)
+                            .query("select e from base$DicSex e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getSexId(),
+                                    "companyCode", personJson.getCompanyCode()))
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                }
+                personExt.setSex(sex);
+
+                personExt.setGroup(personGroupExt);
+                personGroupExt.getList().add(personExt);
+            }
+            for (PersonGroupExt personGroupExt : personGroupExts) {
+                commitContext.addInstanceToCommit(personGroupExt);
+                for (PersonExt personExt : personGroupExt.getList()) {
+                    commitContext.addInstanceToCommit(personExt);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personJsons, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personJsons);
+    }
+
+    @Override
+    public BaseResult deletePerson(PersonDataJson personData) {
+        String methodName = "deletePerson";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonJson> personJsons = new ArrayList<>();
+        if (personData.getPersons() != null) {
+            personJsons = personData.getPersons();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonGroupExt> personGroupExts = new ArrayList<>();
+            for (PersonJson personJson : personJsons) {
+                if (personJson.getLegacyId() == null || personJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personJsons,
+                            "no legacyId ");
+                }
+                if (personJson.getCompanyCode() == null || personJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personJsons,
+                            "no companyCode");
+                }
+                PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                        .query("select e from base$PersonGroupExt e " +
+                                " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                        .setParameters(ParamsMap.of("legacyId", personJson.getLegacyId(),
+                                "company", personJson.getCompanyCode()))
+                        .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                if (personGroupExt == null) {
+                    return prepareError(result, methodName, personData,
+                            "no position with legacyId and companyCode : "
+                                    + personJson.getLegacyId() + " , " + personJson.getCompanyCode());
+                }
+                if (!personGroupExts.stream().filter(personGroupExt1 ->
+                        personGroupExt1.getId().equals(personGroupExt.getId())).findAny().isPresent()) {
+                    personGroupExts.add(personGroupExt);
+                }
+
+            }
+            for (PersonGroupExt personGroupExt : personGroupExts) {
+                for (PersonExt personExt : personGroupExt.getList()) {
+                    entityManager.remove(personExt);
+                }
+                entityManager.remove(personGroupExt);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personJsons);
     }
 
     protected <T extends Serializable> BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
