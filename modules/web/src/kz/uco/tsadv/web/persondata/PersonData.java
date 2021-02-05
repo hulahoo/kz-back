@@ -4,6 +4,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.Notifications;
@@ -19,7 +20,9 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.security.global.UserSession;
+import com.haulmont.cuba.web.gui.components.WebFlowBoxLayout;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.cuba.actions.CreateActionExt;
 import kz.uco.base.cuba.actions.EditActionExt;
@@ -37,6 +40,7 @@ import kz.uco.tsadv.web.screens.personcontact.PersonContactPersonDataEdit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -136,6 +140,10 @@ public class PersonData extends Screen implements SelfServiceMixin {
     protected CollectionLoader<Awards> awardsesDl;
     @Inject
     protected CollectionContainer<Awards> awardsesDc;
+    @Inject
+    protected FileUploadingAPI fileUploadingAPI;
+    @Inject
+    protected FileUploadField uploadCommitmentsAttachments;
 
     @Subscribe(id = "personExtDc", target = Target.DATA_CONTAINER)
     protected void onPersonExtDcItemChange(InstanceContainer.ItemChangeEvent<PersonExt> event) {
@@ -219,34 +227,17 @@ public class PersonData extends Screen implements SelfServiceMixin {
             PersonLanguage personLanguage = (PersonLanguage) o;
             personLanguage.setPersonGroup(personExtDc.getItem().getGroup());
         });
-        firstOtherInformationBtn.setEnabled(personExtDc.getItem().getPrevJobObligation() == null
-                || personExtDc.getItem().getPrevJobNDA() == null);
         relativePropertyTableCreate.setInitializer(o -> {
             PersonRelativesHaveProperty haveProperty = (PersonRelativesHaveProperty) o;
             haveProperty.setPersonGroup(personExtDc.getItem().getGroup());
         });
-    }
-
-
-    public void savePersonData() {
-        if (latinPropertyChanged) {
-            personExtDc.getItem().setWriteHistory(false);
-            dataManager.commit(personExtDc.getItem());
-            personExtDl.load();
-        }
-    }
-
-    public void saveHaveChildWithoutParent() {
-        personExtDc.getItem().setWriteHistory(false);
-        dataManager.commit(personExtDc.getItem());
-        personExtDl.load();
-    }
-
-    public void savePersonDataWithHistory() {
-        if (latinPropertyChanged) {
-            personExtDc.getItem().setWriteHistory(true);
-            dataManager.commit(personExtDc.getItem());
-            personExtDl.load();
+        for (Component componentInWindow : getWindow().getComponents()) {
+            if (componentInWindow instanceof WebFlowBoxLayout) {
+                WebFlowBoxLayout flowBoxLayout = (WebFlowBoxLayout) componentInWindow;
+                for (Component componentInFlowBox : flowBoxLayout.getComponents()) {
+                    componentInFlowBox.getId().contains("upload");
+                }
+            }
         }
     }
 
@@ -446,8 +437,9 @@ public class PersonData extends Screen implements SelfServiceMixin {
 
     public void saveFirstOtherInformation() {
         personExtDc.getItem().setWriteHistory(false);
-        dataManager.commit(personExtDc.getItem());
-        personExtDl.load();
+        PersonExt personExt = dataManager.reload(dataManager.commit(personExtDc.getItem()).getGroup(),
+                "personGroupExt-person-data").getPerson();
+        personExtDc.setItem(personExt);
         firstOtherInformationBtn.setEnabled(personExtDc.getItem().getPrevJobObligation() == null
                 || personExtDc.getItem().getPrevJobNDA() == null);
     }
@@ -622,30 +614,106 @@ public class PersonData extends Screen implements SelfServiceMixin {
                 .build().show();
     }
 
-    public void onHaveConvinctionsAttachments() {
+    protected void addFileToAttachments(FileUploadField.FileUploadSucceedEvent event) {
+        if (event.getSource().getId() != null) {
+            String fieldName = event.getSource().getId().substring(6);
+            List<FileDescriptor> attachments = null;
+            if (fieldName != null && !fieldName.isEmpty()) {
+                try {
+                    Method setter = null;
+                    Method getter = null;
+                    for (Method method : personExtDc.getItem().getClass().getMethods()) {
+                        if (method.getName().equals("set" + fieldName)) {
+                            setter = method;
+                        } else if (method.getName().equals("get" + fieldName)) {
+                            getter = method;
+                        }
+                    }
+                    if (getter != null) {
+                        if (getter.invoke(personExtDc.getItem()) != null) {
+                            attachments = (List<FileDescriptor>) getter.invoke(personExtDc.getItem());
+                        } else if (setter != null) {
+                            setter.invoke(personExtDc.getItem(), new ArrayList<FileDescriptor>());
+                            attachments = (List<FileDescriptor>) getter.invoke(personExtDc.getItem());
+                        }
+                        if (attachments != null) {
+                            FileUploadField uploadField = (FileUploadField) event.getSource();
+                            File file = fileUploadingAPI.getFile(uploadField.getFileId());
+                            FileDescriptor fd = uploadField.getFileDescriptor();
+                            try {
+                                fileUploadingAPI.putFileIntoStorage(uploadField.getFileId(), fd);
+                            } catch (FileStorageException e) {
+                                throw new RuntimeException("Error saving file to FileStorage", e);
+                            }
+                            dataManager.commit(fd);
+                            attachments.add(fd);
+                            UploadField source = event.getSource();
+                            FlowBoxLayout parent = (FlowBoxLayout) source.getParent();
+                            int index = parent.indexOf(source);
+                            LinkButton linkButton = uiComponents.create(LinkButton.class);
+                            linkButton.setCaption(fd.getName());
+                            linkButton.setAlignment(Component.Alignment.MIDDLE_LEFT);
+                            linkButton.setAction(new BaseAction(fd.getId().toString()) {
+                                @Override
+                                public void actionPerform(Component component) {
+                                    exportDisplay.show(fd);
+                                }
+                            });
+                            parent.add(linkButton, index + 1);
+                        }
+                    }
+                } catch (IllegalAccessException | InvocationTargetException | RuntimeException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 
-    public void onHaveNDAAttachments() {
+    @Subscribe("uploadCommitmentsAttachments")
+    protected void onUploadCommitmentsAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
     }
 
-    public void onСommitmentsFromPrevJobAttachments() {
+
+    @Subscribe("uploadNdaAttachments")
+    protected void onUploadNdaAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
     }
 
-    public void onRegisteredDispensaryAttachments() {
+    @Subscribe("uploadConvictionAttachments")
+    protected void onUploadConvictionAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
     }
 
-    public void onDisabilityAttachments() {
+    @Subscribe("uploadDispensaryAttachments")
+    protected void onUploadDispensaryAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
     }
 
-    public void onContraindicationsHealthAttachments() {
+    @Subscribe("uploadDisabilityAttachments")
+    protected void onUploadDisabilityAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
     }
 
-    public void onChildUnder18WithoutFatherOrMotherAttachments() {
+    @Subscribe("uploadContraindicationsHealthAttachments")
+    protected void onUploadContraindicationsHealthAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
     }
 
-    public void onChildUnder14WithoutFatherOrMotherAttachments() {
+    @Subscribe("uploadChildUnder18WithoutFatherOrMotherAttachments")
+    protected void onUploadChildUnder18WithoutFatherOrMotherAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
     }
 
-    public void onCriminalAdministrativeLiabilityAttachments() {
+    @Subscribe("uploadChildUnder14WithoutFatherOrMotherAttachments")
+    protected void onUploadChildUnder14WithoutFatherOrMotherAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
     }
+
+    @Subscribe("uploadCriminalAdministrativeLiabilityAttachments")
+    protected void onUploadCriminalAdministrativeLiabilityAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
 }

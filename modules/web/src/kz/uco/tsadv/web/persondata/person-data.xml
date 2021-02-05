@@ -1231,11 +1231,12 @@
                         <groupBox id="groupBox" spacing="true" caption="msg://groupBox.caption">
                             <vbox spacing="true">
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.commitmentsFromPrevJob"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="commitmentsFromPrevJobFlowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc" property="commitmentsFromPrevJob"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onСommitmentsFromPrevJobAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadCommitmentsAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                     <checkBox dataContainer="personExtDc" property="commitmentsLoan"
                                               caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.commitmentsLoan"/>
                                     <checkBox dataContainer="personExtDc" property="commitmentsCredit"
@@ -1245,82 +1246,90 @@
 
                                 </flowBox>
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.haveNDA"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="haveNDAFlowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc" property="haveNDA"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onHaveNDAAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadNdaAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                 </flowBox>
-                                <label value="msg://label.value"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <label value="msg://label.reasonDismissal"/>
+                                <flowBox id="reasonDismissalFlowBox" spacing="true">
                                     <textField dataContainer="personExtDc" property="reasonForDismissal"
                                                caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.reasonForDismissal"/>
                                     <textField dataContainer="personExtDc" property="prevJobHr"
                                                caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.prevJobHr"/>
                                 </flowBox>
-                                <button id="firstOtherInformationBtn" caption="msg://firstOtherInformationBtn"
+                                <button id="firstOtherInformationBtn" caption="mainMsg://save"
                                         invoke="saveFirstOtherInformation"/>
                             </vbox>
                         </groupBox>
                         <groupBox id="groupBox1" spacing="true" caption="msg://groupBox1.caption">
                             <vbox spacing="true">
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.haveConviction"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="haveConvictionFlowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc" property="haveConviction"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onHaveConvinctionsAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadConvictionAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                 </flowBox>
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.registeredDispensary"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="registeredDispensaryFlowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc" property="registeredDispensary"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onRegisteredDispensaryAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadDispensaryAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                     <textField dataContainer="personExtDc" property="dispensaryPeriod"
                                                caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.dispensaryPeriod"/>
                                 </flowBox>
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.disability"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="disabilityflowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc" property="disability"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onDisabilityAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadDisabilityAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                     <textField dataContainer="personExtDc" property="disabilityGroup"
                                                caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.disabilityGroup"/>
                                 </flowBox>
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.contraindicationsHealth"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="contraindicationsHealthFlowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc" property="contraindicationsHealth"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onContraindicationsHealthAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadContraindicationsHealthAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                     <textField dataContainer="personExtDc" property="contraindicationsHealthText"
                                                caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.contraindicationsHealthText"/>
                                 </flowBox>
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.childUnder18WithoutFatherOrMother"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="childUnder18WithoutFatherOrMotherFlowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc"
                                                       property="childUnder18WithoutFatherOrMother"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onChildUnder18WithoutFatherOrMotherAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadChildUnder18WithoutFatherOrMotherAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                 </flowBox>
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.childUnder14WithoutFatherOrMother"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="childUnder14WithoutFatherOrMotherFlowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc"
                                                       property="childUnder14WithoutFatherOrMother"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onChildUnder14WithoutFatherOrMotherAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadChildUnder14WithoutFatherOrMotherAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                 </flowBox>
                                 <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.criminalAdministrativeLiability"/>
-                                <flowBox id="flowBox" spacing="true">
+                                <flowBox id="criminalAdministrativeLiabilityFlowBox" spacing="true">
                                     <radioButtonGroup dataContainer="personExtDc"
                                                       property="criminalAdministrativeLiability"
                                                       orientation="horizontal"/>
-                                    <button id="button" invoke="onCriminalAdministrativeLiabilityAttachments"
-                                            icon="font-icon:DOWNLOAD"/>
+                                    <upload id="uploadCriminalAdministrativeLiabilityAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
                                     <textField dataContainer="personExtDc"
                                                property="criminalAdministrativeLiabilityPerioidReason"
                                                caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.criminalAdministrativeLiabilityPerioidReason"/>
