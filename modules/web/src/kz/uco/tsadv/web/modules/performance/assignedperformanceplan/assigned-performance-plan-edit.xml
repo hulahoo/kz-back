@@ -69,8 +69,8 @@
                 </actions>
                 <columns>
                     <column id="category"/>
-                    <column id="goalString" editable="true"/>
-                    <column id="weight" editable="true">
+                    <column id="goalString" editable="true" required="true"/>
+                    <column id="weight" editable="true" required="true">
                         <aggregation type="SUM"/>
                     </column>
                     <column id="result" editable="true"/>

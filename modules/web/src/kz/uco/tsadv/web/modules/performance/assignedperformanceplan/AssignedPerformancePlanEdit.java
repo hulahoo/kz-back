@@ -56,7 +56,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected void onAssignedGoalDcItemPropertyChange(InstanceContainer.ItemPropertyChangeEvent<AssignedGoal> event) {
         String property = event.getProperty();
         if (property.equals("weight")) {
-            if (event.getValue() != null && ((double) event.getValue()) > 100 || ((double) event.getValue()) < 0) {
+            if (event.getValue() != null && (((double) event.getValue()) > 100 || ((double) event.getValue()) < 0)) {
                 notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                         .withCaption(messageBundle.getMessage("notBeLessOrMore")).show();
             }
@@ -71,7 +71,11 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                             || "goalString".equals(assignedGoalItemPropertyChangeEvent.getProperty())) {
                         double result = 0.0;
                         for (AssignedGoal item : assignedGoalDc.getItems()) {
-                            result += (item.getResult() != null ? item.getResult() : 0) * item.getWeight() / 100;
+                            result += (item.getResult() != null ? item.getResult() : 0)
+                                    * (item.getWeight() != null
+                                    ? item.getWeight()
+                                    : 0.0)
+                                    / 100;
                         }
                         assignedPerformancePlanDc.getItem().setResult(result);
                         getScreenData().getDataContext().merge(assignedGoalDc.getItem());
@@ -95,12 +99,18 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
         int allWeight = 0;
         for (AssignedGoal assignedGoal : assignedGoalDc.getItems()) {
-            if (assignedGoal.getWeight() > 100 || assignedGoal.getWeight() < 0) {
+            if (assignedGoal.getWeight() != null) {
+                if (assignedGoal.getWeight() > 100 || assignedGoal.getWeight() < 0) {
+                    notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                            .withCaption(messageBundle.getMessage("notBeLessOrMore")).show();
+                    event.preventCommit();
+                }
+            } else {
                 notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                        .withCaption(messageBundle.getMessage("notBeLessOrMore")).show();
+                        .withCaption(messageBundle.getMessage("fillWeight")).show();
                 event.preventCommit();
             }
-            allWeight += assignedGoal.getWeight();
+            allWeight += assignedGoal.getWeight() != null ? assignedGoal.getWeight() : 0.0;
         }
         if (allWeight > 100 || allWeight < 0) {
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
