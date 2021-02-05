@@ -623,5 +623,6 @@
         <class>kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicSchedulePurpose</class>
         <class>kz.uco.tsadv.modules.personal.model.AbsenceForRecall</class>
+        <class>kz.uco.tsadv.modules.personal.requests.OrgStructureRequest</class>
     </persistence-unit>
 </persistence>
