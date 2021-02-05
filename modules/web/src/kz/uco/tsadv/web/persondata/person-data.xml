@@ -42,6 +42,33 @@
                 <property name="attachments" view="_minimal"/>
                 <property name="prevJobNDA"/>
                 <property name="prevJobObligation"/>
+                <property name="haveConviction"/>
+                <property name="convictionAttachments" view="_minimal"/>
+                <property name="commitmentsFromPrevJob"/>
+                <property name="commitmentsAttachments" view="_minimal"/>
+                <property name="commitmentsLoan"/>
+                <property name="commitmentsCredit"/>
+                <property name="haveNDA"/>
+                <property name="ndaAttachments" view="_minimal"/>
+                <property name="reasonForDismissal"/>
+                <property name="prevJobHr"/>
+                <property name="registeredDispensary"/>
+                <property name="dispensaryAttachments" view="_minimal"/>
+                <property name="dispensaryPeriod"/>
+                <property name="disability"/>
+                <property name="disabilityAttachments" view="_minimal"/>
+                <property name="disabilityGroup"/>
+                <property name="contraindicationsHealth"/>
+                <property name="contraindicationsHealthAttachments" view="_minimal"/>
+                <property name="contraindicationsHealthText"/>
+                <property name="childUnder18WithoutFatherOrMother"/>
+                <property name="childUnder18WithoutFatherOrMotherAttachments" view="_minimal"/>
+                <property name="childUnder14WithoutFatherOrMother"/>
+                <property name="childUnder14WithoutFatherOrMotherAttachments" view="_minimal"/>
+                <property name="criminalAdministrativeLiability"/>
+                <property name="criminalAdministrativeLiabilityAttachments" view="_minimal"/>
+                <property name="criminalAdministrativeLiabilityPerioidReason"/>
+                <property name="commitmentsNotSurMatValues"/>
             </view>
             <loader id="personExtDl"/>
             <collection id="personAttachmentsDc" property="attachments"/>
@@ -385,6 +412,11 @@
                     <property name="code"/>
                 </property>
                 <property name="attachments" view="_minimal"/>
+                <property name="city" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
             </view>
             <loader id="addressesDl">
                 <query>
@@ -675,179 +707,6 @@
                 </query>
             </loader>
         </collection>
-        <collection id="personClinicDispancersDc" class="kz.uco.tsadv.modules.personal.model.PersonClinicDispancer">
-            <view extends="_local">
-                <property name="personGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="assignments" view="_minimal">
-                        <property name="assignmentStatus" view="_minimal">
-                            <property name="langValue1"/>
-                            <property name="langValue2"/>
-                            <property name="langValue3"/>
-                            <property name="langValue4"/>
-                            <property name="langValue5"/>
-                            <property name="startDate"/>
-                            <property name="endDate"/>
-                            <property name="code"/>
-                        </property>
-                        <property name="primaryFlag"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="personExperience" view="_minimal"/>
-                </property>
-            </view>
-            <loader id="personClinicDispancersDl">
-                <query>
-                    <![CDATA[select e from tsadv_PersonClinicDispancer e
-                    where e.personGroup.id = :personGroup
-                    and e.startDateHistory <= :systemDate
-                    and e.endDateHistory >= :systemDate ]]>
-                </query>
-            </loader>
-        </collection>
-        <collection id="disabilitiesDc" class="kz.uco.tsadv.modules.personal.model.Disability">
-            <view extends="_local">
-                <property name="personGroupExt" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="assignments" view="_minimal">
-                        <property name="assignmentStatus" view="_minimal">
-                            <property name="langValue1"/>
-                            <property name="langValue2"/>
-                            <property name="langValue3"/>
-                            <property name="langValue4"/>
-                            <property name="langValue5"/>
-                            <property name="startDate"/>
-                            <property name="endDate"/>
-                            <property name="code"/>
-                        </property>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="personExperience" view="_minimal"/>
-                </property>
-            </view>
-            <loader id="disabilitiesDl">
-                <query>
-                    <![CDATA[select e from tsadv$Disability e
-                    where e.personGroupExt.id = :personGroup
-                    and e.startDateHistory <= :systemDate
-                    and e.endDateHistory >= :systemDate ]]>
-                </query>
-            </loader>
-        </collection>
-        <collection id="personReasonChangingJobsDc" class="kz.uco.tsadv.modules.personal.model.PersonReasonChangingJob">
-            <view extends="_local">
-                <property name="personGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="assignments" view="_minimal">
-                        <property name="assignmentStatus" view="_minimal">
-                            <property name="langValue1"/>
-                            <property name="langValue2"/>
-                            <property name="langValue3"/>
-                            <property name="langValue4"/>
-                            <property name="langValue5"/>
-                            <property name="startDate"/>
-                            <property name="endDate"/>
-                            <property name="code"/>
-                        </property>
-                        <property name="primaryFlag"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="personExperience" view="_minimal"/>
-                </property>
-            </view>
-            <loader id="personReasonChangingJobsDl">
-                <query>
-                    <![CDATA[select e from tsadv_PersonReasonChangingJob e
-                    where e.personGroup.id = :personGroup]]>
-                </query>
-            </loader>
-        </collection>
-        <collection id="personCriminalAdministrativeLiabilitiesDc"
-                    class="kz.uco.tsadv.modules.personal.model.PersonCriminalAdministrativeLiability">
-            <view extends="_local">
-                <property name="personGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="assignments" view="_minimal">
-                        <property name="assignmentStatus" view="_minimal">
-                            <property name="langValue1"/>
-                            <property name="langValue2"/>
-                            <property name="langValue3"/>
-                            <property name="langValue4"/>
-                            <property name="langValue5"/>
-                            <property name="startDate"/>
-                            <property name="endDate"/>
-                            <property name="code"/>
-                        </property>
-                        <property name="primaryFlag"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="personExperience" view="_minimal"/>
-                </property>
-                <property name="type" view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
-            </view>
-            <loader id="personCriminalAdministrativeLiabilitiesDl">
-                <query>
-                    <![CDATA[select e from tsadv_PersonCriminalAdministrativeLiability e
-                    where e.personGroup.id = :personGroup
-                    and e.startDateHistory <= :systemDate
-                    and e.endDateHistory >= :systemDate ]]>
-                </query>
-            </loader>
-        </collection>
-        <collection id="personHealthsDc" class="kz.uco.tsadv.modules.personal.model.PersonHealth">
-            <view extends="_local">
-                <property name="personGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="assignments" view="_minimal">
-                        <property name="assignmentStatus" view="_minimal">
-                            <property name="langValue1"/>
-                            <property name="langValue2"/>
-                            <property name="langValue3"/>
-                            <property name="langValue4"/>
-                            <property name="langValue5"/>
-                            <property name="startDate"/>
-                            <property name="endDate"/>
-                            <property name="code"/>
-                        </property>
-                        <property name="primaryFlag"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="personExperience" view="_minimal"/>
-                </property>
-            </view>
-            <loader id="personHealthsDl">
-                <query>
-                    <![CDATA[select e from tsadv_PersonHealth e
-                    where e.personGroup.id = :personGroup
-                    and e.startDateHistory <= :systemDate
-                    and e.endDateHistory >= :systemDate ]]>
-                </query>
-            </loader>
-        </collection>
         <collection id="personRelativesHavePropertiesDc"
                     class="kz.uco.tsadv.modules.personal.model.PersonRelativesHaveProperty">
             <view extends="_local">
@@ -925,38 +784,6 @@
                 </query>
             </loader>
         </collection>
-        <collection id="childDescriptionsDc" class="kz.uco.tsadv.modules.personal.model.ChildDescription">
-            <view extends="_local">
-                <property name="personGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="assignments" view="_minimal">
-                        <property name="assignmentStatus" view="_minimal">
-                            <property name="langValue1"/>
-                            <property name="langValue2"/>
-                            <property name="langValue3"/>
-                            <property name="langValue4"/>
-                            <property name="langValue5"/>
-                            <property name="startDate"/>
-                            <property name="endDate"/>
-                            <property name="code"/>
-                        </property>
-                        <property name="primaryFlag"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
-                    <property name="personExperience" view="_minimal"/>
-                </property>
-            </view>
-            <loader id="childDescriptionsDl">
-                <query>
-                    <![CDATA[select e from tsadv_ChildDescription e
-                    where e.personGroup.id = :personGroup ]]>
-                </query>
-            </loader>
-        </collection>
     </data>
     <layout expand="tabSheet">
         <tabSheet id="tabSheet">
@@ -1004,25 +831,25 @@
 
 
                                 </groupBox>
-                                <groupBox id="firstOtherInformation">
-                                    <form id="firstOtherInformationForm" dataContainer="personExtDc">
-                                        <column width="250px">
-                                            <lookupField id="prevJobObligationField" property="prevJobObligation"
-                                                         contextHelpText="msg://prevJobObligationField.contextHelpText"
-                                                         description="msg://prevJobObligationField.contextHelpText"/>
-                                        </column>
-                                        <column width="280px">
-                                            <lookupField id="prevJobNDAField" property="prevJobNDA"
-                                                         contextHelpText="msg://prevJobNDAField.contextHelpText"
-                                                         description="msg://prevJobNDAField.contextHelpText"/>
-                                        </column>
-                                    </form>
-                                    <buttonsPanel id="firstOtherInformationButtonPanel">
-                                        <button id="firstOtherInformationBtn"
-                                                caption="msg://firstOtherInformationBtn"
-                                                invoke="saveFirstOtherInformation"/>
-                                    </buttonsPanel>
-                                </groupBox>
+                                <!--                                <groupBox id="firstOtherInformation">-->
+                                <!--                                    <form id="firstOtherInformationForm" dataContainer="personExtDc">-->
+                                <!--                                        <column width="250px">-->
+                                <!--                                            <lookupField id="prevJobObligationField" property="prevJobObligation"-->
+                                <!--                                                         contextHelpText="msg://prevJobObligationField.contextHelpText"-->
+                                <!--                                                         description="msg://prevJobObligationField.contextHelpText"/>-->
+                                <!--                                        </column>-->
+                                <!--                                        <column width="280px">-->
+                                <!--                                            <lookupField id="prevJobNDAField" property="prevJobNDA"-->
+                                <!--                                                         contextHelpText="msg://prevJobNDAField.contextHelpText"-->
+                                <!--                                                         description="msg://prevJobNDAField.contextHelpText"/>-->
+                                <!--                                        </column>-->
+                                <!--                                    </form>-->
+                                <!--                                    <buttonsPanel id="firstOtherInformationButtonPanel">-->
+                                <!--                                        <button id="firstOtherInformationBtn"-->
+                                <!--                                                caption="msg://firstOtherInformationBtn"-->
+                                <!--                                                invoke="saveFirstOtherInformation"/>-->
+                                <!--                                    </buttonsPanel>-->
+                                <!--                                </groupBox>-->
                             </vbox>
                         </groupBox>
                         <groupBox id="personDocsGroupBox" caption="msg://personDocsGroupBox">
@@ -1355,150 +1182,25 @@
                                         <column id="radiationRiskZone"/>
                                     </columns>
                                 </table>
-                                <table id="clinicDispancerTable" width="100%"
-                                       dataContainer="personClinicDispancersDc">
-                                    <rowsCount/>
-                                    <actions>
-                                        <action id="createСlinicDispancerRequest" type="create"
-                                                invoke="createСlinicDispancerRequest"
-                                                caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
-                                                primary="true"/>
-                                        <action id="editСlinicDispancerRequest" type="edit" trackSelection="true"
-                                                invoke="editСlinicDispancerRequest" caption="msg://editRequest"
-                                                icon="PENCIL"/>
-                                    </actions>
-                                    <buttonsPanel alwaysVisible="true">
-                                        <button id="clinicDispancerTableCreateBtn"
-                                                action="clinicDispancerTable.createСlinicDispancerRequest"/>
-                                        <button id="clinicDispancerTableEditBtn"
-                                                action="clinicDispancerTable.editСlinicDispancerRequest"/>
-                                    </buttonsPanel>
-                                    <columns>
-                                        <column id="haveClinicDispancer"/>
-                                        <column id="periodFrom"/>
-                                    </columns>
-                                </table>
-                                <table id="disabilityTable" width="100%"
-                                       dataContainer="disabilitiesDc">
-                                    <rowsCount/>
-                                    <actions>
-                                        <action id="createDisabilityRequest" type="create"
-                                                invoke="createDisabilityRequest"
-                                                caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
-                                                primary="true"/>
-                                        <action id="editDisabilityRequest" type="edit" trackSelection="true"
-                                                invoke="editDisabilityRequest" caption="msg://editRequest"
-                                                icon="PENCIL"/>
-                                    </actions>
-                                    <buttonsPanel alwaysVisible="true">
-                                        <button id="disabilityTableCreateBtn"
-                                                action="disabilityTable.createDisabilityRequest"/>
-                                        <button id="disabilityTableEditBtn"
-                                                action="disabilityTable.editDisabilityRequest"/>
-                                    </buttonsPanel>
-                                    <columns>
-                                        <column id="haveDisability"/>
-                                        <column id="group"/>
-                                    </columns>
-                                </table>
-                                <table id="childDescriptionTable" dataContainer="childDescriptionsDc" width="100%">
-                                    <actions>
-                                        <action id="create" type="create"/>
-                                        <action id="edit" type="edit"/>
-                                        <action id="remove" type="remove"/>
-                                    </actions>
-                                    <buttonsPanel>
-                                        <button id="childDescriptionTableCreateBtn"
-                                                action="childDescriptionTable.create"/>
-                                        <button id="childDescriptionTableEditBtn" action="childDescriptionTable.edit"/>
-                                        <button id="childDescriptionTableRemoveBtn"
-                                                action="childDescriptionTable.remove"/>
-                                    </buttonsPanel>
-                                    <rows/>
-                                    <columns>
-                                        <column id="haveDisabledChild"/>
-                                        <column id="haveLittleChild"/>
-                                    </columns>
-                                </table>
                             </vbox>
                         </groupBox>
-                        <groupBox id="personCriminalAdministrativeGroupBox"
-                                  caption="msg://personCriminalAdministrativeGroupBox">
-                            <table id="cALTable" width="100%"
-                                   dataContainer="personCriminalAdministrativeLiabilitiesDc">
-                                <actions>
-                                    <action id="createCALRequest" type="create" invoke="createCALRequest"
-                                            caption="msg://createRequest" icon="ADD_TO_SET_ACTION"
-                                            primary="true"/>
-                                    <action id="editCALRequest" type="edit" trackSelection="true"
-                                            invoke="editCALRequest" caption="msg://editRequest" icon="PENCIL"/>
-                                </actions>
-                                <buttonsPanel alwaysVisible="true">
-                                    <button id="cALTableCreateBtn"
-                                            action="cALTable.createCALRequest"/>
-                                    <button id="cALTableEditBtn"
-                                            action="cALTable.editCALRequest"/>
-                                </buttonsPanel>
-                                <rowsCount/>
-                                <columns>
-                                    <column id="type"/>
-                                    <column id="haveLiability"/>
-                                    <column id="reasonPeriod"/>
-                                </columns>
-                            </table>
-                        </groupBox>
-                        <groupBox id="reasonChangeJobGroupBox" caption="msg://reasonChangeJobGroupBox">
-                            <table id="reasonChangeJobTable" width="100%"
-                                   dataContainer="personReasonChangingJobsDc">
+                        <groupBox id="groupBox">
+                            <table id="relativePropertyTable" width="100%"
+                                   dataContainer="personRelativesHavePropertiesDc">
                                 <actions>
                                     <action id="create" type="create" icon="font-icon:PLUS_CIRCLE"/>
                                 </actions>
                                 <buttonsPanel alwaysVisible="true">
-                                    <button id="reasonChangeJobTableCreateBtn"
-                                            action="reasonChangeJobTable.create"/>
+                                    <button id="relativePropertyTableCreateBtn"
+                                            action="relativePropertyTable.create"/>
                                 </buttonsPanel>
                                 <rowsCount/>
                                 <columns>
-                                    <column id="reason"/>
-                                    <column id="telFullNameHR"/>
+                                    <column id="haveOrNot"/>
+                                    <column id="property"/>
                                 </columns>
                             </table>
                         </groupBox>
-                        <table id="personHealthTable" width="100%"
-                               dataContainer="personHealthsDc">
-                            <actions>
-                                <action id="create" type="create" icon="font-icon:PLUS_CIRCLE"/>
-                                <action id="editHealth" type="edit" trackSelection="true"
-                                        invoke="editHealth" caption="msg://editRequest"
-                                        icon="PENCIL"/>
-                            </actions>
-                            <buttonsPanel alwaysVisible="true">
-                                <button id="personHealthTableCreateBtn"
-                                        action="personHealthTable.create"/>
-                                <button id="personHealthTableEditBtn"
-                                        action="personHealthTable.editHealth"/>
-                            </buttonsPanel>
-                            <rowsCount/>
-                            <columns>
-                                <column id="healthStatus"/>
-                                <column id="contraindications"/>
-                            </columns>
-                        </table>
-                        <table id="relativePropertyTable" width="100%"
-                               dataContainer="personRelativesHavePropertiesDc">
-                            <actions>
-                                <action id="create" type="create" icon="font-icon:PLUS_CIRCLE"/>
-                            </actions>
-                            <buttonsPanel alwaysVisible="true">
-                                <button id="relativePropertyTableCreateBtn"
-                                        action="relativePropertyTable.create"/>
-                            </buttonsPanel>
-                            <rowsCount/>
-                            <columns>
-                                <column id="haveOrNot"/>
-                                <column id="property"/>
-                            </columns>
-                        </table>
 
                         <groupBox id="bankDetailsGroupBox" caption="msg://bankDetailsGroupBox">
                             <table id="bankDetailsTable" width="100%"
@@ -1525,6 +1227,116 @@
                                     <column id="bicBank"/>
                                 </columns>
                             </table>
+                        </groupBox>
+                        <groupBox id="groupBox" spacing="true" caption="msg://groupBox.caption">
+                            <vbox spacing="true">
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.commitmentsFromPrevJob"/>
+                                <flowBox id="commitmentsFromPrevJobFlowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc" property="commitmentsFromPrevJob"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadCommitmentsAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                    <checkBox dataContainer="personExtDc" property="commitmentsLoan"
+                                              caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.commitmentsLoan"/>
+                                    <checkBox dataContainer="personExtDc" property="commitmentsCredit"
+                                              caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.commitmentsCredit"/>
+                                    <checkBox dataContainer="personExtDc" property="commitmentsNotSurMatValues"
+                                              caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.commitmentsNotSurMatValues"/>
+
+                                </flowBox>
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.haveNDA"/>
+                                <flowBox id="haveNDAFlowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc" property="haveNDA"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadNdaAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                </flowBox>
+                                <label value="msg://label.reasonDismissal"/>
+                                <flowBox id="reasonDismissalFlowBox" spacing="true">
+                                    <textField dataContainer="personExtDc" property="reasonForDismissal"
+                                               caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.reasonForDismissal"/>
+                                    <textField dataContainer="personExtDc" property="prevJobHr"
+                                               caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.prevJobHr"/>
+                                </flowBox>
+                                <button id="firstOtherInformationBtn" caption="mainMsg://save"
+                                        invoke="saveFirstOtherInformation"/>
+                            </vbox>
+                        </groupBox>
+                        <groupBox id="groupBox1" spacing="true" caption="msg://groupBox1.caption">
+                            <vbox spacing="true">
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.haveConviction"/>
+                                <flowBox id="haveConvictionFlowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc" property="haveConviction"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadConvictionAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                </flowBox>
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.registeredDispensary"/>
+                                <flowBox id="registeredDispensaryFlowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc" property="registeredDispensary"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadDispensaryAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                    <textField dataContainer="personExtDc" property="dispensaryPeriod"
+                                               caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.dispensaryPeriod"/>
+                                </flowBox>
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.disability"/>
+                                <flowBox id="disabilityflowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc" property="disability"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadDisabilityAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                    <textField dataContainer="personExtDc" property="disabilityGroup"
+                                               caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.disabilityGroup"/>
+                                </flowBox>
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.contraindicationsHealth"/>
+                                <flowBox id="contraindicationsHealthFlowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc" property="contraindicationsHealth"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadContraindicationsHealthAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                    <textField dataContainer="personExtDc" property="contraindicationsHealthText"
+                                               caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.contraindicationsHealthText"/>
+                                </flowBox>
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.childUnder18WithoutFatherOrMother"/>
+                                <flowBox id="childUnder18WithoutFatherOrMotherFlowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc"
+                                                      property="childUnder18WithoutFatherOrMother"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadChildUnder18WithoutFatherOrMotherAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                </flowBox>
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.childUnder14WithoutFatherOrMother"/>
+                                <flowBox id="childUnder14WithoutFatherOrMotherFlowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc"
+                                                      property="childUnder14WithoutFatherOrMother"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadChildUnder14WithoutFatherOrMotherAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                </flowBox>
+                                <label value="msg://kz.uco.tsadv.modules.personal.model/PersonExt.criminalAdministrativeLiability"/>
+                                <flowBox id="criminalAdministrativeLiabilityFlowBox" spacing="true">
+                                    <radioButtonGroup dataContainer="personExtDc"
+                                                      property="criminalAdministrativeLiability"
+                                                      orientation="horizontal"/>
+                                    <upload id="uploadCriminalAdministrativeLiabilityAttachments"
+                                            uploadButtonIcon="font-icon:DOWNLOAD"
+                                            uploadButtonCaption="mainMsg://empty"/>
+                                    <textField dataContainer="personExtDc"
+                                               property="criminalAdministrativeLiabilityPerioidReason"
+                                               caption="msg://kz.uco.tsadv.modules.personal.model/PersonExt.criminalAdministrativeLiabilityPerioidReason"/>
+                                </flowBox>
+                                <button id="firstOtherInformationBtn" caption="msg://firstOtherInformationBtn"
+                                        invoke="saveFirstOtherInformation"/>
+                            </vbox>
                         </groupBox>
                     </vbox>
                 </scrollBox>

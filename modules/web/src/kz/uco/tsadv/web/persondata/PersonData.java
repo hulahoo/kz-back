@@ -4,13 +4,13 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.UiComponents;
-import com.haulmont.cuba.gui.actions.list.CreateAction;
 import com.haulmont.cuba.gui.builders.EditorBuilder;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
@@ -20,8 +20,9 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.security.global.UserSession;
-import kz.uco.base.common.BaseCommonUtils;
+import com.haulmont.cuba.web.gui.components.WebFlowBoxLayout;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.cuba.actions.CreateActionExt;
 import kz.uco.base.cuba.actions.EditActionExt;
@@ -30,9 +31,7 @@ import kz.uco.tsadv.entity.tb.PersonQualification;
 import kz.uco.tsadv.entity.tb.PersonQualificationRequest;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
-import kz.uco.tsadv.modules.personal.dictionary.DicPrevJobObligation;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
-import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.recruitment.model.*;
@@ -41,10 +40,9 @@ import kz.uco.tsadv.web.screens.personcontact.PersonContactPersonDataEdit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.*;
 
 @UiController("tsadv_PersonData")
@@ -113,10 +111,6 @@ public class PersonData extends Screen implements SelfServiceMixin {
     @Inject
     protected Button firstOtherInformationBtn;
     @Inject
-    protected LookupField<DicPrevJobObligation> prevJobObligationField;
-    @Inject
-    protected LookupField<YesNoEnum> prevJobNDAField;
-    @Inject
     protected CollectionLoader<Retirement> retirementsDl;
     @Inject
     protected Table<Retirement> retirementDocumentsTable;
@@ -124,30 +118,6 @@ public class PersonData extends Screen implements SelfServiceMixin {
     protected CollectionLoader<PersonBenefit> personBenefitsDl;
     @Inject
     protected Table<PersonBenefit> benefitTable;
-    @Inject
-    protected CollectionLoader<PersonClinicDispancer> personClinicDispancersDl;
-    @Inject
-    protected Table<PersonClinicDispancer> clinicDispancerTable;
-    @Inject
-    protected Table<Disability> disabilityTable;
-    @Named("reasonChangeJobTable.create")
-    protected CreateActionExt reasonChangeJobTableCreate;
-    @Inject
-    protected CollectionLoader<PersonReasonChangingJob> personReasonChangingJobsDl;
-    @Inject
-    protected CollectionContainer<PersonReasonChangingJob> personReasonChangingJobsDc;
-    @Inject
-    protected Table<PersonCriminalAdministrativeLiability> cALTable;
-    @Inject
-    protected CollectionLoader<PersonCriminalAdministrativeLiability> personCriminalAdministrativeLiabilitiesDl;
-    @Inject
-    protected CollectionLoader<PersonHealth> personHealthsDl;
-    @Named("personHealthTable.create")
-    protected CreateActionExt personHealthTableCreate;
-    @Inject
-    protected Table<PersonHealth> personHealthTable;
-    @Inject
-    protected CollectionContainer<PersonHealth> personHealthsDc;
     @Inject
     protected CollectionLoader<PersonRelativesHaveProperty> personRelativesHavePropertiesDl;
     @Named("relativePropertyTable.create")
@@ -171,9 +141,9 @@ public class PersonData extends Screen implements SelfServiceMixin {
     @Inject
     protected CollectionContainer<Awards> awardsesDc;
     @Inject
-    protected CollectionLoader<ChildDescription> childDescriptionsDl;
-    @Named("childDescriptionTable.create")
-    protected CreateAction<ChildDescription> childDescriptionTableCreate;
+    protected FileUploadingAPI fileUploadingAPI;
+    @Inject
+    protected FileUploadField uploadCommitmentsAttachments;
 
     @Subscribe(id = "personExtDc", target = Target.DATA_CONTAINER)
     protected void onPersonExtDcItemChange(InstanceContainer.ItemChangeEvent<PersonExt> event) {
@@ -214,25 +184,11 @@ public class PersonData extends Screen implements SelfServiceMixin {
         personBenefitsDl.setParameter("personGroup", personGroupId);
         personBenefitsDl.setParameter("systemDate", systemDate);
         personBenefitsDl.load();
-        personCriminalAdministrativeLiabilitiesDl.setParameter("personGroup", personGroupId);
-        personCriminalAdministrativeLiabilitiesDl.setParameter("systemDate", systemDate);
-        personCriminalAdministrativeLiabilitiesDl.load();
-        personClinicDispancersDl.setParameter("personGroup", personGroupId);
-        personClinicDispancersDl.setParameter("systemDate", systemDate);
-        personClinicDispancersDl.load();
-        personReasonChangingJobsDl.setParameter("personGroup", personGroupId);
-        personReasonChangingJobsDl.load();
-        reasonChangeJobTableCreate.setEnabled(personReasonChangingJobsDc.getItems().isEmpty());
-        personHealthsDl.setParameter("personGroup", personGroupId);
-        personHealthsDl.setParameter("systemDate", systemDate);
-        personHealthsDl.load();
         personRelativesHavePropertiesDl.setParameter("personGroup", personGroupId);
         personRelativesHavePropertiesDl.load();
         personBankDetailsesDl.setParameter("personGroup", personGroupId);
         personBankDetailsesDl.setParameter("systemDate", systemDate);
         personBankDetailsesDl.load();
-        childDescriptionsDl.setParameter("personGroup", personGroupId);
-        childDescriptionsDl.load();
     }
 
 
@@ -256,6 +212,8 @@ public class PersonData extends Screen implements SelfServiceMixin {
         addressTableCreate.setInitializer(o -> {
             Address address = (Address) o;
             address.setPersonGroup(personExtDc.getItem().getGroup());
+            address.setStartDate(CommonUtils.getSystemDate());
+            address.setEndDate(CommonUtils.getEndOfTime());
         });
         personContactTableCreate.setScreenClass(PersonContactPersonDataEdit.class);
         personContactTableEdit.setScreenClass(PersonContactPersonDataEdit.class);
@@ -269,51 +227,17 @@ public class PersonData extends Screen implements SelfServiceMixin {
             PersonLanguage personLanguage = (PersonLanguage) o;
             personLanguage.setPersonGroup(personExtDc.getItem().getGroup());
         });
-        firstOtherInformationBtn.setEnabled(personExtDc.getItem().getPrevJobObligation() == null
-                || personExtDc.getItem().getPrevJobNDA() == null);
-        prevJobNDAField.setEditable(personExtDc.getItem().getPrevJobNDA() == null);
-        prevJobObligationField.setEditable(personExtDc.getItem().getPrevJobObligation() == null);
-        reasonChangeJobTableCreate.setInitializer(o -> {
-            PersonReasonChangingJob personReasonChangingJob = (PersonReasonChangingJob) o;
-            personReasonChangingJob.setPersonGroup(personExtDc.getItem().getGroup());
-        });
-        personHealthTableCreate.setInitializer(o -> {
-            PersonHealth personHealth = (PersonHealth) o;
-            personHealth.setPersonGroup(personExtDc.getItem().getGroup());
-            personHealth.setStartDateHistory(BaseCommonUtils.getSystemDate());
-            personHealth.setEndDateHistory(BaseCommonUtils.getEndOfTime());
-        });
         relativePropertyTableCreate.setInitializer(o -> {
             PersonRelativesHaveProperty haveProperty = (PersonRelativesHaveProperty) o;
             haveProperty.setPersonGroup(personExtDc.getItem().getGroup());
         });
-        childDescriptionTableCreate.setInitializer(o -> {
-            ChildDescription childDescription = (ChildDescription) o;
-            childDescription.setPersonGroup(personExtDc.getItem().getGroup());
-        });
-
-    }
-
-
-    public void savePersonData() {
-        if (latinPropertyChanged) {
-            personExtDc.getItem().setWriteHistory(false);
-            dataManager.commit(personExtDc.getItem());
-            personExtDl.load();
-        }
-    }
-
-    public void saveHaveChildWithoutParent() {
-        personExtDc.getItem().setWriteHistory(false);
-        dataManager.commit(personExtDc.getItem());
-        personExtDl.load();
-    }
-
-    public void savePersonDataWithHistory() {
-        if (latinPropertyChanged) {
-            personExtDc.getItem().setWriteHistory(true);
-            dataManager.commit(personExtDc.getItem());
-            personExtDl.load();
+        for (Component componentInWindow : getWindow().getComponents()) {
+            if (componentInWindow instanceof WebFlowBoxLayout) {
+                WebFlowBoxLayout flowBoxLayout = (WebFlowBoxLayout) componentInWindow;
+                for (Component componentInFlowBox : flowBoxLayout.getComponents()) {
+                    componentInFlowBox.getId().contains("upload");
+                }
+            }
         }
     }
 
@@ -513,12 +437,11 @@ public class PersonData extends Screen implements SelfServiceMixin {
 
     public void saveFirstOtherInformation() {
         personExtDc.getItem().setWriteHistory(false);
-        dataManager.commit(personExtDc.getItem());
-        personExtDl.load();
+        PersonExt personExt = dataManager.reload(dataManager.commit(personExtDc.getItem()).getGroup(),
+                "personGroupExt-person-data").getPerson();
+        personExtDc.setItem(personExt);
         firstOtherInformationBtn.setEnabled(personExtDc.getItem().getPrevJobObligation() == null
                 || personExtDc.getItem().getPrevJobNDA() == null);
-        prevJobNDAField.setEditable(personExtDc.getItem().getPrevJobNDA() == null);
-        prevJobObligationField.setEditable(personExtDc.getItem().getPrevJobObligation() == null);
     }
 
     public void createRetirementRequest() {
@@ -583,19 +506,6 @@ public class PersonData extends Screen implements SelfServiceMixin {
                 .build().show();
     }
 
-    public void editСlinicDispancerRequest() {
-        PersonClinicDispancer personClinicDispancer = clinicDispancerTable.getSingleSelected();
-        screenBuilders.editor(PersonClinicDispancerRequest.class, this).newEntity()
-                .withInitializer(dispancerRequest -> {
-                    dispancerRequest.setHaveClinicDispancer(personClinicDispancer.getHaveClinicDispancer());
-                    dispancerRequest.setPeriodFrom(personClinicDispancer.getPeriodFrom());
-                    dispancerRequest.setPersonClinicDispancer(personClinicDispancer);
-                    dispancerRequest.setPersonGroup(dataManager
-                            .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
-                    dispancerRequest.setRequestStatus(draftRequestStatus);
-                }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true)))
-                .build().show();
-    }
 
     public void createDisabilityRequest() {
         screenBuilders.editor(DisabilityRequest.class, this).newEntity()
@@ -605,32 +515,6 @@ public class PersonData extends Screen implements SelfServiceMixin {
                     disabilityRequest.setRequestStatus(draftRequestStatus);
                 }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true)))
                 .build().show();
-    }
-
-    public void editDisabilityRequest() {
-        Disability disability = disabilityTable.getSingleSelected();
-        screenBuilders.editor(DisabilityRequest.class, this).newEntity()
-                .withInitializer(disabilityRequest -> {
-                    disabilityRequest.setAttachment(disability.getAttachment());
-                    disabilityRequest.setGroup(disability.getGroup());
-                    disabilityRequest.setDisability(disability);
-                    disabilityRequest.setAttachmentName(disability.getAttachmentName());
-                    disabilityRequest.setDateFrom(disability.getDateFrom());
-                    disabilityRequest.setDateTo(disability.getDateTo());
-                    disabilityRequest.setDisabilityType(disability.getDisabilityType());
-                    disabilityRequest.setDuration(disability.getDuration());
-                    disabilityRequest.setHaveDisability(disability.getHaveDisability());
-                    disabilityRequest.setPersonGroupExt(dataManager
-                            .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
-                    disabilityRequest.setRequestStatus(draftRequestStatus);
-                }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true)))
-                .build().show();
-    }
-
-    @Subscribe(id = "personReasonChangingJobsDc", target = Target.DATA_CONTAINER)
-    protected void onPersonReasonChangingJobsDcCollectionChange(CollectionContainer.CollectionChangeEvent<PersonReasonChangingJob> event) {
-        reasonChangeJobTableCreate.setEnabled(event.getSource().getItems().isEmpty());
-
     }
 
 
@@ -644,36 +528,6 @@ public class PersonData extends Screen implements SelfServiceMixin {
                 .build().show();
     }
 
-    public void editCALRequest() {
-        PersonCriminalAdministrativeLiability criminalAdministrativeLiability = cALTable.getSingleSelected();
-        screenBuilders.editor(PersonCriminalAdministrativeLiabilityRequest.class, this).newEntity()
-                .withInitializer(disabilityRequest -> {
-                    disabilityRequest.setHaveLiability(criminalAdministrativeLiability.getHaveLiability());
-                    disabilityRequest.setReasonPeriod(criminalAdministrativeLiability.getReasonPeriod());
-                    disabilityRequest.setLiability(criminalAdministrativeLiability);
-                    disabilityRequest.setPersonGroup(dataManager
-                            .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
-                    disabilityRequest.setRequestStatus(draftRequestStatus);
-                }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true)))
-                .build().show();
-    }
-
-    public void editHealth(Component source) {
-        PersonHealth personHealth = personHealthTable.getSingleSelected();
-        PersonHealth personHealthOld = metadata.getTools().copy(personHealth);
-        screenBuilders.editor(PersonHealth.class, this).editEntity(personHealth)
-                .build().show().addAfterCloseListener(afterCloseEvent -> {
-            if (afterCloseEvent.getCloseAction() != null
-                    && afterCloseEvent.getCloseAction().toString().contains("commit")
-                    && !personHealthOld.getStartDateHistory().equals(BaseCommonUtils.getSystemDate())) {
-                personHealthOld.setId(UUID.randomUUID());
-                personHealthOld.setEndDateHistory(Date.from(LocalDateTime.from(BaseCommonUtils.getSystemDate().toInstant())
-                        .plusDays(-1).atZone(ZoneId.systemDefault()).toInstant()));
-                dataManager.commit(personHealthOld);
-            }
-            personHealthsDl.load();
-        });
-    }
 
     public void createBankDetailsRequest() {
         if (CommonUtils.getSystemDate().getDate() < 11
@@ -759,4 +613,107 @@ public class PersonData extends Screen implements SelfServiceMixin {
                 }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true)))
                 .build().show();
     }
+
+    protected void addFileToAttachments(FileUploadField.FileUploadSucceedEvent event) {
+        if (event.getSource().getId() != null) {
+            String fieldName = event.getSource().getId().substring(6);
+            List<FileDescriptor> attachments = null;
+            if (fieldName != null && !fieldName.isEmpty()) {
+                try {
+                    Method setter = null;
+                    Method getter = null;
+                    for (Method method : personExtDc.getItem().getClass().getMethods()) {
+                        if (method.getName().equals("set" + fieldName)) {
+                            setter = method;
+                        } else if (method.getName().equals("get" + fieldName)) {
+                            getter = method;
+                        }
+                    }
+                    if (getter != null) {
+                        if (getter.invoke(personExtDc.getItem()) != null) {
+                            attachments = (List<FileDescriptor>) getter.invoke(personExtDc.getItem());
+                        } else if (setter != null) {
+                            setter.invoke(personExtDc.getItem(), new ArrayList<FileDescriptor>());
+                            attachments = (List<FileDescriptor>) getter.invoke(personExtDc.getItem());
+                        }
+                        if (attachments != null) {
+                            FileUploadField uploadField = (FileUploadField) event.getSource();
+                            File file = fileUploadingAPI.getFile(uploadField.getFileId());
+                            FileDescriptor fd = uploadField.getFileDescriptor();
+                            try {
+                                fileUploadingAPI.putFileIntoStorage(uploadField.getFileId(), fd);
+                            } catch (FileStorageException e) {
+                                throw new RuntimeException("Error saving file to FileStorage", e);
+                            }
+                            dataManager.commit(fd);
+                            attachments.add(fd);
+                            UploadField source = event.getSource();
+                            FlowBoxLayout parent = (FlowBoxLayout) source.getParent();
+                            int index = parent.indexOf(source);
+                            LinkButton linkButton = uiComponents.create(LinkButton.class);
+                            linkButton.setCaption(fd.getName());
+                            linkButton.setAlignment(Component.Alignment.MIDDLE_LEFT);
+                            linkButton.setAction(new BaseAction(fd.getId().toString()) {
+                                @Override
+                                public void actionPerform(Component component) {
+                                    exportDisplay.show(fd);
+                                }
+                            });
+                            parent.add(linkButton, index + 1);
+                        }
+                    }
+                } catch (IllegalAccessException | InvocationTargetException | RuntimeException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    @Subscribe("uploadCommitmentsAttachments")
+    protected void onUploadCommitmentsAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
+
+    @Subscribe("uploadNdaAttachments")
+    protected void onUploadNdaAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
+    @Subscribe("uploadConvictionAttachments")
+    protected void onUploadConvictionAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
+    @Subscribe("uploadDispensaryAttachments")
+    protected void onUploadDispensaryAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
+    @Subscribe("uploadDisabilityAttachments")
+    protected void onUploadDisabilityAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
+    @Subscribe("uploadContraindicationsHealthAttachments")
+    protected void onUploadContraindicationsHealthAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
+    @Subscribe("uploadChildUnder18WithoutFatherOrMotherAttachments")
+    protected void onUploadChildUnder18WithoutFatherOrMotherAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
+    @Subscribe("uploadChildUnder14WithoutFatherOrMotherAttachments")
+    protected void onUploadChildUnder14WithoutFatherOrMotherAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
+    @Subscribe("uploadCriminalAdministrativeLiabilityAttachments")
+    protected void onUploadCriminalAdministrativeLiabilityAttachmentsFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        addFileToAttachments(event);
+    }
+
 }

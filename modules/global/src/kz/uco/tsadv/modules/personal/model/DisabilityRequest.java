@@ -10,6 +10,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "TSADV_DISABILITY_REQUEST")
 @Entity(name = "tsadv_DisabilityRequest")
@@ -60,6 +61,21 @@ public class DisabilityRequest extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DISABILITY_ID")
     private Disability disability;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_DISABILITY_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "DISABILITY_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> attachments;
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
+    }
 
     public Disability getDisability() {
         return disability;
