@@ -1,7 +1,10 @@
 package kz.uco.tsadv.modules.personal.requests;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -16,6 +19,11 @@ import java.util.List;
 @Entity(name = "tsadv_OrgStructureRequest")
 public class OrgStructureRequest extends StandardEntity {
     private static final long serialVersionUID = -587617498631162165L;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "orgStructureRequest")
+    protected List<OrgStructureRequestDetail> orgStructureDetail;
 
     @NotNull
     @Column(name = "REQUEST_NUMBER", nullable = false)
@@ -51,6 +59,14 @@ public class OrgStructureRequest extends StandardEntity {
     @NotNull
     @JoinColumn(name = "AUTHOR_ID")
     protected PersonGroupExt author;
+
+    public List<OrgStructureRequestDetail> getOrgStructureDetail() {
+        return orgStructureDetail;
+    }
+
+    public void setOrgStructureDetail(List<OrgStructureRequestDetail> orgStructureDetail) {
+        this.orgStructureDetail = orgStructureDetail;
+    }
 
     public void setFile(List<FileDescriptor> file) {
         this.file = file;
