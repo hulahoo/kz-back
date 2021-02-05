@@ -58,6 +58,7 @@ public class InsuredPersonBulkEdit extends StandardEditor<InsuredPerson> {
                 exclusionDateField.setVisible(false);
                 exclusionDateField.setRequired(false);
                 exclusionDateField.setValue(null);
+                commentField.setRequired(false);
             }else if ("DRAFT".equals(statusRequestField.getValue().getCode())){
                 attachDateField.setVisible(true);
                 attachDateField.setValue(CommonUtils.getSystemDate());
