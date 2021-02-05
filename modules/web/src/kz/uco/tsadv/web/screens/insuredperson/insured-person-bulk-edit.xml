@@ -24,10 +24,10 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form" dataContainer="insuredPersonDc">
                 <column width="350px">
-                    <dateField  id="attachDateField" resolution="DAY" caption="msg://attachDate"/>
-                    <lookupField id="statusRequestField"
+                    <lookupField id="statusRequestField" required="true"
                                  optionsContainer="statusRequestDc" caption="msg://status"/>
-                    <dateField id="exclusionDateField" resolution="DAY" caption="msg://exclusionDate"/>
+                    <dateField id="exclusionDateField" resolution="DAY" visible="false" caption="msg://exclusionDate"/>
+                    <dateField  id="attachDateField" resolution="DAY" visible="false" caption="msg://attachDate"/>
                     <textArea rowspan="2" id="commentField" caption="msg://comment"/>
                 </column>
             </form>
