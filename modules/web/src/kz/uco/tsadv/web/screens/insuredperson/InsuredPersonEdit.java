@@ -775,7 +775,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 && !whichButton.equals("editHr")) {
             event.preventCommit();
             notifications.create()
-                    .withCaption("Данный сотрудник уже прикрплен к договору страхования Номер: '" + person.getInsuranceContract().getPolicyName() + "' прикреплен").
+                    .withCaption("Данный сотрудник уже прикреплен к договору: " + person.getInsuranceContract().getPolicyName()).
                     withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .show();
         }
