@@ -531,6 +531,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return prepareSuccess(result, methodName, positionJsons);
     }
 
+    @Override
+    public BaseResult createOrUpdatePerson(PersonDataJson personData) {
+        return null;
+    }
+
+    @Override
+    public BaseResult deletePerson(PersonDataJson personData) {
+        return null;
+    }
+
     protected <T extends Serializable> BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
         baseResult.setSuccess(true);
         baseResult.setSuccessMessage("success");

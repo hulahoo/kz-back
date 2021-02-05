@@ -14,7 +14,6 @@ public class PositionJson implements Serializable {
     private String legacyId;
     private String companyCode;
     private String maxPerson;
-
     private String fte;
     private String gradeLegacyId;
     private String organizationLegacyId;
