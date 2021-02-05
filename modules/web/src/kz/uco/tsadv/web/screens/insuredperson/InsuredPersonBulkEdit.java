@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.screen.*;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 
@@ -41,8 +42,38 @@ public class InsuredPersonBulkEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("statusRequestField")
     public void onStatusRequestFieldValueChange(HasValue.ValueChangeEvent<DicMICAttachmentStatus> event) {
-        if (event.getValue() != null && "EXCLUDED".equals(statusRequestField.getValue().getCode())){
-            commentField.setRequired(true);
+        if (event.getValue() != null){
+            if ("EXCLUDED".equals(statusRequestField.getValue().getCode())){
+                commentField.setRequired(true);
+                exclusionDateField.setRequired(true);
+                exclusionDateField.setVisible(true);
+                exclusionDateField.setValue(CommonUtils.getSystemDate());
+                attachDateField.setRequired(false);
+                attachDateField.setVisible(false);
+                attachDateField.setValue(null);
+            }else if ("INSURED".equals(statusRequestField.getValue().getCode())){
+                attachDateField.setVisible(true);
+                attachDateField.setValue(CommonUtils.getSystemDate());
+                attachDateField.setRequired(true);
+                exclusionDateField.setVisible(false);
+                exclusionDateField.setRequired(false);
+                exclusionDateField.setValue(null);
+                commentField.setRequired(false);
+            }else if ("DRAFT".equals(statusRequestField.getValue().getCode())){
+                attachDateField.setVisible(true);
+                attachDateField.setValue(CommonUtils.getSystemDate());
+                attachDateField.setRequired(true);
+                exclusionDateField.setVisible(false);
+                exclusionDateField.setRequired(false);
+                exclusionDateField.setValue(null);
+                commentField.setRequired(false);
+            }
+        }else {
+            attachDateField.setValue(null);
+            exclusionDateField.setValue(null);
+            commentField.setRequired(false);
+            attachDateField.setVisible(false);
+            exclusionDateField.setVisible(false);
         }
     }
 
@@ -50,13 +81,22 @@ public class InsuredPersonBulkEdit extends StandardEditor<InsuredPerson> {
     public void onOkBtnClick(Button.ClickEvent event) {
         CommitContext context = new CommitContext();
         bulks.forEach(insuredPerson -> {
-            insuredPerson.setAttachDate(attachDateField.getValue());
-            insuredPerson.setComment(commentField.getValue());
-            insuredPerson.setExclusionDate(exclusionDateField.getValue());
+            if (attachDateField.getValue() != null){
+                insuredPerson.setAttachDate(attachDateField.getValue());
+            }
+            if (commentField.getValue() != null){
+                insuredPerson.setComment(commentField.getValue());
+            }
+            if (exclusionDateField.getValue() != null){
+                insuredPerson.setExclusionDate(exclusionDateField.getValue());
+            }
+
             insuredPerson.setStatusRequest(statusRequestField.getValue());
             context.addInstanceToCommit(insuredPerson);
         });
         dataManager.commit(context);
         closeWithDefaultAction();
     }
+
+
 }
