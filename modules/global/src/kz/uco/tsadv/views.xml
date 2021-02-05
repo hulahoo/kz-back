@@ -21900,6 +21900,7 @@
         <property name="region" view="_minimal"/>
         <property name="addressType" view="_minimal"/>
         <property name="file" view="_local"/>
+        <property name="statementFile" view="_local"/>
     </view>
     <view entity="tsadv$InsuredPerson" name="insuredPersonMember-editView" extends="_local">
         <property name="relative" view="_local"/>
@@ -21938,6 +21939,8 @@
                 </property>
             </property>
         </property>
+        <property name="file" view="_local"/>
+        <property name="statementFile" view="_local"/>
         <property name="relative" view="_minimal"/>
         <property name="sex" view="_minimal"/>
         <property name="documentType" view="_local"/>
@@ -22934,6 +22937,19 @@
     </view>
     <view entity="tsadv$DicOffenceType" name="dicOffenceType-browse" extends="_local">
         <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-Mic" extends="_local">
+        <property name="list" view="_local">
+            <property name="type" view="_local"/>
+        </property>
+        <property name="assignments" view="_local">
+            <property name="organizationGroup" view="_local"/>
+            <property name="jobGroup" view="_local"/>
+            <property name="positionGroup" view="_local"/>
+            <property name="location" view="_local"/>
+            <property name="assignmentStatus" view="_local"/>
+            <property name="gradeGroup" view="_local"/>
+        </property>
     </view>
 
 </views>

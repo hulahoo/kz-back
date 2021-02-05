@@ -48,7 +48,7 @@
             </loader>
         </collection>
         <collection id="insuranceContractDc" class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
-                    view="_local">
+                    view="insuranceContract-editView">
             <loader id="insuranceContractDl">
                 <query><![CDATA[select e from tsadv$InsuranceContract e ]]>
                     <condition>
@@ -148,6 +148,8 @@
                                          property="job"/>
                             <field id="jobMemberField" property="jobMember" visible="false"/>
                             <dateField id="assignDateField" editable="false" resolution="DAY" caption="msg://assignDate"/>
+                            <upload id="statementFileField" fileStoragePutMode="IMMEDIATE" property="statementFile"
+                                    showFileName="true"/>
                         </column>
                     </form>
                 </groupBox>
@@ -216,6 +218,7 @@
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
+            <button id="commitBtn" action="windowCommit" caption="msg://save"/>
             <button id="closeBtn" action="windowClose"/>
         </hbox>
     </layout>
