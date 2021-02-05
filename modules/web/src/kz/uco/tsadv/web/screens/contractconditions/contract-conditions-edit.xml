@@ -14,7 +14,7 @@
                     class="kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType">
             <loader id="relationshipTypeDl">
                 <query>
-                    <![CDATA[select e from tsadv$DicRelationshipType e]]>
+                    <![CDATA[select e from tsadv$DicRelationshipType e where e.code <> 'PRIMARY']]>
                 </query>
             </loader>
         </collection>

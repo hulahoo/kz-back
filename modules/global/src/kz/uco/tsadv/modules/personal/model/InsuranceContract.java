@@ -95,6 +95,7 @@ public class InsuranceContract extends StandardEntity {
     private Integer countOfFreeMembers;
 
     @Composition
+    @OrderBy("relationshipType, ageMin")
     @OneToMany(mappedBy = "insuranceContract")
     private List<ContractConditions> programConditions;
 

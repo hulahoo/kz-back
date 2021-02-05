@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://personGroupExtMIC.caption"
+        focusComponent="personGroupExtTable"
+        messagesPack="kz.uco.tsadv.web.screens.persongroupext">
+    <data readOnly="true">
+        <collection id="personGroupExtDc"
+                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt">
+            <view extends="personGroupExt-Mic"/>
+            <loader id="personGroupExtDl">
+                <query>
+                    <![CDATA[select e
+                           from base$PersonGroupExt e
+                           join e.list p
+                           left join e.assignments a
+                          where p.type.code = 'EMPLOYEE'
+                            and :session$systemDate between p.startDate and p.endDate
+                            and (:session$systemDate between a.startDate and a.endDate)]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="personGroupExtTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="personGroupExtTable"
+                dataLoader="personGroupExtDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="personGroupExtTable"
+                    width="100%"
+                    dataContainer="personGroupExtDc">
+            <actions>
+            </actions>
+            <columns>
+                <column id="person" caption="ФИО"/>
+                <column id="currentAssignment.organizationGroup"/>
+                <column id="currentAssignment.positionGroup"/>
+                <column id="currentAssignment.jobGroup"/>
+                <column id="currentAssignment.gradeGroup"/>
+                <column id="currentAssignment.location.langValue"/>
+                <column id="person.type.langValue"
+                        caption="msg://Person.type"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

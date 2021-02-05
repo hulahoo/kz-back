@@ -125,6 +125,10 @@ public class InsuredPerson extends StandardEntity {
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     private List<FileDescriptor> file;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STATEMENT_FILE_ID")
+    private FileDescriptor statementFile;
+
     @Column(name = "TYPE", nullable = false)
     @NotNull
     private String type;
@@ -142,6 +146,14 @@ public class InsuredPerson extends StandardEntity {
 
     @Column(name = "COMMENT", length = 500)
     private String comment;
+
+    public FileDescriptor getStatementFile() {
+        return statementFile;
+    }
+
+    public void setStatementFile(FileDescriptor statementFile) {
+        this.statementFile = statementFile;
+    }
 
     public String getJobMember() {
         return jobMember;
