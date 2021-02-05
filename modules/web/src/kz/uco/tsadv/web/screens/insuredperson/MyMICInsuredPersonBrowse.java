@@ -202,6 +202,20 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                     insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
                 }
             }
+
+            if (!personGroupExt.getAddresses().isEmpty()){
+                boolean isSetAddress = false;
+                for (Address a : personGroupExt.getAddresses()){
+                    if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())){
+                        insuredPerson.setAddressType(a);
+                        isSetAddress = true;
+                        break;
+                    }
+                }
+                if (!isSetAddress){
+                    insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
+                }
+            }
             insuredPerson.setEmployee(personGroupExt);
             insuredPerson.setFirstName(person.getFirstName());
             insuredPerson.setSecondName(person.getLastName());
@@ -213,8 +227,6 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             insuredPerson.setCompany(company);
             insuredPerson.setJob(assignment.getJobGroup());
             insuredPerson.setTotalAmount(new BigDecimal(0));
-            insuredPerson.setAddressType(address);
-            insuredPerson.setAddress(address.getAddress());
 
         }
         return insuredPerson;
