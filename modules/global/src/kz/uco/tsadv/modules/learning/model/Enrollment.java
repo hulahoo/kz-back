@@ -43,9 +43,22 @@ public class Enrollment extends AbstractParentEntity {
 
     @Column(name = "MONEY_IN_BUDGET")
     protected Boolean moneyInBudget;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REASON_FOR_LEARNING_ID")
     protected DicReasonForLearning reasonForLearning;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COURSE_SCHEDULE_ID")
+    protected CourseSchedule courseSchedule;
+
+    public CourseSchedule getCourseSchedule() {
+        return courseSchedule;
+    }
+
+    public void setCourseSchedule(CourseSchedule courseSchedule) {
+        this.courseSchedule = courseSchedule;
+    }
 
     public void setReasonForLearning(DicReasonForLearning reasonForLearning) {
         this.reasonForLearning = reasonForLearning;

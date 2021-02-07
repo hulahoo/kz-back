@@ -23,6 +23,7 @@
                 dataLoader="coursesDl">
             <properties include=".*"/>
         </filter>
+        0
         <groupTable id="coursesTable"
                     width="100%"
                     dataContainer="coursesDc">
@@ -63,14 +64,6 @@
                         caption="mainMsg://table.btn.empty"/>
                 <button id="removeBtn"
                         action="coursesTable.remove"/>
-                <button id="enrollmentsBtn"
-                        caption="msg://Course.enrollmentsBtn"
-                        icon="GROUP"
-                        invoke="createEnrollments"/>
-                <button id="resultsBtn"
-                        caption="msg://Course.results"
-                        icon="BAR_CHART"
-                        invoke="openResults"/>
             </buttonsPanel>
         </groupTable>
     </layout>
