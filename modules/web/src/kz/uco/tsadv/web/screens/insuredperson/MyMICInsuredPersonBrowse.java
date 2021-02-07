@@ -109,12 +109,8 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             }else {
                 insuredPersonsTableJoinMIC.setEnabled(false);
             }
-            insuredPersonsTableJoinMIC.setEnabled(contract != null);
-        }else {
-            insuredPersonsTableJoinMIC.setEnabled(false);
         }
     }
-
 
     @Subscribe("insuredPersonsTable.joinMIC")
     public void onInsuredPersonsTableJoinMIC(Action.ActionPerformedEvent event) {

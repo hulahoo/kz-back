@@ -70,11 +70,11 @@
                 </query>
             </loader>
         </collection>
-        <collection id="dicLanguagesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicLanguage">
+        <collection id="dicLanguagesDc" class="kz.uco.base.entity.dictionary.DicLanguage">
             <view extends="_local"/>
             <loader id="dicLanguagesDl">
                 <query>
-                    <![CDATA[select e from tsadv$DicLanguage e]]>
+                    <![CDATA[select e from base$DicLanguage e]]>
                 </query>
             </loader>
         </collection>

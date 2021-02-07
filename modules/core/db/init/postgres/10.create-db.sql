@@ -14867,7 +14867,25 @@ alter table BASE_PERSON add column HAVE_CRIPPLE_CHILD varchar(50) ^
 alter table BASE_PERSON add column HAVE_CHILD_WITHOUT_PARENT varchar(50) ^
 alter table BASE_PERSON add column PREV_JOB_NDA varchar(50) ^
 alter table BASE_PERSON add column PREV_JOB_OBLIGATION varchar(50) ^
-alter table BASE_PERSON add column DTYPE varchar(31) ^
+alter table BASE_PERSON add column COMMITMENTS_FROM_PREV_JOB varchar(50) ^
+alter table BASE_PERSON add column COMMITMENTS_LOAN boolean ^
+alter table BASE_PERSON add column COMMITMENTS_CREDIT boolean ^
+alter table BASE_PERSON add column COMMITMENTS_NOT_SUR_MAT_VALUES boolean ^
+alter table BASE_PERSON add column HAVE_NDA varchar(50) ^
+alter table BASE_PERSON add column REASON_FOR_DISMISSAL varchar(255) ^
+alter table BASE_PERSON add column PREV_JOB_HR varchar(255) ^
+alter table BASE_PERSON add column HAVE_CONVICTION varchar(50) ^
+alter table BASE_PERSON add column REGISTERED_DISPENSARY varchar(50) ^
+alter table BASE_PERSON add column DISPENSARY_PERIOD varchar(255) ^
+alter table BASE_PERSON add column DISABILITY varchar(50) ^
+alter table BASE_PERSON add column DISABILITY_GROUP varchar(255) ^
+alter table BASE_PERSON add column CONTRAINDICATIONS_HEALTH varchar(50) ^
+alter table BASE_PERSON add column CONTRAINDICATIONS_HEALTH_TEXT varchar(255) ^
+alter table BASE_PERSON add column CHILD_UNDER18_WITHOUT_FATHER_OR_MOTHER varchar(50) ^
+alter table BASE_PERSON add column CHILD_UNDER14_WITHOUT_FATHER_OR_MOTHER varchar(50) ^
+alter table BASE_PERSON add column CRIMINAL_ADMINISTRATIVE_LIABILITY varchar(50) ^
+alter table BASE_PERSON add column CRIMINAL_ADMINISTRATIVE_LIABILITY_PERIOID_REASON varchar(255) ^
+alter table BASE_PERSON add column DTYPE varchar(100) ^
 update BASE_PERSON set DTYPE = 'base$PersonExt' where DTYPE is null ^
 -- end BASE_PERSON
 -- begin BASE_ORGANIZATION
@@ -14965,6 +14983,7 @@ update BASE_ORGANIZATION_GROUP set DTYPE = 'base$OrganizationGroupExt' where DTY
 alter table BASE_PERSON_GROUP add column LINKEDIN_ACCESS_TOKEN varchar(1000) ^
 alter table BASE_PERSON_GROUP add column LINKEDIN_PROFILE_LINK varchar(1000) ^
 alter table BASE_PERSON_GROUP add column LINKEDIN_TOKEN_EXPIRES_DATE timestamp ^
+alter table BASE_PERSON_GROUP add column COMPANY_ID uuid ^
 alter table BASE_PERSON_GROUP add column DTYPE varchar(100) ^
 update BASE_PERSON_GROUP set DTYPE = 'base$PersonGroupExt' where DTYPE is null ^
 -- end BASE_PERSON_GROUP
@@ -17201,3 +17220,10 @@ create table TSADV_DIC_ASSESSMENT_TYPE (
     primary key (ID)
 )^
 -- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_DISABILITY_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_DISABILITY_REQUEST_FILE_DESCRIPTOR_LINK (
+    DISABILITY_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (DISABILITY_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_DISABILITY_REQUEST_FILE_DESCRIPTOR_LINK
