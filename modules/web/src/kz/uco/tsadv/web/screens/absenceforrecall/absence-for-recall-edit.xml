@@ -51,7 +51,8 @@
                     <checkBox id="compensationPaymentField" property="compensationPayment"/>
                     <dateField id="dateFromField" property="dateFrom" editable="false"/>
                     <dateField id="dateToField" property="dateTo" editable="false"/>
-                    <textField id="purposeTextField" property="purposeText"/>
+                    <textArea id="purposeTextField" property="purposeText"
+                              rows="5"/>
                     <checkBox id="isAgreeField" property="isAgree" visible="false"/>
                     <checkBox id="isFamiliarizationField" property="isFamiliarization" visible="false"/>
                 </column>
