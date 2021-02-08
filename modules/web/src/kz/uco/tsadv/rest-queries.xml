@@ -112,5 +112,50 @@
             <param name="courseName" type="java.lang.String"/>
         </params>
     </query>
-
+    <query name="searchEnrollments" entity="tsadv$DicCategory" view="category-enrollment">
+        <jpql>
+            <![CDATA[
+            select c
+            from tsadv$DicCategory c
+            join c.courses cc
+            join cc.enrollments e
+            where e.personGroup.id = :userId
+            ]]>
+        </jpql>
+        <params>
+            <param name="userId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="searchEnrollments" entity="tsadv$DicCategory" view="category-enrollment">
+        <jpql>
+            <![CDATA[
+            select c
+            from tsadv$DicCategory c
+            join c.courses cc
+            join cc.enrollments e
+            where (lower ( cc.name) like :courseName)
+                and e.personGroup.id = :userId
+            ]]>
+        </jpql>
+        <params>
+            <param name="courseName" type="java.lang.String"/>
+            <param name="userId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="enrollment" entity="tsadv$Enrollment" view="enrollment-course">
+        <jpql>
+            <![CDATA[
+            select e
+            from tsadv$Enrollment e
+            left join e.course c
+            left join c.sections s
+            left join s.courseSectionAttempts a
+                ON a.enrollment.id = :id
+            where e.id = :id
+            ]]>
+        </jpql>
+        <params>
+            <param name="id" type="java.util.UUID"/>
+        </params>
+    </query>
 </queries>

@@ -26,7 +26,7 @@ public interface SelfServiceMixin {
         for (String loaderId : screenData.getLoaderIds()) {
             DataLoader loader = screenData.getLoader(loaderId);
             String query = loader.getQuery();
-            if (query.isEmpty()) continue;
+            if (query == null || query.isEmpty()) continue;
 
             Matcher matcher = CONTAINER_REF_PATTERN.matcher(query);
             while (matcher.find()) {

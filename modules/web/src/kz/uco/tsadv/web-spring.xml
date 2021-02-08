@@ -132,6 +132,8 @@
                 <entry key="tsadv_BprocService" value="kz.uco.tsadv.service.BprocService"/>
                 <entry key="tsadv_PortalHelperService" value="kz.uco.tsadv.service.portal.PortalHelperService"/>
                 <entry key="tsadv_StartBprocService" value="kz.uco.tsadv.service.portal.StartBprocService"/>
+                <entry key="tsadv_EnrollmentService" value="kz.uco.tsadv.service.portal.EnrollmentService"/>
+                <entry key="tsadv_IntegrationRestService" value="kz.uco.tsadv.service.IntegrationRestService"/>
             </map>
         </property>
     </bean>

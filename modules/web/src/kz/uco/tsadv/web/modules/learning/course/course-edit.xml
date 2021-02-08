@@ -1,34 +1,48 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://Course.editorCaption"
-        class="kz.uco.tsadv.web.modules.learning.course.CourseEdit"
-        datasource="courseDs"
-        focusComponent="fieldGroup">
-    <dsContext>
-        <datasource id="courseDs"
-                    class="kz.uco.tsadv.modules.learning.model.Course"
-                    view="course.edit.new">
-            <collectionDatasource id="sectionsDs"
-                                  property="sections">
-                <collectionDatasource id="sessionsDs"
-                                      property="session"/>
-            </collectionDatasource>
-            <collectionDatasource id="competencesDs"
-                                  property="competences"/>
-            <collectionDatasource id="preRequisitionDs"
-                                  property="preRequisition"/>
-            <collectionDatasource id="feedbackTemplatesDs"
-                                  property="feedbackTemplates"/>
-            <collectionDatasource id="courseScheduleDs" property="courseSchedule"/>
-        </datasource>
-        <collectionDatasource id="dicLearningTypesDs"
-                              class="kz.uco.tsadv.modules.learning.dictionary.DicLearningType"
-                              view="_minimal">
-            <query>
-                <![CDATA[select e from tsadv$DicLearningType e]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+        focusComponent="fieldGroup"
+        messagesPack="kz.uco.tsadv.web.modules.learning.course">
+    <data>
+        <instance id="courseDc"
+                  class="kz.uco.tsadv.modules.learning.model.Course"
+                  view="course.edit.new">
+            <collection id="sectionsDc"
+                        property="sections">
+                <collection id="sessionsDc"
+                            property="session"/>
+            </collection>
+            <collection id="competencesDc"
+                        property="competences"/>
+            <collection id="preRequisitionDc"
+                        property="preRequisition"/>
+            <collection id="feedbackTemplatesDc"
+                        property="feedbackTemplates"/>
+            <collection id="courseScheduleDc"
+                        property="courseSchedule"/>
+            <collection id="trainerDc"
+                        property="courseTrainers"/>
+            <loader id="courseDl"/>
+        </instance>
+        <collection id="dicLearningTypesDc"
+                    class="kz.uco.tsadv.modules.learning.dictionary.DicLearningType"
+                    view="_minimal">
+            <loader id="dicLearningTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicLearningType e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="enrollmentDc"
+                    class="kz.uco.tsadv.modules.learning.model.Enrollment"
+                    view="enrollment.for.course">
+            <loader id="enrollmentDl">
+                <query>
+                    <![CDATA[select e from tsadv$Enrollment e where e.course = :course]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="tabSheet"
@@ -56,33 +70,42 @@
                                 showClearButton="true"
                                 uploadButtonIcon="icons/reports-template-upload.png"/>
                     </hbox>
-                    <fieldGroup id="fieldGroup"
-                                datasource="courseDs">
+                    <form id="fieldGroup"
+                          dataContainer="courseDc">
                         <column width="250px">
-                            <field id="name" property="name"/>
-                            <field property="party"/>
-                            <field property="category"/>
-                            <field property="targetAudience"/>
-                            <field caption="msg://learningType"
-                                   optionsDatasource="dicLearningTypesDs"
-                                   property="learningType"/>
-                            <field property="activeFlag"/>
-                            <field property="selfEnrollment"
-                                   required="true"/>
-                            <field property="isOnline"/>
-                            <field id="shortDescription" property="shortDescription"
-                                   rows="5"/>
+                            <textField id="name" property="name"/>
+                            <pickerField property="party">
+                                <actions>
+                                    <action id="lookup" type="picker_lookup"/>
+                                    <action id="clear" type="picker_clear"/>
+                                </actions>
+                            </pickerField>
+                            <pickerField property="category">
+                                <actions>
+                                    <action id="lookup" type="picker_lookup"/>
+                                    <action id="clear" type="picker_clear"/>
+                                </actions>
+                            </pickerField>
+                            <textField property="targetAudience"/>
+                            <lookupField caption="msg://learningType"
+                                         optionsContainer="dicLearningTypesDc"
+                                         property="learningType"/>
+                            <checkBox property="activeFlag"/>
+                            <checkBox property="selfEnrollment"/>
+                            <checkBox property="isOnline"/>
+                            <textArea id="shortDescription" property="shortDescription"
+                                      rows="5"/>
                         </column>
-                    </fieldGroup>
+                    </form>
                 </scrollBox>
             </tab>
             <tab id="courseSchedule" caption="msg://courseSchedule"
                  margin="true, false, false, false">
-                <table id="courseScheduleTable" height="100%" width="100%">
+                <table id="courseScheduleTable" height="100%" width="100%" dataContainer="courseScheduleDc">
                     <actions>
-                        <action id="create"/>
-                        <action id="edit"/>
-                        <action id="remove"/>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
                     </actions>
                     <columns>
                         <column id="name"/>
@@ -92,7 +115,7 @@
                         <column id="address"/>
                         <column id="maxNumberOfPeople"/>
                     </columns>
-                    <rows datasource="courseScheduleDs"/>
+                    <rows/>
                     <buttonsPanel id="courseScheduleBtnPanel">
                         <button id="courseScheduleCreate" action="courseScheduleTable.create"/>
                         <button id="courseScheduleEdit" action="courseScheduleTable.edit"/>
@@ -104,17 +127,22 @@
                  caption="msg://Course.sections"
                  margin="true,true,true,false">
                 <table id="sectionsTable"
+                       dataContainer="sectionsDc"
                        height="100%"
                        width="100%">
                     <actions>
                         <action id="create"
                                 caption="mainMsg://table.btn.empty"
+                                type="create"
                                 icon="icons/plus-btn.png"/>
                         <action id="edit"
+                                type="edit"
                                 caption="mainMsg://table.btn.empty"/>
                         <action id="remove"
+                                type="remove"
                                 caption="mainMsg://table.btn.empty"/>
                         <action id="excel"
+                                type="excel"
                                 caption="mainMsg://table.btn.empty"
                                 icon="icons/excel.png"/>
                     </actions>
@@ -125,7 +153,7 @@
                         <column id="order"/>
                         <column id="mandatory"/>
                     </columns>
-                    <rows datasource="sectionsDs"/>
+                    <rows/>
                     <buttonsPanel id="sectionButtonsPanel"
                                   alwaysVisible="true">
                         <button action="sectionsTable.create"/>
@@ -139,13 +167,16 @@
                  caption="msg://Course.preRequisition"
                  margin="true,true,true,false">
                 <table id="preRequisitionTable"
+                       dataContainer="preRequisitionDc"
                        height="100%"
                        width="100%">
                     <actions>
                         <action id="selectPreRequisition"/>
                         <action id="remove"
+                                type="remove"
                                 caption="mainMsg://table.btn.empty"/>
                         <action id="excel"
+                                type="excel"
                                 caption="mainMsg://table.btn.empty"
                                 icon="icons/excel.png"/>
                     </actions>
@@ -153,7 +184,7 @@
                         <column id="requisitionCourse.name"/>
                         <column id="requisitionCourse.category.langValue"/>
                     </columns>
-                    <rows datasource="preRequisitionDs"/>
+                    <rows/>
                     <buttonsPanel id="preRequisitionButtonsPanel">
                         <button action="preRequisitionTable.selectPreRequisition"
                                 caption="mainMsg://table.btn.empty"
@@ -167,17 +198,22 @@
                  caption="msg://Course.competences"
                  margin="true,true,true,false">
                 <table id="competencesTable"
+                       dataContainer="competencesDc"
                        height="100%"
                        width="100%">
                     <actions>
                         <action id="create"
+                                type="create"
                                 caption="mainMsg://table.btn.empty"
                                 icon="icons/plus-btn.png"/>
                         <action id="edit"
+                                type="edit"
                                 caption="mainMsg://table.btn.empty"/>
                         <action id="remove"
+                                type="remove"
                                 caption="mainMsg://table.btn.empty"/>
                         <action id="excel"
+                                type="excel"
                                 caption="mainMsg://table.btn.empty"
                                 icon="icons/excel.png"/>
                     </actions>
@@ -185,7 +221,7 @@
                         <column id="competenceGroup.competence.competenceName"/>
                         <column id="scaleLevel"/>
                     </columns>
-                    <rows datasource="competencesDs"/>
+                    <rows/>
                     <buttonsPanel id="competenceButtonsPanel">
                         <button action="competencesTable.create"/>
                         <button action="competencesTable.edit"/>
@@ -198,7 +234,7 @@
                  caption="msg://Course.description"
                  margin="true,true,true,false">
                 <richTextArea id="richTextArea"
-                              datasource="courseDs"
+                              dataContainer="courseDc"
                               height="100%"
                               property="description"
                               width="100%"/>
@@ -208,14 +244,18 @@
                  expand="feedbackTemplatesTable"
                  margin="true,true,true,false">
                 <table id="feedbackTemplatesTable"
+                       dataContainer="feedbackTemplatesDc"
                        width="100%">
                     <actions>
                         <action id="create"
+                                type="create"
                                 caption="mainMsg://table.btn.empty"
                                 icon="icons/plus-btn.png"/>
                         <action id="edit"
+                                type="edit"
                                 caption="mainMsg://table.btn.empty"/>
                         <action id="remove"
+                                type="remove"
                                 caption="mainMsg://table.btn.empty"/>
                     </actions>
                     <columns>
@@ -223,7 +263,7 @@
                         <column id="startDate"/>
                         <column id="endDate"/>
                     </columns>
-                    <rows datasource="feedbackTemplatesDs"/>
+                    <rows/>
                     <rowsCount/>
                     <buttonsPanel>
                         <button action="feedbackTemplatesTable.create"/>
@@ -232,8 +272,87 @@
                     </buttonsPanel>
                 </table>
             </tab>
+            <tab id="enrollments"
+                 caption="msg://kz.uco.tsadv.modules.learning.model/Course.enrollments"
+                 spacing="true"
+                 expand="enrollmentsTable"
+                 margin="true,false,false,false">
+                <filter id="filter"
+                        applyTo="enrollmentsTable"
+                        dataLoader="enrollmentDl">
+                    <properties include=".*"/>
+                </filter>
+                <dataGrid id="enrollmentsTable"
+                          selectionMode="MULTI_CHECK"
+                          height="100%"
+                          dataContainer="enrollmentDc"
+                          width="100%">
+                    <actions>
+                        <action id="create"
+                                type="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                type="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                type="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column property="personGroup"/>
+                        <column property="personGroup.currentAssignment.organizationGroup.organization.organizationName"
+                                caption="mainMsg://organizationName"/>
+                        <column property="personGroup.currentAssignment.positionGroup"/>
+                        <column property="personGroup.currentAssignment.jobGroup"/>
+                        <column property="personGroup.currentAssignment.gradeGroup"/>
+                        <column property="courseSchedule"/>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button action="enrollmentsTable.create"/>
+                        <button action="enrollmentsTable.edit"/>
+                        <button action="enrollmentsTable.remove"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </tab>
+            <tab id="trainers"
+                 caption="msg://kz.uco.tsadv.modules.learning.model/CourseSectionSession.trainer"
+                 expand="trainersTable"
+                 margin="true,true,true,false">
+                <table id="trainersTable"
+                       dataContainer="trainerDc"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                type="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                type="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                type="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="trainer.employee" caption="msg://menu-config.tsadv$Trainer.browse"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                    </columns>
+                    <rows/>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button action="trainersTable.create"/>
+                        <button action="trainersTable.edit"/>
+                        <button action="trainersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
         </tabSheet>
-        <frame id="windowActions"
-               screen="editWindowActions"/>
+        <hbox id="windowActions" spacing="true" width="AUTO">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>

@@ -672,4 +672,30 @@
             <param name="trainerId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="tsadv_IntegrationRestService">
+        <method name="createOrUpdateOrganization">
+            <param name="organizationData" type="kz.uco.tsadv.modules.integration.jsonobject.OrganizationDataJson"/>
+        </method>
+        <method name="deleteOrganization">
+            <param name="organizationData" type="kz.uco.tsadv.modules.integration.jsonobject.OrganizationDataJson"/>
+        </method>
+        <method name="createOrUpdateJob">
+            <param name="jobData" type="kz.uco.tsadv.modules.integration.jsonobject.JobDataJson"/>
+        </method>
+        <method name="deleteJob">
+            <param name="jobData" type="kz.uco.tsadv.modules.integration.jsonobject.JobDataJson"/>
+        </method>
+        <method name="deletePosition">
+            <param name="positionData" type="kz.uco.tsadv.modules.integration.jsonobject.PositionDataJson"/>
+        </method>
+        <method name="createOrUpdatePosition">
+            <param name="positionData" type="kz.uco.tsadv.modules.integration.jsonobject.PositionDataJson"/>
+        </method>
+        <method name="createOrUpdatePerson">
+            <param name="personData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDataJson"/>
+        </method>
+        <method name="deletePerson">
+            <param name="personData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDataJson"/>
+        </method>
+    </service>
 </services>

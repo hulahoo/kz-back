@@ -44,7 +44,7 @@
                                      caption="msg://selectGoal"
                                      optionsContainer="goalDc"
                                      enable="false"/>
-                        <textField id="goalStringField" property="goalString" caption="msg://goalEdit"/>
+                        <textField id="goalStringField" property="goalString" maxLength="5" caption="msg://goalEdit"/>
                         <textField id="weightField" property="weight" required="true"/>
                         <textField id="resultField" property="result"/>
                     </column>

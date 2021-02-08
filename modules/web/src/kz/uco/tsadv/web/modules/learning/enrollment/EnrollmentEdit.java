@@ -37,7 +37,7 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
         super.postInit();
 
         initReasonField(statusField.getValue());
-        initVisibleComponent(courseField.getValue());
+//        initVisibleComponent(courseField.getValue());
     }
 
     @Override

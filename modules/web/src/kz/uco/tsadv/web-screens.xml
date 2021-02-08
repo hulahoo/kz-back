@@ -302,10 +302,10 @@
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicmonth/dic-month-browse.xml"/>
     <screen id="tsadv$DicMonth.edit"
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicmonth/dic-month-edit.xml"/>
-    <screen id="tsadv$Course.edit"
-            template="/kz/uco/tsadv/web/modules/learning/course/course-edit.xml"/>
-    <screen id="tsadv$Course.browse"
-            template="/kz/uco/tsadv/web/modules/learning/course/course-browse.xml"/>
+<!--    <screen id="tsadv$Course.edit"-->
+    <!--            template="/kz/uco/tsadv/web/modules/learning/course/course-edit.xml"/>-->
+<!--    <screen id="tsadv$Course.browse"-->
+    <!--            template="/kz/uco/tsadv/web/modules/learning/course/course-browse.xml"/>-->
     <screen id="tsadv$CourseSectionObject.edit"
             template="/kz/uco/tsadv/web/modules/learning/coursesectionobject/course-section-object-edit.xml"/>
     <screen id="tsadv$Enrollment.browse"

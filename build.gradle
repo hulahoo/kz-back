@@ -3,6 +3,13 @@ buildscript {
     repositories {
         mavenLocal()
         maven {
+            url 'https://repo.cuba-platform.com/content/groups/work'
+            credentials {
+                username('cuba')
+                password('cuba123')
+            }
+        }
+        maven {
             url 'http://apps.uco.kz/nexus/content/groups/uco-group/'
             credentials {
                 username('uco')
@@ -29,7 +36,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'kz.uco.tsadv'
-        version = "2.0.36"
+        version = "2.0.43"
         isSnapshot = true
     }
     tomcat {

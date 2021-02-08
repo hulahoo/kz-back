@@ -196,6 +196,7 @@
                             <column id="totalAmountFieldPerson" property="totalAmount"/>
                             <column id="exclusionDateFieldPerson" property="exclusionDate"/>
                             <column id="commentFieldPerson" property="comment"/>
+                            <column id="statementFileField" property="statementFile" caption="Файл"/>
                         </columns>
                         <rowsCount/>
                         <buttonsPanel id="buttonsPanel"
@@ -214,7 +215,7 @@
         </scrollBox>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
-            <button id="commitBtn" action="windowCommit" caption="Сохранить"/>
+            <button id="commitBtn" action="windowCommit" caption="msg://save"/>
             <button id="closeBtn" action="windowClose"/>
         </hbox>
     </layout>

@@ -110,6 +110,339 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     @ManyToMany
     private List<FileDescriptor> attachments;
 
+    @Column(name = "COMMITMENTS_FROM_PREV_JOB")
+    protected String commitmentsFromPrevJob;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> commitmentsAttachments;
+
+    @Column(name = "COMMITMENTS_LOAN")
+    protected Boolean commitmentsLoan;
+
+    @Column(name = "COMMITMENTS_CREDIT")
+    protected Boolean commitmentsCredit;
+
+    @Column(name = "COMMITMENTS_NOT_SUR_MAT_VALUES")
+    protected Boolean commitmentsNotSurMatValues;
+
+    @Column(name = "HAVE_NDA")
+    protected String haveNDA;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> ndaAttachments;
+
+    @Column(name = "REASON_FOR_DISMISSAL")
+    protected String reasonForDismissal;
+
+    @Column(name = "PREV_JOB_HR")
+    protected String prevJobHr;
+
+    @Column(name = "HAVE_CONVICTION")
+    protected String haveConviction;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> convictionAttachments;
+
+    @Column(name = "REGISTERED_DISPENSARY")
+    protected String registeredDispensary;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> dispensaryAttachments;
+
+    @Column(name = "DISPENSARY_PERIOD")
+    protected String dispensaryPeriod;
+
+    @Column(name = "DISABILITY")
+    protected String disability;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> disabilityAttachments;
+
+    @Column(name = "DISABILITY_GROUP")
+    protected String disabilityGroup;
+
+    @Column(name = "CONTRAINDICATIONS_HEALTH")
+    protected String contraindicationsHealth;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> contraindicationsHealthAttachments;
+
+    @Column(name = "CONTRAINDICATIONS_HEALTH_TEXT")
+    protected String contraindicationsHealthText;
+
+    @Column(name = "CHILD_UNDER18_WITHOUT_FATHER_OR_MOTHER")
+    protected String childUnder18WithoutFatherOrMother;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> childUnder18WithoutFatherOrMotherAttachments;
+
+    @Column(name = "CHILD_UNDER14_WITHOUT_FATHER_OR_MOTHER")
+    protected String childUnder14WithoutFatherOrMother;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> childUnder14WithoutFatherOrMotherAttachments;
+
+    @Column(name = "CRIMINAL_ADMINISTRATIVE_LIABILITY")
+    protected String criminalAdministrativeLiability;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_PERSON_EXT_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "PERSON_EXT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> criminalAdministrativeLiabilityAttachments;
+
+    @Column(name = "CRIMINAL_ADMINISTRATIVE_LIABILITY_PERIOID_REASON")
+    protected String criminalAdministrativeLiabilityPerioidReason;
+
+    public String getCriminalAdministrativeLiabilityPerioidReason() {
+        return criminalAdministrativeLiabilityPerioidReason;
+    }
+
+    public void setCriminalAdministrativeLiabilityPerioidReason(String criminalAdministrativeLiabilityPerioidReason) {
+        this.criminalAdministrativeLiabilityPerioidReason = criminalAdministrativeLiabilityPerioidReason;
+    }
+
+    public void setCommitmentsFromPrevJob(YesNoEnum commitmentsFromPrevJob) {
+        this.commitmentsFromPrevJob = commitmentsFromPrevJob == null ? null : commitmentsFromPrevJob.getId();
+    }
+
+    public YesNoEnum getCommitmentsFromPrevJob() {
+        return commitmentsFromPrevJob == null ? null : YesNoEnum.fromId(commitmentsFromPrevJob);
+    }
+
+    public List<FileDescriptor> getCriminalAdministrativeLiabilityAttachments() {
+        return criminalAdministrativeLiabilityAttachments;
+    }
+
+    public void setCriminalAdministrativeLiabilityAttachments(List<FileDescriptor> criminalAdministrativeLiabilityAttachments) {
+        this.criminalAdministrativeLiabilityAttachments = criminalAdministrativeLiabilityAttachments;
+    }
+
+    public YesNoEnum getCriminalAdministrativeLiability() {
+        return criminalAdministrativeLiability == null ? null : YesNoEnum.fromId(criminalAdministrativeLiability);
+    }
+
+    public void setCriminalAdministrativeLiability(YesNoEnum criminalAdministrativeLiability) {
+        this.criminalAdministrativeLiability = criminalAdministrativeLiability == null ? null : criminalAdministrativeLiability.getId();
+    }
+
+    public List<FileDescriptor> getChildUnder14WithoutFatherOrMotherAttachments() {
+        return childUnder14WithoutFatherOrMotherAttachments;
+    }
+
+    public void setChildUnder14WithoutFatherOrMotherAttachments(List<FileDescriptor> childUnder14WithoutFatherOrMotherAttachments) {
+        this.childUnder14WithoutFatherOrMotherAttachments = childUnder14WithoutFatherOrMotherAttachments;
+    }
+
+    public YesNoEnum getChildUnder14WithoutFatherOrMother() {
+        return childUnder14WithoutFatherOrMother == null ? null : YesNoEnum.fromId(childUnder14WithoutFatherOrMother);
+    }
+
+    public void setChildUnder14WithoutFatherOrMother(YesNoEnum childUnder14WithoutFatherOrMother) {
+        this.childUnder14WithoutFatherOrMother = childUnder14WithoutFatherOrMother == null ? null : childUnder14WithoutFatherOrMother.getId();
+    }
+
+    public List<FileDescriptor> getChildUnder18WithoutFatherOrMotherAttachments() {
+        return childUnder18WithoutFatherOrMotherAttachments;
+    }
+
+    public void setChildUnder18WithoutFatherOrMotherAttachments(List<FileDescriptor> childUnder18WithoutFatherOrMotherAttachments) {
+        this.childUnder18WithoutFatherOrMotherAttachments = childUnder18WithoutFatherOrMotherAttachments;
+    }
+
+    public YesNoEnum getChildUnder18WithoutFatherOrMother() {
+        return childUnder18WithoutFatherOrMother == null ? null : YesNoEnum.fromId(childUnder18WithoutFatherOrMother);
+    }
+
+    public void setChildUnder18WithoutFatherOrMother(YesNoEnum childUnder18WithoutFatherOrMother) {
+        this.childUnder18WithoutFatherOrMother = childUnder18WithoutFatherOrMother == null ? null : childUnder18WithoutFatherOrMother.getId();
+    }
+
+    public String getContraindicationsHealthText() {
+        return contraindicationsHealthText;
+    }
+
+    public void setContraindicationsHealthText(String contraindicationsHealthText) {
+        this.contraindicationsHealthText = contraindicationsHealthText;
+    }
+
+    public List<FileDescriptor> getContraindicationsHealthAttachments() {
+        return contraindicationsHealthAttachments;
+    }
+
+    public void setContraindicationsHealthAttachments(List<FileDescriptor> contraindicationsHealthAttachments) {
+        this.contraindicationsHealthAttachments = contraindicationsHealthAttachments;
+    }
+
+    public YesNoEnum getContraindicationsHealth() {
+        return contraindicationsHealth == null ? null : YesNoEnum.fromId(contraindicationsHealth);
+    }
+
+    public void setContraindicationsHealth(YesNoEnum contraindicationsHealth) {
+        this.contraindicationsHealth = contraindicationsHealth == null ? null : contraindicationsHealth.getId();
+    }
+
+    public String getDisabilityGroup() {
+        return disabilityGroup;
+    }
+
+    public void setDisabilityGroup(String disabilityGroup) {
+        this.disabilityGroup = disabilityGroup;
+    }
+
+    public List<FileDescriptor> getDisabilityAttachments() {
+        return disabilityAttachments;
+    }
+
+    public void setDisabilityAttachments(List<FileDescriptor> disabilityAttachments) {
+        this.disabilityAttachments = disabilityAttachments;
+    }
+
+    public YesNoEnum getDisability() {
+        return disability == null ? null : YesNoEnum.fromId(disability);
+    }
+
+    public void setDisability(YesNoEnum disability) {
+        this.disability = disability == null ? null : disability.getId();
+    }
+
+    public String getDispensaryPeriod() {
+        return dispensaryPeriod;
+    }
+
+    public void setDispensaryPeriod(String dispensaryPeriod) {
+        this.dispensaryPeriod = dispensaryPeriod;
+    }
+
+    public List<FileDescriptor> getDispensaryAttachments() {
+        return dispensaryAttachments;
+    }
+
+    public void setDispensaryAttachments(List<FileDescriptor> dispensaryAttachments) {
+        this.dispensaryAttachments = dispensaryAttachments;
+    }
+
+    public YesNoEnum getRegisteredDispensary() {
+        return registeredDispensary == null ? null : YesNoEnum.fromId(registeredDispensary);
+    }
+
+    public void setRegisteredDispensary(YesNoEnum registeredDispensary) {
+        this.registeredDispensary = registeredDispensary == null ? null : registeredDispensary.getId();
+    }
+
+    public List<FileDescriptor> getConvictionAttachments() {
+        return convictionAttachments;
+    }
+
+    public void setConvictionAttachments(List<FileDescriptor> convictionAttachments) {
+        this.convictionAttachments = convictionAttachments;
+    }
+
+    public YesNoEnum getHaveConviction() {
+        return haveConviction == null ? null : YesNoEnum.fromId(haveConviction);
+    }
+
+    public void setHaveConviction(YesNoEnum haveConviction) {
+        this.haveConviction = haveConviction == null ? null : haveConviction.getId();
+    }
+
+    public String getPrevJobHr() {
+        return prevJobHr;
+    }
+
+    public void setPrevJobHr(String prevJobHr) {
+        this.prevJobHr = prevJobHr;
+    }
+
+    public String getReasonForDismissal() {
+        return reasonForDismissal;
+    }
+
+    public void setReasonForDismissal(String reasonForDismissal) {
+        this.reasonForDismissal = reasonForDismissal;
+    }
+
+    public List<FileDescriptor> getNdaAttachments() {
+        return ndaAttachments;
+    }
+
+    public void setNdaAttachments(List<FileDescriptor> ndaAttachments) {
+        this.ndaAttachments = ndaAttachments;
+    }
+
+    public YesNoEnum getHaveNDA() {
+        return haveNDA == null ? null : YesNoEnum.fromId(haveNDA);
+    }
+
+    public void setHaveNDA(YesNoEnum haveNDA) {
+        this.haveNDA = haveNDA == null ? null : haveNDA.getId();
+    }
+
+    public Boolean getCommitmentsNotSurMatValues() {
+        return commitmentsNotSurMatValues;
+    }
+
+    public void setCommitmentsNotSurMatValues(Boolean commitmentsNotSurMatValues) {
+        this.commitmentsNotSurMatValues = commitmentsNotSurMatValues;
+    }
+
+    public Boolean getCommitmentsCredit() {
+        return commitmentsCredit;
+    }
+
+    public void setCommitmentsCredit(Boolean commitmentsCredit) {
+        this.commitmentsCredit = commitmentsCredit;
+    }
+
+    public Boolean getCommitmentsLoan() {
+        return commitmentsLoan;
+    }
+
+    public void setCommitmentsLoan(Boolean commitmentsLoan) {
+        this.commitmentsLoan = commitmentsLoan;
+    }
+
+    public List<FileDescriptor> getCommitmentsAttachments() {
+        return commitmentsAttachments;
+    }
+
+    public void setCommitmentsAttachments(List<FileDescriptor> commitmentsAttachments) {
+        this.commitmentsAttachments = commitmentsAttachments;
+    }
+
     public void setPrevJobObligation(YesNoEnum prevJobObligation) {
         this.prevJobObligation = prevJobObligation == null ? null : prevJobObligation.getId();
     }

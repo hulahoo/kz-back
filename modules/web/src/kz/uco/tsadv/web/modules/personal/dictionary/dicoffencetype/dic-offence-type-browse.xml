@@ -8,7 +8,7 @@
     <dsContext>
         <groupDatasource id="dicOffenceTypesDs"
                          class="kz.uco.tsadv.modules.personal.dictionary.DicOffenceType"
-                         view="_base">
+                         view="dicOffenceType-browse">
             <query>
                 <![CDATA[select e from tsadv$DicOffenceType e]]>
             </query>

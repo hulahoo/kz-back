@@ -8,6 +8,13 @@
         <datasource id="enrollmentDs"
                     class="kz.uco.tsadv.modules.learning.model.Enrollment"
                     view="enrollment-view"/>
+        <collectionDatasource id="courseScheduleDs"
+                              class="kz.uco.tsadv.modules.learning.model.CourseSchedule"
+                              view="courseSchedule.edit">
+            <query>
+                <![CDATA[select e from tsadv_CourseSchedule e where e.course = :ds$enrollmentDs.course]]>
+            </query>
+        </collectionDatasource>
     </dsContext>
     <dialogMode height="AUTO"
                 width="AUTO"/>
@@ -16,12 +23,11 @@
         <fieldGroup id="fieldGroup"
                     datasource="enrollmentDs">
             <column width="350px">
-                <field id="course"
-                       property="course" captionProperty="name"/>
-                <field property="personGroup" captionProperty="personFioWithEmployeeNumber"/>
+                <field property="personGroup" captionProperty="personFioWithEmployeeNumber" editable="false"/>
                 <field property="date"/>
                 <field property="status"/>
                 <field property="reasonForLearning"/>
+                <field property="courseSchedule" required="true" optionsDatasource="courseScheduleDs"/>
                 <field id="reason" property="reason">
                     <textArea id="reasonTextArea" datasource="enrollmentDs" property="reason" maxLength="1000"/>
                 </field>

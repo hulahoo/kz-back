@@ -1,35 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://Course.browseCaption"
-        class="kz.uco.tsadv.web.modules.learning.course.CourseBrowse"
         focusComponent="coursesTable"
-        lookupComponent="coursesTable"
         messagesPack="kz.uco.tsadv.web.modules.learning.course">
-    <dsContext>
-        <groupDatasource id="coursesDs"
-                         class="kz.uco.tsadv.modules.learning.model.Course"
-                         view="course.browse">
-            <query>
-                <![CDATA[select e from tsadv$Course e]]>
-            </query>
-        </groupDatasource>
-    </dsContext>
+    <data>
+        <collection id="coursesDc"
+                    class="kz.uco.tsadv.modules.learning.model.Course"
+                    view="course.browse">
+            <loader id="coursesDl">
+                <query>
+                    <![CDATA[select e from tsadv$Course e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <layout expand="coursesTable"
             spacing="true">
         <filter id="filter"
                 applyTo="coursesTable"
-                datasource="coursesDs">
+                dataLoader="coursesDl">
             <properties include=".*"/>
         </filter>
+        0
         <groupTable id="coursesTable"
-                    width="100%">
+                    width="100%"
+                    dataContainer="coursesDc">
             <actions>
                 <action id="create"
+                        type="create"
                         caption="mainMsg://table.btn.empty"
                         icon="icons/plus-btn.png"/>
+                <action id="edit" type="edit"/>
                 <action id="remove"
+                        type="remove"
                         caption="mainMsg://table.btn.empty"/>
             </actions>
             <columns>
@@ -47,26 +52,18 @@
                 <column id="activeFlag"/>
                 <column id="selfEnrollment"/>
             </columns>
-            <rows datasource="coursesDs"/>
+            <rows/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn"
                         action="coursesTable.create"/>
                 <button id="editBtn"
-                invoke="editAction"
-                icon="icons/edit.png"
-                caption="mainMsg://table.btn.empty"/>
+                        icon="icons/edit.png"
+                        action="coursesTable.edit"
+                        caption="mainMsg://table.btn.empty"/>
                 <button id="removeBtn"
                         action="coursesTable.remove"/>
-                <button id="enrollmentsBtn"
-                        caption="msg://Course.enrollmentsBtn"
-                        icon="GROUP"
-                        invoke="createEnrollments"/>
-                <button id="resultsBtn"
-                        caption="msg://Course.results"
-                        icon="BAR_CHART"
-                        invoke="openResults"/>
             </buttonsPanel>
         </groupTable>
     </layout>
