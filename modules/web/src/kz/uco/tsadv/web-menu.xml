@@ -152,6 +152,7 @@
                   screen="base$OrganizationGroup.browse"/>
             <item id="hrPositionGroups"
                   screen="base$PositionGroup.browse"/>
+            <item screen="tsadv_DicChangeType.browse"/>
         </menu>
         <menu id="hrGradesAndRules"
               icon="font-icon:BALANCE_SCALE">
