@@ -3,8 +3,12 @@ package kz.uco.tsadv.service;
 import com.haulmont.addon.bproc.data.Outcome;
 import com.haulmont.addon.bproc.data.OutcomesContainer;
 import com.haulmont.addon.bproc.entity.HistoricVariableInstanceData;
+import com.haulmont.addon.bproc.entity.ProcessDefinitionData;
 import com.haulmont.addon.bproc.entity.ProcessInstanceData;
+import com.haulmont.addon.bproc.form.FormData;
+import com.haulmont.addon.bproc.service.BprocFormService;
 import com.haulmont.addon.bproc.service.BprocHistoricService;
+import com.haulmont.addon.bproc.service.BprocRepositoryService;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.EntityManager;
@@ -71,6 +75,10 @@ public class BprocServiceBean implements BprocService {
     protected String templateFolder = "classpath:kz/uco/tsadv/templates/";
     @Inject
     protected GlobalConfig globalConfig;
+    @Inject
+    protected BprocRepositoryService bprocRepositoryService;
+    @Inject
+    protected BprocFormService bprocFormService;
 
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
@@ -165,6 +173,18 @@ public class BprocServiceBean implements BprocService {
                 .singleResult();
     }
 
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @Override
+    public ExtTaskData getActiveTask(ProcessInstanceData processInstanceData) {
+        return getProcessTasks(processInstanceData)
+                .stream()
+                .filter(taskData -> taskData.getEndTime() == null)
+                .filter(taskData -> taskData.getAssigneeOrCandidates() != null)
+                .filter(taskData -> taskData.getAssigneeOrCandidates().contains(userSessionSource.getUserSession().getCurrentOrSubstitutedUser()))
+                .findAny()
+                .orElse(null);
+    }
+
     @Override
     public List<ExtTaskData> getProcessTasks(ProcessInstanceData processInstanceData) {
         List<ExtTaskData> tasks = new ArrayList<>();
@@ -227,6 +247,21 @@ public class BprocServiceBean implements BprocService {
                 .forEach(tasks::add);
 
         return tasks;
+    }
+
+    @Override
+    public ProcessDefinitionData getProcessDefinitionData(String processDefinitionKey) {
+        return bprocRepositoryService
+                .createProcessDefinitionDataQuery()
+                .processDefinitionKey(processDefinitionKey)
+                .active()
+                .latestVersion()
+                .singleResult();
+    }
+
+    @Override
+    public FormData getStartFormData(String processDefinitionKey) {
+        return bprocFormService.getStartFormData(getProcessDefinitionData(processDefinitionKey).getId());
     }
 
     protected ExtTaskData initInitiatorTask(ProcessInstanceData processInstanceData) {

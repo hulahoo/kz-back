@@ -98,5 +98,6 @@
         <class>kz.uco.tsadv.modules.administration.appproperty.ExtAppPropertyEntity</class>
         <class>kz.uco.tsadv.entity.bproc.ExtTaskData</class>
         <class>kz.uco.tsadv.modules.bpm.NotPersisitBprocActors</class>
+        <class>kz.uco.tsadv.entity.bproc.StartBprocParams</class>
     </metadata-model>
 </metadata>

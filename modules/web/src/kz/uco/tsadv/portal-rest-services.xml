@@ -10,8 +10,47 @@
             <param name="processInstanceBusinessKey" type="java.lang.String"/>
             <param name="processDefinitionKey" type="java.lang.String"/>
         </method>
+        <method name="getActiveTask">
+            <param name="processInstanceData" type="com.haulmont.addon.bproc.entity.ProcessInstanceData"/>
+        </method>
         <method name="getProcessTasks">
             <param name="processInstanceData" type="com.haulmont.addon.bproc.entity.ProcessInstanceData"/>
+        </method>
+        <method name="getProcessDefinitionData">
+            <param name="processDefinitionKey" type="java.lang.String"/>
+        </method>
+        <method name="getStartFormData">
+            <param name="processDefinitionKey" type="java.lang.String"/>
+        </method>
+    </service>
+    <service name="tsadv_StartBprocService">
+        <method name="getBpmRolesDefiner">
+            <param name="processDefinitionKey" type="java.lang.String"/>
+            <param name="initiatorPersonGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="getNotPersisitBprocActors">
+            <param name="employee" type="kz.uco.tsadv.modules.administration.TsadvUser"/>
+            <param name="initiatorPersonGroupId" type="java.util.UUID"/>
+            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
+        </method>
+        <method name="saveBprocActors">
+            <param name="entityId" type="java.util.UUID"/>
+            <param name="notPersisitBprocActors"/>
+        </method>
+    </service>
+    <service name="bproc_BprocRuntimeService">
+        <method name="startProcessInstanceByKey">
+            <param name="processDefinitionKey" type="java.lang.String"/>
+            <param name="businessKey" type="java.lang.String"/>
+            <param name="variables" type="java.util.Map"/>
+        </method>
+    </service>
+    <service name="bproc_BprocFormService">
+        <method name="getStartFormData">
+            <param name="processDefinitionId" type="java.lang.String"/>
+        </method>
+        <method name="getTaskFormData">
+            <param name="taskId" type="java.lang.String"/>
         </method>
     </service>
 </services>
