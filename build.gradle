@@ -12,11 +12,11 @@ buildscript {
         maven {
             url 'http://apps.uco.kz/nexus/content/groups/uco-group/'
             credentials {
-                username('uco')
-                password('!uco@')
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'uco')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : '!uco@')
             }
         }
-    }
+        }
     dependencies {
         classpath "com.haulmont.gradle:cuba-plugin:$cubaVersion"
     }
