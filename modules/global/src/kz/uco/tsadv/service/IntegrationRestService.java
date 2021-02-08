@@ -25,4 +25,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdateOrganizationHierarchyElement(HierarchyElementDataJson hierarchyElementData);
 
     BaseResult deleteOrganizationHierarchyElement(HierarchyElementDataJson hierarchyElementData);
+
+    BaseResult createOrUpdatePositionHierarchyElement(HierarchyElementDataJson hierarchyElementData);
+
+    BaseResult deletePositionHierarchyElement(HierarchyElementDataJson hierarchyElementData);
 }

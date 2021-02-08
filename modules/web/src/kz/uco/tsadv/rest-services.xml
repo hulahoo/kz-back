@@ -705,5 +705,13 @@
             <param name="hierarchyElementData"
                    type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
         </method>
+        <method name="createOrUpdatePositionHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
+        <method name="deletePositionHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
     </service>
 </services>

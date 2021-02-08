@@ -7,6 +7,16 @@ public class HierarchyElementDataJson implements Serializable {
 
     private ArrayList<HierarchyElementJson> organizationHierarchyElements;
 
+    private ArrayList<HierarchyElementJson> positionHierarchyElements;
+
+    public ArrayList<HierarchyElementJson> getPositionHierarchyElements() {
+        return positionHierarchyElements;
+    }
+
+    public void setPositionHierarchyElements(ArrayList<HierarchyElementJson> positionHierarchyElements) {
+        this.positionHierarchyElements = positionHierarchyElements;
+    }
+
     public ArrayList<HierarchyElementJson> getOrganizationHierarchyElements() {
         return organizationHierarchyElements;
     }

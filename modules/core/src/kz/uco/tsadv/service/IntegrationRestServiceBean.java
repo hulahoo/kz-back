@@ -14,6 +14,7 @@ import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
 import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
@@ -43,6 +44,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected RestIntegrationLogService restIntegrationLogService;
     @Inject
     protected Metadata metadata;
+    @Inject
+    protected PositionStructureConfig positionStructureConfig;
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     @Transactional
@@ -911,8 +914,219 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no hierarchy with legacyId and companyCode : "
                                     + hierarchyElementJson.getLegacyId() + " , " + hierarchyElementJson.getCompanyCode());
                 }
-                if (!hierarchyElementGroups.stream().filter(personGroupExt1 ->
-                        personGroupExt1.getId().equals(hierarchyElementGroup.getId())).findAny().isPresent()) {
+                if (!hierarchyElementGroups.stream().filter(hierarchyElementGroup1 ->
+                        hierarchyElementGroup1.getId().equals(hierarchyElementGroup.getId())).findAny().isPresent()) {
+                    hierarchyElementGroups.add(hierarchyElementGroup);
+                }
+
+            }
+            for (HierarchyElementGroup hierarchyElementGroup : hierarchyElementGroups) {
+                for (HierarchyElementExt hierarchyElementExt : hierarchyElementGroup.getList()) {
+                    entityManager.remove(hierarchyElementExt);
+                }
+                entityManager.remove(hierarchyElementGroup);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, hierarchyElementData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, hierarchyElementJsons);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePositionHierarchyElement(HierarchyElementDataJson hierarchyElementData) {
+        String methodName = "createOrUpdatePositionHierarchyElement";
+        ArrayList<HierarchyElementJson> positionHierarchyElementJsons = new ArrayList<>();
+        if (hierarchyElementData.getPositionHierarchyElements() != null) {
+            positionHierarchyElementJsons = hierarchyElementData.getPositionHierarchyElements();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            List<HierarchyElementGroup> positionHierarchyElementGroups = new ArrayList<>();
+            for (HierarchyElementJson positionHierarchyElementJson : positionHierarchyElementJsons) {
+                if (positionHierarchyElementJson.getLegacyId() == null
+                        || positionHierarchyElementJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, positionHierarchyElementJsons,
+                            "no legacyId ");
+                }
+                if (positionHierarchyElementJson.getCompanyCode() == null
+                        || positionHierarchyElementJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, positionHierarchyElementJsons,
+                            "no companyCode");
+                }
+                HierarchyElementGroup positionHierarchyElementGroup = positionHierarchyElementGroups.stream().filter(
+                        hierarchyElementGroup1 ->
+                                hierarchyElementGroup1.getList() != null
+                                        && hierarchyElementGroup1.getList().stream().anyMatch(hierarchyElementExt1 ->
+                                        hierarchyElementExt1.getPositionGroup() != null
+                                                && hierarchyElementExt1.getPositionGroup().getList() != null
+                                                && hierarchyElementExt1.getPositionGroup().getList().stream()
+                                                .anyMatch(positionExt -> positionExt.getOrganizationGroupExt() != null
+                                                        && positionExt.getOrganizationGroupExt().getCompany() != null
+                                                        && positionExt.getOrganizationGroupExt().getCompany()
+                                                        .getLegacyId() != null
+                                                        && positionExt.getOrganizationGroupExt().getCompany()
+                                                        .getLegacyId()
+                                                        .equals(positionHierarchyElementJson.getCompanyCode())))
+                                        && hierarchyElementGroup1.getLegacyId() != null
+                                        && hierarchyElementGroup1.getLegacyId()
+                                        .equals(positionHierarchyElementJson.getLegacyId()))
+                        .findFirst().orElse(null);
+                if (positionHierarchyElementGroup == null) {
+                    positionHierarchyElementGroup = dataManager.load(HierarchyElementGroup.class)
+                            .query("select e.group from base$HierarchyElementExt e " +
+                                    " where e.legacyId = :legacyId and e.positionGroup.id in " +
+                                    " (select p.group.id from base$PositionExt p " +
+                                    " where p.organizationGroupExt.company.legacyId = :company) ")
+                            .setParameters(ParamsMap.of("legacyId", positionHierarchyElementJson.getLegacyId(),
+                                    "company", positionHierarchyElementJson.getCompanyCode()))
+                            .view("hierarchyElementGroup-for-integration-rest").list().stream().findFirst().orElse(null);
+                    if (positionHierarchyElementGroup != null) {
+                        for (HierarchyElementExt hierarchyElementExt : positionHierarchyElementGroup.getList()) {
+                            commitContext.addInstanceToRemove(hierarchyElementExt);
+                        }
+                        positionHierarchyElementGroup.getList().clear();
+                        positionHierarchyElementGroups.add(positionHierarchyElementGroup);
+                    }
+                }
+                if (positionHierarchyElementGroup == null) {
+                    positionHierarchyElementGroup = metadata.create(HierarchyElementGroup.class);
+                    positionHierarchyElementGroup.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                    positionHierarchyElementGroup.setId(UUID.randomUUID());
+                    positionHierarchyElementGroup.setList(new ArrayList<>());
+                    positionHierarchyElementGroups.add(positionHierarchyElementGroup);
+                }
+                HierarchyElementExt hierarchyElementExt = metadata.create(HierarchyElementExt.class);
+                PositionGroupExt subordinatePositionGroupExt = null;
+                if (positionHierarchyElementJson.getSubordinatePositionId() != null &&
+                        !positionHierarchyElementJson.getSubordinatePositionId().isEmpty()) {
+                    subordinatePositionGroupExt = dataManager.load(PositionGroupExt.class).query(
+                            "select e from base$PositionGroupExt e " +
+                                    " where e.legacyId = :legacyId and e.id in " +
+                                    " (select p.group.id from base$PositionExt p " +
+                                    " where p.organizationGroupExt.company.legacyId = :companyCode)")
+                            .setParameters(ParamsMap.of("companyCode"
+                                    , positionHierarchyElementJson.getCompanyCode()
+                                    , "legacyId", positionHierarchyElementJson.getSubordinatePositionId()))
+                            .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    hierarchyElementExt.setPositionGroup(subordinatePositionGroupExt);
+                }
+                if (subordinatePositionGroupExt == null) {
+                    return prepareError(result, methodName, positionHierarchyElementJsons,
+                            "not found subordinatePosition with legacyId = " +
+                                    positionHierarchyElementJson.getSubordinatePositionId());
+                }
+                UUID positionStructureId = positionStructureConfig.getPositionStructureId();
+                if (positionStructureId == null) {
+                    return prepareError(result, methodName, positionHierarchyElementJsons,
+                            "set property tal.selfService.positionStructureId for posiiton structure");
+                }
+                Hierarchy hierarchy = null;
+                hierarchy = dataManager.load(Hierarchy.class).query(
+                        "select e from base$Hierarchy e " +
+                                " where e.id = :positionStructureId")
+                        .parameter("positionStructureId", positionStructureId)
+                        .view("hierarchy.view").list().stream().findFirst().orElse(null);
+                hierarchyElementExt.setHierarchy(hierarchy);
+                HierarchyElementExt parent = null;
+                if (positionHierarchyElementJson.getParentPositionId() != null
+                        && !positionHierarchyElementJson.getParentPositionId().isEmpty()) {
+                    parent = dataManager.load(HierarchyElementExt.class).query(
+                            "select e from base$HierarchyElementExt e " +
+                                    " where e.positionGroup.legacyId = :legacyId " +
+                                    " and e.positionGroup.id in " +
+                                    " (select p.group.id from base$PositionExt p " +
+                                    " where  p.organizationGroupExt.company.legacyId = :companyCode) ")
+                            .setParameters(ParamsMap.of("legacyId"
+                                    , positionHierarchyElementJson.getParentPositionId()
+                                    , "companyCode", positionHierarchyElementJson.getCompanyCode()))
+                            .view("hierarchyElementExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    hierarchyElementExt.setParent(parent);
+                    hierarchyElementExt.setParentGroup(parent != null ? parent.getGroup() : null);
+                }
+                hierarchyElementExt.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                hierarchyElementExt.setStartDate(positionHierarchyElementJson.getStartDate() != null
+                        ? formatter.parse(positionHierarchyElementJson.getStartDate()) : null);
+                hierarchyElementExt.setEndDate(positionHierarchyElementJson.getEndDate() != null
+                        ? formatter.parse(positionHierarchyElementJson.getEndDate()) : null);
+                hierarchyElementExt.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                hierarchyElementExt.setGroup(positionHierarchyElementGroup);
+                hierarchyElementExt.setWriteHistory(false);
+                hierarchyElementExt.setElementType(ElementType.POSITION);
+                positionHierarchyElementGroup.getList().add(hierarchyElementExt);
+            }
+            for (HierarchyElementGroup hierarchyElementGroup : positionHierarchyElementGroups) {
+                commitContext.addInstanceToCommit(hierarchyElementGroup);
+                for (HierarchyElementExt hierarchyElementExt : hierarchyElementGroup.getList()) {
+                    HierarchyElementJson foundHierarchyElementJson = positionHierarchyElementJsons.stream()
+                            .filter(hierarchyElementJson ->
+                                    hierarchyElementJson.getLegacyId().equals(hierarchyElementExt.getLegacyId())
+                                            && hierarchyElementExt.getPositionGroup().getList().stream()
+                                            .anyMatch(positionExt -> positionExt.getOrganizationGroupExt().getCompany()
+                                                    .getLegacyId().equals(hierarchyElementJson.getCompanyCode())))
+                            .findFirst().orElse(null);
+                    positionHierarchyElementGroups.forEach(hierarchyElementGroup1 ->
+                            hierarchyElementGroup1.getList().forEach(hierarchyElementExt1 -> {
+                                if (hierarchyElementExt1.getPositionGroup().getList().stream()
+                                        .anyMatch(positionExt -> positionExt.getOrganizationGroupExt().getCompany()
+                                                .getLegacyId().equals(foundHierarchyElementJson.getCompanyCode()))
+                                        && hierarchyElementExt1.getPositionGroup().getLegacyId()
+                                        .equals(foundHierarchyElementJson.getParentPositionId())) {
+                                    hierarchyElementExt.setParent(hierarchyElementExt1);
+                                    hierarchyElementExt.setParentGroup(hierarchyElementGroup);
+                                }
+                            }));
+                    commitContext.addInstanceToCommit(hierarchyElementExt);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, positionHierarchyElementJsons, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, positionHierarchyElementJsons);
+    }
+
+    @Override
+    public BaseResult deletePositionHierarchyElement(HierarchyElementDataJson hierarchyElementData) {
+        String methodName = "deletePositionHierarchyElement";
+        BaseResult result = new BaseResult();
+        ArrayList<HierarchyElementJson> hierarchyElementJsons = new ArrayList<>();
+        if (hierarchyElementData.getPositionHierarchyElements() != null) {
+            hierarchyElementJsons = hierarchyElementData.getPositionHierarchyElements();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<HierarchyElementGroup> hierarchyElementGroups = new ArrayList<>();
+            for (HierarchyElementJson hierarchyElementJson : hierarchyElementJsons) {
+                if (hierarchyElementJson.getLegacyId() == null || hierarchyElementJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, hierarchyElementJsons,
+                            "no legacyId ");
+                }
+                if (hierarchyElementJson.getCompanyCode() == null || hierarchyElementJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, hierarchyElementJsons,
+                            "no companyCode");
+                }
+                HierarchyElementGroup hierarchyElementGroup = dataManager.load(HierarchyElementGroup.class)
+                        .query("select e.group from base$HierarchyElementExt e " +
+                                " where e.legacyId = :legacyId and e.positionGroup.id in " +
+                                " (select p.group.id from base$PositionExt p " +
+                                " where p.organizationGroupExt.company.legacyId = :company)")
+                        .setParameters(ParamsMap.of("legacyId", hierarchyElementJson.getLegacyId(),
+                                "company", hierarchyElementJson.getCompanyCode()))
+                        .view("hierarchyElementGroup-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                if (hierarchyElementGroup == null) {
+                    return prepareError(result, methodName, hierarchyElementData,
+                            "no hierarchy with legacyId and companyCode : "
+                                    + hierarchyElementJson.getLegacyId() + " , " + hierarchyElementJson.getCompanyCode());
+                }
+                if (!hierarchyElementGroups.stream().filter(hierarchyElementGroup1 ->
+                        hierarchyElementGroup1.getId().equals(hierarchyElementGroup.getId())).findAny().isPresent()) {
                     hierarchyElementGroups.add(hierarchyElementGroup);
                 }
 

@@ -8,7 +8,11 @@ public class HierarchyElementJson implements Serializable {
 
     private String parentOrganizationId;
 
+    private String parentPositionId;
+
     private String subordinateOrganizationId;
+
+    private String subordinatePositionId;
 
     private String startDate;
 
@@ -22,6 +26,22 @@ public class HierarchyElementJson implements Serializable {
 
     public void setLegacyId(String legacyId) {
         this.legacyId = legacyId;
+    }
+
+    public String getParentPositionId() {
+        return parentPositionId;
+    }
+
+    public void setParentPositionId(String parentPositionId) {
+        this.parentPositionId = parentPositionId;
+    }
+
+    public String getSubordinatePositionId() {
+        return subordinatePositionId;
+    }
+
+    public void setSubordinatePositionId(String subordinatePositionId) {
+        this.subordinatePositionId = subordinatePositionId;
     }
 
     public String getParentOrganizationId() {
