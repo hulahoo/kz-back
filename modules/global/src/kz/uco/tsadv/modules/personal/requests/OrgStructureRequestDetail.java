@@ -1,7 +1,7 @@
 package kz.uco.tsadv.modules.personal.requests;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
-import kz.uco.tsadv.modules.personal.enums.ChangeType;
+import kz.uco.tsadv.modules.personal.dictionary.DicChangeType;
 import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -21,8 +21,9 @@ public class OrgStructureRequestDetail extends StandardEntity {
     protected OrgStructureRequest orgStructureRequest;
 
     @NotNull
-    @Column(name = "CHANGE_TYPE", nullable = false)
-    protected String changeType;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "CHANGE_TYPE_ID")
+    protected DicChangeType changeType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CURRENT_ORGANIZATION_GROUP_ID")
@@ -103,6 +104,14 @@ public class OrgStructureRequestDetail extends StandardEntity {
 
     @Column(name = "DIFFERENCE_MONTHLY_TOTAL_PAYROLL")
     protected BigDecimal differenceMonthlyTotalPayroll;
+
+    public void setChangeType(DicChangeType changeType) {
+        this.changeType = changeType;
+    }
+
+    public DicChangeType getChangeType() {
+        return changeType;
+    }
 
     public OrgStructureRequest getOrgStructureRequest() {
         return orgStructureRequest;
@@ -304,11 +313,4 @@ public class OrgStructureRequestDetail extends StandardEntity {
         this.currentOrganizationGroup = currentOrganizationGroup;
     }
 
-    public ChangeType getChangeType() {
-        return changeType == null ? null : ChangeType.fromId(changeType);
-    }
-
-    public void setChangeType(ChangeType changeType) {
-        this.changeType = changeType == null ? null : changeType.getId();
-    }
 }
