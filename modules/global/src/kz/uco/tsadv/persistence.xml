@@ -625,5 +625,6 @@
         <class>kz.uco.tsadv.modules.personal.model.AbsenceForRecall</class>
         <class>kz.uco.tsadv.modules.personal.requests.OrgStructureRequest</class>
         <class>kz.uco.tsadv.modules.personal.requests.OrgStructureRequestDetail</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicChangeType</class>
     </persistence-unit>
 </persistence>

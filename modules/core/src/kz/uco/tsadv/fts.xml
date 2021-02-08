@@ -1885,5 +1885,8 @@
         <entity class="kz.uco.tsadv.modules.personal.requests.OrgStructureRequestDetail">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicChangeType">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
