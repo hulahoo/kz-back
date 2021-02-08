@@ -29,6 +29,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.components.GroupsComponent;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
+import kz.uco.tsadv.entity.bproc.StartBprocParams;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.service.BprocService;
 import kz.uco.tsadv.service.EmployeeNumberService;
@@ -273,25 +274,26 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     protected void startProcess(Action.ActionPerformedEvent event) {
         if (!OperationResult.Status.SUCCESS.equals(commitChanges().getStatus())) return;
 
-        ProcessDefinitionData processDefinitionData = bprocRepositoryService
-                .createProcessDefinitionDataQuery()
-                .processDefinitionKey(getProcDefinitionKey())
-                .active()
-                .latestVersion()
-                .singleResult();
+        ProcessDefinitionData processDefinitionData = bprocService.getProcessDefinitionData(getProcDefinitionKey());
 
         Screen startProcessForm = this.processFormScreens.createStartProcessForm(processDefinitionData, this);
         if (startProcessForm instanceof StartBprocScreen) {
-            ((StartBprocScreen) startProcessForm).setEntity(getEditedEntity());
-            ((StartBprocScreen) startProcessForm).setPersonGroupId(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
-            ((StartBprocScreen) startProcessForm).setEmployee(getEmployee());
-            ((StartBprocScreen) startProcessForm).setProcessVariableSupplier(this::getProcessVariables);
+            ((StartBprocScreen) startProcessForm).setStartBprocParams(initStartBprocParams());
         }
         startProcessForm.addAfterCloseListener(afterCloseEvent -> {
             if (afterCloseEvent.getCloseAction().equals(WINDOW_COMMIT_AND_CLOSE_ACTION))
                 closeWithDefaultAction();
         });
         startProcessForm.show();
+    }
+
+    protected StartBprocParams initStartBprocParams() {
+        StartBprocParams startBprocParams = metadata.create(StartBprocParams.class);
+        startBprocParams.setEmployee(getEmployee());
+        startBprocParams.setRequest(getEditedEntity());
+        startBprocParams.setInitiatorPersonGroupId(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
+        startBprocParams.setParams(getProcessVariables());
+        return startBprocParams;
     }
 
     @Nullable
@@ -337,7 +339,6 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         }
         return null;
     }
-
 
     @SuppressWarnings("UnstableApiUsage")
     public Component generateOutcome(ExtTaskData taskData) {

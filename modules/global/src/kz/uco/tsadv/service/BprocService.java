@@ -1,6 +1,8 @@
 package kz.uco.tsadv.service;
 
+import com.haulmont.addon.bproc.entity.ProcessDefinitionData;
 import com.haulmont.addon.bproc.entity.ProcessInstanceData;
+import com.haulmont.addon.bproc.form.FormData;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
@@ -34,11 +36,17 @@ public interface BprocService {
 
     ProcessInstanceData getProcessInstanceData(String processInstanceBusinessKey, String processDefinitionKey);
 
+    ExtTaskData getActiveTask(ProcessInstanceData processInstanceData);
+
     List<ExtTaskData> getProcessTasks(ProcessInstanceData processInstanceData);
+
+    ProcessDefinitionData getProcessDefinitionData(String processDefinitionKey);
+
+    FormData getStartFormData(String processDefinitionKey);
 
     <T extends AbstractBprocRequest> void sendNotificationAndActivity(T entity, User user, ActivityType activityType, String notificationTemplateCode);
 
-    List<? extends User> getActors(UUID bprocRequestId, String bprocUserTaskCode,String viewName);
+    List<? extends User> getActors(UUID bprocRequestId, String bprocUserTaskCode, String viewName);
 
     void approveAbsence(AbsenceRequest absenceRequest);
 

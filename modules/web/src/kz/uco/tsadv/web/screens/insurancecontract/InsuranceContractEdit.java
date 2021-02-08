@@ -171,16 +171,19 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
             createBtnPerson.setEnabled(false);
         }
     }
-//
+
+
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
         insuredPersonsDl.setParameter("insuranceContractId", insuranceContractDc.getItem().getId());
         insuredPersonsDl.load();
     }
 
+
     public void setParameter(boolean isCreateContract){
         this.isCreateContract = isCreateContract;
     }
+
 
     @Subscribe("contractAdministratorDataGrid.create")
     public void onContractAdministratorDataGridCreate(Action.ActionPerformedEvent event) {
@@ -192,9 +195,6 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
                 .build()
                 .show();
     }
-
-
-
 
 
     @Subscribe("insuredPersonsTable.edit")

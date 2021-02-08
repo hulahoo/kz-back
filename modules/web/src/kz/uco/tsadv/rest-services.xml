@@ -697,6 +697,22 @@
         <method name="deletePerson">
             <param name="personData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDataJson"/>
         </method>
+        <method name="createOrUpdateOrganizationHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
+        <method name="deleteOrganizationHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
+        <method name="createOrUpdatePositionHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
+        <method name="deletePositionHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
         <method name="createOrUpdateAssignment">
             <param name="assignmentDataJson" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentDataJson"/>
         </method>

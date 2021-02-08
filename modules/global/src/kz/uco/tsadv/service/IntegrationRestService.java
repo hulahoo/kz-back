@@ -22,6 +22,14 @@ public interface IntegrationRestService {
 
     BaseResult deletePerson(PersonDataJson personData);
 
+    BaseResult createOrUpdateOrganizationHierarchyElement(HierarchyElementDataJson hierarchyElementData);
+
+    BaseResult deleteOrganizationHierarchyElement(HierarchyElementDataJson hierarchyElementData);
+
+    BaseResult createOrUpdatePositionHierarchyElement(HierarchyElementDataJson hierarchyElementData);
+
+    BaseResult deletePositionHierarchyElement(HierarchyElementDataJson hierarchyElementData);
+
     BaseResult createOrUpdateAssignment(AssignmentDataJson assignmentDataJson);
 
     BaseResult deleteAssignment(AssignmentDataJson assignmentDataJson);
