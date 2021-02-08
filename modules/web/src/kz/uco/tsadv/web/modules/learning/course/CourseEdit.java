@@ -267,7 +267,7 @@ public class CourseEdit extends StandardEditor<Course> {
                             enrollment.setStatus(EnrollmentStatus.REQUEST);
                             enrollment.setDate(BaseCommonUtils.getSystemDate());
                             if (courseScheduleDc.getItems().size() == 1) {
-                                enrollment.setCourseSchedule(courseScheduleDc.getItem());
+                                enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
                             }
                             commitContext.addInstanceToCommit(enrollment);
                         }

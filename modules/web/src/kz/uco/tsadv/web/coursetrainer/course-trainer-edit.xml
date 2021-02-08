@@ -18,6 +18,7 @@
                     datasource="courseTrainerDs">
             <column width="250px">
                 <field property="course" captionProperty="name"/>
+                <field property="trainer"/>
                 <field property="dateFrom"/>
                 <field property="dateTo"/>
             </column>

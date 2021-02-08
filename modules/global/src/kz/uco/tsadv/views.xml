@@ -9734,17 +9734,13 @@
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Enrollment"
           name="enrollment-view">
-        <property name="course"
-                  view="_minimal">
-            <property name="category"
-                      view="_local"/>
+        <property name="course" view="_minimal">
+            <property name="category" view="_local"/>
             <property name="activeFlag"/>
             <property name="selfEnrollment"/>
         </property>
-        <property name="personGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
+        <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
@@ -9752,11 +9748,13 @@
         <property name="status"/>
         <property name="date"/>
         <property name="reason"/>
-        <property name="certificationEnrollment"
-                  view="_minimal"/>
+        <property name="certificationEnrollment" view="_minimal"/>
         <property name="moneyInBudget"/>
-        <property name="reasonForLearning"
-                  view="_local"/>
+        <property name="reasonForLearning" view="_local"/>
+        <property name="courseSchedule" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CertificationEnrollment"
           name="certificationEnrollment.schedule">
@@ -10103,6 +10101,22 @@
             <property name="certificationEnrollment" view="_minimal"/>
             <property name="moneyInBudget"/>
             <property name="reasonForLearning" view="_minimal"/>
+            <property name="courseSchedule" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="courseTrainers" view="_minimal">
+            <property name="trainer" view="_minimal">
+                <property name="employee" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                    </property>
+                    <property name="personExperience" view="_minimal"/>
+                </property>
+            </property>
+            <property name="dateFrom"/>
+            <property name="dateTo"/>
         </property>
         <property name="feedbackTemplates" view="courseFeedbackTemplate.course"/>
         <property name="party" view="_minimal">

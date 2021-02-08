@@ -20,6 +20,8 @@
                         property="feedbackTemplates"/>
             <collection id="courseScheduleDc"
                         property="courseSchedule"/>
+            <collection id="trainerDc"
+                        property="courseTrainers"/>
             <loader id="courseDl"/>
         </instance>
         <collection id="dicLearningTypesDc"
@@ -272,8 +274,14 @@
             </tab>
             <tab id="enrollments"
                  caption="msg://kz.uco.tsadv.modules.learning.model/Course.enrollments"
+                 spacing="true"
                  expand="enrollmentsTable"
                  margin="true,false,false,false">
+                <filter id="filter"
+                        applyTo="enrollmentsTable"
+                        dataLoader="enrollmentDl">
+                    <properties include=".*"/>
+                </filter>
                 <dataGrid id="enrollmentsTable"
                           selectionMode="MULTI_CHECK"
                           height="100%"
@@ -308,8 +316,43 @@
                     </buttonsPanel>
                 </dataGrid>
             </tab>
+            <tab id="trainers"
+                 caption="msg://kz.uco.tsadv.modules.learning.model/CourseSectionSession.trainer"
+                 expand="trainersTable"
+                 margin="true,true,true,false">
+                <table id="trainersTable"
+                       dataContainer="trainerDc"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                type="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                type="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                type="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="trainer.employee" caption="msg://menu-config.tsadv$Trainer.browse"/>
+                        <column id="dateFrom"/>
+                        <column id="dateTo"/>
+                    </columns>
+                    <rows/>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button action="trainersTable.create"/>
+                        <button action="trainersTable.edit"/>
+                        <button action="trainersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
         </tabSheet>
-        <frame id="windowActions"
-               screen="editWindowActions"/>
+        <hbox id="windowActions" spacing="true" width="AUTO">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>
