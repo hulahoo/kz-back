@@ -38,6 +38,7 @@ import org.checkerframework.common.subtyping.qual.Bottom;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -166,11 +167,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
 
-        LocalDateTime ldt = LocalDateTime.ofInstant(timeSource.currentTimestamp().toInstant(), ZoneId.systemDefault());
-        Date outRequestDate = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
-        attachDateField.setRangeStart(outRequestDate);
-        Date today = timeSource.currentTimestamp();
-        attachDateField.setValue(today);
+
         if (addressTypeField.getValue() != null) {
             addressTypeTempField.setValue(addressTypeField.getValue().getAddressType());
         }
@@ -180,6 +177,9 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         } else if ("joinEmployee".equals(whichButton)) {
             isJoinEmployeeBtn();
         } else if ("joinHr".equals(whichButton)) {
+            LocalDateTime ldt = LocalDateTime.ofInstant(timeSource.currentTimestamp().toInstant(), ZoneId.systemDefault());
+            Date outRequestDate = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
+            attachDateField.setRangeStart(outRequestDate);
             attachDateField.setEditable(true);
             familyMemberInformationGroup.setVisible(false);
             commentField.setVisible(false);
@@ -213,6 +213,12 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     }
 
     private void isEditHrBtn() {
+        if (attachDateField.getValue() != null){
+            Instant i = Instant.ofEpochMilli(attachDateField.getValue().getTime());
+            Date outRequestDate = Date.from(i);
+            attachDateField.setRangeStart(outRequestDate);
+        }
+
         attachDateField.setEditable(true);
         exclusionDateField.setVisible(true);
         commentField.setVisible(true);
@@ -246,6 +252,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     }
 
     private void isOpenEmployeeBtn() {
+
         editButton.setVisible(false);
         removeButton.setVisible(false);
         createButton.setVisible(false);
@@ -771,6 +778,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 .list().stream().findFirst().orElse(null);
         if (person != null && relativeField.getValue().getCode().equals("PRIMARY")
                 && whichButton != null
+                && !whichButton.equals("openEmployee")
                 && !whichButton.equals("joinMember")
                 && !whichButton.equals("editHr")) {
             event.preventCommit();
