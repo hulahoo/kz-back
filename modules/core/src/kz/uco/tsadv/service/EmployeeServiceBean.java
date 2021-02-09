@@ -2441,7 +2441,7 @@ public class EmployeeServiceBean implements EmployeeService {
         return dataManager.load(PersonGroupExt.class)
                 .query("select e.personGroup from base$AssignmentExt e " +
                         "   where e.positionGroup.id = :positionGroupId" +
-                        "       and #systemDate between e.startDate and e.endDate " +
+                        "       and :systemDate between e.startDate and e.endDate " +
                         "       and e.primaryFlag = 'TRUE' " +
                         "       and e.assignmentStatus.code <> 'TERMINATED' ")
                 .setParameters(ParamsMap.of("positionGroupId", positionGroupId, "systemDate", CommonUtils.getSystemDate()))
