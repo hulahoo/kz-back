@@ -722,5 +722,11 @@
         <method name="deleteSalary">
             <param name="salaryData" type="kz.uco.tsadv.modules.integration.jsonobject.SalaryDataJson"/>
         </method>
+        <method name="createOrUpdatePersonDocument">
+            <param name="personDocumentData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentDataJson"/>
+        </method>
+        <method name="deletePersonDocument">
+            <param name="personDocumentData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentDataJson"/>
+        </method>
     </service>
 </services>
