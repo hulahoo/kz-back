@@ -273,14 +273,17 @@
             </property>
         </property>
     </view>
-    <view entity="tsadv$Book" name="portal-book-browse" extends="_local">
-    <property name="category" view="_minimal"/>
-    <property name="image" view="_minimal"/>
-    <property name="fb2" view="_minimal"/>
-    <property name="epub" view="_minimal"/>
-    <property name="mobi" view="_minimal"/>
-    <property name="kf8" view="_minimal"/>
-    <property name="pdf" view="_minimal"/>
-    <property name="djvu" view="_minimal"/>
-</view>
+    <view name="portal-books-category-browse" entity="tsadv$DicBookCategory" extends="_minimal">
+        <property name="order"/>
+        <property name="books" view="_minimal">
+            <property name="category" view="_minimal"/>
+            <property name="image" view="_minimal"/>
+            <property name="fb2" view="_minimal"/>
+            <property name="epub" view="_minimal"/>
+            <property name="mobi" view="_minimal"/>
+            <property name="kf8" view="_minimal"/>
+            <property name="pdf" view="_minimal"/>
+            <property name="djvu" view="_minimal"/>
+        </property>
+    </view>
 </views>
