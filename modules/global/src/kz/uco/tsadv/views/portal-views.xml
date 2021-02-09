@@ -70,6 +70,7 @@
         <property name="goal" view="_minimal">
             <property name="successCriteria"/>
         </property>
+        <property name="goalLibrary" view="_minimal"/>
     </view>
     <view entity="base$AssignmentExt" name="assignment-portal-kpi" extends="_local">
         <property name="jobGroup" view="_local"/>
@@ -202,6 +203,7 @@
         <property name="goal" view="_minimal"/>
         <property name="weight"/>
         <property name="goalLibrary" view="_minimal"/>
+        <property name="category" view="_minimal"/>
     </view>
     <view entity="tsadv$StandardSchedule" name="standardSchedule-for-my-team" extends="_local">
         <property name="baseStandardSchedule" view="_minimal"/>
@@ -245,4 +247,40 @@
             <property name="format" view="_minimal"/>
         </property>
     </view>
+    <view name="assignedPerformancePlan-kpi-team" entity="tsadv$AssignedPerformancePlan"
+          extends="assignedPerformancePlan-myKpi">
+        <property name="performancePlan">
+            <property name="performancePlanName"/>
+            <property name="performancePlanNameEn"/>
+            <property name="performancePlanNameKz"/>
+        </property>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="status"/>
+        <property name="assignedPerson" view="_minimal">
+            <property name="person" view="_local"/>
+            <property name="assignments" view="_minimal">
+                <property name="personGroup">
+                    <property name="list" view="_local"/>
+                </property>
+                <property name="jobGroup" view="_minimal">
+                    <property name="jobNameLang1"/>
+                </property>
+                <property name="organizationGroup" view="_local">
+                    <property name="list" view="_local"/>
+                    <property name="organization" view="_local"/>
+                </property>
+            </property>
+        </property>
+    </view>
+    <view entity="tsadv$Book" name="portal-book-browse" extends="_local">
+    <property name="category" view="_minimal"/>
+    <property name="image" view="_minimal"/>
+    <property name="fb2" view="_minimal"/>
+    <property name="epub" view="_minimal"/>
+    <property name="mobi" view="_minimal"/>
+    <property name="kf8" view="_minimal"/>
+    <property name="pdf" view="_minimal"/>
+    <property name="djvu" view="_minimal"/>
+</view>
 </views>
