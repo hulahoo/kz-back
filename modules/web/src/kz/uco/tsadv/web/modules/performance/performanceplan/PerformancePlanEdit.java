@@ -172,10 +172,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     CommitContext commitContext = new CommitContext();
                     personList.forEach(personExt -> {
                         boolean isNew = true;
-                        for (AssignedPerformancePlan item : assignedPerformancePlansDc.getItems()) {
-                            if (item.getAssignedPerson().equals(personExt.getGroup())) {
-                                isNew = false;
-                                break;
+                        List<AssignedPerformancePlan> assignedPerformancePlanList =
+                                dataManager.load(AssignedPerformancePlan.class)
+                                        .query("select e from tsadv$AssignedPerformancePlan e " +
+                                                " where e.performancePlan = :performancePlan")
+                                        .parameter("performancePlan", performancePlanDc.getItem())
+                                        .view("assignedPerformancePlan.browse")
+                                        .list();
+                        if (!assignedPerformancePlanList.isEmpty()) {
+                            for (AssignedPerformancePlan item : assignedPerformancePlanList) {
+                                if (item.getAssignedPerson().equals(personExt.getGroup())) {
+                                    isNew = false;
+                                    break;
+                                }
                             }
                         }
                         if (isNew) {

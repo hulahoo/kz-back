@@ -6227,6 +6227,7 @@
                 <property name="endDate"/>
             </property>
             <property name="personExperience" view="_minimal"/>
+            <property name="company" view="_minimal"/>
             <property name="currentAssignment" view="_minimal">
                 <property name="jobGroup" view="_minimal">
                     <property name="jobNameLang1"/>
@@ -13490,13 +13491,11 @@
         <property name="nonresidentType" view="_local"/>
         <property name="group" view="_minimal">
             <property name="list" view="_minimal">
+                <property name="group" view="_minimal"/>
                 <property name="startDate"/>
                 <property name="endDate"/>
-                <property name="group"
-                          view="_minimal"/>
             </property>
-            <property name="assignments"
-                      view="_minimal">
+            <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
@@ -13513,14 +13512,9 @@
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
-                    <property name="grade" view="_local"/>
                 </property>
-                <property name="group"
-                          view="_local"/>
-                <property name="organizationGroup"
-                          view="_minimal">
-                    <property name="list"
-                              view="_minimal">
+                <property name="organizationGroup" view="_minimal">
+                    <property name="list" view="_minimal">
                         <property name="startDate"/>
                         <property name="endDate"/>
                         <property name="organizationNameLang1"/>
@@ -13551,6 +13545,7 @@
                 <property name="endDate"/>
                 <property name="location" view="_local"/>
             </property>
+            <property name="company" view="_minimal"/>
             <property name="currentAssignment" view="_minimal">
                 <property name="assignmentStatus" view="_local"/>
                 <property name="jobGroup" view="_minimal">
@@ -13660,6 +13655,7 @@
         </property>
         <property name="nationality" view="_local"/>
         <property name="citizenship" view="_local"/>
+        <property name="fioWithEmployeeNumber"/>
         <property name="legacyId"/>
         <property name="startDate"/>
         <property name="endDate"/>
@@ -13677,7 +13673,6 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
-        <property name="fioWithEmployeeNumber"/>
     </view>
     <view entity="base$PersonExt"
           name="person-for-search">

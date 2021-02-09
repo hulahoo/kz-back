@@ -651,5 +651,12 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
         return result.toString();
     }
 
-
+    @Override
+    public String getShortName() {
+        StringBuilder builder = new StringBuilder("");
+        builder.append(lastName).append(" ");
+        builder.append(firstName != null && firstName.length() > 0 ? firstName.substring(0, 1) : "").append(". ");
+        if (middleName != null && middleName.length() > 0) builder.append(middleName.substring(0, 1)).append(". ");
+        return builder.toString();
+    }
 }
