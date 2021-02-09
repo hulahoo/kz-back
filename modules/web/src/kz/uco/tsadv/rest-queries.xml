@@ -158,4 +158,93 @@
             <param name="id" type="java.util.UUID"/>
         </params>
     </query>
+    <query name="kpiTeam" entity="tsadv$AssignedPerformancePlan" view="assignedPerformancePlan-kpi-team">
+        <jpql>
+            <![CDATA[
+                    select app
+                    from tsadv$AssignedPerformancePlan app
+                        join app.assignedPerson ap
+                        join ap.assignments a
+                        join a.positionGroup p
+                        join base$HierarchyElementExt he ON he.positionGroup.id = p.id
+                        join he.parent parent
+                        join parent.positionGroup pp
+                        join pp.assignments pa
+                        join pa.personGroup pap
+                    where a.assignmentStatus.code = 'ACTIVE'
+                        and a.startDate <= CURRENT_DATE
+                        and a.endDate >= CURRENT_DATE
+                        and a.primaryFlag = true
+                        and pa.assignmentStatus.code = 'ACTIVE'
+                        and pa.startDate <= CURRENT_DATE
+                        and pa.endDate >= CURRENT_DATE
+                        and pa.primaryFlag = true
+                        and pap.id = :personGroupId
+                        and (EXTRACT(YEAR FROM app.endDate) = EXTRACT(YEAR FROM CURRENT_DATE))
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <!--    Тут должен быть group by pplan, но падает ошибка -->
+    <query name="kpiTeamPerformancePlans" entity="tsadv$PerformancePlan" view="_local">
+        <jpql>
+            <![CDATA[
+                    select pplan
+                    from tsadv$PerformancePlan pplan
+                        join tsadv$AssignedPerformancePlan app on pplan.id = app.performancePlan.id
+                        join app.assignedPerson ap
+                        join ap.assignments a
+                        join a.positionGroup p
+                        join base$HierarchyElementExt he ON he.positionGroup.id = p.id
+                        join he.parent parent
+                        join parent.positionGroup pp
+                        join pp.assignments pa
+                        join pa.personGroup pap
+                    where a.assignmentStatus.code = 'ACTIVE'
+                        and a.startDate <= CURRENT_DATE
+                        and a.endDate >= CURRENT_DATE
+                        and a.primaryFlag = true
+                        and pa.assignmentStatus.code = 'ACTIVE'
+                        and pa.startDate <= CURRENT_DATE
+                        and pa.endDate >= CURRENT_DATE
+                        and pa.primaryFlag = true
+                        and pap.id = :personGroupId
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="kpiTeamPerformancePlan" entity="tsadv$AssignedPerformancePlan" view="assignedPerformancePlan-kpi-team">
+        <jpql>
+            <![CDATA[
+                    select app
+                    from tsadv$AssignedPerformancePlan app
+                        join app.assignedPerson ap
+                        join ap.assignments a
+                        join a.positionGroup p
+                        join base$HierarchyElementExt he ON he.positionGroup.id = p.id
+                        join he.parent parent
+                        join parent.positionGroup pp
+                        join pp.assignments pa
+                        join pa.personGroup pap
+                    where a.assignmentStatus.code = 'ACTIVE'
+                        and a.startDate <= CURRENT_DATE
+                        and a.endDate >= CURRENT_DATE
+                        and a.primaryFlag = true
+                        and pa.assignmentStatus.code = 'ACTIVE'
+                        and pa.startDate <= CURRENT_DATE
+                        and pa.endDate >= CURRENT_DATE
+                        and pa.primaryFlag = true
+                        and pap.id = :personGroupId
+                        and app.performancePlan.id = :performancePlanId
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="performancePlanId" type="java.util.UUID"/>
+        </params>
+    </query>
 </queries>

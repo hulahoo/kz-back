@@ -21,11 +21,7 @@ public class EnrollmentServiceBean implements EnrollmentService {
         return persistence.callInTransaction(em -> {
             List<DicCategory> enrollmentCategory = em.createQuery("" +
                     "select c " +
-                    "            from tsadv$DicCategory c " +
-                    "            join c.courses cc " +
-                    "            join cc.enrollments e " +
-                    "            where e.personGroup.id = :userId", DicCategory.class)
-                    .setParameter("userId", userId)
+                    "            from tsadv$DicCategory c ", DicCategory.class)
                     .setView(DicCategory.class, "category-enrollment")
                     .getResultList();
             return searchEnrollmentFilter(enrollmentCategory, userId);
@@ -53,6 +49,9 @@ public class EnrollmentServiceBean implements EnrollmentService {
     protected List<DicCategory> searchEnrollmentFilter(List<DicCategory> enrollmentCategory, UUID userId) {
         return enrollmentCategory
                 .stream()
+                .filter(c -> c.getCourses()
+                        .stream()
+                        .anyMatch(course -> course.getEnrollments().stream().anyMatch(e -> e.getPersonGroup().getId().equals(userId))))
                 .peek(category -> {
                     category.setCourses(category.getCourses()
                             .stream()

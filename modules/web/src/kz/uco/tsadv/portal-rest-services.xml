@@ -62,4 +62,13 @@
             <param name="userId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="tsadv_CourseService">
+        <method name="courseInfo">
+            <param name="courseId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="courseTrainerInfo">
+            <param name="trainerId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>
