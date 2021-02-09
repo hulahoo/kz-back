@@ -35,4 +35,6 @@
 
     <bean id="bproc_BprocTaskService" class="kz.uco.tsadv.bproc.beans.ExtBprocTaskServiceBean"/>
 
+    <bean id="bproc_BprocRuntimeService" class="kz.uco.tsadv.bproc.beans.ExtBprocRuntimeServiceBean"/>
+
 </beans>
