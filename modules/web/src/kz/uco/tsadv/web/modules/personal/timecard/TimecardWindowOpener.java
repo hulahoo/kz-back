@@ -21,19 +21,19 @@ public class TimecardWindowOpener implements Runnable {
         UserSession userSession = AppBeans.get(UserSession.class);
         Messages messages = AppBeans.get(Messages.class);
         WindowManager windowManager = AppBeans.get(WindowManagerProvider.class).get();
-        String urlShort = "";
-        try {
-            URL url = Page.getCurrent().getLocation().toURL();
-            String s = url.toString();
-            urlShort = s.substring(0, s.length() - 2);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+//        String urlShort = "";
+//        try {
+//            URL url = Page.getCurrent().getLocation().toURL();
+//            String s = url.toString();
+//            urlShort = s.substring(0, s.length() - 2);
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
 
         if (organizationService.getOrganizationsWhereUserIsHr((TsadvUser) userSession.getUser()).isEmpty()) {
             windowManager.showNotification(messages.getMessage(this.getClass(), "no.rights"), Frame.NotificationType.ERROR_HTML);
         } else {
-            windowManager.showWebPage(urlShort + "open?screen=tsadv$Timecard.browse&openType=DIALOG", null);
+            windowManager.showWebPage( "open?screen=tsadv$Timecard.browse&openType=DIALOG", null);
         }
     }
 }
