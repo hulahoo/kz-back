@@ -12,6 +12,15 @@ public class PersonDocumentJson implements Serializable {
     protected String issueAuthorityId;
     protected String nationalIdentifier;
     protected String companyCode;
+    protected String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getPersonId() {
         return personId;

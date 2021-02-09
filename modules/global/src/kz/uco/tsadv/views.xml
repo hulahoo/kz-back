@@ -22407,7 +22407,9 @@
         <property name="company" view="_minimal"/>
     </view>
     <view entity="tsadv$DicDocumentType" name="dicDocumentType-edit" extends="_local">
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
     <view entity="tsadv$DicDuration" name="dicDuration-browse" extends="_local">
         <property name="company" view="_minimal"/>
@@ -23268,6 +23270,16 @@
         </property>
         <property name="hierarchy" view="_minimal">
             <property name="primaryFlag"/>
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_DicIssuingAuthority" name="dicIssuingAuthority.for.integration" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv$DicApprovalStatus" name="dicApprovalStatus.for.integration" extends="_local">
+        <property name="company" view="_minimal">
             <property name="legacyId"/>
         </property>
     </view>
