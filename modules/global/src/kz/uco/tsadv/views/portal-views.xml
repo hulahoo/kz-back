@@ -286,4 +286,7 @@
             <property name="djvu" view="_minimal"/>
         </property>
     </view>
+    <view name="portal-bproc-users" entity="tsadv$UserExt" extends="_minimal">
+        <property name="fullNameWithLogin"/>
+    </view>
 </views>
