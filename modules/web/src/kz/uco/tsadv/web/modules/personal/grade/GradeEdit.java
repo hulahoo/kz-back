@@ -35,11 +35,14 @@ public class GradeEdit extends AbstractHrEditor<Grade> {
     @Override
     protected boolean preCommit() {
         Grade grade = commonService.emQueryFirstResult(Grade.class,
-                "select e from tsadv$Grade e\n" +
-                        "where e.gradeName = :gradeName and e.id <> :gradeId",
+                "select e from tsadv$Grade e " +
+                        " where e.gradeName = :gradeName " +
+                        " and e.group.id <> :gradeGroupId " +
+                        " and e.group.company = :company",
                 ParamsMap.of("gradeName", getItem().getGradeName(),
-                        "gradeId", getItem().getId()),
-                "_local");
+                        "gradeGroupId", getItem().getGroup().getId(),
+                        "company", getItem().getGroup().getCompany()),
+                "grade.edit");
         if (grade != null) {
             showNotification(messages.getMessage("kz.uco.tsadv.web", "uniqueGrade"), NotificationType.TRAY);
         }

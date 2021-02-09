@@ -22,11 +22,11 @@
                 width="800"/>
     <layout expand="split"
             spacing="true">
-        <groupBox caption="msg://CustomFilter"
-                  collapsable="true"
-                  collapsed="true">
-            <vbox id="filterBox"/>
-        </groupBox>
+        <filter id="filter"
+                applyTo="gradeGroupsTable"
+                datasource="gradeGroupsDs">
+            <properties include=".*"/>
+        </filter>
         <split id="split"
                orientation="vertical"
                width="100%">
