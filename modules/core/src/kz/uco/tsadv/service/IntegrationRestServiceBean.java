@@ -9,9 +9,6 @@ import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.*;
-import kz.uco.base.entity.dictionary.DicLocation;
-import kz.uco.base.entity.dictionary.DicOrgType;
-import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
@@ -1629,5 +1626,137 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, salaryData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonDocument(PersonDocumentDataJson personDocumentData) {
+        String methodName = "createOrUpdatePersonDocument";
+        ArrayList<PersonDocumentJson> personDocuments = new ArrayList<>();
+        if (personDocumentData.getPersonDocuments() != null) {
+            personDocuments = personDocumentData.getPersonDocuments();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (PersonDocumentJson personDocumentJson : personDocuments) {
+                if (personDocumentJson.getLegacyId() == null || personDocumentJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no legacyId");
+                }
+                if (personDocumentJson.getCompanyCode() == null || personDocumentJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no companyCode");
+                }
+                if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no personId");
+                }
+                PersonDocument personDocument = dataManager.load(PersonDocument.class)
+                        .query("select e from tsadv$PersonDocument e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pgLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personDocumentJson.getLegacyId(),
+                                "pgLegacyId", personDocumentJson.getPersonId(),
+                                "companyCode", personDocumentJson.getCompanyCode()))
+                        .view("personDocument.edit").list().stream().findFirst().orElse(null);
+                if (personDocument != null) {
+                    personDocument.setLegacyId(personDocumentJson.getLegacyId());
+//                    PersonGroupExt
+//                    if (assignmentGroupExt != null) {
+//                        salary.setAssignmentGroup(assignmentGroupExt);
+//                    } else {
+//                        return prepareError(result, methodName, salarys,
+//                                "no base$AssignmentGroupExt with legacyId " + salaryJson.getAssignmentLegacyId()
+//                                        + " and company legacyId " + salaryJson.getCompanyCode());
+//                    }
+//                    salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
+//                            ? Double.valueOf(salaryJson.getAmount())
+//                            : null);
+//                    salary.setCurrency(salaryJson.getCurrency() != null && !salaryJson.getCurrency().isEmpty()
+//                            ? dataManager.load(DicCurrency.class)
+//                            .query("select e from base$DicCurrency e " +
+//                                    " where e.legacyId = :cLegacyId " +
+//                                    " and e.company.legacyId = :companyCode")
+//                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency(),
+//                                    "companyCode", salaryJson.getCompanyCode()))
+//                            .list().stream().findFirst().orElse(null)
+//                            : dataManager.load(DicCurrency.class)
+//                            .query("select e from base$DicCurrency e " +
+//                                    " where e.code = 'KZT'")
+//                            .list().stream().findFirst().orElse(null));
+//                    salary.setNetGross(GrossNet.fromId(salaryJson.getNetGross() != null
+//                            && !salaryJson.getNetGross().isEmpty()
+//                            ? salaryJson.getNetGross()
+//                            : "GROSS"));
+//                    salary.setType(SalaryType.fromId(salaryJson.getSalaryType() != null
+//                            && !salaryJson.getSalaryType().isEmpty()
+//                            ? salaryJson.getNetGross()
+//                            : "MONTHLYRATE"));
+//                    salary.setStartDate(formatter.parse(salaryJson.getStartDate()));
+//                    salary.setEndDate(formatter.parse(salaryJson.getEndDate()));
+//                    salary.setWriteHistory(false);
+//                    commitContext.addInstanceToCommit(salary);
+//                }
+//                if (salary == null) {
+//                    salary = metadata.create(Salary.class);
+//                    salary.setId(UUID.randomUUID());
+//                    salary.setLegacyId(salaryJson.getLegacyId());
+//                    AssignmentGroupExt assignmentGroupExt = dataManager.load(AssignmentGroupExt.class)
+//                            .query("select e.group from base$AssignmentExt e " +
+//                                    " where e.legacyId = :legacyId " +
+//                                    " and e.personGroup.company.legacyId = :company ")
+//                            .setParameters(ParamsMap.of("legacyId", salaryJson.getAssignmentLegacyId(),
+//                                    "company", salaryJson.getCompanyCode()))
+//                            .view("assignmentGroup.view")
+//                            .list().stream().findFirst().orElse(null);
+//                    if (assignmentGroupExt != null) {
+//                        salary.setAssignmentGroup(assignmentGroupExt);
+//                    } else {
+//                        return prepareError(result, methodName, salarys,
+//                                "no base$AssignmentGroupExt with legacyId " + salaryJson.getAssignmentLegacyId()
+//                                        + " and company legacyId " + salaryJson.getCompanyCode());
+//                    }
+//                    salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
+//                            ? Double.valueOf(salaryJson.getAmount())
+//                            : null);
+//                    salary.setCurrency(salaryJson.getCurrency() != null && !salaryJson.getCurrency().isEmpty()
+//                            ? dataManager.load(DicCurrency.class)
+//                            .query("select e from base$DicCurrency e " +
+//                                    " where e.legacyId = :cLegacyId " +
+//                                    " and e.company.legacyId = :companyCode")
+//                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency(),
+//                                    "companyCode", salaryJson.getCompanyCode()))
+//                            .list().stream().findFirst().orElse(null)
+//                            : dataManager.load(DicCurrency.class)
+//                            .query("select e from base$DicCurrency e " +
+//                                    " where e.code = 'KZT'")
+//                            .list().stream().findFirst().orElse(null));
+//                    salary.setNetGross(GrossNet.fromId(salaryJson.getNetGross() != null
+//                            && !salaryJson.getNetGross().isEmpty()
+//                            ? salaryJson.getNetGross()
+//                            : "GROSS"));
+//                    salary.setType(SalaryType.fromId(salaryJson.getSalaryType() != null
+//                            && !salaryJson.getSalaryType().isEmpty()
+//                            ? salaryJson.getSalaryType()
+//                            : "MONTHLYRATE"));
+//                    salary.setStartDate(formatter.parse(salaryJson.getStartDate()));
+//                    salary.setEndDate(formatter.parse(salaryJson.getEndDate()));
+//                    salary.setWriteHistory(false);
+//                    commitContext.addInstanceToCommit(salary);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personDocuments, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personDocuments);
+    }
+
+    @Override
+    public BaseResult deletePersonDocument(PersonDocumentDataJson personDocumentData) {
+        return null;
     }
 }

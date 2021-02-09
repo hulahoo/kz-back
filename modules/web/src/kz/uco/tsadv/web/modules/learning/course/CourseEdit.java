@@ -24,6 +24,7 @@ import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.List;
 
 @UiController("tsadv$Course.edit")
 @UiDescriptor("course-edit.xml")
@@ -254,10 +255,18 @@ public class CourseEdit extends StandardEditor<Course> {
                     CommitContext commitContext = new CommitContext();
                     personList.forEach(personExt -> {
                         boolean isNew = true;
-                        for (Enrollment enrollment : enrollmentDc.getItems()) {
-                            if (enrollment.getPersonGroup().equals(personExt.getGroup())) {
-                                isNew = false;
-                                break;
+                        List<Enrollment> enrollmentList = dataManager.load(Enrollment.class)
+                                .query("select e from tsadv$Enrollment e " +
+                                        " where e.course = :course")
+                                .parameter("course", courseDc.getItem())
+                                .view("enrollment.for.course")
+                                .list();
+                        if (!enrollmentList.isEmpty()) {
+                            for (Enrollment enrollment : enrollmentList) {
+                                if (enrollment.getPersonGroup().equals(personExt.getGroup())) {
+                                    isNew = false;
+                                    break;
+                                }
                             }
                         }
                         if (isNew) {

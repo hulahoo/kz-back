@@ -37,4 +37,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdateSalary(SalaryDataJson salaryData);
 
     BaseResult deleteSalary(SalaryDataJson salaryData);
+
+    BaseResult createOrUpdatePersonDocument(PersonDocumentDataJson personDocumentData);
+
+    BaseResult deletePersonDocument(PersonDocumentDataJson personDocumentData);
 }
