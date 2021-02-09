@@ -13,6 +13,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
@@ -26,6 +27,8 @@ import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
+import kz.uco.tsadv.modules.personal.model.Absence;
+import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.uactivity.entity.Activity;
@@ -79,6 +82,8 @@ public class BprocServiceBean implements BprocService {
     protected BprocRepositoryService bprocRepositoryService;
     @Inject
     protected BprocFormService bprocFormService;
+    @Inject
+    protected DatesService datesService;
 
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
@@ -507,5 +512,25 @@ public class BprocServiceBean implements BprocService {
         String templateContents = resources.getResourceAsString(String.format(templateFolder + "absenceRequest/AbsenceRequestTable%s.html", lang));
         Assert.notNull(templateContents, "templateContents not found!");
         return TemplateHelper.processTemplate(templateContents, params);
+    }
+
+    @Override
+    public void approveAbsenceForRecall(AbsenceForRecall absenceForRecall) {
+        try (Transaction tx = persistence.getTransaction()) {
+
+            Absence newAbsence = metadata.create(Absence.class);
+            newAbsence.setPersonGroup(absenceForRecall.getEmployee());
+            newAbsence.setType(dataManager.load(DicAbsenceType.class)
+                    .query("select e from tsadv$DicAbsenceType e " +
+                            " where e.code = 'RECALL'")
+                    .list().stream().findFirst().orElse(null));
+            newAbsence.setDateFrom(absenceForRecall.getRecallDateFrom());
+            newAbsence.setDateTo(absenceForRecall.getRecallDateTo());
+            newAbsence.setAbsenceDays(datesService.getFullDaysCount(absenceForRecall.getRecallDateFrom(),
+                    absenceForRecall.getRecallDateTo()));
+            EntityManager entityManager = persistence.getEntityManager();
+            changeRequestStatus(absenceForRecall, "APPROVED");
+            entityManager.persist(newAbsence);
+        }
     }
 }
