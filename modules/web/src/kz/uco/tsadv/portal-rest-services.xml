@@ -35,7 +35,7 @@
         </method>
         <method name="saveBprocActors">
             <param name="entityId" type="java.util.UUID"/>
-            <param name="notPersisitBprocActors"/>
+            <param name="notPersisitBprocActors" type="java.util.List"/>
         </method>
     </service>
     <service name="bproc_BprocRuntimeService">
