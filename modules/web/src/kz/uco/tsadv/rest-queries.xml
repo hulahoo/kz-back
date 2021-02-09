@@ -247,4 +247,14 @@
             <param name="performancePlanId" type="java.util.UUID"/>
         </params>
     </query>
+    <query name="bprocUsers" entity="tsadv$UserExt" view="portal-bproc-users">
+        <jpql>
+            <![CDATA[
+                select u
+                from tsadv$UserExt u
+                    join u.personGroup pg
+                where u.active = true
+            ]]>
+        </jpql>
+    </query>
 </queries>
