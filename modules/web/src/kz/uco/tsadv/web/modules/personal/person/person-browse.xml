@@ -80,6 +80,7 @@
                 <column id="generedOpenRequiestionCount"
                         caption="msg://RequisitionOpenCount"
                         generator="generateGeneredOpenRequiestionCountCell"/>
+                <column id="group.company"/>
             </columns>
             <rows datasource="personsDs"/>
             <rowsCount/>

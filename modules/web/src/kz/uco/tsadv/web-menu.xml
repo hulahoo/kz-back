@@ -5,6 +5,7 @@
           insertBefore="reports">
         <menu id="hrDictionaries"
               icon="font-icon:BOOK">
+            <item screen="tsadv_DicChangeType.browse"/>
             <item screen="tsadv_DicSchedulePurpose.browse"/>
             <item screen="tsadv_DicAbsencePurpose.browse"/>
             <item screen="tsadv_AbsPurposeSetting.browse"
@@ -152,6 +153,7 @@
                   screen="base$OrganizationGroup.browse"/>
             <item id="hrPositionGroups"
                   screen="base$PositionGroup.browse"/>
+
         </menu>
         <menu id="hrGradesAndRules"
               icon="font-icon:BALANCE_SCALE">

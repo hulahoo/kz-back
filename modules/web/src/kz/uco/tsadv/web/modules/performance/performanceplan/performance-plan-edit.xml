@@ -111,6 +111,7 @@
                         <column property="result"/>
                         <column property="gzp"/>
                         <column property="status"/>
+                        <column property="assignedPerson.company"/>
                     </columns>
                     <rowsCount/>
                     <buttonsPanel id="assignedPerformancePlanBtnPnl">

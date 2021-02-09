@@ -668,9 +668,6 @@
         <method name="courseInfo">
             <param name="courseId" type="java.util.UUID"/>
         </method>
-        <method name="courseTrainerInfo">
-            <param name="trainerId" type="java.util.UUID"/>
-        </method>
     </service>
     <service name="tsadv_IntegrationRestService">
         <method name="createOrUpdateOrganization">
@@ -696,6 +693,40 @@
         </method>
         <method name="deletePerson">
             <param name="personData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDataJson"/>
+        </method>
+        <method name="createOrUpdateOrganizationHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
+        <method name="deleteOrganizationHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
+        <method name="createOrUpdatePositionHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
+        <method name="deletePositionHierarchyElement">
+            <param name="hierarchyElementData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HierarchyElementDataJson"/>
+        </method>
+        <method name="createOrUpdateAssignment">
+            <param name="assignmentDataJson" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentDataJson"/>
+        </method>
+        <method name="deleteAssignment">
+            <param name="assignmentDataJson" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentDataJson"/>
+        </method>
+        <method name="createOrUpdateSalary">
+            <param name="salaryData" type="kz.uco.tsadv.modules.integration.jsonobject.SalaryDataJson"/>
+        </method>
+        <method name="deleteSalary">
+            <param name="salaryData" type="kz.uco.tsadv.modules.integration.jsonobject.SalaryDataJson"/>
+        </method>
+        <method name="createOrUpdatePersonDocument">
+            <param name="personDocumentData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentDataJson"/>
+        </method>
+        <method name="deletePersonDocument">
+            <param name="personDocumentData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentDataJson"/>
         </method>
     </service>
 </services>

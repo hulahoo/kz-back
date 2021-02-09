@@ -1,19 +1,20 @@
 package kz.uco.tsadv.web.modules.personal.gradegroup;
 
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.filter.Op;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
 import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.model.Grade;
-import kz.uco.base.web.components.CustomFilter;
 import kz.uco.tsadv.service.AbsenceBalanceService;
 import kz.uco.tsadv.web.modules.personal.grade.GradeEdit;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class GradeGroupBrowse extends AbstractLookup {
 
@@ -29,11 +30,6 @@ public class GradeGroupBrowse extends AbstractLookup {
     @Inject
     private Metadata metadata;
 
-    @Inject
-    private VBoxLayout filterBox;
-    private Map<String, CustomFilter.Element> filterMap;
-    private CustomFilter customFilter;
-
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
@@ -42,30 +38,26 @@ public class GradeGroupBrowse extends AbstractLookup {
             String query = String.format("select e from tsadv$GradeGroup e  \n" +
                     "  where (e.id not in (select a.gradeGroup.id from tsadv$TalentProgramGrade a  \n" +
                     "  where a.talentProgram.id='%s')) ", (UUID) params.get("fromTalentProgram"));
-            if (params.containsKey("existingGrades")){
-               query = query.concat(String.format(" and (e.id not in %s)",params.get("existingGrades")));
+            if (params.containsKey("existingGrades")) {
+                query = query.concat(String.format(" and (e.id not in %s)", params.get("existingGrades")));
             }
             gradeGroupsDs.setQuery(query);
         }
 
-        initFilterMap();
-
-        customFilter = CustomFilter.init(gradeGroupsDs, gradeGroupsDs.getQuery(), filterMap);
-        filterBox.add(customFilter.getFilterComponent());
     }
 
-    private void initFilterMap() {
-        filterMap = new LinkedHashMap<>();
-        filterMap.put("gradeName",
-                CustomFilter.Element
-                        .initElement()
-                        .setCaption(messages.getMessage("kz.uco.tsadv.modules.personal.model", "Grade.gradeName"))
-                        .setComponentClass(TextField.class)
-                        .setOptions(Op.CONTAINS, Op.DOES_NOT_CONTAIN, Op.ENDS_WITH, Op.STARTS_WITH, Op.EQUAL, Op.NOT_EQUAL)
-                        .setQueryFilter("lower(g.gradeName) ?")
-        );
-
-    }
+//    private void initFilterMap() {
+//        filterMap = new LinkedHashMap<>();
+//        filterMap.put("gradeName",
+//                CustomFilter.Element
+//                        .initElement()
+//                        .setCaption(messages.getMessage("kz.uco.tsadv.modules.personal.model", "Grade.gradeName"))
+//                        .setComponentClass(TextField.class)
+//                        .setOptions(Op.CONTAINS, Op.DOES_NOT_CONTAIN, Op.ENDS_WITH, Op.STARTS_WITH, Op.EQUAL, Op.NOT_EQUAL)
+//                        .setQueryFilter("lower(g.gradeName) ?")
+//        );
+//
+//    }
 
     public void openGrade() {
         openGradeEditor(metadata.create(Grade.class), null);

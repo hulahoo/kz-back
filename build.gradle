@@ -12,8 +12,8 @@ buildscript {
         maven {
             url 'http://apps.uco.kz/nexus/content/groups/uco-group/'
             credentials {
-                username('uco')
-                password('!uco@')
+                username(rootProject.hasProperty('repoUser') ? rootProject['repoUser'] : 'uco')
+                password(rootProject.hasProperty('repoPass') ? rootProject['repoPass'] : '!uco@')
             }
         }
     }
@@ -36,7 +36,7 @@ apply(plugin: 'cuba')
 cuba {
     artifact {
         group = 'kz.uco.tsadv'
-        version = "2.0.43"
+        version = "2.0.47"
         isSnapshot = true
     }
     tomcat {
