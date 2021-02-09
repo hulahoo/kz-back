@@ -4010,18 +4010,7 @@
     <view class="kz.uco.tsadv.modules.personal.model.PersonDocument"
           extends="_local"
           name="personDocument.edit">
-        <property name="documentType"
-                  view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-        <property name="status"
-                  view="_minimal">
+        <property name="issuingAuthority" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -4031,19 +4020,37 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
-        <property name="file"
-                  view="_minimal"/>
-        <property name="personGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
+        <property name="documentType" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="legacyId"/>
                 <property name="startDate"/>
                 <property name="endDate"/>
                 <property name="writeHistory"/>
-                <property name="legacyId"/>
             </property>
+            <property name="company" view="_minimal"/>
             <property name="personFioWithEmployeeNumber"/>
+            <property name="legacyId"/>
         </property>
+        <property name="status" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="file" view="_minimal"/>
     </view>
     <view entity="base$PersonExt"
           extends="_local"
@@ -22400,7 +22407,9 @@
         <property name="company" view="_minimal"/>
     </view>
     <view entity="tsadv$DicDocumentType" name="dicDocumentType-edit" extends="_local">
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
     <view entity="tsadv$DicDuration" name="dicDuration-browse" extends="_local">
         <property name="company" view="_minimal"/>
@@ -23261,6 +23270,16 @@
         </property>
         <property name="hierarchy" view="_minimal">
             <property name="primaryFlag"/>
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_DicIssuingAuthority" name="dicIssuingAuthority.for.integration" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv$DicApprovalStatus" name="dicApprovalStatus.for.integration" extends="_local">
+        <property name="company" view="_minimal">
             <property name="legacyId"/>
         </property>
     </view>

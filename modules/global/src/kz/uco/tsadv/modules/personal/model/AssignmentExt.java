@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @Listeners("tsadv_AssignmentExtListener")
-@NamePattern("%s %s %s %s|id,organizationGroup,jobGroup,group")
+@NamePattern("%s %s %s %s|id,organizationGroup,jobGroup,group,endDate,startDate")
 @Extends(Assignment.class)
 @Entity(name = "base$AssignmentExt")
 public class AssignmentExt extends Assignment implements IGroupedEntity<AssignmentGroupExt> {

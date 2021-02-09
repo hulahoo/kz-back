@@ -9,9 +9,6 @@ import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.*;
-import kz.uco.base.entity.dictionary.DicLocation;
-import kz.uco.base.entity.dictionary.DicOrgType;
-import kz.uco.base.entity.dictionary.DicSex;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
@@ -1629,5 +1626,265 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, salaryData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonDocument(PersonDocumentDataJson personDocumentData) {
+        String methodName = "createOrUpdatePersonDocument";
+        ArrayList<PersonDocumentJson> personDocuments = new ArrayList<>();
+        if (personDocumentData.getPersonDocuments() != null) {
+            personDocuments = personDocumentData.getPersonDocuments();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (PersonDocumentJson personDocumentJson : personDocuments) {
+                if (personDocumentJson.getLegacyId() == null || personDocumentJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no legacyId");
+                }
+                if (personDocumentJson.getCompanyCode() == null || personDocumentJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no companyCode");
+                }
+                if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no personId");
+                }
+                if (personDocumentJson.getDocumentTypeId() == null || personDocumentJson.getDocumentTypeId().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no documentType");
+                }
+                if (personDocumentJson.getDocumentNumber() == null || personDocumentJson.getDocumentNumber().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no documentNumber");
+                }
+                if (personDocumentJson.getIssueDate() == null || personDocumentJson.getIssueDate().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no issueDate");
+                }
+                if (personDocumentJson.getExpiredDate() == null || personDocumentJson.getExpiredDate().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no expiredDate");
+                }
+                if (personDocumentJson.getIssueAuthorityId() == null || personDocumentJson.getIssueAuthorityId().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no issueAuthority");
+                }
+                if (personDocumentJson.getStatus() == null || personDocumentJson.getStatus().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no status");
+                }
+                PersonDocument personDocument = dataManager.load(PersonDocument.class)
+                        .query("select e from tsadv$PersonDocument e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pgLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personDocumentJson.getLegacyId(),
+                                "pgLegacyId", personDocumentJson.getPersonId(),
+                                "companyCode", personDocumentJson.getCompanyCode()))
+                        .view("personDocument.edit").list().stream().findFirst().orElse(null);
+                if (personDocument != null) {
+                    personDocument.setLegacyId(personDocumentJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getPersonId(),
+                                    "company", personDocumentJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personDocument.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personDocuments,
+                                "no base$PersonGroupExt with legacyId " + personDocumentJson.getPersonId()
+                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    }
+                    DicDocumentType dicDocumentType = dataManager.load(DicDocumentType.class)
+                            .query("select e from tsadv$DicDocumentType e" +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getDocumentTypeId(),
+                                    "companyCode", personDocumentJson.getCompanyCode()))
+                            .view("dicDocumentType-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (dicDocumentType != null) {
+                        personDocument.setDocumentType(dicDocumentType);
+                    } else {
+                        return prepareError(result, methodName, personDocuments,
+                                "no tsadv$DicDocumentType with legacyId " + personDocumentJson.getDocumentTypeId()
+                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    }
+                    personDocument.setDocumentNumber(personDocumentJson.getDocumentNumber());
+                    personDocument.setIssueDate(formatter.parse(personDocumentJson.getIssueDate()));
+                    personDocument.setExpiredDate(formatter.parse(personDocumentJson.getExpiredDate()));
+
+                    DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
+                            .query("select e from tsadv_DicIssuingAuthority e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
+                                    "companyCode", personDocumentJson.getCompanyCode()))
+                            .view("dicIssuingAuthority.for.integration")
+                            .list().stream().findFirst().orElse(null);
+                    if (dicIssuingAuthority != null) {
+                        personDocument.setIssuingAuthority(dicIssuingAuthority);
+                    } else {
+                        return prepareError(result, methodName, personDocuments,
+                                "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
+                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    }
+                    DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
+                            .query("select e from tsadv$DicApprovalStatus e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode ")
+                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
+                                    "companyCode", personDocumentJson.getCompanyCode()))
+                            .view("dicApprovalStatus.for.integration")
+                            .list().stream().findFirst().orElse(null);
+                    if (status != null) {
+                        personDocument.setStatus(status);
+                    } else {
+                        return prepareError(result, methodName, personDocuments,
+                                "no tsadv$DicApprovalStatus with legacyId " + personDocumentJson.getStatus()
+                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(personDocument);
+                }
+                if (personDocument == null) {
+                    personDocument = metadata.create(PersonDocument.class);
+                    personDocument.setId(UUID.randomUUID());
+                    personDocument.setLegacyId(personDocumentJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getPersonId(),
+                                    "company", personDocumentJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personDocument.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personDocuments,
+                                "no base$PersonGroupExt with legacyId " + personDocumentJson.getPersonId()
+                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    }
+                    DicDocumentType dicDocumentType = dataManager.load(DicDocumentType.class)
+                            .query("select e from tsadv$DicDocumentType e" +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getDocumentTypeId(),
+                                    "companyCode", personDocumentJson.getCompanyCode()))
+                            .view("dicDocumentType-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (dicDocumentType != null) {
+                        personDocument.setDocumentType(dicDocumentType);
+                    } else {
+                        return prepareError(result, methodName, personDocuments,
+                                "no tsadv$DicDocumentType with legacyId " + personDocumentJson.getDocumentTypeId()
+                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    }
+                    personDocument.setDocumentNumber(personDocumentJson.getDocumentNumber());
+                    personDocument.setIssueDate(formatter.parse(personDocumentJson.getIssueDate()));
+                    personDocument.setExpiredDate(formatter.parse(personDocumentJson.getExpiredDate()));
+
+                    DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
+                            .query("select e from tsadv_DicIssuingAuthority e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getIssueAuthorityId(),
+                                    "companyCode", personDocumentJson.getCompanyCode()))
+                            .view("dicIssuingAuthority.for.integration")
+                            .list().stream().findFirst().orElse(null);
+                    if (dicIssuingAuthority != null) {
+                        personDocument.setIssuingAuthority(dicIssuingAuthority);
+                    } else {
+                        return prepareError(result, methodName, personDocuments,
+                                "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
+                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    }
+                    DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
+                            .query("select e from tsadv$DicApprovalStatus e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode ")
+                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
+                                    "companyCode", personDocumentJson.getCompanyCode()))
+                            .view("dicApprovalStatus.for.integration")
+                            .list().stream().findFirst().orElse(null);
+                    if (status != null) {
+                        personDocument.setStatus(status);
+                    } else {
+                        return prepareError(result, methodName, personDocuments,
+                                "no tsadv$DicApprovalStatus with legacyId " + personDocumentJson.getStatus()
+                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(personDocument);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personDocuments, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personDocuments);
+    }
+
+    @Override
+    public BaseResult deletePersonDocument(PersonDocumentDataJson personDocumentData) {
+        String methodName = "deletePersonDocument";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonDocumentJson> personDocuments = new ArrayList<>();
+        if (personDocumentData.getPersonDocuments() != null) {
+            personDocuments = personDocumentData.getPersonDocuments();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonDocument> personDocumentArrayList = new ArrayList<>();
+            for (PersonDocumentJson personDocumentJson : personDocuments) {
+                if (personDocumentJson.getLegacyId() == null || personDocumentJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no legacyId");
+                }
+                if (personDocumentJson.getCompanyCode() == null || personDocumentJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no companyCode");
+                }
+                if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personDocuments,
+                            "no personId");
+                }
+
+                PersonDocument personDocument = dataManager.load(PersonDocument.class)
+                        .query("select e from tsadv$PersonDocument e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pgLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personDocumentJson.getLegacyId(),
+                                "pgLegacyId", personDocumentJson.getPersonId(),
+                                "companyCode", personDocumentJson.getCompanyCode()))
+                        .view("personDocument.edit").list().stream().findFirst().orElse(null);
+
+                if (personDocument == null) {
+                    return prepareError(result, methodName, personDocumentJson,
+                            "no personDocument with legacyId and personId : "
+                                    + personDocumentJson.getLegacyId() + " , " + personDocumentJson.getPersonId() +
+                                    ", " + personDocumentJson.getCompanyCode());
+                }
+                if (!personDocumentArrayList.stream().filter(personDocument1 ->
+                        personDocument1.getId().equals(personDocument.getId())).findAny().isPresent()) {
+                    personDocumentArrayList.add(personDocument);
+                }
+            }
+            for (PersonDocument personDocument : personDocumentArrayList) {
+                entityManager.remove(personDocument);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personDocumentData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personDocumentData);
     }
 }

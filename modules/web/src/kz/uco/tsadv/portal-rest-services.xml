@@ -71,4 +71,11 @@
             <param name="trainerId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="bproc_BprocTaskService">
+        <method name="completeWithOutcome">
+            <param name="taskData" type="com.haulmont.addon.bproc.entity.TaskData"/>
+            <param name="outcomeId" type="java.lang.String"/>
+            <param name="processVariables" type="java.util.Map"/>
+        </method>
+    </service>
 </services>
