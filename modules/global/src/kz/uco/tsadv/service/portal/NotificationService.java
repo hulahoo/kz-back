@@ -8,4 +8,6 @@ public interface NotificationService {
     String NAME = "tsadv_NotificationService";
 
     List<BellNotificationResponsePojo> notifications();
+
+    List<BellNotificationResponsePojo> tasks();
 }

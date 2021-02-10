@@ -648,6 +648,7 @@
     </service>
     <service name="tsadv_NotificationService">
         <method name="notifications"/>
+        <method name="tasks"/>
     </service>
     <service name="tsadv_KpiService">
         <method name="loadUsersPerformancePlans">
