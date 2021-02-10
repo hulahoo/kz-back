@@ -2,10 +2,13 @@ package kz.uco.tsadv.web.screens.scheduleoffsetsrequest;
 
 import com.haulmont.addon.bproc.web.processform.Outcome;
 import com.haulmont.addon.bproc.web.processform.ProcessForm;
+import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.TextField;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
@@ -25,6 +28,8 @@ import javax.inject.Inject;
 public class ScheduleOffsetsRequestSsMyTeamEdit extends AbstractBprocEditor<ScheduleOffsetsRequest> {
     @Inject
     protected TextField<String> purposeTextField;
+    @Inject
+    protected InstanceContainer<ScheduleOffsetsRequest> scheduleOffsetsRequestDc;
 
     @Subscribe(id = "scheduleOffsetsRequestDc", target = Target.DATA_CONTAINER)
     public void onScheduleOffsetsRequestDcItemPropertyChange(
@@ -41,4 +46,14 @@ public class ScheduleOffsetsRequestSsMyTeamEdit extends AbstractBprocEditor<Sche
         super.initEditableFields();
     }
 
+    @Override
+    protected TsadvUser getEmployee() {
+        TsadvUser user = dataManager.load(TsadvUser.class)
+                .query("select e from tsadv$UserExt e where e.personGroup.id = :personGroupId")
+                .setParameters(ParamsMap.of("personGroupId",
+                        scheduleOffsetsRequestDc.getItem().getPersonGroup().getId()))
+                .view(View.MINIMAL).list().stream().findFirst().orElse(null);
+
+        return user;
+    }
 }
