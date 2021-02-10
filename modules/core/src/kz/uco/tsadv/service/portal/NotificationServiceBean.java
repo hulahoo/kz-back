@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 @Service(NotificationService.NAME)
 public class NotificationServiceBean implements NotificationService {
 
-    private final Gson gson = new Gson();
-
     @Inject
     private UserSessionSource userSessionSource;
 

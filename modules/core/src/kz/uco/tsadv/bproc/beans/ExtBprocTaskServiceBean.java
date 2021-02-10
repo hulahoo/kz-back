@@ -6,6 +6,7 @@ import com.haulmont.addon.bproc.entity.TaskData;
 import com.haulmont.addon.bproc.service.BprocTaskServiceBean;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.security.entity.User;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import org.flowable.engine.ProcessEngines;
 import org.flowable.engine.RuntimeService;
@@ -20,6 +21,10 @@ public class ExtBprocTaskServiceBean extends BprocTaskServiceBean {
 
     @Override
     public void completeWithOutcome(TaskData taskData, String outcomeId, Map<String, Object> processVariables) {
+
+        User user = userSessionSource.getUserSession().getUser();
+        this.setAssignee(taskData.getId(), user.getId().toString());
+
         Outcome outcomeInstance = new Outcome();
         outcomeInstance.setTaskDefinitionKey(taskData.getTaskDefinitionKey());
         outcomeInstance.setDate(AppBeans.get(TimeSource.class).currentTimestamp());
