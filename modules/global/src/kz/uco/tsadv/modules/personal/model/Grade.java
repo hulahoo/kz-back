@@ -8,7 +8,7 @@ import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@NamePattern("%s |gradeName")
+@NamePattern("%s |gradeName,endDate,startDate")
 @Table(name = "TSADV_GRADE")
 @Entity(name = "tsadv$Grade")
 public class Grade extends AbstractTimeBasedEntity implements IGroupedEntity<GradeGroup> {
