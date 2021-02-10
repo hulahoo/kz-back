@@ -6,6 +6,7 @@ import com.haulmont.addon.bproc.form.FormData;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
+import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.uactivity.entity.ActivityType;
 
@@ -51,4 +52,6 @@ public interface BprocService {
     void approveAbsence(AbsenceRequest absenceRequest);
 
     Map<String, String> getActivityIdMap(String processDefinitionKey);
+
+    void approveAbsenceForRecall(AbsenceForRecall absenceForRecall);
 }
