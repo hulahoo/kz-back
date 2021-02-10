@@ -1093,7 +1093,15 @@ public class EmployeeServiceBean implements EmployeeService {
                 " WHERE e.person_group_id = ?2 " +
                 "   and e.start_month <= ?1 " +
                 "   and e.delete_ts is null";
-        list.addAll(commonService.emNativeQueryResultList(query2, map));
+        List<Object[]> list2 = (commonService.emNativeQueryResultList(query2, map));
+        if(list2.size() != 0) {
+            for (Object[] items : list2) {
+                if (items[1] == null) {
+                    items[1] = new Date();
+                }
+            }
+            list.addAll(list2);
+        }
 
         return getYears(list);
     }
