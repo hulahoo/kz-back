@@ -10598,6 +10598,7 @@ create table TSADV_VACATION_SCHEDULE (
     END_DATE date,
     ABSENCE_DAYS integer,
     STATUS_ID uuid not null,
+    ABSENCE_REQUEST_ID uuid,
     --
     primary key (ID)
 )^
@@ -16567,6 +16568,15 @@ create table TSADV_ABSENCE_REQUEST (
     PURPOSE_ID uuid,
     PURPOSE_TEXT varchar(2000),
     TIME_OF_STARTING timestamp,
+    REASON varchar(255),
+    ORIGINAL_SHEET boolean,
+    SCHEDULE_START_DATE date,
+    SCHEDULE_END_DATE date,
+    ADD_NEXT_YEAR boolean,
+    NEW_START_DATE date,
+    NEW_END_DATE varchar(255),
+    PERIOD_DATE_FROM date,
+    PERIOD_DATE_TO date,
     TIME_OF_FINISHING timestamp,
     TOTAL_HOURS integer,
     COMPENCATION boolean,
