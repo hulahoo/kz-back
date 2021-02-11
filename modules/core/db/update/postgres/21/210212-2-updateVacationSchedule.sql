@@ -1,0 +1,3 @@
+alter table TSADV_VACATION_SCHEDULE rename column absence_request_id to absence_request_id__u05415 ;
+alter table TSADV_VACATION_SCHEDULE drop constraint FK_TSADV_VACATION_SCHEDULE_ABSENCE_REQUEST ;
+drop index IDX_TSADV_VACATION_SCHEDULE_ABSENCE_REQUEST ;

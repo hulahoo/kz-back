@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(name = "TSADV_VACATION_SCHEDULE")
-@Entity(name = "tsadv_VacationSchedule")
+@Entity(name = "'tsadv_VacationSchedule'")
 @NamePattern("%s(%s)|personGroup,absenceDays")
 public class VacationSchedule extends AbstractParentEntity {
     private static final long serialVersionUID = -8297168813225443665L;
@@ -44,16 +44,6 @@ public class VacationSchedule extends AbstractParentEntity {
     @NotNull
     private DicRequestStatus status;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ABSENCE_REQUEST_ID")
-    private AbsenceRequest absenceRequest;
-
-    public AbsenceRequest getAbsenceRequest() {
-        return absenceRequest;
-    }
-
-    public void setAbsenceRequest(AbsenceRequest absenceRequest) {
-        this.absenceRequest = absenceRequest;
-    }
 
     public void setStatus(DicRequestStatus status) {
         this.status = status;
