@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://vacationGraphicEdit.caption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.vacationgraphic">
+    <data>
+        <instance id="vacationGraphicDc"
+                  class="kz.uco.tsadv.entity.VacationGraphic">
+            <view extends="_minimal">
+                <property name="requestNumber"/>
+                <property name="surname"/>
+                <property name="middlename"/>
+                <property name="division"/>
+                <property name="duty"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="comments"/>
+            </view>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="vacationGraphicDc">
+            <column width="350px">
+                <textField id="nameField" property="name" dataContainer="vacationGraphicDc"/>
+                <textField id="surnameField" property="surname" dataContainer="vacationGraphicDc"/>
+                <textField id="middlenameField" property="middlename" dataContainer="vacationGraphicDc"/>
+                <textField id="divisionField" property="division" dataContainer="vacationGraphicDc"/>
+                <textField id="dutyField" property="duty" dataContainer="vacationGraphicDc"/>
+                <dateField id="startDateField" property="startDate" dataContainer="vacationGraphicDc"/>
+                <dateField id="endDateField" property="endDate" dataContainer="vacationGraphicDc"/>
+                <textField id="commentsField" property="comments" dataContainer="vacationGraphicDc"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button id="commitAndCloseBtn" caption="save" />
+            <button id="closeBtn" action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

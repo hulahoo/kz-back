@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://vacationGraphicBrowse.caption"
+        focusComponent="vacationGraphicsTable"
+        messagesPack="kz.uco.tsadv.web.screens.vacationgraphic">
+    <data readOnly="true">
+        <collection id="vacationGraphicsDc"
+                    class="kz.uco.tsadv.entity.VacationGraphic">
+            <view extends="_minimal">
+                <property name="surname"/>
+                <property name="middlename"/>
+                <property name="division"/>
+                <property name="duty"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="comments"/>
+                <property name="isSendToOracle"/>
+                <property name="name"> </property>
+            </view>
+            <loader id="vacationGraphicsDl">
+                <query>
+                    <![CDATA[select e from tsadv_VacationGraphic e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="vacationGraphicsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="vacationGraphicsTable"
+                dataLoader="vacationGraphicsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="vacationGraphicsTable"
+                    width="100%"
+                    dataContainer="vacationGraphicsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+              <column id="nameSurnameMiddlename" caption=""/>
+                <column id="division"/>
+                <column id="duty"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="comments"/>
+                <column id="isSendToOracle"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="vacationGraphicsTable.create"/>
+                <button id="editBtn" action="vacationGraphicsTable.edit"/>
+                <button id="removeBtn" action="vacationGraphicsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

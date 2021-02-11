@@ -626,5 +626,6 @@
         <class>kz.uco.tsadv.modules.personal.requests.OrgStructureRequest</class>
         <class>kz.uco.tsadv.modules.personal.requests.OrgStructureRequestDetail</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicChangeType</class>
+        <class>kz.uco.tsadv.entity.VacationGraphic</class>
     </persistence-unit>
 </persistence>
