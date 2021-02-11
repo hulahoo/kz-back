@@ -1,0 +1,9 @@
+alter table TSADV_ABSENCE_REQUEST add column REASON varchar(255) ;
+alter table TSADV_ABSENCE_REQUEST add column SCHEDULE_START_DATE date ;
+alter table TSADV_ABSENCE_REQUEST add column NEW_START_DATE date ;
+alter table TSADV_ABSENCE_REQUEST add column ADD_NEXT_YEAR boolean ;
+alter table TSADV_ABSENCE_REQUEST add column SCHEDULE_END_DATE date ;
+alter table TSADV_ABSENCE_REQUEST add column PERIOD_DATE_FROM date ;
+alter table TSADV_ABSENCE_REQUEST add column ORIGINAL_SHEET boolean ;
+alter table TSADV_ABSENCE_REQUEST add column PERIOD_DATE_TO date ;
+alter table TSADV_ABSENCE_REQUEST add column NEW_END_DATE varchar(255) ;

@@ -4,6 +4,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import kz.uco.tsadv.entity.VacationSchedule;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
@@ -13,6 +14,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @NamePattern("%s (%s)|id,requestDate")
 @Table(name = "TSADV_ABSENCE_REQUEST")
@@ -65,6 +67,38 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @Column(name = "TIME_OF_STARTING")
     protected Date timeOfStarting;
 
+    @Column(name = "REASON")
+    private String reason;
+
+    @Column(name = "ORIGINAL_SHEET")
+    private Boolean originalSheet;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "SCHEDULE_START_DATE")
+    private Date scheduleStartDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "SCHEDULE_END_DATE")
+    private Date scheduleEndDate;
+
+    @Column(name = "ADD_NEXT_YEAR")
+    private Boolean addNextYear;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "NEW_START_DATE")
+    private Date newStartDate;
+
+    @Column(name = "NEW_END_DATE")
+    private String newEndDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "PERIOD_DATE_FROM")
+    private Date periodDateFrom;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "PERIOD_DATE_TO")
+    private Date periodDateTo;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "TIME_OF_FINISHING")
     protected Date timeOfFinishing;
@@ -83,6 +117,89 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     @Column(name = "AGREE")
     protected Boolean agree;
+
+    @OneToMany(mappedBy = "absenceRequest")
+    private List<VacationSchedule> vacationSchedule;
+
+    public Boolean getAddNextYear() {
+        return addNextYear;
+    }
+
+    public void setAddNextYear(Boolean addNextYear) {
+        this.addNextYear = addNextYear;
+    }
+
+    public String getNewEndDate() {
+        return newEndDate;
+    }
+
+    public void setNewEndDate(String newEndDate) {
+        this.newEndDate = newEndDate;
+    }
+
+    public Date getNewStartDate() {
+        return newStartDate;
+    }
+
+    public void setNewStartDate(Date newStartDate) {
+        this.newStartDate = newStartDate;
+    }
+
+    public Date getPeriodDateTo() {
+        return periodDateTo;
+    }
+
+    public void setPeriodDateTo(Date periodDateTo) {
+        this.periodDateTo = periodDateTo;
+    }
+
+    public Date getPeriodDateFrom() {
+        return periodDateFrom;
+    }
+
+    public void setPeriodDateFrom(Date periodDateFrom) {
+        this.periodDateFrom = periodDateFrom;
+    }
+
+    public Date getScheduleEndDate() {
+        return scheduleEndDate;
+    }
+
+    public void setScheduleEndDate(Date scheduleEndDate) {
+        this.scheduleEndDate = scheduleEndDate;
+    }
+
+    public Date getScheduleStartDate() {
+        return scheduleStartDate;
+    }
+
+    public void setScheduleStartDate(Date scheduleStartDate) {
+        this.scheduleStartDate = scheduleStartDate;
+    }
+
+    public void setOriginalSheet(Boolean originalSheet) {
+        this.originalSheet = originalSheet;
+    }
+
+    public Boolean getOriginalSheet() {
+        return originalSheet;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public List<VacationSchedule> getVacationSchedule() {
+        return vacationSchedule;
+    }
+
+    public void setVacationSchedule(List<VacationSchedule> vacationSchedule) {
+        this.vacationSchedule = vacationSchedule;
+    }
 
     public String getPurposeText() {
         return purposeText;

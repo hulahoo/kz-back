@@ -1,0 +1,1 @@
+alter table TSADV_VACATION_SCHEDULE add column ABSENCE_REQUEST_ID uuid ;
