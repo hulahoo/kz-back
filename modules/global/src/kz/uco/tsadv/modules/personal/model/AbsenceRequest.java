@@ -67,9 +67,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @Column(name = "TIME_OF_STARTING")
     protected Date timeOfStarting;
 
-    @Column(name = "REASON")
-    private String reason;
-
     @Column(name = "ORIGINAL_SHEET")
     private Boolean originalSheet;
 
@@ -89,7 +86,8 @@ public class AbsenceRequest extends AbstractBprocRequest {
     private Date newStartDate;
 
     @Column(name = "NEW_END_DATE")
-    private String newEndDate;
+    @Temporal(TemporalType.DATE)
+    private Date newEndDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "PERIOD_DATE_FROM")
@@ -121,20 +119,20 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @OneToMany(mappedBy = "absenceRequest")
     private List<VacationSchedule> vacationSchedule;
 
+    public void setNewEndDate(Date newEndDate) {
+        this.newEndDate = newEndDate;
+    }
+
+    public Date getNewEndDate() {
+        return newEndDate;
+    }
+
     public Boolean getAddNextYear() {
         return addNextYear;
     }
 
     public void setAddNextYear(Boolean addNextYear) {
         this.addNextYear = addNextYear;
-    }
-
-    public String getNewEndDate() {
-        return newEndDate;
-    }
-
-    public void setNewEndDate(String newEndDate) {
-        this.newEndDate = newEndDate;
     }
 
     public Date getNewStartDate() {
@@ -183,14 +181,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     public Boolean getOriginalSheet() {
         return originalSheet;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
     }
 
     public List<VacationSchedule> getVacationSchedule() {
