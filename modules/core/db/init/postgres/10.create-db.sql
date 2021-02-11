@@ -12387,13 +12387,13 @@ create table TSADV_PERSON_DOCUMENT (
     END_DATE date,
     EXPIRED_DATE date not null,
     ISSUED_BY varchar(500),
-    ISSUING_AUTHORITY_ID uuid not null,
+    ISSUING_AUTHORITY_ID uuid,
     DESCRIPTION varchar(2000),
     DOCUMENT_TYPE_ID uuid not null,
     PERSON_GROUP_ID uuid,
     DOCUMENT_NUMBER varchar(255) not null,
     SERIES varchar(255),
-    STATUS_ID uuid not null,
+    STATUS_ID uuid,
     FILE_ID uuid,
     --
     primary key (ID)
@@ -17001,6 +17001,18 @@ create table TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK (
 -- begin SEC_USER
 alter table SEC_USER add column PERSON_GROUP_ID uuid ^
 alter table SEC_USER add column FULLNAMEWITHLOGIN varchar(255) ^
+alter table SEC_USER add column IMAGE_ID uuid ^
+alter table SEC_USER add column ATS_CODE varchar(255) ^
+alter table SEC_USER add column INNER_NUMBER varchar(255) ^
+alter table SEC_USER add column AVAILABILITY boolean ^
+update SEC_USER set AVAILABILITY = false where AVAILABILITY is null ^
+alter table SEC_USER alter column AVAILABILITY set not null ^
+alter table SEC_USER add column MOBILE_PHONE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CODE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CHAT_ID varchar(255) ^
+alter table SEC_USER add column PASSWORD_CHANGE_DATE date ^
+alter table SEC_USER add column SHORT_NAME varchar(100) ^
+alter table SEC_USER add column FULL_NAME varchar(100) ^
 -- end SEC_USER
 -- begin BASE_ASSIGNMENT
 -- alter table BASE_ASSIGNMENT add column PERSON_GROUP_ID uuid ^
