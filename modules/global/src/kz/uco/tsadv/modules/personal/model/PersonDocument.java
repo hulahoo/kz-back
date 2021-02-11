@@ -39,8 +39,7 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     @Column(name = "ISSUED_BY", length = 500)
     protected String issuedBy;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ISSUING_AUTHORITY_ID")
     protected DicIssuingAuthority issuingAuthority;
 
@@ -65,7 +64,7 @@ public class PersonDocument extends AbstractParentEntity implements HasApprovalS
     protected String series;
 
     @OnDeleteInverse(DeletePolicy.DENY)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "STATUS_ID")
     protected DicApprovalStatus status;
 

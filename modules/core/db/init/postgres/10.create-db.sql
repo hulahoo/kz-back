@@ -10598,6 +10598,7 @@ create table TSADV_VACATION_SCHEDULE (
     END_DATE date,
     ABSENCE_DAYS integer,
     STATUS_ID uuid not null,
+    ABSENCE_REQUEST_ID uuid,
     --
     primary key (ID)
 )^
@@ -12387,13 +12388,13 @@ create table TSADV_PERSON_DOCUMENT (
     END_DATE date,
     EXPIRED_DATE date not null,
     ISSUED_BY varchar(500),
-    ISSUING_AUTHORITY_ID uuid not null,
+    ISSUING_AUTHORITY_ID uuid,
     DESCRIPTION varchar(2000),
     DOCUMENT_TYPE_ID uuid not null,
     PERSON_GROUP_ID uuid,
     DOCUMENT_NUMBER varchar(255) not null,
     SERIES varchar(255),
-    STATUS_ID uuid not null,
+    STATUS_ID uuid,
     FILE_ID uuid,
     --
     primary key (ID)
@@ -16567,6 +16568,15 @@ create table TSADV_ABSENCE_REQUEST (
     PURPOSE_ID uuid,
     PURPOSE_TEXT varchar(2000),
     TIME_OF_STARTING timestamp,
+    REASON varchar(255),
+    ORIGINAL_SHEET boolean,
+    SCHEDULE_START_DATE date,
+    SCHEDULE_END_DATE date,
+    ADD_NEXT_YEAR boolean,
+    NEW_START_DATE date,
+    NEW_END_DATE varchar(255),
+    PERIOD_DATE_FROM date,
+    PERIOD_DATE_TO date,
     TIME_OF_FINISHING timestamp,
     TOTAL_HOURS integer,
     COMPENCATION boolean,
@@ -17001,6 +17011,18 @@ create table TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK (
 -- begin SEC_USER
 alter table SEC_USER add column PERSON_GROUP_ID uuid ^
 alter table SEC_USER add column FULLNAMEWITHLOGIN varchar(255) ^
+alter table SEC_USER add column IMAGE_ID uuid ^
+alter table SEC_USER add column ATS_CODE varchar(255) ^
+alter table SEC_USER add column INNER_NUMBER varchar(255) ^
+alter table SEC_USER add column AVAILABILITY boolean ^
+update SEC_USER set AVAILABILITY = false where AVAILABILITY is null ^
+alter table SEC_USER alter column AVAILABILITY set not null ^
+alter table SEC_USER add column MOBILE_PHONE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CODE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CHAT_ID varchar(255) ^
+alter table SEC_USER add column PASSWORD_CHANGE_DATE date ^
+alter table SEC_USER add column SHORT_NAME varchar(100) ^
+alter table SEC_USER add column FULL_NAME varchar(100) ^
 -- end SEC_USER
 -- begin BASE_ASSIGNMENT
 -- alter table BASE_ASSIGNMENT add column PERSON_GROUP_ID uuid ^
@@ -17165,3 +17187,28 @@ alter table BASE_POSITION_GROUP add column ADMIN_APPROVE_ID uuid ^
 alter table BASE_POSITION_GROUP add column DTYPE varchar(31) ^
 update BASE_POSITION_GROUP set DTYPE = 'base$PositionGroupExt' where DTYPE is null ^
 -- end BASE_POSITION_GROUP
+-- begin TSADV_VACATION_GRAPHIC
+create table TSADV_VACATION_GRAPHIC (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    REQUEST_NUMBER bigint,
+    NAME varchar(255) not null,
+    SURNAME varchar(255) not null,
+    MIDDLENAME varchar(255) not null,
+    DIVISION varchar(255) not null,
+    DUTY varchar(255) not null,
+    START_DATE date not null,
+    END_DATE date,
+    COMMENTS varchar(255),
+    IS_SEND_TO_ORACLE boolean,
+    --
+    primary key (ID)
+)^
+-- end TSADV_VACATION_GRAPHIC

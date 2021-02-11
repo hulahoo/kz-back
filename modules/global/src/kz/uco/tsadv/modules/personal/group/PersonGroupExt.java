@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Locale;
 
 @Listeners("tsadv_PersonGroupListener")
-@NamePattern("%s|person")
+@NamePattern("%s|person,list")
 @Extends(PersonGroup.class)
 @Entity(name = "base$PersonGroupExt")
 @Customizer(PersonGroupExtDescriptorCustomizer.class)
