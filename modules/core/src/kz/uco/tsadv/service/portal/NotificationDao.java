@@ -1,8 +1,8 @@
 package kz.uco.tsadv.service.portal;
 
-import com.haulmont.cuba.core.Persistence;
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.DataManager;
-import kz.uco.uactivity.entity.StatusEnum;
+import kz.uco.uactivity.entity.Activity;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -13,65 +13,28 @@ import java.util.UUID;
 public class NotificationDao {
 
     @Inject
-    private Persistence persistence;
-
-    @Inject
     protected DataManager dataManager;
 
-    //todo
-    List<Object[]> loadNotifications(UUID userId, StatusEnum activityStatus, String locale, int limit) {
-        final String notificationCode = "NOTIFICATION";
+    public static final String NOTIFICATION_CODE = "NOTIFICATION";
 
-        return persistence.callInTransaction(em -> em.createNativeQuery(String.format(
-                "" +
-                        "SELECT a.id, " +
-                        "                           a.name_%s AS name, " +
-                        "                           a.create_ts, " +
-                        "                           at.code, " +
-//                        "                           at.code " +
-                        "                           a.REFERENCE_ID " +
-                        "                    FROM uactivity_activity a " +
-                        "                             INNER JOIN uactivity_activity_type at ON a.type_id = at.id " +
-                        "                        AND a.delete_ts IS NULL " +
-                        "                        AND at.delete_ts IS NULL " +
-                        "                        AND a.assigned_user_id = #userId " +
-                        "                        AND a.status = #status " +
-                        "                        AND at.code = #code " +
-                        "                    ORDER BY a.create_ts desc " +
-                        "                    LIMIT %d ",
-                locale,
-                limit))
-                .setParameter("userId", userId)
-                .setParameter("status", activityStatus.getId())
-                .setParameter("code", notificationCode)
-                .getResultList());
+    List<Activity> loadNotifications(UUID userId, int firstResult, int limit) {
+        return getActiveActivityList(userId, firstResult, limit, true);
     }
 
-    public List<Object[]> loadTasks(UUID userId, StatusEnum activityStatus, String language, int limit) {
+    public List<Activity> loadTasks(UUID userId, int firstResult, int limit) {
+        return getActiveActivityList(userId, firstResult, limit, false);
+    }
 
-        final String notificationCode = "NOTIFICATION";
-
-        return persistence.callInTransaction(em -> em.createNativeQuery(String.format("" +
-                        "SELECT a.id, " +
-                        "                           a.name_%s AS name, " +
-                        "                           a.create_ts, " +
-                        "                           at.code, " +
-//                        "                           at.code " +
-                        "                           a.REFERENCE_ID " +
-                        "                    FROM uactivity_activity a " +
-                        "                             INNER JOIN uactivity_activity_type at ON a.type_id = at.id " +
-                        "                        AND a.delete_ts IS NULL " +
-                        "                        AND at.delete_ts IS NULL " +
-                        "                        AND a.assigned_user_id = #userId " +
-                        "                        AND a.status = #status " +
-                        "                        AND at.code <> #code " +
-                        "                    ORDER BY a.create_ts desc " +
-                        "                    LIMIT %d ",
-                language,
-                limit))
-                .setParameter("userId", userId)
-                .setParameter("status", activityStatus.getId())
-                .setParameter("code", notificationCode)
-                .getResultList());
+    protected List<Activity> getActiveActivityList(UUID userId, int firstResult, int limit, boolean onlyNotification) {
+        return dataManager.load(Activity.class)
+                .query(String.format("select e from uactivity$Activity e " +
+                        "   where e.assignedUser.id = :assignedUserId " +
+                        "       and e.status = @enum(uco.uactivity.entity.StatusEnum.active) " +
+                        "       and e.type.code %s :code", onlyNotification ? '=' : "<>"))
+                .setParameters(ParamsMap.of("assignedUserId", userId, "code", NOTIFICATION_CODE))
+                .view("portal-activity")
+                .firstResult(firstResult)
+                .maxResults(limit)
+                .list();
     }
 }

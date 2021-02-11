@@ -289,4 +289,9 @@
     <view name="portal-bproc-users" entity="tsadv$UserExt" extends="_minimal">
         <property name="fullNameWithLogin"/>
     </view>
+    <view name="portal-activity" entity="uactivity$Activity" extends="_local">
+        <property name="type" view="_local">
+            <property name="windowProperty" view="_local"/>
+        </property>
+    </view>
 </views>

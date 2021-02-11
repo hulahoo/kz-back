@@ -7,7 +7,7 @@ import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.entity.dictionary.DicCompany;
-import kz.uco.tsadv.exceptions.ItemNotFoundException;
+import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesDefiner;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
@@ -87,7 +87,7 @@ public class StartBprocServiceBean implements StartBprocService {
 
             if (hrUsersForPerson.isEmpty()) {
                 if (!link.getIsAddableApprover())
-                    throw new ItemNotFoundException(String.format(messages.getMainMessage("hr.user.not.found"), hrRole.getLangValue()));
+                    throw new PortalException(String.format(messages.getMainMessage("hr.user.not.found"), hrRole.getLangValue()));
 
                 if (link.getRequired()) {
                     NotPersisitBprocActors bprocActors = createNotPersisitBprocActors(link, hrRole);

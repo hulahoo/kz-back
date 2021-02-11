@@ -10,7 +10,5 @@
            http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2.xsd
 	       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd">
 
-    <bean id="cuba_RestServicesConfiguration" class="kz.uco.base.restapi.ExtRestServicesConfiguration"/>
-    <bean id="cuba_AnonymousAuthenticationFilter" class="kz.uco.base.restapi.AnonymousAuthenticationFilter"/>
-
+    <bean id="restapi_ServicesController" class="kz.uco.tsadv.controllers.ExtServicesController"/>
 </beans>

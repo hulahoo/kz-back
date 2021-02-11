@@ -15,6 +15,8 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.tsadv.entity.bproc.StartBprocParams;
+import kz.uco.tsadv.exceptions.ItemNotFoundException;
+import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesDefiner;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
@@ -117,13 +119,16 @@ public class StartBprocScreen extends Screen {
         addHrRoleHbox.setVisible(!hrRolesDc.getItems().isEmpty());
     }
 
-    @SuppressWarnings("unchecked")
     protected void initNotPersisitBprocActors() {
-        notPersisitBprocActorsDc.setItems(
-                startBprocService.getNotPersisitBprocActors(
-                        startBprocParams.getEmployee(),
-                        startBprocParams.getInitiatorPersonGroupId(),
-                        bpmRolesDefinerDc.getItem()));
+        try {
+            List<NotPersisitBprocActors> notPersisitBprocActors = startBprocService.getNotPersisitBprocActors(
+                    startBprocParams.getEmployee(),
+                    startBprocParams.getInitiatorPersonGroupId(),
+                    bpmRolesDefinerDc.getItem());
+            notPersisitBprocActorsDc.setItems(notPersisitBprocActors);
+        } catch (PortalException e) {
+            throw new ItemNotFoundException(e.getMessage());
+        }
     }
 
     @Subscribe("ok")
