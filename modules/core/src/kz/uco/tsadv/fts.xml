@@ -1888,5 +1888,8 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicChangeType">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.entity.VacationGraphic">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

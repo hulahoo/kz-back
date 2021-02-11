@@ -1573,5 +1573,3 @@ VALUES('c838be0a-96d0-4ef4-a7c0-dff348347f93', '2020-10-26 11:34:35.598', NULL, 
 INSERT INTO public.sec_user_role
 (id, create_ts, created_by, "version", update_ts, updated_by, delete_ts, deleted_by, user_id, role_id, role_name)
 VALUES('5c62a259-00f7-0c23-5125-dd5fb89a0a03', '2020-12-07 13:03:08.167', 'admin', 1, '2020-12-07 13:03:08.167', NULL, NULL, NULL, '60885987-1b61-4247-94c7-dff348347f93', '51579576-069f-23e4-e764-7a3257935a13', NULL);
-
-
