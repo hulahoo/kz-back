@@ -148,11 +148,8 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
 //                    ifPresent(revision -> outcomes.add(outcomes.indexOf(revision) + 1, reassign));
 
             outcomesPanel.createLayout(taskData, outcomes);
-            outcomesPanel.setBeforeTaskCompletedPredicate(formOutcome -> {
-                boolean equals = OperationResult.Status.SUCCESS.equals(commitChanges().getStatus());
-                bprocTaskService.setAssignee(taskData.getId(), userSession.getUser().getId().toString());
-                return equals;
-            });
+            outcomesPanel.setBeforeTaskCompletedPredicate(formOutcome ->
+                    OperationResult.Status.SUCCESS.equals(commitChanges().getStatus()));
             outcomesPanel.setAfterTaskCompletedHandler(formOutcome -> {
                 notifications.create(Notifications.NotificationType.HUMANIZED)
                         .withPosition(Notifications.Position.MIDDLE_CENTER)

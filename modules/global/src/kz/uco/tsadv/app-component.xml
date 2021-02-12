@@ -48,7 +48,7 @@
         <property name="cuba.springContextConfig"
                   value="+kz/uco/tsadv/web-spring.xml"/>
         <property name="cuba.dispatcherSpringContextConfig"
-                  value="+kz/uco/tsadv/dispatcher-spring.xml"/>
+                  value="+kz/uco/tsadv/web-dispatcher-spring.xml"/>
         <property name="cuba.rest.servicesConfig"
                   value="+kz/uco/tsadv/rest-services.xml kz/uco/tsadv/portal-rest-services.xml"/>
         <property name="cuba.windowConfig"
@@ -59,7 +59,7 @@
                   value="+kz/uco/tsadv/web-permissions.xml"/>
         <property name="cuba.mainMessagePack"
                   value="+kz.uco.tsadv.web kz.uco.tsadv.global kz.uco.tsadv.core"/>
-<!--        <property name="cuba.restSpringContextConfig"-->
-<!--                  value="+kz/uco/tsadv/rest-dispatcher-spring.xml"/>-->
+        <property name="cuba.restSpringContextConfig"
+                  value="+kz/uco/tsadv/rest-dispatcher-spring.xml"/>
     </module>
 </app-component>

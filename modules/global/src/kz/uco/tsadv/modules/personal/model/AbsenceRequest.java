@@ -4,6 +4,7 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import kz.uco.tsadv.entity.VacationSchedule;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
@@ -65,6 +66,36 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @Column(name = "TIME_OF_STARTING")
     protected Date timeOfStarting;
 
+    @Column(name = "ORIGINAL_SHEET")
+    private Boolean originalSheet;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "SCHEDULE_START_DATE")
+    private Date scheduleStartDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "SCHEDULE_END_DATE")
+    private Date scheduleEndDate;
+
+    @Column(name = "ADD_NEXT_YEAR")
+    private Boolean addNextYear;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "NEW_START_DATE")
+    private Date newStartDate;
+
+    @Column(name = "NEW_END_DATE")
+    @Temporal(TemporalType.DATE)
+    private Date newEndDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "PERIOD_DATE_FROM")
+    private Date periodDateFrom;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "PERIOD_DATE_TO")
+    private Date periodDateTo;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "TIME_OF_FINISHING")
     protected Date timeOfFinishing;
@@ -83,6 +114,82 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     @Column(name = "AGREE")
     protected Boolean agree;
+
+    @JoinColumn(name = "VACATION_SCHEDULE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private VacationSchedule vacationSchedule;
+
+    public void setVacationSchedule(VacationSchedule vacationSchedule) {
+        this.vacationSchedule = vacationSchedule;
+    }
+
+    public VacationSchedule getVacationSchedule() {
+        return vacationSchedule;
+    }
+
+    public void setNewEndDate(Date newEndDate) {
+        this.newEndDate = newEndDate;
+    }
+
+    public Date getNewEndDate() {
+        return newEndDate;
+    }
+
+    public Boolean getAddNextYear() {
+        return addNextYear;
+    }
+
+    public void setAddNextYear(Boolean addNextYear) {
+        this.addNextYear = addNextYear;
+    }
+
+    public Date getNewStartDate() {
+        return newStartDate;
+    }
+
+    public void setNewStartDate(Date newStartDate) {
+        this.newStartDate = newStartDate;
+    }
+
+    public Date getPeriodDateTo() {
+        return periodDateTo;
+    }
+
+    public void setPeriodDateTo(Date periodDateTo) {
+        this.periodDateTo = periodDateTo;
+    }
+
+    public Date getPeriodDateFrom() {
+        return periodDateFrom;
+    }
+
+    public void setPeriodDateFrom(Date periodDateFrom) {
+        this.periodDateFrom = periodDateFrom;
+    }
+
+    public Date getScheduleEndDate() {
+        return scheduleEndDate;
+    }
+
+    public void setScheduleEndDate(Date scheduleEndDate) {
+        this.scheduleEndDate = scheduleEndDate;
+    }
+
+    public Date getScheduleStartDate() {
+        return scheduleStartDate;
+    }
+
+    public void setScheduleStartDate(Date scheduleStartDate) {
+        this.scheduleStartDate = scheduleStartDate;
+    }
+
+    public void setOriginalSheet(Boolean originalSheet) {
+        this.originalSheet = originalSheet;
+    }
+
+    public Boolean getOriginalSheet() {
+        return originalSheet;
+    }
 
     public String getPurposeText() {
         return purposeText;

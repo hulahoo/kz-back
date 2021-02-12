@@ -27,7 +27,7 @@ import java.util.Optional;
 @Listeners("tsadv_PositionExtListener")
 @Extends(Position.class)
 @Entity(name = "base$PositionExt")
-@NamePattern("%s|positionName")
+@NamePattern("%s|positionName,endDate,positionNameLang1,positionNameLang2,positionNameLang3,positionNameLang4,positionNameLang5,startDate")
 public class PositionExt extends Position implements IGroupedEntity<PositionGroupExt> {
     private static final long serialVersionUID = 4443208303116319103L;
 

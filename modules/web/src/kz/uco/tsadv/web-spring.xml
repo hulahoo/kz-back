@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:gui="http://schemas.haulmont.com/cuba/spring/cuba-gui.xsd">
+
     <!-- Annotation-based beans -->
     <context:component-scan base-package="kz.uco.tsadv"/>
     <gui:screens base-packages="kz.uco.tsadv.web"/>

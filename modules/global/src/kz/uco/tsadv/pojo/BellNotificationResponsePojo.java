@@ -9,6 +9,8 @@ public class BellNotificationResponsePojo implements Serializable {
     private Date createTs;
     private String code;
     private String name;
+    private String link;
+    private String entityId;
 
     public UUID getId() {
         return id;
@@ -42,11 +44,29 @@ public class BellNotificationResponsePojo implements Serializable {
         this.name = name;
     }
 
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(String entityId) {
+        this.entityId = entityId;
+    }
+
     public static final class BellNotificationResponsePojoBuilder {
         private UUID id;
         private Date createTs;
         private String code;
         private String name;
+        private String entityId;
+        private String link;
 
         private BellNotificationResponsePojoBuilder() {
         }
@@ -70,6 +90,16 @@ public class BellNotificationResponsePojo implements Serializable {
             return this;
         }
 
+        public BellNotificationResponsePojoBuilder entityId(String entityId) {
+            this.entityId = entityId;
+            return this;
+        }
+
+        public BellNotificationResponsePojoBuilder link(String link) {
+            this.link = link;
+            return this;
+        }
+
         public BellNotificationResponsePojoBuilder name(String name) {
             this.name = name;
             return this;
@@ -81,6 +111,8 @@ public class BellNotificationResponsePojo implements Serializable {
             bellNotificationResponsePojo.code = this.code;
             bellNotificationResponsePojo.name = this.name;
             bellNotificationResponsePojo.id = this.id;
+            bellNotificationResponsePojo.link = this.link;
+            bellNotificationResponsePojo.entityId = this.entityId;
             return bellNotificationResponsePojo;
         }
     }

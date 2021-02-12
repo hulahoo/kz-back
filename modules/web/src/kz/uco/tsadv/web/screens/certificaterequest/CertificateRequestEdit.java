@@ -11,7 +11,6 @@ import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import kz.uco.tsadv.service.CommonReportsService;
@@ -89,15 +88,13 @@ public class CertificateRequestEdit extends AbstractBprocEditor<CertificateReque
     }
 
     protected void btnSettings(DicReceivingType receivingType) {
-        getReferenceBtn.setVisible(isDraft() && receivingType != null && "SCAN_VERSION".equals(receivingType.getCode()));
-        procActionButtonHBox.setVisible(!isDraft() || receivingType != null && "ON_HAND".equals(receivingType.getCode()));
+        boolean visible = !isDraft() || receivingType != null && "ON_HAND".equals(receivingType.getCode());
+        getReferenceBtn.setVisible(!visible);
+        procActionButtonHBox.setVisible(visible);
     }
 
     @Subscribe("getReferenceBtn")
     protected void onGetReferenceBtnClick(Button.ClickEvent event) {
-        CertificateRequest editedEntity = getEditedEntity();
-        editedEntity.setFile(commonReportsService.getReportByCertificateRequest(editedEntity));
-        editedEntity.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
         closeWithCommit();
     }
 }

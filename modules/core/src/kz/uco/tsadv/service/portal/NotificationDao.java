@@ -1,8 +1,8 @@
 package kz.uco.tsadv.service.portal;
 
-import com.haulmont.cuba.core.Persistence;
+import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.global.DataManager;
 import kz.uco.uactivity.entity.Activity;
-import kz.uco.uactivity.entity.StatusEnum;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -13,52 +13,28 @@ import java.util.UUID;
 public class NotificationDao {
 
     @Inject
-    private Persistence persistence;
+    protected DataManager dataManager;
 
-    List<Object[]> loadTasksAndNotifications(UUID userId, Integer activityStatus, String locale, int limit) {
-        final String notificationCode = "NOTIFICATION";
-        final String taskCode = "KPI_APPROVE";
+    public static final String NOTIFICATION_CODE = "NOTIFICATION";
 
-        return persistence.callInTransaction(em -> em.createNativeQuery(String.format("" +
-                        "WITH temp_tasks AS (SELECT a.id, " +
-                        "                           a.name_%s AS name, " +
-                        "                           a.create_ts, " +
-                        "                           at.code " +
-                        "                    FROM uactivity_activity a " +
-                        "                             INNER JOIN uactivity_activity_type at ON a.type_id = at.id " +
-                        "                        AND a.delete_ts IS NULL " +
-                        "                        AND at.delete_ts IS NULL " +
-                        "                        AND a.assigned_user_id = ?1 " +
-                        "                        AND a.status = ?2 " +
-                        "                        AND at.code = ?3 " +
-                        "                    ORDER BY a.create_ts desc " +
-                        "                    LIMIT %d), " +
-                        "     temp_notifications AS (SELECT a.id, " +
-                        "                                   a.name_%s AS name, " +
-                        "                                   a.create_ts, " +
-                        "                                   at.code " +
-                        "                            FROM uactivity_activity a " +
-                        "                                     INNER JOIN uactivity_activity_type at ON a.type_id = at.id " +
-                        "                                AND a.delete_ts IS NULL " +
-                        "                                AND at.delete_ts IS NULL " +
-                        "                                AND a.assigned_user_id = ?1 " +
-                        "                                AND a.status = ?2 " +
-                        "                                AND at.code = ?4 " +
-                        "                            ORDER BY a.create_ts desc " +
-                        "                            LIMIT %d) " +
-                        "SELECT * " +
-                        "FROM temp_tasks " +
-                        "UNION ALL " +
-                        "SELECT * " +
-                        "FROM temp_notifications;",
-                locale,
-                limit,
-                locale,
-                limit))
-                .setParameter(1, userId)
-                .setParameter(2, activityStatus)
-                .setParameter(3, notificationCode)
-                .setParameter(4, taskCode)
-                .getResultList());
+    List<Activity> loadNotifications(UUID userId, int firstResult, int limit) {
+        return getActiveActivityList(userId, firstResult, limit, true);
+    }
+
+    public List<Activity> loadTasks(UUID userId, int firstResult, int limit) {
+        return getActiveActivityList(userId, firstResult, limit, false);
+    }
+
+    protected List<Activity> getActiveActivityList(UUID userId, int firstResult, int limit, boolean onlyNotification) {
+        return dataManager.load(Activity.class)
+                .query(String.format("select e from uactivity$Activity e " +
+                        "   where e.assignedUser.id = :assignedUserId " +
+                        "       and e.status = @enum(uco.uactivity.entity.StatusEnum.active) " +
+                        "       and e.type.code %s :code", onlyNotification ? '=' : "<>"))
+                .setParameters(ParamsMap.of("assignedUserId", userId, "code", NOTIFICATION_CODE))
+                .view("portal-activity")
+                .firstResult(firstResult)
+                .maxResults(limit)
+                .list();
     }
 }
