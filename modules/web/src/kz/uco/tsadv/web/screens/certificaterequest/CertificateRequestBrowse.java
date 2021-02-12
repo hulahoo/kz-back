@@ -49,7 +49,6 @@ public class CertificateRequestBrowse extends StandardLookup<CertificateRequest>
         certificateRequestsDl.setParameter("session$userPersonGroupId", personGroupExt.getId());
     }
 
-
     public void printReport(CertificateRequest item, String columnId) {
         exportDisplay.show(item.getFile());
     }
@@ -58,6 +57,7 @@ public class CertificateRequestBrowse extends StandardLookup<CertificateRequest>
         screenBuilders.editor(certificateRequestsTable)
                 .editEntity(certificateRequest)
                 .build()
-                .show();
+                .show()
+                .addAfterCloseListener(afterCloseEvent -> certificateRequestsDl.load());
     }
 }
