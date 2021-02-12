@@ -6,7 +6,6 @@ import com.haulmont.cuba.core.entity.annotation.LookupType;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -43,17 +42,8 @@ public class VacationSchedule extends AbstractParentEntity {
     @JoinColumn(name = "STATUS_ID")
     @NotNull
     private DicRequestStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ABSENCE_REQUEST_ID")
-    private AbsenceRequest absenceRequest;
-
-    public AbsenceRequest getAbsenceRequest() {
-        return absenceRequest;
-    }
-
-    public void setAbsenceRequest(AbsenceRequest absenceRequest) {
-        this.absenceRequest = absenceRequest;
-    }
 
     public void setStatus(DicRequestStatus status) {
         this.status = status;

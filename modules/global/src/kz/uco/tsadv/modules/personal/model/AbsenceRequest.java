@@ -14,7 +14,6 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 
 @NamePattern("%s (%s)|id,requestDate")
 @Table(name = "TSADV_ABSENCE_REQUEST")
@@ -116,8 +115,17 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @Column(name = "AGREE")
     protected Boolean agree;
 
-    @OneToMany(mappedBy = "absenceRequest")
-    private List<VacationSchedule> vacationSchedule;
+    @JoinColumn(name = "VACATION_SCHEDULE_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private VacationSchedule vacationSchedule;
+
+    public void setVacationSchedule(VacationSchedule vacationSchedule) {
+        this.vacationSchedule = vacationSchedule;
+    }
+
+    public VacationSchedule getVacationSchedule() {
+        return vacationSchedule;
+    }
 
     public void setNewEndDate(Date newEndDate) {
         this.newEndDate = newEndDate;
@@ -181,14 +189,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     public Boolean getOriginalSheet() {
         return originalSheet;
-    }
-
-    public List<VacationSchedule> getVacationSchedule() {
-        return vacationSchedule;
-    }
-
-    public void setVacationSchedule(List<VacationSchedule> vacationSchedule) {
-        this.vacationSchedule = vacationSchedule;
     }
 
     public String getPurposeText() {
