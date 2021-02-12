@@ -5,6 +5,8 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.AppBeans;
+import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicCertificateType;
 import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
@@ -120,8 +122,12 @@ public class CertificateRequest extends AbstractBprocRequest {
     @PostConstruct
     public void postConstruct() {
         super.postConstruct();
+
+        CommonService commonService = AppBeans.get(CommonService.class);
+
         this.setShowSalary(false);
         this.setNumberOfCopy(1);
+        this.setCertificateType(commonService.getEntity(DicCertificateType.class, "CERTIFICATE_OF_EMPLOYMENT"));
     }
 
     @Override

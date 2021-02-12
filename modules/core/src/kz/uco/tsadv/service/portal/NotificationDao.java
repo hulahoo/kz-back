@@ -3,6 +3,7 @@ package kz.uco.tsadv.service.portal;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.DataManager;
 import kz.uco.uactivity.entity.Activity;
+import kz.uco.uactivity.entity.StatusEnum;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -29,9 +30,11 @@ public class NotificationDao {
         return dataManager.load(Activity.class)
                 .query(String.format("select e from uactivity$Activity e " +
                         "   where e.assignedUser.id = :assignedUserId " +
-                        "       and e.status = @enum(uco.uactivity.entity.StatusEnum.active) " +
+                        "       and e.status = :status " +
                         "       and e.type.code %s :code", onlyNotification ? '=' : "<>"))
-                .setParameters(ParamsMap.of("assignedUserId", userId, "code", NOTIFICATION_CODE))
+                .setParameters(ParamsMap.of("assignedUserId", userId,
+                        "code", NOTIFICATION_CODE, "status",
+                        StatusEnum.active.getId()))
                 .view("portal-activity")
                 .firstResult(firstResult)
                 .maxResults(limit)
