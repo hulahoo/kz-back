@@ -1891,5 +1891,8 @@
         <entity class="kz.uco.tsadv.entity.VacationGraphic">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

@@ -520,9 +520,9 @@
         }
         input:checked ~ label::after {
            background: var(--radio-checked-color) !important;
-           width: 14px !important;
-           height: 14px !important;
-           top: 6px !important;
+           width: 9px !important;
+           height: 9px !important;
+           top: 5px !important;
            border-radius: 50% !important;
            left: 5px !important;
         }

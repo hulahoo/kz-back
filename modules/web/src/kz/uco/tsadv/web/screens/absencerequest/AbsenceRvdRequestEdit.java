@@ -11,7 +11,7 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.administration.TsadvUser;
-import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
+import kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
 import javax.inject.Inject;
@@ -20,9 +20,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@UiController("tsadv$AbsenceRequestForMyTeam.edit")
-@UiDescriptor("absence-request-for-my-team-edit.xml")
-@EditedEntityContainer("absenceRequestDc")
+@UiController("tsadv_AbsenceRvdRequest.edit")
+@UiDescriptor("absence-rvd-request-edit.xml")
+@EditedEntityContainer("absenceRvdRequestDc")
 @LoadDataBeforeShow
 @ProcessForm(
         outcomes = {
@@ -31,11 +31,11 @@ import java.util.Date;
                 @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
         }
 )
-public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequest> {
+public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest> {
     @Inject
     protected DateField<Date> timeOfStartingField;
     @Inject
-    protected InstanceContainer<AbsenceRequest> absenceRequestDc;
+    protected InstanceContainer<AbsenceRvdRequest> absenceRvdRequestDc;
     @Inject
     protected DateField<Date> timeOfFinishingField;
     protected boolean isBlocked = false;
@@ -48,14 +48,14 @@ public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequ
     @Inject
     protected MessageBundle messageBundle;
 
-    @Subscribe(id = "absenceRequestDc", target = Target.DATA_CONTAINER)
-    protected void onAbsenceRequestDcItemPropertyChange(InstanceContainer.ItemPropertyChangeEvent<AbsenceRequest> event) {
+    @Subscribe(id = "absenceRvdRequestDc", target = Target.DATA_CONTAINER)
+    protected void onAbsenceRvdRequestDcItemPropertyChange(InstanceContainer.ItemPropertyChangeEvent<AbsenceRvdRequest> event) {
         if (!isBlocked) {
             isBlocked = true;
             if (event.getProperty().equals("compencation")) {
-                absenceRequestDc.getItem().setVacationDay(!event.getItem().getCompencation());
+                absenceRvdRequestDc.getItem().setVacationDay(!event.getItem().getCompencation());
             } else if (event.getProperty().equals("vacationDay")) {
-                absenceRequestDc.getItem().setCompencation(!event.getItem().getVacationDay());
+                absenceRvdRequestDc.getItem().setCompencation(!event.getItem().getVacationDay());
             }
             isBlocked = false;
         }
@@ -82,9 +82,9 @@ public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequ
                 Duration between = Duration.between(
                         convertToLocalDateTimeViaSqlTimestamp(event.getItem().getTimeOfStarting()),
                         convertToLocalDateTimeViaSqlTimestamp(event.getItem().getTimeOfFinishing()));
-                absenceRequestDc.getItem().setTotalHours(Integer.valueOf(Long.valueOf(between.toHours()).toString()));
+                absenceRvdRequestDc.getItem().setTotalHours(Integer.valueOf(Long.valueOf(between.toHours()).toString()));
             } else {
-                absenceRequestDc.getItem().setTotalHours(null);
+                absenceRvdRequestDc.getItem().setTotalHours(null);
             }
 
         }
@@ -111,8 +111,8 @@ public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequ
     }
 
     protected void setTimesNull() {
-        absenceRequestDc.getItem().setTimeOfFinishing(null);
-        absenceRequestDc.getItem().setTimeOfStarting(null);
+        absenceRvdRequestDc.getItem().setTimeOfFinishing(null);
+        absenceRvdRequestDc.getItem().setTimeOfStarting(null);
     }
 
 
@@ -121,7 +121,7 @@ public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequ
         TsadvUser user = dataManager.load(TsadvUser.class)
                 .query("select e from tsadv$UserExt e where e.personGroup.id = :personGroupId")
                 .setParameters(ParamsMap.of("personGroupId",
-                        absenceRequestDc.getItem().getPersonGroup().getId()))
+                        absenceRvdRequestDc.getItem().getPersonGroup().getId()))
                 .view(View.MINIMAL).list().stream().findFirst().orElse(null);
 
         return user;

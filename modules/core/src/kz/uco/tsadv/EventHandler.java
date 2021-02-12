@@ -68,10 +68,23 @@ public class EventHandler {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("SCHEDULE_OFFSETS_REQUEST_APPROVE");
             activityType.setScreen("tsadv_ScheduleOffsetsRequestSsMyTeam.edit");
-            activityType.setLangValue1("Утверждение / отклонение заявление на ");
+            activityType.setLangValue1("Утверждение / отклонение заявление на смену графика");
             WindowProperty windowProperty = metadata.create(WindowProperty.class);
             windowProperty.setEntityName("tsadv_ScheduleOffsetsRequest");
             windowProperty.setScreenName("tsadv_ScheduleOffsetsRequestSsMyTeam.edit");
+            windowProperty.setViewName(View.LOCAL);
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
+        if (getCount(em, "ABSENCE_RVD_REQUEST_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("ABSENCE_RVD_REQUEST_APPROVE");
+            activityType.setScreen("tsadv_AbsenceRvdRequest.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на РВД");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv_AbsenceRvdRequest");
+            windowProperty.setScreenName("tsadv_AbsenceRvdRequest.edit");
             windowProperty.setViewName(View.LOCAL);
             activityType.setWindowProperty(windowProperty);
             em.persist(windowProperty);
