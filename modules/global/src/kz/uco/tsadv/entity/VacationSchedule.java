@@ -6,14 +6,13 @@ import com.haulmont.cuba.core.entity.annotation.LookupType;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(name = "TSADV_VACATION_SCHEDULE")
-@Entity(name = "'tsadv_VacationSchedule'")
+@Entity(name = "tsadv_VacationSchedule")
 @NamePattern("%s(%s)|personGroup,absenceDays")
 public class VacationSchedule extends AbstractParentEntity {
     private static final long serialVersionUID = -8297168813225443665L;
@@ -43,6 +42,7 @@ public class VacationSchedule extends AbstractParentEntity {
     @JoinColumn(name = "STATUS_ID")
     @NotNull
     private DicRequestStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
 
     public void setStatus(DicRequestStatus status) {
