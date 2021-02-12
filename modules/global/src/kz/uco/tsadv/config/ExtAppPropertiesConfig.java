@@ -34,4 +34,8 @@ public interface ExtAppPropertiesConfig extends Config {
     @Property("tsadv.kpi.cascadeInPerson")
     @DefaultBoolean(true)
     Boolean getCascadeInPerson();
+
+    @Property("tsadv.kpi.includeAbsence")
+    @DefaultBoolean(true)
+    Boolean getIncludeAbsence();
 }
