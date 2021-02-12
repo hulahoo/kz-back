@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="courseSchedulesTable"
+        messagesPack="kz.uco.tsadv.web.screens.courseschedule">
+    <data readOnly="true">
+        <collection id="courseSchedulesDc"
+                    class="kz.uco.tsadv.modules.learning.model.CourseSchedule"
+                    view="courseSchedule.edit">
+            <loader id="courseSchedulesDl">
+                <query>
+                    <![CDATA[select e from tsadv_CourseSchedule e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="courseSchedulesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="courseSchedulesTable"
+                dataLoader="courseSchedulesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="courseSchedulesTable"
+                    width="100%"
+                    dataContainer="courseSchedulesDc">
+            <actions>
+            </actions>
+            <columns>
+                <column id="course"/>
+                <column id="name"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="learningCenter"/>
+                <column id="address"/>
+                <column id="maxNumberOfPeople"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

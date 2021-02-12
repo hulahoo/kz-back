@@ -6,11 +6,11 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.components.Action;
-import com.haulmont.cuba.gui.components.DialogAction;
-import com.haulmont.cuba.gui.components.Embedded;
-import com.haulmont.cuba.gui.components.FileUploadField;
-import com.haulmont.cuba.gui.model.*;
+import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.model.CollectionContainer;
+import com.haulmont.cuba.gui.model.CollectionLoader;
+import com.haulmont.cuba.gui.model.InstanceContainer;
+import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.common.IMAGE_SIZE;
@@ -24,6 +24,7 @@ import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @UiController("tsadv$Course.edit")
@@ -59,13 +60,21 @@ public class CourseEdit extends StandardEditor<Course> {
     @Inject
     protected CollectionLoader<Enrollment> enrollmentDl;
     @Inject
-    protected CollectionPropertyContainer<CourseSchedule> courseScheduleDc;
+    protected CollectionContainer<CourseSchedule> courseScheduleDc;
+    @Inject
+    protected CollectionLoader<CourseSchedule> courseScheduleDl;
+    @Inject
+    protected Table<CourseSchedule> courseScheduleTable;
+    protected List<Enrollment> newEnrollmentList = new ArrayList<>();
+    protected CommitContext newCommitContext = new CommitContext();
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         courseDl.load();
         enrollmentDl.setParameter("course", courseDc.getItem());
         enrollmentDl.load();
+        courseScheduleDl.setParameter("course", courseDc.getItem());
+        courseScheduleDl.load();
     }
 
 
@@ -252,7 +261,6 @@ public class CourseEdit extends StandardEditor<Course> {
         screenBuilders.lookup(PersonExt.class, this)
                 .withScreenId("base$PersonForKpiCard.browse")
                 .withSelectHandler(personList -> {
-                    CommitContext commitContext = new CommitContext();
                     personList.forEach(personExt -> {
                         boolean isNew = true;
                         List<Enrollment> enrollmentList = dataManager.load(Enrollment.class)
@@ -275,15 +283,47 @@ public class CourseEdit extends StandardEditor<Course> {
                             enrollment.setPersonGroup(personExt.getGroup());
                             enrollment.setStatus(EnrollmentStatus.REQUEST);
                             enrollment.setDate(BaseCommonUtils.getSystemDate());
-                            if (courseScheduleDc.getItems().size() == 1) {
-                                enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
-                            }
-                            commitContext.addInstanceToCommit(enrollment);
+                            newEnrollmentList.add(enrollment);
+//                            newCommitContext
                         }
                     });
-                    dataManager.commit(commitContext);
-                    enrollmentDl.load();
+//                    createEnrollment(newEnrollmentList);
                 })
-                .build().show();
+                .build().show()
+                .addAfterCloseListener(afterCloseEvent -> {
+                    enrollmentDl.load();
+                });
+    }
+
+//    private void createEnrollment(List<Enrollment> newEnrollmentList) {
+//        if (!newEnrollmentList.isEmpty()) {
+//            newEnrollmentList.forEach(enrollment -> {
+//                if (courseScheduleDc.getItems().size() == 1) {
+//                    enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
+//                    newCommitContext.addInstanceToCommit(enrollment);
+//                } else {
+//                    screenBuilders.lookup(CourseSchedule.class, this)
+//                            .withScreenId("tsadv_CourseSchedule.browse")
+//                            .withOptions(new MapScreenOptions(ParamsMap.of("course", courseDc.getItem())))
+//                            .withSelectHandler(courseSchedules -> {
+//                                courseSchedules.forEach(enrollment::setCourseSchedule);
+//                                newCommitContext.addInstanceToCommit(enrollment);
+//                            })
+//                            .build().show();
+//                }
+//            });
+//            dataManager.commit(newCommitContext);
+//            enrollmentDl.load();
+//        }
+//    }
+
+    @Subscribe("courseScheduleTable.create")
+    protected void onCourseScheduleTableCreate(Action.ActionPerformedEvent event) {
+        screenBuilders.editor(courseScheduleTable)
+                .newEntity()
+                .withInitializer(courseSchedule -> {
+                    courseSchedule.setCourse(courseDc.getItem());
+                }).build().show()
+                .addAfterCloseListener(afterCloseEvent -> courseScheduleDl.load());
     }
 }
