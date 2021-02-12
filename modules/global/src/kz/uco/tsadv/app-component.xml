@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <app-component xmlns="http://schemas.haulmont.com/cuba/app-component.xsd"
-               dependsOn="com.haulmont.addon.emailtemplates, com.haulmont.reports, com.haulmont.charts, com.haulmont.fts, com.haulmont.addon.restapi, com.haulmont.addon.helium, com.haulmont.addon.bproc, de.diedavids.cuba.dataimport, kz.uco.uactivity">
+               dependsOn="com.haulmont.addon.emailtemplates, com.haulmont.reports, com.haulmont.charts, com.haulmont.fts, com.haulmont.addon.restapi, kz.uco.base, com.haulmont.addon.helium, com.haulmont.addon.bproc, de.diedavids.cuba.dataimport, kz.uco.uactivity">
     <module blocks="*"
             name="global">
         <artifact appJar="true"
