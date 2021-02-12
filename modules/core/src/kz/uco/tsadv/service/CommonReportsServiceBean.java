@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.reports.ReportingApi;
 import com.haulmont.reports.entity.Report;
+import com.haulmont.reports.libintegration.CubaReporting;
 import kz.uco.tsadv.modules.personal.model.CertificateRequest;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class CommonReportsServiceBean implements CommonReportsService {
             return null;
         }
 
-        return reportingApi.createAndSaveReport(report, ParamsMap.of("req_id", report), report.getName());
+        return reportingApi.createAndSaveReport(report, ParamsMap.of("req_id", report, CubaReporting.REPORT_FILE_NAME_KEY, report.getName()), report.getName());
     }
 
 

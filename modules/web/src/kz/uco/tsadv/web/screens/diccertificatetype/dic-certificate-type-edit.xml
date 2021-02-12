@@ -6,7 +6,9 @@
     <data>
         <instance id="dicCertificateTypeDc"
                   class="kz.uco.tsadv.modules.personal.dictionary.DicCertificateType">
-            <view extends="_local"/>
+            <view extends="_local">
+                <property name="company"/>
+            </view>
             <loader/>
         </instance>
     </data>
