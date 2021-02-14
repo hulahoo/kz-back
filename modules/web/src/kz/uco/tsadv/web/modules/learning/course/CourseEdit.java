@@ -1,5 +1,6 @@
 package kz.uco.tsadv.web.modules.learning.course;
 
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
@@ -15,6 +16,7 @@ import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.common.IMAGE_SIZE;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSchedule;
@@ -65,8 +67,8 @@ public class CourseEdit extends StandardEditor<Course> {
     protected CollectionLoader<CourseSchedule> courseScheduleDl;
     @Inject
     protected Table<CourseSchedule> courseScheduleTable;
-    protected List<Enrollment> newEnrollmentList = new ArrayList<>();
-    protected CommitContext newCommitContext = new CommitContext();
+    @Inject
+    protected CollectionLoader<DicLearningType> dicLearningTypesDl;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -75,6 +77,7 @@ public class CourseEdit extends StandardEditor<Course> {
         enrollmentDl.load();
         courseScheduleDl.setParameter("course", courseDc.getItem());
         courseScheduleDl.load();
+        dicLearningTypesDl.load();
     }
 
 
@@ -258,6 +261,8 @@ public class CourseEdit extends StandardEditor<Course> {
 
     @Subscribe("enrollmentsTable.create")
     protected void onEnrollmentsTableCreate(Action.ActionPerformedEvent event) {
+        List<Enrollment> newEnrollmentList = new ArrayList<>();
+        CommitContext newCommitContext = new CommitContext();
         screenBuilders.lookup(PersonExt.class, this)
                 .withScreenId("base$PersonForKpiCard.browse")
                 .withSelectHandler(personList -> {
@@ -283,47 +288,47 @@ public class CourseEdit extends StandardEditor<Course> {
                             enrollment.setPersonGroup(personExt.getGroup());
                             enrollment.setStatus(EnrollmentStatus.REQUEST);
                             enrollment.setDate(BaseCommonUtils.getSystemDate());
+                            if (courseScheduleDc.getItems().size() == 1) {
+                                enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
+                            }
                             newEnrollmentList.add(enrollment);
-//                            newCommitContext
+                            newCommitContext.addInstanceToCommit(enrollment);
                         }
                     });
-//                    createEnrollment(newEnrollmentList);
-                })
-                .build().show()
+                    if (courseScheduleDc.getItems().size() == 1) {
+                        dataManager.commit(newCommitContext);
+                        enrollmentDl.load();
+                    }
+                }).build().show()
                 .addAfterCloseListener(afterCloseEvent -> {
-                    enrollmentDl.load();
+                    if (courseScheduleDc.getItems().size() > 1) {
+                        screenBuilders.lookup(CourseSchedule.class, this)
+                                .withScreenId("tsadv_CourseSchedule.browse")
+                                .withOptions(new MapScreenOptions(ParamsMap.of("course", courseDc.getItem())))
+                                .withSelectHandler(courseSchedules -> {
+                                    courseSchedules.forEach(courseSchedule ->
+                                            newEnrollmentList.forEach(enrollment -> {
+                                                enrollment.setCourseSchedule(courseSchedule);
+                                                newCommitContext.addInstanceToCommit(enrollment);
+                                            }));
+                                    dataManager.commit(newCommitContext);
+                                    enrollmentDl.load();
+                                })
+                                .build().show();
+                    } else if (courseScheduleDc.getItems().size() == 0) {
+                        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                                .withCaption(messageBundle.getMessage("notCourseSchedule"
+                                        + " " + courseDc.getItem().getName()))
+                                .show();
+                    }
                 });
     }
-
-//    private void createEnrollment(List<Enrollment> newEnrollmentList) {
-//        if (!newEnrollmentList.isEmpty()) {
-//            newEnrollmentList.forEach(enrollment -> {
-//                if (courseScheduleDc.getItems().size() == 1) {
-//                    enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
-//                    newCommitContext.addInstanceToCommit(enrollment);
-//                } else {
-//                    screenBuilders.lookup(CourseSchedule.class, this)
-//                            .withScreenId("tsadv_CourseSchedule.browse")
-//                            .withOptions(new MapScreenOptions(ParamsMap.of("course", courseDc.getItem())))
-//                            .withSelectHandler(courseSchedules -> {
-//                                courseSchedules.forEach(enrollment::setCourseSchedule);
-//                                newCommitContext.addInstanceToCommit(enrollment);
-//                            })
-//                            .build().show();
-//                }
-//            });
-//            dataManager.commit(newCommitContext);
-//            enrollmentDl.load();
-//        }
-//    }
 
     @Subscribe("courseScheduleTable.create")
     protected void onCourseScheduleTableCreate(Action.ActionPerformedEvent event) {
         screenBuilders.editor(courseScheduleTable)
                 .newEntity()
-                .withInitializer(courseSchedule -> {
-                    courseSchedule.setCourse(courseDc.getItem());
-                }).build().show()
+                .withInitializer(courseSchedule -> courseSchedule.setCourse(courseDc.getItem())).build().show()
                 .addAfterCloseListener(afterCloseEvent -> courseScheduleDl.load());
     }
 }

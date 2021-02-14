@@ -48,14 +48,13 @@ public class CourseSectionEdit extends AbstractEditor<CourseSection> {
     @Inject
     protected PickerField test;
 
-//    @Inject
-//    protected Label contentLabel;
-
     @Inject
     protected Label testLabel;
 
     @Inject
     protected GridLayout onlineGrid;
+    @Inject
+    protected Label<String> contentLabel;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -96,25 +95,25 @@ public class CourseSectionEdit extends AbstractEditor<CourseSection> {
         super.postInit();
 
         if (objectTypeDs.getItem() == null) {
-//            content.setVisible(false);
+            content.setVisible(false);
             test.setVisible(false);
 
-//            contentLabel.setVisible(false);
+            contentLabel.setVisible(false);
             testLabel.setVisible(false);
 
-//            content.setRequired(false);
+            content.setRequired(false);
             test.setRequired(false);
         }
     }
 
     protected void visibleTestContent(boolean showTest) {
-//        content.setVisible(!showTest);
+        content.setVisible(!showTest);
         test.setVisible(showTest);
 
-//        contentLabel.setVisible(!showTest);
+        contentLabel.setVisible(!showTest);
         testLabel.setVisible(showTest);
 
-//        content.setRequired(!showTest);
+        content.setRequired(!showTest);
         test.setRequired(showTest);
     }
 

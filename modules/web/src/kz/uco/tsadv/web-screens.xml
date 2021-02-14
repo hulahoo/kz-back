@@ -610,8 +610,6 @@
             template="/kz/uco/tsadv/web/modules/personal/person/frames/pcf-addresses.xml"/>
     <screen id="tsadv$Address.edit"
             template="/kz/uco/tsadv/web/modules/personal/address/address-edit.xml"/>
-    <screen id="tsadv_CourseSchedule.edit"
-            template="/kz/uco/tsadv/web/screens/courseschedule/course-schedule-edit.xml"/>
     <screen id="tsadv$DicAddressType.browse"
             template="/kz/uco/tsadv/web/modules/personal/dictionary/dicaddresstype/dic-address-type-browse.xml"/>
     <screen id="tsadv$DicAddressType.edit"
@@ -1828,8 +1826,8 @@
             template="kz/uco/tsadv/web/learningfeedbackanswer/learning-feedback-answer-browse.xml"/>
     <screen id="tsadv$CourseSchedule.browse"
             template="kz/uco/tsadv/web/modules/learning/coursesectionsession/course-schedule-browse.xml"/>
-    <screen id="tsadv$CourseSchedule.edit"
-            template="kz/uco/tsadv/web/modules/learning/coursesectionsession/course-schedule-edit.xml"/>
+<!--    <screen id="tsadv$CourseSchedule.edit"-->
+    <!--            template="kz/uco/tsadv/web/modules/learning/coursesectionsession/course-schedule-edit.xml"/>-->
     <screen id="tsadv$CourseSection.browse"
             template="kz/uco/tsadv/web/modules/learning/coursesection/course-section-browse.xml"/>
     <screen id="tsadv$DicBudgetItem.browse"

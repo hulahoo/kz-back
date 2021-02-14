@@ -21,8 +21,8 @@
                               class="kz.uco.tsadv.modules.learning.dictionary.DicCourseFormat"/>
     </dsContext>
     <dialogMode height="600"
-                width="800"/>
-    <layout expand="tabSheet"
+                width="1000"/>
+    <layout expand="windowActions"
             spacing="true">
         <tabSheet id="tabSheet">
             <tab id="mainInfo"
@@ -56,14 +56,14 @@
                                                      property="format"
                                                      width="300px"/>
                                     </row>
-                                    <row>
-                                        <label value="mainMsg://CourseSectionObject.content"/>
-                                        <pickerField id="content"
-                                                     captionProperty="objectName"
-                                                     datasource="sectionObjectDs"
-                                                     property="content"
-                                                     width="300px"/>
-                                    </row>
+                                    <!--                                    <row>-->
+                                    <!--                                        <label value="mainMsg://CourseSectionObject.content"/>-->
+                                    <!--                                        <pickerField id="content"-->
+                                    <!--                                                     captionProperty="objectName"-->
+                                    <!--                                                     datasource="sectionObjectDs"-->
+                                    <!--                                                     property="content"-->
+                                    <!--                                                     width="300px"/>-->
+                                    <!--                                    </row>-->
                                 </rows>
                             </grid>
                             <grid id="onlineGrid"
@@ -80,15 +80,15 @@
                                                      property="sectionObject.objectType"
                                                      width="300px"/>
                                     </row>
-                                    <!--                                    <row>-->
-                                    <!--                                        <label id="contentLabel"-->
-                                    <!--                                               value="mainMsg://CourseSectionObject.content"/>-->
-                                    <!--                                        <pickerField id="content"-->
-                                    <!--                                                     captionProperty="objectName"-->
-                                    <!--                                                     datasource="sectionObjectDs"-->
-                                    <!--                                                     property="content"-->
-                                    <!--                                                     width="300px"/>-->
-                                    <!--                                    </row>-->
+                                    <row>
+                                        <label id="contentLabel"
+                                               value="mainMsg://CourseSectionObject.content"/>
+                                        <pickerField id="content"
+                                                     captionProperty="objectName"
+                                                     datasource="sectionObjectDs"
+                                                     property="content"
+                                                     width="300px"/>
+                                    </row>
                                     <row>
                                         <label id="testLabel"
                                                value="mainMsg://CourseSectionObject.test"/>

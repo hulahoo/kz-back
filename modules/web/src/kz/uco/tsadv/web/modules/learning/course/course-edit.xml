@@ -94,12 +94,14 @@
                                 </actions>
                             </pickerField>
                             <textField property="targetAudience"/>
-                            <lookupField caption="msg://learningType"
+                            <lookupField id="learningType" caption="msg://learningType"
                                          optionsContainer="dicLearningTypesDc"
                                          property="learningType"/>
-                            <checkBox property="activeFlag"/>
-                            <checkBox property="selfEnrollment"/>
+                            <checkBox property="activeFlag" caption="msg://active"/>
                             <checkBox property="isOnline"/>
+                            <checkBox property="selfEnrollment"/>
+                            <textField property="educationDuration"/>
+                            <textField property="educationPeriod"/>
                             <textArea id="shortDescription" property="shortDescription"
                                       rows="5"/>
                         </column>
