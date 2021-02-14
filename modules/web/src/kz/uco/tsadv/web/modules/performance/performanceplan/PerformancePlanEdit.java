@@ -313,8 +313,14 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson() != null
                         ? assignedPerformancePlan.getAssignedPerson().getCurrentAssignment()
                         : null;
-                assignedPerformancePlan.setGzp(BigDecimal.valueOf(
-                        kpiService.calculationOfGZP(currentAssignment != null
+                assignedPerformancePlan.setGzp(
+                        extAppPropertiesConfig.getIncludeAbsence()
+                                ? kpiService.calculationOfGzpWithAbsences(currentAssignment != null
+                                        ? currentAssignment.getPersonGroup()
+                                        : null,
+                                performancePlanDc.getItem().getStartDate(),
+                                performancePlanDc.getItem().getEndDate())
+                                : BigDecimal.valueOf(kpiService.calculationOfGZP(currentAssignment != null
                                         ? currentAssignment.getGroup()
                                         : null,
                                 performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));

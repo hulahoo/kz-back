@@ -1,22 +1,26 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.LoadContext;
-import com.haulmont.cuba.core.global.Messages;
-import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.Query;
+import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.global.*;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Salary;
 import kz.uco.tsadv.pojo.PairPojo;
 import kz.uco.tsadv.pojo.kpi.AssignedPerformancePlanListPojo;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.fop.events.Event;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -123,6 +127,68 @@ public class KpiServiceBean implements KpiService {
     }
 
     @Override
+    public BigDecimal calculationOfGzpWithAbsences(PersonGroupExt personGroupExt, Date startDate, Date endDate) {
+        try (Transaction tx = persistence.createTransaction()) {
+            EntityManager em = persistence.getEntityManager();
+
+            Query query = em.createNativeQuery(
+                    "with params as (" +
+                            "    select ?1::date as start_date, ?2::date as end_date, ?3::uuid as person_group_id" +
+                            "), " +
+                            "     absence as ( " +
+                            "         select * from tsadv_absence a " +
+                            "                           join tsadv_dic_absence_type t on t.id = a.type_id and t.code = 'MATERNITY' " +
+                            "                           join params on 1 = 1 " +
+                            "         where a.delete_ts is null " +
+                            "           and a.date_from <= params.end_date " +
+                            "           and params.start_date <= a.date_to " +
+                            "           and a.person_group_id = params.person_group_id " +
+                            "         order by a.date_from " +
+                            "     ), " +
+                            "     days as ( " +
+                            "         select dd as one_day, count(a.*) as absence_count from generate_series " +
+                            "                                                                    ( (select greatest(min(a.date_from) , ?1 ) from absence a ), " +
+                            "                                                                      (select least(max(a.date_to) , ?2) from absence a ), " +
+                            "                                                                      '1 day'::interval) dd " +
+                            "                                                                    left join absence a on dd between a.date_from and a.date_to " +
+                            "         group by dd " +
+                            "     ), " +
+                            "     salary as ( " +
+                            "         select s.id, " +
+                            "                greatest(min(days), s.start_date) as start_date, " +
+                            "                least(max(days), s.end_date) as end_date, " +
+                            "                1 + least(max(days), s.end_date)::date - greatest(min(days), s.start_date)::date as full_days, " +
+                            "                1 + (least(max(days), s.end_date)::date - greatest(min(days), s.start_date)::date) - count(dd.one_day) as salary_days, " +
+                            "                ss.person_group_id, " +
+                            "                s.assignment_group_id, " +
+                            "                s.amount " +
+                            "         from generate_series( ?1, ?2, '1 day'::interval) days " +
+                            "                  join tsadv_salary s on  days between s.start_date and s.end_date and s.delete_ts is null " +
+                            "                  join base_assignment ss " +
+                            "                       on ss.group_id = s.assignment_group_id " +
+                            "                           and ss.delete_ts is null " +
+                            "                           and days between ss.start_date and ss.end_date " +
+                            "                           and ss.person_group_id = ?3 " +
+                            "                  left join days dd on dd.one_day = days and dd.absence_count > 0 " +
+                            "         group by s.id, s.start_date, s.end_date, ss.person_group_id, s.assignment_group_id, s.amount, to_char(days, 'yyyyMM') " +
+                            "         order by s.start_date " +
+                            "     ) " +
+                            "select sum(s.salary_days * 1.0 / ( (date_trunc('month', s.start_date)::date + '1 month'::interval)::date - date_trunc('month', s.start_date)::date ) * s.amount) " +
+                            "from salary s;");
+
+            query.setParameter(1, startDate);
+            query.setParameter(2, endDate);
+            query.setParameter(3, personGroupExt.getId());
+
+            List<Object[]> rows = query.getResultList();
+            if (!rows.isEmpty()) {
+                return new BigDecimal(((Vector) rows).firstElement().toString());
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    @Override
     public List kpiAssignedGoals(UUID appId) {
         List<AssignedGoal> assignedGoals = dataManager.loadList(LoadContext.create(AssignedGoal.class)
                 .setQuery(LoadContext.createQuery("" +
@@ -131,7 +197,7 @@ public class KpiServiceBean implements KpiService {
                         "            where ag.assignedPerformancePlan.id = :appId " +
                         "            order by ag.category.order, ag.weight desc")
                         .setParameter("appId", appId))
-        .setView("assignedGoal-portal-kpi-create-default"));
+                .setView("assignedGoal-portal-kpi-create-default"));
         List<PairPojo<String, List<AssignedGoal>>> responseAssignedGoals = assignedGoals.stream()
                 .collect(Collectors.groupingBy(AssignedGoal::getCategory))
                 .entrySet()
