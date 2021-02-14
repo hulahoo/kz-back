@@ -257,4 +257,15 @@
             ]]>
         </jpql>
     </query>
+    <query name="books" entity="tsadv$DicBookCategory" view="portal-books-category-browse">
+        <jpql>
+            <![CDATA[
+                select d
+                from tsadv$DicBookCategory d
+                    join d.books b
+                order by
+                    d.order
+            ]]>
+        </jpql>
+    </query>
 </queries>

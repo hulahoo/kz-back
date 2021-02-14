@@ -846,6 +846,7 @@ public class CourseServiceBean implements CourseService {
                 .user(r.getPersonGroup().getFullName())
                 .date(r.getCreateTs())
                 .comment(r.getText())
+                .rating(r.getRate())
                 .build()).collect(Collectors.toList()));
         coursePojo.setRating(course.getReviews().stream()
                 .collect(Collectors.groupingBy(CourseReview::getRate, Collectors.counting()))
