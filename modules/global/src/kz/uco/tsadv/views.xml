@@ -10033,12 +10033,7 @@
           name="course.edit.new">
         <property name="name"/>
         <property name="enrollments" view="_minimal">
-            <property name="personGroup" view="_minimal">
-                <property name="list" view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
-            </property>
+            <property name="personGroup" view="_minimal"/>
             <property name="status"/>
             <property name="date"/>
             <property name="reason"/>
@@ -10053,9 +10048,6 @@
         <property name="courseTrainers" view="_minimal">
             <property name="trainer" view="_minimal">
                 <property name="employee" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                    </property>
                     <property name="personExperience" view="_minimal"/>
                 </property>
             </property>
@@ -10165,6 +10157,8 @@
         <property name="learningType" view="_minimal"/>
         <property name="isOnline"/>
         <property name="courseSchedule" view="courseSchedule.edit"/>
+        <property name="educationPeriod"/>
+        <property name="educationDuration"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CoursePreRequisition"
           name="coursePreRequisition.edit.new">
@@ -22747,6 +22741,7 @@
     <view entity="tsadv_CourseSchedule" name="courseSchedule.edit" extends="_local">
         <property name="course" view="_minimal"/>
         <property name="learningCenter" view="_minimal">
+            <property name="address"/>
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="code"/>

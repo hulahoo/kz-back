@@ -18,8 +18,6 @@
                         property="preRequisition"/>
             <collection id="feedbackTemplatesDc"
                         property="feedbackTemplates"/>
-            <collection id="courseScheduleDc"
-                        property="courseSchedule"/>
             <collection id="trainerDc"
                         property="courseTrainers"/>
             <loader id="courseDl"/>
@@ -39,6 +37,15 @@
             <loader id="enrollmentDl">
                 <query>
                     <![CDATA[select e from tsadv$Enrollment e where e.course = :course]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="courseScheduleDc"
+                    class="kz.uco.tsadv.modules.learning.model.CourseSchedule"
+                    view="courseSchedule.edit">
+            <loader id="courseScheduleDl">
+                <query>
+                    <![CDATA[select e from tsadv_CourseSchedule e where e.course = :course]]>
                 </query>
             </loader>
         </collection>
@@ -87,12 +94,14 @@
                                 </actions>
                             </pickerField>
                             <textField property="targetAudience"/>
-                            <lookupField caption="msg://learningType"
+                            <lookupField id="learningType" caption="msg://learningType"
                                          optionsContainer="dicLearningTypesDc"
                                          property="learningType"/>
-                            <checkBox property="activeFlag"/>
-                            <checkBox property="selfEnrollment"/>
+                            <checkBox property="activeFlag" caption="msg://active"/>
                             <checkBox property="isOnline"/>
+                            <checkBox property="selfEnrollment"/>
+                            <textField property="educationDuration"/>
+                            <textField property="educationPeriod"/>
                             <textArea id="shortDescription" property="shortDescription"
                                       rows="5"/>
                         </column>
