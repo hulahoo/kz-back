@@ -62,7 +62,7 @@ public class StartBprocServiceBean implements StartBprocService {
                 .collect(Collectors.toList());
 
         if (!bpmRolesDefiners.isEmpty()) return bpmRolesDefiners.get(0);
-        throw new RuntimeException("bpmRolesDefiner not found!");
+        throw new PortalException("bpmRolesDefiner not found!");
     }
 
     @Override

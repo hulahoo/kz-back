@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author Alibek Berdaulet
  */
-
 @ControllerAdvice
 public class PortalExceptionHandler {
 
@@ -22,9 +21,7 @@ public class PortalExceptionHandler {
     @ExceptionHandler(PortalException.class)
     @ResponseBody
     public ResponseEntity<ExceptionResponse> handlePortalException(PortalException e) {
-        if (e.getCause() == null) {
-            log.info("PortalException: {}", e.getMessage());
-        }
+        log.info("PortalException: {}", e.getMessage(), e);
         ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_GATEWAY.value(), e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_GATEWAY);
     }

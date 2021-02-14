@@ -28,7 +28,7 @@ import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.MyTeamService;
 import kz.uco.tsadv.web.screens.absenceforrecall.AbsenceForRecallEdit;
-import kz.uco.tsadv.web.screens.absencerequest.AbsenceRequestForMyTeamEdit;
+import kz.uco.tsadv.web.screens.absencerequest.AbsenceRvdRequestEdit;
 import kz.uco.tsadv.web.screens.scheduleoffsetsrequest.ScheduleOffsetsRequestSsMyTeamEdit;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
@@ -83,7 +83,7 @@ public class SsStructurePerson extends AbstractWindow {
     @Inject
     protected CollectionDatasource<Absence, UUID> absencesDs;
     @Inject
-    protected CollectionDatasource<AbsenceRequest, UUID> absenceRequestsDs;
+    protected CollectionDatasource<AbsenceRvdRequest, UUID> absenceRvdRequestsDs;
     @Inject
     protected Metadata metadata;
     @Inject
@@ -185,11 +185,11 @@ public class SsStructurePerson extends AbstractWindow {
         if (person != null && person.getGroup() != null) {
             params.put("personGroupId", person.getGroup().getId());
             absencesDs.refresh(params);
-            absenceRequestsDs.refresh(params);
+            absenceRvdRequestsDs.refresh(params);
             scheduleOffsetsRequestsDs.refresh(params);
         } else {
             absencesDs.clear();
-            absenceRequestsDs.clear();
+            absenceRvdRequestsDs.clear();
             scheduleOffsetsRequestsDs.clear();
         }
     }
@@ -312,20 +312,20 @@ public class SsStructurePerson extends AbstractWindow {
 
     public void createAbsenceRequest() {
         if (personExtDs.getItem() != null) {
-            AbsenceRequest absenceRequest = metadata.create(AbsenceRequest.class);
+            AbsenceRvdRequest absenceRvdRequest = metadata.create(AbsenceRvdRequest.class);
             PersonGroupExt personGroupExt = dataManager.reload(personExtDs.getItem().getGroup(), "personGroup.person.info");
-            absenceRequest.setPersonGroup(personGroupExt);
+            absenceRvdRequest.setPersonGroup(personGroupExt);
             DicAbsenceType workOnWeekend = commonService.getEntity(DicAbsenceType.class, "WORK_ON_WEEKEND");
             DicRequestStatus status = commonService.getEntity(DicRequestStatus.class, "DRAFT");
-            absenceRequest.setType(workOnWeekend);
-            absenceRequest.setStatus(status);
-            absenceRequest.setRequestDate(CommonUtils.getSystemDate());
-            absenceRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            absenceRequest.setCompencation(true);
-            absenceRequest.setVacationDay(false);
-            screenBuilders.editor(AbsenceRequest.class, this)
-                    .withScreenClass(AbsenceRequestForMyTeamEdit.class).newEntity(absenceRequest)
-                    .withAfterCloseListener(absenceRequestForMyTeamEditAfterScreenCloseEvent -> {
+            absenceRvdRequest.setType(workOnWeekend);
+            absenceRvdRequest.setStatus(status);
+            absenceRvdRequest.setRequestDate(CommonUtils.getSystemDate());
+            absenceRvdRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());
+            absenceRvdRequest.setCompencation(true);
+            absenceRvdRequest.setVacationDay(false);
+            screenBuilders.editor(AbsenceRvdRequest.class, this)
+                    .withScreenClass(AbsenceRvdRequestEdit.class).newEntity(absenceRvdRequest)
+                    .withAfterCloseListener(absenceRvdRequestEditAfterScreenCloseEvent -> {
                         refreshDss(personExtDs.getItem());
                     }).build().show();
         }

@@ -1,76 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
-        caption="msg://absenceRequestForMyTeamEdit.caption"
+        caption="msg://absenceRvdRequestEdit.caption"
         focusComponent="form"
         messagesPack="kz.uco.tsadv.web.screens.absencerequest">
-<data>
-    <instance id="absenceRequestDc"
-              class="kz.uco.tsadv.modules.personal.model.AbsenceRequest">
-        <view extends="_local">
-            <property name="type" view="_minimal">
-                <property name="langValue1"/>
-                <property name="langValue2"/>
-                <property name="langValue3"/>
-                <property name="langValue4"/>
-                <property name="langValue5"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
-            <property name="personGroup" view="_minimal">
-                <property name="list" view="_minimal"/>
-                <property name="assignments" view="_minimal">
-                    <property name="assignmentStatus" view="_minimal">
-                        <property name="langValue1"/>
-                        <property name="langValue2"/>
-                        <property name="langValue3"/>
-                        <property name="langValue4"/>
-                        <property name="langValue5"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                        <property name="code"/>
-                    </property>
-                    <property name="primaryFlag"/>
+    <data>
+        <instance id="absenceRvdRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest">
+            <view extends="_local">
+                <property name="type" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
                     <property name="startDate"/>
                     <property name="endDate"/>
+                    <property name="code"/>
                 </property>
-            </property>
-            <property name="purpose" view="_minimal"/>
-            <property name="status" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
-        </view>
-        <loader/>
-    </instance>
-    <collection id="dicAbsenceTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType">
-        <view extends="_local"/>
-        <loader id="dicAbsenceTypesDl">
-            <query>
-                <![CDATA[select e from tsadv$DicAbsenceType e where e.availableToManager = true]]>
-            </query>
-        </loader>
-    </collection>
-    <collection id="dicAbsencePurposesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose">
-        <view extends="_local"/>
-        <loader id="dicAbsencePurposesDl">
-            <query>
-                <![CDATA[select e.absencePurpose from tsadv_AbsPurposeSetting e ]]>
-                <condition>
-                    <and>
-                        <c:jpql>
-                            <c:where>e.absenceType = :component_typeField</c:where>
-                        </c:jpql>
-                    </and>
-                </condition>
-            </query>
-        </loader>
-    </collection>
-    <collection id="tasksDc"
-                class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
-</data>
+                <property name="personGroup" view="_minimal">
+                    <property name="assignments" view="_minimal">
+                        <property name="assignmentStatus" view="_minimal">
+                            <property name="langValue1"/>
+                            <property name="langValue2"/>
+                            <property name="langValue3"/>
+                            <property name="langValue4"/>
+                            <property name="langValue5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="code"/>
+                        </property>
+                        <property name="primaryFlag"/>
+                    </property>
+                </property>
+                <property name="purpose" view="_minimal"/>
+                <property name="status" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                    <property name="legacyId"/>
+                    <property name="company" view="_minimal"/>
+                </property>
+            </view>
+            <loader/>
+        </instance>
+        <collection id="dicAbsenceTypesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType">
+            <view extends="_local"/>
+            <loader id="dicAbsenceTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicAbsenceType e where e.availableToManager = true]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="dicAbsencePurposesDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose">
+            <view extends="_local"/>
+            <loader id="dicAbsencePurposesDl">
+                <query>
+                    <![CDATA[select e.absencePurpose from tsadv_AbsPurposeSetting e ]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>e.absenceType = :component_typeField</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+    </data>
     <dialogMode height="600"
                 width="800"/>
     <facets>
@@ -78,7 +77,7 @@
     </facets>
     <layout expand="scrollBox" spacing="true">
         <scrollBox id="scrollBox" spacing="true">
-            <form id="form" dataContainer="absenceRequestDc">
+            <form id="form" dataContainer="absenceRvdRequestDc">
                 <column width="350px">
                     <textField id="requestNumberField" property="requestNumber" editable="false"/>
                     <dateField id="requestDateField" property="requestDate" editable="false"/>
