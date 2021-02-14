@@ -37,4 +37,6 @@
 
     <bean id="bproc_BprocRuntimeService" class="kz.uco.tsadv.bproc.beans.ExtBprocRuntimeServiceBean"/>
 
+    <bean id="cuba_MetadataTools" class="kz.uco.tsadv.beans.CustomMetadataTools"/>
+
 </beans>

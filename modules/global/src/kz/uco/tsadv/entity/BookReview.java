@@ -2,7 +2,7 @@ package kz.uco.tsadv.entity;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,8 +22,7 @@ public class BookReview extends StandardEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "AUTHOR_ID")
-    protected PersonExt author;     // todo anuar 0 тут нужно указать personGroup
-
+    protected PersonGroupExt author;     // todo anuar 0 тут нужно указать personGroup
 
     @Temporal(TemporalType.DATE)
     @Column(name = "POST_DATE")
@@ -34,12 +33,13 @@ public class BookReview extends StandardEntity {
 
     @Column(name = "RATING")
     protected BigDecimal rating;
-    public PersonExt getAuthor() {
-        return author;
+
+    public void setAuthor(PersonGroupExt author) {
+        this.author = author;
     }
 
-    public void setAuthor(PersonExt author) {
-        this.author = author;
+    public PersonGroupExt getAuthor() {
+        return author;
     }
 
     public void setRating(BigDecimal rating) {

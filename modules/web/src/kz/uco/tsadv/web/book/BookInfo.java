@@ -273,7 +273,7 @@ public class BookInfo extends AbstractWindow {
         Book book = bookDs.getItem();
         BookReview review = metadata.create(BookReview.class);
         review.setBook(book);
-        review.setAuthor(userSession.getAttribute(StaticVariable.USER_PERSON));
+        review.setAuthor(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP));
         review.setPostDate(CommonUtils.getSystemDate());
         AbstractEditor editor = openEditor("tsadv$BookReview.edit",
                 review,

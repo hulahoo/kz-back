@@ -13,6 +13,8 @@ public class CommentPojo implements Serializable {
 
     private String comment;
 
+    private Double rating;
+
     public String getUser() {
         return user;
     }
@@ -37,11 +39,20 @@ public class CommentPojo implements Serializable {
         this.comment = comment;
     }
 
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
 
     public static final class CommentPojoBuilder {
         private String user;
         private Date date;
         private String comment;
+        private Double rating;
+
 
         private CommentPojoBuilder() {
         }
@@ -65,11 +76,18 @@ public class CommentPojo implements Serializable {
             return this;
         }
 
+
+        public CommentPojoBuilder rating(Double rating) {
+            this.rating = rating;
+            return this;
+        }
+
         public CommentPojo build() {
             CommentPojo commentPojo = new CommentPojo();
             commentPojo.setUser(user);
             commentPojo.setDate(date);
             commentPojo.setComment(comment);
+            commentPojo.setRating(rating);
             return commentPojo;
         }
     }
