@@ -57,6 +57,7 @@
                         <field property="order"/>
                         <field property="isRequiredOrderNumber"/>
                         <field property="availableToManager"/>
+                        <field property="includeCalcGzp"/>
                     </column>
                 </fieldGroup>
             </groupBox>
