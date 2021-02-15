@@ -12,6 +12,7 @@ import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
 import kz.uco.tsadv.bproc.events.ExtProcessStartedEvent;
 import kz.uco.tsadv.bproc.events.ExtUserTaskCreatedEvent;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
@@ -20,7 +21,6 @@ import kz.uco.tsadv.service.BprocService;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
-import kz.uco.uactivity.entity.WindowProperty;
 import org.flowable.identitylink.api.IdentityLink;
 import org.flowable.identitylink.api.IdentityLinkInfo;
 import org.springframework.context.event.EventListener;
@@ -29,23 +29,22 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component(BprocProcessStatesListener.NAME)
-public class BprocProcessStatesListener {
+public class BprocProcessStatesListener extends AbstractBprocHelper {
     public static final String NAME = "tsadv_BprocProcessStatesListener";
 
     @Inject
     private BprocRuntimeService bprocRuntimeService;
     @Inject
-    protected DataManager dataManager;
-    @Inject
     protected CommonService commonService;
     @Inject
     protected UserSessionSource userSessionSource;
-    @Inject
-    protected MetadataTools metadataTools;
     @Inject
     protected Metadata metadata;
     @Inject
@@ -109,14 +108,7 @@ public class BprocProcessStatesListener {
                     .view("user-fioWithLogin")
                     .list());
 
-        ActivityType activityType = dataManager.load(ActivityType.class)
-                .query("select e from uactivity$ActivityType e where e.code = :code")
-                .parameter("code", getActivityCodeFromTableName(bprocRequest))
-                .view(new View(ActivityType.class)
-                        .addProperty("code")
-                        .addProperty("windowProperty",
-                                new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
-                .one();
+        ActivityType activityType = getActivityFromEntity(bprocRequest);
 
         if (userList.size() == 1) {
             User user = userList.get(0);
@@ -147,14 +139,6 @@ public class BprocProcessStatesListener {
         boolean isOutcomeReject = outcomesContainer.getOutcomes().stream()
                 .anyMatch(outcome -> outcome.getOutcomeId().equals(AbstractBprocRequest.OUTCOME_REJECT));
         if (isOutcomeReject) bprocService.reject(bprocRequest);
-    }
-
-    protected <T extends AbstractBprocRequest> String getActivityCodeFromTableName(T entity) {
-        StringBuilder builder = new StringBuilder();
-        String tableName = metadataTools.getDatabaseTable(entity.getMetaClass());
-        builder.append(tableName, Objects.requireNonNull(tableName).indexOf('_') + 1, tableName.length());
-        builder.append("_APPROVE");
-        return builder.toString();
     }
 
     protected List<Activity> getActivityList(UUID referenceId, String taskCode) {

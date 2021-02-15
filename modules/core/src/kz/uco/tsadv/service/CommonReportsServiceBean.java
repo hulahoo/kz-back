@@ -34,7 +34,9 @@ public class CommonReportsServiceBean implements CommonReportsService {
             return null;
         }
 
-        return reportingApi.createAndSaveReport(report, ParamsMap.of("req_id", report, CubaReporting.REPORT_FILE_NAME_KEY, report.getName()), report.getName());
+        return reportingApi.createAndSaveReport(report,
+                ParamsMap.of("req_id", request, CubaReporting.REPORT_FILE_NAME_KEY, report.getName()),
+                report.getName());
     }
 
 

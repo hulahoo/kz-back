@@ -4,8 +4,8 @@ import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.reports.entity.Report;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicCertificateType;
+import kz.uco.tsadv.modules.personal.dictionary.DicLanguage;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -45,8 +45,7 @@ public class CertificateTemplate extends AbstractParentEntity {
     @Column(name = "SHOW_SALARY", nullable = false)
     private Boolean showSalary = false;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SIGNER_ID")
     private PersonGroupExt signer;
 

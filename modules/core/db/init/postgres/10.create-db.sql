@@ -14519,7 +14519,7 @@ create table TSADV_CERTIFICATE_TEMPLATE (
     ORGANIZATION_ID uuid,
     LANGUAGE_ID uuid not null,
     SHOW_SALARY boolean not null,
-    SIGNER_ID uuid not null,
+    SIGNER_ID uuid,
     REPORT_ID uuid,
     --
     primary key (ID)

@@ -20,6 +20,7 @@ import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
+import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -36,6 +37,7 @@ import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.entity.WindowProperty;
 import kz.uco.uactivity.service.ActivityService;
+import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.UserTask;
 import org.flowable.engine.ProcessEngines;
@@ -50,14 +52,12 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service(BprocService.NAME)
-public class BprocServiceBean implements BprocService {
+public class BprocServiceBean extends AbstractBprocHelper implements BprocService {
 
     @Inject
     protected CommonService commonService;
     @Inject
     protected Persistence persistence;
-    @Inject
-    protected DataManager dataManager;
     @Inject
     protected ActivityService activityService;
     @Inject
@@ -105,7 +105,17 @@ public class BprocServiceBean implements BprocService {
     @Transactional
     public <T extends AbstractBprocRequest> void reject(T entity) {
         changeRequestStatus(entity, "REJECT");
-        sendNotificationToInitiator(entity);
+//        sendNotificationToInitiator(entity);
+    }
+
+    @Override
+    public <T extends AbstractBprocRequest> void sendNotificationAndActivityToInitiator(T bprocRequest, String notificationTemplateCode) {
+        ProcessInstanceData processInstanceData =
+                this.getProcessInstanceData(bprocRequest.getId().toString(), bprocRequest.getProcessDefinitionKey());
+
+        User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
+
+        this.sendNotificationAndActivity(bprocRequest, initiator, getActivityFromEntity(bprocRequest), notificationTemplateCode);
     }
 
     @Override
@@ -123,7 +133,7 @@ public class BprocServiceBean implements BprocService {
         if (notificationTemplateCode == null)
             notificationTemplateCode = getProcessVariable(processInstanceData.getId(), "initiatorNotificationTemplateCode");
 
-        if (notificationTemplateCode == null) return;
+        if (StringUtils.isBlank(notificationTemplateCode)) return;
 
         User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
 
@@ -217,7 +227,7 @@ public class BprocServiceBean implements BprocService {
                 .stream()
                 .map(taskData -> (ExtTaskData) taskData)
                 .peek(taskData -> {
-                    if (taskData.getEndTime() == null) {
+                    if (taskData.getEndTime() == null && taskData.getAssignee() == null) {
                         @SuppressWarnings("unchecked") List<TsadvUser> taskCandidates = (List<TsadvUser>) getTaskCandidates(taskData.getExecutionId(), "user-fioWithLogin");
                         taskData.setAssigneeOrCandidates(taskCandidates);
                     } else if (taskData.getAssignee() != null) {
@@ -309,6 +319,9 @@ public class BprocServiceBean implements BprocService {
         User sessionUser = userSessionSource.getUserSession().getUser();
 
         Map<String, Object> notificationParams = getNotificationParams(notificationTemplateCode, entity);
+
+        if (!PersistenceHelper.isLoadedWithView(user, "user-fioWithLogin"))
+            user = dataManager.reload(user, "user-fioWithLogin");
 
         notificationParams.put("userRu", ((TsadvUser) user).getFullNameWithLogin(Locale.forLanguageTag("ru")));
         notificationParams.put("userEn", ((TsadvUser) user).getFullNameWithLogin(Locale.forLanguageTag("en")));

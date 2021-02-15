@@ -24,6 +24,8 @@ public interface BprocService {
 
     <T extends AbstractBprocRequest> void reject(T entity);
 
+    <T extends AbstractBprocRequest> void sendNotificationAndActivityToInitiator(T bprocRequest, String notificationTemplateCode);
+
     <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest);
 
     <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest, String notificationTemplateCode);

@@ -31,7 +31,8 @@ public class NotificationDao {
                 .query(String.format("select e from uactivity$Activity e " +
                         "   where e.assignedUser.id = :assignedUserId " +
                         "       and e.status = :status " +
-                        "       and e.type.code %s :code", onlyNotification ? '=' : "<>"))
+                        "       and e.type.code %s :code " +
+                        "   order by e.createTs desc ", onlyNotification ? '=' : "<>"))
                 .setParameters(ParamsMap.of("assignedUserId", userId,
                         "code", NOTIFICATION_CODE, "status",
                         StatusEnum.active.getId()))
