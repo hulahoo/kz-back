@@ -105,7 +105,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Transactional
     public <T extends AbstractBprocRequest> void reject(T entity) {
         changeRequestStatus(entity, "REJECT");
-//        sendNotificationToInitiator(entity);
+        sendNotificationToInitiator(entity);
     }
 
     @Override
