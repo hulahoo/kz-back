@@ -9,7 +9,10 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.TransactionalDataManager;
-import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.core.global.LoadContext;
+import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
@@ -59,7 +62,7 @@ public class BprocProcessStatesListener extends AbstractBprocHelper {
     @EventListener
     @SuppressWarnings("unchecked")
     protected <T extends AbstractBprocRequest> void onProcessStarted(ExtProcessStartedEvent event) {
-        @SuppressWarnings("unchecked") T bprocRequest = (T) bprocRuntimeService.getVariable(event.getExecutionId(), "entity");
+        @SuppressWarnings("unchecked") T bprocRequest = (T) event.getVariables().get("entity");
 
         bprocRequest = (T) transactionalDataManager.load(bprocRequest.getClass())
                 .id(bprocRequest.getId())
