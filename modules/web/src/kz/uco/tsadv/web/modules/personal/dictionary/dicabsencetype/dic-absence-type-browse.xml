@@ -48,6 +48,7 @@
                 <column id="vacationDurationType"/>
                 <column id="order"/>
                 <column id="isRequiredOrderNumber"/>
+                <column id="includeCalcGzp"/>
                 <column id="company"/>
             </columns>
             <rows datasource="dicAbsenceTypesDs"/>

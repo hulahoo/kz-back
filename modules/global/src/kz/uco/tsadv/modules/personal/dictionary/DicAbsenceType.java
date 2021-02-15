@@ -65,6 +65,18 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "IS_REQUIRED_ORDER_NUMBER", nullable = false)
     protected Boolean isRequiredOrderNumber = false;
 
+    @NotNull
+    @Column(name = "INCLUDE_CALC_GZP", nullable = false)
+    protected Boolean includeCalcGzp = false;
+
+    public Boolean getIncludeCalcGzp() {
+        return includeCalcGzp;
+    }
+
+    public void setIncludeCalcGzp(Boolean includeCalcGzp) {
+        this.includeCalcGzp = includeCalcGzp;
+    }
+
     public Boolean getAvailableToManager() {
         return availableToManager;
     }
