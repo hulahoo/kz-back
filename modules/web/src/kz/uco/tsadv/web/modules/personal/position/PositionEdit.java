@@ -136,12 +136,12 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected EditAction hierarchyElementsTableEdit;
     @Named("competencePosTable.create")
     protected CreateAction competencePosTableCreate;
-    @Named("flySurChargeTable.create")
-    protected CreateAction flySurChargeTableCreate;
+//    @Named("flySurChargeTable.create")
+//    protected CreateAction flySurChargeTableCreate;
     @Inject
     protected Caseframe caseFrame;
-    @Named("flightTimeRateTable.create")
-    protected CreateAction flightTimeRateTableCreate;
+//    @Named("flightTimeRateTable.create")
+//    protected CreateAction flightTimeRateTableCreate;
     /*@Named("goalsTable.create")
     protected CreateAction goalsTableCreate;*/
 //    protected int languageIndex = languageIndex();
@@ -226,8 +226,8 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         getDsContext().addBeforeCommitListener(context -> context.addInstanceToCommit(analyticsDs.getItem()));
 
         competencePosTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroup", getItem().getGroup()));
-        flightTimeRateTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroupName", getItem().getGroup()));
-        flySurChargeTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroupId", getItem().getGroup()));
+//        flightTimeRateTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroupName", getItem().getGroup()));
+//        flySurChargeTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("positionGroupId", getItem().getGroup()));
     }
 
     protected void selectLangTab(TabSheet tabSheet, String num, boolean lang) {
