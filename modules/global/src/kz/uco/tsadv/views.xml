@@ -2895,14 +2895,11 @@
             </property>
         </property>
         <property name="personGroup" view="_minimal">
-            <property name="list" view="_minimal"/>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="code"/>
                 </property>
                 <property name="primaryFlag"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="personExperience" view="_minimal"/>
         </property>
@@ -2928,14 +2925,11 @@
         <property name="actualValue"/>
         <property name="successCritetia"/>
         <property name="assignedByPersonGroup" view="_minimal">
-            <property name="list" view="_minimal"/>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="code"/>
                 </property>
                 <property name="primaryFlag"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="personExperience" view="_minimal"/>
         </property>
@@ -2943,7 +2937,9 @@
         <property name="endDate"/>
         <property name="weight"/>
         <property name="priority" view="_local"/>
-        <property name="assignedPerformancePlan" view="_minimal"/>
+        <property name="assignedPerformancePlan" view="_minimal">
+            <property name="result"/>
+        </property>
         <property name="category" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>
