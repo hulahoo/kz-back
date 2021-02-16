@@ -357,15 +357,15 @@ public class SsStructurePerson extends AbstractWindow {
     }
 
     public void createRequestForRecall() {
-        if (personExtDs.getItem() != null) {
-            AbsenceForRecall absenceForRecall = metadata.create(AbsenceForRecall.class);
-            absenceForRecall.setEmployee(personExtDs.getItem().getGroup());
-            absenceForRecall.setLeaveOtherTime(true);
-            absenceForRecall.setVacation(absenceTable1.getSingleSelected());
-            absenceForRecall.setAbsenceType(absenceTable1.getSingleSelected().getType());
-            screenBuilders.editor(AbsenceForRecall.class, this)
-                    .withScreenClass(AbsenceForRecallEdit.class).newEntity(absenceForRecall)
-                    .build().show();
-        }
+        AbsenceForRecall absenceForRecall = metadata.create(AbsenceForRecall.class);
+        absenceForRecall.setEmployee(personExtDs.getItem().getGroup());
+        absenceForRecall.setLeaveOtherTime(true);
+        absenceForRecall.setVacation(absenceTable1.getSingleSelected());
+        absenceForRecall.setAbsenceType(absenceTable1.getSingleSelected().getType());
+        screenBuilders.editor(AbsenceForRecall.class, this)
+                .withScreenClass(AbsenceForRecallEdit.class)
+                .newEntity(absenceForRecall)
+                .build()
+                .show();
     }
 }

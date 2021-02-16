@@ -124,7 +124,7 @@ public class CourseSectionEdit extends AbstractEditor<CourseSection> {
                 )
         );
         objectType.setRequired(onlineGrid.isVisible());
-        sessionGroupBox.setVisible(formatCode != null && formatCode.equalsIgnoreCase(OFFLINE));
+//        sessionGroupBox.setVisible(formatCode != null && formatCode.equalsIgnoreCase(OFFLINE));
     }
 
     @Override

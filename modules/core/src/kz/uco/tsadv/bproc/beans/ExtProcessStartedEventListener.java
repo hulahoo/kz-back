@@ -7,7 +7,10 @@ import com.haulmont.addon.bproc.events.ProcessStartedEvent;
 import kz.uco.tsadv.bproc.events.ExtProcessStartedEvent;
 import org.flowable.common.engine.api.delegate.event.FlowableEvent;
 import org.flowable.common.engine.impl.cfg.TransactionState;
+import org.flowable.engine.delegate.event.FlowableEntityWithVariablesEvent;
 import org.flowable.engine.delegate.event.FlowableProcessEngineEvent;
+
+import java.util.Map;
 
 /**
  * @author Alibek Berdaulet
@@ -17,7 +20,7 @@ public class ExtProcessStartedEventListener extends ProcessStartedEventListener 
     @Override
     public void onEvent(FlowableEvent event) {
         if (!(event instanceof FlowableProcessEngineEvent)) return;
-        String executionId = ((FlowableProcessEngineEvent) event).getExecutionId();
+        @SuppressWarnings("unchecked") Map<String, Object> variables = ((FlowableEntityWithVariablesEvent) event).getVariables();
         String processDefinitionId = ((FlowableProcessEngineEvent) event).getProcessDefinitionId();
         String processInstanceId = ((FlowableProcessEngineEvent) event).getProcessInstanceId();
         ProcessDefinitionData processDefinitionData = bprocRepositoryService.getProcessDefinitionById(processDefinitionId);
@@ -28,7 +31,7 @@ public class ExtProcessStartedEventListener extends ProcessStartedEventListener 
         processInstanceData.setProcessDefinitionName(processDefinitionData.getName());
         processInstanceData.setProcessDefinitionVersion(processDefinitionData.getVersion());
         ProcessStartedEvent processStartedEvent = new ExtProcessStartedEvent(this)
-                .withExecutionId(executionId)
+                .withVariables(variables)
                 .withProcessDefinitionData(processDefinitionData)
                 .withProcessInstanceData(processInstanceData);
         events.publish(processStartedEvent);

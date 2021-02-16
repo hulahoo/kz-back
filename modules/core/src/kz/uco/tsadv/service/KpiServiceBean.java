@@ -137,7 +137,7 @@ public class KpiServiceBean implements KpiService {
                             "), " +
                             "     absence as ( " +
                             "         select * from tsadv_absence a " +
-                            "                           join tsadv_dic_absence_type t on t.id = a.type_id and t.code = 'MATERNITY' " +
+                            "                           join tsadv_dic_absence_type t on t.id = a.type_id and t.include_calc_gzp = true " +
                             "                           join params on 1 = 1 " +
                             "         where a.delete_ts is null " +
                             "           and a.date_from <= params.end_date " +

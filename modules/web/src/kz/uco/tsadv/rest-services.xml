@@ -729,5 +729,35 @@
         <method name="deletePersonDocument">
             <param name="personDocumentData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentDataJson"/>
         </method>
+        <method name="createOrUpdatePersonQualification">
+            <param name="personQualificationData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonQualificationDataJson"/>
+        </method>
+        <method name="deletePersonQualification">
+            <param name="personQualificationData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonQualificationDataJson"/>
+        </method>
+        <method name="createOrUpdatePersonContact">
+            <param name="personContactData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonContactDataJson"/>
+        </method>
+        <method name="deletePersonContact">
+            <param name="personContactData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonContactDataJson"/>
+        </method>
+        <method name="createOrUpdatePersonEducation">
+            <param name="personEducationData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonEducationDataJson"/>
+        </method>
+        <method name="deletePersonEducation">
+            <param name="personEducationData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonEducationDataJson"/>
+        </method>
+        <method name="createOrUpdateAbsence">
+            <param name="absenceData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.AbsenceDataJson"/>
+        </method>
+        <method name="deleteAbsence">
+            <param name="absenceData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.AbsenceDataJson"/>
+        </method>
     </service>
 </services>

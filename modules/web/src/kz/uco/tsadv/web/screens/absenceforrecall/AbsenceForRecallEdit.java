@@ -72,7 +72,7 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
         }
         dataManager.commit(fd);
         if (absenceForRecallDc.getItem().getFile() == null) {
-            absenceForRecallDc.getItem().setFile(new ArrayList<FileDescriptor>());
+            absenceForRecallDc.getItem().setFile(new ArrayList<>());
         }
         fileDc.getDisconnectedItems().add(fd);
         absenceForRecallDc.getItem().getFile().add(fd);
@@ -81,13 +81,8 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
     public Component generatorName(FileDescriptor fd) {
         LinkButton linkButton = componentsFactory.createComponent(LinkButton.class);
         linkButton.setCaption(fd.getName());
-        linkButton.setAction(new BaseAction("export") {
-            @Override
-            public void actionPerform(Component component) {
-                super.actionPerform(component);
-                exportDisplay.show(fd, ExportFormat.OCTET_STREAM);
-            }
-        });
+        linkButton.setAction(new BaseAction("export")
+                .withHandler(actionPerformedEvent -> exportDisplay.show(fd, ExportFormat.OCTET_STREAM)));
         return linkButton;
     }
 

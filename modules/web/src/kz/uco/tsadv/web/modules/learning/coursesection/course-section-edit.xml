@@ -110,6 +110,7 @@
                     </rows>
                 </grid>
                 <groupBox id="sessionGroupBox"
+                          visible="false"
                           caption="msg://CourseSectionSession.browseCaption">
                     <table id="sectionSessionTable"
                            height="100%"

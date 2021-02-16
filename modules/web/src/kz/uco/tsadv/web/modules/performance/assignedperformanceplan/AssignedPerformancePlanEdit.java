@@ -6,10 +6,7 @@ import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Table;
-import com.haulmont.cuba.gui.model.CollectionContainer;
-import com.haulmont.cuba.gui.model.CollectionLoader;
-import com.haulmont.cuba.gui.model.InstanceContainer;
-import com.haulmont.cuba.gui.model.InstanceLoader;
+import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
@@ -78,11 +75,30 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                                     / 100;
                         }
                         assignedPerformancePlanDc.getItem().setResult(result);
-                        getScreenData().getDataContext().merge(assignedGoalDc.getItem());
-                        getScreenData().getDataContext().commit();
+                        dataManager.commit(assignedPerformancePlanDc.getItem());
+                        assignedPerformancePlanDl.load();
+//                        getScreenData().getDataContext().merge(assignedGoalDc.getItem());
+//                        getScreenData().getDataContext().commit();
                     }
                 }
         );
+        assignedGoalDc.addCollectionChangeListener(assignedGoalCollectionChangeEvent -> {
+            if (assignedGoalCollectionChangeEvent != null
+                    && (assignedGoalCollectionChangeEvent.getChangeType().equals(CollectionChangeType.ADD_ITEMS)
+                    || assignedGoalCollectionChangeEvent.getChangeType().equals(CollectionChangeType.REMOVE_ITEMS))) {
+                double result = 0.0;
+                for (AssignedGoal item : assignedGoalDc.getItems()) {
+                    result += (item.getResult() != null ? item.getResult() : 0)
+                            * (item.getWeight() != null
+                            ? item.getWeight()
+                            : 0.0)
+                            / 100;
+                }
+                assignedPerformancePlanDc.getItem().setResult(result);
+                dataManager.commit(assignedPerformancePlanDc.getItem());
+                assignedPerformancePlanDl.load();
+            }
+        });
         assignedPerformancePlanDc.addItemPropertyChangeListener(assignedPerformancePlanItemPropertyChangeEvent -> {
             if ("extraPoint".equals(assignedPerformancePlanItemPropertyChangeEvent.getProperty())) {
                 assignedPerformancePlanDc.getItem().setFinalScore(
@@ -93,7 +109,6 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
             }
         });
     }
-
 
     @Subscribe
     protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
@@ -122,6 +137,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
 
     @Subscribe("assignedGoalTable.edit")
     protected void onAssignedGoalTableEdit(Action.ActionPerformedEvent event) {
+        getScreenData().getDataContext().commit();
         screenBuilders.editor(assignedGoalTable)
                 .withScreenId(assignedGoalTable.getSingleSelected().getGoalType().equals(AssignedGoalTypeEnum.INDIVIDUAL)
                         ? "tsadv$AssignedGoalIndividual.edit"

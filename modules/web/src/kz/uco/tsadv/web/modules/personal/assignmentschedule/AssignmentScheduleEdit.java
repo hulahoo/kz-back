@@ -86,7 +86,8 @@ public class AssignmentScheduleEdit extends AbstractEditor<AssignmentSchedule> {
     }
 
     protected void overrideCommitAction() {
-        ((Button) getComponentNN("windowCommit")).setAction(new BaseAction("windowCommit") {
+        Button windowCommitButton = (Button) getComponents().stream().filter(component -> Objects.equals(component.getId(), "windowCommit")).findFirst().get();
+        windowCommitButton.setAction(new BaseAction("windowCommit") {
             @Override
             public String getCaption() {
                 return getMessage("windowCommit");
