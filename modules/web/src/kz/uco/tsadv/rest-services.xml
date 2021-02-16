@@ -737,5 +737,13 @@
             <param name="personQualificationData"
                    type="kz.uco.tsadv.modules.integration.jsonobject.PersonQualificationDataJson"/>
         </method>
+        <method name="createOrUpdatePersonEducation">
+            <param name="personEducationData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonEducationDataJson"/>
+        </method>
+        <method name="deletePersonEducation">
+            <param name="personEducationData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonEducationDataJson"/>
+        </method>
     </service>
 </services>
