@@ -13,6 +13,8 @@ import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.config.PositionStructureConfig;
+import kz.uco.tsadv.entity.tb.PersonQualification;
+import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
 import kz.uco.tsadv.modules.personal.dictionary.*;
@@ -21,6 +23,8 @@ import kz.uco.tsadv.modules.personal.enums.SalaryType;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.recruitment.model.PersonEducation;
+import kz.uco.tsadv.modules.recruitment.model.PersonExperience;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -1886,5 +1890,964 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, personDocumentData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonQualification(PersonQualificationDataJson personQualificationData) {
+        String methodName = "createOrUpdatePersonQualification";
+        ArrayList<PersonQualificationJson> personQualifications = new ArrayList<>();
+        if (personQualificationData.getPersonQualifications() != null) {
+            personQualifications = personQualificationData.getPersonQualifications();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (PersonQualificationJson personQualificationJson : personQualifications) {
+                if (personQualificationJson.getLegacyId() == null || personQualificationJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no legacyId ");
+                }
+                if (personQualificationJson.getCompanyCode() == null || personQualificationJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no companyCode");
+                }
+                if (personQualificationJson.getSchool() == null || personQualificationJson.getSchool().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no school");
+                }
+                if (personQualificationJson.getStartDate() == null || personQualificationJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no startDate");
+                }
+                if (personQualificationJson.getEndDate() == null || personQualificationJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no endDate");
+                }
+                if (personQualificationJson.getQualificationTypeId() == null || personQualificationJson.getQualificationTypeId().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no qualificationTypeId");
+                }
+                if (personQualificationJson.getDocumentNumber() == null || personQualificationJson.getDocumentNumber().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no documentNumber");
+                }
+                if (personQualificationJson.getDocumentDate() == null || personQualificationJson.getDocumentDate().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no documentDate");
+                }
+                PersonQualification personQualification = dataManager.load(PersonQualification.class)
+                        .query("select e from tsadv$PersonQualification e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personQualificationJson.getLegacyId(),
+                                "pLegacyId", personQualificationJson.getPersonId(),
+                                "companyCode", personQualificationJson.getCompanyCode()))
+                        .view("personQualification-view")
+                        .list().stream().findFirst().orElse(null);
+                if (personQualification != null) {
+                    personQualification.setLegacyId(personQualificationJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personQualificationJson.getPersonId(),
+                                    "company", personQualificationJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personQualification.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personQualificationJson,
+                                "no base$PersonGroupExt with legacyId " + personQualificationJson.getPersonId()
+                                        + " and company legacyId " + personQualificationJson.getCompanyCode());
+                    }
+                    personQualification.setEducationalInstitutionName(personQualificationJson.getSchool());
+                    personQualification.setStartDate(formatter.parse(personQualificationJson.getStartDate()));
+                    personQualification.setEndDate(formatter.parse(personQualificationJson.getEndDate()));
+                    personQualification.setDiploma(personQualificationJson.getDocumentNumber());
+                    personQualification.setIssuedDate(formatter.parse(personQualificationJson.getDocumentDate()));
+                    DicPersonQualificationType qualificationType = dataManager.load(DicPersonQualificationType.class)
+                            .query("select e from tsadv$DicPersonQualificationType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personQualificationJson.getQualificationTypeId(),
+                                    "companyCode", personQualificationJson.getCompanyCode()))
+                            .view("dicPersonQualificationType-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (qualificationType != null) {
+                        personQualification.setType(qualificationType);
+                    } else {
+                        return prepareError(result, methodName, personQualificationJson,
+                                "no tsadv$DicPersonQualificationType with legacyId " + personQualificationJson.getQualificationTypeId()
+                                        + " and company legacyId " + personQualificationJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(personQualification);
+                }
+                if (personQualification == null) {
+                    personQualification = metadata.create(PersonQualification.class);
+                    personQualification.setUuid(UUID.randomUUID());
+                    personQualification.setLegacyId(personQualificationJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personQualificationJson.getPersonId(),
+                                    "company", personQualificationJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personQualification.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personQualificationJson,
+                                "no base$PersonGroupExt with legacyId " + personQualificationJson.getPersonId()
+                                        + " and company legacyId " + personQualificationJson.getCompanyCode());
+                    }
+                    personQualification.setEducationalInstitutionName(personQualificationJson.getSchool());
+                    personQualification.setStartDate(formatter.parse(personQualificationJson.getStartDate()));
+                    personQualification.setEndDate(formatter.parse(personQualificationJson.getEndDate()));
+                    personQualification.setDiploma(personQualificationJson.getDocumentNumber());
+                    personQualification.setIssuedDate(formatter.parse(personQualificationJson.getDocumentDate()));
+                    DicPersonQualificationType qualificationType = dataManager.load(DicPersonQualificationType.class)
+                            .query("select e from tsadv$DicPersonQualificationType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personQualificationJson.getQualificationTypeId(),
+                                    "companyCode", personQualificationJson.getCompanyCode()))
+                            .view("dicPersonQualificationType-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (qualificationType != null) {
+                        personQualification.setType(qualificationType);
+                    } else {
+                        return prepareError(result, methodName, personQualificationJson,
+                                "no tsadv$DicPersonQualificationType with legacyId " + personQualificationJson.getQualificationTypeId()
+                                        + " and company legacyId " + personQualificationJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(personQualification);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personQualifications, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personQualifications);
+    }
+
+    @Override
+    public BaseResult deletePersonQualification(PersonQualificationDataJson personQualificationData) {
+        String methodName = "deletePersonQualification";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonQualificationJson> personQualifications = new ArrayList<>();
+        if (personQualificationData.getPersonQualifications() != null) {
+            personQualifications = personQualificationData.getPersonQualifications();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonQualification> personQualificationArrayList = new ArrayList<>();
+            for (PersonQualificationJson personQualificationJson : personQualifications) {
+                if (personQualificationJson.getLegacyId() == null || personQualificationJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no legacyId");
+                }
+                if (personQualificationJson.getCompanyCode() == null || personQualificationJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no companyCode");
+                }
+                if (personQualificationJson.getPersonId() == null || personQualificationJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personQualifications,
+                            "no personId");
+                }
+
+                PersonQualification personQualification = dataManager.load(PersonQualification.class)
+                        .query("select e from tsadv$PersonQualification e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personQualificationJson.getLegacyId(),
+                                "pLegacyId", personQualificationJson.getPersonId(),
+                                "companyCode", personQualificationJson.getCompanyCode()))
+                        .view("personQualification-view")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personQualification == null) {
+                    return prepareError(result, methodName, personQualificationJson,
+                            "no personQualification with legacyId and personId : "
+                                    + personQualificationJson.getLegacyId() + " , " + personQualificationJson.getPersonId() +
+                                    ", " + personQualificationJson.getCompanyCode());
+                }
+                if (!personQualificationArrayList.stream().filter(personQualification1 ->
+                        personQualification1.getId().equals(personQualification.getId())).findAny().isPresent()) {
+                    personQualificationArrayList.add(personQualification);
+                }
+            }
+            for (PersonQualification personQualification : personQualificationArrayList) {
+                entityManager.remove(personQualification);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personQualificationData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personQualificationData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonContact(PersonContactDataJson personContactData) {
+        String methodName = "createOrUpdatePersonContact";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<PersonContactJson> personContacts = new ArrayList<>();
+        if (personContactData.getPersonContacts() != null) {
+            personContacts = personContactData.getPersonContacts();
+        }
+        try {
+            for (PersonContactJson personContactJson : personContacts) {
+
+                if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personContacts,
+                            "no legacyId");
+                }
+
+                if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personContacts,
+                            "no companyCode");
+                }
+
+                if (personContactJson.getPersonId() == null || personContactJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personContacts,
+                            "no personId");
+                }
+
+                PersonContact personContact = dataManager.load(PersonContact.class)
+                        .query(
+                                " select e from tsadv$PersonContact e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.personGroup.legacyId = :pgLegacyId " +
+                                        " and e.personGroup.company.legacyId = :companyCode " +
+                                        " and e.type.legacyId = :tpLegacyId")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", personContactJson.getLegacyId(),
+                                "pgLegacyId", personContactJson.getPersonId(),
+                                "companyCode", personContactJson.getCompanyCode(),
+                                "tpLegacyId", personContactJson.getType()))
+                        .view("personContact.edit").list().stream().findFirst().orElse(null);
+
+                if (personContact != null) {
+                    personContact.setLegacyId(personContactJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query(
+                                    " select e from base$PersonGroupExt e " +
+                                            " where e.legacyId = :legacyId " +
+                                            " and e.company.legacyId = :company ")
+                            .setParameters(ParamsMap.of(
+                                    "legacyId", personContactJson.getPersonId(),
+                                    "company", personContactJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personContact.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personContacts,
+                                "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
+                                        + " and company legacyId " + personContactJson.getCompanyCode());
+                    }
+
+                    DicPhoneType type = dataManager.load(DicPhoneType.class)
+                            .query(
+                                    "select e from tsadv$DicPhoneType e " +
+                                            " where e.legacyId = :legacyId ")
+                            .parameter("legacyId", personContactJson.getType())
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                    if (type != null) {
+                        personContact.setType(type);
+                    } else {
+                        return prepareError(result, methodName, personContactJson.getType(), "" +
+                                "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
+                    }
+                    personContact.setContactValue(personContactJson.getValue());
+                    commitContext.addInstanceToCommit(personContact);
+                }
+                if (personContact == null)
+                    personContact = metadata.create(PersonContact.class);
+                personContact.setId(UUID.randomUUID());
+                personContact.setLegacyId(personContactJson.getLegacyId());
+                PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                        .query(
+                                " select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :company ")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", personContactJson.getPersonId(),
+                                "company", personContactJson.getCompanyCode()))
+                        .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                if (personGroupExt != null) {
+                    personContact.setPersonGroup(personGroupExt);
+                } else {
+                    return prepareError(result, methodName, personContacts,
+                            "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
+                                    + " and company legacyId " + personContactJson.getCompanyCode());
+                }
+
+                DicPhoneType type = dataManager.load(DicPhoneType.class)
+                        .query(
+                                "select e from tsadv$DicPhoneType e " +
+                                        " where e.legacyId = :legacyId ")
+                        .parameter("legacyId", personContactJson.getType())
+                        .view(View.BASE).list().stream().findFirst().orElse(null);
+                if (type != null) {
+                    personContact.setType(type);
+                } else {
+                    return prepareError(result, methodName, personContactJson.getType(), "" +
+                            "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
+                }
+                personContact.setContactValue(personContactJson.getValue());
+                commitContext.addInstanceToCommit(personContact);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personContactData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personContactData);
+    }
+
+    @Override
+    public BaseResult deletePersonContact(PersonContactDataJson personContactData) {
+        String methodName = "deletePersonContact";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonContactJson> personContacts = new ArrayList<>();
+        if (personContactData.getPersonContacts() != null) {
+            personContacts = personContactData.getPersonContacts();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonContact> personContactArrayList = new ArrayList<>();
+            for (PersonContactJson personContactJson : personContacts) {
+
+                if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personContacts,
+                            "no legacyId");
+                }
+
+                if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personContacts,
+                            "no companyCode");
+                }
+
+                PersonContact personContact = dataManager.load(PersonContact.class)
+                        .query(
+                                " select e from tsadv$PersonContact e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.personGroup.company.legacyId = :companyCode ")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", personContactJson.getLegacyId(),
+                                "companyCode", personContactJson.getCompanyCode()))
+                        .view("personContact.edit").list().stream().findFirst().orElse(null);
+
+                if (personContact == null) {
+                    return prepareError(result, methodName, personContactJson,
+                            "no PersonContact with legacyId " + personContactJson.getPersonId()
+                                    + " and company legacyId " + personContactJson.getCompanyCode());
+                }
+
+                if (!personContactArrayList.stream().filter(personContact1 ->
+                        personContact1.getId().equals(personContact.getId())).findAny().isPresent()) {
+                    personContactArrayList.add(personContact);
+                }
+            }
+
+            for (PersonContact personContact1 : personContactArrayList) {
+                entityManager.remove(personContact1);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personContactData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, personContactData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonEducation(PersonEducationDataJson personEducationData) {
+        String methodName = "createOrUpdatePersonEducation";
+        ArrayList<PersonEducationJson> personEducations = new ArrayList<>();
+        if (personEducationData.getPersonEducations() != null) {
+            personEducations = personEducationData.getPersonEducations();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (PersonEducationJson personEducationJson : personEducations) {
+                if (personEducationJson.getLegacyId() == null || personEducationJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no legacyId");
+                }
+                if (personEducationJson.getCompanyCode() == null || personEducationJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no companyCode");
+                }
+                if (personEducationJson.getSchool() == null || personEducationJson.getSchool().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no school");
+                }
+                if (personEducationJson.getEducationTypeId() == null || personEducationJson.getEducationTypeId().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no educationTypeId");
+                }
+                if (personEducationJson.getFaculty() == null || personEducationJson.getFaculty().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no faculty");
+                }
+                if (personEducationJson.getStartYear() == null || personEducationJson.getStartYear().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no startYear");
+                }
+                if (personEducationJson.getEndYear() == null || personEducationJson.getEndYear().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no endYear");
+                }
+                if (personEducationJson.getQualification() == null || personEducationJson.getQualification().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no qualification");
+                }
+                PersonEducation personEducation = dataManager.load(PersonEducation.class)
+                        .query("select e from tsadv$PersonEducation e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personEducationJson.getLegacyId(),
+                                "pLegacyId", personEducationJson.getPersonId(),
+                                "companyCode", personEducationJson.getCompanyCode()))
+                        .view("personEducation.full")
+                        .list().stream().findFirst().orElse(null);
+                if (personEducation != null) {
+                    personEducation.setLegacyId(personEducationJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personEducationJson.getPersonId(),
+                                    "company", personEducationJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personEducation.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personEducationJson,
+                                "no base$PersonGroupExt with legacyId " + personEducationJson.getPersonId()
+                                        + " and company legacyId " + personEducationJson.getCompanyCode());
+                    }
+                    personEducation.setSchool(personEducationJson.getSchool());
+                    personEducation.setStartYear(Integer.valueOf(personEducationJson.getStartYear()));
+                    personEducation.setEndYear(Integer.valueOf(personEducationJson.getEndYear()));
+                    personEducation.setFaculty(personEducationJson.getFaculty());
+                    personEducation.setQualification(personEducationJson.getQualification());
+                    DicEducationType educationType = dataManager.load(DicEducationType.class)
+                            .query("select e from base$DicEducationType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personEducationJson.getEducationTypeId(),
+                                    "companyCode", personEducationJson.getCompanyCode()))
+                            .view("dicEducationType-browse")
+                            .list().stream().findFirst().orElse(null);
+                    if (educationType != null) {
+                        personEducation.setEducationType(educationType);
+                    } else {
+                        return prepareError(result, methodName, personEducationJson,
+                                "no base$DicEducationType with legacyId " + personEducationJson.getEducationTypeId()
+                                        + " and company legacyId " + personEducationJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(personEducation);
+                }
+                if (personEducation == null) {
+                    personEducation = metadata.create(PersonEducation.class);
+                    personEducation.setUuid(UUID.randomUUID());
+                    personEducation.setLegacyId(personEducationJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personEducationJson.getPersonId(),
+                                    "company", personEducationJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personEducation.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personEducationJson,
+                                "no base$PersonGroupExt with legacyId " + personEducationJson.getPersonId()
+                                        + " and company legacyId " + personEducationJson.getCompanyCode());
+                    }
+                    personEducation.setSchool(personEducationJson.getSchool());
+                    personEducation.setStartYear(Integer.valueOf(personEducationJson.getStartYear()));
+                    personEducation.setEndYear(Integer.valueOf(personEducationJson.getEndYear()));
+                    personEducation.setFaculty(personEducationJson.getFaculty());
+                    personEducation.setQualification(personEducationJson.getQualification());
+                    DicEducationType educationType = dataManager.load(DicEducationType.class)
+                            .query("select e from base$DicEducationType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personEducationJson.getEducationTypeId(),
+                                    "companyCode", personEducationJson.getCompanyCode()))
+                            .view("dicEducationType-browse")
+                            .list().stream().findFirst().orElse(null);
+                    if (educationType != null) {
+                        personEducation.setEducationType(educationType);
+                    } else {
+                        return prepareError(result, methodName, personEducationJson,
+                                "no base$DicEducationType with legacyId " + personEducationJson.getEducationTypeId()
+                                        + " and company legacyId " + personEducationJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(personEducation);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personEducations, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personEducations);
+    }
+
+    @Override
+    public BaseResult deletePersonEducation(PersonEducationDataJson personEducationData) {
+        String methodName = "deletePersonEducation";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonEducationJson> personEducations = new ArrayList<>();
+        if (personEducationData.getPersonEducations() != null) {
+            personEducations = personEducationData.getPersonEducations();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonEducation> personEducationArrayList = new ArrayList<>();
+            for (PersonEducationJson personEducationJson : personEducations) {
+                if (personEducationJson.getLegacyId() == null || personEducationJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no legacyId");
+                }
+                if (personEducationJson.getCompanyCode() == null || personEducationJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no companyCode");
+                }
+                if (personEducationJson.getPersonId() == null || personEducationJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personEducations,
+                            "no personId");
+                }
+
+                PersonEducation personEducation = dataManager.load(PersonEducation.class)
+                        .query("select e from tsadv$PersonEducation e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personEducationJson.getLegacyId(),
+                                "pLegacyId", personEducationJson.getPersonId(),
+                                "companyCode", personEducationJson.getCompanyCode()))
+                        .view("personEducation.full")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personEducation == null) {
+                    return prepareError(result, methodName, personEducationJson,
+                            "no personEducation with legacyId and personId : "
+                                    + personEducationJson.getLegacyId() + " , " + personEducationJson.getPersonId() +
+                                    ", " + personEducationJson.getCompanyCode());
+                }
+                if (!personEducationArrayList.stream().filter(personEducation1 ->
+                        personEducation1.getId().equals(personEducation.getId())).findAny().isPresent()) {
+                    personEducationArrayList.add(personEducation);
+                }
+            }
+            for (PersonEducation personEducation : personEducationArrayList) {
+                entityManager.remove(personEducation);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personEducations, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personEducationData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateAbsence(AbsenceDataJson absenceData) {
+        String methodName = "createOrUpdateAbsence";
+        ArrayList<AbsenceJson> absences = new ArrayList<>();
+        if (absenceData.getAbsences() != null) {
+            absences = absenceData.getAbsences();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (AbsenceJson absenceJson : absences) {
+                if (absenceJson.getLegacyId() == null || absenceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no legacyId");
+                }
+                if (absenceJson.getCompanyCode() == null || absenceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no companyCode");
+                }
+                if (absenceJson.getAbsenceTypeId() == null || absenceJson.getAbsenceTypeId().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no absenceTypeId");
+                }
+                if (absenceJson.getStartDate() == null || absenceJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no startDate");
+                }
+                if (absenceJson.getEndDate() == null || absenceJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no endDate");
+                }
+                if (absenceJson.getAbsenceDuration() == null || absenceJson.getAbsenceDuration().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no absenceDuration");
+                }
+                if (absenceJson.getOrderNumber() == null || absenceJson.getOrderNumber().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no orderNumber");
+                }
+                if (absenceJson.getOrderDate() == null || absenceJson.getOrderDate().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no orderDate");
+                }
+                Absence absence = dataManager.load(Absence.class)
+                        .query("select e from tsadv$Absence e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
+                                "pLegacyId", absenceJson.getPersonId(),
+                                "companyCode", absenceJson.getCompanyCode()))
+                        .view("absence.for.integration")
+                        .list().stream().findFirst().orElse(null);
+                if (absence != null) {
+                    absence.setLegacyId(absenceJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getPersonId(),
+                                    "company", absenceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        absence.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, absenceJson,
+                                "no base$PersonGroupExt with legacyId " + absenceJson.getPersonId()
+                                        + " and company legacyId " + absenceJson.getCompanyCode());
+                    }
+                    absence.setDateFrom(formatter.parse(absenceJson.getStartDate()));
+                    absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
+                    absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
+                    absence.setOrderNum(absenceJson.getOrderNumber());
+                    absence.setOrderDate(formatter.parse(absenceJson.getOrderDate()));
+                    DicAbsenceType absenceType = dataManager.load(DicAbsenceType.class)
+                            .query("select e from tsadv$DicAbsenceType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getAbsenceTypeId(),
+                                    "companyCode", absenceJson.getCompanyCode()))
+                            .view("dicAbsenceType.view")
+                            .list().stream().findFirst().orElse(null);
+                    if (absenceType != null) {
+                        absence.setType(absenceType);
+                    } else {
+                        return prepareError(result, methodName, absenceJson,
+                                "no tsadv$DicAbsenceType with legacyId " + absenceJson.getAbsenceTypeId()
+                                        + " and company legacyId " + absenceJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(absence);
+                }
+                if (absence == null) {
+                    absence = metadata.create(Absence.class);
+                    absence.setUuid(UUID.randomUUID());
+                    absence.setLegacyId(absenceJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getPersonId(),
+                                    "company", absenceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        absence.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, absenceJson,
+                                "no base$PersonGroupExt with legacyId " + absenceJson.getPersonId()
+                                        + " and company legacyId " + absenceJson.getCompanyCode());
+                    }
+                    absence.setDateFrom(formatter.parse(absenceJson.getStartDate()));
+                    absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
+                    absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
+                    absence.setOrderNum(absenceJson.getOrderNumber());
+                    absence.setOrderDate(formatter.parse(absenceJson.getOrderDate()));
+                    DicAbsenceType absenceType = dataManager.load(DicAbsenceType.class)
+                            .query("select e from tsadv$DicAbsenceType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getAbsenceTypeId(),
+                                    "companyCode", absenceJson.getCompanyCode()))
+                            .view("dicAbsenceType.view")
+                            .list().stream().findFirst().orElse(null);
+                    if (absenceType != null) {
+                        absence.setType(absenceType);
+                    } else {
+                        return prepareError(result, methodName, absenceJson,
+                                "no tsadv$DicAbsenceType with legacyId " + absenceJson.getAbsenceTypeId()
+                                        + " and company legacyId " + absenceJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(absence);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, absences, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, absences);
+    }
+
+    @Override
+    public BaseResult deleteAbsence(AbsenceDataJson absenceData) {
+        String methodName = "deleteAbsence";
+        BaseResult result = new BaseResult();
+        ArrayList<AbsenceJson> absences = new ArrayList<>();
+        if (absenceData.getAbsences() != null) {
+            absences = absenceData.getAbsences();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<Absence> absenceArrayList = new ArrayList<>();
+            for (AbsenceJson absenceJson : absences) {
+                if (absenceJson.getLegacyId() == null || absenceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no legacyId");
+                }
+                if (absenceJson.getCompanyCode() == null || absenceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no companyCode");
+                }
+                if (absenceJson.getPersonId() == null || absenceJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no personId");
+                }
+
+                Absence absence = dataManager.load(Absence.class)
+                        .query("select e from tsadv$Absence e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
+                                "pLegacyId", absenceJson.getPersonId(),
+                                "companyCode", absenceJson.getCompanyCode()))
+                        .view("absence.for.integration")
+                        .list().stream().findFirst().orElse(null);
+
+                if (absence == null) {
+                    return prepareError(result, methodName, absenceJson,
+                            "no absence with legacyId and personId : "
+                                    + absenceJson.getLegacyId() + " , " + absenceJson.getPersonId() +
+                                    ", " + absenceJson.getCompanyCode());
+                }
+                if (!absenceArrayList.stream().filter(absence1 ->
+                        absence1.getId().equals(absence.getId())).findAny().isPresent()) {
+                    absenceArrayList.add(absence);
+                }
+            }
+            for (Absence absence : absenceArrayList) {
+                entityManager.remove(absence);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, absences, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, absences);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonExperience(PersonExperienceDataJson personExperienceData) {
+        String methodName = "createOrUpdatePersonExperience";
+        ArrayList<PersonExperienceJson> personExperiences = new ArrayList<>();
+        if (personExperienceData.getPersonExperiences() != null) {
+            personExperiences = personExperienceData.getPersonExperiences();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (PersonExperienceJson personExperienceJson : personExperiences) {
+                if (personExperienceJson.getLegacyId() == null || personExperienceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no legacyId");
+                }
+                if (personExperienceJson.getCompanyCode() == null || personExperienceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no companyCode");
+                }
+                if (personExperienceJson.getPersonId() == null || personExperienceJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no personId");
+                }
+                if (personExperienceJson.getStartDate() == null || personExperienceJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no startDate");
+                }
+                if (personExperienceJson.getEndDate() == null || personExperienceJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no endDate");
+                }
+                if (personExperienceJson.getCompany() == null || personExperienceJson.getCompany().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no company");
+                }
+                if (personExperienceJson.getJob() == null || personExperienceJson.getJob().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no job");
+                }
+                if (personExperienceJson.getLocation() == null || personExperienceJson.getLocation().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no location");
+                }
+                PersonExperience personExperience = dataManager.load(PersonExperience.class)
+                        .query("select e from tsadv$PersonExperience e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personExperienceJson.getLegacyId(),
+                                "pLegacyId", personExperienceJson.getPersonId(),
+                                "companyCode", personExperienceJson.getCompanyCode()))
+                        .view("personExperience.full")
+                        .list().stream().findFirst().orElse(null);
+                if (personExperience != null) {
+                    personExperience.setLegacyId(personExperienceJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personExperienceJson.getPersonId(),
+                                    "company", personExperienceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personExperience.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personExperienceJson,
+                                "no base$PersonGroupExt with legacyId " + personExperienceJson.getPersonId()
+                                        + " and company legacyId " + personExperienceJson.getCompanyCode());
+                    }
+                    personExperience.setStartMonth(formatter.parse(personExperienceJson.getStartDate()));
+                    personExperience.setEndMonth(formatter.parse(personExperienceJson.getEndDate()));
+                    personExperience.setCompany(personExperienceJson.getCompany());
+                    personExperience.setJob(personExperienceJson.getJob());
+                    personExperience.setLocation(personExperienceJson.getLocation());
+
+                    commitContext.addInstanceToCommit(personExperience);
+                }
+                if (personExperience == null) {
+                    personExperience = metadata.create(PersonExperience.class);
+                    personExperience.setUuid(UUID.randomUUID());
+                    personExperience.setLegacyId(personExperienceJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personExperienceJson.getPersonId(),
+                                    "company", personExperienceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personExperience.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personExperienceJson,
+                                "no base$PersonGroupExt with legacyId " + personExperienceJson.getPersonId()
+                                        + " and company legacyId " + personExperienceJson.getCompanyCode());
+                    }
+                    personExperience.setStartMonth(formatter.parse(personExperienceJson.getStartDate()));
+                    personExperience.setEndMonth(formatter.parse(personExperienceJson.getEndDate()));
+                    personExperience.setCompany(personExperienceJson.getCompany());
+                    personExperience.setJob(personExperienceJson.getJob());
+                    personExperience.setLocation(personExperienceJson.getLocation());
+
+                    commitContext.addInstanceToCommit(personExperience);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personExperiences, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personExperiences);
+    }
+
+    @Override
+    public BaseResult deletePersonExperience(PersonExperienceDataJson personExperienceData) {
+        String methodName = "deletePersonExperience";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonExperienceJson> personExperiences = new ArrayList<>();
+        if (personExperienceData.getPersonExperiences() != null) {
+            personExperiences = personExperienceData.getPersonExperiences();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonExperience> personExperienceArrayList = new ArrayList<>();
+            for (PersonExperienceJson personExperienceJson : personExperiences) {
+                if (personExperienceJson.getLegacyId() == null || personExperienceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no legacyId");
+                }
+                if (personExperienceJson.getCompanyCode() == null || personExperienceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no companyCode");
+                }
+                if (personExperienceJson.getPersonId() == null || personExperienceJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no personId");
+                }
+
+                PersonExperience personExperience = dataManager.load(PersonExperience.class)
+                        .query("select e from tsadv$PersonExperience e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personExperienceJson.getLegacyId(),
+                                "pLegacyId", personExperienceJson.getPersonId(),
+                                "companyCode", personExperienceJson.getCompanyCode()))
+                        .view("personExperience.full")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personExperience == null) {
+                    return prepareError(result, methodName, personExperienceJson,
+                            "no absence with legacyId and personId : "
+                                    + personExperienceJson.getLegacyId() + " , " + personExperienceJson.getPersonId() +
+                                    ", " + personExperienceJson.getCompanyCode());
+                }
+                if (!personExperienceArrayList.stream().filter(personExperience1 ->
+                        personExperience1.getId().equals(personExperience.getId())).findAny().isPresent()) {
+                    personExperienceArrayList.add(personExperience);
+                }
+            }
+            for (PersonExperience personExperience : personExperienceArrayList) {
+                entityManager.remove(personExperience);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personExperiences, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personExperiences);
     }
 }

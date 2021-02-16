@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <include file="kz/uco/tsadv/views/portal-views.xml"/>
+    <include file="kz/uco/tsadv/views/x-portal-views.xml"/>
     <!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
     <!--          extends="procTask-frame"-->
     <!--          name="procTask-frame-extended">-->
@@ -2895,14 +2895,11 @@
             </property>
         </property>
         <property name="personGroup" view="_minimal">
-            <property name="list" view="_minimal"/>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="code"/>
                 </property>
                 <property name="primaryFlag"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="personExperience" view="_minimal"/>
         </property>
@@ -2928,14 +2925,11 @@
         <property name="actualValue"/>
         <property name="successCritetia"/>
         <property name="assignedByPersonGroup" view="_minimal">
-            <property name="list" view="_minimal"/>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="code"/>
                 </property>
                 <property name="primaryFlag"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="personExperience" view="_minimal"/>
         </property>
@@ -2943,7 +2937,9 @@
         <property name="endDate"/>
         <property name="weight"/>
         <property name="priority" view="_local"/>
-        <property name="assignedPerformancePlan" view="_minimal"/>
+        <property name="assignedPerformancePlan" view="_minimal">
+            <property name="result"/>
+        </property>
         <property name="category" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>
@@ -8987,7 +8983,9 @@
           extends="_local"
           name="dicAbsenceType.view">
         <property name="absenceCategory" view="_local"/>
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Agreement"
           extends="_local"
@@ -11146,18 +11144,30 @@
     <view class="kz.uco.tsadv.modules.recruitment.model.PersonEducation"
           extends="_local"
           name="personEducation.full">
-        <property name="personGroup"
-                  view="_minimal"/>
-        <property name="degree"
-                  view="_minimal"/>
-        <property name="level"
-                  view="_minimal"/>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
+        <property name="educationType" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+        </property>
+        <property name="degree" view="_minimal"/>
+        <property name="level" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.PersonExperience"
           extends="_local"
           name="personExperience.full">
-        <property name="personGroup"
-                  view="_minimal"/>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
           extends="_local"
@@ -19749,22 +19759,20 @@
     <view class="kz.uco.tsadv.entity.tb.PersonQualification"
           extends="_local"
           name="personQualification-view">
-        <property name="type"
-                  view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
+        <property name="type" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
             <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
             <property name="legacyId"/>
         </property>
-        <property name="attachment"
-                  view="_minimal"/>
-        <property name="personGroup"
-                  view="_minimal">
-            <property name="legacyId"/>
-        </property>
+        <property name="attachment" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.recognition.shop.GoodsOrderDetail"
           extends="_local"
@@ -22150,7 +22158,9 @@
         <property name="company" view="_minimal"/>
     </view>
     <view entity="tsadv$DicPersonQualificationType" name="dicPersonQualificationType-edit" extends="_local">
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
     <view entity="tsadv$DicProtectionEquipmentCondition" name="dicProtectionEquipmentCondition-browse" extends="_local">
         <property name="company" view="_minimal"/>
@@ -23302,5 +23312,27 @@
             <property name="code"/>
         </property>
     </view>
-
+    <view entity="tsadv$Absence" name="absence.for.integration" extends="_local">
+        <property name="order" view="_minimal"/>
+        <property name="absenceStatus" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
+    </view>
 </views>
