@@ -78,4 +78,10 @@
             <param name="processVariables" type="java.util.Map"/>
         </method>
     </service>
+    <service name="tsadv_PortalAccessEntityAttributesService">
+        <method name="entityAttributesSecurityState">
+            <param name="entityName" type="java.lang.String"/>
+            <param name="entityId" type="java.lang.String"/>
+        </method>
+    </service>
 </services>

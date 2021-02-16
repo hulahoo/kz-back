@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <views xmlns="http://schemas.haulmont.com/cuba/view.xsd">
-    <include file="kz/uco/tsadv/views/portal-views.xml"/>
+    <include file="kz/uco/tsadv/views/x-portal-views.xml"/>
     <!--    <view class="com.haulmont.bpm.entity.ProcTask"-->
     <!--          extends="procTask-frame"-->
     <!--          name="procTask-frame-extended">-->
@@ -23302,5 +23302,4 @@
             <property name="code"/>
         </property>
     </view>
-
 </views>
