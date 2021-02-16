@@ -49,4 +49,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdatePersonContact(PersonContactDataJson personContactData);
 
     BaseResult deletePersonContact(PersonContactDataJson personContactData);
+
+    BaseResult createOrUpdatePersonEducation(PersonEducationDataJson personEducationData);
+
+    BaseResult deletePersonEducation(PersonEducationDataJson personEducationData);
 }

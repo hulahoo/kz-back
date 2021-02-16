@@ -11142,12 +11142,20 @@
     <view class="kz.uco.tsadv.modules.recruitment.model.PersonEducation"
           extends="_local"
           name="personEducation.full">
-        <property name="personGroup"
-                  view="_minimal"/>
-        <property name="degree"
-                  view="_minimal"/>
-        <property name="level"
-                  view="_minimal"/>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
+        <property name="educationType" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+        </property>
+        <property name="degree" view="_minimal"/>
+        <property name="level" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.PersonExperience"
           extends="_local"
