@@ -2099,42 +2099,42 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         BaseResult result = new BaseResult();
         CommitContext commitContext = new CommitContext();
         ArrayList<PersonContactJson> personContacts = new ArrayList<>();
-        if(personContactData.getPersonContacts() != null){
+        if (personContactData.getPersonContacts() != null) {
             personContacts = personContactData.getPersonContacts();
         }
-        try{
-            for(PersonContactJson personContactJson : personContacts){
+        try {
+            for (PersonContactJson personContactJson : personContacts) {
 
-                if(personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()){
+                if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
                     return prepareError(result, methodName, personContacts,
                             "no legacyId");
                 }
 
-                if(personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()){
+                if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
                     return prepareError(result, methodName, personContacts,
                             "no companyCode");
                 }
 
-                if (personContactJson.getPersonId() == null || personContactJson.getPersonId().isEmpty()){
-                    return prepareError(result,methodName,personContacts,
+                if (personContactJson.getPersonId() == null || personContactJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personContacts,
                             "no personId");
                 }
 
                 PersonContact personContact = dataManager.load(PersonContact.class)
                         .query(
                                 " select e from tsadv$PersonContact e " +
-                                " where e.legacyId = :legacyId " +
-                                " and e.personGroup.legacyId = :pgLegacyId " +
-                                " and e.personGroup.company.legacyId = :companyCode " +
-                                " and e.type.legacyId = :tpLegacyId")
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.personGroup.legacyId = :pgLegacyId " +
+                                        " and e.personGroup.company.legacyId = :companyCode " +
+                                        " and e.type.legacyId = :tpLegacyId")
                         .setParameters(ParamsMap.of(
-                                "legacyId",personContactJson.getLegacyId(),
-                                "pgLegacyId",personContactJson.getPersonId(),
-                                "companyCode",personContactJson.getCompanyCode(),
-                                "tpLegacyId",personContactJson.getType()))
+                                "legacyId", personContactJson.getLegacyId(),
+                                "pgLegacyId", personContactJson.getPersonId(),
+                                "companyCode", personContactJson.getCompanyCode(),
+                                "tpLegacyId", personContactJson.getType()))
                         .view("personContact.edit").list().stream().findFirst().orElse(null);
 
-                if(personContact != null){
+                if (personContact != null) {
                     personContact.setLegacyId(personContactJson.getLegacyId());
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query(
@@ -2142,49 +2142,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             " where e.legacyId = :legacyId " +
                                             " and e.company.legacyId = :company ")
                             .setParameters(ParamsMap.of(
-                                    "legacyId",personContactJson.getPersonId(),
-                                    "company",personContactJson.getCompanyCode()))
+                                    "legacyId", personContactJson.getPersonId(),
+                                    "company", personContactJson.getCompanyCode()))
                             .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-                    if(personGroupExt != null){
+                    if (personGroupExt != null) {
                         personContact.setPersonGroup(personGroupExt);
-                    }else{
-                        return prepareError(result,methodName,personContacts,
-                                "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
-                                 + " and company legacyId " + personContactJson.getCompanyCode());
-                    }
-
-                    DicPhoneType type = dataManager.load(DicPhoneType.class)
-                            .query(
-                                    "select e from tsadv$DicPhoneType e " +
-                                    " where e.legacyId = :legacyId ")
-                            .parameter("legacyId",personContactJson.getType())
-                            .view(View.BASE).list().stream().findFirst().orElse(null);
-                    if(type != null){
-                        personContact.setType(type);
-                    }else{
-                        return prepareError(result,methodName,personContactJson.getType(),"" +
-                                "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
-                    }
-                    personContact.setContactValue(personContactJson.getValue());
-                    commitContext.addInstanceToCommit(personContact);
-                }
-                if(personContact == null)
-                    personContact = metadata.create(PersonContact.class);
-                    personContact.setId(UUID.randomUUID());
-                    personContact.setLegacyId(personContactJson.getLegacyId());
-                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
-                            .query(
-                                    " select e from base$PersonGroupExt e " +
-                                            " where e.legacyId = :legacyId " +
-                                            " and e.company.legacyId = :company ")
-                            .setParameters(ParamsMap.of(
-                                    "legacyId",personContactJson.getPersonId(),
-                                    "company",personContactJson.getCompanyCode()))
-                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-                    if(personGroupExt != null){
-                        personContact.setPersonGroup(personGroupExt);
-                    }else{
-                        return prepareError(result,methodName,personContacts,
+                    } else {
+                        return prepareError(result, methodName, personContacts,
                                 "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
                                         + " and company legacyId " + personContactJson.getCompanyCode());
                     }
@@ -2193,24 +2157,60 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .query(
                                     "select e from tsadv$DicPhoneType e " +
                                             " where e.legacyId = :legacyId ")
-                            .parameter("legacyId",personContactJson.getType())
+                            .parameter("legacyId", personContactJson.getType())
                             .view(View.BASE).list().stream().findFirst().orElse(null);
-                    if(type != null){
+                    if (type != null) {
                         personContact.setType(type);
-                    }else{
-                        return prepareError(result,methodName,personContactJson.getType(),"" +
+                    } else {
+                        return prepareError(result, methodName, personContactJson.getType(), "" +
                                 "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                     }
                     personContact.setContactValue(personContactJson.getValue());
                     commitContext.addInstanceToCommit(personContact);
                 }
-                dataManager.commit(commitContext);
-            } catch (Exception e) {
-                return prepareError(result, methodName, personContactData, e.getMessage() + "\r" +
+                if (personContact == null)
+                    personContact = metadata.create(PersonContact.class);
+                personContact.setId(UUID.randomUUID());
+                personContact.setLegacyId(personContactJson.getLegacyId());
+                PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                        .query(
+                                " select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :company ")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", personContactJson.getPersonId(),
+                                "company", personContactJson.getCompanyCode()))
+                        .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                if (personGroupExt != null) {
+                    personContact.setPersonGroup(personGroupExt);
+                } else {
+                    return prepareError(result, methodName, personContacts,
+                            "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
+                                    + " and company legacyId " + personContactJson.getCompanyCode());
+                }
+
+                DicPhoneType type = dataManager.load(DicPhoneType.class)
+                        .query(
+                                "select e from tsadv$DicPhoneType e " +
+                                        " where e.legacyId = :legacyId ")
+                        .parameter("legacyId", personContactJson.getType())
+                        .view(View.BASE).list().stream().findFirst().orElse(null);
+                if (type != null) {
+                    personContact.setType(type);
+                } else {
+                    return prepareError(result, methodName, personContactJson.getType(), "" +
+                            "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
+                }
+                personContact.setContactValue(personContactJson.getValue());
+                commitContext.addInstanceToCommit(personContact);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personContactData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
-            }
-            return prepareSuccess(result, methodName, personContactData);
+        }
+        return prepareSuccess(result, methodName, personContactData);
     }
 
     @Override
@@ -2218,21 +2218,21 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         String methodName = "deletePersonContact";
         BaseResult result = new BaseResult();
         ArrayList<PersonContactJson> personContacts = new ArrayList<>();
-        if(personContactData.getPersonContacts() != null){
+        if (personContactData.getPersonContacts() != null) {
             personContacts = personContactData.getPersonContacts();
         }
 
-        try(Transaction tx = persistence.getTransaction()){
+        try (Transaction tx = persistence.getTransaction()) {
             EntityManager entityManager = persistence.getEntityManager();
             ArrayList<PersonContact> personContactArrayList = new ArrayList<>();
-            for(PersonContactJson personContactJson : personContacts){
+            for (PersonContactJson personContactJson : personContacts) {
 
-                if(personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()){
+                if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
                     return prepareError(result, methodName, personContacts,
                             "no legacyId");
                 }
 
-                if(personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()){
+                if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
                     return prepareError(result, methodName, personContacts,
                             "no companyCode");
                 }
@@ -2243,27 +2243,27 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         " where e.legacyId = :legacyId " +
                                         " and e.personGroup.company.legacyId = :companyCode ")
                         .setParameters(ParamsMap.of(
-                                "legacyId",personContactJson.getLegacyId(),
-                                "companyCode",personContactJson.getCompanyCode()))
+                                "legacyId", personContactJson.getLegacyId(),
+                                "companyCode", personContactJson.getCompanyCode()))
                         .view("personContact.edit").list().stream().findFirst().orElse(null);
 
-                if(personContact == null){
-                    return prepareError(result,methodName,personContactJson,
+                if (personContact == null) {
+                    return prepareError(result, methodName, personContactJson,
                             "no PersonContact with legacyId " + personContactJson.getPersonId()
                                     + " and company legacyId " + personContactJson.getCompanyCode());
                 }
 
-                if(!personContactArrayList.stream().filter(personContact1 ->
-                        personContact1.getId().equals(personContact.getId())).findAny().isPresent()){
+                if (!personContactArrayList.stream().filter(personContact1 ->
+                        personContact1.getId().equals(personContact.getId())).findAny().isPresent()) {
                     personContactArrayList.add(personContact);
                 }
             }
 
-            for(PersonContact personContact1 : personContactArrayList){
+            for (PersonContact personContact1 : personContactArrayList) {
                 entityManager.remove(personContact1);
             }
             tx.commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             return prepareError(result, methodName, personContactData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
@@ -2472,5 +2472,207 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, personEducationData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateAbsence(AbsenceDataJson absenceData) {
+        String methodName = "createOrUpdateAbsence";
+        ArrayList<AbsenceJson> absences = new ArrayList<>();
+        if (absenceData.getAbsences() != null) {
+            absences = absenceData.getAbsences();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (AbsenceJson absenceJson : absences) {
+                if (absenceJson.getLegacyId() == null || absenceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no legacyId");
+                }
+                if (absenceJson.getCompanyCode() == null || absenceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no companyCode");
+                }
+                if (absenceJson.getAbsenceTypeId() == null || absenceJson.getAbsenceTypeId().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no absenceTypeId");
+                }
+                if (absenceJson.getStartDate() == null || absenceJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no startDate");
+                }
+                if (absenceJson.getEndDate() == null || absenceJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no endDate");
+                }
+                if (absenceJson.getAbsenceDuration() == null || absenceJson.getAbsenceDuration().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no absenceDuration");
+                }
+                if (absenceJson.getOrderNumber() == null || absenceJson.getOrderNumber().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no orderNumber");
+                }
+                if (absenceJson.getOrderDate() == null || absenceJson.getOrderDate().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no orderDate");
+                }
+                Absence absence = dataManager.load(Absence.class)
+                        .query("select e from tsadv$Absence e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
+                                "pLegacyId", absenceJson.getPersonId(),
+                                "companyCode", absenceJson.getCompanyCode()))
+                        .view("absence.for.integration")
+                        .list().stream().findFirst().orElse(null);
+                if (absence != null) {
+                    absence.setLegacyId(absenceJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getPersonId(),
+                                    "company", absenceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        absence.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, absenceJson,
+                                "no base$PersonGroupExt with legacyId " + absenceJson.getPersonId()
+                                        + " and company legacyId " + absenceJson.getCompanyCode());
+                    }
+                    absence.setDateFrom(formatter.parse(absenceJson.getStartDate()));
+                    absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
+                    absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
+                    absence.setOrderNum(absenceJson.getOrderNumber());
+                    absence.setOrderDate(formatter.parse(absenceJson.getOrderDate()));
+                    DicAbsenceType absenceType = dataManager.load(DicAbsenceType.class)
+                            .query("select e from tsadv$DicAbsenceType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getAbsenceTypeId(),
+                                    "companyCode", absenceJson.getCompanyCode()))
+                            .view("dicAbsenceType.view")
+                            .list().stream().findFirst().orElse(null);
+                    if (absenceType != null) {
+                        absence.setType(absenceType);
+                    } else {
+                        return prepareError(result, methodName, absenceJson,
+                                "no tsadv$DicAbsenceType with legacyId " + absenceJson.getAbsenceTypeId()
+                                        + " and company legacyId " + absenceJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(absence);
+                }
+                if (absence == null) {
+                    absence = metadata.create(Absence.class);
+                    absence.setUuid(UUID.randomUUID());
+                    absence.setLegacyId(absenceJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getPersonId(),
+                                    "company", absenceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        absence.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, absenceJson,
+                                "no base$PersonGroupExt with legacyId " + absenceJson.getPersonId()
+                                        + " and company legacyId " + absenceJson.getCompanyCode());
+                    }
+                    absence.setDateFrom(formatter.parse(absenceJson.getStartDate()));
+                    absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
+                    absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
+                    absence.setOrderNum(absenceJson.getOrderNumber());
+                    absence.setOrderDate(formatter.parse(absenceJson.getOrderDate()));
+                    DicAbsenceType absenceType = dataManager.load(DicAbsenceType.class)
+                            .query("select e from tsadv$DicAbsenceType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", absenceJson.getAbsenceTypeId(),
+                                    "companyCode", absenceJson.getCompanyCode()))
+                            .view("dicAbsenceType.view")
+                            .list().stream().findFirst().orElse(null);
+                    if (absenceType != null) {
+                        absence.setType(absenceType);
+                    } else {
+                        return prepareError(result, methodName, absenceJson,
+                                "no tsadv$DicAbsenceType with legacyId " + absenceJson.getAbsenceTypeId()
+                                        + " and company legacyId " + absenceJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(absence);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, absences, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, absences);
+    }
+
+    @Override
+    public BaseResult deleteAbsence(AbsenceDataJson absenceData) {
+        String methodName = "deleteAbsence";
+        BaseResult result = new BaseResult();
+        ArrayList<AbsenceJson> absences = new ArrayList<>();
+        if (absenceData.getAbsences() != null) {
+            absences = absenceData.getAbsences();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<Absence> absenceArrayList = new ArrayList<>();
+            for (AbsenceJson absenceJson : absences) {
+                if (absenceJson.getLegacyId() == null || absenceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no legacyId");
+                }
+                if (absenceJson.getCompanyCode() == null || absenceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no companyCode");
+                }
+                if (absenceJson.getPersonId() == null || absenceJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, absences,
+                            "no personId");
+                }
+
+                Absence absence = dataManager.load(Absence.class)
+                        .query("select e from tsadv$Absence e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", absenceJson.getLegacyId(),
+                                "pLegacyId", absenceJson.getPersonId(),
+                                "companyCode", absenceJson.getCompanyCode()))
+                        .view("absence.for.integration")
+                        .list().stream().findFirst().orElse(null);
+
+                if (absence == null) {
+                    return prepareError(result, methodName, absenceJson,
+                            "no absence with legacyId and personId : "
+                                    + absenceJson.getLegacyId() + " , " + absenceJson.getPersonId() +
+                                    ", " + absenceJson.getCompanyCode());
+                }
+                if (!absenceArrayList.stream().filter(absence1 ->
+                        absence1.getId().equals(absence.getId())).findAny().isPresent()) {
+                    absenceArrayList.add(absence);
+                }
+            }
+            for (Absence absence : absenceArrayList) {
+                entityManager.remove(absence);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, absences, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, absences);
     }
 }

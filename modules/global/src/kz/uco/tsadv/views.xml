@@ -8983,7 +8983,9 @@
           extends="_local"
           name="dicAbsenceType.view">
         <property name="absenceCategory" view="_local"/>
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Agreement"
           extends="_local"
@@ -23306,5 +23308,27 @@
             <property name="code"/>
         </property>
     </view>
-
+    <view entity="tsadv$Absence" name="absence.for.integration" extends="_local">
+        <property name="order" view="_minimal"/>
+        <property name="absenceStatus" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
+    </view>
 </views>
