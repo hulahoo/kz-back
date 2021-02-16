@@ -24,6 +24,7 @@ import kz.uco.tsadv.service.BprocService;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.flowable.identitylink.api.IdentityLink;
 import org.flowable.identitylink.api.IdentityLinkInfo;
 import org.springframework.context.event.EventListener;
@@ -93,6 +94,8 @@ public class BprocProcessStatesListener extends AbstractBprocHelper {
         @SuppressWarnings("unchecked") T bprocRequest = (T) bprocRuntimeService.getVariable(executionId, "entity");
 
         String notificationTemplateCode = (String) bprocRuntimeService.getVariable(executionId, "approverNotificationTemplateCode");
+
+        if (StringUtils.isBlank(notificationTemplateCode)) return;
 
         List<User> userList = new ArrayList<>();
 
