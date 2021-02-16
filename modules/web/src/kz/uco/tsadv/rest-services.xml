@@ -729,5 +729,13 @@
         <method name="deletePersonDocument">
             <param name="personDocumentData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDocumentDataJson"/>
         </method>
+        <method name="createOrUpdatePersonQualification">
+            <param name="personQualificationData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonQualificationDataJson"/>
+        </method>
+        <method name="deletePersonQualification">
+            <param name="personQualificationData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonQualificationDataJson"/>
+        </method>
     </service>
 </services>
