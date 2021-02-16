@@ -24,6 +24,7 @@ import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.recruitment.model.PersonEducation;
+import kz.uco.tsadv.modules.recruitment.model.PersonExperience;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -2674,5 +2675,179 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, absences);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonExperience(PersonExperienceDataJson personExperienceData) {
+        String methodName = "createOrUpdatePersonExperience";
+        ArrayList<PersonExperienceJson> personExperiences = new ArrayList<>();
+        if (personExperienceData.getPersonExperiences() != null) {
+            personExperiences = personExperienceData.getPersonExperiences();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (PersonExperienceJson personExperienceJson : personExperiences) {
+                if (personExperienceJson.getLegacyId() == null || personExperienceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no legacyId");
+                }
+                if (personExperienceJson.getCompanyCode() == null || personExperienceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no companyCode");
+                }
+                if (personExperienceJson.getPersonId() == null || personExperienceJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no personId");
+                }
+                if (personExperienceJson.getStartDate() == null || personExperienceJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no startDate");
+                }
+                if (personExperienceJson.getEndDate() == null || personExperienceJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no endDate");
+                }
+                if (personExperienceJson.getCompany() == null || personExperienceJson.getCompany().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no company");
+                }
+                if (personExperienceJson.getJob() == null || personExperienceJson.getJob().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no job");
+                }
+                if (personExperienceJson.getLocation() == null || personExperienceJson.getLocation().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no location");
+                }
+                PersonExperience personExperience = dataManager.load(PersonExperience.class)
+                        .query("select e from tsadv$PersonExperience e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personExperienceJson.getLegacyId(),
+                                "pLegacyId", personExperienceJson.getPersonId(),
+                                "companyCode", personExperienceJson.getCompanyCode()))
+                        .view("personExperience.full")
+                        .list().stream().findFirst().orElse(null);
+                if (personExperience != null) {
+                    personExperience.setLegacyId(personExperienceJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personExperienceJson.getPersonId(),
+                                    "company", personExperienceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personExperience.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personExperienceJson,
+                                "no base$PersonGroupExt with legacyId " + personExperienceJson.getPersonId()
+                                        + " and company legacyId " + personExperienceJson.getCompanyCode());
+                    }
+                    personExperience.setStartMonth(formatter.parse(personExperienceJson.getStartDate()));
+                    personExperience.setEndMonth(formatter.parse(personExperienceJson.getEndDate()));
+                    personExperience.setCompany(personExperienceJson.getCompany());
+                    personExperience.setJob(personExperienceJson.getJob());
+                    personExperience.setLocation(personExperienceJson.getLocation());
+
+                    commitContext.addInstanceToCommit(personExperience);
+                }
+                if (personExperience == null) {
+                    personExperience = metadata.create(PersonExperience.class);
+                    personExperience.setUuid(UUID.randomUUID());
+                    personExperience.setLegacyId(personExperienceJson.getLegacyId());
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personExperienceJson.getPersonId(),
+                                    "company", personExperienceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest")
+                            .list().stream().findFirst().orElse(null);
+                    if (personGroupExt != null) {
+                        personExperience.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personExperienceJson,
+                                "no base$PersonGroupExt with legacyId " + personExperienceJson.getPersonId()
+                                        + " and company legacyId " + personExperienceJson.getCompanyCode());
+                    }
+                    personExperience.setStartMonth(formatter.parse(personExperienceJson.getStartDate()));
+                    personExperience.setEndMonth(formatter.parse(personExperienceJson.getEndDate()));
+                    personExperience.setCompany(personExperienceJson.getCompany());
+                    personExperience.setJob(personExperienceJson.getJob());
+                    personExperience.setLocation(personExperienceJson.getLocation());
+
+                    commitContext.addInstanceToCommit(personExperience);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personExperiences, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personExperiences);
+    }
+
+    @Override
+    public BaseResult deletePersonExperience(PersonExperienceDataJson personExperienceData) {
+        String methodName = "deletePersonExperience";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonExperienceJson> personExperiences = new ArrayList<>();
+        if (personExperienceData.getPersonExperiences() != null) {
+            personExperiences = personExperienceData.getPersonExperiences();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonExperience> personExperienceArrayList = new ArrayList<>();
+            for (PersonExperienceJson personExperienceJson : personExperiences) {
+                if (personExperienceJson.getLegacyId() == null || personExperienceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no legacyId");
+                }
+                if (personExperienceJson.getCompanyCode() == null || personExperienceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no companyCode");
+                }
+                if (personExperienceJson.getPersonId() == null || personExperienceJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personExperiences,
+                            "no personId");
+                }
+
+                PersonExperience personExperience = dataManager.load(PersonExperience.class)
+                        .query("select e from tsadv$PersonExperience e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroup.legacyId = :pLegacyId " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personExperienceJson.getLegacyId(),
+                                "pLegacyId", personExperienceJson.getPersonId(),
+                                "companyCode", personExperienceJson.getCompanyCode()))
+                        .view("personExperience.full")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personExperience == null) {
+                    return prepareError(result, methodName, personExperienceJson,
+                            "no absence with legacyId and personId : "
+                                    + personExperienceJson.getLegacyId() + " , " + personExperienceJson.getPersonId() +
+                                    ", " + personExperienceJson.getCompanyCode());
+                }
+                if (!personExperienceArrayList.stream().filter(personExperience1 ->
+                        personExperience1.getId().equals(personExperience.getId())).findAny().isPresent()) {
+                    personExperienceArrayList.add(personExperience);
+                }
+            }
+            for (PersonExperience personExperience : personExperienceArrayList) {
+                entityManager.remove(personExperience);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personExperiences, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personExperiences);
     }
 }

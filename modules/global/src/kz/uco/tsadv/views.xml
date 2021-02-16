@@ -11162,8 +11162,12 @@
     <view class="kz.uco.tsadv.modules.recruitment.model.PersonExperience"
           extends="_local"
           name="personExperience.full">
-        <property name="personGroup"
-                  view="_minimal"/>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.CompetenceElement"
           extends="_local"
