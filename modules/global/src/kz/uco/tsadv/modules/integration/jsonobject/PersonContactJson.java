@@ -1,59 +1,62 @@
 package kz.uco.tsadv.modules.integration.jsonobject;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 
 public class PersonContactJson implements Serializable {
     private String personId;
     private String legacyId;
-    private String personEmail;
-    private String homePhone;
-    private String mobilePhone;
+    private String type;
+    private String value;
     private String companyCode;
 
+    @JsonProperty("personId")
     public String getPersonId() {
         return personId;
     }
 
+    @JsonProperty("personId")
     public void setPersonId(String personId) {
         this.personId = personId;
     }
 
+    @JsonProperty("legacyId")
     public String getLegacyId() {
         return legacyId;
     }
 
+    @JsonProperty("legacyId")
     public void setLegacyId(String legacyId) {
         this.legacyId = legacyId;
     }
 
-    public String getPersonEmail() {
-        return personEmail;
+    @JsonProperty("type")
+    public String getType() {
+        return type;
     }
 
-    public void setPersonEmail(String personEmail) {
-        this.personEmail = personEmail;
+    @JsonProperty("type")
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getHomePhone() {
-        return homePhone;
+    @JsonProperty("value")
+    public String getValue() {
+        return value;
     }
 
-    public void setHomePhone(String homePhone) {
-        this.homePhone = homePhone;
+    @JsonProperty("value")
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getMobilePhone() {
-        return mobilePhone;
-    }
-
-    public void setMobilePhone(String mobilePhone) {
-        this.mobilePhone = mobilePhone;
-    }
-
+    @JsonProperty("companyCode")
     public String getCompanyCode() {
         return companyCode;
     }
 
+    @JsonProperty("companyCode")
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
     }
