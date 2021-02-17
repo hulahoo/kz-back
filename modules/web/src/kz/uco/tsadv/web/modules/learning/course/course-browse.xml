@@ -49,7 +49,8 @@
                 <column id="targetAudience"/>
                 <column id="learningType.langValue"
                         caption="msg://learningType"/>
-                <column id="activeFlag"/>
+                <column id="activeFlag" caption="msg://active"/>
+                <column id="isOnline"/>
                 <column id="selfEnrollment"/>
             </columns>
             <rows/>

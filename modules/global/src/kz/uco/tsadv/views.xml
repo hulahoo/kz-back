@@ -8715,30 +8715,22 @@
     <view class="kz.uco.tsadv.modules.personal.model.Beneficiary"
           extends="_local"
           name="beneficiaryView">
-        <property name="personGroupParent"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
+        <property name="personGroupParent" view="_minimal">
+            <property name="list" view="_minimal">
                 <property name="fioWithEmployeeNumber"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
-            <property name="person"
-                      view="_minimal">
+            <property name="person" view="_minimal">
                 <property name="fioWithEmployeeNumber"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
+            </property>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
             </property>
             <property name="personFioWithEmployeeNumber"/>
+            <property name="legacyId"/>
         </property>
-        <property name="personGroupChild"
-                  view="_local">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="maritalStatus"
-                          view="_minimal">
+        <property name="personGroupChild" view="_local">
+            <property name="list" view="_minimal">
+                <property name="maritalStatus" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
                     <property name="langValue3"/>
@@ -8747,8 +8739,7 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
-                <property name="type"
-                          view="_minimal">
+                <property name="type" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
                     <property name="langValue3"/>
@@ -8758,8 +8749,7 @@
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
-                <property name="nationality"
-                          view="_minimal">
+                <property name="nationality" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
                     <property name="langValue3"/>
@@ -8768,8 +8758,7 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
-                <property name="citizenship"
-                          view="_minimal">
+                <property name="citizenship" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
                     <property name="langValue3"/>
@@ -8778,33 +8767,22 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
-                <property name="hireDate"/>
-                <property name="nationalIdentifier"/>
-                <property name="dateOfBirth"/>
-                <property name="sex"
-                          view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
-                <property name="image"
-                          view="_minimal">
+                <property name="image" view="_minimal">
                     <property name="size"/>
                 </property>
                 <property name="firstNameLatin"/>
                 <property name="middleNameLatin"/>
                 <property name="lastNameLatin"/>
+                <property name="hireDate"/>
+                <property name="nationalIdentifier"/>
+                <property name="dateOfBirth"/>
+                <property name="sex" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
             </property>
-            <property name="person"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="maritalStatus"
-                          view="_minimal">
+            <property name="person" view="_minimal">
+                <property name="maritalStatus" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
                     <property name="langValue3"/>
@@ -8813,8 +8791,7 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
-                <property name="type"
-                          view="_minimal">
+                <property name="type" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
                     <property name="langValue3"/>
@@ -8824,8 +8801,7 @@
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
-                <property name="nationality"
-                          view="_minimal">
+                <property name="nationality" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
                     <property name="langValue3"/>
@@ -8834,8 +8810,7 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
-                <property name="citizenship"
-                          view="_minimal">
+                <property name="citizenship" view="_minimal">
                     <property name="langValue1"/>
                     <property name="langValue2"/>
                     <property name="langValue3"/>
@@ -8844,31 +8819,27 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
-                <property name="hireDate"/>
-                <property name="nationalIdentifier"/>
-                <property name="dateOfBirth"/>
-                <property name="sex"
-                          view="_minimal">
-                    <property name="langValue1"/>
-                    <property name="langValue2"/>
-                    <property name="langValue3"/>
-                    <property name="langValue4"/>
-                    <property name="langValue5"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
-                <property name="image"
-                          view="_minimal">
+                <property name="image" view="_minimal">
                     <property name="size"/>
                 </property>
                 <property name="firstNameLatin"/>
                 <property name="middleNameLatin"/>
                 <property name="lastNameLatin"/>
+                <property name="hireDate"/>
+                <property name="nationalIdentifier"/>
+                <property name="dateOfBirth"/>
+                <property name="sex" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
             </property>
             <property name="personFioWithEmployeeNumber"/>
         </property>
-        <property name="relationshipType"
-                  view="_minimal">
+        <property name="relationshipType" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -22596,7 +22567,9 @@
         <property name="company" view="_minimal"/>
     </view>
     <view entity="tsadv$DicRelationshipType" name="dicRelationshipType-edit" extends="_local">
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
     <view entity="tsadv$DicRetirementType" name="dicRetirementType-browse" extends="_local">
         <property name="company" view="_minimal"/>

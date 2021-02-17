@@ -61,4 +61,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdatePersonExperience(PersonExperienceDataJson personExperienceData);
 
     BaseResult deletePersonExperience(PersonExperienceDataJson personExperienceData);
+
+    BaseResult createOrUpdateBeneficiary(BeneficiaryDataJson beneficiaryData);
+
+    BaseResult deleteBeneficiary(BeneficiaryDataJson beneficiaryData);
 }

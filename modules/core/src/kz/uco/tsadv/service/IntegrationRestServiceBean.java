@@ -2850,4 +2850,242 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         }
         return prepareSuccess(result, methodName, personExperiences);
     }
+
+    @Override
+    public BaseResult createOrUpdateBeneficiary(BeneficiaryDataJson beneficiaryData) {
+        String methodName = "createOrUpdateBeneficiary";
+        ArrayList<BeneficiaryJson> beneficiaries = new ArrayList<>();
+        if (beneficiaryData.getBeneficiaries() != null) {
+            beneficiaries = beneficiaryData.getBeneficiaries();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (BeneficiaryJson beneficiaryJson : beneficiaries) {
+                if (beneficiaryJson.getLegacyId() == null || beneficiaryJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no legacyId");
+                }
+                if (beneficiaryJson.getCompanyCode() == null || beneficiaryJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no companyCode");
+                }
+                if (beneficiaryJson.getPersonId() == null || beneficiaryJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no personId");
+                }
+                if (beneficiaryJson.getRelationshipTypeId() == null || beneficiaryJson.getRelationshipTypeId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no relationshipTypeId");
+                }
+                if (beneficiaryJson.getLastName() == null || beneficiaryJson.getLastName().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no lastName");
+                }
+                if (beneficiaryJson.getFirstName() == null || beneficiaryJson.getFirstName().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no firstName");
+                }
+                if (beneficiaryJson.getMiddleName() == null || beneficiaryJson.getMiddleName().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no middleName");
+                }
+                if (beneficiaryJson.getLastNameLatin() == null || beneficiaryJson.getLastNameLatin().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no lastNameLatin");
+                }
+                if (beneficiaryJson.getFirstNameLatin() == null || beneficiaryJson.getFirstNameLatin().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no firstNameLatin");
+                }
+                if (beneficiaryJson.getDateOfBirth() == null || beneficiaryJson.getDateOfBirth().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no dateOfBirth");
+                }
+                if (beneficiaryJson.getWorkPlace() == null || beneficiaryJson.getWorkPlace().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no workPlace");
+                }
+                if (beneficiaryJson.getContactPhone() == null || beneficiaryJson.getContactPhone().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no contactPhone");
+                }
+
+                PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                        .query("select e from base$PersonGroupExt e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.company.legacyId = :company")
+                        .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getPersonId(),
+                                "company", beneficiaryJson.getCompanyCode()))
+                        .view("personGroupExt-for-integration-rest")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personGroupExt == null) {
+                    return prepareError(result, methodName, beneficiaryJson,
+                            "no personGroup with personId = " + beneficiaryJson.getPersonId()
+                                    + " and companyCode = " + beneficiaryJson.getCompanyCode());
+                }
+                Beneficiary beneficiary = dataManager.load(Beneficiary.class)
+                        .query("select e from tsadv$Beneficiary e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroupParent.legacyId = :pLegacyId " +
+                                " and e.personGroupParent.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getLegacyId(),
+                                "pLegacyId", beneficiaryJson.getPersonId(),
+                                "companyCode", beneficiaryJson.getCompanyCode()))
+                        .view("beneficiaryView")
+                        .list().stream().findFirst().orElse(null);
+                if (beneficiary != null && beneficiary.getPersonGroupChild() != null
+                        && beneficiary.getPersonGroupChild().getPerson() != null) {
+                    beneficiary.setLegacyId(beneficiaryJson.getLegacyId());
+                    beneficiary.setPersonGroupParent(personGroupExt);
+
+                    PersonExt personExt = beneficiary.getPersonGroupChild().getPerson();
+                    personExt.setFirstName(beneficiaryJson.getFirstName());
+                    personExt.setLastName(beneficiaryJson.getLastName());
+                    personExt.setMiddleName(beneficiaryJson.getMiddleName());
+                    personExt.setFirstNameLatin(beneficiaryJson.getFirstNameLatin());
+                    personExt.setLastNameLatin(beneficiaryJson.getLastNameLatin());
+                    personExt.setDateOfBirth(formatter.parse(beneficiaryJson.getDateOfBirth()));
+
+                    DicRelationshipType relationshipType = dataManager.load(DicRelationshipType.class)
+                            .query("select e from tsadv$DicRelationshipType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getRelationshipTypeId(),
+                                    "companyCode", beneficiaryJson.getCompanyCode()))
+                            .view("dicRelationshipType-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (relationshipType != null) {
+                        beneficiary.setRelationshipType(relationshipType);
+                    } else {
+                        return prepareError(result, methodName, beneficiaryJson,
+                                "no RelationshipType with relationshipTypeId = " + beneficiaryJson.getRelationshipTypeId()
+                                        + " and companyCode = " + beneficiaryJson.getCompanyCode());
+                    }
+                    beneficiary.setAdditionalContact(beneficiaryJson.getContactPhone());
+                    beneficiary.setWorkLocation(beneficiaryJson.getWorkPlace());
+
+                    commitContext.addInstanceToCommit(personExt);
+                    commitContext.addInstanceToCommit(beneficiary);
+                } else {
+                    beneficiary = metadata.create(Beneficiary.class);
+                    beneficiary.setUuid(UUID.randomUUID());
+                    beneficiary.setLegacyId(beneficiaryJson.getLegacyId());
+                    beneficiary.setPersonGroupParent(personGroupExt);
+
+                    PersonGroupExt personGroupChild = metadata.create(PersonGroupExt.class);
+
+                    PersonExt newPersonExt = metadata.create(PersonExt.class);
+
+                    DicPersonType personType = dataManager.load(DicPersonType.class)
+                            .query("select e from tsadv$DicPersonType e" +
+                                    " where e.code = 'BENEFICIARY'")
+                            .list().stream().findFirst().orElse(null);
+
+                    if (personType == null) {
+                        return prepareError(result, methodName, beneficiaryJson,
+                                "no DicPersonType with code = 'BENEFICIARY'");
+                    }
+
+                    newPersonExt.setType(personType);
+                    newPersonExt.setGroup(personGroupChild);
+                    newPersonExt.setFirstName(beneficiaryJson.getFirstName());
+                    newPersonExt.setLastName(beneficiaryJson.getLastName());
+                    newPersonExt.setMiddleName(beneficiaryJson.getMiddleName());
+                    newPersonExt.setFirstNameLatin(beneficiaryJson.getFirstNameLatin());
+                    newPersonExt.setLastNameLatin(beneficiaryJson.getLastNameLatin());
+                    newPersonExt.setDateOfBirth(formatter.parse(beneficiaryJson.getDateOfBirth()));
+
+                    beneficiary.setPersonGroupChild(personGroupChild);
+                    beneficiary.setWorkLocation(beneficiaryJson.getWorkPlace());
+                    beneficiary.setAdditionalContact(beneficiaryJson.getContactPhone());
+
+                    DicRelationshipType relationshipType = dataManager.load(DicRelationshipType.class)
+                            .query("select e from tsadv$DicRelationshipType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getRelationshipTypeId(),
+                                    "companyCode", beneficiaryJson.getCompanyCode()))
+                            .view("dicRelationshipType-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (relationshipType != null) {
+                        beneficiary.setRelationshipType(relationshipType);
+                    } else {
+                        return prepareError(result, methodName, beneficiaryJson,
+                                "no RelationshipType with relationshipTypeId = " + beneficiaryJson.getRelationshipTypeId()
+                                        + " and companyCode = " + beneficiaryJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(personGroupChild);
+                    commitContext.addInstanceToCommit(newPersonExt);
+                    commitContext.addInstanceToCommit(beneficiary);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, beneficiaries, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, beneficiaries);
+    }
+
+    @Override
+    public BaseResult deleteBeneficiary(BeneficiaryDataJson beneficiaryData) {
+        String methodName = "deleteBeneficiary";
+        BaseResult result = new BaseResult();
+        ArrayList<BeneficiaryJson> beneficiaries = new ArrayList<>();
+        if (beneficiaryData.getBeneficiaries() != null) {
+            beneficiaries = beneficiaryData.getBeneficiaries();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<Beneficiary> beneficiaryArrayList = new ArrayList<>();
+            for (BeneficiaryJson beneficiaryJson : beneficiaries) {
+                if (beneficiaryJson.getLegacyId() == null || beneficiaryJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no legacyId");
+                }
+                if (beneficiaryJson.getCompanyCode() == null || beneficiaryJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no companyCode");
+                }
+                if (beneficiaryJson.getPersonId() == null || beneficiaryJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaries,
+                            "no personId");
+                }
+
+                Beneficiary beneficiary = dataManager.load(Beneficiary.class)
+                        .query("select e from tsadv$Beneficiary e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroupParent.legacyId = :pLegacyId " +
+                                " and e.personGroupParent.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getLegacyId(),
+                                "pLegacyId", beneficiaryJson.getPersonId(),
+                                "companyCode", beneficiaryJson.getCompanyCode()))
+                        .view("beneficiaryView")
+                        .list().stream().findFirst().orElse(null);
+
+                if (beneficiary == null) {
+                    return prepareError(result, methodName, beneficiaryJson,
+                            "no beneficiary with legacyId and personId : "
+                                    + beneficiaryJson.getLegacyId() + " , " + beneficiaryJson.getPersonId() +
+                                    ", " + beneficiaryJson.getCompanyCode());
+                }
+                if (!beneficiaryArrayList.stream().filter(beneficiary1 ->
+                        beneficiary1.getId().equals(beneficiary.getId())).findAny().isPresent()) {
+                    beneficiaryArrayList.add(beneficiary);
+                }
+            }
+            for (Beneficiary beneficiary : beneficiaryArrayList) {
+                entityManager.remove(beneficiary);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, beneficiaries, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, beneficiaries);
+    }
 }
