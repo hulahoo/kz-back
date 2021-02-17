@@ -5482,26 +5482,20 @@
     <view class="kz.uco.tsadv.modules.learning.model.Course"
           name="course.browse">
         <property name="name"/>
-        <property name="description"/>
-        <property name="logo"/>
-        <property name="category"
-                  view="_local">
-        </property>
-        <property name="targetAudience"/>
-        <property name="activeFlag"/>
-        <property name="selfEnrollment"/>
-        <property name="learningType"
-                  view="_minimal"/>
-        <property name="party"
-                  view="_minimal">
-            <property name="course"
-                      view="_minimal">
-                <property name="name"/>
-                <property name="party"
-                          view="_minimal"/>
+        <property name="party" view="_minimal">
+            <property name="course" view="_minimal">
+                <property name="party" view="_minimal"/>
             </property>
         </property>
+        <property name="description"/>
+        <property name="logo"/>
+        <property name="category" view="_local"/>
+        <property name="targetAudience"/>
+        <property name="activeFlag"/>
         <property name="shortDescription"/>
+        <property name="selfEnrollment"/>
+        <property name="learningType" view="_minimal"/>
+        <property name="isOnline"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Course"
           name="course.edit">
