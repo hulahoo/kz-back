@@ -2863,51 +2863,51 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         try {
             for (BeneficiaryJson beneficiaryJson : beneficiaries) {
                 if (beneficiaryJson.getLegacyId() == null || beneficiaryJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no legacyId");
                 }
                 if (beneficiaryJson.getCompanyCode() == null || beneficiaryJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no companyCode");
                 }
                 if (beneficiaryJson.getPersonId() == null || beneficiaryJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no personId");
                 }
                 if (beneficiaryJson.getRelationshipTypeId() == null || beneficiaryJson.getRelationshipTypeId().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no relationshipTypeId");
                 }
                 if (beneficiaryJson.getLastName() == null || beneficiaryJson.getLastName().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no lastName");
                 }
                 if (beneficiaryJson.getFirstName() == null || beneficiaryJson.getFirstName().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no firstName");
                 }
                 if (beneficiaryJson.getMiddleName() == null || beneficiaryJson.getMiddleName().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no middleName");
                 }
                 if (beneficiaryJson.getLastNameLatin() == null || beneficiaryJson.getLastNameLatin().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no lastNameLatin");
                 }
                 if (beneficiaryJson.getFirstNameLatin() == null || beneficiaryJson.getFirstNameLatin().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no firstNameLatin");
                 }
                 if (beneficiaryJson.getDateOfBirth() == null || beneficiaryJson.getDateOfBirth().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no dateOfBirth");
                 }
                 if (beneficiaryJson.getWorkPlace() == null || beneficiaryJson.getWorkPlace().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no workPlace");
                 }
                 if (beneficiaryJson.getContactPhone() == null || beneficiaryJson.getContactPhone().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no contactPhone");
                 }
 
@@ -2921,7 +2921,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
 
                 if (personGroupExt == null) {
-                    return prepareError(result, methodName, beneficiaryJson,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no personGroup with personId = " + beneficiaryJson.getPersonId()
                                     + " and companyCode = " + beneficiaryJson.getCompanyCode());
                 }
@@ -2959,7 +2959,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (relationshipType != null) {
                         beneficiary.setRelationshipType(relationshipType);
                     } else {
-                        return prepareError(result, methodName, beneficiaryJson,
+                        return prepareError(result, methodName, beneficiaryData,
                                 "no RelationshipType with relationshipTypeId = " + beneficiaryJson.getRelationshipTypeId()
                                         + " and companyCode = " + beneficiaryJson.getCompanyCode());
                     }
@@ -2984,7 +2984,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .list().stream().findFirst().orElse(null);
 
                     if (personType == null) {
-                        return prepareError(result, methodName, beneficiaryJson,
+                        return prepareError(result, methodName, beneficiaryData,
                                 "no DicPersonType with code = 'BENEFICIARY'");
                     }
 
@@ -3012,7 +3012,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (relationshipType != null) {
                         beneficiary.setRelationshipType(relationshipType);
                     } else {
-                        return prepareError(result, methodName, beneficiaryJson,
+                        return prepareError(result, methodName, beneficiaryData,
                                 "no RelationshipType with relationshipTypeId = " + beneficiaryJson.getRelationshipTypeId()
                                         + " and companyCode = " + beneficiaryJson.getCompanyCode());
                     }
@@ -3023,11 +3023,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, beneficiaries, e.getMessage() + "\r" +
+            return prepareError(result, methodName, beneficiaryData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, beneficiaries);
+        return prepareSuccess(result, methodName, beneficiaryData);
     }
 
     @Override
@@ -3043,15 +3043,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<Beneficiary> beneficiaryArrayList = new ArrayList<>();
             for (BeneficiaryJson beneficiaryJson : beneficiaries) {
                 if (beneficiaryJson.getLegacyId() == null || beneficiaryJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no legacyId");
                 }
                 if (beneficiaryJson.getCompanyCode() == null || beneficiaryJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no companyCode");
                 }
                 if (beneficiaryJson.getPersonId() == null || beneficiaryJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, beneficiaries,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no personId");
                 }
 
@@ -3067,7 +3067,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
 
                 if (beneficiary == null) {
-                    return prepareError(result, methodName, beneficiaryJson,
+                    return prepareError(result, methodName, beneficiaryData,
                             "no beneficiary with legacyId and personId : "
                                     + beneficiaryJson.getLegacyId() + " , " + beneficiaryJson.getPersonId() +
                                     ", " + beneficiaryJson.getCompanyCode());
@@ -3082,10 +3082,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             tx.commit();
         } catch (Exception e) {
-            return prepareError(result, methodName, beneficiaries, e.getMessage() + "\r" +
+            return prepareError(result, methodName, beneficiaryData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, beneficiaries);
+        return prepareSuccess(result, methodName, beneficiaryData);
     }
 }
