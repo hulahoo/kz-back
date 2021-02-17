@@ -2587,10 +2587,9 @@
           name="gradeGroup.browse">
         <property name="list" view="_minimal">
             <property name="recognitionNominate"/>
+            <property name="bonusPercent"/>
             <property name="updatedBy"/>
             <property name="legacyId"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
         </property>
         <property name="company" view="_minimal">
             <property name="legacyId"/>
@@ -2598,8 +2597,6 @@
         <property name="grade" view="_minimal">
             <property name="recognitionNominate"/>
             <property name="legacyId"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
