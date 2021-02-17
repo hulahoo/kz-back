@@ -1950,60 +1950,109 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no companyCode");
                 }
 
-                PersonContact personContact = dataManager.load(PersonContact.class)
-                        .query(
-                                " select e from tsadv$PersonContact e " +
-                                        " where e.legacyId = :legacyId " +
-                                        " and e.personGroup.legacyId = :pgLegacyId " +
-                                        " and e.personGroup.company.legacyId = :companyCode " +
-                                        " and e.type.legacyId = :tpLegacyId")
-                        .setParameters(ParamsMap.of(
-                                "legacyId", personContactJson.getLegacyId(),
-                                "pgLegacyId", personContactJson.getPersonId(),
-                                "companyCode", personContactJson.getCompanyCode(),
-                                "tpLegacyId", personContactJson.getType()))
-                        .view("personContact.edit").list().stream().findFirst().orElse(null);
+                PersonContact personContact = personContactsCommitList.stream().filter(filterPersonContact ->
+                        filterPersonContact.getLegacyId() != null
+                                && filterPersonContact.getType() != null
+                                && filterPersonContact.getType().getLegacyId() != null
+                                && filterPersonContact.getPersonGroup() != null
+                                && filterPersonContact.getPersonGroup().getLegacyId() != null
+                                && filterPersonContact.getPersonGroup().getCompany() != null
+                                && filterPersonContact.getPersonGroup().getCompany().getLegacyId() != null
+                                && filterPersonContact.getLegacyId().equals(personContactJson.getLegacyId())
+                                && filterPersonContact.getType().getLegacyId().equals(personContactJson.getType())
+                                && filterPersonContact.getPersonGroup().getLegacyId().equals(personContactJson.getPersonId())
+                                && filterPersonContact.getPersonGroup().getCompany().getLegacyId().equals(personContactJson.getCompanyCode())
+                ).findFirst().orElse(null);
 
-                if (personContact != null) {
-                    personContact.setLegacyId(personContactJson.getLegacyId());
-                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
-                            .query(
-                                    " select e from base$PersonGroupExt e " +
-                                            " where e.legacyId = :legacyId " +
-                                            " and e.company.legacyId = :company ")
-                            .setParameters(ParamsMap.of(
-                                    "legacyId", personContactJson.getPersonId(),
-                                    "company", personContactJson.getCompanyCode()))
-                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-                    if (personGroupExt != null) {
-                        personContact.setPersonGroup(personGroupExt);
-                    } else {
-                        return prepareError(result, methodName, personContacts,
-                                "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
-                                        + " and company legacyId " + personContactJson.getCompanyCode());
-                    }
 
-                    DicPhoneType type = dataManager.load(DicPhoneType.class)
-                            .query(
-                                    "select e from tsadv$DicPhoneType e " +
-                                            " where e.legacyId = :legacyId ")
-                            .parameter("legacyId", personContactJson.getType())
-                            .view(View.BASE).list().stream().findFirst().orElse(null);
-                    if (type != null) {
-                        personContact.setType(type);
-                    } else {
-                        return prepareError(result, methodName, personContactJson.getType(), "" +
-                                "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
-                    }
-                    personContact.setContactValue(personContactJson.getValue());
-                    commitContext.addInstanceToCommit(personContact);
-                }
                 if (personContact == null) {
-                    personContact = metadata.create(PersonContact.class);
-                    personContact.setId(UUID.randomUUID());
+                    personContact = dataManager.load(PersonContact.class)
+                            .query(
+                                    " select e from tsadv$PersonContact e " +
+                                            " where e.legacyId = :legacyId " +
+                                            " and e.personGroup.legacyId = :pgLegacyId " +
+                                            " and e.personGroup.company.legacyId = :companyCode " +
+                                            " and e.type.legacyId = :tpLegacyId")
+                            .setParameters(ParamsMap.of(
+                                    "legacyId", personContactJson.getLegacyId(),
+                                    "pgLegacyId", personContactJson.getPersonId(),
+                                    "companyCode", personContactJson.getCompanyCode(),
+                                    "tpLegacyId", personContactJson.getType()))
+                            .view("personContact.edit").list().stream().findFirst().orElse(null);
+
+                    if (personContact != null) {
+                        personContact.setLegacyId(personContactJson.getLegacyId());
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query(
+                                        " select e from base$PersonGroupExt e " +
+                                                " where e.legacyId = :legacyId " +
+                                                " and e.company.legacyId = :company ")
+                                .setParameters(ParamsMap.of(
+                                        "legacyId", personContactJson.getPersonId(),
+                                        "company", personContactJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                        if (personGroupExt != null) {
+                            personContact.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, personContacts,
+                                    "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
+                                            + " and company legacyId " + personContactJson.getCompanyCode());
+                        }
+
+                        DicPhoneType type = dataManager.load(DicPhoneType.class)
+                                .query(
+                                        "select e from tsadv$DicPhoneType e " +
+                                                " where e.legacyId = :legacyId ")
+                                .parameter("legacyId", personContactJson.getType())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+                        if (type != null) {
+                            personContact.setType(type);
+                        } else {
+                            return prepareError(result, methodName, personContactJson.getType(), "" +
+                                    "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
+                        }
+                        personContact.setContactValue(personContactJson.getValue());
+                        personContactsCommitList.add(personContact);
+                    } else {
+                        personContact = metadata.create(PersonContact.class);
+                        personContact.setId(UUID.randomUUID());
+                        personContact.setLegacyId(personContactJson.getLegacyId());
+                        personContact.setStartDate(new Date());
+                        personContact.setEndDate(new Date());
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query(
+                                        " select e from base$PersonGroupExt e " +
+                                                " where e.legacyId = :legacyId " +
+                                                " and e.company.legacyId = :company ")
+                                .setParameters(ParamsMap.of(
+                                        "legacyId", personContactJson.getPersonId(),
+                                        "company", personContactJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                        if (personGroupExt != null) {
+                            personContact.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, personContacts,
+                                    "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
+                                            + " and company legacyId " + personContactJson.getCompanyCode());
+                        }
+
+                        DicPhoneType type = dataManager.load(DicPhoneType.class)
+                                .query(
+                                        "select e from tsadv$DicPhoneType e " +
+                                                " where e.legacyId = :legacyId ")
+                                .parameter("legacyId", personContactJson.getType())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+                        if (type != null) {
+                            personContact.setType(type);
+                        } else {
+                            return prepareError(result, methodName, personContactJson.getType(), "" +
+                                    "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
+                        }
+                        personContact.setContactValue(personContactJson.getValue());
+                        personContactsCommitList.add(personContact);
+                    }
+                } else {
                     personContact.setLegacyId(personContactJson.getLegacyId());
-                    personContact.setStartDate(new Date());
-                    personContact.setEndDate(new Date());
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query(
                                     " select e from base$PersonGroupExt e " +
@@ -2034,13 +2083,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                     }
                     personContact.setContactValue(personContactJson.getValue());
-                    commitContext.addInstanceToCommit(personContact);
                 }
             }
 
-            System.out.println("commit ins:");
+            System.out.println("commit instances:");
+            for (PersonContact personContact : personContactsCommitList) {
+                commitContext.addInstanceToCommit(personContact);
+            }
             for (Entity item : commitContext.getCommitInstances()) {
-                System.out.println("item id" + ((PersonContact) item).getLegacyId());
+                System.out.println("items id" + ((PersonContact) item).getLegacyId());
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
