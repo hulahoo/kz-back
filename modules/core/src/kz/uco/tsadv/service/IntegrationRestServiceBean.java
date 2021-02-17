@@ -14,6 +14,9 @@ import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.config.PositionStructureConfig;
+import kz.uco.tsadv.entity.tb.PersonQualification;
+import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
 import kz.uco.tsadv.modules.personal.dictionary.*;
@@ -1990,7 +1993,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         personContact.setId(UUID.randomUUID());
                         personContact.setLegacyId(personContactJson.getLegacyId());
                         personContact.setStartDate(new Date());
-                        personContact.setEndDate(new Date());
+                        personContact.setEndDate(CommonUtils.getMaxDate());
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
                                         " select e from base$PersonGroupExt e " +
@@ -2111,7 +2114,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 if (personContact == null) {
                     return prepareError(result, methodName, personContactJson,
-                            "no PersonContact with legacyId " + personContactJson.getPersonId()
+                            "no tsadv$PersonContact with legacyId " + personContactJson.getLegacyId()
                                     + " and company legacyId " + personContactJson.getCompanyCode());
                 }
 
