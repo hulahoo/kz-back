@@ -1891,34 +1891,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
     @Override
     public BaseResult createOrUpdatePersonContact(PersonContactDataJson personContactData) {
-//        DicPhoneType type = dataManager.load(DicPhoneType.class)
-//                .query(
-//                        "select e from tsadv$DicPhoneType e where e.legacyId = :id")
-//                .setParameters(ParamsMap.of("id", "789"))
-//                .view(View.BASE).one();
-////
-//        System.out.println("IS NULL = " + (type.getLegacyId() + " | " + type.getCode()));
-//        return prepareSuccess(new BaseResult(), "createorupdaete", type);
-
-
-//        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
-//                .query(
-//                        "select e from base$PersonGroupExt e where e.legacyId = :id and e.company.legacyId = :cId")
-//                .setParameters(ParamsMap.of("id", "377", "cId", "101"))
-//                .view("personGroupExt-for-integration-rest").one();
-//
-//        System.out.println("IS NULL = " + (personGroupExt.getLegacyId() + " | " + personGroupExt.getId() + " | " + personGroupExt.getCompany().getCode()));
-//        return prepareSuccess(new BaseResult(), "createorupdaete", personGroupExt);
-//        if (personGroupExtArrayList == null) {
-//            return prepareError(new BaseResult(), "createOrupdatePersonContact", personGroupExtArrayList.get(0), "error with 377 legacyid");
-//        } else {
-//            System.out.println("SQL_LIST_SIZE: " + personGroupExtArrayList.size());
-//            for (PersonGroupExt personGroupExt : personGroupExtArrayList) {
-//                System.out.println("\'" + personGroupExt.getId() + "\',");
-//            }
-//            return prepareSuccess(new BaseResult(), "createorupdaete", personGroupExtArrayList.get(0));
-//        }
-
         String methodName = "createOrUpdatePersonContact";
         BaseResult result = new BaseResult();
         CommitContext commitContext = new CommitContext();
