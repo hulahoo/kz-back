@@ -759,5 +759,13 @@
             <param name="absenceData"
                    type="kz.uco.tsadv.modules.integration.jsonobject.AbsenceDataJson"/>
         </method>
+        <method name="createOrUpdatePersonExperience">
+            <param name="personExperienceData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonExperienceDataJson"/>
+        </method>
+        <method name="deletePersonExperience">
+            <param name="personExperienceData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonExperienceDataJson"/>
+        </method>
     </service>
 </services>

@@ -57,4 +57,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdateAbsence(AbsenceDataJson absenceData);
 
     BaseResult deleteAbsence(AbsenceDataJson absenceData);
+
+    BaseResult createOrUpdatePersonExperience(PersonExperienceDataJson personExperienceData);
+
+    BaseResult deletePersonExperience(PersonExperienceDataJson personExperienceData);
 }
