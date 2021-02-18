@@ -31,8 +31,7 @@
                        property="parentName"/>
                 <field captionProperty="position"
                        property="positionGroup"/>
-                <field
-                       property="organizationGroup"/>
+                <field property="organizationGroup"/>
 
             </column>
         </fieldGroup>
