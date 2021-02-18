@@ -15,7 +15,7 @@ import javax.persistence.*;
 
 @PublishEntityChangedEvents
 @Listeners("tsadv_OrganizationListener")
-@NamePattern("%s|organizationName")
+@NamePattern("%s %s %s %s %s %s|organizationName,organizationName,organizationNameLang2,organizationNameLang3,organizationNameLang4,organizationNameLang5")
 @Extends(Organization.class)
 @Entity(name = "base$OrganizationExt")
 public class OrganizationExt extends Organization implements IGroupedEntity<OrganizationGroupExt> {

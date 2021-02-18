@@ -8620,12 +8620,21 @@
             </property>
         </property>
         <property name="organizationGroup"
-                  view="_minimal">
+                  view="organizationGroup.browse">
             <property name="list"
                       view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
                 <property name="legacyId"/>
+                <property name="costCenter" view="_minimal"/>
+                <property name="payroll" view="_minimal"/>
+                <property name="organizationNameLang1"/>
+                <property name="organizationNameLang2"/>
+                <property name="organizationNameLang3"/>
+                <property name="organizationNameLang4"/>
+                <property name="organizationNameLang5"/>
+                <property name="location" view="_minimal"/>
+                <property name="updatedBy"/>
             </property>
         </property>
         <property name="parent"
