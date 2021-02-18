@@ -5288,11 +5288,7 @@
         <property name="attachment"
                   view="_minimal"/>
         <property name="status"
-                  view="_minimal">
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-        </property>
+                  view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.dictionary.DicCategory"
           name="dicCategory.browse">
