@@ -4717,6 +4717,10 @@ create table TSADV_DIC_ABSENCE_TYPE (
     CANCEL_PARENT_ABSENCE boolean,
     AVAILABLE_FOR_TIMECARD boolean not null,
     IS_REQUIRED_ORDER_NUMBER boolean not null,
+    MAX_DAY integer,
+    MIN_DAY integer,
+    DAYS_ADVANCE integer,
+    MANY_DAYS integer,
     --
     primary key (ID)
 )^

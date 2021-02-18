@@ -65,6 +65,50 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "IS_REQUIRED_ORDER_NUMBER", nullable = false)
     protected Boolean isRequiredOrderNumber = false;
 
+    @Column(name = "MAX_DAY")
+    private Integer maxDay;
+
+    @Column(name = "MIN_DAY")
+    private Integer minDay;
+
+    @Column(name = "DAYS_ADVANCE")
+    private Integer daysAdvance;
+
+    @Column(name = "MANY_DAYS")
+    private Integer manyDays;
+
+    public void setManyDays(Integer manyDays) {
+        this.manyDays = manyDays;
+    }
+
+    public Integer getManyDays() {
+        return manyDays;
+    }
+
+    public Integer getDaysAdvance() {
+        return daysAdvance;
+    }
+
+    public void setDaysAdvance(Integer daysAdvance) {
+        this.daysAdvance = daysAdvance;
+    }
+
+    public Integer getMinDay() {
+        return minDay;
+    }
+
+    public void setMinDay(Integer minDay) {
+        this.minDay = minDay;
+    }
+
+    public Integer getMaxDay() {
+        return maxDay;
+    }
+
+    public void setMaxDay(Integer maxDay) {
+        this.maxDay = maxDay;
+    }
+
     public Boolean getAvailableToManager() {
         return availableToManager;
     }
