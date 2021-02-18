@@ -6,6 +6,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.*;
@@ -15,6 +16,9 @@ import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.tb.PersonQualification;
 import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
+import kz.uco.tsadv.entity.tb.PersonQualification;
+import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
 import kz.uco.tsadv.modules.personal.dictionary.*;
@@ -63,11 +67,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             List<OrganizationGroupExt> organizationGroupExts = new ArrayList<>();
             for (OrganizationJson organizationJson : organizationJsons) {
                 if (organizationJson.getLegacyId() == null || organizationJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, organizationJsons,
+                    return prepareError(result, methodName, organizationData,
                             "no legacyId ");
                 }
                 if (organizationJson.getCompanyCode() == null || organizationJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, organizationJsons,
+                    return prepareError(result, methodName, organizationData,
                             "no companyCode");
                 }
                 OrganizationGroupExt organizationGroupExt = organizationGroupExts.stream().filter(organizationGroupExt1 ->
@@ -98,7 +102,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             " where e.legacyId = :legacyId").parameter("legacyId", organizationJson.getCompanyCode())
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                     if (company == null) {
-                        return prepareError(result, methodName, organizationJsons,
+                        return prepareError(result, methodName, organizationData,
                                 "no base$DicCompany with legacyId " + organizationJson.getCompanyCode());
                     }
                     organizationGroupExt.setCompany(company);
@@ -150,11 +154,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, organizationJsons, e.getMessage() + "\r" +
+            return prepareError(result, methodName, organizationData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, organizationJsons);
+        return prepareSuccess(result, methodName, organizationData);
     }
 
     @Override
@@ -169,11 +173,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             EntityManager entityManager = persistence.getEntityManager();
             for (OrganizationJson organization : organizations) {
                 if (organization.getLegacyId() == null || organization.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, organizations,
+                    return prepareError(result, methodName, organizationData,
                             "no legacyId ");
                 }
                 if (organization.getCompanyCode() == null || organization.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, organizations,
+                    return prepareError(result, methodName, organizationData,
                             "no companyCode");
                 }
                 OrganizationGroupExt organizationGroupExt = dataManager.load(OrganizationGroupExt.class)
@@ -198,7 +202,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, organizations);
+        return prepareSuccess(result, methodName, organizationData);
     }
 
     @Override
@@ -214,11 +218,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             List<JobGroup> jobGroups = new ArrayList<>();
             for (JobJson jobJson : jobs) {
                 if (jobJson.getLegacyId() == null || jobJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, jobs,
+                    return prepareError(result, methodName, jobData,
                             "no legacyId ");
                 }
                 if (jobJson.getCompanyCode() == null || jobJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, jobs,
+                    return prepareError(result, methodName, jobData,
                             "no companyCode");
                 }
                 JobGroup jobGroup = jobGroups.stream().filter(jobGroup1 ->
@@ -246,7 +250,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             " where e.legacyId = :legacyId").parameter("legacyId", jobJson.getCompanyCode())
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                     if (company == null) {
-                        return prepareError(result, methodName, jobs,
+                        return prepareError(result, methodName, jobData,
                                 "no base$DicCompany with legacyId " + jobJson.getCompanyCode());
                     }
                     jobGroup.setCompany(company);
@@ -283,11 +287,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, jobs, e.getMessage() + "\r" +
+            return prepareError(result, methodName, jobData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, jobs);
+        return prepareSuccess(result, methodName, jobData);
     }
 
     @Override
@@ -302,11 +306,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             EntityManager entityManager = persistence.getEntityManager();
             for (JobJson jobJson : jobJsons) {
                 if (jobJson.getLegacyId() == null || jobJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, jobJsons,
+                    return prepareError(result, methodName, jobData,
                             "no legacyId ");
                 }
                 if (jobJson.getCompanyCode() == null || jobJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, jobJsons,
+                    return prepareError(result, methodName, jobData,
                             "no companyCode");
                 }
                 JobGroup jobGroup = dataManager.load(JobGroup.class)
@@ -331,7 +335,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, jobJsons);
+        return prepareSuccess(result, methodName, jobData);
     }
 
     @Override
@@ -347,15 +351,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             CommitContext commitContext = new CommitContext();
             for (PositionJson positionJson : positionJsons) {
                 if (positionJson.getLegacyId() == null || positionJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, positionJsons,
+                    return prepareError(result, methodName, positionData,
                             "no legacyId ");
                 }
                 if (positionJson.getCompanyCode() == null || positionJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, positionJsons,
+                    return prepareError(result, methodName, positionData,
                             "no companyCode");
                 }
                 if (positionJson.getOrganizationLegacyId() == null || positionJson.getOrganizationLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, positionJsons,
+                    return prepareError(result, methodName, positionData,
                             "no organizationLegacyId");
                 }
                 PositionGroupExt positionGroupExt = positionGroupExts.stream().filter(positionGroupExt1 ->
@@ -395,7 +399,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             " where e.legacyId = :legacyId").parameter("legacyId", positionJson.getCompanyCode())
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                     if (company == null) {
-                        return prepareError(result, methodName, positionJsons,
+                        return prepareError(result, methodName, positionData,
                                 "no base$DicCompany with legacyId " + positionJson.getCompanyCode());
                     }
                     positionGroupExt.setLegacyId(positionJson.getLegacyId());
@@ -480,7 +484,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, positionJsons, e.getMessage() + "\r" +
+            return prepareError(result, methodName, positionData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
@@ -501,11 +505,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<PositionGroupExt> positionGroupExts = new ArrayList<>();
             for (PositionJson positionJson : positionJsons) {
                 if (positionJson.getLegacyId() == null || positionJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, positionJsons,
+                    return prepareError(result, methodName, positionData,
                             "no legacyId ");
                 }
                 if (positionJson.getCompanyCode() == null || positionJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, positionJsons,
+                    return prepareError(result, methodName, positionData,
                             "no companyCode");
                 }
                 PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
@@ -538,7 +542,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, positionJsons);
+        return prepareSuccess(result, methodName, positionData);
     }
 
     @Override
@@ -554,11 +558,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             List<PersonGroupExt> personGroupExts = new ArrayList<>();
             for (PersonJson personJson : personJsons) {
                 if (personJson.getLegacyId() == null || personJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personJsons,
+                    return prepareError(result, methodName, personData,
                             "no legacyId ");
                 }
                 if (personJson.getCompanyCode() == null || personJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personJsons,
+                    return prepareError(result, methodName, personData,
                             "no companyCode");
                 }
                 PersonGroupExt personGroupExt = personGroupExts.stream().filter(personGroupExt1 ->
@@ -586,7 +590,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             " where e.legacyId = :legacyId").parameter("legacyId", personJson.getCompanyCode())
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                     if (company == null) {
-                        return prepareError(result, methodName, personJsons,
+                        return prepareError(result, methodName, personData,
                                 "no base$DicCompany with legacyId " + personJson.getCompanyCode());
                     }
                     personGroupExt.setCompany(company);
@@ -680,11 +684,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, personJsons, e.getMessage() + "\r" +
+            return prepareError(result, methodName, personData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, personJsons);
+        return prepareSuccess(result, methodName, personData);
     }
 
     @Override
@@ -700,11 +704,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<PersonGroupExt> personGroupExts = new ArrayList<>();
             for (PersonJson personJson : personJsons) {
                 if (personJson.getLegacyId() == null || personJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personJsons,
+                    return prepareError(result, methodName, personData,
                             "no legacyId ");
                 }
                 if (personJson.getCompanyCode() == null || personJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personJsons,
+                    return prepareError(result, methodName, personData,
                             "no companyCode");
                 }
                 PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
@@ -737,7 +741,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, personJsons);
+        return prepareSuccess(result, methodName, personData);
     }
 
     @Override
@@ -754,17 +758,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (HierarchyElementJson organizationHierarchyElementJson : organizationHierarchyElementJsons) {
                 if (organizationHierarchyElementJson.getLegacyId() == null
                         || organizationHierarchyElementJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, organizationHierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no legacyId ");
                 }
                 if (organizationHierarchyElementJson.getCompanyCode() == null
                         || organizationHierarchyElementJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, organizationHierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no companyCode");
                 }
                 if (organizationHierarchyElementJson.getSubordinateOrganizationId() == null
                         || organizationHierarchyElementJson.getSubordinateOrganizationId().isEmpty()) {
-                    return prepareError(result, methodName, organizationHierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no subordinateOrganization");
                 }
                 HierarchyElementGroup organizationHierarchyElementGroup = organizationHierarchyElementGroups.stream().filter(
@@ -817,7 +821,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     hierarchyElementExt.setOrganizationGroup(subordinateOrganizationGroupExt);
                 }
                 if (subordinateOrganizationGroupExt == null) {
-                    return prepareError(result, methodName, organizationHierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "not found subordinateOrganization with legacyId = " +
                                     organizationHierarchyElementJson.getSubordinateOrganizationId());
                 }
@@ -876,11 +880,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, organizationHierarchyElementJsons, e.getMessage() + "\r" +
+            return prepareError(result, methodName, hierarchyElementData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, organizationHierarchyElementJsons);
+        return prepareSuccess(result, methodName, hierarchyElementData);
     }
 
     @Override
@@ -896,11 +900,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<HierarchyElementGroup> hierarchyElementGroups = new ArrayList<>();
             for (HierarchyElementJson hierarchyElementJson : hierarchyElementJsons) {
                 if (hierarchyElementJson.getLegacyId() == null || hierarchyElementJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, hierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no legacyId ");
                 }
                 if (hierarchyElementJson.getCompanyCode() == null || hierarchyElementJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, hierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no companyCode");
                 }
                 HierarchyElementGroup hierarchyElementGroup = dataManager.load(HierarchyElementGroup.class)
@@ -933,7 +937,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, hierarchyElementJsons);
+        return prepareSuccess(result, methodName, hierarchyElementData);
     }
 
     @Override
@@ -950,12 +954,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (HierarchyElementJson positionHierarchyElementJson : positionHierarchyElementJsons) {
                 if (positionHierarchyElementJson.getLegacyId() == null
                         || positionHierarchyElementJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, positionHierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no legacyId ");
                 }
                 if (positionHierarchyElementJson.getCompanyCode() == null
                         || positionHierarchyElementJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, positionHierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no companyCode");
                 }
                 HierarchyElementGroup positionHierarchyElementGroup = positionHierarchyElementGroups.stream().filter(
@@ -1016,13 +1020,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     hierarchyElementExt.setPositionGroup(subordinatePositionGroupExt);
                 }
                 if (subordinatePositionGroupExt == null) {
-                    return prepareError(result, methodName, positionHierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "not found subordinatePosition with legacyId = " +
                                     positionHierarchyElementJson.getSubordinatePositionId());
                 }
                 UUID positionStructureId = positionStructureConfig.getPositionStructureId();
                 if (positionStructureId == null) {
-                    return prepareError(result, methodName, positionHierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "set property tal.selfService.positionStructureId for posiiton structure");
                 }
                 Hierarchy hierarchy = null;
@@ -1085,11 +1089,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, positionHierarchyElementJsons, e.getMessage() + "\r" +
+            return prepareError(result, methodName, hierarchyElementData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, positionHierarchyElementJsons);
+        return prepareSuccess(result, methodName, hierarchyElementData);
     }
 
     @Override
@@ -1105,11 +1109,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<HierarchyElementGroup> hierarchyElementGroups = new ArrayList<>();
             for (HierarchyElementJson hierarchyElementJson : hierarchyElementJsons) {
                 if (hierarchyElementJson.getLegacyId() == null || hierarchyElementJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, hierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no legacyId ");
                 }
                 if (hierarchyElementJson.getCompanyCode() == null || hierarchyElementJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, hierarchyElementJsons,
+                    return prepareError(result, methodName, hierarchyElementData,
                             "no companyCode");
                 }
                 HierarchyElementGroup hierarchyElementGroup = dataManager.load(HierarchyElementGroup.class)
@@ -1144,7 +1148,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, hierarchyElementJsons);
+        return prepareSuccess(result, methodName, hierarchyElementData);
     }
 
     protected <T extends Serializable> BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
@@ -1187,47 +1191,47 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             List<AssignmentGroupExt> assignmentGroupExtList = new ArrayList<>();
             for (AssignmentJson assignmentJson : assignmentJsons) {
                 if (assignmentJson.getLegacyId() == null || assignmentJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no legacyId");
                 }
                 if (assignmentJson.getCompanyCode() == null || assignmentJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no companyCode");
                 }
                 if (assignmentJson.getPersonGroup() == null || assignmentJson.getPersonGroup().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no personGroup");
                 }
                 if (assignmentJson.getOrganizationGroup() == null || assignmentJson.getOrganizationGroup().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no organizationGroup()");
                 }
                 if (assignmentJson.getJobGroup() == null || assignmentJson.getJobGroup().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no jobGroup");
                 }
                 if (assignmentJson.getPositionGroup() == null || assignmentJson.getPositionGroup().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no positionGroup");
                 }
                 if (assignmentJson.getGrade() == null || assignmentJson.getGrade().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no grade");
                 }
                 if (assignmentJson.getStartDate() == null || assignmentJson.getStartDate().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no startDate");
                 }
                 if (assignmentJson.getEndDate() == null || assignmentJson.getEndDate().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no endDate");
                 }
                 if (assignmentJson.getAssignmentNumber() == null || assignmentJson.getAssignmentNumber().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no assignmentNumber");
                 }
                 if (assignmentJson.getAssignDate() == null || assignmentJson.getAssignDate().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no assignDate");
                 }
 
@@ -1271,7 +1275,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view(View.BASE)
                             .list().stream().findFirst().orElse(null);
                     if (company == null) {
-                        return prepareError(result, methodName, assignmentJsons,
+                        return prepareError(result, methodName, assignmentDataJson,
                                 "no base$DicCompany with legacyId " + assignmentJson.getCompanyCode());
                     }
                     assignmentGroupExt.setLegacyId(assignmentJson.getLegacyId());
@@ -1307,7 +1311,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (personGroupExt != null) {
                     assignmentExt.setPersonGroup(personGroupExt);
                 } else {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no base$PersonGroupExt with legacyId " + assignmentJson.getPersonGroup()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
@@ -1322,7 +1326,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (organizationGroupExt != null) {
                     assignmentExt.setOrganizationGroup(organizationGroupExt);
                 } else {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no base$OrganizationGroupExt with legacyId " + assignmentJson.getOrganizationGroup()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
@@ -1337,7 +1341,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (jobGroup != null) {
                     assignmentExt.setJobGroup(jobGroup);
                 } else {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no tsadv$JobGroup with legacyId " + assignmentJson.getJobGroup()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
@@ -1352,7 +1356,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (positionGroupExt != null) {
                     assignmentExt.setPositionGroup(positionGroupExt);
                 } else {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no base$PositionGroupExt with legacyId " + assignmentJson.getPositionGroup()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
@@ -1367,7 +1371,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (gradeGroup != null) {
                     assignmentExt.setGradeGroup(gradeGroup);
                 } else {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no tsadv$GradeGroup with legacyId " + assignmentJson.getGrade()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
@@ -1391,11 +1395,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, assignmentJsons, e.getMessage() + "\r" +
+            return prepareError(result, methodName, assignmentDataJson, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, assignmentJsons);
+        return prepareSuccess(result, methodName, assignmentDataJson);
     }
 
     @Override
@@ -1411,11 +1415,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<AssignmentGroupExt> assignmentGroupExts = new ArrayList<>();
             for (AssignmentJson assignmentJson : assignmentJsons) {
                 if (assignmentJson.getLegacyId() == null || assignmentJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no legacyId ");
                 }
                 if (assignmentJson.getCompanyCode() == null || assignmentJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, assignmentJsons,
+                    return prepareError(result, methodName, assignmentDataJson,
                             "no companyCode");
                 }
                 AssignmentGroupExt assignmentGroupExt = dataManager.load(AssignmentGroupExt.class)
@@ -1465,11 +1469,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         try {
             for (SalaryJson salaryJson : salarys) {
                 if (salaryJson.getLegacyId() == null || salaryJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, salarys,
+                    return prepareError(result, methodName, salaryData,
                             "no legacyId ");
                 }
                 if (salaryJson.getCompanyCode() == null || salaryJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, salarys,
+                    return prepareError(result, methodName, salaryData,
                             "no companyCode");
                 }
                 Salary salary = dataManager.load(Salary.class)
@@ -1492,7 +1496,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (assignmentGroupExt != null) {
                         salary.setAssignmentGroup(assignmentGroupExt);
                     } else {
-                        return prepareError(result, methodName, salarys,
+                        return prepareError(result, methodName, salaryData,
                                 "no base$AssignmentGroupExt with legacyId " + salaryJson.getAssignmentLegacyId()
                                         + " and company legacyId " + salaryJson.getCompanyCode());
                     }
@@ -1539,7 +1543,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (assignmentGroupExt != null) {
                         salary.setAssignmentGroup(assignmentGroupExt);
                     } else {
-                        return prepareError(result, methodName, salarys,
+                        return prepareError(result, methodName, salaryData,
                                 "no base$AssignmentGroupExt with legacyId " + salaryJson.getAssignmentLegacyId()
                                         + " and company legacyId " + salaryJson.getCompanyCode());
                     }
@@ -1574,11 +1578,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, salarys, e.getMessage() + "\r" +
+            return prepareError(result, methodName, salaryData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, salarys);
+        return prepareSuccess(result, methodName, salaryData);
     }
 
     @Override
@@ -1594,11 +1598,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<Salary> salaries = new ArrayList<>();
             for (SalaryJson salaryJson : salarys) {
                 if (salaryJson.getLegacyId() == null || salaryJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, salarys,
+                    return prepareError(result, methodName, salaryData,
                             "no legacyId ");
                 }
                 if (salaryJson.getCompanyCode() == null || salaryJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, salarys,
+                    return prepareError(result, methodName, salaryData,
                             "no companyCode");
                 }
                 Salary salary = dataManager.load(Salary.class)
@@ -1610,7 +1614,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("salary.view").list().stream().findFirst().orElse(null);
 
                 if (salary == null) {
-                    return prepareError(result, methodName, salaryJson,
+                    return prepareError(result, methodName, salaryData,
                             "no salary with legacyId and assignmentLegacyId : "
                                     + salaryJson.getLegacyId() + " , " + salaryJson.getAssignmentLegacyId());
                 }
@@ -1644,39 +1648,39 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         try {
             for (PersonDocumentJson personDocumentJson : personDocuments) {
                 if (personDocumentJson.getLegacyId() == null || personDocumentJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no legacyId");
                 }
                 if (personDocumentJson.getCompanyCode() == null || personDocumentJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no companyCode");
                 }
                 if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no personId");
                 }
                 if (personDocumentJson.getDocumentTypeId() == null || personDocumentJson.getDocumentTypeId().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no documentType");
                 }
                 if (personDocumentJson.getDocumentNumber() == null || personDocumentJson.getDocumentNumber().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no documentNumber");
                 }
                 if (personDocumentJson.getIssueDate() == null || personDocumentJson.getIssueDate().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no issueDate");
                 }
                 if (personDocumentJson.getExpiredDate() == null || personDocumentJson.getExpiredDate().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no expiredDate");
                 }
                 if (personDocumentJson.getIssueAuthorityId() == null || personDocumentJson.getIssueAuthorityId().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no issueAuthority");
                 }
                 if (personDocumentJson.getStatus() == null || personDocumentJson.getStatus().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no status");
                 }
                 PersonDocument personDocument = dataManager.load(PersonDocument.class)
@@ -1700,7 +1704,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personDocument.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personDocuments,
+                        return prepareError(result, methodName, personDocumentData,
                                 "no base$PersonGroupExt with legacyId " + personDocumentJson.getPersonId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
@@ -1715,7 +1719,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (dicDocumentType != null) {
                         personDocument.setDocumentType(dicDocumentType);
                     } else {
-                        return prepareError(result, methodName, personDocuments,
+                        return prepareError(result, methodName, personDocumentData,
                                 "no tsadv$DicDocumentType with legacyId " + personDocumentJson.getDocumentTypeId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
@@ -1734,7 +1738,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (dicIssuingAuthority != null) {
                         personDocument.setIssuingAuthority(dicIssuingAuthority);
                     } else {
-                        return prepareError(result, methodName, personDocuments,
+                        return prepareError(result, methodName, personDocumentData,
                                 "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
@@ -1749,7 +1753,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (status != null) {
                         personDocument.setStatus(status);
                     } else {
-                        return prepareError(result, methodName, personDocuments,
+                        return prepareError(result, methodName, personDocumentData,
                                 "no tsadv$DicApprovalStatus with legacyId " + personDocumentJson.getStatus()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
@@ -1769,7 +1773,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personDocument.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personDocuments,
+                        return prepareError(result, methodName, personDocumentData,
                                 "no base$PersonGroupExt with legacyId " + personDocumentJson.getPersonId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
@@ -1784,7 +1788,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (dicDocumentType != null) {
                         personDocument.setDocumentType(dicDocumentType);
                     } else {
-                        return prepareError(result, methodName, personDocuments,
+                        return prepareError(result, methodName, personDocumentData,
                                 "no tsadv$DicDocumentType with legacyId " + personDocumentJson.getDocumentTypeId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
@@ -1803,7 +1807,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (dicIssuingAuthority != null) {
                         personDocument.setIssuingAuthority(dicIssuingAuthority);
                     } else {
-                        return prepareError(result, methodName, personDocuments,
+                        return prepareError(result, methodName, personDocumentData,
                                 "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
@@ -1818,7 +1822,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (status != null) {
                         personDocument.setStatus(status);
                     } else {
-                        return prepareError(result, methodName, personDocuments,
+                        return prepareError(result, methodName, personDocumentData,
                                 "no tsadv$DicApprovalStatus with legacyId " + personDocumentJson.getStatus()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
@@ -1827,11 +1831,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, personDocuments, e.getMessage() + "\r" +
+            return prepareError(result, methodName, personDocumentData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, personDocuments);
+        return prepareSuccess(result, methodName, personDocumentData);
     }
 
     @Override
@@ -1847,15 +1851,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<PersonDocument> personDocumentArrayList = new ArrayList<>();
             for (PersonDocumentJson personDocumentJson : personDocuments) {
                 if (personDocumentJson.getLegacyId() == null || personDocumentJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no legacyId");
                 }
                 if (personDocumentJson.getCompanyCode() == null || personDocumentJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no companyCode");
                 }
                 if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personDocuments,
+                    return prepareError(result, methodName, personDocumentData,
                             "no personId");
                 }
 
@@ -1870,7 +1874,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("personDocument.edit").list().stream().findFirst().orElse(null);
 
                 if (personDocument == null) {
-                    return prepareError(result, methodName, personDocumentJson,
+                    return prepareError(result, methodName, personDocumentData,
                             "no personDocument with legacyId and personId : "
                                     + personDocumentJson.getLegacyId() + " , " + personDocumentJson.getPersonId() +
                                     ", " + personDocumentJson.getCompanyCode());
@@ -1904,35 +1908,35 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         try {
             for (PersonQualificationJson personQualificationJson : personQualifications) {
                 if (personQualificationJson.getLegacyId() == null || personQualificationJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no legacyId ");
                 }
                 if (personQualificationJson.getCompanyCode() == null || personQualificationJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no companyCode");
                 }
                 if (personQualificationJson.getSchool() == null || personQualificationJson.getSchool().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no school");
                 }
                 if (personQualificationJson.getStartDate() == null || personQualificationJson.getStartDate().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no startDate");
                 }
                 if (personQualificationJson.getEndDate() == null || personQualificationJson.getEndDate().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no endDate");
                 }
                 if (personQualificationJson.getQualificationTypeId() == null || personQualificationJson.getQualificationTypeId().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no qualificationTypeId");
                 }
                 if (personQualificationJson.getDocumentNumber() == null || personQualificationJson.getDocumentNumber().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no documentNumber");
                 }
                 if (personQualificationJson.getDocumentDate() == null || personQualificationJson.getDocumentDate().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no documentDate");
                 }
                 PersonQualification personQualification = dataManager.load(PersonQualification.class)
@@ -1958,7 +1962,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personQualification.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personQualificationJson,
+                        return prepareError(result, methodName, personQualificationData,
                                 "no base$PersonGroupExt with legacyId " + personQualificationJson.getPersonId()
                                         + " and company legacyId " + personQualificationJson.getCompanyCode());
                     }
@@ -1978,7 +1982,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (qualificationType != null) {
                         personQualification.setType(qualificationType);
                     } else {
-                        return prepareError(result, methodName, personQualificationJson,
+                        return prepareError(result, methodName, personQualificationData,
                                 "no tsadv$DicPersonQualificationType with legacyId " + personQualificationJson.getQualificationTypeId()
                                         + " and company legacyId " + personQualificationJson.getCompanyCode());
                     }
@@ -1999,7 +2003,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personQualification.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personQualificationJson,
+                        return prepareError(result, methodName, personQualificationData,
                                 "no base$PersonGroupExt with legacyId " + personQualificationJson.getPersonId()
                                         + " and company legacyId " + personQualificationJson.getCompanyCode());
                     }
@@ -2019,7 +2023,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (qualificationType != null) {
                         personQualification.setType(qualificationType);
                     } else {
-                        return prepareError(result, methodName, personQualificationJson,
+                        return prepareError(result, methodName, personQualificationData,
                                 "no tsadv$DicPersonQualificationType with legacyId " + personQualificationJson.getQualificationTypeId()
                                         + " and company legacyId " + personQualificationJson.getCompanyCode());
                     }
@@ -2028,11 +2032,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, personQualifications, e.getMessage() + "\r" +
+            return prepareError(result, methodName, personQualificationData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, personQualifications);
+        return prepareSuccess(result, methodName, personQualificationData);
     }
 
     @Override
@@ -2048,15 +2052,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<PersonQualification> personQualificationArrayList = new ArrayList<>();
             for (PersonQualificationJson personQualificationJson : personQualifications) {
                 if (personQualificationJson.getLegacyId() == null || personQualificationJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no legacyId");
                 }
                 if (personQualificationJson.getCompanyCode() == null || personQualificationJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no companyCode");
                 }
                 if (personQualificationJson.getPersonId() == null || personQualificationJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personQualifications,
+                    return prepareError(result, methodName, personQualificationData,
                             "no personId");
                 }
 
@@ -2072,7 +2076,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
 
                 if (personQualification == null) {
-                    return prepareError(result, methodName, personQualificationJson,
+                    return prepareError(result, methodName, personQualificationData,
                             "no personQualification with legacyId and personId : "
                                     + personQualificationJson.getLegacyId() + " , " + personQualificationJson.getPersonId() +
                                     ", " + personQualificationJson.getCompanyCode());
@@ -2104,11 +2108,22 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             personContacts = personContactData.getPersonContacts();
         }
         try {
+            ArrayList<PersonContact> personContactsCommitList = new ArrayList<>();
             for (PersonContactJson personContactJson : personContacts) {
+
+                if (personContactJson.getPersonId() == null || personContactJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personContacts,
+                            "no personId");
+                }
 
                 if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
                     return prepareError(result, methodName, personContacts,
                             "no legacyId");
+                }
+
+                if (personContactJson.getType() == null || personContactJson.getType().isEmpty()) {
+                    return prepareError(result, methodName, personContacts,
+                            "no type");
                 }
 
                 if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
@@ -2116,26 +2131,108 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no companyCode");
                 }
 
-                if (personContactJson.getPersonId() == null || personContactJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
-                            "no personId");
-                }
+                PersonContact personContact = personContactsCommitList.stream().filter(filterPersonContact ->
+                        filterPersonContact.getLegacyId() != null
+                                && filterPersonContact.getType() != null
+                                && filterPersonContact.getType().getLegacyId() != null
+                                && filterPersonContact.getPersonGroup() != null
+                                && filterPersonContact.getPersonGroup().getLegacyId() != null
+                                && filterPersonContact.getPersonGroup().getCompany() != null
+                                && filterPersonContact.getPersonGroup().getCompany().getLegacyId() != null
+                                && filterPersonContact.getLegacyId().equals(personContactJson.getLegacyId())
+                                && filterPersonContact.getType().getLegacyId().equals(personContactJson.getType())
+                                && filterPersonContact.getPersonGroup().getLegacyId().equals(personContactJson.getPersonId())
+                                && filterPersonContact.getPersonGroup().getCompany().getLegacyId().equals(personContactJson.getCompanyCode())
+                ).findFirst().orElse(null);
 
-                PersonContact personContact = dataManager.load(PersonContact.class)
-                        .query(
-                                " select e from tsadv$PersonContact e " +
-                                        " where e.legacyId = :legacyId " +
-                                        " and e.personGroup.legacyId = :pgLegacyId " +
-                                        " and e.personGroup.company.legacyId = :companyCode " +
-                                        " and e.type.legacyId = :tpLegacyId")
-                        .setParameters(ParamsMap.of(
-                                "legacyId", personContactJson.getLegacyId(),
-                                "pgLegacyId", personContactJson.getPersonId(),
-                                "companyCode", personContactJson.getCompanyCode(),
-                                "tpLegacyId", personContactJson.getType()))
-                        .view("personContact.edit").list().stream().findFirst().orElse(null);
 
-                if (personContact != null) {
+                if (personContact == null) {
+                    personContact = dataManager.load(PersonContact.class)
+                            .query(
+                                    " select e from tsadv$PersonContact e " +
+                                            " where e.legacyId = :legacyId " +
+                                            " and e.personGroup.legacyId = :pgLegacyId " +
+                                            " and e.personGroup.company.legacyId = :companyCode " +
+                                            " and e.type.legacyId = :tpLegacyId")
+                            .setParameters(ParamsMap.of(
+                                    "legacyId", personContactJson.getLegacyId(),
+                                    "pgLegacyId", personContactJson.getPersonId(),
+                                    "companyCode", personContactJson.getCompanyCode(),
+                                    "tpLegacyId", personContactJson.getType()))
+                            .view("personContact.edit").list().stream().findFirst().orElse(null);
+
+                    if (personContact != null) {
+                        personContact.setLegacyId(personContactJson.getLegacyId());
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query(
+                                        " select e from base$PersonGroupExt e " +
+                                                " where e.legacyId = :legacyId " +
+                                                " and e.company.legacyId = :company ")
+                                .setParameters(ParamsMap.of(
+                                        "legacyId", personContactJson.getPersonId(),
+                                        "company", personContactJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                        if (personGroupExt != null) {
+                            personContact.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, personContacts,
+                                    "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
+                                            + " and company legacyId " + personContactJson.getCompanyCode());
+                        }
+
+                        DicPhoneType type = dataManager.load(DicPhoneType.class)
+                                .query(
+                                        "select e from tsadv$DicPhoneType e " +
+                                                " where e.legacyId = :legacyId ")
+                                .parameter("legacyId", personContactJson.getType())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+                        if (type != null) {
+                            personContact.setType(type);
+                        } else {
+                            return prepareError(result, methodName, personContactJson.getType(), "" +
+                                    "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
+                        }
+                        personContact.setContactValue(personContactJson.getValue());
+                        personContactsCommitList.add(personContact);
+                    } else {
+                        personContact = metadata.create(PersonContact.class);
+                        personContact.setId(UUID.randomUUID());
+                        personContact.setLegacyId(personContactJson.getLegacyId());
+                        personContact.setStartDate(new Date());
+                        personContact.setEndDate(CommonUtils.getMaxDate());
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query(
+                                        " select e from base$PersonGroupExt e " +
+                                                " where e.legacyId = :legacyId " +
+                                                " and e.company.legacyId = :company ")
+                                .setParameters(ParamsMap.of(
+                                        "legacyId", personContactJson.getPersonId(),
+                                        "company", personContactJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                        if (personGroupExt != null) {
+                            personContact.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, personContacts,
+                                    "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
+                                            + " and company legacyId " + personContactJson.getCompanyCode());
+                        }
+
+                        DicPhoneType type = dataManager.load(DicPhoneType.class)
+                                .query(
+                                        "select e from tsadv$DicPhoneType e " +
+                                                " where e.legacyId = :legacyId ")
+                                .parameter("legacyId", personContactJson.getType())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+                        if (type != null) {
+                            personContact.setType(type);
+                        } else {
+                            return prepareError(result, methodName, personContactJson.getType(), "" +
+                                    "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
+                        }
+                        personContact.setContactValue(personContactJson.getValue());
+                        personContactsCommitList.add(personContact);
+                    }
+                } else {
                     personContact.setLegacyId(personContactJson.getLegacyId());
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query(
@@ -2167,46 +2264,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                     }
                     personContact.setContactValue(personContactJson.getValue());
-                    commitContext.addInstanceToCommit(personContact);
                 }
-                if (personContact == null)
-                    personContact = metadata.create(PersonContact.class);
-                personContact.setId(UUID.randomUUID());
-                personContact.setLegacyId(personContactJson.getLegacyId());
-                PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
-                        .query(
-                                " select e from base$PersonGroupExt e " +
-                                        " where e.legacyId = :legacyId " +
-                                        " and e.company.legacyId = :company ")
-                        .setParameters(ParamsMap.of(
-                                "legacyId", personContactJson.getPersonId(),
-                                "company", personContactJson.getCompanyCode()))
-                        .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-                if (personGroupExt != null) {
-                    personContact.setPersonGroup(personGroupExt);
-                } else {
-                    return prepareError(result, methodName, personContacts,
-                            "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
-                                    + " and company legacyId " + personContactJson.getCompanyCode());
-                }
+            }
 
-                DicPhoneType type = dataManager.load(DicPhoneType.class)
-                        .query(
-                                "select e from tsadv$DicPhoneType e " +
-                                        " where e.legacyId = :legacyId ")
-                        .parameter("legacyId", personContactJson.getType())
-                        .view(View.BASE).list().stream().findFirst().orElse(null);
-                if (type != null) {
-                    personContact.setType(type);
-                } else {
-                    return prepareError(result, methodName, personContactJson.getType(), "" +
-                            "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
-                }
-                personContact.setContactValue(personContactJson.getValue());
+            for (PersonContact personContact : personContactsCommitList) {
                 commitContext.addInstanceToCommit(personContact);
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
+            e.printStackTrace();
             return prepareError(result, methodName, personContactData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
@@ -2250,7 +2316,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 if (personContact == null) {
                     return prepareError(result, methodName, personContactJson,
-                            "no PersonContact with legacyId " + personContactJson.getPersonId()
+                            "no tsadv$PersonContact with legacyId " + personContactJson.getLegacyId()
                                     + " and company legacyId " + personContactJson.getCompanyCode());
                 }
 
@@ -2285,35 +2351,35 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         try {
             for (PersonEducationJson personEducationJson : personEducations) {
                 if (personEducationJson.getLegacyId() == null || personEducationJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no legacyId");
                 }
                 if (personEducationJson.getCompanyCode() == null || personEducationJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no companyCode");
                 }
                 if (personEducationJson.getSchool() == null || personEducationJson.getSchool().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no school");
                 }
                 if (personEducationJson.getEducationTypeId() == null || personEducationJson.getEducationTypeId().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no educationTypeId");
                 }
                 if (personEducationJson.getFaculty() == null || personEducationJson.getFaculty().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no faculty");
                 }
                 if (personEducationJson.getStartYear() == null || personEducationJson.getStartYear().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no startYear");
                 }
                 if (personEducationJson.getEndYear() == null || personEducationJson.getEndYear().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no endYear");
                 }
                 if (personEducationJson.getQualification() == null || personEducationJson.getQualification().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no qualification");
                 }
                 PersonEducation personEducation = dataManager.load(PersonEducation.class)
@@ -2339,7 +2405,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personEducation.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personEducationJson,
+                        return prepareError(result, methodName, personEducationData,
                                 "no base$PersonGroupExt with legacyId " + personEducationJson.getPersonId()
                                         + " and company legacyId " + personEducationJson.getCompanyCode());
                     }
@@ -2359,7 +2425,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (educationType != null) {
                         personEducation.setEducationType(educationType);
                     } else {
-                        return prepareError(result, methodName, personEducationJson,
+                        return prepareError(result, methodName, personEducationData,
                                 "no base$DicEducationType with legacyId " + personEducationJson.getEducationTypeId()
                                         + " and company legacyId " + personEducationJson.getCompanyCode());
                     }
@@ -2380,7 +2446,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personEducation.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personEducationJson,
+                        return prepareError(result, methodName, personEducationData,
                                 "no base$PersonGroupExt with legacyId " + personEducationJson.getPersonId()
                                         + " and company legacyId " + personEducationJson.getCompanyCode());
                     }
@@ -2400,7 +2466,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (educationType != null) {
                         personEducation.setEducationType(educationType);
                     } else {
-                        return prepareError(result, methodName, personEducationJson,
+                        return prepareError(result, methodName, personEducationData,
                                 "no base$DicEducationType with legacyId " + personEducationJson.getEducationTypeId()
                                         + " and company legacyId " + personEducationJson.getCompanyCode());
                     }
@@ -2409,7 +2475,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, personEducations, e.getMessage() + "\r" +
+            return prepareError(result, methodName, personEducationData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
@@ -2429,15 +2495,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<PersonEducation> personEducationArrayList = new ArrayList<>();
             for (PersonEducationJson personEducationJson : personEducations) {
                 if (personEducationJson.getLegacyId() == null || personEducationJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no legacyId");
                 }
                 if (personEducationJson.getCompanyCode() == null || personEducationJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no companyCode");
                 }
                 if (personEducationJson.getPersonId() == null || personEducationJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personEducations,
+                    return prepareError(result, methodName, personEducationData,
                             "no personId");
                 }
 
@@ -2453,7 +2519,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
 
                 if (personEducation == null) {
-                    return prepareError(result, methodName, personEducationJson,
+                    return prepareError(result, methodName, personEducationData,
                             "no personEducation with legacyId and personId : "
                                     + personEducationJson.getLegacyId() + " , " + personEducationJson.getPersonId() +
                                     ", " + personEducationJson.getCompanyCode());
@@ -2468,7 +2534,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             tx.commit();
         } catch (Exception e) {
-            return prepareError(result, methodName, personEducations, e.getMessage() + "\r" +
+            return prepareError(result, methodName, personEducationData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
@@ -2487,35 +2553,35 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         try {
             for (AbsenceJson absenceJson : absences) {
                 if (absenceJson.getLegacyId() == null || absenceJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no legacyId");
                 }
                 if (absenceJson.getCompanyCode() == null || absenceJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no companyCode");
                 }
                 if (absenceJson.getAbsenceTypeId() == null || absenceJson.getAbsenceTypeId().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no absenceTypeId");
                 }
                 if (absenceJson.getStartDate() == null || absenceJson.getStartDate().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no startDate");
                 }
                 if (absenceJson.getEndDate() == null || absenceJson.getEndDate().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no endDate");
                 }
                 if (absenceJson.getAbsenceDuration() == null || absenceJson.getAbsenceDuration().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no absenceDuration");
                 }
                 if (absenceJson.getOrderNumber() == null || absenceJson.getOrderNumber().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no orderNumber");
                 }
                 if (absenceJson.getOrderDate() == null || absenceJson.getOrderDate().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no orderDate");
                 }
                 Absence absence = dataManager.load(Absence.class)
@@ -2541,7 +2607,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         absence.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, absenceJson,
+                        return prepareError(result, methodName, absenceData,
                                 "no base$PersonGroupExt with legacyId " + absenceJson.getPersonId()
                                         + " and company legacyId " + absenceJson.getCompanyCode());
                     }
@@ -2561,7 +2627,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (absenceType != null) {
                         absence.setType(absenceType);
                     } else {
-                        return prepareError(result, methodName, absenceJson,
+                        return prepareError(result, methodName, absenceData,
                                 "no tsadv$DicAbsenceType with legacyId " + absenceJson.getAbsenceTypeId()
                                         + " and company legacyId " + absenceJson.getCompanyCode());
                     }
@@ -2582,7 +2648,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         absence.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, absenceJson,
+                        return prepareError(result, methodName, absenceData,
                                 "no base$PersonGroupExt with legacyId " + absenceJson.getPersonId()
                                         + " and company legacyId " + absenceJson.getCompanyCode());
                     }
@@ -2602,7 +2668,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (absenceType != null) {
                         absence.setType(absenceType);
                     } else {
-                        return prepareError(result, methodName, absenceJson,
+                        return prepareError(result, methodName, absenceData,
                                 "no tsadv$DicAbsenceType with legacyId " + absenceJson.getAbsenceTypeId()
                                         + " and company legacyId " + absenceJson.getCompanyCode());
                     }
@@ -2611,11 +2677,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, absences, e.getMessage() + "\r" +
+            return prepareError(result, methodName, absenceData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, absences);
+        return prepareSuccess(result, methodName, absenceData);
     }
 
     @Override
@@ -2631,15 +2697,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<Absence> absenceArrayList = new ArrayList<>();
             for (AbsenceJson absenceJson : absences) {
                 if (absenceJson.getLegacyId() == null || absenceJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no legacyId");
                 }
                 if (absenceJson.getCompanyCode() == null || absenceJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no companyCode");
                 }
                 if (absenceJson.getPersonId() == null || absenceJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, absences,
+                    return prepareError(result, methodName, absenceData,
                             "no personId");
                 }
 
@@ -2655,7 +2721,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
 
                 if (absence == null) {
-                    return prepareError(result, methodName, absenceJson,
+                    return prepareError(result, methodName, absenceData,
                             "no absence with legacyId and personId : "
                                     + absenceJson.getLegacyId() + " , " + absenceJson.getPersonId() +
                                     ", " + absenceJson.getCompanyCode());
@@ -2670,11 +2736,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             tx.commit();
         } catch (Exception e) {
-            return prepareError(result, methodName, absences, e.getMessage() + "\r" +
+            return prepareError(result, methodName, absenceData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, absences);
+        return prepareSuccess(result, methodName, absenceData);
     }
 
     @Override
@@ -2689,35 +2755,35 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         try {
             for (PersonExperienceJson personExperienceJson : personExperiences) {
                 if (personExperienceJson.getLegacyId() == null || personExperienceJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no legacyId");
                 }
                 if (personExperienceJson.getCompanyCode() == null || personExperienceJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no companyCode");
                 }
                 if (personExperienceJson.getPersonId() == null || personExperienceJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no personId");
                 }
                 if (personExperienceJson.getStartDate() == null || personExperienceJson.getStartDate().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no startDate");
                 }
                 if (personExperienceJson.getEndDate() == null || personExperienceJson.getEndDate().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no endDate");
                 }
                 if (personExperienceJson.getCompany() == null || personExperienceJson.getCompany().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no company");
                 }
                 if (personExperienceJson.getJob() == null || personExperienceJson.getJob().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no job");
                 }
                 if (personExperienceJson.getLocation() == null || personExperienceJson.getLocation().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no location");
                 }
                 PersonExperience personExperience = dataManager.load(PersonExperience.class)
@@ -2743,7 +2809,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personExperience.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personExperienceJson,
+                        return prepareError(result, methodName, personExperienceData,
                                 "no base$PersonGroupExt with legacyId " + personExperienceJson.getPersonId()
                                         + " and company legacyId " + personExperienceJson.getCompanyCode());
                     }
@@ -2770,7 +2836,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personExperience.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personExperienceJson,
+                        return prepareError(result, methodName, personExperienceData,
                                 "no base$PersonGroupExt with legacyId " + personExperienceJson.getPersonId()
                                         + " and company legacyId " + personExperienceJson.getCompanyCode());
                     }
@@ -2785,11 +2851,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             dataManager.commit(commitContext);
         } catch (Exception e) {
-            return prepareError(result, methodName, personExperiences, e.getMessage() + "\r" +
+            return prepareError(result, methodName, personExperienceData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, personExperiences);
+        return prepareSuccess(result, methodName, personExperienceData);
     }
 
     @Override
@@ -2805,15 +2871,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             ArrayList<PersonExperience> personExperienceArrayList = new ArrayList<>();
             for (PersonExperienceJson personExperienceJson : personExperiences) {
                 if (personExperienceJson.getLegacyId() == null || personExperienceJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no legacyId");
                 }
                 if (personExperienceJson.getCompanyCode() == null || personExperienceJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no companyCode");
                 }
                 if (personExperienceJson.getPersonId() == null || personExperienceJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personExperiences,
+                    return prepareError(result, methodName, personExperienceData,
                             "no personId");
                 }
 
@@ -2829,7 +2895,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
 
                 if (personExperience == null) {
-                    return prepareError(result, methodName, personExperienceJson,
+                    return prepareError(result, methodName, personExperienceData,
                             "no absence with legacyId and personId : "
                                     + personExperienceJson.getLegacyId() + " , " + personExperienceJson.getPersonId() +
                                     ", " + personExperienceJson.getCompanyCode());
@@ -2844,10 +2910,248 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
             tx.commit();
         } catch (Exception e) {
-            return prepareError(result, methodName, personExperiences, e.getMessage() + "\r" +
+            return prepareError(result, methodName, personExperienceData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, personExperiences);
+        return prepareSuccess(result, methodName, personExperienceData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateBeneficiary(BeneficiaryDataJson beneficiaryData) {
+        String methodName = "createOrUpdateBeneficiary";
+        ArrayList<BeneficiaryJson> beneficiaries = new ArrayList<>();
+        if (beneficiaryData.getBeneficiaries() != null) {
+            beneficiaries = beneficiaryData.getBeneficiaries();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (BeneficiaryJson beneficiaryJson : beneficiaries) {
+                if (beneficiaryJson.getLegacyId() == null || beneficiaryJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no legacyId");
+                }
+                if (beneficiaryJson.getCompanyCode() == null || beneficiaryJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no companyCode");
+                }
+                if (beneficiaryJson.getPersonId() == null || beneficiaryJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no personId");
+                }
+                if (beneficiaryJson.getRelationshipTypeId() == null || beneficiaryJson.getRelationshipTypeId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no relationshipTypeId");
+                }
+                if (beneficiaryJson.getLastName() == null || beneficiaryJson.getLastName().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no lastName");
+                }
+                if (beneficiaryJson.getFirstName() == null || beneficiaryJson.getFirstName().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no firstName");
+                }
+                if (beneficiaryJson.getMiddleName() == null || beneficiaryJson.getMiddleName().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no middleName");
+                }
+                if (beneficiaryJson.getLastNameLatin() == null || beneficiaryJson.getLastNameLatin().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no lastNameLatin");
+                }
+                if (beneficiaryJson.getFirstNameLatin() == null || beneficiaryJson.getFirstNameLatin().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no firstNameLatin");
+                }
+                if (beneficiaryJson.getDateOfBirth() == null || beneficiaryJson.getDateOfBirth().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no dateOfBirth");
+                }
+                if (beneficiaryJson.getWorkPlace() == null || beneficiaryJson.getWorkPlace().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no workPlace");
+                }
+                if (beneficiaryJson.getContactPhone() == null || beneficiaryJson.getContactPhone().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no contactPhone");
+                }
+
+                PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                        .query("select e from base$PersonGroupExt e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.company.legacyId = :company")
+                        .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getPersonId(),
+                                "company", beneficiaryJson.getCompanyCode()))
+                        .view("personGroupExt-for-integration-rest")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personGroupExt == null) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no personGroup with personId = " + beneficiaryJson.getPersonId()
+                                    + " and companyCode = " + beneficiaryJson.getCompanyCode());
+                }
+                Beneficiary beneficiary = dataManager.load(Beneficiary.class)
+                        .query("select e from tsadv$Beneficiary e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroupParent.legacyId = :pLegacyId " +
+                                " and e.personGroupParent.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getLegacyId(),
+                                "pLegacyId", beneficiaryJson.getPersonId(),
+                                "companyCode", beneficiaryJson.getCompanyCode()))
+                        .view("beneficiaryView")
+                        .list().stream().findFirst().orElse(null);
+                if (beneficiary != null && beneficiary.getPersonGroupChild() != null
+                        && beneficiary.getPersonGroupChild().getPerson() != null) {
+                    beneficiary.setLegacyId(beneficiaryJson.getLegacyId());
+                    beneficiary.setPersonGroupParent(personGroupExt);
+
+                    PersonExt personExt = beneficiary.getPersonGroupChild().getPerson();
+                    personExt.setFirstName(beneficiaryJson.getFirstName());
+                    personExt.setLastName(beneficiaryJson.getLastName());
+                    personExt.setMiddleName(beneficiaryJson.getMiddleName());
+                    personExt.setFirstNameLatin(beneficiaryJson.getFirstNameLatin());
+                    personExt.setLastNameLatin(beneficiaryJson.getLastNameLatin());
+                    personExt.setDateOfBirth(formatter.parse(beneficiaryJson.getDateOfBirth()));
+
+                    DicRelationshipType relationshipType = dataManager.load(DicRelationshipType.class)
+                            .query("select e from tsadv$DicRelationshipType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getRelationshipTypeId(),
+                                    "companyCode", beneficiaryJson.getCompanyCode()))
+                            .view("dicRelationshipType-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (relationshipType != null) {
+                        beneficiary.setRelationshipType(relationshipType);
+                    } else {
+                        return prepareError(result, methodName, beneficiaryData,
+                                "no RelationshipType with relationshipTypeId = " + beneficiaryJson.getRelationshipTypeId()
+                                        + " and companyCode = " + beneficiaryJson.getCompanyCode());
+                    }
+                    beneficiary.setAdditionalContact(beneficiaryJson.getContactPhone());
+                    beneficiary.setWorkLocation(beneficiaryJson.getWorkPlace());
+
+                    commitContext.addInstanceToCommit(personExt);
+                    commitContext.addInstanceToCommit(beneficiary);
+                } else {
+                    beneficiary = metadata.create(Beneficiary.class);
+                    beneficiary.setUuid(UUID.randomUUID());
+                    beneficiary.setLegacyId(beneficiaryJson.getLegacyId());
+                    beneficiary.setPersonGroupParent(personGroupExt);
+
+                    PersonGroupExt personGroupChild = metadata.create(PersonGroupExt.class);
+
+                    PersonExt newPersonExt = metadata.create(PersonExt.class);
+
+                    DicPersonType personType = dataManager.load(DicPersonType.class)
+                            .query("select e from tsadv$DicPersonType e" +
+                                    " where e.code = 'BENEFICIARY'")
+                            .list().stream().findFirst().orElse(null);
+
+                    if (personType == null) {
+                        return prepareError(result, methodName, beneficiaryData,
+                                "no DicPersonType with code = 'BENEFICIARY'");
+                    }
+
+                    newPersonExt.setType(personType);
+                    newPersonExt.setGroup(personGroupChild);
+                    newPersonExt.setFirstName(beneficiaryJson.getFirstName());
+                    newPersonExt.setLastName(beneficiaryJson.getLastName());
+                    newPersonExt.setMiddleName(beneficiaryJson.getMiddleName());
+                    newPersonExt.setFirstNameLatin(beneficiaryJson.getFirstNameLatin());
+                    newPersonExt.setLastNameLatin(beneficiaryJson.getLastNameLatin());
+                    newPersonExt.setDateOfBirth(formatter.parse(beneficiaryJson.getDateOfBirth()));
+
+                    beneficiary.setPersonGroupChild(personGroupChild);
+                    beneficiary.setWorkLocation(beneficiaryJson.getWorkPlace());
+                    beneficiary.setAdditionalContact(beneficiaryJson.getContactPhone());
+
+                    DicRelationshipType relationshipType = dataManager.load(DicRelationshipType.class)
+                            .query("select e from tsadv$DicRelationshipType e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getRelationshipTypeId(),
+                                    "companyCode", beneficiaryJson.getCompanyCode()))
+                            .view("dicRelationshipType-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (relationshipType != null) {
+                        beneficiary.setRelationshipType(relationshipType);
+                    } else {
+                        return prepareError(result, methodName, beneficiaryData,
+                                "no RelationshipType with relationshipTypeId = " + beneficiaryJson.getRelationshipTypeId()
+                                        + " and companyCode = " + beneficiaryJson.getCompanyCode());
+                    }
+                    commitContext.addInstanceToCommit(personGroupChild);
+                    commitContext.addInstanceToCommit(newPersonExt);
+                    commitContext.addInstanceToCommit(beneficiary);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, beneficiaryData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, beneficiaryData);
+    }
+
+    @Override
+    public BaseResult deleteBeneficiary(BeneficiaryDataJson beneficiaryData) {
+        String methodName = "deleteBeneficiary";
+        BaseResult result = new BaseResult();
+        ArrayList<BeneficiaryJson> beneficiaries = new ArrayList<>();
+        if (beneficiaryData.getBeneficiaries() != null) {
+            beneficiaries = beneficiaryData.getBeneficiaries();
+        }
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<Beneficiary> beneficiaryArrayList = new ArrayList<>();
+            for (BeneficiaryJson beneficiaryJson : beneficiaries) {
+                if (beneficiaryJson.getLegacyId() == null || beneficiaryJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no legacyId");
+                }
+                if (beneficiaryJson.getCompanyCode() == null || beneficiaryJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no companyCode");
+                }
+                if (beneficiaryJson.getPersonId() == null || beneficiaryJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no personId");
+                }
+
+                Beneficiary beneficiary = dataManager.load(Beneficiary.class)
+                        .query("select e from tsadv$Beneficiary e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.personGroupParent.legacyId = :pLegacyId " +
+                                " and e.personGroupParent.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", beneficiaryJson.getLegacyId(),
+                                "pLegacyId", beneficiaryJson.getPersonId(),
+                                "companyCode", beneficiaryJson.getCompanyCode()))
+                        .view("beneficiaryView")
+                        .list().stream().findFirst().orElse(null);
+
+                if (beneficiary == null) {
+                    return prepareError(result, methodName, beneficiaryData,
+                            "no beneficiary with legacyId and personId : "
+                                    + beneficiaryJson.getLegacyId() + " , " + beneficiaryJson.getPersonId() +
+                                    ", " + beneficiaryJson.getCompanyCode());
+                }
+                if (!beneficiaryArrayList.stream().filter(beneficiary1 ->
+                        beneficiary1.getId().equals(beneficiary.getId())).findAny().isPresent()) {
+                    beneficiaryArrayList.add(beneficiary);
+                }
+            }
+            for (Beneficiary beneficiary : beneficiaryArrayList) {
+                entityManager.remove(beneficiary);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, beneficiaryData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, beneficiaryData);
     }
 }

@@ -767,5 +767,11 @@
             <param name="personExperienceData"
                    type="kz.uco.tsadv.modules.integration.jsonobject.PersonExperienceDataJson"/>
         </method>
+        <method name="createOrUpdateBeneficiary">
+            <param name="beneficiaryData" type="kz.uco.tsadv.modules.integration.jsonobject.BeneficiaryDataJson"/>
+        </method>
+        <method name="deleteBeneficiary">
+            <param name="beneficiaryData" type="kz.uco.tsadv.modules.integration.jsonobject.BeneficiaryDataJson"/>
+        </method>
     </service>
 </services>

@@ -45,6 +45,9 @@ public class PortalAccessEntityAttributesServiceBean implements PortalAccessEnti
         checkEntityIsNotNull(entityName, entityId, entity);
 
         SecurityState securityState = attributeAccessService.computeSecurityState(entity);
+        if (securityState == null) {
+            return new SecurityState();
+        }
 
         try {
             Field securityTokenField = SecurityState.class.getDeclaredField("securityToken");
