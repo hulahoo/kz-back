@@ -19,7 +19,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|positionName")
+@NamePattern("%s|position")
 @Extends(PositionGroup.class)
 @Entity(name = "base$PositionGroupExt")
 public class PositionGroupExt extends PositionGroup implements IEntityGroup<PositionExt> {
