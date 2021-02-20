@@ -29,10 +29,8 @@
                        property="parent" caption="msg://kz.uco.tsadv.web.modules.personal.hierarchyelementtable/parent"/>
                 <field editable="false"
                        property="parentName"/>
-                <field captionProperty="position"
-                       property="positionGroup"/>
-                <field captionProperty="organization"
-                       property="organizationGroup"/>
+                <field property="positionGroup"/>
+                <field property="organizationGroup"/>
 
             </column>
         </fieldGroup>
