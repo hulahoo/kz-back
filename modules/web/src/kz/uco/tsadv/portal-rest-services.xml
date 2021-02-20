@@ -84,4 +84,17 @@
             <param name="entityId" type="java.lang.String"/>
         </method>
     </service>
+    <service name="tsadv_AbsenceService">
+        <method name="countDays">
+            <param name="dateFrom" type="java.util.Date"/>
+            <param name="dateTo" type="java.util.Date"/>
+            <param name="absenceTypeId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="getVacationDurationType">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceTypeId" type="java.util.UUID"/>
+            <param name="dateFrom" type="java.util.Date"/>
+        </method>
+    </service>
 </services>
