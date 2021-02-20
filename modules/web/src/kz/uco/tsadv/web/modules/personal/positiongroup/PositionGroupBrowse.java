@@ -121,7 +121,7 @@ public class PositionGroupBrowse extends AbstractLookup {
                         "                  WHERE :session$systemDate BETWEEN p.startDate and p.endDate " +
                         "                  AND e.id NOT IN (SELECT he.positionGroup.id    " +
                         "                  FROM base$HierarchyElementExt he" +
-                        "                  WHERE he.hierarchy.id = :custom$selectedHierarchy) " +
+                        "                  WHERE he.hierarchy.id = :custom$selectedHierarchy.id) " +
                         "                  ORDER BY e.updateTs, e.id desc");
                 Map<String, Object> queryParam = new HashMap<>();
                 queryParam.put("selectedHierarchy", (Hierarchy) selectedHierarchy);
