@@ -6,16 +6,22 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.entity.Category;
 import com.haulmont.cuba.core.entity.CategoryAttribute;
 import com.haulmont.cuba.core.entity.CategoryAttributeValue;
+import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
+import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
+import kz.uco.tsadv.modules.personal.model.VacationConditions;
 import kz.uco.tsadv.modules.timesheet.model.Calendar;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +44,10 @@ public class AbsenceServiceBean implements AbsenceService {
     protected CallStoredFunctionService callStoredFunctionService;
     @Inject
     protected CalendarService calendarService;
+    @Inject
+    protected DataManager dataManager;
+    @Inject
+    protected EmployeeService employeeService;
     @Inject
     private Persistence persistence;
     @Inject
@@ -109,6 +119,22 @@ public class AbsenceServiceBean implements AbsenceService {
     @Override
     public int countBusinessDays(Date dateFrom, Date dateTo, DicAbsenceType absenceType, AssignmentGroupExt assignmentGroup) {
         return (countAbsenceDays(dateFrom, dateTo, absenceType, assignmentGroup) - countWeekendDays(dateFrom, dateTo));
+    }
+
+    @Override
+    public int countDays(Date dateFrom, Date dateTo, UUID absenceTypeId, UUID personGroupId) {
+
+        DicAbsenceType absenceType = dataManager.load(Id.of(absenceTypeId, DicAbsenceType.class)).view(View.LOCAL)
+                .optional().orElse(null);
+
+        if (absenceType == null) return 0;
+
+        AssignmentExt assignmentExt = employeeService.getAssignmentExt(personGroupId, dateFrom, "portal-assignment-group");
+
+        return VacationDurationType.WORK.equals(
+                this.getVacationDurationType(personGroupId, absenceTypeId, dateFrom))
+                ? this.countBusinessDays(dateFrom, dateTo, absenceType, assignmentExt.getGroup())
+                : this.countAbsenceDays(dateFrom, dateTo, absenceType, assignmentExt.getGroup());
     }
 
     @Override
@@ -418,5 +444,40 @@ public class AbsenceServiceBean implements AbsenceService {
 
         em.merge(absenceRequest);
         em.persist(absence);
+    }
+
+    public VacationDurationType getVacationDurationType(UUID personGroupId, UUID absenceTypeId, Date date) {
+        DicAbsenceType absenceType = dataManager.load(Id.of(absenceTypeId, DicAbsenceType.class)).view(View.LOCAL)
+                .optional().orElse(null);
+
+        AssignmentExt assignmentExt = employeeService.getAssignmentExt(personGroupId, date, "portal-assignment-group");
+
+        VacationDurationType vacationDurationType = getVacationDurationType(absenceType);
+        if (vacationDurationType != null) return vacationDurationType;
+
+        List<VacationConditions> vacationConditionsList = dataManager.load(VacationConditions.class)
+                .query("select v from base$AssignmentExt a" +
+                        "   join tsadv$VacationConditions v " +
+                        "       on v.positionGroup = a.positionGroup " +
+                        " where a.group.id = :assignmentGroupId" +
+                        "   and :sysDate between a.startDate and a.endDate " +
+                        "   and a.primaryFlag = 'TRUE' " +
+                        "   and :sysDate between v.startDate and v.endDate " +
+                        " order by v.startDate desc ")
+                .parameter("assignmentGroupId", assignmentExt.getGroup().getId())
+                .parameter("sysDate", Optional.ofNullable(date).orElse(CommonUtils.getSystemDate()))
+                .view(View.LOCAL)
+                .list();
+
+        return vacationConditionsList.stream()
+                .map(VacationConditions::getVacationDurationType)
+                .filter(Objects::nonNull)
+                .findAny()
+                .orElse(VacationDurationType.CALENDAR);
+    }
+
+    @Nullable
+    protected VacationDurationType getVacationDurationType(@Nullable DicAbsenceType absenceType) {
+        return absenceType != null ? absenceType.getVacationDurationType() : null;
     }
 }

@@ -2,23 +2,25 @@ package kz.uco.tsadv.bproc.events;
 
 import com.haulmont.addon.bproc.events.ProcessStartedEvent;
 
+import java.util.Map;
+
 /**
  * @author Alibek Berdaulet
  */
 public class ExtProcessStartedEvent extends ProcessStartedEvent {
 
-    protected String executionId;
+    protected Map<String, Object> variables;
 
     public ExtProcessStartedEvent(Object source) {
         super(source);
     }
 
-    public ExtProcessStartedEvent withExecutionId(String executionId) {
-        this.executionId = executionId;
+    public ExtProcessStartedEvent withVariables(Map<String, Object> variables) {
+        this.variables = variables;
         return this;
     }
 
-    public String getExecutionId() {
-        return executionId;
+    public Map<String, Object> getVariables() {
+        return variables;
     }
 }
