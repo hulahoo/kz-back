@@ -1,15 +1,22 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import kz.uco.tsadv.entity.VacationSchedule;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
+import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.service.AssignmentService;
+import kz.uco.tsadv.service.EmployeeService;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -118,6 +125,18 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @JoinColumn(name = "VACATION_SCHEDULE_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private VacationSchedule vacationSchedule;
+
+    @MetaProperty
+    @Transient
+    private String vacationDurationType;
+
+    public VacationDurationType getVacationDurationType() {
+        return vacationDurationType == null ? null : VacationDurationType.fromId(vacationDurationType);
+    }
+
+    public void setVacationDurationType(VacationDurationType vacationDurationType) {
+        this.vacationDurationType = vacationDurationType == null ? null : vacationDurationType.getId();
+    }
 
     public void setVacationSchedule(VacationSchedule vacationSchedule) {
         this.vacationSchedule = vacationSchedule;
@@ -330,5 +349,27 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @Override
     public String getProcessDefinitionKey() {
         return PROCESS_DEFINITION_KEY;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.assignmentGroup == null && this.personGroup == null) {
+            AssignmentService assignmentService = AppBeans.get(AssignmentService.class);
+            UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.class);
+            this.assignmentGroup = assignmentService.getAssignmentGroup(userSessionSource.getUserSession().getUser().getLogin());
+        } else if (this.personGroup != null) {
+            AssignmentExt assignmentExt = AppBeans.get(EmployeeService.class)
+                    .getAssignmentExt(
+                            this.personGroup.getId(),
+                            CommonUtils.getSystemDate(),
+                            "portal-assignment-group");
+            if (assignmentExt != null && assignmentExt.getGroup() != null)
+                this.assignmentGroup = assignmentExt.getGroup();
+        }
+
+        if (this.assignmentGroup != null && this.personGroup == null) {
+            EmployeeService employeeService = AppBeans.get(EmployeeService.class);
+            this.personGroup = employeeService.getPersonGroupByAssignmentGroupId(this.assignmentGroup.getId());
+        }
     }
 }

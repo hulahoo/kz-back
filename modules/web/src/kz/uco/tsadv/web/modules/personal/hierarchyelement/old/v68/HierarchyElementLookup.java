@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import java.util.*;
+import java.util.stream.Collectors;
 
 //todo
 public class HierarchyElementLookup extends AbstractLookup {
@@ -140,7 +141,7 @@ public class HierarchyElementLookup extends AbstractLookup {
                 Map<String, Object> params = new HashMap<>();
                 params.put("searchStr", searchStr);
                 params.put("systemDate", hierarchyEndDate);
-                params.put("hierarchyLookup", hierarchyLookup.getValue());
+                params.put("hierarchyLookup", ((Hierarchy) hierarchyLookup.getValue()).getId());
                 childrenElements = commonService.getEntities(HierarchyElementExt.class, queryForChildren, params, "hierarchyElement.parent");
 
                 if (!childrenElements.isEmpty()) {
@@ -163,7 +164,7 @@ public class HierarchyElementLookup extends AbstractLookup {
                     hierarchyElementsDs.setQuery("select e\n" +
                             "                           from base$HierarchyElementExt e\n" +
                             "                          where :param$date between e.startDate and e.endDate\n" +
-                            "                            and e.hierarchy.id = :component$hierarchyLookup");
+                            "                            and e.hierarchy.id = :component$hierarchyLookup.id");
                     hierarchyElementsDs.refresh();
                     hierarchyElementsTree.collapseTree();
                 }
@@ -172,31 +173,37 @@ public class HierarchyElementLookup extends AbstractLookup {
             hierarchyElementsDs.setQuery("select e\n" +
                     "                           from base$HierarchyElementExt e\n" +
                     "                          where :param$date between e.startDate and e.endDate\n" +
-                    "                            and e.hierarchy.id = :component$hierarchyLookup");
+                    "                            and e.hierarchy.id = :component$hierarchyLookup.id");
             hierarchyElementsDs.refresh();
             hierarchyElementsTree.collapseTree();
         }
 
-        List<HierarchyElementExt> items = new ArrayList<>();
+        if(hierarchyElementsDs.getItems() != null && !hierarchyElementsDs.getItems().isEmpty()) {
+            List<HierarchyElementExt> items = new ArrayList<>();
 
-        if (((Hierarchy) hierarchyLookup.getValue()).getId().equals(organizationStructureConfig.getOrganizationStructureId())) {
-            hierarchyElementsDs.getItems().forEach(element -> {
-                if (element.getOrganizationGroup().getOrganization() == null) {
-                    items.add(element);
+            if (((Hierarchy) hierarchyLookup.getValue()).getId().equals(organizationStructureConfig.getOrganizationStructureId())) {
+                hierarchyElementsDs.getItems()
+                        .stream()
+                        .filter(element -> element != null
+                            && element.getOrganizationGroup() != null
+                            && element.getOrganizationGroup().getOrganization() == null)
+                        .collect(Collectors.toList())
+                        .forEach(items::add);
                 }
-            });
-        }
 
-        if (((Hierarchy) hierarchyLookup.getValue()).getId().equals(positionStructureConfig.getPositionStructureId())) {
-            hierarchyElementsDs.getItems().forEach(element -> {
-                if (element.getPositionGroup().getPosition() == null) {
-                    items.add(element);
-                }
-            });
-        }
+            if (((Hierarchy) hierarchyLookup.getValue()).getId().equals(positionStructureConfig.getPositionStructureId())) {
+                hierarchyElementsDs.getItems()
+                        .stream()
+                        .filter(element -> element != null
+                                && element.getPositionGroup() != null
+                                && element.getPositionGroup().getPosition() == null)
+                        .collect(Collectors.toList())
+                        .forEach(items::add);
+            }
 
-        for (HierarchyElementExt element : items) {
-            hierarchyElementsDs.removeItem(hierarchyElementsDs.getItem(element.getId()));
+            for (HierarchyElementExt element : items) {
+                hierarchyElementsDs.removeItem(hierarchyElementsDs.getItem(element.getId()));
+            }
         }
     }
 
