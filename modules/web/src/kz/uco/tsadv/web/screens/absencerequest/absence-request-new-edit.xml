@@ -7,7 +7,7 @@
         <instance id="absenceRequestDc"
                   class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
                   view="absenceRequest.edit">
-            <loader/>
+            <loader id="absenceRequestDl"/>
         </instance>
         <collection id="dicAbsenceTypesDc"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
@@ -23,6 +23,21 @@
 
         <collection id="tasksDc"
                     class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+        <collection id="vacationSchedulesDc" class="kz.uco.tsadv.entity.VacationSchedule">
+            <view extends="_local">
+                <property name="personGroup" view="_minimal"/>
+                <property name="status" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+            </view>
+            <loader id="vacationSchedulesDl">
+                <query>
+                    <![CDATA[select e from tsadv_VacationSchedule e]]>
+                </query>
+            </loader>
+        </collection>
 
     </data>
     <dialogMode height="600"
@@ -33,11 +48,13 @@
                       spacing="true"
                       width="1300px">
                 <form id="form" dataContainer="absenceRequestDc" childrenCaptionWidth="200px">
-                    <column width="750px">
+                    <column id="column" width="750px">
                         <textField id="requestNumberField" property="requestNumber" editable="false"/>
                         <textField id="statusField" property="status" editable="false"/>
                         <lookupPickerField id="typeField" required="true" property="type"
                                            optionsContainer="dicAbsenceTypesDc"/>
+                        <lookupField id="vacationScheduleField" property="vacationSchedule"
+                                     required="true" optionsContainer="vacationSchedulesDc" visible="false"/>
                         <dateField id="dateFromField" property="dateFrom" required="true"/>
                         <dateField id="dateToField" property="dateTo" required="true"/>
                         <textField id="absenceDaysField" property="absenceDays" editable="false"/>
