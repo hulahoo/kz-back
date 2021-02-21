@@ -53,7 +53,7 @@ import java.util.*;
 public class EmployeeServiceBean implements EmployeeService {
 
     protected static final Logger log = org.slf4j.LoggerFactory.getLogger(EmployeeServiceBean.class);
-    private Log logger = LogFactory.getLog(EmployeeServiceBean.class.getName());
+    private final Log logger = LogFactory.getLog(EmployeeServiceBean.class.getName());
 
     @Inject
     private DataManager dataManager;
@@ -964,7 +964,7 @@ public class EmployeeServiceBean implements EmployeeService {
         String langOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
 
         if (langOrder != null) {
-            List<String> langs = Arrays.asList(langOrder.split(";"));
+            String[] langs = langOrder.split(";");
             int count = 1;
             for (String lang : langs) {
                 if (language.equals(lang)) {
@@ -1094,7 +1094,7 @@ public class EmployeeServiceBean implements EmployeeService {
                 "   and e.start_month <= ?1 " +
                 "   and e.delete_ts is null";
         List<Object[]> list2 = (commonService.emNativeQueryResultList(query2, map));
-        if(list2.size() != 0) {
+        if (list2.size() != 0) {
             for (Object[] items : list2) {
                 if (items[1] == null) {
                     items[1] = new Date();
@@ -2064,7 +2064,7 @@ public class EmployeeServiceBean implements EmployeeService {
                         " where e.personGroup.id = :personGroup " +
                         " and e.assignmentStatus.code <> 'TERMINATED' " +
                         " and :createDate between e.startDate and e.endDate and e.primaryFlag = 'TRUE' ",
-                ParamsMap.of("personGroup", personGroupId, "createDate", date),
+                ParamsMap.of("personGroup", personGroupId, "createDate", date != null ? date : CommonUtils.getSystemDate()),
                 view != null ? view : View.LOCAL);
         return assignmentExtList.isEmpty() ? null : assignmentExtList.get(0);
     }
