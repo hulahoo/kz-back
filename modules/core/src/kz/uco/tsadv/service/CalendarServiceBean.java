@@ -52,8 +52,9 @@ public class CalendarServiceBean implements CalendarService {
             return calendar;
         }
 
-        AssignmentExt assignment = dataManager.reload(assignmentGroup.getAssignment(), "assignmentBrowse.view");
+        AssignmentExt assignment = assignmentGroup.getAssignment();
         if (assignment != null) {
+            assignment = dataManager.reload(assignment, "assignmentBrowse.view");
             if (assignment.getPositionGroup() != null) {
 
                 calendar = getCalendarForPosition(assignment.getPositionGroup());
