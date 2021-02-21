@@ -55,7 +55,7 @@
                         <lookupPickerField id="typeField" required="true" property="type"
                                            optionsContainer="dicAbsenceTypesDc"/>
                         <lookupField id="vacationScheduleField" property="vacationSchedule"
-                                     required="true" optionsContainer="vacationSchedulesDc" visible="false"/>
+                                     optionsContainer="vacationSchedulesDc" visible="false"/>
                         <dateField id="dateFromField" property="dateFrom" required="true"/>
                         <dateField id="dateToField" property="dateTo" required="true"/>
                         <textField id="absenceDaysField" property="absenceDays" editable="false"/>
