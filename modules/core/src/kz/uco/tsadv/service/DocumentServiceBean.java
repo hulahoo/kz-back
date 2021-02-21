@@ -1,6 +1,7 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.FluentLoader;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import kz.uco.base.entity.dictionary.DicCompany;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Service(DocumentService.NAME)
 public class DocumentServiceBean implements DocumentService {
@@ -33,6 +36,18 @@ public class DocumentServiceBean implements DocumentService {
     @Override
     public InsuredPerson getInsuredPerson(String type) {
         return RelativeType.EMPLOYEE.equals(RelativeType.fromId(type)) ? getInsuredPersonEmployee(type) : null;
+    }
+
+    @Override
+    public List<InsuredPerson> getInsuredPersonMembers(UUID insuredPersonId) {
+        FluentLoader<InsuredPerson, UUID> fluentLoader = dataManager.load(InsuredPerson.class).view("insuredPerson-browseView");
+        InsuredPerson insuredPerson = fluentLoader.id(insuredPersonId).one();
+        return fluentLoader
+                .query("select e from tsadv$InsuredPerson e where  e.insuranceContract.id =:employeeContractId and e.employee.id =:employeeId and e.type = :relativeType")
+                .parameter("employeeContractId", insuredPerson.getInsuranceContract().getId())
+                .parameter("employeeId", insuredPerson.getEmployee().getId())
+                .parameter("relativeType", RelativeType.MEMBER)
+                .list();
     }
 
     private InsuredPerson getInsuredPersonEmployee(String type) {
