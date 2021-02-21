@@ -2,7 +2,7 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.security.global.UserSession;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
@@ -22,7 +22,7 @@ public class DocumentServiceBean implements DocumentService {
     @Inject
     protected EmployeeService employeeService;
     @Inject
-    private UserSession userSession;
+    protected UserSessionSource userSessionSource;
     @Inject
     protected CommonService commonService;
     @Inject
@@ -119,7 +119,7 @@ public class DocumentServiceBean implements DocumentService {
     private PersonGroupExt getPersonGroupExt() {
         return dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +
-                "where e.id = :uId").parameter("uId", userSession.getUser().getId())
+                "where e.id = :uId").parameter("uId", userSessionSource.getUserSession().getUser().getId())
                 .view("personGroupExt-view")
                 .list().stream().findFirst().orElse(null);
     }

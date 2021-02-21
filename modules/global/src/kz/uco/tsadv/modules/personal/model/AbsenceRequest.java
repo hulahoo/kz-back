@@ -21,6 +21,7 @@ import kz.uco.tsadv.service.EmployeeService;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @NamePattern("%s (%s)|id,requestDate")
 @Table(name = "TSADV_ABSENCE_REQUEST")
@@ -34,6 +35,9 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNMENT_GROUP_ID")
     protected AssignmentGroupExt assignmentGroup;
+
+    @Column(name = "REASON", length = 2000)
+    protected String reason;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ATTACHMENT_ID")
@@ -129,6 +133,29 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @MetaProperty
     @Transient
     private String vacationDurationType;
+
+    @OrderBy("name")
+    @JoinTable(name = "TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "ABSENCE_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @ManyToMany
+    protected List<FileDescriptor> files;
+
+    public List<FileDescriptor> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<FileDescriptor> files) {
+        this.files = files;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
     public VacationDurationType getVacationDurationType() {
         return vacationDurationType == null ? null : VacationDurationType.fromId(vacationDurationType);
