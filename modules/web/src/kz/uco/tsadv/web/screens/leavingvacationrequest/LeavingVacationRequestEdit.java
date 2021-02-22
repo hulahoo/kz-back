@@ -1,10 +1,14 @@
 package kz.uco.tsadv.web.screens.leavingvacationrequest;
 
+import com.haulmont.addon.bproc.web.processform.Outcome;
+import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.components.DateField;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
+import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
@@ -15,8 +19,14 @@ import java.util.Date;
 @UiDescriptor("leaving-vacation-request-edit.xml")
 @EditedEntityContainer("leavingVacationRequestDc")
 @LoadDataBeforeShow
-public class LeavingVacationRequestEdit extends StandardEditor<LeavingVacationRequest> {
-
+@ProcessForm(
+        outcomes = {
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
+        }
+)
+public class LeavingVacationRequestEdit extends AbstractBprocEditor<LeavingVacationRequest> {
 
     @Inject
     private DateField<Date> requestDateField;
@@ -25,10 +35,7 @@ public class LeavingVacationRequestEdit extends StandardEditor<LeavingVacationRe
     @Inject
     private DateField<Date> plannedStartDateField;
     @Inject
-    private DateField<Date> endDataField;
-    @Inject
     private InstanceContainer<LeavingVacationRequest> leavingVacationRequestDc;
-
 
 
     @Subscribe

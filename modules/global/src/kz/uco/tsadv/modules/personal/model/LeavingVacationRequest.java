@@ -1,9 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.recruitment.dictionary.DicRequisitionType;
 
 import javax.persistence.*;
@@ -13,22 +11,10 @@ import java.util.Date;
 @Table(name = "TSADV_LEAVING_VACATION_REQUEST")
 @Entity(name = "tsadv$LeavingVacationRequest")
 @NamePattern("%s %s %s|id,startDate,endData")
-public class LeavingVacationRequest extends AbstractParentEntity {
+public class LeavingVacationRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = -3518404858438386443L;
 
-    @Column(name = "REQUEST_NUMBER", nullable = false)
-    @NotNull
-    private Long requestNumber;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUS_REQUEST_ID")
-    @NotNull
-    private DicRequestStatus statusRequest;
-
-    @Column(name = "REQUEST_DATE")
-    @NotNull
-    @Temporal(TemporalType.DATE)
-    private Date requestDate;
+    public static final String PROCESS_DEFINITION_KEY = "leavingVacationRequest";
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,31 +41,9 @@ public class LeavingVacationRequest extends AbstractParentEntity {
     @Temporal(TemporalType.DATE)
     private Date plannedStartDate;
 
-    @Column(name = "COMMENT_", length = 2500)
-    private String comment;
-
-    public void setStatusRequest(DicRequestStatus statusRequest) {
-        this.statusRequest = statusRequest;
-    }
-
-    public DicRequestStatus getStatusRequest() {
-        return statusRequest;
-    }
-
-    public Long getRequestNumber() {
-        return requestNumber;
-    }
-
-    public void setRequestNumber(Long requestNumber) {
-        this.requestNumber = requestNumber;
-    }
-
-    public Date getRequestDate() {
-        return requestDate;
-    }
-
-    public void setRequestDate(Date requestDate) {
-        this.requestDate = requestDate;
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
     }
 
     public DicRequisitionType getRequestType() {
@@ -122,11 +86,4 @@ public class LeavingVacationRequest extends AbstractParentEntity {
         this.plannedStartDate = plannedStartDate;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 }

@@ -9,41 +9,70 @@
                   view="leavingVacationRequest-editView">
             <loader/>
         </instance>
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
     </data>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="editActions" spacing="true">
-        <form id="form" dataContainer="leavingVacationRequestDc">
-            <column width="350px">
-                <textField id="requestNumberField" property="requestNumber" editable="false"/>
-                <pickerField id="statusRequestField" property="statusRequest" editable="false">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-                <dateField id="requestDateField" property="requestDate" editable="true"/>
-                <pickerField id="requestTypeField" property="requestType" editable="false">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-                <pickerField id="vacationField" property="vacation" captionProperty="typeAndDate">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
-                <dateField id="startDateField" property="startDate" editable="false"/>
-                <dateField id="endDataField" property="endData" editable="false"/>
-                <dateField id="plannedStartDateField" property="plannedStartDate"/>
-                <textArea id="commentField" property="comment" rowspan="3"/>
-            </column>
-        </form>
-        <hbox id="editActions" spacing="true">
-            <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
-            <button id="closeBtn" action="windowClose"/>
+    <layout expand="procActionsBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="leavingVacationRequestDc">
+                <column width="350px">
+                    <textField id="requestNumberField" property="requestNumber" editable="false"/>
+                    <pickerField id="statusRequestField" property="status" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <dateField id="requestDateField" property="requestDate" editable="false"/>
+                    <pickerField id="requestTypeField" property="requestType" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <pickerField id="vacationField" property="vacation" editable="false" captionProperty="typeAndDate">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <dateField id="startDateField" property="startDate" editable="false"/>
+                    <dateField id="endDataField" property="endData" editable="false"/>
+                    <dateField id="plannedStartDateField" property="plannedStartDate"/>
+                    <textArea id="commentField" property="comment" rowspan="3"/>
+                </column>
+            </form>
+            <vbox id="bpmActorsVBox"
+                  width="1300px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://kz.uco.tsadv.bproc/bproc.participants"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
+                           width="100%">
+                        <columns>
+                            <column id="hrRole"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
+                        </columns>
+                    </table>
+                </groupBox>
+            </vbox>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button action="windowClose"/>
         </hbox>
     </layout>
 </window>
