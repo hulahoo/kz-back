@@ -79,7 +79,8 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("birthdateField")
     public void onBirthdateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-        if (isNewOrChangedInsuredPerson()){
+        if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null
+                && relativeField.getValue() != null){
             calculatedAmount();
         }
     }
@@ -108,7 +109,8 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
-        if (isNewOrChangedInsuredPerson()){
+        if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null
+                && relativeField.getValue() != null){
             calculatedAmount();
         }
     }
