@@ -35,7 +35,67 @@ public class DocumentServiceBean implements DocumentService {
 
     @Override
     public InsuredPerson getInsuredPerson(String type) {
-        return RelativeType.EMPLOYEE.equals(RelativeType.fromId(type)) ? getInsuredPersonEmployee(type) : null;
+        return RelativeType.EMPLOYEE.equals(RelativeType.fromId(type)) ? getInsuredPersonEmployee() : getInsuredPersonMember();
+    }
+
+    private InsuredPerson getInsuredPersonMember() {
+        InsuredPerson insuredPerson = dataManager.create(InsuredPerson.class);
+        Date today = timeSource.currentTimestamp();
+        insuredPerson.setAttachDate(today);
+        insuredPerson.setType(RelativeType.MEMBER);
+        PersonGroupExt personGroupExt = getPersonGroupExt();
+
+        DicCompany company = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
+
+        InsuranceContract contract = dataManager.load(InsuranceContract.class)
+                .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId ")
+                .parameter("companyId", company.getId())
+                .view("insuranceContract-editView")
+                .list().stream().findFirst().orElse(null);
+        insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
+        if (contract != null) {
+            insuredPerson.setInsuranceContract(contract);
+            insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
+        }
+
+        boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
+        if (isEmptyDocument) {
+            insuredPerson.setDocumentType(contract.getDefaultDocumentType());
+        } else {
+            boolean isSetDocument = false;
+            for (PersonDocument document : personGroupExt.getPersonDocuments()) {
+                if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
+                    insuredPerson.setDocumentType(document.getDocumentType());
+                    insuredPerson.setDocumentNumber(document.getDocumentNumber());
+                    isEmptyDocument = true;
+                    break;
+                }
+            }
+            if (!isEmptyDocument) {
+                insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
+                insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
+            }
+        }
+
+        if (!personGroupExt.getAddresses().isEmpty()) {
+            boolean isSetAddress = false;
+            for (Address a : personGroupExt.getAddresses()) {
+                if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
+                    insuredPerson.setAddressType(a);
+                    isSetAddress = true;
+                    break;
+                }
+            }
+            if (!isSetAddress) {
+                insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
+            }
+        }
+        insuredPerson.setEmployee(personGroupExt);
+        insuredPerson.setCompany(company);
+        insuredPerson.setTotalAmount(new BigDecimal(0));
+        insuredPerson.setAmount(new BigDecimal(0));
+
+        return insuredPerson;
     }
 
     @Override
@@ -50,7 +110,22 @@ public class DocumentServiceBean implements DocumentService {
                 .list();
     }
 
-    private InsuredPerson getInsuredPersonEmployee(String type) {
+    @Override
+    public Boolean checkPersonInsure(UUID personGroupId, UUID contractId) {
+        InsuredPerson person = dataManager.load(InsuredPerson.class).query("select e " +
+                "from tsadv$InsuredPerson e " +
+                "where e.insuranceContract.id = :contractId " +
+                " and e.employee.id = :employeeId " +
+                " and e.relative.code = 'PRIMARY' ")
+                .parameter("contractId",contractId)
+                .parameter("employeeId", personGroupId)
+                .view("insuredPerson-editView")
+                .list().stream().findFirst().orElse(null);
+
+        return person != null;
+    }
+
+    private InsuredPerson getInsuredPersonEmployee() {
         InsuredPerson insuredPerson = dataManager.create(InsuredPerson.class);
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
         Date today = timeSource.currentTimestamp();

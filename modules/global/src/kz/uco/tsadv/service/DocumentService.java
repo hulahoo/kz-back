@@ -10,4 +10,5 @@ public interface DocumentService {
 
     InsuredPerson getInsuredPerson(String type);
     List<InsuredPerson> getInsuredPersonMembers(UUID insuredPersonId);
+    Boolean checkPersonInsure(UUID personGroupId,UUID contractId);
 }

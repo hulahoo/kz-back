@@ -781,5 +781,9 @@
         <method name="getInsuredPersonMembers">
             <param name="insuredPersonId" type="java.util.UUID"/>
         </method>
+        <method name="checkPersonInsure">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="contractId" type="java.util.UUID"/>
+        </method>
     </service>
 </services>
