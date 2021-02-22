@@ -105,8 +105,6 @@ public class InsuredPersonChangedListener {
                 txDataManager.save(employee);
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-            if (event.getChanges().isChanged("amount")) {
-        } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
             if (event.getChanges().isChanged("amount") && (event.getChanges().isChanged("birthdate") || event.getChanges().isChanged("relative"))) {
                 Id<InsuredPerson, UUID> entityId = event.getEntityId();
                 InsuredPerson person = txDataManager.load(entityId).view("insuredPerson-editView").one();
