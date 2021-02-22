@@ -66,8 +66,6 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
     @Inject
     protected HBoxLayout distanceWorkingConfirmBox;
     @Inject
-    protected TextField<String> vacationDurationTypeField;
-    @Inject
     protected CheckBox distanceWorkingConfirm;
     @Inject
     protected Form form;
@@ -117,12 +115,11 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
             distanceWorkingConfirmBox.setVisible(visible);
 
             if (e.getValue() != null)
-                vacationDurationTypeField.setValue(
+                absenceRequestDc.getItem().setVacationDurationType(
                         absenceService.getVacationDurationType(
                                 userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID),
                                 e.getValue().getId(),
                                 getEditedEntity().getDateFrom())
-                                .getId()
                 );
         });
     }

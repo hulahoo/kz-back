@@ -72,8 +72,6 @@
                                    editable="false"/>
                         <dateField id="periodDateFromField" property="periodDateFrom" visible="false" editable="false"/>
                         <dateField id="periodDateToField" property="periodDateTo" visible="false" editable="false"/>
-                        <textField id="vacationDurationTypeField" caption="msg://vacationDurationType"
-                                   editable="false"/>
                         <dateField id="requestDateField" property="requestDate" editable="false"/>
                         <textArea id="commentField" property="comment"/>
                     </column>
