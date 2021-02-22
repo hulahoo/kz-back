@@ -41,6 +41,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -295,8 +296,9 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 .withAfterCloseListener(e -> {
                     insuredPersonMemberDl.load();
                 })
-                .build()
-                .show();
+                .build();
+
+        insuredPersonMemberEdit.show();
 
     }
 
@@ -311,7 +313,9 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 .withAfterCloseListener(e -> {
                     insuredPersonMemberDl.load();
                 })
-                .build().show();
+                .build();
+
+        insuredPersonMemberEdit.show();
     }
 
 
@@ -347,7 +351,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             } else {
                 commitBtn.setVisible(false);
                 amountField.setVisible(true);
-                if (whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
+                if (isNewOrChangedInsuredPerson() && whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
                     calculatedAmount();
                 }
             }
@@ -403,7 +407,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 typeField.setValue(RelativeType.EMPLOYEE);
                 PersonExt personExt = employeeField.getValue().getPerson();
                 AssignmentExt assignmentExt = employeeField.getValue().getCurrentAssignment();
-                assignDateField.setValue(personExt.getHireDate());
                 firstNameField.setValue(personExt.getFirstName());
                 secondNameField.setValue(personExt.getLastName());
                 middleNameField.setValue(personExt.getMiddleName());
@@ -436,7 +439,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                     if (assignmentExt != null) {
                         jobField.setValue(assignmentExt.getJobGroup());
                     }
-                    assignDateField.setValue(personExt.getHireDate());
                     firstNameField.setValue(personExt.getFirstName());
                     secondNameField.setValue(personExt.getLastName());
                     middleNameField.setValue(personExt.getMiddleName());
@@ -495,29 +497,63 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     }
 
 
-    protected void calculatedAmount() {
+    public InsuredPerson getPerson(){
+        return dataManager.load(InsuredPerson.class).
+                query("select e from tsadv$InsuredPerson e where e.id =:id")
+                .parameter("id", getEditedEntity().getId())
+                .view("insuredPerson-editView")
+                .list().stream().findFirst().orElse(null);
+    }
 
-        if (insuranceContractField.getValue() != null) {
+    public boolean isNewOrChangedInsuredPerson(){
+        boolean result = true;
+        if (getPerson() != null
+                && birthdateField.getValue() != null
+                && birthdateField.getValue().equals(getPerson().getBirthdate())
+                && relativeField.getValue() != null
+                && relativeField.getValue().getCode().equals(getPerson().getRelative().getCode())){
+
+            result = false;
+        }
+
+        return result;
+    }
+
+
+    protected void calculatedAmount() {
+        List<ContractConditions> conditionsList = new ArrayList<>();
+        if (insuranceContractField.getValue() != null &&
+                employeeField.getValue() != null &&
+                relativeField.getValue() != null &&
+                birthdateField.getValue() != null) {
             int age = employeeService.calculateAge(birthdateField.getValue());
             List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
                     "from tsadv$InsuredPerson e " +
                     " where e.insuranceContract.id = :insuranceContractId" +
                     " and e.employee.id = :employeeId " +
+                    " and e.amount = :amount " +
                     " and e.relative.code <> 'PRIMARY'")
                     .parameter("insuranceContractId", insuranceContractField.getValue().getId())
                     .parameter("employeeId", employeeField.getValue().getId())
+                    .parameter("amount", BigDecimal.valueOf(0))
                     .view("insuredPerson-editView")
                     .list();
 
-            if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size()) {
+            for (ContractConditions condition : insuranceContractField.getValue().getProgramConditions()) {
+                if (condition.getRelationshipType().getId() == relativeField.getValue().getId()) {
+                    if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
+                        conditionsList.add(condition);
+                    }
+                }
+            }
+
+            if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size() && conditionsList.size() > 1) {
                 amountField.setValue(BigDecimal.valueOf(0));
-            } else {
-                for (ContractConditions condition : insuranceContractField.getValue().getProgramConditions()) {
-                    if (condition.getRelationshipType().getId() == relativeField.getValue().getId()) {
-                        if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
-                            amountField.setValue(condition.getCostInKzt());
-                            break;
-                        }
+            } else if(insuranceContractField.getValue().getCountOfFreeMembers() <= personList.size()){
+                for (ContractConditions condition : conditionsList){
+                    if (!condition.getIsFree()){
+                        amountField.setValue(condition.getCostInKzt());
+                        break;
                     }
                 }
             }
@@ -527,7 +563,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("birthdateField")
     public void onBirthdateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-        if (event.getValue() != null && whichButton != null
+        if (isNewOrChangedInsuredPerson() && event.getValue() != null && whichButton != null
                 && relativeField.getValue() != null
                 && !relativeField.getValue().getCode().equals("PRIMARY")
                 && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
@@ -622,12 +658,18 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         }
         checkAddressEmployee();
 
+        if (event.getValue() != null){
+            assignDateField.setValue(event.getValue().getPerson().getHireDate());
+        }else {
+            assignDateField.setValue(null);
+        }
+
         if (relativeField.getValue() != null) {
             if (employeeField.getValue() != null && relativeField.getValue().getCode().equals("PRIMARY")) {
                 amountField.setVisible(false);
             } else if (employeeField.getValue() != null && !relativeField.getValue().getCode().equals("PRIMARY")) {
                 amountField.setVisible(true);
-                if (whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
+                if (isNewOrChangedInsuredPerson() && whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
                     calculatedAmount();
                 }
             }
@@ -650,7 +692,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 birthdateField.setEditable(false);
                 iinField.setEditable(false);
                 companyField.setEditable(false);
-                assignDateField.setValue(personExt.getHireDate());
                 firstNameField.setValue(personExt.getFirstName());
                 secondNameField.setValue(personExt.getLastName());
                 middleNameField.setValue(personExt.getMiddleName());
@@ -667,9 +708,7 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 birthdateField.setValue(null);
                 sexField.setValue(null);
                 jobField.setValue(null);
-                assignDateField.setValue(event.getValue().getPerson().getHireDate());
             } else if (event.getValue() != null && relativeField.getValue() == null) {
-//            assignDateField.setValue(event.getValue().getPerson().getHireDate());
 //            if (personGroupExt.getAddresses().size() == 0){
 //                addressTypeField.setVisible(false);
 //                addressField.setCaption("Домашний адрес");
