@@ -1,9 +1,6 @@
 package kz.uco.tsadv.service;
 
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.FluentLoader;
-import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -117,12 +115,56 @@ public class DocumentServiceBean implements DocumentService {
                 "where e.insuranceContract.id = :contractId " +
                 " and e.employee.id = :employeeId " +
                 " and e.relative.code = 'PRIMARY' ")
-                .parameter("contractId",contractId)
+                .parameter("contractId", contractId)
                 .parameter("employeeId", personGroupId)
                 .view("insuredPerson-editView")
                 .list().stream().findFirst().orElse(null);
 
         return person != null;
+    }
+
+    @Override
+    public BigDecimal calcAmount(UUID insuranceContractId,
+                                 UUID personGroupExtId,
+                                 Date bith,
+                                 UUID relativeTypeId) {
+        InsuranceContract insuranceContract = dataManager.load(InsuranceContract.class).id(insuranceContractId).view("insuranceContract-editView").one();
+        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).id(personGroupExtId).view("personGroupExt-view").one();
+        DicRelationshipType relativeType = dataManager.load(DicRelationshipType.class).id(relativeTypeId).view(View.LOCAL).one();
+        List<ContractConditions> conditionsList = new ArrayList<>();
+
+        int age = employeeService.calculateAge(bith);
+        List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
+                "from tsadv$InsuredPerson e " +
+                " where e.insuranceContract.id = :insuranceContractId" +
+                " and e.employee.id = :employeeId " +
+                " and e.amount = :amount " +
+                " and e.relative.code <> 'PRIMARY'")
+                .parameter("insuranceContractId", insuranceContract.getId())
+                .parameter("employeeId", personGroupExt.getId())
+                .parameter("amount", BigDecimal.valueOf(0))
+                .view("insuredPerson-editView")
+                .list();
+
+        for (ContractConditions condition : insuranceContract.getProgramConditions()) {
+            if (condition.getRelationshipType().getId().equals(relativeType.getId()) ) {
+                if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
+                    conditionsList.add(condition);
+                }
+            }
+        }
+
+        if (insuranceContract.getCountOfFreeMembers() > personList.size() && conditionsList.size() > 1) {
+            return BigDecimal.ZERO;
+        } else if (insuranceContract.getCountOfFreeMembers() <= personList.size()) {
+            for (ContractConditions condition : conditionsList) {
+                if (!condition.getIsFree()) {
+                    return condition.getCostInKzt();
+                }
+            }
+        }
+
+        return BigDecimal.ZERO;
     }
 
     private InsuredPerson getInsuredPersonEmployee() {
