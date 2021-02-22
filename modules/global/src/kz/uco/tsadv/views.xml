@@ -22944,7 +22944,9 @@
             <property name="type" view="_local"/>
         </property>
         <property name="assignments" view="_local">
-            <property name="organizationGroup" view="_local"/>
+            <property name="organizationGroup" view="_local">
+                <property name="list" view="_local"/>
+            </property>
             <property name="jobGroup" view="_local"/>
             <property name="positionGroup" view="_local"/>
             <property name="location" view="_local"/>
