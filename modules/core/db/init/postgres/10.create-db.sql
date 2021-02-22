@@ -4718,6 +4718,10 @@ create table TSADV_DIC_ABSENCE_TYPE (
     AVAILABLE_FOR_TIMECARD boolean not null,
     IS_REQUIRED_ORDER_NUMBER boolean not null,
     INCLUDE_CALC_GZP boolean not null,
+    MAX_DAY integer,
+    MIN_DAY integer,
+    DAYS_ADVANCE integer,
+    MANY_DAYS integer,
     --
     primary key (ID)
 )^
@@ -16558,6 +16562,7 @@ create table TSADV_ABSENCE_REQUEST (
     COMMENT_ varchar(3000),
     --
     ASSIGNMENT_GROUP_ID uuid,
+    REASON varchar(2000),
     ATTACHMENT_ID uuid,
     DATE_FROM date,
     DATE_TO date,
@@ -17350,3 +17355,10 @@ create table TSADV_DIC_ASSESSMENT_TYPE (
     primary key (ID)
 )^
 -- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (
+    ABSENCE_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (ABSENCE_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK

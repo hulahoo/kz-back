@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|organizationName")
+@NamePattern("%s|organization,list")
 @Extends(OrganizationGroup.class)
 @Entity(name = "base$OrganizationGroupExt")
 @Customizer(OrganizationGroupExtDescriptorCustomizer.class)
@@ -168,9 +168,9 @@ public class OrganizationGroupExt extends OrganizationGroup implements IEntityGr
         UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
         String language = userSessionSource.getLocale().getLanguage();
         String organizationNameOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
-        if (organizationNameOrder != null){
+        if (organizationNameOrder != null) {
             List<String> langs = Arrays.asList(organizationNameOrder.split(";"));
-            switch (langs.indexOf(language)){
+            switch (langs.indexOf(language)) {
                 case 0:
                     return organizationNameLang1;
                 case 1:

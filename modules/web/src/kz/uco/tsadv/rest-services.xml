@@ -774,4 +774,12 @@
             <param name="beneficiaryData" type="kz.uco.tsadv.modules.integration.jsonobject.BeneficiaryDataJson"/>
         </method>
     </service>
+    <service name="tsadv_DocumentService">
+        <method name="getInsuredPerson">
+            <param name="type" type="java.lang.String"/>
+        </method>
+        <method name="getInsuredPersonMembers">
+            <param name="insuredPersonId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>

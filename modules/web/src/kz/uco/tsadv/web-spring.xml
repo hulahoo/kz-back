@@ -137,6 +137,7 @@
                 <entry key="tsadv_IntegrationRestService" value="kz.uco.tsadv.service.IntegrationRestService"/>
                 <entry key="tsadv_PortalAccessEntityAttributesService"
                        value="kz.uco.tsadv.service.portal.PortalAccessEntityAttributesService"/>
+                                <entry key="tsadv_DocumentService" value="kz.uco.tsadv.service.DocumentService"/>
             </map>
         </property>
     </bean>

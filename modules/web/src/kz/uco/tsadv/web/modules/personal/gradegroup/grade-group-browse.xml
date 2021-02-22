@@ -44,6 +44,7 @@
                 <columns>
                     <column id="company"/>
                     <column id="grade.gradeName"/>
+                    <column id="grade.bonusPercent"/>
                 </columns>
                 <rows datasource="gradeGroupsDs"/>
                 <rowsCount/>
@@ -69,12 +70,15 @@
                        width="100%">
                     <actions>
                         <action id="edit"
+                                trackSelection="true"
                                 caption="msg://table.btn.edit"
                                 invoke="editHistory"/>
                         <action id="remove"
                                 caption="msg://table.btn.remove"
+                                trackSelection="true"
                                 invoke="removeHistory"/>
                         <action id="removeLate"
+                                trackSelection="true"
                                 caption="msg://table.btn.remove.late"
                                 invoke="removeHistories"/>
                     </actions>
@@ -86,6 +90,10 @@
                         <column id="recognitionNominate"/>
                     </columns>
                     <rows datasource="listDs"/>
+                    <buttonsPanel id="historyButtonsPanel">
+                        <button id="historyRemoveBtn" action="historyTable.remove"/>
+                        <button id="historyRemoveLate" action="historyTable.removeLate"/>
+                    </buttonsPanel>
                 </table>
             </groupBox>
         </split>

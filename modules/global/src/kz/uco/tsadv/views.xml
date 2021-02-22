@@ -2587,10 +2587,9 @@
           name="gradeGroup.browse">
         <property name="list" view="_minimal">
             <property name="recognitionNominate"/>
+            <property name="bonusPercent"/>
             <property name="updatedBy"/>
             <property name="legacyId"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
         </property>
         <property name="company" view="_minimal">
             <property name="legacyId"/>
@@ -2598,8 +2597,6 @@
         <property name="grade" view="_minimal">
             <property name="recognitionNominate"/>
             <property name="legacyId"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
@@ -5195,9 +5192,6 @@
                         <property name="endDate"/>
                     </property>
 
-                    <property name="person"
-                              view="_minimal">
-                    </property>
                 </property>
                 <property name="organizationGroup"
                           view="_minimal">
@@ -5269,6 +5263,17 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="personGroup" view="_minimal"/>
+        <property name="purpose" view="_minimal"/>
+        <property name="vacationSchedule" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="status" view="_minimal">
+                <property name="startDate"/>
+                <property name="code"/>
+                <property name="endDate"/>
+            </property>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
           extends="_local"
@@ -5293,6 +5298,19 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="purpose" view="_minimal"/>
+        <property name="personGroup" view="_minimal"/>
+        <property name="vacationSchedule" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="status" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+        </property>
+        <property name="vacationDurationType"/>
+        <property name="files" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.dictionary.DicCategory"
           name="dicCategory.browse">
@@ -5482,26 +5500,20 @@
     <view class="kz.uco.tsadv.modules.learning.model.Course"
           name="course.browse">
         <property name="name"/>
-        <property name="description"/>
-        <property name="logo"/>
-        <property name="category"
-                  view="_local">
-        </property>
-        <property name="targetAudience"/>
-        <property name="activeFlag"/>
-        <property name="selfEnrollment"/>
-        <property name="learningType"
-                  view="_minimal"/>
-        <property name="party"
-                  view="_minimal">
-            <property name="course"
-                      view="_minimal">
-                <property name="name"/>
-                <property name="party"
-                          view="_minimal"/>
+        <property name="party" view="_minimal">
+            <property name="course" view="_minimal">
+                <property name="party" view="_minimal"/>
             </property>
         </property>
+        <property name="description"/>
+        <property name="logo"/>
+        <property name="category" view="_local"/>
+        <property name="targetAudience"/>
+        <property name="activeFlag"/>
         <property name="shortDescription"/>
+        <property name="selfEnrollment"/>
+        <property name="learningType" view="_minimal"/>
+        <property name="isOnline"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Course"
           name="course.edit">
@@ -23308,4 +23320,13 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-for-absenceRequest" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroup-for-absenceRequest" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+
 </views>
