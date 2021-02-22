@@ -1,6 +1,7 @@
 package kz.uco.tsadv.web.screens.insuredperson;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.TimeSource;
@@ -28,10 +29,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.Year;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 @UiController("tsadv$InsuredPerson.MemberEdit")
 @UiDescriptor("insured-person-member-edit.xml")
@@ -80,39 +79,71 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("birthdateField")
     public void onBirthdateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-        if (event.getValue() != null && relativeField.getValue() != null && insuranceContractField.getValue() != null){
+        if (isNewOrChangedInsuredPerson()){
             calculatedAmount();
         }
     }
 
+    public InsuredPerson getPerson(){
+        return dataManager.load(InsuredPerson.class).
+                query("select e from tsadv$InsuredPerson e where e.id =:id")
+                .parameter("id", getEditedEntity().getId())
+                .view("insuredPerson-editView")
+                .list().stream().findFirst().orElse(null);
+    }
+
+    public boolean isNewOrChangedInsuredPerson(){
+        boolean result = true;
+        if (getPerson() != null
+                && birthdateField.getValue() != null
+                && birthdateField.getValue().equals(getPerson().getBirthdate())
+                && relativeField.getValue() != null
+                && relativeField.getValue().getCode().equals(getPerson().getRelative().getCode())){
+
+            result = false;
+        }
+
+        return result;
+    }
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
-        if (event.getValue() != null && birthdateField.getValue() != null && insuranceContractField.getValue() != null){
+        if (isNewOrChangedInsuredPerson()){
             calculatedAmount();
         }
     }
 
 
     protected void calculatedAmount(){
+        List<ContractConditions> conditionsList = new ArrayList<>();
+        if (insuranceContractField.getValue() != null &&
+                employeeField.getValue() != null) {
+            int age = employeeService.calculateAge(birthdateField.getValue());
+            List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
+                    "from tsadv$InsuredPerson e " +
+                    " where e.insuranceContract.id = :insuranceContractId" +
+                    " and e.employee.id = :employeeId " +
+                    " and e.amount = :amount " +
+                    " and e.relative.code <> 'PRIMARY'")
+                    .parameter("insuranceContractId", insuranceContractField.getValue().getId())
+                    .parameter("employeeId", employeeField.getValue().getId())
+                    .parameter("amount", BigDecimal.valueOf(0))
+                    .view("insuredPerson-editView")
+                    .list();
 
-        int age = employeeService.calculateAge(birthdateField.getValue());
-        List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
-                "from tsadv$InsuredPerson e " +
-                " where e.insuranceContract.id = :insuranceContractId" +
-                " and e.employee.id = :employeeId " +
-                " and e.relative.code <> 'PRIMARY'")
-                .parameter("insuranceContractId", insuranceContractField.getValue().getId())
-                .parameter("employeeId", employeeField.getValue().getId())
-                .view("insuredPerson-editView")
-                .list();
+            for (ContractConditions condition : insuranceContractField.getValue().getProgramConditions()) {
+                if (condition.getRelationshipType().getId() == relativeField.getValue().getId()) {
+                    if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
+                        conditionsList.add(condition);
+                    }
+                }
+            }
 
-        if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size()){
-            amountField.setValue(BigDecimal.valueOf(0));
-        }else {
-            for (ContractConditions condition : insuranceContractField.getValue().getProgramConditions()){
-                if (condition.getRelationshipType().getId() == relativeField.getValue().getId()){
-                    if (condition.getAgeMin() <= age && condition.getAgeMax() >= age){
+            if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size() && conditionsList.size() > 1) {
+                amountField.setValue(BigDecimal.valueOf(0));
+            } else if(insuranceContractField.getValue().getCountOfFreeMembers() <= personList.size()){
+                for (ContractConditions condition : conditionsList){
+                    if (!condition.getIsFree()){
                         amountField.setValue(condition.getCostInKzt());
                         break;
                     }
@@ -121,7 +152,6 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
         }
 
     }
-
 
 
     @Subscribe("upload")
@@ -140,6 +170,7 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
         attachmentsDc.getDisconnectedItems().add(fd);
         insuredPersonDc.getItem().getFile().add(fd);
     }
+
 
     public Component generatorName(FileDescriptor fd) {
         LinkButton linkButton = componentsFactory.createComponent(LinkButton.class);
