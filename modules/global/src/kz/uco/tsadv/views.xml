@@ -5192,9 +5192,6 @@
                         <property name="endDate"/>
                     </property>
 
-                    <property name="person"
-                              view="_minimal">
-                    </property>
                 </property>
                 <property name="organizationGroup"
                           view="_minimal">
@@ -5266,6 +5263,17 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="personGroup" view="_minimal"/>
+        <property name="purpose" view="_minimal"/>
+        <property name="vacationSchedule" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="status" view="_minimal">
+                <property name="startDate"/>
+                <property name="code"/>
+                <property name="endDate"/>
+            </property>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
           extends="_local"
@@ -5285,7 +5293,24 @@
         <property name="attachment"
                   view="_minimal"/>
         <property name="status"
-                  view="_local"/>
+                  view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="purpose" view="_minimal"/>
+        <property name="personGroup" view="_minimal"/>
+        <property name="vacationSchedule" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="status" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="code"/>
+            </property>
+        </property>
+        <property name="vacationDurationType"/>
+        <property name="files" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.dictionary.DicCategory"
           name="dicCategory.browse">
@@ -23295,4 +23320,13 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="base$PersonGroupExt" name="personGroupExt-for-absenceRequest" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroup-for-absenceRequest" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+
 </views>

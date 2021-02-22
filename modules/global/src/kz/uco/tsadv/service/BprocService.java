@@ -56,4 +56,7 @@ public interface BprocService {
     Map<String, String> getActivityIdMap(String processDefinitionKey);
 
     void approveAbsenceForRecall(AbsenceForRecall absenceForRecall);
+
+    void changeStatusAbsenceRequest(AbsenceRequest entity, String status, String notificationCode);
+
 }

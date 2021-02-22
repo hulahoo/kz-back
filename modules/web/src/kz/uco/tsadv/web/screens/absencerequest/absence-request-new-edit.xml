@@ -7,7 +7,8 @@
         <instance id="absenceRequestDc"
                   class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
                   view="absenceRequest.edit">
-            <loader/>
+            <loader id="absenceRequestDl"/>
+            <collection id="filesDc" property="files"/>
         </instance>
         <collection id="dicAbsenceTypesDc"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType"
@@ -23,6 +24,21 @@
 
         <collection id="tasksDc"
                     class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+        <collection id="vacationSchedulesDc" class="kz.uco.tsadv.entity.VacationSchedule">
+            <view extends="_local">
+                <property name="personGroup" view="_minimal"/>
+                <property name="status" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+            </view>
+            <loader id="vacationSchedulesDl">
+                <query>
+                    <![CDATA[select e from tsadv_VacationSchedule e]]>
+                </query>
+            </loader>
+        </collection>
 
     </data>
     <dialogMode height="600"
@@ -33,21 +49,50 @@
                       spacing="true"
                       width="1300px">
                 <form id="form" dataContainer="absenceRequestDc" childrenCaptionWidth="200px">
-                    <column width="750px">
+                    <column id="column" width="750px">
                         <textField id="requestNumberField" property="requestNumber" editable="false"/>
                         <textField id="statusField" property="status" editable="false"/>
                         <lookupPickerField id="typeField" required="true" property="type"
                                            optionsContainer="dicAbsenceTypesDc"/>
+                        <lookupField id="vacationScheduleField" property="vacationSchedule"
+                                     optionsContainer="vacationSchedulesDc" visible="false"/>
                         <dateField id="dateFromField" property="dateFrom" required="true"/>
                         <dateField id="dateToField" property="dateTo" required="true"/>
                         <textField id="absenceDaysField" property="absenceDays" editable="false"/>
+                        <textField id="reasonField" property="reason"/>
+                        <checkBox id="originalSheetField" property="originalSheet" visible="false"/>
+                        <dateField id="scheduleStartDateField" visible="false" required="true" editable="false"
+                                   property="scheduleStartDate"/>
+                        <dateField id="scheduleEndDateField" visible="false" required="true" editable="false"
+                                   property="scheduleEndDate"/>
+                        <checkBox id="addNextYearField" property="addNextYear" visible="false"/>
+                        <dateField id="newStartDateField" property="newStartDate" visible="false" required="true"
+                                   editable="false"/>
+                        <dateField id="newEndDateField" property="newEndDate" visible="false" required="true"
+                                   editable="false"/>
+                        <dateField id="periodDateFromField" property="periodDateFrom" visible="false" editable="false"/>
+                        <dateField id="periodDateToField" property="periodDateTo" visible="false" editable="false"/>
                         <textField id="vacationDurationTypeField" caption="msg://vacationDurationType"
                                    editable="false"/>
                         <dateField id="requestDateField" property="requestDate" editable="false"/>
-                        <field id="attachmentField" property="attachment" caption="msg://file"/>
                         <textArea id="commentField" property="comment"/>
                     </column>
                 </form>
+                <groupBox id="groupBox">
+                    <table id="fileDescriptorsTable" width="100%" dataContainer="filesDc">
+                        <actions>
+                            <action id="remove" type="remove"/>
+                        </actions>
+                        <buttonsPanel alwaysVisible="true">
+                            <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                    stylename="primary"/>
+                            <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>
+                        </buttonsPanel>
+                        <columns>
+                            <column id="name" generator="generatorName" caption="mainMsg://fileName"/>
+                        </columns>
+                    </table>
+                </groupBox>
                 <hbox id="distanceWorkingConfirmBox"
                       expand="distanceWorkingConfirmLabel"
                       height="100%"
