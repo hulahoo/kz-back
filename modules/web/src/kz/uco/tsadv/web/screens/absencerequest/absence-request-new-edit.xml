@@ -73,7 +73,7 @@
                         <dateField id="periodDateFromField" property="periodDateFrom" visible="false" editable="false"/>
                         <dateField id="periodDateToField" property="periodDateTo" visible="false" editable="false"/>
                         <dateField id="requestDateField" property="requestDate" editable="false"/>
-                        <textArea id="commentField" property="comment"/>
+                        <textArea id="commentField" property="comment" rows="3"/>
                     </column>
                 </form>
                 <groupBox id="groupBox">
