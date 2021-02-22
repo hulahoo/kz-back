@@ -3196,9 +3196,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 Date personDismissalDate = formatter.parse(personDismissalJson.getDismissalDate());
                 Dismissal personDismissal = personDismissalsCommitList.stream().filter(filterPersonDismissal ->
                         filterPersonDismissal.getLegacyId() != null
-                                && filterPersonDismissal.getDismissalReason() != null
-                                && filterPersonDismissal.getDismissalReason().getLegacyId() != null
-                                && filterPersonDismissal.getDismissalReason().getLegacyId().equals(personDismissalJson.getDismissalReasonCode())
+                                && filterPersonDismissal.getLcArticle() != null
+                                && filterPersonDismissal.getLcArticle().getLegacyId() != null
+                                && filterPersonDismissal.getLcArticle().getLegacyId().equals(personDismissalJson.getDismissalReasonCode())
                                 && filterPersonDismissal.getDismissalDate() != null
                                 && filterPersonDismissal.getDismissalDate().equals(personDismissalDate)
                                 && filterPersonDismissal.getPersonGroup() != null
@@ -3217,7 +3217,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             " where e.legacyId = :legacyId " +
                                             " and e.personGroup.legacyId = :pgLegacyId " +
                                             " and e.personGroup.company.legacyId = :companyCode " +
-                                            " and e.dismissalReason.legacyId = :drLegacyId" +
+                                            " and e.lcArticle.legacyId = :drLegacyId" +
                                             " and e.dismissalDate = :dsDate")
                             .setParameters(ParamsMap.of(
                                     "legacyId", personDismissalJson.getLegacyId(),
@@ -3230,6 +3230,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personDismissal != null) {
                         personDismissal.setLegacyId(personDismissalJson.getLegacyId());
                         personDismissal.setDismissalDate(formatter.parse(personDismissalJson.getDismissalDate()));
+                        personDismissal.setRequestDate(CommonUtils.getSystemDate());
+
+                        //use default id
+                        DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
+                                .query(
+                                        "select e from tsadv$DicDismissalStatus e " +
+                                                " where e.id = :id ")
+                                .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        personDismissal.setStatus(status);
+
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
                                         " select e from base$PersonGroupExt e " +
@@ -3247,17 +3259,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             + " and company legacyId " + personDismissalJson.getCompanyCode());
                         }
 
-                        DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                        DicLCArticle reason = dataManager.load(DicLCArticle.class)
                                 .query(
-                                        "select e from tsadv$DicDismissalReason e " +
+                                        "select e from tsadv$DicLCArticle e " +
                                                 " where e.legacyId = :legacyId ")
                                 .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
                         if (reason != null) {
-                            personDismissal.setDismissalReason(reason);
+                            personDismissal.setLcArticle(reason);
                         } else {
                             return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
-                                    "no tsadv$DicDismissalReason with legacyId " + personDismissalJson.getDismissalReasonCode());
+                                    "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
                         }
 
                         personDismissalsCommitList.add(personDismissal);
@@ -3266,6 +3278,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         personDismissal.setId(UUID.randomUUID());
                         personDismissal.setLegacyId(personDismissalJson.getLegacyId());
                         personDismissal.setDismissalDate(formatter.parse(personDismissalJson.getDismissalDate()));
+                        personDismissal.setRequestDate(CommonUtils.getSystemDate());
+
+                        //used default id
+                        DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
+                                .query(
+                                        "select e from tsadv$DicDismissalStatus e " +
+                                                " where e.id = :id ")
+                                .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        personDismissal.setStatus(status);
+
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
                                         " select e from base$PersonGroupExt e " +
@@ -3283,23 +3307,35 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             + " and company legacyId " + personDismissalJson.getCompanyCode());
                         }
 
-                        DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                        DicLCArticle reason = dataManager.load(DicLCArticle.class)
                                 .query(
-                                        "select e from tsadv$DicDismissalReason e " +
+                                        "select e from tsadv$DicLCArticle e " +
                                                 " where e.legacyId = :legacyId ")
                                 .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
                         if (reason != null) {
-                            personDismissal.setDismissalReason(reason);
+                            personDismissal.setLcArticle(reason);
                         } else {
                             return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
-                                    "no tsadv$DicDismissalReason with legacyId " + personDismissalJson.getDismissalReasonCode());
+                                    "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
                         }
 
                         personDismissalsCommitList.add(personDismissal);
                     }
                 } else {
                     personDismissal.setLegacyId(personDismissalJson.getLegacyId());
+                    personDismissal.setRequestDate(CommonUtils.getSystemDate());
+
+                    //used exists default id
+                    DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
+                            .query(
+                                    "select e from tsadv$DicDismissalStatus e " +
+                                            " where e.id = :id ")
+                            .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                    personDismissal.setStatus(status);
+
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query(
                                     " select e from base$PersonGroupExt e " +
@@ -3317,17 +3353,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         + " and company legacyId " + personDismissalJson.getCompanyCode());
                     }
 
-                    DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                    DicLCArticle reason = dataManager.load(DicLCArticle.class)
                             .query(
-                                    "select e from tsadv$DicDismissalReason e " +
+                                    "select e from tsadv$DicLCArticle e " +
                                             " where e.legacyId = :legacyId ")
                             .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                     if (reason != null) {
-                        personDismissal.setDismissalReason(reason);
+                        personDismissal.setLcArticle(reason);
                     } else {
                         return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
-                                "no tsadv$DicDismissalReason with legacyId " + personDismissalJson.getDismissalReasonCode());
+                                "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
                     }
                 }
             }
@@ -3377,7 +3413,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .setParameters(ParamsMap.of(
                                 "legacyId", personDismissalJson.getLegacyId(),
                                 "companyCode", personDismissalJson.getCompanyCode()))
-                        .view("personDismissal.edit").list().stream().findFirst().orElse(null);
+                        .view("dismissal.edit").list().stream().findFirst().orElse(null);
 
                 if (personDismissal == null) {
                     return prepareError(result, methodName, personDismissalJson,
