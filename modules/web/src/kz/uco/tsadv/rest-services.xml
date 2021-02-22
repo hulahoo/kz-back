@@ -773,6 +773,12 @@
         <method name="deleteBeneficiary">
             <param name="beneficiaryData" type="kz.uco.tsadv.modules.integration.jsonobject.BeneficiaryDataJson"/>
         </method>
+        <method name="createOrUpdatePersonDismissal">
+            <param name="personDismissalData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
+        </method>
+        <method name="deletePersonDismissal">
+            <param name="personDismissalData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
+        </method>
     </service>
     <service name="tsadv_DocumentService">
         <method name="getInsuredPerson">
