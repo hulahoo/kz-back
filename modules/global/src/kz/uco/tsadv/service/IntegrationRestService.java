@@ -65,4 +65,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdateBeneficiary(BeneficiaryDataJson beneficiaryData);
 
     BaseResult deleteBeneficiary(BeneficiaryDataJson beneficiaryData);
+
+    BaseResult createOrUpdatePersonDismissal(PersonDismissalDataJson personDismissalData);
+
+    BaseResult deletePersonDismissal(PersonDismissalDataJson personDismissalData);
 }

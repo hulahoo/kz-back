@@ -4594,6 +4594,13 @@
         <property name="assignmentStatus"
                   view="_local"/>
     </view>
+    <view class="kz.uco.tsadv.modules.personal.model.Dismissal"
+        extends="_local"
+        name="dismissal.edit">
+        <property name="status" view="_minimal"/>
+        <property name="personGroup" view="_minimal"/>
+        <property name="lcArticle" view="_minimal"/>
+    </view>
     <view class="kz.uco.tsadv.modules.personal.dictionary.DicCitizenship"
           extends="_local"
           name="dicCitizenship.all">
@@ -23078,7 +23085,9 @@
             <property name="type" view="_local"/>
         </property>
         <property name="assignments" view="_local">
-            <property name="organizationGroup" view="_local"/>
+            <property name="organizationGroup" view="_local">
+                <property name="list" view="_local"/>
+            </property>
             <property name="jobGroup" view="_local"/>
             <property name="positionGroup" view="_local"/>
             <property name="location" view="_local"/>

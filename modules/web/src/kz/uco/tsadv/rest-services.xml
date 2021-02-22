@@ -773,6 +773,12 @@
         <method name="deleteBeneficiary">
             <param name="beneficiaryData" type="kz.uco.tsadv.modules.integration.jsonobject.BeneficiaryDataJson"/>
         </method>
+        <method name="createOrUpdatePersonDismissal">
+            <param name="personDismissalData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
+        </method>
+        <method name="deletePersonDismissal">
+            <param name="personDismissalData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
+        </method>
     </service>
     <service name="tsadv_DocumentService">
         <method name="getInsuredPerson">
@@ -780,6 +786,17 @@
         </method>
         <method name="getInsuredPersonMembers">
             <param name="insuredPersonId" type="java.util.UUID"/>
+        </method>
+        <method name="checkPersonInsure">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="contractId" type="java.util.UUID"/>
+        </method>
+        <method name="calcAmount">
+
+            <param name="insuranceContractId" type="java.util.UUID"/>
+            <param name="personGroupExtId" type="java.util.UUID"/>
+            <param name="bith" type="java.util.Date"/>
+            <param name="relativeTypeId" type="java.util.UUID"/>
         </method>
     </service>
 </services>
