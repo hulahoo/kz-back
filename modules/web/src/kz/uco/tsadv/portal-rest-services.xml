@@ -116,5 +116,9 @@
             <param name="relativeTypeId" type="java.util.UUID"/>
         </method>
         <method name="getMyInsuraces"/>
+        <method name="getOffsetRequestsByPgId">
+            <param name="personGroupExtId" type="java.util.UUID"/>
+         </method>
+        <method name="getOffsetRequestsNew"/>
     </service>
 </services>

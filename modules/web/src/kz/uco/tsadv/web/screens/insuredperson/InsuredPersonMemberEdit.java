@@ -21,6 +21,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.ContractConditions;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
+import kz.uco.tsadv.service.DocumentService;
 import kz.uco.tsadv.service.EmployeeService;
 
 import javax.inject.Inject;
@@ -70,6 +71,8 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
     private CollectionPropertyContainer<FileDescriptor> attachmentsDc;
     @Inject
     private PickerField<PersonGroupExt> employeeField;
+    @Inject
+    private DocumentService documentService;
 
 
     @Subscribe
@@ -79,9 +82,13 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("birthdateField")
     public void onBirthdateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-        if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null
-                && relativeField.getValue() != null){
-            calculatedAmount();
+        if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null && employeeField.getValue() != null
+                && relativeField.getValue() != null && insuranceContractField.getValue() != null){
+            amountField.setValue(documentService.calcAmount(
+                    insuranceContractField.getValue().getId(),
+                    employeeField.getValue().getId(),
+                    birthdateField.getValue(),
+                    relativeField.getValue().getId()));
         }
     }
 
@@ -109,9 +116,13 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
-        if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null
-                && relativeField.getValue() != null){
-            calculatedAmount();
+        if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null && employeeField.getValue() != null
+                && relativeField.getValue() != null && insuranceContractField.getValue() != null){
+            amountField.setValue(documentService.calcAmount(
+                    insuranceContractField.getValue().getId(),
+                    employeeField.getValue().getId(),
+                    birthdateField.getValue(),
+                    relativeField.getValue().getId()));
         }
     }
 
@@ -134,16 +145,26 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
                     .list();
 
             for (ContractConditions condition : insuranceContractField.getValue().getProgramConditions()) {
-                if (condition.getRelationshipType().getId() == relativeField.getValue().getId()) {
+                if (condition.getRelationshipType().getId().equals(relativeField.getValue().getId())) {
                     if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
                         conditionsList.add(condition);
                     }
                 }
             }
 
-            if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size() && conditionsList.size() > 1) {
-                amountField.setValue(BigDecimal.valueOf(0));
-            } else if(insuranceContractField.getValue().getCountOfFreeMembers() <= personList.size()){
+
+            if (conditionsList.size() > 1) {
+                if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size()){
+                    amountField.setValue(BigDecimal.ZERO);
+                }else {
+                    for (ContractConditions condition : conditionsList){
+                        if (!condition.getIsFree()){
+                            amountField.setValue(condition.getCostInKzt());
+                            break;
+                        }
+                    }
+                }
+            } else {
                 for (ContractConditions condition : conditionsList){
                     if (!condition.getIsFree()){
                         amountField.setValue(condition.getCostInKzt());
