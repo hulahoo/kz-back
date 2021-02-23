@@ -17369,3 +17369,22 @@ create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (
     primary key (ABSENCE_REQUEST_ID, FILE_DESCRIPTOR_ID)
 )^
 -- end TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_POSITION_HARMFUL_CONDITION
+create table TSADV_POSITION_HARMFUL_CONDITION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    POSITION_GROUP_ID uuid not null,
+    END_DATE date not null,
+    DAYS integer not null,
+    START_DATE date not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_POSITION_HARMFUL_CONDITION
