@@ -62,6 +62,9 @@
                 </property>
             </property>
         </property>
+        <property name="status" view="_minimal">
+            <property name="code"/>
+        </property>
     </view>
     <view entity="tsadv$AssignedGoal" name="assignedGoal-portal-kpi-create-default" extends="_local">
         <property name="category" view="_minimal">
