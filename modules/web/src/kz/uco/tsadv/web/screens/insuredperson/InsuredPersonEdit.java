@@ -31,6 +31,7 @@ import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.service.DocumentService;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.web.modules.learning.course.PersonGroupExtForEnrollment;
 import kz.uco.tsadv.web.screens.persongroupext.PersonGroupExtMIC;
@@ -158,6 +159,8 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
     private Button commitBtn;
     @Inject
     private FileUploadField statementFileField;
+    @Inject
+    private DocumentService documentService;
 
 
     public void setParameter(String whichButton) {
@@ -351,8 +354,15 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             } else {
                 commitBtn.setVisible(false);
                 amountField.setVisible(true);
-                if (isNewOrChangedInsuredPerson() && whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
-                    calculatedAmount();
+                if (whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
+                    if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null && employeeField.getValue() != null
+                            && relativeField.getValue() != null && insuranceContractField.getValue() != null){
+                        amountField.setValue(documentService.calcAmount(
+                                insuranceContractField.getValue().getId(),
+                                employeeField.getValue().getId(),
+                                birthdateField.getValue(),
+                                relativeField.getValue().getId()));
+                    }
                 }
             }
         }
@@ -567,7 +577,14 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
                 && relativeField.getValue() != null
                 && !relativeField.getValue().getCode().equals("PRIMARY")
                 && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
-            calculatedAmount();
+            if (birthdateField.getValue() != null && employeeField.getValue() != null
+                    && relativeField.getValue() != null && insuranceContractField.getValue() != null){
+                amountField.setValue(documentService.calcAmount(
+                        insuranceContractField.getValue().getId(),
+                        employeeField.getValue().getId(),
+                        birthdateField.getValue(),
+                        relativeField.getValue().getId()));
+            }
         }
     }
 
@@ -670,7 +687,14 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
             } else if (employeeField.getValue() != null && !relativeField.getValue().getCode().equals("PRIMARY")) {
                 amountField.setVisible(true);
                 if (isNewOrChangedInsuredPerson() && whichButton != null && (whichButton.equals("joinHr") || whichButton.equals("editHr"))) {
-                    calculatedAmount();
+                    if (birthdateField.getValue() != null && employeeField.getValue() != null
+                            && relativeField.getValue() != null && insuranceContractField.getValue() != null){
+                        amountField.setValue(documentService.calcAmount(
+                                insuranceContractField.getValue().getId(),
+                                employeeField.getValue().getId(),
+                                birthdateField.getValue(),
+                                relativeField.getValue().getId()));
+                    }
                 }
             }
 
