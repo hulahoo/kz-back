@@ -97,4 +97,24 @@
             <param name="dateFrom" type="java.util.Date"/>
         </method>
     </service>
+    <service name="tsadv_DocumentService">
+        <method name="getInsuredPerson">
+            <param name="type" type="java.lang.String"/>
+        </method>
+        <method name="getInsuredPersonMembers">
+            <param name="insuredPersonId" type="java.util.UUID"/>
+        </method>
+        <method name="checkPersonInsure">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="contractId" type="java.util.UUID"/>
+        </method>
+        <method name="calcAmount">
+
+            <param name="insuranceContractId" type="java.util.UUID"/>
+            <param name="personGroupExtId" type="java.util.UUID"/>
+            <param name="bith" type="java.util.Date"/>
+            <param name="relativeTypeId" type="java.util.UUID"/>
+        </method>
+        <method name="getMyInsuraces"/>
+    </service>
 </services>
