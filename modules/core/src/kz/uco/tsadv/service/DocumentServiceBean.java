@@ -8,6 +8,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -164,9 +165,17 @@ public class DocumentServiceBean implements DocumentService {
             }
         }
 
-        if (insuranceContract.getCountOfFreeMembers() > personList.size() && conditionsList.size() > 1) {
-            return BigDecimal.ZERO;
-        } else if (insuranceContract.getCountOfFreeMembers() <= personList.size()) {
+        if (conditionsList.size() > 1) {
+            if (insuranceContract.getCountOfFreeMembers() > personList.size()){
+                return BigDecimal.ZERO;
+            }else {
+                for (ContractConditions condition : conditionsList){
+                    if (!condition.getIsFree()){
+                        return condition.getCostInKzt();
+                    }
+                }
+            }
+        } else {
             for (ContractConditions condition : conditionsList) {
                 if (!condition.getIsFree()) {
                     return condition.getCostInKzt();
@@ -175,6 +184,15 @@ public class DocumentServiceBean implements DocumentService {
         }
 
         return BigDecimal.ZERO;
+    }
+
+    @Override
+    public List<ScheduleOffsetsRequest> getOffsetRequestsByPgId(UUID personGroupExtId) {
+        return dataManager.load(ScheduleOffsetsRequest.class)
+                .query("select e from tsadv_ScheduleOffsetsRequest e where e.personGroup.id = :pgId")
+                .parameter("pgId",personGroupExtId)
+                .view("scheduleOffsetsRequest-for-my-team")
+                .list();
     }
 
     private InsuredPerson getInsuredPersonEmployee() {

@@ -196,6 +196,7 @@
         </menu>
         <item screen="tsadv_VacationGraphic.browse" id="vacationGraphicBrowse"
               caption="График заявок на отпуск" openType="NEW_TAB"/>
+        <item screen="tsadv$AssignmentScheduleLite.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"

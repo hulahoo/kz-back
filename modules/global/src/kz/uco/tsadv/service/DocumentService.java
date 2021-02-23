@@ -1,6 +1,7 @@
 package kz.uco.tsadv.service;
 
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
+import kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,4 +20,7 @@ public interface DocumentService {
                           UUID personGroupExtId,
                           Date bith,
                           UUID relativeTypeId);
+
+    List<ScheduleOffsetsRequest> getOffsetRequestsByPgId(UUID personGroupExtId);
+
 }
