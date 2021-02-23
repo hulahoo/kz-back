@@ -22867,7 +22867,6 @@
                 <property name="endDate"/>
             </property>
         </property>
-        <property name="name"/>
         <property name="schedule" view="_minimal">
             <property name="scheduleName"/>
             <property name="startDate"/>
