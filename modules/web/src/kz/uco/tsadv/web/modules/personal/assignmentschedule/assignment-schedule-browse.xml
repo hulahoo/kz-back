@@ -52,8 +52,8 @@
                         <hbox margin="true"
                               spacing="true">
                             <dateField id="month"
-                                        align="MIDDLE_LEFT"
-                                        resolution="DAY"/>
+                                       align="MIDDLE_LEFT"
+                                       resolution="DAY"/>
                             <label align="MIDDLE_LEFT"
                                    value="msg://kz.uco.tsadv.modules.timesheet.model/ScheduleHeader.schedule"/>
                         </hbox>
@@ -68,8 +68,8 @@
                             <dateField id="dateField" resolution="DAY"/>
                             <textField id="searchByNumber"
                                        width="100px"
-                            description="msg://findPersonByCode"
-                            align="BOTTOM_RIGHT"/>
+                                       description="msg://findPersonByCode"
+                                       align="BOTTOM_RIGHT"/>
                             <linkButton id="searchButton"
                                         invoke="searchPersonByCode"
                                         icon="font-icon:SEARCH"

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="assignmentSchedulesTable"
+        messagesPack="kz.uco.tsadv.web.screens.assignmentschedule">
+    <data readOnly="true">
+        <collection id="assignmentSchedulesDc"
+                    class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
+                    view="assignmentSchedule.view">
+            <loader id="assignmentSchedulesDl">
+                <query>
+                    <![CDATA[select e from tsadv$AssignmentSchedule e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="assignmentSchedulesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="assignmentSchedulesTable"
+                dataLoader="assignmentSchedulesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="assignmentSchedulesTable"
+                    width="100%"
+                    dataContainer="assignmentSchedulesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="assignmentGroup.assignmentPersonFioWithEmployeeNumber" caption="msg://assignmentGroup"/>
+                <column id="offset.offsetScheduleName" caption="График"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="colorsSet" caption="Цвет"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="assignmentSchedulesTable.create"/>
+                <button id="editBtn" action="assignmentSchedulesTable.edit"/>
+                <button id="removeBtn" action="assignmentSchedulesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
