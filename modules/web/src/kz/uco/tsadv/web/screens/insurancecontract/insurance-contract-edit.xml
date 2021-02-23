@@ -23,13 +23,14 @@
                 <query><![CDATA[select e from tsadv$DicAddressType e]]></query>
             </loader>
         </collection>
-        <collection id="insuredPersonsDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson" view="insuredPerson-browseView">
+        <collection id="insuredPersonsDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
+                    view="insuredPerson-browseView">
             <loader id="insuredPersonsDl">
                 <query><![CDATA[select e from tsadv$InsuredPerson e]]>
                     <condition>
                         <and>
                             <c:jpql>
-                                <c:where> e.insuranceContract.id = :insuranceContractId</c:where>
+                                <c:where>e.insuranceContract.id = :insuranceContractId</c:where>
                             </c:jpql>
                         </and>
                     </condition>
@@ -54,6 +55,8 @@
         <scrollBox id="scrollBox" spacing="true">
             <tabSheet>
                 <tab id="contractTab"
+                     margin="true, false, false, false"
+                     spacing="true"
                      caption="msg://insuranceContract">
                     <groupBox caption="msg://mainGroupBox">
                         <form id="form" dataContainer="insuranceContractDc">
@@ -83,14 +86,18 @@
                                            contextHelpText="msg://attachingFamilyField.helpText"/>
                                 <textField id="countOfFreeMembersField" property="countOfFreeMembers"
                                            contextHelpText="msg://countOfFreeMembers"/>
-                                <lookupField id="documentTypeField" property="defaultDocumentType" optionsContainer="documentTypeDc"/>
-                                <lookupField id="defaultAddress" property="defaultAddress" optionsContainer="addressDc"/>
+                                <lookupField id="documentTypeField" property="defaultDocumentType"
+                                             optionsContainer="documentTypeDc"/>
+                                <lookupField id="defaultAddress" property="defaultAddress"
+                                             optionsContainer="addressDc"/>
                             </column>
                         </form>
                     </groupBox>
                     <groupBox
                             caption="msg://programConditions"
-                            outerMargin="true, false, true, false">
+                            outerMargin="true, false, true, false"
+                            height="350px"
+                            expand="programConditionsDataGrid">
                         <dataGrid id="programConditionsDataGrid"
                                   editorEnabled="true"
                                   width="100%"
@@ -116,7 +123,9 @@
                         </dataGrid>
                     </groupBox>
                     <groupBox caption="msg://ContractAdministrator"
-                              outerMargin="true, false, true, false">
+                              outerMargin="true, false, true, false"
+                              height="350px"
+                              expand="contractAdministratorDataGrid">
                         <dataGrid id="contractAdministratorDataGrid"
                                   editorEnabled="true"
                                   width="100%"
@@ -138,7 +147,10 @@
                             </buttonsPanel>
                         </dataGrid>
                     </groupBox>
-                    <groupBox caption="msg://attachments">
+                    <groupBox caption="msg://attachments"
+                              spacing="true"
+                              height="350px"
+                              expand="attachmentsDataGrid">
                         <dataGrid id="attachmentsDataGrid"
                                   width="100%"
                                   dataContainer="attachmentsDc">
@@ -181,7 +193,7 @@
                             <column id="contractFieldPerson" property="insuranceContract.contract"/>
                             <column id="relativeFieldPerson" property="relative"/>
                             <column id="attachDateFieldPerson" property="attachDate"/>
-                            <column id="employeeFieldPerson" property="employee" />
+                            <column id="employeeFieldPerson" property="employee"/>
                             <column id="statusRequestFieldPerson" property="statusRequest"/>
                             <column id="firstNameFieldPerson" property="firstName"/>
                             <column id="secondNameFieldPerson" property="secondName"/>

@@ -2,14 +2,14 @@ package kz.uco.tsadv.web.screens.insurancecontract;
 
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.global.CommitContext;
-import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
-import com.haulmont.cuba.gui.*;
+import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.RemoveOperation;
+import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
-import com.haulmont.cuba.gui.components.data.ValueSource;
 import com.haulmont.cuba.gui.export.ExportDisplay;
 import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.*;
@@ -24,7 +24,6 @@ import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.web.screens.insurancecontractadministrator.InsuranceContractAdministratorEdit;
-import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonBrowse;
 import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonBulkEdit;
 import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonEdit;
 
@@ -40,10 +39,13 @@ import java.util.Set;
 @LoadDataBeforeShow
 public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Inject
+    protected InstanceLoader<InsuranceContract> insuranceContractDl;
+    @Inject
     private CollectionPropertyContainer<Attachment> attachmentsDc;
     @Inject
     private DataGrid<ContractConditions> programConditionsDataGrid;
-    @Inject DataGrid<InsuranceContractAdministrator> contractAdministratorDataGrid;
+    @Inject
+    DataGrid<InsuranceContractAdministrator> contractAdministratorDataGrid;
     @Inject
     private Notifications notifications;
     @Inject
@@ -83,12 +85,12 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Subscribe
     public void onInit(InitEvent event) {
 
-        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("contractFieldPerson", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
+        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("contractFieldPerson", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>() {
             @Override
-            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
+            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event) {
                 LinkButton linkButton = uiComponents.create(LinkButton.class);
                 linkButton.setCaption(event.getItem().getInsuranceContract().getContract());
-                linkButton.setAction(new BaseAction("contractFieldPerson").withHandler(e->{
+                linkButton.setAction(new BaseAction("contractFieldPerson").withHandler(e -> {
                     InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                             .editEntity(event.getItem())
                             .build();
@@ -99,17 +101,17 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
             }
 
             @Override
-            public Class<LinkButton> getType(){
+            public Class<LinkButton> getType() {
                 return LinkButton.class;
             }
 
         }, 0);
         column.setRenderer(insuredPersonsTable.createRenderer(DataGrid.ComponentRenderer.class));
 
-        DataGrid.Column file = insuredPersonsTable.addGeneratedColumn("statementFileField", new DataGrid.ColumnGenerator<InsuredPerson, CssLayout>(){
+        DataGrid.Column file = insuredPersonsTable.addGeneratedColumn("statementFileField", new DataGrid.ColumnGenerator<InsuredPerson, CssLayout>() {
             @Override
-            public CssLayout getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
-                CssLayout cssLayout  = componentsFactory.createComponent(CssLayout.class);
+            public CssLayout getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event) {
+                CssLayout cssLayout = componentsFactory.createComponent(CssLayout.class);
 
                 cssLayout.setHeight("300px");
                 cssLayout.setWidthFull();
@@ -118,7 +120,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
                 List<FileDescriptor> fileDescriptorList = event.getItem().getFile();
 
 
-                if (event.getItem().getRelative().getCode().equals("PRIMARY") && event.getItem().getStatementFile() != null){
+                if (event.getItem().getRelative().getCode().equals("PRIMARY") && event.getItem().getStatementFile() != null) {
                     LinkButton linkButton = uiComponents.create(LinkButton.class);
                     linkButton.setCaption(event.getItem().getStatementFile().getName());
                     linkButton.setWidthAuto();
@@ -131,7 +133,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
                         }
                     });
                     hBoxLayout.add(linkButton);
-                }else {
+                } else {
                     if (fileDescriptorList != null && !fileDescriptorList.isEmpty())
                         fileDescriptorList.forEach(e -> {
                             LinkButton button = componentsFactory.createComponent(LinkButton.class);
@@ -155,7 +157,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
             }
 
             @Override
-            public Class<CssLayout> getType(){
+            public Class<CssLayout> getType() {
                 return CssLayout.class;
             }
 
@@ -167,7 +169,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
 
     @Subscribe
     public void onBeforeShow(BeforeShowEvent event) {
-        if (isCreateContract){
+        if (isCreateContract) {
             createBtnPerson.setEnabled(false);
         }
     }
@@ -180,27 +182,32 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     }
 
 
-    public void setParameter(boolean isCreateContract){
+    public void setParameter(boolean isCreateContract) {
         this.isCreateContract = isCreateContract;
     }
 
 
-    @Subscribe("contractAdministratorDataGrid.create")
-    public void onContractAdministratorDataGridCreate(Action.ActionPerformedEvent event) {
-        InsuranceContractAdministrator administrator = metadata.create(InsuranceContractAdministrator.class);
-        administrator.setNotifyAboutNewAttachments(true);
-        screenBuilders.editor(InsuranceContractAdministrator.class, this)
-                .withScreenClass(InsuranceContractAdministratorEdit.class)
-                .newEntity(administrator)
-                .build()
-                .show();
-    }
+//    @Subscribe("contractAdministratorDataGrid.create")
+//    public void onContractAdministratorDataGridCreate(Action.ActionPerformedEvent event) {
+//        screenBuilders.editor(InsuranceContractAdministrator.class, this)
+//                .withScreenClass(InsuranceContractAdministratorEdit.class)
+//                .newEntity()
+//                .withInitializer(insuranceContractAdministrator -> {
+//                    insuranceContractAdministrator.setInsuranceContract(insuranceContractDc.getItem());
+//                    insuranceContractAdministrator.setNotifyAboutNewAttachments(true);
+//                })
+//                .build()
+//                .show()
+//                .addAfterCloseListener(afterCloseEvent -> {
+//                    insuranceContractDl.load();
+//                });
+//    }
 
 
     @Subscribe("insuredPersonsTable.edit")
     public void onInsuredPersonsTableEdit(Action.ActionPerformedEvent event) {
         InsuredPerson selectItem = insuredPersonsTable.getSingleSelected();
-        if (selectItem != null){
+        if (selectItem != null) {
             InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                     .editEntity(selectItem)
                     .build();
@@ -217,13 +224,13 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
 
         InsuredPersonBulkEdit bulkEdit = screenBuilders.editor(InsuredPerson.class, this)
                 .withScreenClass(InsuredPersonBulkEdit.class)
-                .withAfterCloseListener(e->{
+                .withAfterCloseListener(e -> {
                     int bulkItemSize = bulks.size();
                     notifications.create().withCaption("Изменено " + bulkItemSize + " запись");
                     insuredPersonsDl.load();
                 })
                 .build();
-        if (!bulks.isEmpty()){
+        if (!bulks.isEmpty()) {
             bulkEdit.setParameter(bulks);
             bulkEdit.show();
         }
@@ -253,7 +260,7 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
         InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(InsuredPerson.class, this)
                 .withScreenClass(InsuredPersonEdit.class)
                 .newEntity(insuredPerson)
-                .withAfterCloseListener(e->{
+                .withAfterCloseListener(e -> {
                     insuredPersonsDl.load();
                 })
                 .build();
@@ -333,10 +340,10 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
 
     @Subscribe("availabilityPeriodFromField")
     public void onAvailabilityPeriodFromFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-        if (event.getValue() != null){
-                Instant i = Instant.ofEpochMilli(event.getValue().getTime());
-                Date outRequestDate = Date.from(i);
-                availabilityPeriodToField.setRangeStart(outRequestDate);
+        if (event.getValue() != null) {
+            Instant i = Instant.ofEpochMilli(event.getValue().getTime());
+            Date outRequestDate = Date.from(i);
+            availabilityPeriodToField.setRangeStart(outRequestDate);
         }
     }
 
@@ -350,7 +357,6 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     private void programConditionsDataGridRemoveAfterActionPerformedHandler(RemoveOperation.AfterActionPerformedEvent<ContractConditions> afterActionPerformedEvent) {
         insuredPersonsDl.load();
     }
-
 
 
 }
