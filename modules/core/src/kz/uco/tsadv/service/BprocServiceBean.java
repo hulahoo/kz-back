@@ -29,10 +29,7 @@ import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
-import kz.uco.tsadv.modules.personal.model.Absence;
-import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
-import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
-import kz.uco.tsadv.modules.personal.model.PersonExt;
+import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
@@ -617,6 +614,12 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
     @Override
     public void changeStatusAbsenceRequest(AbsenceRequest entity, String status, String notificationCode) {
+        changeRequestStatus(entity, status);
+        sendNotificationToInitiator(entity, notificationCode);
+    }
+
+    @Override
+    public void changeStatusLeavingVacationRequest(LeavingVacationRequest entity, String status, String notificationCode) {
         changeRequestStatus(entity, status);
         sendNotificationToInitiator(entity, notificationCode);
     }

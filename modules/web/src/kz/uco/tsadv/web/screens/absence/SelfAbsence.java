@@ -167,7 +167,7 @@ public class SelfAbsence extends StandardLookup<Absence>
         item.setRequestType(commonService.getEntity(DicRequisitionType.class, "MATERNITY"));
 
         screenBuilders.editor(LeavingVacationRequest.class, this)
-                .editEntity(item)
+                .newEntity(item)
                 .build()
                 .show();
     }
