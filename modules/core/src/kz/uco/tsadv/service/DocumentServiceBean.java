@@ -165,9 +165,17 @@ public class DocumentServiceBean implements DocumentService {
             }
         }
 
-        if (insuranceContract.getCountOfFreeMembers() > personList.size() && conditionsList.size() > 1) {
-            return BigDecimal.ZERO;
-        } else if (insuranceContract.getCountOfFreeMembers() <= personList.size()) {
+        if (conditionsList.size() > 1) {
+            if (insuranceContract.getCountOfFreeMembers() > personList.size()){
+                return BigDecimal.ZERO;
+            }else {
+                for (ContractConditions condition : conditionsList){
+                    if (!condition.getIsFree()){
+                        return condition.getCostInKzt();
+                    }
+                }
+            }
+        } else {
             for (ContractConditions condition : conditionsList) {
                 if (!condition.getIsFree()) {
                     return condition.getCostInKzt();
