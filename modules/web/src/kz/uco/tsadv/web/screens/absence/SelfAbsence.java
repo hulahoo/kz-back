@@ -161,9 +161,6 @@ public class SelfAbsence extends StandardLookup<Absence>
         LeavingVacationRequest item = dataManager.create(LeavingVacationRequest.class);
         Date today = timeSource.currentTimestamp();
 
-        item.setRequestDate(today);
-        item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
-        item.setStatusRequest(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
         item.setVacation(getItem);
         item.setStartDate(getItem.getDateFrom());
         item.setEndData(getItem.getDateTo());

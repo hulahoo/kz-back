@@ -21793,17 +21793,8 @@
         <property name="certificateType" view="_local"/>
     </view>
     <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-editView" extends="_local">
-        <property name="statusRequest" view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-        </property>
         <property name="requestType" view="_minimal">
+            <property name="legacyId"/>
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -21818,11 +21809,20 @@
         <property name="vacation" view="_minimal">
             <property name="orderNum"/>
         </property>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
     </view>
     <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-browseView" extends="_local">
-        <property name="statusRequest" view="_minimal"/>
         <property name="requestType" view="_minimal"/>
         <property name="vacation" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
     </view>
     <view entity="tsadv$ContractConditions" name="contractConditions-browseView" extends="_local">
         <property name="relationshipType" view="_minimal"/>
