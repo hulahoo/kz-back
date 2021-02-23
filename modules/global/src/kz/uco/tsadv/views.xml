@@ -22879,9 +22879,12 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
+            <property name="offsetDisplay"/>
+            <property name="offsetDisplayDays"/>
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
+        <property name="name"/>
     </view>
     <view entity="tsadv_ScheduleOffsetsRequest" name="scheduleOffsetsRequest-for-my-team" extends="_local">
         <property name="personGroup" view="_minimal">
