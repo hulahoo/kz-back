@@ -6,12 +6,15 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
+import kz.uco.base.entity.shared.AssignmentGroup;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
+import kz.uco.tsadv.modules.personal.model.OrganizationExt;
 import kz.uco.tsadv.modules.timesheet.config.TimecardConfig;
 import kz.uco.tsadv.modules.timesheet.enums.MaterialDesignColorsEnum;
 import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
@@ -59,7 +62,8 @@ public class AssignmentScheduleEdit extends AbstractEditor<AssignmentSchedule> {
     protected OrganizationGroupExt organizationGroup;
     protected PositionGroupExt positionGroup;
     protected PersonGroupExt personGroup;
-
+    @Named("fieldGroup.assignmentGroup")
+    protected PickerField<AssignmentGroupExt> assignmentGroupField;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -77,6 +81,17 @@ public class AssignmentScheduleEdit extends AbstractEditor<AssignmentSchedule> {
                 personGroup = (PersonGroupExt) params.get("personGroup");
             }
         }
+        assignmentGroupField.removeAction(PickerField.LookupAction.NAME);
+        assignmentGroupField.removeAction(PickerField.ClearAction.NAME);
+        PickerField.LookupAction lookupAction = new PickerField.LookupAction(assignmentGroupField) {
+            public AssignmentGroupExt transformValueFromLookupWindow(Entity valueFromLookupWindow) {
+                return ((AssignmentExt) valueFromLookupWindow).getGroup();
+            }
+        };
+        assignmentGroupField.addAction(lookupAction);
+        assignmentGroupField.addClearAction();
+        lookupAction.setLookupScreen("base$AssignmentGroup.browse");
+        lookupAction.setLookupScreenOpenType(WindowManager.OpenType.THIS_TAB);
     }
 
     @Override
@@ -90,7 +105,7 @@ public class AssignmentScheduleEdit extends AbstractEditor<AssignmentSchedule> {
         windowCommitButton.setAction(new BaseAction("windowCommit") {
             @Override
             public String getCaption() {
-                return getMessage("windowCommit");
+                return getMessage("OK");
             }
 
             @Override
@@ -100,13 +115,13 @@ public class AssignmentScheduleEdit extends AbstractEditor<AssignmentSchedule> {
                             getMessage("deleteAssignmentSchedule"),
                             MessageType.WARNING,
                             new Action[]{
-                                    new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY) {
+                                    new DialogAction(DialogAction.Type.YES, Status.PRIMARY) {
                                         @Override
                                         public void actionPerform(Component component) {
                                             commitAndClose();
                                         }
                                     },
-                                    new DialogAction(DialogAction.Type.NO, Action.Status.NORMAL) {
+                                    new DialogAction(DialogAction.Type.NO, Status.NORMAL) {
                                         public void actionPerform(Component component) {
                                         }
                                     }

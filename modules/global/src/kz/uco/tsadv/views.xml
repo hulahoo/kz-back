@@ -11635,23 +11635,33 @@
     <view class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
           extends="_local"
           name="assignmentSchedule.view">
-        <property name="assignmentGroup"
-                  view="_minimal">
-            <property name="assignment"
-                      view="_minimal"/>
+        <property name="assignmentGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="personGroup" view="_minimal"/>
+            </property>
+            <property name="assignment" view="_minimal">
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                    <property name="organizationNameLang1"/>
+                    <property name="organizationNameLang2"/>
+                    <property name="organizationNameLang3"/>
+                    <property name="organizationNameLang4"/>
+                    <property name="organizationNameLang5"/>
+                </property>
+            </property>
+            <property name="assignmentPersonFioWithEmployeeNumber"/>
         </property>
-        <property name="schedule"
-                  view="_minimal">
+        <property name="schedule" view="_minimal">
             <property name="scheduleName"/>
         </property>
-        <property name="offset"
-                  view="_minimal">
-            <property name="standardSchedule"
-                      view="_minimal">
+        <property name="offset" view="_minimal">
+            <property name="standardSchedule" view="_minimal">
                 <property name="scheduleName"/>
             </property>
             <property name="offsetDisplay"/>
+            <property name="offsetScheduleName"/>
         </property>
+        <property name="name"/>
     </view>
     <view class="kz.uco.tsadv.modules.timesheet.model.TimecardHeader"
           extends="_minimal"
