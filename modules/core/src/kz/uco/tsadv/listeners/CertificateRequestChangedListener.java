@@ -1,7 +1,8 @@
 package kz.uco.tsadv.listeners;
 
-import com.haulmont.cuba.core.TransactionalDataManager;
+import com.haulmont.bali.db.QueryRunner;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
+import com.haulmont.cuba.core.global.DataManager;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.dictionary.DicReceivingType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Component("tsadv_CertificateRequestChangedListener")
 public class CertificateRequestChangedListener {
     @Inject
-    protected TransactionalDataManager dataManager;
+    protected DataManager dataManager;
     @Inject
     protected CommonService commonService;
     @Inject
@@ -29,8 +30,8 @@ public class CertificateRequestChangedListener {
     @Inject
     protected CommonReportsService commonReportsService;
 
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void beforeCommit(EntityChangedEvent<CertificateRequest, UUID> event) {
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void afterCommit(EntityChangedEvent<CertificateRequest, UUID> event) {
         if (event.getType().equals(EntityChangedEvent.Type.DELETED)) return;
 
         CertificateRequest request = dataManager.load(CertificateRequest.class)
@@ -49,12 +50,14 @@ public class CertificateRequestChangedListener {
         } catch (Exception e) {
             log.error("Error on approving Scan version of Certificate", e);
         }
+
+        new QueryRunner();
     }
 
     protected void approveScanVersion(CertificateRequest request) {
         request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
         request.setFile(commonReportsService.getReportByCertificateRequest(request));
-        dataManager.save(request);
+        dataManager.commit(request);
     }
 
 }
