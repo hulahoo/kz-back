@@ -48,7 +48,7 @@
                 <textField id="adjustedScore" property="adjustedScore"/>
             </column>
             <column id="column2" width="300px">
-                <lookupField id="status" property="status"/>
+                <lookupField id="status" property="stepStageStatus"/>
                 <dateField id="startDate" property="startDate"/>
                 <dateField id="endDate" property="endDate"/>
                 <textField id="result" property="result" enable="false"/>

@@ -1,6 +1,6 @@
 package kz.uco.tsadv.modules.performance.model;
 
-import com.haulmont.cuba.core.entity.StandardEntity;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -10,8 +10,10 @@ import java.util.Date;
 
 @Table(name = "TSADV_ASSIGNED_PERFORMANCE_PLAN")
 @Entity(name = "tsadv$AssignedPerformancePlan")
-public class AssignedPerformancePlan extends StandardEntity {
+public class AssignedPerformancePlan extends AbstractBprocRequest {
     private static final long serialVersionUID = -5439003925414989525L;
+
+    public static final String PROCESS_DEFINITION_KEY = "kpi";
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PERFORMANCE_PLAN_ID")
@@ -31,8 +33,8 @@ public class AssignedPerformancePlan extends StandardEntity {
     @JoinColumn(name = "ASSIGNED_BY_ID")
     protected PersonGroupExt assigned_by;
 
-    @Column(name = "STATUS")
-    protected String status;
+    @Column(name = "STEP_STAGE_STATUS")
+    protected String stepStageStatus;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE")
@@ -184,12 +186,12 @@ public class AssignedPerformancePlan extends StandardEntity {
         this.startDate = startDate;
     }
 
-    public CardStatusEnum getStatus() {
-        return status == null ? null : CardStatusEnum.fromId(status);
+    public CardStatusEnum getStepStageStatus() {
+        return stepStageStatus == null ? null : CardStatusEnum.fromId(stepStageStatus);
     }
 
-    public void setStatus(CardStatusEnum status) {
-        this.status = status == null ? null : status.getId();
+    public void setStepStageStatus(CardStatusEnum stepStageStatus) {
+        this.stepStageStatus = stepStageStatus == null ? null : stepStageStatus.getId();
     }
 
     public void setPerformancePlan(PerformancePlan performancePlan) {
@@ -217,4 +219,8 @@ public class AssignedPerformancePlan extends StandardEntity {
     }
 
 
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
+    }
 }

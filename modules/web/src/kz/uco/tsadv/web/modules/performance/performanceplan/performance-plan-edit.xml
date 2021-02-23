@@ -110,7 +110,7 @@
                         <column property="assignedPerson.currentAssignment.gradeGroup"/>
                         <column property="result"/>
                         <column property="gzp"/>
-                        <column property="status"/>
+                        <column property="stepStageStatus"/>
                         <column property="assignedPerson.company"/>
                     </columns>
                     <rowsCount/>

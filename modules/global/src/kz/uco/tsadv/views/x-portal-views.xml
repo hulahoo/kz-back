@@ -34,7 +34,7 @@
         </property>
         <property name="startDate"/>
         <property name="endDate"/>
-        <property name="status"/>
+        <property name="stepStageStatus"/>
     </view>
     <view entity="tsadv$AssignedPerformancePlan" name="assignedPerformancePlan-myKpi-edit" extends="_minimal">
         <property name="performancePlan">
@@ -44,7 +44,7 @@
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
-        <property name="status"/>
+        <property name="stepStageStatus"/>
         <property name="assignedPerson" view="_local">
             <property name="person" view="_local"/>
             <property name="assignments" view="_minimal">
@@ -256,7 +256,7 @@
         </property>
         <property name="startDate"/>
         <property name="endDate"/>
-        <property name="status"/>
+        <property name="stepStageStatus"/>
         <property name="assignedPerson" view="_minimal">
             <property name="person" view="_local"/>
             <property name="assignments" view="_minimal">
