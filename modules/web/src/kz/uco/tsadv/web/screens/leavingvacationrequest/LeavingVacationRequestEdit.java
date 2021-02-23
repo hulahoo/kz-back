@@ -50,6 +50,8 @@ public class LeavingVacationRequestEdit extends AbstractBprocEditor<LeavingVacat
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
 
+        super.onAfterShow(event);
+
         LocalDateTime ldt1 = LocalDateTime.ofInstant(requestDateField.getValue().toInstant(), ZoneId.systemDefault());
         Date outPlannedStart = Date.from(ldt1.minusDays(-30).atZone(ZoneId.systemDefault()).toInstant());
 
