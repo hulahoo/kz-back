@@ -192,7 +192,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                     .create(AssignedPerformancePlan.class);
                             assignedPerformancePlan.setPerformancePlan(performancePlanDc.getItem());
                             assignedPerformancePlan.setAssignedPerson(personExt.getGroup());
-                            assignedPerformancePlan.setStatus(CardStatusEnum.DRAFT);
+                            assignedPerformancePlan.setStepStageStatus(CardStatusEnum.DRAFT);
                             assignedPerformancePlan.setStartDate(performancePlanDc.getItem().getStartDate());
                             assignedPerformancePlan.setEndDate(performancePlanDc.getItem().getEndDate());
                             commitContext.addInstanceToCommit(assignedPerformancePlan);

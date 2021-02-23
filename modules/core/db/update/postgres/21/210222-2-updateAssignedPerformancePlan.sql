@@ -1,0 +1,3 @@
+alter table TSADV_ASSIGNED_PERFORMANCE_PLAN rename column status to status__u59054 ;
+alter table TSADV_ASSIGNED_PERFORMANCE_PLAN add column STEP_STAGE_STATUS varchar(50) ;
+update TSADV_ASSIGNED_PERFORMANCE_PLAN set STEP_STAGE_STATUS = status__u59054;
