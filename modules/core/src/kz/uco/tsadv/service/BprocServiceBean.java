@@ -613,7 +613,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     }
 
     @Override
-    public void changeStatusAbsenceRequest(AbsenceRequest entity, String status, String notificationCode) {
+    public void changeStatusBprocRequest(AbstractBprocRequest entity, String status, String notificationCode) {
         changeRequestStatus(entity, status);
         sendNotificationToInitiator(entity, notificationCode);
     }
