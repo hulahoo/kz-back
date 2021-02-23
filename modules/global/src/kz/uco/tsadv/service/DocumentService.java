@@ -10,6 +10,7 @@ import java.util.UUID;
 public interface DocumentService {
     String NAME = "tsadv_DocumentService";
 
+    List<InsuredPerson> getMyInsuraces();
     InsuredPerson getInsuredPerson(String type);
     List<InsuredPerson> getInsuredPersonMembers(UUID insuredPersonId);
     Boolean checkPersonInsure(UUID personGroupId,UUID contractId);

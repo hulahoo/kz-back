@@ -32,6 +32,16 @@ public class DocumentServiceBean implements DocumentService {
     protected TimeSource timeSource;
 
     @Override
+    public List<InsuredPerson> getMyInsuraces() {
+        return dataManager.load(InsuredPerson.class)
+                .query("select e from tsadv$InsuredPerson e where e.type = :type and e.employee.id = :pgId")
+                .parameter("type",RelativeType.EMPLOYEE.getId())
+                .parameter("pgId",getPersonGroupExt().getId())
+                .view("insuredPerson-browseView")
+                .list();
+    }
+
+    @Override
     public InsuredPerson getInsuredPerson(String type) {
         return RelativeType.EMPLOYEE.equals(RelativeType.fromId(type)) ? getInsuredPersonEmployee() : getInsuredPersonMember();
     }
