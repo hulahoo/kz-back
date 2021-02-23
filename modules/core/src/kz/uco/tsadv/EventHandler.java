@@ -90,6 +90,20 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        if (getCount(em, "LEAVING_VACATION_REQUEST_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("LEAVING_VACATION_REQUEST_APPROVE");
+            activityType.setScreen("tsadv$LeavingVacationRequest.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на выход из отпуска без сохранения " +
+                    " заработной платы по уходу за ребенком до достижения им возраста трех лет");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv$LeavingVacationRequest");
+            windowProperty.setScreenName("tsadv$LeavingVacationRequest.edit");
+            windowProperty.setViewName(View.LOCAL);
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
 //        if (getCount(em, "ABSENCE_FOR_RECALL_APPROVE") == 0) {
 //            ActivityType activityType = metadata.create(ActivityType.class);
 //            activityType.setCode("ABSENCE_FOR_RECALL_APPROVE");

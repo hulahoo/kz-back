@@ -58,10 +58,4 @@ public class LeavingVacationRequestEdit extends AbstractBprocEditor<LeavingVacat
         plannedStartDateField.setRangeStart(outPlannedStart);
 
     }
-
-
-    @Subscribe
-    public void onBeforeShow(BeforeShowEvent event) {
-        plannedStartDateField.setRangeEnd(leavingVacationRequestDc.getItem().getEndData());
-    }
 }
