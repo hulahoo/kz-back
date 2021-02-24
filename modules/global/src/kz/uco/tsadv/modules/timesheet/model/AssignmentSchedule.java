@@ -51,6 +51,10 @@ public class AssignmentSchedule extends AbstractParentEntity {
     @Transient
     String name;
 
+    @NotNull
+    @Column(name = "END_POLICY_CODE")
+    protected String endPolicyCode;
+
     public void setAssignmentGroup(AssignmentGroupExt assignmentGroup) {
         this.assignmentGroup = assignmentGroup;
     }

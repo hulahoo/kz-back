@@ -9292,6 +9292,7 @@ create table TSADV_ASSIGNMENT_SCHEDULE (
     START_DATE date not null,
     END_DATE date not null,
     COLORS_SET integer not null,
+    END_POLICY_CODE varchar(255),
     --
     primary key (ID)
 )^
