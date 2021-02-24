@@ -3225,7 +3225,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     "pgLegacyId", personDismissalJson.getPersonId(),
                                     "companyCode", personDismissalJson.getCompanyCode(),
                                     "drLegacyId", personDismissalJson.getDismissalReasonCode(),
-                                    "dsDate",formatter.parse(personDismissalJson.getDismissalDate())))
+                                    "dsDate", formatter.parse(personDismissalJson.getDismissalDate())))
                             .view("dismissal.edit").list().stream().findFirst().orElse(null);
 
                     if (personDismissal != null) {
@@ -3369,7 +3369,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 }
             }
 
-            for (Dismissal personDismissal : personDismissalsCommitList ) {
+            for (Dismissal personDismissal : personDismissalsCommitList) {
                 commitContext.addInstanceToCommit(personDismissal);
             }
             dataManager.commit(commitContext);
@@ -3447,223 +3447,229 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         BaseResult result = new BaseResult();
         CommitContext commitContext = new CommitContext();
         ArrayList<HarmfulConditionJson> harmfulConditions = new ArrayList<>();
-//        if (harmfulConditionData.getHarmfulConditions() != null) {
-//            harmfulConditions = harmfulConditionData.getHarmfulConditions();
-//        }
-//        try {
-//            ArrayList<PositionHarmfulCondition> harmfulConditionsCommitList = new ArrayList<>();
-//            for (HarmfulConditionJson harmfulConditionJson : harmfulConditions) {
-//
-//                if (harmfulConditionJson.getPersonId() == null || harmfulConditionJson.getPersonId().isEmpty()) {
-//                    return prepareError(result, methodName, harmfulConditions,
-//                            "no personId");
-//                }
-//
-//                if (harmfulConditionJson.getLegacyId() == null || harmfulConditionJson.getLegacyId().isEmpty()) {
-//                    return prepareError(result, methodName, harmfulConditions,
-//                            "no legacyId");
-//                }
-//
-//                if (harmfulConditionJson.getDismissalReasonCode() == null || harmfulConditionJson.getDismissalReasonCode().isEmpty()) {
-//                    return prepareError(result, methodName, harmfulConditions,
-//                            "no dismissalReasonCode");
-//                }
-//
-//                if (harmfulConditionJson.getDismissalDate() == null || harmfulConditionJson.getDismissalDate().isEmpty()) {
-//                    return prepareError(result, methodName, harmfulConditions,
-//                            "no dismissalDate");
-//                }
-//
-//                if (harmfulConditionJson.getCompanyCode() == null || harmfulConditionJson.getCompanyCode().isEmpty()) {
-//                    return prepareError(result, methodName, harmfulConditions,
-//                            "no companyCode");
-//                }
-//
-//                Date personDismissalDate = formatter.parse(harmfulConditionJson.getDismissalDate());
-//                Dismissal personDismissal = harmfulConditionsCommitList.stream().filter(filterPersonDismissal ->
-//                        filterPersonDismissal.getLegacyId() != null
-//                                && filterPersonDismissal.getLcArticle() != null
-//                                && filterPersonDismissal.getLcArticle().getLegacyId() != null
-//                                && filterPersonDismissal.getLcArticle().getLegacyId().equals(harmfulConditionJson.getDismissalReasonCode())
-//                                && filterPersonDismissal.getDismissalDate() != null
-//                                && filterPersonDismissal.getDismissalDate().equals(personDismissalDate)
-//                                && filterPersonDismissal.getPersonGroup() != null
-//                                && filterPersonDismissal.getPersonGroup().getLegacyId() != null
-//                                && filterPersonDismissal.getPersonGroup().getLegacyId().equals(harmfulConditionJson.getPersonId())
-//                                && filterPersonDismissal.getPersonGroup().getCompany() != null
-//                                && filterPersonDismissal.getPersonGroup().getCompany().getLegacyId() != null
-//                                && filterPersonDismissal.getPersonGroup().getCompany().getLegacyId().equals(harmfulConditionJson.getCompanyCode())
-//                                && filterPersonDismissal.getLegacyId() != null
-//                                && filterPersonDismissal.getLegacyId().equals(harmfulConditionJson.getLegacyId())
-//                ).findFirst().orElse(null);
-//                if (personDismissal == null) {
-//                    personDismissal = dataManager.load(Dismissal.class)
-//                            .query(
-//                                    " select e from tsadv$Dismissal e " +
-//                                            " where e.legacyId = :legacyId " +
-//                                            " and e.personGroup.legacyId = :pgLegacyId " +
-//                                            " and e.personGroup.company.legacyId = :companyCode " +
-//                                            " and e.lcArticle.legacyId = :drLegacyId" +
-//                                            " and e.dismissalDate = :dsDate")
-//                            .setParameters(ParamsMap.of(
-//                                    "legacyId", harmfulConditionJson.getLegacyId(),
-//                                    "pgLegacyId", harmfulConditionJson.getPersonId(),
-//                                    "companyCode", harmfulConditionJson.getCompanyCode(),
-//                                    "drLegacyId", harmfulConditionJson.getDismissalReasonCode(),
-//                                    "dsDate",formatter.parse(harmfulConditionJson.getDismissalDate())))
-//                            .view("dismissal.edit").list().stream().findFirst().orElse(null);
-//
-//                    if (personDismissal != null) {
-//                        personDismissal.setLegacyId(harmfulConditionJson.getLegacyId());
-//                        personDismissal.setDismissalDate(formatter.parse(harmfulConditionJson.getDismissalDate()));
-//                        personDismissal.setRequestDate(CommonUtils.getSystemDate());
-//
-//                        //use default id
-//                        DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
-//                                .query(
-//                                        "select e from tsadv$DicDismissalStatus e " +
-//                                                " where e.id = :id ")
-//                                .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
-//                                .view(View.BASE).list().stream().findFirst().orElse(null);
-//
-//                        personDismissal.setStatus(status);
-//
-//                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
-//                                .query(
-//                                        " select e from base$PersonGroupExt e " +
-//                                                " where e.legacyId = :legacyId " +
-//                                                " and e.company.legacyId = :company ")
-//                                .setParameters(ParamsMap.of(
-//                                        "legacyId", harmfulConditionJson.getPersonId(),
-//                                        "company", harmfulConditionJson.getCompanyCode()))
-//                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-//                        if (personGroupExt != null) {
-//                            personDismissal.setPersonGroup(personGroupExt);
-//                        } else {
-//                            return prepareError(result, methodName, harmfulConditions,
-//                                    "no base$PersonGroupExt with legacyId " + harmfulConditionJson.getPersonId()
-//                                            + " and company legacyId " + harmfulConditionJson.getCompanyCode());
-//                        }
-//
-//                        DicLCArticle reason = dataManager.load(DicLCArticle.class)
-//                                .query(
-//                                        "select e from tsadv$DicLCArticle e " +
-//                                                " where e.legacyId = :legacyId ")
-//                                .parameter("legacyId", harmfulConditionJson.getDismissalReasonCode())
-//                                .view(View.BASE).list().stream().findFirst().orElse(null);
-//                        if (reason != null) {
-//                            personDismissal.setLcArticle(reason);
-//                        } else {
-//                            return prepareError(result, methodName, harmfulConditionJson.getDismissalReasonCode(), "" +
-//                                    "no tsadv$DicLCArticle with legacyId " + harmfulConditionJson.getDismissalReasonCode());
-//                        }
-//
-//                        harmfulConditionsCommitList.add(personDismissal);
-//                    } else {
-//                        personDismissal = metadata.create(Dismissal.class);
-//                        personDismissal.setId(UUID.randomUUID());
-//                        personDismissal.setLegacyId(harmfulConditionJson.getLegacyId());
-//                        personDismissal.setDismissalDate(formatter.parse(harmfulConditionJson.getDismissalDate()));
-//                        personDismissal.setRequestDate(CommonUtils.getSystemDate());
-//
-//                        //used default id
-//                        DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
-//                                .query(
-//                                        "select e from tsadv$DicDismissalStatus e " +
-//                                                " where e.id = :id ")
-//                                .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
-//                                .view(View.BASE).list().stream().findFirst().orElse(null);
-//
-//                        personDismissal.setStatus(status);
-//
-//                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
-//                                .query(
-//                                        " select e from base$PersonGroupExt e " +
-//                                                " where e.legacyId = :legacyId " +
-//                                                " and e.company.legacyId = :company ")
-//                                .setParameters(ParamsMap.of(
-//                                        "legacyId", harmfulConditionJson.getPersonId(),
-//                                        "company", harmfulConditionJson.getCompanyCode()))
-//                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-//                        if (personGroupExt != null) {
-//                            personDismissal.setPersonGroup(personGroupExt);
-//                        } else {
-//                            return prepareError(result, methodName, harmfulConditions,
-//                                    "no base$PersonGroupExt with legacyId " + harmfulConditionJson.getPersonId()
-//                                            + " and company legacyId " + harmfulConditionJson.getCompanyCode());
-//                        }
-//
-//                        DicLCArticle reason = dataManager.load(DicLCArticle.class)
-//                                .query(
-//                                        "select e from tsadv$DicLCArticle e " +
-//                                                " where e.legacyId = :legacyId ")
-//                                .parameter("legacyId", harmfulConditionJson.getDismissalReasonCode())
-//                                .view(View.BASE).list().stream().findFirst().orElse(null);
-//                        if (reason != null) {
-//                            personDismissal.setLcArticle(reason);
-//                        } else {
-//                            return prepareError(result, methodName, harmfulConditionJson.getDismissalReasonCode(), "" +
-//                                    "no tsadv$DicLCArticle with legacyId " + harmfulConditionJson.getDismissalReasonCode());
-//                        }
-//
-//                        harmfulConditionsCommitList.add(personDismissal);
-//                    }
-//                } else {
-//                    personDismissal.setLegacyId(harmfulConditionJson.getLegacyId());
-//                    personDismissal.setRequestDate(CommonUtils.getSystemDate());
-//
-//                    //used exists default id
-//                    DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
-//                            .query(
-//                                    "select e from tsadv$DicDismissalStatus e " +
-//                                            " where e.id = :id ")
-//                            .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
-//                            .view(View.BASE).list().stream().findFirst().orElse(null);
-//
-//                    personDismissal.setStatus(status);
-//
-//                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
-//                            .query(
-//                                    " select e from base$PersonGroupExt e " +
-//                                            " where e.legacyId = :legacyId " +
-//                                            " and e.company.legacyId = :company ")
-//                            .setParameters(ParamsMap.of(
-//                                    "legacyId", harmfulConditionJson.getPersonId(),
-//                                    "company", harmfulConditionJson.getCompanyCode()))
-//                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-//                    if (personGroupExt != null) {
-//                        personDismissal.setPersonGroup(personGroupExt);
-//                    } else {
-//                        return prepareError(result, methodName, harmfulConditions,
-//                                "no base$PersonGroupExt with legacyId " + harmfulConditionJson.getPersonId()
-//                                        + " and company legacyId " + harmfulConditionJson.getCompanyCode());
-//                    }
-//
-//                    DicLCArticle reason = dataManager.load(DicLCArticle.class)
-//                            .query(
-//                                    "select e from tsadv$DicLCArticle e " +
-//                                            " where e.legacyId = :legacyId ")
-//                            .parameter("legacyId", harmfulConditionJson.getDismissalReasonCode())
-//                            .view(View.BASE).list().stream().findFirst().orElse(null);
-//                    if (reason != null) {
-//                        personDismissal.setLcArticle(reason);
-//                    } else {
-//                        return prepareError(result, methodName, harmfulConditionJson.getDismissalReasonCode(), "" +
-//                                "no tsadv$DicLCArticle with legacyId " + harmfulConditionJson.getDismissalReasonCode());
-//                    }
-//                }
-//            }
-//
-//            for (Dismissal personDismissal : harmfulConditionsCommitList ) {
-//                commitContext.addInstanceToCommit(personDismissal);
-//            }
-//            dataManager.commit(commitContext);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return prepareError(result, methodName, personDismissalData, e.getMessage() + "\r" +
-//                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
-//                            .collect(Collectors.joining("\r")));
-//        }
+        if (harmfulConditionData.getHarmfulConditions() != null) {
+            harmfulConditions = harmfulConditionData.getHarmfulConditions();
+        }
+        try {
+            ArrayList<PositionHarmfulCondition> harmfulConditionsCommitList = new ArrayList<>();
+            for (HarmfulConditionJson harmfulConditionJson : harmfulConditions) {
+
+                if (harmfulConditionJson.getLegacyId() == null || harmfulConditionJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditions,
+                            "no legacyId");
+                }
+
+                if (harmfulConditionJson.getPositionId() == null || harmfulConditionJson.getPositionId().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditions,
+                            "no positionId");
+                }
+
+                if (harmfulConditionJson.getStartDate() == null || harmfulConditionJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditions,
+                            "no startDate");
+                }
+
+                if (harmfulConditionJson.getEndDate() == null || harmfulConditionJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditions,
+                            "no endDate");
+                }
+
+                if (harmfulConditionJson.getDays() < 0) {
+                    return prepareError(result, methodName, harmfulConditions,
+                            "days is negative");
+                }
+
+                if (harmfulConditionJson.getCompanyCode() == null || harmfulConditionJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditions,
+                            "no companyCode");
+                }
+
+                Date startDate = CommonUtils.truncDate(formatter.parse(harmfulConditionJson.getStartDate()));
+                Date endDate = CommonUtils.truncDate(formatter.parse(harmfulConditionJson.getEndDate()));
+
+                PositionHarmfulCondition harmfulCondition = harmfulConditionsCommitList.stream().filter(filterHarmfulCondition ->
+                        filterHarmfulCondition.getLegacyId() != null
+                                && filterHarmfulCondition.getLegacyId().equals(harmfulConditionJson.getLegacyId())
+                                && filterHarmfulCondition.getPositionGroup() != null
+                                && filterHarmfulCondition.getPositionGroup() != null
+                                && filterHarmfulCondition.getPositionGroup().getLegacyId() != null
+                                && filterHarmfulCondition.getPositionGroup().getLegacyId().equals(harmfulConditionJson.getPositionId())
+                                && filterHarmfulCondition.getPositionGroup().getPosition().getOrganizationGroupExt().getCompany() != null
+                                && filterHarmfulCondition.getPositionGroup().getPosition().getOrganizationGroupExt().getCompany().getLegacyId().equals(harmfulConditionJson.getCompanyCode())
+                                && filterHarmfulCondition.getStartDate() != null
+                                && filterHarmfulCondition.getStartDate().equals(startDate)
+                                && filterHarmfulCondition.getEndDate() != null
+                                && filterHarmfulCondition.getEndDate().equals(endDate)
+                ).findFirst().orElse(null);
+                if (harmfulCondition == null) {
+                    harmfulCondition = dataManager.load(PositionHarmfulCondition.class)
+                            .query(
+                                    " select e from tsadv_PositionHarmfulCondition e " +
+                                            " where e.legacyId = :legacyId " +
+                                            " and e.positionGroup.legacyId = :pgLegacyId " +
+                                            " and e.positionGroup.legacyId in" +
+                                            " (select p.group.legacyId from base$PositionExt p " +
+                                            "where p.organizationGroupExt.company.legacyId = :companyCode) ")
+                            .setParameters(ParamsMap.of(
+                                    "legacyId", harmfulConditionJson.getLegacyId(),
+                                    "pgLegacyId", harmfulConditionJson.getPositionId(),
+                                    "companyCode", harmfulConditionJson.getCompanyCode()))
+                            .view("positionHarmfulCondition.edit").list().stream().findFirst().orElse(null);
+
+                    if (harmfulCondition != null) {
+                        harmfulCondition.setLegacyId(harmfulConditionJson.getLegacyId());
+                        harmfulCondition.setStartDate(startDate);
+                        harmfulCondition.setEndDate(endDate);
+                        harmfulCondition.setDays(harmfulConditionJson.getDays());
+
+                        PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
+                                .query(
+                                        "select e from base$PositionGroupExt e " +
+                                                " where e.legacyId = :id" +
+                                                " and e.legacyId in " +
+                                                "(select p.group.legacyId from base$PositionExt p" +
+                                                " where p.organizationGroupExt.company.legacyId = :companyCode)")
+                                .parameter("id", harmfulConditionJson.getPositionId())
+                                .parameter("companyCode", harmfulConditionJson.getCompanyCode())
+                                .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (positionGroupExt != null) {
+                            harmfulCondition.setPositionGroup(positionGroupExt);
+                        } else {
+                            return prepareError(result, methodName, harmfulConditions,
+                                    "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
+                                            + " and company legacyId " + harmfulConditionJson.getCompanyCode());
+                        }
+
+
+                        harmfulConditionsCommitList.add(harmfulCondition);
+                    } else {
+                        harmfulCondition = metadata.create(PositionHarmfulCondition.class);
+                        harmfulCondition.setId(UUID.randomUUID());
+                        harmfulCondition.setLegacyId(harmfulConditionJson.getLegacyId());
+                        harmfulCondition.setStartDate(startDate);
+                        harmfulCondition.setEndDate(endDate);
+                        harmfulCondition.setDays(harmfulConditionJson.getDays());
+
+                        PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
+                                .query(
+                                        "select e from base$PositionGroupExt e " +
+                                                " where e.legacyId = :id" +
+                                                " and e.legacyId in " +
+                                                "(select p.group.legacyId from base$PositionExt p" +
+                                                " where p.organizationGroupExt.company.legacyId = :companyCode)")
+                                .parameter("id", harmfulConditionJson.getPositionId())
+                                .parameter("companyCode", harmfulConditionJson.getCompanyCode())
+                                .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (positionGroupExt != null) {
+                            harmfulCondition.setPositionGroup(positionGroupExt);
+                        } else {
+                            return prepareError(result, methodName, harmfulConditions,
+                                    "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
+                                            + " and company legacyId " + harmfulConditionJson.getCompanyCode());
+                        }
+
+                        harmfulConditionsCommitList.add(harmfulCondition);
+                    }
+                } else {
+                    harmfulCondition.setLegacyId(harmfulConditionJson.getLegacyId());
+                    harmfulCondition.setStartDate(startDate);
+                    harmfulCondition.setEndDate(endDate);
+                    harmfulCondition.setDays(harmfulConditionJson.getDays());
+
+                    PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
+                            .query(
+                                    "select e from base$PositionGroupExt e " +
+                                            " where e.legacyId = :id" +
+                                            " and e.legacyId in " +
+                                            "(select p.group.legacyId from base$PositionExt p" +
+                                            " where p.organizationGroupExt.company.legacyId = :companyCode)")
+                            .parameter("id", harmfulConditionJson.getPositionId())
+                            .parameter("companyCode", harmfulConditionJson.getCompanyCode())
+                            .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                    if (positionGroupExt != null) {
+                        harmfulCondition.setPositionGroup(positionGroupExt);
+                    } else {
+                        return prepareError(result, methodName, harmfulConditions,
+                                "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
+                                        + " and company legacyId " + harmfulConditionJson.getCompanyCode());
+                    }
+                }
+            }
+
+            for (PositionHarmfulCondition positionHarmfulCondition : harmfulConditionsCommitList) {
+                commitContext.addInstanceToCommit(positionHarmfulCondition);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, harmfulConditionData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, harmfulConditionData);
+    }
+
+    @Override
+    public BaseResult deleteHarmfulCondition(HarmfulConditionDataJson harmfulConditionData) {
+        String methodName = "deleteHarmfulCondition";
+        BaseResult result = new BaseResult();
+        ArrayList<HarmfulConditionJson> harmfulConditions = new ArrayList<>();
+        if (harmfulConditionData.getHarmfulConditions() != null) {
+            harmfulConditions = harmfulConditionData.getHarmfulConditions();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PositionHarmfulCondition> harmfulCondtionsArrayList = new ArrayList<>();
+            for (HarmfulConditionJson harmfulConditionJson : harmfulConditions) {
+
+                if (harmfulConditionJson.getLegacyId() == null || harmfulConditionJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditions,
+                            "no legacyId");
+                }
+
+                if (harmfulConditionJson.getCompanyCode() == null || harmfulConditionJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditions,
+                            "no companyCode");
+                }
+
+                PositionHarmfulCondition harmfulCondition = dataManager.load(PositionHarmfulCondition.class)
+                        .query(
+                                " select e from tsadv_PositionHarmfulCondition e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.positionGroup.legacyId in" +
+                                        " (select p.group.legacyId from base$PositionExt p " +
+                                        "where p.organizationGroupExt.company.legacyId = :companyCode) ")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", harmfulConditionJson.getLegacyId(),
+                                "companyCode", harmfulConditionJson.getCompanyCode()))
+                        .view("positionHarmfulCondition.edit").list().stream().findFirst().orElse(null);
+
+                if (harmfulCondition == null) {
+                    return prepareError(result, methodName, harmfulConditionJson,
+                            "no tsadv$PositionHarmfulCondition with legacyId " + harmfulConditionJson.getLegacyId()
+                                    + " and company legacyId " + harmfulConditionJson.getCompanyCode());
+                }
+
+                if (!harmfulCondtionsArrayList.stream().filter(harmfulCondition1 ->
+                        harmfulCondition1.getId().equals(harmfulCondition.getId())).findAny().isPresent()) {
+                    harmfulCondtionsArrayList.add(harmfulCondition);
+                }
+            }
+
+            for (PositionHarmfulCondition harmfulCondition : harmfulCondtionsArrayList) {
+                entityManager.remove(harmfulCondition);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, harmfulConditionData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
         return prepareSuccess(result, methodName, harmfulConditionData);
     }
 }

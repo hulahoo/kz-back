@@ -14,6 +14,10 @@ public class PositionHarmfulCondition extends StandardEntity {
     private static final long serialVersionUID = -4271285474033997233L;
 
     @NotNull
+    @Column(name = "LEGACY_ID")
+    protected String legacyId;
+
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "POSITION_GROUP_ID")
     protected PositionGroupExt positionGroup;
@@ -22,6 +26,14 @@ public class PositionHarmfulCondition extends StandardEntity {
     @NotNull
     @Column(name = "END_DATE", nullable = false)
     protected Date endDate;
+
+    public String getLegacyId() {
+        return legacyId;
+    }
+
+    public void setLegacyId(String legacyId) {
+        this.legacyId = legacyId;
+    }
 
     @NotNull
     @Column(name = "DAYS", nullable = false)
