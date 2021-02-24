@@ -487,10 +487,32 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 params.putIfAbsent("tableEn", createTableAbsence(absenceRequest, "En"));
                 break;
             }
+            case "application.for.absence.requires.approval":
+            case "absence.request.rejected":
+            case "absence.application.approved":
+            case "end.of.absence": {
+                LeavingVacationRequest leavingVacationRequest = transactionalDataManager.load(LeavingVacationRequest.class)
+                        .id(entity.getId()).view("leavingVacationRequest-editView").optional().orElse(null);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                if (leavingVacationRequest != null) {
+                    params.put("status", leavingVacationRequest.getStatus() != null
+                            ? leavingVacationRequest.getStatus().getLangValue1()
+                            : null);
+                    params.put("type", leavingVacationRequest.getRequestType() != null
+                            ? leavingVacationRequest.getRequestType().getLangValue1()
+                            : "");
+                    params.put("dateFrom", leavingVacationRequest.getStartDate() != null
+                            ? dateFormat.format(leavingVacationRequest.getStartDate())
+                            : null);
+                    params.put("dateTo", leavingVacationRequest.getEndData() != null
+                            ? dateFormat.format(leavingVacationRequest.getEndData())
+                            : null);
+                }
+            }
         }
         params.put("approversTableRu", getApproversTable("Ru", processInstanceData));
         params.put("approversTableEn", getApproversTable("En", processInstanceData));
-        params.put("comment", getProcessVariable(processInstanceData.getId(), "comment"));
+        params.put("comment", StringUtils.defaultString(getProcessVariable(processInstanceData.getId(), "comment"),""));
 
         return params;
     }
