@@ -64,8 +64,8 @@ public class NotificationWebSocketServer extends TextWebSocketHandler implements
     @Authenticated
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
-        System.out.println(status.getReason());
-//        openedWsConnections.remove(userSessionSource.currentOrSubstitutedUserId());
+        openedWsConnections.entrySet()
+                .removeIf(e -> e.getValue().getId().equalsIgnoreCase(session.getId()));
     }
 
     @Override
