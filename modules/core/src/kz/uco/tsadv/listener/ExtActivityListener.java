@@ -8,6 +8,8 @@ import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
 import kz.uco.base.events.NotificationRefreshEvent;
 import kz.uco.uactivity.listener.ActivityListener;
 import kz.uco.uactivity.entity.Activity;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.sql.Connection;
 
@@ -35,6 +37,11 @@ public class ExtActivityListener extends ActivityListener implements
     }
 
     protected void publishNotificationRefreshEvent(Activity activity) {
-        ((Events) AppBeans.get("cuba_Events")).publish(new NotificationRefreshEvent(activity.getAssignedUser().getId()));
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+            @Override
+            public void afterCommit() {
+                ((Events) AppBeans.get("cuba_Events")).publish(new NotificationRefreshEvent(activity.getAssignedUser().getId()));
+            }
+        });
     }
 }
