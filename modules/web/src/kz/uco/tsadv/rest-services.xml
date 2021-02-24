@@ -785,5 +785,11 @@
         <method name="deleteHarmfulCondition">
             <param name="harmfulConditionData" type="kz.uco.tsadv.modules.integration.jsonobject.HarmfulConditionDataJson"/>
         </method>
+        <method name="createOrUpdateAssignmentSchedule">
+            <param name="assignmentScheduleData" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
+        </method>
+        <method name="deleteAssignmentSchedule">
+            <param name="assignmentScheduleData" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
+        </method>
     </service>
 </services>

@@ -8623,6 +8623,18 @@
             </property>
         </property>
     </view>
+    <view class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
+          extends="_local"
+          name="assignmentSchedule.edit">
+        <property name="schedule" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="assignmentGroup" view="_minimal">
+            <property name="assignment" view="_minimal">
+                <property name="organizationGroup" view="_minimal"/>
+            </property>
+        </property>
+    </view>
     <view class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
           extends="_local"
           name="hierarchyElement.lookup">

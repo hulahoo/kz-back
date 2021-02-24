@@ -30,6 +30,10 @@ import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.recruitment.model.PersonEducation;
 import kz.uco.tsadv.modules.recruitment.model.PersonExperience;
+import kz.uco.tsadv.modules.timesheet.enums.MaterialDesignColorsEnum;
+import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
+import kz.uco.tsadv.modules.timesheet.model.StandardOffset;
+import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -3671,5 +3675,312 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         }
 
         return prepareSuccess(result, methodName, harmfulConditionData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateAssignmentSchedule(AssignmentScheduleJsonData assignmentScheduleData) {
+        String methodName = "createOrUpdateAssignmentSchedule";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<AssignmentScheduleJson> assignmentSchedules = new ArrayList<>();
+        if (assignmentScheduleData.getAssignmentSchedules() != null) {
+            assignmentSchedules = assignmentScheduleData.getAssignmentSchedules();
+        }
+        try {
+            ArrayList<AssignmentSchedule> assignmentSchedulesCommitList = new ArrayList<>();
+            for (AssignmentScheduleJson assignmentScheduleJson : assignmentSchedules) {
+
+                if (assignmentScheduleJson.getAssignmentId() == null || assignmentScheduleJson.getAssignmentId().isEmpty()) {
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no assignmentId");
+                }
+
+                if (assignmentScheduleJson.getScheduleId() == null || assignmentScheduleJson.getScheduleId().isEmpty()) {
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no scheduleId");
+                }
+
+                if (assignmentScheduleJson.getStartDate() == null || assignmentScheduleJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no startDate");
+                }
+
+                if (assignmentScheduleJson.getEndDate() == null || assignmentScheduleJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no endDate");
+                }
+
+                if (assignmentScheduleJson.getEndPolicyCode() == null || assignmentScheduleJson.getEndPolicyCode().isEmpty()) {
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no endPolicyCode");
+                }
+
+                if (assignmentScheduleJson.getCompanyCode() == null || assignmentScheduleJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no companyCode");
+                }
+
+
+                //todo check this default values for non null constraint
+                StandardOffset offset = dataManager.load(StandardOffset.class)
+                        .query("select e from tsadv$StandardOffset e")
+                        .view(View.BASE)
+                        .list().stream().findFirst().orElse(null);
+
+                MaterialDesignColorsEnum colorSet = MaterialDesignColorsEnum.AMBER;
+
+                Date startDate = CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getStartDate()));
+                Date endDate = CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getEndDate()));
+
+                AssignmentSchedule assignmentSchedule = assignmentSchedulesCommitList.stream().filter(filterAssignmentSchedule ->
+                        filterAssignmentSchedule.getAssignmentGroup() != null
+                                && filterAssignmentSchedule.getAssignmentGroup().getLegacyId() != null
+                                && filterAssignmentSchedule.getAssignmentGroup().getLegacyId().equals(assignmentScheduleJson.getAssignmentId())
+                                && filterAssignmentSchedule.getSchedule() != null
+                                && filterAssignmentSchedule.getSchedule().getLegacyId() != null
+                                && filterAssignmentSchedule.getSchedule().getLegacyId().equals(assignmentScheduleJson.getScheduleId())
+                                && filterAssignmentSchedule.getEndPolicyCode() != null
+                                && filterAssignmentSchedule.getEndPolicyCode().equals(assignmentScheduleJson.getEndPolicyCode())
+                                && filterAssignmentSchedule.getAssignmentGroup().getAssignment().getOrganizationGroup().getCompany() != null
+                                && filterAssignmentSchedule.getAssignmentGroup().getAssignment().getOrganizationGroup().getCompany().getLegacyId().equals(assignmentScheduleJson.getCompanyCode())
+                                && filterAssignmentSchedule.getStartDate() != null
+                                && filterAssignmentSchedule.getStartDate().equals(startDate)
+                                && filterAssignmentSchedule.getEndDate() != null
+                                && filterAssignmentSchedule.getEndDate().equals(endDate)
+                                && filterAssignmentSchedule.getEndPolicyCode() != null
+                                && filterAssignmentSchedule.getEndPolicyCode().equals(assignmentScheduleJson.getEndPolicyCode())
+                ).findFirst().orElse(null);
+                if (assignmentSchedule == null) {
+                    assignmentSchedule = dataManager.load(AssignmentSchedule.class)
+                            .query(
+                                    " select e from tsadv$AssignmentSchedule e " +
+                                            " where e.endPolicyCode = :epc" +
+                                            " and e.schedule.legacyId = :shLegacyId " +
+                                            " and e.assignmentGroup.legacyId = :agLegacyId " +
+                                            " and e.assignmentGroup.legacyId in " +
+                                            " (select p.group.legacyId from base$AssignmentExt p " +
+                                            " where p.organizationGroup.company.legacyId = :companyCode) ")
+                            .setParameters(ParamsMap.of(
+                                    "epc",assignmentScheduleJson.getEndPolicyCode(),
+                                    "agLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                    "shLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                    "companyCode", assignmentScheduleJson.getCompanyCode()))
+                            .view("assignmentSchedule.edit").list().stream().findFirst().orElse(null);
+
+                    if (assignmentSchedule != null) {
+                        assignmentSchedule.setStartDate(startDate);
+                        assignmentSchedule.setEndDate(endDate);
+                        assignmentSchedule.setEndPolicyCode(assignmentScheduleJson.getEndPolicyCode());
+                        assignmentSchedule.setOffset(offset);
+                        assignmentSchedule.setColorsSet(colorSet);
+
+                        AssignmentGroupExt assignmentGroupExt = dataManager.load(AssignmentGroupExt.class)
+                                .query("select e.group from base$AssignmentExt e " +
+                                        " where e.group.legacyId = :legacyId " +
+                                        " and e.group.legacyId in " +
+                                        "(select p.group.legacyId from base$AssignmentExt p " +
+                                        " where p.organizationGroup.company.legacyId = :companyCode)")
+                                .setParameters(
+                                        ParamsMap.of(
+                                                "legacyId", assignmentScheduleJson.getAssignmentId(),
+                                                "companyCode", assignmentScheduleJson.getCompanyCode())
+                                )
+                                .view("assignmentGroup.view")
+                                .list().stream().findFirst().orElse(null);
+                        if (assignmentGroupExt != null) {
+                            assignmentSchedule.setAssignmentGroup(assignmentGroupExt);
+                        } else {
+                            return prepareError(result, methodName, assignmentScheduleData,
+                                    "no base$AssignmentGroupExt with legacyId " + assignmentScheduleJson.getAssignmentId()
+                                            + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
+                        }
+
+                        StandardSchedule schedule = dataManager.load(StandardSchedule.class)
+                                .query("select e from tsadv$StandardSchedule e " +
+                                        "where e.legacyId = :shLegacyId")
+                                .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
+                                .view(View.BASE)
+                                .list().stream().findFirst().orElse(null);
+
+                        if (schedule != null) {
+                            assignmentSchedule.setSchedule(schedule);
+                        } else {
+                            return prepareError(result, methodName, assignmentScheduleData,
+                                    "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                        }
+
+                        assignmentSchedulesCommitList.add(assignmentSchedule);
+                    } else {
+                        assignmentSchedule = metadata.create(AssignmentSchedule.class);
+                        assignmentSchedule.setId(UUID.randomUUID());
+                        assignmentSchedule.setStartDate(startDate);
+                        assignmentSchedule.setEndDate(endDate);
+                        assignmentSchedule.setEndPolicyCode(assignmentScheduleJson.getEndPolicyCode());
+                        assignmentSchedule.setOffset(offset);
+                        assignmentSchedule.setColorsSet(colorSet);
+
+
+                        AssignmentGroupExt assignmentGroupExt = dataManager.load(AssignmentGroupExt.class)
+                                .query("select e.group from base$AssignmentExt e " +
+                                        " where e.group.legacyId = :legacyId " +
+                                        " and e.group.legacyId in " +
+                                        "(select p.group.legacyId from base$AssignmentExt p " +
+                                        " where p.organizationGroup.company.legacyId = :companyCode)")
+                                .setParameters(
+                                        ParamsMap.of(
+                                                "legacyId", assignmentScheduleJson.getAssignmentId(),
+                                                "companyCode", assignmentScheduleJson.getCompanyCode())
+                                )
+                                .view("assignmentGroup.view")
+                                .list().stream().findFirst().orElse(null);
+                        if (assignmentGroupExt != null) {
+                            assignmentSchedule.setAssignmentGroup(assignmentGroupExt);
+                        } else {
+                            return prepareError(result, methodName, assignmentScheduleData,
+                                    "no base$AssignmentGroupExt with legacyId " + assignmentScheduleJson.getAssignmentId()
+                                            + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
+                        }
+
+                        StandardSchedule schedule = dataManager.load(StandardSchedule.class)
+                                .query("select e from tsadv$StandardSchedule e " +
+                                        "where e.legacyId = :shLegacyId")
+                                .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
+                                .view(View.MINIMAL)
+                                .list().stream().findFirst().orElse(null);
+
+                        if (schedule != null) {
+                            assignmentSchedule.setSchedule(schedule);
+                        } else {
+                            return prepareError(result, methodName, assignmentScheduleData,
+                                    "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                        }
+
+                        assignmentSchedulesCommitList.add(assignmentSchedule);
+                    }
+                } else {
+                    assignmentSchedule.setStartDate(startDate);
+                    assignmentSchedule.setEndDate(endDate);
+                    assignmentSchedule.setEndPolicyCode(assignmentScheduleJson.getEndPolicyCode());
+                    assignmentSchedule.setOffset(offset);
+                    assignmentSchedule.setColorsSet(colorSet);
+
+                    AssignmentGroupExt assignmentGroupExt = dataManager.load(AssignmentGroupExt.class)
+                            .query("select e.group from base$AssignmentExt e " +
+                                    " where e.group.legacyId = :legacyId " +
+                                    " and e.group.legacyId in " +
+                                    "(select p.group.legacyId from base$AssignmentExt p " +
+                                    " where p.organizationGroup.company.legacyId = :companyCode)")
+                            .setParameters(
+                                    ParamsMap.of(
+                                            "legacyId", assignmentScheduleJson.getAssignmentId(),
+                                            "companyCode", assignmentScheduleJson.getCompanyCode())
+                            )
+                            .view("assignmentGroup.view")
+                            .list().stream().findFirst().orElse(null);
+                    if (assignmentGroupExt != null) {
+                        assignmentSchedule.setAssignmentGroup(assignmentGroupExt);
+                    } else {
+                        return prepareError(result, methodName, assignmentScheduleData,
+                                "no base$AssignmentGroupExt with legacyId " + assignmentScheduleJson.getAssignmentId()
+                                        + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
+                    }
+
+                    StandardSchedule schedule = dataManager.load(StandardSchedule.class)
+                            .query("select e from tsadv$StandardSchedule e " +
+                                    "where e.legacyId = :shLegacyId")
+                            .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
+                            .view(View.MINIMAL)
+                            .list().stream().findFirst().orElse(null);
+
+                    if (schedule != null) {
+                        assignmentSchedule.setSchedule(schedule);
+                    } else {
+                        return prepareError(result, methodName, assignmentScheduleData,
+                                "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                    }
+                }
+            }
+
+            for (AssignmentSchedule assignmentSchedule : assignmentSchedulesCommitList) {
+                commitContext.addInstanceToCommit(assignmentSchedule);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, assignmentScheduleData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, assignmentScheduleData);
+    }
+
+    @Override
+    public BaseResult deleteAssignmentSchedule(AssignmentScheduleJsonData assignmentScheduleData) {
+        String methodName = "deleteAssignmentSchedule";
+        BaseResult result = new BaseResult();
+        ArrayList<AssignmentScheduleJson> assignmentSchedules = new ArrayList<>();
+        if (assignmentScheduleData.getAssignmentSchedules() != null) {
+            assignmentSchedules = assignmentScheduleData.getAssignmentSchedules();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<AssignmentSchedule> assignmentSchedulesArrayList = new ArrayList<>();
+            for (AssignmentScheduleJson assignmentScheduleJson : assignmentSchedules) {
+
+                if (assignmentScheduleJson.getAssignmentId() == null || assignmentScheduleJson.getAssignmentId().isEmpty()) {
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no assignmentId");
+                }
+
+                if(assignmentScheduleJson.getStartDate() == null || assignmentScheduleJson.getStartDate().isEmpty()){
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no startDate");
+                }
+                if (assignmentScheduleJson.getCompanyCode() == null || assignmentScheduleJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, assignmentSchedules,
+                            "no companyCode");
+                }
+
+                AssignmentSchedule assignmentSchedule = dataManager.load(AssignmentSchedule.class)
+                        .query(
+                                " select e from tsadv$AssignmentSchedule e " +
+                                        " where e.startDate = :startDate" +
+                                        " and e.assignmentGroup.legacyId = :agLegacyId " +
+                                        " and e.assignmentGroup.legacyId in " +
+                                        " (select p.group.legacyId from base$AssignmentExt p " +
+                                        " where p.organizationGroup.company.legacyId = :companyCode) ")
+                        .setParameters(
+                                ParamsMap.of(
+                                "startDate",CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getStartDate())),
+                                "agLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                "companyCode", assignmentScheduleJson.getCompanyCode()
+                                )
+                        )
+                        .view("assignmentSchedule.edit").list().stream().findFirst().orElse(null);
+
+                if (assignmentSchedule == null) {
+                    return prepareError(result, methodName, assignmentScheduleJson,
+                            "no tsadv$AssignmentSchedule with assignmentId " + assignmentScheduleJson.getAssignmentId()
+                                    + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
+                }
+
+                if (!assignmentSchedulesArrayList.stream().filter(assignmentSchedule1 ->
+                        assignmentSchedule1.getId().equals(assignmentSchedule.getId())).findAny().isPresent()) {
+                    assignmentSchedulesArrayList.add(assignmentSchedule);
+                }
+            }
+
+            for (AssignmentSchedule assignmentSchedule : assignmentSchedulesArrayList) {
+                entityManager.remove(assignmentSchedule);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, assignmentScheduleData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, assignmentScheduleData);
     }
 }
