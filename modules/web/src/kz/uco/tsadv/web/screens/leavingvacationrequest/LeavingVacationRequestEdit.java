@@ -4,6 +4,7 @@ import com.haulmont.addon.bproc.web.processform.Outcome;
 import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.components.DateField;
+import com.haulmont.cuba.gui.components.TextArea;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
@@ -29,6 +30,8 @@ import java.util.Date;
 public class LeavingVacationRequestEdit extends AbstractBprocEditor<LeavingVacationRequest> {
 
     @Inject
+    protected TextArea<String> commentField;
+    @Inject
     private DateField<Date> requestDateField;
     @Inject
     protected TimeSource timeSource;
@@ -52,16 +55,15 @@ public class LeavingVacationRequestEdit extends AbstractBprocEditor<LeavingVacat
 
         super.onAfterShow(event);
 
+        if (leavingVacationRequestDc.getItem().getStatus() != null
+                && !leavingVacationRequestDc.getItem().getStatus().getCode().equals("DRAFT")) {
+            plannedStartDateField.setEditable(false);
+            commentField.setEditable(false);
+        }
         LocalDateTime ldt1 = LocalDateTime.ofInstant(requestDateField.getValue().toInstant(), ZoneId.systemDefault());
         Date outPlannedStart = Date.from(ldt1.minusDays(-30).atZone(ZoneId.systemDefault()).toInstant());
 
         plannedStartDateField.setRangeStart(outPlannedStart);
 
-    }
-
-
-    @Subscribe
-    public void onBeforeShow(BeforeShowEvent event) {
-        plannedStartDateField.setRangeEnd(leavingVacationRequestDc.getItem().getEndData());
     }
 }

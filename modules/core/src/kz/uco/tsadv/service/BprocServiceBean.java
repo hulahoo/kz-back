@@ -479,6 +479,49 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
                 break;
             }
+            case "Application.for.withdrawal.from.labor.leave.requires":
+            case "Application.for.withdrawal.from.labor.leave.rejected":
+            case "Application.for.withdrawal.from.labor.leave.approved": {
+                AbsenceForRecall absenceForRecall = transactionalDataManager.load(AbsenceForRecall.class)
+                        .id(entity.getId()).view("absenceForRecall.edit").optional().orElse(null);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+                PersonExt person = commonService.getEntity(PersonExt.class,
+                        "select e from base$PersonExt e " +
+                                " where e.group.id = :groupId " +
+                                "   and current_date between e.startDate and e.endDate ",
+                        ParamsMap.of("groupId", absenceForRecall.getEmployee().getId()),
+                        View.LOCAL);
+
+                DicAbsenceType type = absenceForRecall.getAbsenceType();
+                params.put("fullNameRu", person.getFullNameLatin("ru"));
+                params.put("fullNameEn", person.getFullNameLatin("en"));
+                params.put("absenceTypeRu", type.getLangValue1());
+                params.put("absenceTypeEn", type.getLangValue3());
+                params.put("dateFrom", dateFormat.format(absenceForRecall.getDateFrom()));
+                params.put("dateTo", dateFormat.format(absenceForRecall.getDateTo()));
+                params.putIfAbsent("requestStatusRu", absenceForRecall.getStatus().getLangValue1());
+                params.putIfAbsent("requestStatusEn", absenceForRecall.getStatus().getLangValue3());
+                if (absenceForRecall.getPurpose() != null && absenceForRecall.getPurpose().getCode() != null) {
+                    if (absenceForRecall.getPurpose().getCode().equals("OTHER")) {
+                        params.putIfAbsent("purposeRu", absenceForRecall.getPurposeText() != null ?
+                                absenceForRecall.getPurposeText() : " ");
+                        params.putIfAbsent("purposeEn", absenceForRecall.getPurposeText() != null ?
+                                absenceForRecall.getPurposeText() : " ");
+                    } else {
+                        params.putIfAbsent("purposeRu", absenceForRecall.getPurpose().getLangValue1() != null ?
+                                absenceForRecall.getPurpose().getLangValue1() : " ");
+                        params.putIfAbsent("purposeEn", absenceForRecall.getPurpose().getLangValue3() != null ?
+                                absenceForRecall.getPurpose().getLangValue3() : " ");
+                    }
+                } else {
+                    params.putIfAbsent("purposeRu", " ");
+                    params.putIfAbsent("purposeEn", " ");
+                }
+
+
+                break;
+            }
             case "bpm.absenceRequest.approver.notification": {
                 AbsenceRequest absenceRequest = (AbsenceRequest) dataManager.reload(entity, "absenceRequest.view");
 
@@ -487,10 +530,32 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 params.putIfAbsent("tableEn", createTableAbsence(absenceRequest, "En"));
                 break;
             }
+            case "application.for.absence.requires.approval":
+            case "absence.request.rejected":
+            case "absence.application.approved":
+            case "end.of.absence": {
+                LeavingVacationRequest leavingVacationRequest = transactionalDataManager.load(LeavingVacationRequest.class)
+                        .id(entity.getId()).view("leavingVacationRequest-editView").optional().orElse(null);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                if (leavingVacationRequest != null) {
+                    params.put("status", leavingVacationRequest.getStatus() != null
+                            ? leavingVacationRequest.getStatus().getLangValue1()
+                            : null);
+                    params.put("type", leavingVacationRequest.getRequestType() != null
+                            ? leavingVacationRequest.getRequestType().getLangValue1()
+                            : "");
+                    params.put("dateFrom", leavingVacationRequest.getStartDate() != null
+                            ? dateFormat.format(leavingVacationRequest.getStartDate())
+                            : null);
+                    params.put("dateTo", leavingVacationRequest.getEndData() != null
+                            ? dateFormat.format(leavingVacationRequest.getEndData())
+                            : null);
+                }
+            }
         }
         params.put("approversTableRu", getApproversTable("Ru", processInstanceData));
         params.put("approversTableEn", getApproversTable("En", processInstanceData));
-        params.put("comment", getProcessVariable(processInstanceData.getId(), "comment"));
+        params.put("comment", StringUtils.defaultString(getProcessVariable(processInstanceData.getId(), "comment"),""));
 
         return params;
     }
