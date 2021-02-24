@@ -120,5 +120,8 @@
             <param name="personGroupExtId" type="java.util.UUID"/>
          </method>
         <method name="getOffsetRequestsNew"/>
+        <method name="calcTotalAmount">
+            <param name="insuredPersonId" type="java.util.UUID"/>
+        </method>
     </service>
 </services>
