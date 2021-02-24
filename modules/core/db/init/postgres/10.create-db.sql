@@ -17380,6 +17380,7 @@ create table TSADV_POSITION_HARMFUL_CONDITION (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    LEGACY_ID varchar(255),
     POSITION_GROUP_ID uuid not null,
     END_DATE date not null,
     DAYS integer not null,
