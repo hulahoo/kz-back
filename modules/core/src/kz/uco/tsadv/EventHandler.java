@@ -103,19 +103,19 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
-//        if (getCount(em, "ABSENCE_FOR_RECALL_APPROVE") == 0) {
-//            ActivityType activityType = metadata.create(ActivityType.class);
-//            activityType.setCode("ABSENCE_FOR_RECALL_APPROVE");
-//            activityType.setScreen("tsadv_AbsenceForRecall.edit");
-//            activityType.setLangValue1("Утверждение / отклонение заявление на AbsenceForRecal");
-//            WindowProperty windowProperty = metadata.create(WindowProperty.class);
-//            windowProperty.setEntityName("tsadv_AbsenceForRecall");
-//            windowProperty.setScreenName("tsadv_AbsenceRvdRequest.edit");
-//            windowProperty.setViewName(View.LOCAL);
-//            activityType.setWindowProperty(windowProperty);
-//            em.persist(windowProperty);
-//            em.persist(activityType);
-//        }
+        if (getCount(em, "ABSENCE_FOR_RECALL_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("ABSENCE_FOR_RECALL_APPROVE");
+            activityType.setScreen("tsadv_AbsenceForRecall.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на отзыв из отпуска");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv_AbsenceForRecall");
+            windowProperty.setScreenName("tsadv_AbsenceForRecall.edit");
+            windowProperty.setViewName("absenceForRecall.edit");
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
         if (getCount(em, "NOTIFICATION") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("NOTIFICATION");
