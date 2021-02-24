@@ -2,6 +2,7 @@ package kz.uco.tsadv.entity.tb;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.base.entity.shared.PositionGroup;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ public class PositionHarmfulCondition extends StandardEntity {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "POSITION_GROUP_ID")
-    protected PositionGroup positionGroup;
+    protected PositionGroupExt positionGroup;
 
     @Temporal(TemporalType.DATE)
     @NotNull
@@ -31,11 +32,11 @@ public class PositionHarmfulCondition extends StandardEntity {
     @Column(name = "START_DATE", nullable = false)
     protected Date startDate;
 
-    public void setPositionGroup(PositionGroup positionGroup) {
+    public void setPositionGroup(PositionGroupExt positionGroup) {
         this.positionGroup = positionGroup;
     }
 
-    public PositionGroup getPositionGroup() {
+    public PositionGroupExt getPositionGroup() {
         return positionGroup;
     }
 
