@@ -1,14 +1,18 @@
 package kz.uco.tsadv.service;
 
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
+import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
+import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -31,6 +35,8 @@ public class DocumentServiceBean implements DocumentService {
     protected DataManager dataManager;
     @Inject
     protected TimeSource timeSource;
+    @Inject
+    private EmployeeNumberService employeeNumberService;
 
     @Override
     public List<InsuredPerson> getMyInsuraces() {
@@ -194,6 +200,28 @@ public class DocumentServiceBean implements DocumentService {
                 .view("scheduleOffsetsRequest-for-my-team")
                 .list();
     }
+
+
+    @Override
+    public ScheduleOffsetsRequest getOffsetRequestsNew() {
+        ScheduleOffsetsRequest request = dataManager.create(ScheduleOffsetsRequest.class);
+        PersonGroupExt personGroupExt = getPersonGroupExt();
+        request.setPersonGroup(personGroupExt);
+        DicRequestStatus status = commonService.getEntity(DicRequestStatus.class, "DRAFT");
+        request.setStatus(status);
+        StandardSchedule standardSchedule = commonService.getEntities(StandardSchedule.class,
+                "select e.schedule from tsadv$AssignmentSchedule e " +
+                        " where current_date between e.startDate and e.endDate and e.assignmentGroup.id in " +
+                        "(select a.group.id from base$AssignmentExt a where current_date between a.startDate and a.endDate " +
+                        "and a.personGroup.id = :personGroupId) ",
+                ParamsMap.of("personGroupId", personGroupExt.getId()),
+                "standardSchedule-for-my-team").stream().findFirst().orElse(null);
+        request.setCurrentSchedule(standardSchedule);
+        request.setRequestDate(CommonUtils.getSystemDate());
+        request.setRequestNumber(employeeNumberService.generateNextRequestNumber());
+        return  request;
+    }
+
 
     private InsuredPerson getInsuredPersonEmployee() {
         InsuredPerson insuredPerson = dataManager.create(InsuredPerson.class);

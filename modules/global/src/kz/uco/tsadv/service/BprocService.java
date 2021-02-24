@@ -58,7 +58,7 @@ public interface BprocService {
 
     void approveAbsenceForRecall(AbsenceForRecall absenceForRecall);
 
-    void changeStatusAbsenceRequest(AbsenceRequest entity, String status, String notificationCode);
+    void changeStatusBprocRequest(AbstractBprocRequest entity, String status, String notificationCode);
 
     void changeStatusLeavingVacationRequest(LeavingVacationRequest entity, String status, String notificationCode);
 

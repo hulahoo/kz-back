@@ -104,6 +104,19 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        if (getCount(em, "ASSIGNED_PERFORMANCE_PLAN_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("ASSIGNED_PERFORMANCE_PLAN_APPROVE");
+            activityType.setScreen("tsadv$AssignedPerformancePlan.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на ASSIGNED_PERFORMANCE_PLAN_APPROVE");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv$AssignedPerformancePlan");
+            windowProperty.setScreenName("tsadv$AssignedPerformancePlan.edit");
+            windowProperty.setViewName(View.LOCAL);
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
 //        if (getCount(em, "ABSENCE_FOR_RECALL_APPROVE") == 0) {
 //            ActivityType activityType = metadata.create(ActivityType.class);
 //            activityType.setCode("ABSENCE_FOR_RECALL_APPROVE");

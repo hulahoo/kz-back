@@ -1906,8 +1906,6 @@
                       view="_minimal"/>
             <property name="list"
                       view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
                 <property name="maritalStatus"
                           view="_minimal">
                     <property name="langValue1"/>
@@ -1952,6 +1950,20 @@
                 <property name="nationalIdentifier"/>
                 <property name="dateOfBirth"/>
             </property>
+            <property name="assignments" view="_minimal">
+                <property name="organizationGroup">
+                    <property name="organizationNameLang1"/>
+                    <property name="organizationNameLang2"/>
+                    <property name="organizationNameLang3"/>
+                    <property name="organizationNameLang4"/>
+                    <property name="organizationNameLang5"/>
+                    <property name="organizationName"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="code"/>
+                </property>
+            </property>
         </property>
         <property name="legacyId"/>
         <property name="nonresidentType"/>
@@ -1967,11 +1979,6 @@
           name="assignment.view">
         <property name="personGroup"
                   view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
             <property name="personFirstLastNameLatin"/>
         </property>
         <property name="gradeGroup"
@@ -1984,8 +1991,6 @@
                       view="_local">
                 <property name="gradeGroup"
                           view="_minimal">
-                    <property name="grade"
-                              view="_minimal"/>
                     <property name="list"
                               view="_minimal"/>
                 </property>
@@ -1996,8 +2001,6 @@
                       view="_local">
                 <property name="gradeGroup"
                           view="_minimal">
-                    <property name="grade"
-                              view="_minimal"/>
                     <property name="list"
                               view="_minimal"/>
                 </property>
@@ -2011,20 +2014,15 @@
                       view="_local">
                 <property name="updatedBy"/>
             </property>
-            <property name="assignmentNumber"/>
         </property>
         <property name="organizationGroup"
                   view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="organizationNameLang1"/>
-                <property name="organizationNameLang2"/>
-                <property name="organizationNameLang3"/>
-                <property name="organizationNameLang4"/>
-                <property name="organizationNameLang5"/>
-            </property>
+            <property name="organizationName"/>
+            <property name="organizationNameLang2"/>
+            <property name="organizationNameLang3"/>
+            <property name="organizationNameLang4"/>
+            <property name="organizationNameLang5"/>
+            <property name="organizationNameLang1"/>
         </property>
         <property name="jobGroup"
                   view="_minimal">
@@ -4595,8 +4593,8 @@
                   view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Dismissal"
-        extends="_local"
-        name="dismissal.edit">
+          extends="_local"
+          name="dismissal.edit">
         <property name="status" view="_minimal"/>
         <property name="personGroup" view="_minimal"/>
         <property name="lcArticle" view="_minimal"/>
@@ -22873,7 +22871,6 @@
                 <property name="endDate"/>
             </property>
         </property>
-        <property name="name"/>
         <property name="schedule" view="_minimal">
             <property name="scheduleName"/>
             <property name="startDate"/>
@@ -22885,9 +22882,12 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
+            <property name="offsetDisplay"/>
+            <property name="offsetDisplayDays"/>
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
+        <property name="name"/>
     </view>
     <view entity="tsadv_ScheduleOffsetsRequest" name="scheduleOffsetsRequest-for-my-team" extends="_local">
         <property name="personGroup" view="_minimal">

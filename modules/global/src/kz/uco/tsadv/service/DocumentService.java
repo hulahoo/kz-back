@@ -22,5 +22,5 @@ public interface DocumentService {
                           UUID relativeTypeId);
 
     List<ScheduleOffsetsRequest> getOffsetRequestsByPgId(UUID personGroupExtId);
-
+    ScheduleOffsetsRequest getOffsetRequestsNew();
 }
