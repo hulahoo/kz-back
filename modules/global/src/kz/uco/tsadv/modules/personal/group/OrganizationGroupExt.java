@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|organization,list")
+@NamePattern("%s|organization,list,organizationNameLang1,organizationNameLang2,organizationNameLang3,organizationNameLang4,organizationNameLang5")
 @Extends(OrganizationGroup.class)
 @Entity(name = "base$OrganizationGroupExt")
 @Customizer(OrganizationGroupExtDescriptorCustomizer.class)
