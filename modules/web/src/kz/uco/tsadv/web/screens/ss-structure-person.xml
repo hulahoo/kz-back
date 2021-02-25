@@ -276,6 +276,11 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                                                 enable="false"
                                                 caption="msg://createAbsenceForRecall"
                                                 icon="PLUS"/>
+                                        <action id="changeAbsenceDaysCreate" type="create"
+                                                invoke="changeAbsenceDaysCreate"
+                                                enable="false"
+                                                caption="msg://changeAbsenceDaysCreate"
+                                                icon="PLUS"/>
                                     </actions>
                                     <columns>
                                         <column id="type"/>
@@ -285,6 +290,8 @@ and a.personGroup.id = :ds$personExtDs.group.id)]]>
                                     </columns>
                                     <buttonsPanel>
                                         <button id="absenceForRecallCreateBtn" action="absenceTable1.recallCreate"/>
+                                        <button id="changeAbsenceDaysCreateBtn"
+                                                action="absenceTable1.changeAbsenceDaysCreate"/>
                                     </buttonsPanel>
                                     <rows datasource="absenceDs"/>
                                     <rowsCount/>
