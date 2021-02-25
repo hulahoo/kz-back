@@ -130,6 +130,19 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        if (getCount(em, "CHANGE_ABSENCE_DAYS_REQUEST_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("CHANGE_ABSENCE_DAYS_REQUEST_APPROVE");
+            activityType.setScreen("tsadv_ChangeAbsenceDaysRequest.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на изменение дат отпуска");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv_ChangeAbsenceDaysRequest");
+            windowProperty.setScreenName("tsadv_ChangeAbsenceDaysRequest.edit");
+            windowProperty.setViewName("changeAbsenceDaysRequest.edit");
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
         if (getCount(em, "NOTIFICATION") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("NOTIFICATION");

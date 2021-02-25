@@ -401,6 +401,7 @@
         </item>
         <item screen="tsadv_PersonData" caption="mainMsg://menu_config.tsadv_PersonData"/>
         <item screen="tsadv$MyMICInsuredPerson.browse" caption="mainMsg://menu_config.tsadv$MyMICInsuredPerson.browse"/>
+        <item screen="tsadv_DicPurposeAbsence.browse"/>
     </menu>
     <menu id="performanceManagement"
           icon="font-icon:BAR_CHART_O"

@@ -628,6 +628,8 @@
         <class>kz.uco.tsadv.modules.personal.dictionary.DicChangeType</class>
         <class>kz.uco.tsadv.entity.VacationGraphic</class>
         <class>kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest</class>
+        <class>kz.uco.tsadv.modules.personal.model.ChangeAbsenceDaysRequest</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicPurposeAbsence</class>
         <class>kz.uco.tsadv.entity.tb.PositionHarmfulCondition</class>
     </persistence-unit>
 </persistence>

@@ -1894,6 +1894,12 @@
         <entity class="kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.ChangeAbsenceDaysRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicPurposeAbsence">
+            <include re=".*"/>
+        </entity>
         <entity class="kz.uco.tsadv.entity.tb.PositionHarmfulCondition">
             <include re=".*"/>
         </entity>
