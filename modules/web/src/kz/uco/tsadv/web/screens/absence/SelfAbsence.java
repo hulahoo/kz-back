@@ -24,7 +24,6 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
-import kz.uco.tsadv.modules.recruitment.dictionary.DicRequisitionType;
 import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
@@ -128,7 +127,7 @@ public class SelfAbsence extends StandardLookup<Absence>
     protected void onAbsencesDcItemChange(InstanceContainer.ItemChangeEvent<Absence> event) {
 
         boolean isEnabled = event.getItem() != null && "MATERNITY".equals(event.getItem().getType().getCode());
-        absencesTableNewLeavingVacationRequest.setEnabled(isEnabled);
+        absencesTableNewLeavingVacationRequest.setEnabled(true);
     }
 
     public void newVacationScheduleButton() {
@@ -159,12 +158,10 @@ public class SelfAbsence extends StandardLookup<Absence>
     public void newLeavingVacationRequest() {
         Absence getItem = absencesDc.getItem();
         LeavingVacationRequest item = dataManager.create(LeavingVacationRequest.class);
-        Date today = timeSource.currentTimestamp();
 
         item.setVacation(getItem);
         item.setStartDate(getItem.getDateFrom());
-        item.setEndData(getItem.getDateTo());
-        item.setRequestType(commonService.getEntity(DicRequisitionType.class, "MATERNITY"));
+        item.setEndDate(getItem.getDateTo());
 
         screenBuilders.editor(LeavingVacationRequest.class, this)
                 .newEntity(item)

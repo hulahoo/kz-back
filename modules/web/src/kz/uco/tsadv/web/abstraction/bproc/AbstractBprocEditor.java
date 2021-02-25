@@ -120,6 +120,8 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         processInstanceData = getProcessInstanceData();
         fillTasksDc();
         activeTaskData = getActiveTaskData();
+
+        if (!isProcessStarted() && isDraft()) getEditedEntity().setRequestDate(new Date());
     }
 
     protected void initFields() {

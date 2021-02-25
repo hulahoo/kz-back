@@ -9500,10 +9500,9 @@ create table TSADV_LEAVING_VACATION_REQUEST (
     REQUEST_DATE date not null,
     COMMENT_ varchar(3000),
     --
-    REQUEST_TYPE_ID uuid,
     VACATION_ID uuid,
     START_DATE date,
-    END_DATA date,
+    END_DATE date,
     PLANNED_START_DATE date,
     --
     primary key (ID)

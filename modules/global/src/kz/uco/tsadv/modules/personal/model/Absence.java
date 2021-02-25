@@ -347,16 +347,16 @@ public class Absence extends AbstractParentCategorizedEntity {
     }
 
     public String getTypeAndDate() {
-
-        typeAndDate = type == null ? "" : type.getLangValue() + " " + dateFormat.format(dateFrom) + " - " + dateFormat.format(dateTo);
+        if (dateFrom != null && dateTo != null)
+            typeAndDate = type == null ? "" : type.getLangValue() + " " + dateFormat.format(dateFrom) + " - " + dateFormat.format(dateTo);
         return typeAndDate;
     }
 
     public String getNumberAndTypeAndDate() {
         numberAndTypeAndDate = (orderNum != null ? (orderNum + " ") : "");
         if (type != null) numberAndTypeAndDate += type.getLangValue() + "";
-        if(dateFrom != null) numberAndTypeAndDate += dateFormat.format(dateFrom) + "";
-        if(dateTo != null) numberAndTypeAndDate += dateFormat.format(dateTo) + "";
+        if (dateFrom != null) numberAndTypeAndDate += dateFormat.format(dateFrom) + "";
+        if (dateTo != null) numberAndTypeAndDate += dateFormat.format(dateTo) + "";
         return numberAndTypeAndDate;
     }
 
