@@ -41,19 +41,21 @@ public class EnrollmentChangedListener {
                 if (!EnrollmentStatus.APPROVED.equals(EnrollmentStatus.fromId(oldValue))
                         && EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 
-                    sendNotification(enrollment);
+                    sendNotification(enrollment, "tdc.student.enrollmentApproved");
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
 
             if (EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 
-                sendNotification(enrollment);
+                sendNotification(enrollment, "tdc.student.enrollmentApproved");
+            } else {
+                sendNotification(enrollment, "tdc.trainer.newEnrollment");
             }
         }
     }
 
-    private void sendNotification(Enrollment enrollment) {
+    private void sendNotification(Enrollment enrollment, String notificationCode) {
         List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                 .query("select e from tsadv$CourseTrainer e " +
                         " where e.course = :course " +
@@ -74,7 +76,7 @@ public class EnrollmentChangedListener {
                     Map<String, Object> map = new HashMap<>();
                     map.put("courseName", enrollment.getCourse().getName());
                     map.put("personFullName", enrollment.getPersonGroup().getFullName());
-                    notificationSender.sendParametrizedNotification("tdc.student.enrollmentApproved",
+                    notificationSender.sendParametrizedNotification(notificationCode,
                             tsadvUser, map);
                 }
             });
