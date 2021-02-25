@@ -586,14 +586,11 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                     params.put("status", leavingVacationRequest.getStatus() != null
                             ? leavingVacationRequest.getStatus().getLangValue1()
                             : null);
-                    params.put("type", leavingVacationRequest.getRequestType() != null
-                            ? leavingVacationRequest.getRequestType().getLangValue1()
-                            : "");
                     params.put("dateFrom", leavingVacationRequest.getStartDate() != null
                             ? dateFormat.format(leavingVacationRequest.getStartDate())
                             : null);
-                    params.put("dateTo", leavingVacationRequest.getEndData() != null
-                            ? dateFormat.format(leavingVacationRequest.getEndData())
+                    params.put("dateTo", leavingVacationRequest.getEndDate() != null
+                            ? dateFormat.format(leavingVacationRequest.getEndDate())
                             : null);
                 }
             }

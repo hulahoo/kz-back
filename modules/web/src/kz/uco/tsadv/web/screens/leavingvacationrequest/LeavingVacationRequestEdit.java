@@ -40,16 +40,6 @@ public class LeavingVacationRequestEdit extends AbstractBprocEditor<LeavingVacat
     @Inject
     private InstanceContainer<LeavingVacationRequest> leavingVacationRequestDc;
 
-
-    @Subscribe
-    protected void onAfterInit(AfterInitEvent event) {
-        LocalDateTime ldt = LocalDateTime.ofInstant(timeSource.currentTimestamp().toInstant(), ZoneId.systemDefault());
-        Date outRequestDate = Date.from(ldt.minusDays(1).atZone(ZoneId.systemDefault()).toInstant());
-
-        requestDateField.setRangeStart(outRequestDate);
-
-    }
-
     @Subscribe
     public void onAfterShow(AfterShowEvent event) {
 

@@ -39,7 +39,7 @@
                 <column id="requestType"/>
                 <column id="vacation"/>
                 <column id="startDate"/>
-                <column id="endData"/>
+                <column id="endDate"/>
                 <column id="plannedStartDate"/>
                 <column id="comment"/>
             </columns>
