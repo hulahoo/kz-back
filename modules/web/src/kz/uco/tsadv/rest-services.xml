@@ -779,5 +779,23 @@
         <method name="deletePersonDismissal">
             <param name="personDismissalData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
         </method>
+        <method name="createOrUpdateHarmfulCondition">
+            <param name="harmfulConditionData" type="kz.uco.tsadv.modules.integration.jsonobject.HarmfulConditionDataJson"/>
+        </method>
+        <method name="deleteHarmfulCondition">
+            <param name="harmfulConditionData" type="kz.uco.tsadv.modules.integration.jsonobject.HarmfulConditionDataJson"/>
+        </method>
+        <method name="createOrUpdateAssignmentSchedule">
+            <param name="assignmentScheduleData" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
+        </method>
+        <method name="deleteAssignmentSchedule">
+            <param name="assignmentScheduleData" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
+        </method>
+        <method name="createOrUpdatePersonAddress">
+            <param name="personAddressData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonAddressDataJson"/>
+        </method>
+        <method name="deletePersonAddress">
+            <param name="personAddressData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonAddressDataJson"/>
+        </method>
     </service>
 </services>

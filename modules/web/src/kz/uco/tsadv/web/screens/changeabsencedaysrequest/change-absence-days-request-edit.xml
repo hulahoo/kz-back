@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.changeabsencedaysrequest">
+    <data>
+        <instance id="changeAbsenceDaysRequestDc"
+                  class="kz.uco.tsadv.modules.personal.model.ChangeAbsenceDaysRequest"
+                  view="changeAbsenceDaysRequest.edit">
+            <loader/>
+            <collection id="fileDc" property="file"/>
+        </instance>
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="changeAbsenceDaysRequestDc">
+                <column width="250px">
+                    <textField id="requestNumberField" property="requestNumber" editable="false"/>
+                    <pickerField id="statusField" property="status" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <dateField id="requestDateField" property="requestDate" editable="false"/>
+                    <pickerField id="requestTypeField" property="requestType" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <pickerField id="employeeField" property="employee" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <pickerField id="vacationField" property="vacation" editable="false">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <dateField id="scheduleStartDateField" property="scheduleStartDate" editable="false"/>
+                    <dateField id="scheduleEndDateField" property="scheduleEndDate" editable="false"/>
+                    <pickerField id="purposeField" property="purpose" required="true">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                    <textArea id="purposeTextField" property="purposeText" rows="5" visible="false"/>
+                    <dateField id="newStartDateField" property="newStartDate" required="true"/>
+                    <dateField id="newEndDateField" property="newEndDate" required="true"/>
+                    <dateField id="periodStartDateField" property="periodStartDate" required="true"/>
+                    <dateField id="periodEndDateField" property="periodEndDate" required="true"/>
+                    <checkBox id="agreeField" property="agree" editable="false"/>
+                    <checkBox id="familiarizationField" property="familiarization" editable="false"/>
+                </column>
+            </form>
+            <groupBox id="fileBox" caption="msg://kz.uco.tsadv.modules.personal.model/AbsenceForRecall.file">
+                <table id="fileTable" dataContainer="fileDc" width="100%" height="200px">
+                    <actions>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="name" generator="generatorName"/>
+                    </columns>
+                    <buttonsPanel>
+                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                stylename="primary"/>
+                        <button action="fileTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+            <vbox id="bpmActorsVBox"
+                  width="1000px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://TransferRequest.approvalProcess.actors"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
+                           width="100%">
+                        <columns>
+                            <column id="hrRole"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
+                        </columns>
+                    </table>
+                </groupBox>
+            </vbox>
+        </scrollBox>
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
+              spacing="true">
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

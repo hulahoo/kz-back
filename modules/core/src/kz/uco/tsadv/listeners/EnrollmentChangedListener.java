@@ -1,0 +1,86 @@
+package kz.uco.tsadv.listeners;
+
+import com.haulmont.cuba.core.app.events.AttributeChanges;
+import com.haulmont.cuba.core.app.events.EntityChangedEvent;
+import com.haulmont.cuba.core.entity.contracts.Id;
+import com.haulmont.cuba.core.global.DataManager;
+import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.tsadv.modules.administration.TsadvUser;
+import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
+import kz.uco.tsadv.modules.learning.model.Enrollment;
+import kz.uco.tsadv.modules.performance.model.CourseTrainer;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
+
+import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+@Component("tsadv_EnrollmentChangedListener")
+public class EnrollmentChangedListener {
+    @Inject
+    protected NotificationSenderAPI notificationSender;
+    @Inject
+    protected DataManager dataManager;
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void afterCommit(EntityChangedEvent<Enrollment, UUID> event) {
+        AttributeChanges changes = event.getChanges();
+        Id<Enrollment, UUID> entityId = event.getEntityId();
+        Enrollment enrollment = dataManager.load(entityId).view("enrollment.for.course").one();
+        if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+
+            for (String attribute : changes.getAttributes()) {
+
+                if (!attribute.equals("status")) continue;
+
+                Integer oldValue = changes.getOldValue(attribute);
+                if (!EnrollmentStatus.APPROVED.equals(EnrollmentStatus.fromId(oldValue))
+                        && EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
+
+                    sendNotification(enrollment, "tdc.student.enrollmentApproved");
+                }
+            }
+        } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+
+            if (EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
+
+                sendNotification(enrollment, "tdc.student.enrollmentApproved");
+            } else {
+                sendNotification(enrollment, "tdc.trainer.newEnrollment");
+            }
+        }
+    }
+
+    private void sendNotification(Enrollment enrollment, String notificationCode) {
+        List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
+                .query("select e from tsadv$CourseTrainer e " +
+                        " where e.course = :course " +
+                        " and current_date between e.dateFrom and e.dateTo " +
+                        " and e.trainer.employee is not null")
+                .parameter("course", enrollment.getCourse())
+                .view("courseTrainer.edit")
+                .list();
+
+        if (!courseTrainers.isEmpty()) {
+            courseTrainers.forEach(courseTrainer -> {
+                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.personGroup = :personGroup")
+                        .parameter("personGroup", courseTrainer.getTrainer().getEmployee())
+                        .list().stream().findFirst().orElse(null);
+                if (tsadvUser != null) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("courseName", enrollment.getCourse().getName());
+                    map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                    notificationSender.sendParametrizedNotification(notificationCode,
+                            tsadvUser, map);
+                }
+            });
+        }
+    }
+
+}

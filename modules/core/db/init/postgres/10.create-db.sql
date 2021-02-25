@@ -9292,6 +9292,7 @@ create table TSADV_ASSIGNMENT_SCHEDULE (
     START_DATE date not null,
     END_DATE date not null,
     COLORS_SET integer not null,
+    END_POLICY_CODE varchar(255),
     --
     primary key (ID)
 )^
@@ -12737,6 +12738,10 @@ create table TSADV_ADDRESS (
     COUNTRY_ID uuid not null,
     POSTAL_CODE varchar(255),
     CITY_NAME varchar(255),
+    FACT_ADDRESS varchar(255),
+    REGISTRATION_ADDRESS varchar(255),
+    FACT_ADDRESS_KATO_CODE varchar(255),
+    REGISTRATION_ADDRESS_KATO_CODE varchar(255),
     CITY_ID uuid,
     LANGUAGE_ID uuid,
     START_DATE date not null,
@@ -17368,3 +17373,100 @@ create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (
     primary key (ABSENCE_REQUEST_ID, FILE_DESCRIPTOR_ID)
 )^
 -- end TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_DIC_PURPOSE_ABSENCE
+create table TSADV_DIC_PURPOSE_ABSENCE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_PURPOSE_ABSENCE
+-- begin TSADV_CHANGE_ABSENCE_DAYS_REQUEST
+create table TSADV_CHANGE_ABSENCE_DAYS_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
+    --
+    REQUEST_TYPE_ID uuid,
+    EMPLOYEE_ID uuid,
+    VACATION_ID uuid,
+    SCHEDULE_START_DATE date,
+    SCHEDULE_END_DATE date,
+    NEW_START_DATE date,
+    NEW_END_DATE date,
+    PERIOD_START_DATE date,
+    PERIOD_END_DATE date,
+    AGREE boolean not null,
+    FAMILIARIZATION boolean not null,
+    PURPOSE_TEXT text,
+    PURPOSE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_CHANGE_ABSENCE_DAYS_REQUEST
+-- begin TSADV_CHANGE_ABSENCE_DAYS_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_CHANGE_ABSENCE_DAYS_REQUEST_FILE_DESCRIPTOR_LINK (
+    CHANGE_ABSENCE_DAYS_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (CHANGE_ABSENCE_DAYS_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_CHANGE_ABSENCE_DAYS_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_POSITION_HARMFUL_CONDITION
+create table TSADV_POSITION_HARMFUL_CONDITION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    LEGACY_ID varchar(255),
+    POSITION_GROUP_ID uuid not null,
+    END_DATE date not null,
+    DAYS integer not null,
+    START_DATE date not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_POSITION_HARMFUL_CONDITION

@@ -11,7 +11,6 @@ import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
-import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
 import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +41,8 @@ public class DocumentServiceBean implements DocumentService {
     public List<InsuredPerson> getMyInsuraces() {
         return dataManager.load(InsuredPerson.class)
                 .query("select e from tsadv$InsuredPerson e where e.type = :type and e.employee.id = :pgId")
-                .parameter("type",RelativeType.EMPLOYEE.getId())
-                .parameter("pgId",getPersonGroupExt().getId())
+                .parameter("type", RelativeType.EMPLOYEE.getId())
+                .parameter("pgId", getPersonGroupExt().getId())
                 .view("insuredPerson-browseView")
                 .list();
     }
@@ -164,7 +163,7 @@ public class DocumentServiceBean implements DocumentService {
                 .list();
 
         for (ContractConditions condition : insuranceContract.getProgramConditions()) {
-            if (condition.getRelationshipType().getId().equals(relativeType.getId()) ) {
+            if (condition.getRelationshipType().getId().equals(relativeType.getId())) {
                 if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
                     conditionsList.add(condition);
                 }
@@ -172,11 +171,11 @@ public class DocumentServiceBean implements DocumentService {
         }
 
         if (conditionsList.size() > 1) {
-            if (insuranceContract.getCountOfFreeMembers() > personList.size()){
+            if (insuranceContract.getCountOfFreeMembers() > personList.size()) {
                 return BigDecimal.ZERO;
-            }else {
-                for (ContractConditions condition : conditionsList){
-                    if (!condition.getIsFree()){
+            } else {
+                for (ContractConditions condition : conditionsList) {
+                    if (!condition.getIsFree()) {
                         return condition.getCostInKzt();
                     }
                 }
@@ -196,7 +195,7 @@ public class DocumentServiceBean implements DocumentService {
     public List<ScheduleOffsetsRequest> getOffsetRequestsByPgId(UUID personGroupExtId) {
         return dataManager.load(ScheduleOffsetsRequest.class)
                 .query("select e from tsadv_ScheduleOffsetsRequest e where e.personGroup.id = :pgId")
-                .parameter("pgId",personGroupExtId)
+                .parameter("pgId", personGroupExtId)
                 .view("scheduleOffsetsRequest-for-my-team")
                 .list();
     }
@@ -219,7 +218,7 @@ public class DocumentServiceBean implements DocumentService {
         request.setCurrentSchedule(standardSchedule);
         request.setRequestDate(CommonUtils.getSystemDate());
         request.setRequestNumber(employeeNumberService.generateNextRequestNumber());
-        return  request;
+        return request;
     }
 
 
@@ -312,5 +311,12 @@ public class DocumentServiceBean implements DocumentService {
                 .list().stream().findFirst().orElse(null);
     }
 
-
+    public BigDecimal calcTotalAmount(UUID insuredPersonId) {
+        return BigDecimal.valueOf(
+                getInsuredPersonMembers(insuredPersonId)
+                        .stream()
+                        .mapToDouble(value -> value.getAmount().doubleValue())
+                        .sum()
+        );
+    }
 }

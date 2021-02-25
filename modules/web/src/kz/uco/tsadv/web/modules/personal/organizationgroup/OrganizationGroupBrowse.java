@@ -185,7 +185,11 @@ public class OrganizationGroupBrowse extends AbstractLookup {
                 organizationGroupsDs.refresh();
                 organizationGroupsTable.repaint();
                 try {
-                    organizationGroupsTable.setSelected(organizationGroup);
+                    if (organizationGroup != null && organizationGroupsDs.getItems().stream()
+                            .anyMatch(organizationGroupExt ->
+                                    organizationGroupExt.getId().equals(organizationGroup.getId()))) {
+                        organizationGroupsTable.setSelected(organizationGroup);
+                    }
                 } catch (IllegalStateException e) {
                 }
             }
