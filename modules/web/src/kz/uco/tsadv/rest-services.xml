@@ -791,5 +791,11 @@
         <method name="deleteAssignmentSchedule">
             <param name="assignmentScheduleData" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
         </method>
+        <method name="createOrUpdatePersonAddress">
+            <param name="personAddressData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonAddressDataJson"/>
+        </method>
+        <method name="deletePersonAddress">
+            <param name="personAddressData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonAddressDataJson"/>
+        </method>
     </service>
 </services>

@@ -77,4 +77,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdateAssignmentSchedule(AssignmentScheduleJsonData assignmentScheduleData);
 
     BaseResult deleteAssignmentSchedule(AssignmentScheduleJsonData assignmentScheduleData);
+
+    BaseResult createOrUpdatePersonAddress(PersonAddressDataJson personAddressData);
+
+    BaseResult deletePersonAddress(PersonAddressDataJson personAddressData);
 }

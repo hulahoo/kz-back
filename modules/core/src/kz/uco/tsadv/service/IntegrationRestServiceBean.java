@@ -34,6 +34,7 @@ import kz.uco.tsadv.modules.timesheet.enums.MaterialDesignColorsEnum;
 import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
 import kz.uco.tsadv.modules.timesheet.model.StandardOffset;
 import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
+import org.apache.commons.math3.analysis.function.Add;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -3982,5 +3983,270 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         }
 
         return prepareSuccess(result, methodName, assignmentScheduleData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonAddress(PersonAddressDataJson personAddressData) {
+        String methodName = "createOrUpdatePersonAddress";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<PersonAddressJson> personAdresses = new ArrayList<>();
+        if (personAddressData.getPersonAddresses() != null) {
+            personAdresses = personAddressData.getPersonAddresses();
+        }
+        try {
+            ArrayList<Address> personAddressesCommitList = new ArrayList<>();
+            for (PersonAddressJson personAddressJson : personAdresses) {
+
+                if (personAddressJson.getLegacyId() == null || personAddressJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personAdresses,
+                            "no legacyId");
+                }
+
+                if (personAddressJson.getPersonId() == null || personAddressJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personAdresses,
+                            "no personId");
+                }
+
+                if (personAddressJson.getFactAddress() == null || personAddressJson.getFactAddress().isEmpty()) {
+                    return prepareError(result, methodName, personAdresses,
+                            "no factAddress");
+                }
+
+                if (personAddressJson.getRegistrationAddress() == null || personAddressJson.getRegistrationAddress().isEmpty()) {
+                    return prepareError(result, methodName, personAdresses,
+                            "no registrationAddress");
+                }
+
+                if (personAddressJson.getFactAddressKATOCode() == null || personAddressJson.getFactAddressKATOCode().isEmpty()) {
+                    return prepareError(result, methodName, personAdresses,
+                            "no factAddressKATOCode");
+                }
+
+                if (personAddressJson.getRegistrationAddressKATOCode() == null || personAddressJson.getRegistrationAddressKATOCode().isEmpty()) {
+                    return prepareError(result, methodName, personAdresses,
+                            "no registrationAddressKATOCode");
+                }
+
+                if (personAddressJson.getCompanyCode() == null || personAddressJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personAdresses,
+                            "no companyCode");
+                }
+
+                //todo check default values
+                DicAddressType addressType = dataManager.load(DicAddressType.class)
+                        .query("select e from tsadv$DicAddressType e")
+                        .list().stream().findFirst().orElse(null);
+                DicCountry country = dataManager.load(DicCountry.class)
+                        .query("select e from base$DicCountry e")
+                        .list().stream().findFirst().orElse(null);
+                String addressString = "default_address";
+
+                Date startDate = CommonUtils.getSystemDate();
+                Date endDate = CommonUtils.getMaxDate();
+
+                Address address = personAddressesCommitList.stream().filter(filterAddress ->
+                        filterAddress.getLegacyId() != null
+                                && filterAddress.getLegacyId().equals(personAddressJson.getLegacyId())
+                                && filterAddress.getPersonGroup() != null
+                                && filterAddress.getPersonGroup().getLegacyId() != null
+                                && filterAddress.getPersonGroup().getLegacyId().equals(personAddressJson.getPersonId())
+                                && filterAddress.getPersonGroup().getCompany() != null
+                                && filterAddress.getPersonGroup().getCompany().getLegacyId().equals(personAddressJson.getCompanyCode())
+                                && filterAddress.getFactAddress() != null
+                                && filterAddress.getFactAddress().equals(personAddressJson.getFactAddress())
+                                && filterAddress.getRegistrationAddress() != null
+                                && filterAddress.getRegistrationAddress().equals(personAddressJson.getRegistrationAddress())
+                                && filterAddress.getFactAddressKATOCode() != null
+                                && filterAddress.getFactAddressKATOCode().equals(personAddressJson.getFactAddressKATOCode())
+                                && filterAddress.getRegistrationAddressKATOCode() != null
+                                && filterAddress.getRegistrationAddressKATOCode().equals(personAddressJson.getRegistrationAddressKATOCode())
+                ).findFirst().orElse(null);
+                if (address == null) {
+                    address = dataManager.load(Address.class)
+                            .query(
+                                    " select e from tsadv$Address e " +
+                                            " where e.legacyId = " + personAddressJson.getLegacyId() + " " +
+                                            " and e.personGroup.legacyId = :pgLegacyId " +
+                                            " and e.personGroup.company.legacyId = :companyCode " +
+                                            " and e.factAddress = :fd " +
+                                            " and e.registrationAddress = :rd" +
+                                            " and e.factAddressKATOCode = :fdkc" +
+                                            " and e.registrationAddressKATOCode = :rdkc ")
+                            .setParameters(
+                                    ParamsMap.of(
+                                        "pgLegacyId", personAddressJson.getPersonId(),
+                                        "companyCode", personAddressJson.getCompanyCode(),
+                                        "fd",personAddressJson.getFactAddress(),
+                                        "rd",personAddressJson.getRegistrationAddress(),
+                                        "fdkc",personAddressJson.getFactAddressKATOCode(),
+                                            "rdkc",personAddressJson.getRegistrationAddressKATOCode()
+                                    )
+                            )
+                            .view("address.view").list().stream().findFirst().orElse(null);
+
+                    if (address != null) {
+
+                        address.setStartDate(startDate);
+                        address.setEndDate(endDate);
+                        address.setAddressType(addressType);
+                        address.setCountry(country);
+                        address.setAddress(addressString);
+
+                        address.setLegacyId(personAddressJson.getLegacyId());
+                        address.setFactAddress(personAddressJson.getFactAddress());
+                        address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
+                        address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
+                        address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", personAddressJson.getPersonId(),
+                                        "company", personAddressJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            address.setPersonGroup(personGroupExt);
+                        }else {
+                            return prepareError(result, methodName, personAddressData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
+                        }
+
+                        personAddressesCommitList.add(address);
+                    } else {
+                        address = metadata.create(Address.class);
+                        address.setId(UUID.randomUUID());
+                        address.setLegacyId(personAddressJson.getLegacyId());
+                        address.setFactAddress(personAddressJson.getFactAddress());
+                        address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
+                        address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
+                        address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
+
+                        address.setStartDate(startDate);
+                        address.setEndDate(endDate);
+                        address.setAddressType(addressType);
+                        address.setCountry(country);
+                        address.setAddress(addressString);
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", personAddressJson.getPersonId(),
+                                        "company", personAddressJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            address.setPersonGroup(personGroupExt);
+                        }else {
+                            return prepareError(result, methodName, personAddressData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
+                        }
+
+                        personAddressesCommitList.add(address);
+                    }
+                } else {
+
+                    address.setStartDate(startDate);
+                    address.setEndDate(endDate);
+                    address.setAddressType(addressType);
+                    address.setCountry(country);
+                    address.setAddress(addressString);
+
+                    address.setLegacyId(personAddressJson.getLegacyId());
+                    address.setFactAddress(personAddressJson.getFactAddress());
+                    address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
+                    address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
+                    address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
+
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personAddressJson.getPersonId(),
+                                    "company", personAddressJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                    if (personGroupExt != null) {
+                        address.setPersonGroup(personGroupExt);
+                    }else {
+                        return prepareError(result, methodName, personAddressData,
+                                "no personGroup with legacyId and companyCode : "
+                                        + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
+                    }
+                }
+            }
+
+            for (Address address : personAddressesCommitList) {
+                commitContext.addInstanceToCommit(address);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, personAddressData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personAddressData);
+    }
+
+    @Override
+    public BaseResult deletePersonAddress(PersonAddressDataJson personAddressData) {
+        String methodName = "deletePersonAddress";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonAddressJson> personAddresses = new ArrayList<>();
+        if (personAddressData.getPersonAddresses() != null) {
+            personAddresses = personAddressData.getPersonAddresses();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<Address> personAddressesArrayList = new ArrayList<>();
+            for (PersonAddressJson personAddressJson : personAddresses) {
+
+                if (personAddressJson.getLegacyId() == null || personAddressJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personAddresses,
+                            "no legacyId");
+                }
+
+                if (personAddressJson.getCompanyCode() == null || personAddressJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personAddresses,
+                            "no companyCode");
+                }
+
+                Address address = dataManager.load(Address.class)
+                        .query(
+                                " select e from tsadv$Address e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", personAddressJson.getLegacyId(),
+                                "companyCode", personAddressJson.getCompanyCode()))
+                        .view("address.view").list().stream().findFirst().orElse(null);
+
+                if (address == null) {
+                    return prepareError(result, methodName, personAddressJson,
+                            "no tsadv$Address with legacyId " + personAddressJson.getLegacyId()
+                                    + " and company legacyId " + personAddressJson.getCompanyCode());
+                }
+
+                if (!personAddressesArrayList.stream().filter(harmfulCondition1 ->
+                        harmfulCondition1.getId().equals(address.getId())).findAny().isPresent()) {
+                    personAddressesArrayList.add(address);
+                }
+            }
+
+            for (Address address : personAddressesArrayList) {
+                entityManager.remove(address);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personAddressData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, personAddressData);
     }
 }
