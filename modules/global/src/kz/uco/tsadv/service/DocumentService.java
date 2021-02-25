@@ -12,9 +12,12 @@ public interface DocumentService {
     String NAME = "tsadv_DocumentService";
 
     List<InsuredPerson> getMyInsuraces();
+
     InsuredPerson getInsuredPerson(String type);
+
     List<InsuredPerson> getInsuredPersonMembers(UUID insuredPersonId);
-    Boolean checkPersonInsure(UUID personGroupId,UUID contractId);
+
+    Boolean checkPersonInsure(UUID personGroupId, UUID contractId);
 
     BigDecimal calcAmount(UUID insuranceContractId,
                           UUID personGroupExtId,
@@ -22,5 +25,8 @@ public interface DocumentService {
                           UUID relativeTypeId);
 
     List<ScheduleOffsetsRequest> getOffsetRequestsByPgId(UUID personGroupExtId);
+
     ScheduleOffsetsRequest getOffsetRequestsNew();
+
+    BigDecimal calcTotalAmount(UUID insuredPersonId);
 }

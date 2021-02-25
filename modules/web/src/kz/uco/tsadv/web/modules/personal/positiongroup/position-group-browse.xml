@@ -137,6 +137,9 @@
                     <button id="excelBtn"
                             action="positionGroupsTable.excel"
                             caption="msg://table.btn.excel"/>
+                    <button id="positionHarmfulConditionBtn"
+                            caption="positionHarmfulCondition"
+                            invoke="openPositionHarmfulConditionScreen"/>
                 </buttonsPanel>
             </groupTable>
             <groupBox id="historyGroupBox"

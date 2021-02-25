@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.filter.Op;
 import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
@@ -29,6 +30,7 @@ import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.web.modules.filterconfig.FilterConfig;
 import kz.uco.tsadv.web.modules.personal.position.PositionEdit;
+import kz.uco.tsadv.web.screens.positionharmfulcondition.PositionHarmfulConditionBrowse;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -82,6 +84,8 @@ public class PositionGroupBrowse extends AbstractLookup {
     protected Object openedFromAssignmentHistoryEdit;
     @Inject
     protected ScreenBuilders screenBuilders;
+    @Inject
+    private Screens screens;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -509,5 +513,9 @@ public class PositionGroupBrowse extends AbstractLookup {
         AbstractEditor abstractEditor = openEditor(orgAnalytics, WindowManager.OpenType.THIS_TAB, ParamsMap.empty());
         abstractEditor.addCloseWithCommitListener(() ->
                 positionGroupsDs.refresh());
+    }
+
+    public void openPositionHarmfulConditionScreen() {
+        screens.create(PositionHarmfulConditionBrowse.class).show();
     }
 }

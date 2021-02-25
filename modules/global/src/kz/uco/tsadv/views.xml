@@ -874,6 +874,18 @@
                       view="_minimal"/>
         </property>
     </view>
+    <view class="kz.uco.tsadv.entity.tb.PositionHarmfulCondition"
+          extends="_local"
+          name="positionHarmfulCondition.edit">
+        <property name="positionGroup"
+                  view="_minimal">
+            <property name="position" view="_minimal">
+                <property name="organizationGroupExt" view="_minimal">
+                    <property name="company" view="_minimal"/>
+                </property>
+            </property>
+        </property>
+    </view>
     <view class="kz.uco.tsadv.entity.tb.HarmfullFactors"
           extends="_minimal"
           name="harmfullFactors-view">
