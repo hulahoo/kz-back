@@ -179,4 +179,35 @@ public class Address extends AbstractParentEntity {
     }
 
 
+    public String getFactAddress() {
+        return factAddress;
+    }
+
+    public void setFactAddress(String factAddress) {
+        this.factAddress = factAddress;
+    }
+
+    public String getRegistrationAddress() {
+        return registrationAddress;
+    }
+
+    public void setRegistrationAddress(String registrationAddress) {
+        this.registrationAddress = registrationAddress;
+    }
+
+    public String getFactAddressKATOCode() {
+        return factAddressKATOCode;
+    }
+
+    public void setFactAddressKATOCode(String factAddressKATOCode) {
+        this.factAddressKATOCode = factAddressKATOCode;
+    }
+
+    public String getRegistrationAddressKATOCode() {
+        return registrationAddressKATOCode;
+    }
+
+    public void setRegistrationAddressKATOCode(String registrationAddressKATOCode) {
+        this.registrationAddressKATOCode = registrationAddressKATOCode;
+    }
 }

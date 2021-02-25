@@ -73,4 +73,8 @@ public interface IntegrationRestService {
     BaseResult createOrUpdateHarmfulCondition(HarmfulConditionDataJson harmfulConditionData);
 
     BaseResult deleteHarmfulCondition(HarmfulConditionDataJson harmfulConditionData);
+
+    BaseResult createOrUpdatePersonAddress(PersonAddressDataJson personAddressData);
+
+    BaseResult deletePersonAddress(PersonAddressDataJson personAddressData);
 }

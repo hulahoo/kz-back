@@ -785,5 +785,11 @@
         <method name="deleteHarmfulCondition">
             <param name="harmfulConditionData" type="kz.uco.tsadv.modules.integration.jsonobject.HarmfulConditionDataJson"/>
         </method>
+        <method name="createOrUpdatePersonAddress">
+            <param name="personAddressData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonAddressDataJson"/>
+        </method>
+        <method name="deletePersonAddress">
+            <param name="personAddressData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonAddressDataJson"/>
+        </method>
     </service>
 </services>

@@ -11,6 +11,7 @@ public class PersonAddressJson implements Serializable {
     private String registrationAddress;
     private String factAddressKATOCode;
     private String registrationAddressKATOCode;
+    private String companyCode;
 
     @JsonProperty("personId")
     public String getPersonId() {
@@ -70,5 +71,15 @@ public class PersonAddressJson implements Serializable {
     @JsonProperty("registrationAddressKATOCode")
     public void setRegistrationAddressKATOCode(String registrationAddressKATOCode) {
         this.registrationAddressKATOCode = registrationAddressKATOCode;
+    }
+
+    @JsonProperty("companyCode")
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    @JsonProperty("legacyId")
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }
