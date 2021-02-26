@@ -14177,6 +14177,13 @@
             </property>
         </property>
     </view>
+    <view class="kz.uco.tsadv.modules.personal.model.PersonLanguage"
+          extends="_local"
+          name="personLanguage.edit">
+        <property name="personGroup" view="_minimal"/>
+        <property name="language" view="_minimal"/>
+        <property name="languageLevel" view="_minimal"/>
+    </view>
     <view class="kz.uco.tsadv.modules.learning.model.PersonLearningContract"
           extends="_local"
           name="personLearningContract.edit">

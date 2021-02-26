@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.*;
+import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
@@ -4248,5 +4249,287 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         }
 
         return prepareSuccess(result, methodName, personAddressData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonLanguages(PersonLanguageDataJson personLanguageData) {
+        String methodName = "createOrUpdatePersonLanguages";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<PersonLanguageJson> personLanguages = new ArrayList<>();
+        if (personLanguageData.getPersonLanguages() != null) {
+            personLanguages = personLanguageData.getPersonLanguages();
+        }
+        try {
+            ArrayList<PersonLanguage> personLanguagesCommitList = new ArrayList<>();
+            for (PersonLanguageJson personLanguageJson : personLanguages) {
+
+                if (personLanguageJson.getLegacyId() == null || personLanguageJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguages,
+                            "no legacyId");
+                }
+
+                if (personLanguageJson.getPersonId() == null || personLanguageJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguages,
+                            "no personId");
+                }
+
+                if (personLanguageJson.getLanguageId() == null || personLanguageJson.getLanguageId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguages,
+                            "no languageId");
+                }
+
+                if (personLanguageJson.getLevelId() == null || personLanguageJson.getLevelId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguages,
+                            "no levelId");
+                }
+
+                if (personLanguageJson.getCompanyCode() == null || personLanguageJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personLanguages,
+                            "no companyCode");
+                }
+
+                PersonLanguage personLanguage = personLanguagesCommitList.stream().filter(filterPersonLanguage ->
+                        filterPersonLanguage.getLegacyId() != null
+                                && filterPersonLanguage.getLegacyId().equals(personLanguageJson.getLegacyId())
+                                && filterPersonLanguage.getPersonGroup() != null
+                                && filterPersonLanguage.getPersonGroup().getLegacyId() != null
+                                && filterPersonLanguage.getPersonGroup().getLegacyId().equals(personLanguageJson.getPersonId())
+                                && filterPersonLanguage.getPersonGroup().getCompany() != null
+                                && filterPersonLanguage.getPersonGroup().getCompany().getLegacyId().equals(personLanguageJson.getCompanyCode())
+                                && filterPersonLanguage.getLanguage() != null
+                                && filterPersonLanguage.getLanguage().getLegacyId().equals(personLanguageJson.getLanguageId())
+                                && filterPersonLanguage.getLanguageLevel() != null
+                                && filterPersonLanguage.getLanguageLevel().getLegacyId().equals(personLanguageJson.getLevelId())
+                ).findFirst().orElse(null);
+                if (personLanguage == null) {
+                    personLanguage = dataManager.load(PersonLanguage.class)
+                            .query(
+                                    " select e from tsadv_PersonLanguage e " +
+                                            " where e.legacyId = :legacyId" +
+                                            " and e.personGroup.legacyId = :pgLegacyId " +
+                                            " and e.personGroup.company.legacyId = :companyCode " +
+                                            " and e.language.legacyId = :lgLegacyId " +
+                                            " and e.languageLevel.legacyId = :lglvLegacyId")
+                            .setParameters(
+                                    ParamsMap.of(
+                                            "legacyId",personLanguageJson.getLegacyId(),
+                                            "pgLegacyId", personLanguageJson.getPersonId(),
+                                            "companyCode", personLanguageJson.getCompanyCode(),
+                                            "lgLegacyId",personLanguageJson.getLanguageId(),
+                                            "lglvLegacyId",personLanguageJson.getLevelId()
+                                    )
+                            )
+                            .view("personLanguage.edit").list().stream().findFirst().orElse(null);
+
+                    if (personLanguage != null) {
+                        personLanguage.setLegacyId(personLanguageJson.getLegacyId());
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", personLanguageJson.getPersonId(),
+                                        "company", personLanguageJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            personLanguage.setPersonGroup(personGroupExt);
+                        }else {
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
+                        }
+
+                        DicLanguage language = dataManager.load(DicLanguage.class)
+                                .query("select e from base$DicLanguage e " +
+                                        " where e.legacyId = :lgLegacyId")
+                                .parameter("lgLegacyId",personLanguageJson.getLanguageId())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        if(language != null){
+                            personLanguage.setLanguage(language);
+                        }else{
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
+                        }
+
+                        DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
+                                .query("select e from tsadv_DicLanguageLevel e " +
+                                        " where e.legacyId = :lglvLegacyId")
+                                .parameter("lglvLegacyId",personLanguageJson.getLevelId())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        if(languageLevel != null){
+                            personLanguage.setLanguageLevel(languageLevel);
+                        }else{
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
+                        }
+
+                        personLanguagesCommitList.add(personLanguage);
+                    } else {
+                        personLanguage = metadata.create(PersonLanguage.class);
+                        personLanguage.setId(UUID.randomUUID());
+                        personLanguage.setLegacyId(personLanguageJson.getLegacyId());
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", personLanguageJson.getPersonId(),
+                                        "company", personLanguageJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            personLanguage.setPersonGroup(personGroupExt);
+                        }else {
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
+                        }
+
+                        DicLanguage language = dataManager.load(DicLanguage.class)
+                                .query("select e from base$DicLanguage e " +
+                                        " where e.legacyId = :lgLegacyId")
+                                .parameter("lgLegacyId",personLanguageJson.getLanguageId())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        if(language != null){
+                            personLanguage.setLanguage(language);
+                        }else{
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
+                        }
+
+                        DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
+                                .query("select e from tsadv_DicLanguageLevel e " +
+                                        " where e.legacyId = :lglvLegacyId")
+                                .parameter("lglvLegacyId",personLanguageJson.getLevelId())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        if(languageLevel != null){
+                            personLanguage.setLanguageLevel(languageLevel);
+                        }else{
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
+                        }
+
+                        personLanguagesCommitList.add(personLanguage);
+                    }
+                } else {
+                    personLanguage.setLegacyId(personLanguageJson.getLegacyId());
+
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personLanguageJson.getPersonId(),
+                                    "company", personLanguageJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                    if (personGroupExt != null) {
+                        personLanguage.setPersonGroup(personGroupExt);
+                    }else {
+                        return prepareError(result, methodName, personLanguageData,
+                                "no personGroup with legacyId and companyCode : "
+                                        + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
+                    }
+
+                    DicLanguage language = dataManager.load(DicLanguage.class)
+                            .query("select e from base$DicLanguage e " +
+                                    " where e.legacyId = :lgLegacyId")
+                            .parameter("lgLegacyId",personLanguageJson.getLanguageId())
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                    if(language != null){
+                        personLanguage.setLanguage(language);
+                    }else{
+                        return prepareError(result, methodName, personLanguageData,
+                                "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
+                    }
+
+                    DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
+                            .query("select e from tsadv_DicLanguageLevel e " +
+                                    " where e.legacyId = :lglvLegacyId")
+                            .parameter("lglvLegacyId",personLanguageJson.getLevelId())
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                    if(languageLevel != null){
+                        personLanguage.setLanguageLevel(languageLevel);
+                    }else{
+                        return prepareError(result, methodName, personLanguageData,
+                                "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
+                    }
+                }
+            }
+
+            for (PersonLanguage personLanguage : personLanguagesCommitList) {
+                commitContext.addInstanceToCommit(personLanguage);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, personLanguageData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personLanguageData);
+    }
+
+    @Override
+    public BaseResult deletePersonLanguages(PersonLanguageDataJson personLanguageData) {
+        String methodName = "deletePersonLanguages";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonLanguageJson> personLanguages = new ArrayList<>();
+        if (personLanguageData.getPersonLanguages() != null) {
+            personLanguages = personLanguageData.getPersonLanguages();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonLanguage> personLanguagesArrayList = new ArrayList<>();
+            for (PersonLanguageJson personLanguageJson : personLanguages) {
+
+                if (personLanguageJson.getLegacyId() == null || personLanguageJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguages,
+                            "no legacyId");
+                }
+
+                if (personLanguageJson.getCompanyCode() == null || personLanguageJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personLanguages,
+                            "no companyCode");
+                }
+
+                PersonLanguage personLanguage = dataManager.load(PersonLanguage.class)
+                        .query(
+                                " select e from tsadv_PersonLanguage e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", personLanguageJson.getLegacyId(),
+                                "companyCode", personLanguageJson.getCompanyCode()))
+                        .view("personLanguage.edit").list().stream().findFirst().orElse(null);
+
+                if (personLanguage == null) {
+                    return prepareError(result, methodName, personLanguageJson,
+                            "no tsadv_PersonLanguage with legacyId " + personLanguageJson.getLegacyId()
+                                    + " and company legacyId " + personLanguageJson.getCompanyCode());
+                }
+
+                if (!personLanguagesArrayList.stream().filter(harmfulCondition1 ->
+                        harmfulCondition1.getId().equals(personLanguage.getId())).findAny().isPresent()) {
+                    personLanguagesArrayList.add(personLanguage);
+                }
+            }
+
+            for (PersonLanguage personLanguage : personLanguagesArrayList) {
+                entityManager.remove(personLanguage);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personLanguageData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, personLanguageData);
     }
 }
