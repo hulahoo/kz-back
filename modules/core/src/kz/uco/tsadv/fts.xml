@@ -1903,5 +1903,8 @@
         <entity class="kz.uco.tsadv.entity.tb.PositionHarmfulCondition">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.views.AllAbsenceRequest">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

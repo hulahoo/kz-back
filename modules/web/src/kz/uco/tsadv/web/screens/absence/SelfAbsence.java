@@ -1,11 +1,13 @@
 package kz.uco.tsadv.web.screens.absence;
 
+import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.builders.EditorBuilder;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.TabSheet;
 import com.haulmont.cuba.gui.components.Table;
@@ -17,6 +19,7 @@ import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
@@ -24,6 +27,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
+import kz.uco.tsadv.modules.personal.views.AllAbsenceRequest;
 import kz.uco.tsadv.service.AssignmentService;
 import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
@@ -169,10 +173,13 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .show();
     }
 
-    public void openRequest(AbsenceRequest absenceRequest, String columnId) {
-        screenBuilders.editor(AbsenceRequest.class, this)
-                .withScreenId("tsadv$AbsenceRequestNew.edit")
-                .editEntity(absenceRequest)
+    @SuppressWarnings("unchecked")
+    public <T extends AbstractBprocRequest> void openRequest(AllAbsenceRequest absenceRequest, String columnId) {
+        Class<T> javaClass = metadata.getClassNN(absenceRequest.getEntityName()).getJavaClass();
+        T abstractBprocRequest = dataManager.load(Id.of(absenceRequest.getId(), javaClass)).one();
+        EditorBuilder<T> editor = screenBuilders.editor((Class<T>) abstractBprocRequest.getClass(), this);
+        if (abstractBprocRequest instanceof AbsenceRequest) editor.withScreenId("tsadv$AbsenceRequestNew.edit");
+        editor.editEntity(abstractBprocRequest)
                 .show();
     }
 }

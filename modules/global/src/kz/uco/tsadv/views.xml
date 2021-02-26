@@ -23441,5 +23441,10 @@
             <property name="code"/>
         </property>
     </view>
+    <view entity="tsadv_AllAbsenceRequest" name="allAbsenceRequest-view" extends="_local">
+        <property name="type" view="_local"/>
+        <property name="personGroup" view="_minimal"/>
+        <property name="status" view="_local"/>
+    </view>
 
 </views>
