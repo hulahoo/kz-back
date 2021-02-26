@@ -585,6 +585,6 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         Report report = dataManager.load(LoadContext.create(Report.class)
                 .setQuery(LoadContext.createQuery("select e from report$Report e where e.code = 'KPI'")));
         reportGuiManager.printReport(report,
-                ParamsMap.of("performancePlanId", performancePlanDc.getItem().getId()));
+                ParamsMap.of("id", assignedPerformancePlanTable.getSelected()));
     }
 }
