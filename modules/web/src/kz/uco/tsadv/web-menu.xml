@@ -12,6 +12,13 @@
                   caption="mainMsg://menu_config.tsadv_AbsPurposeSetting.browse"/>
             <item id="countrye"
                   screen="base$DicCountry.browse"/>
+            <menu id="reference" caption="mainMsg://menu_config.reference">
+                <item screen="tsadv_DicReceivingType.browse" caption="mainMsg://menu_config.tsadv_DicReceivingType.browse"/>
+                <item screen="tsadv_DicCertificateType.browse"
+                      caption="mainMsg://menu_config.tsadv_DicCertificateType.browse"/>
+                <item screen="tsadv_CertificateTemplate.browse"
+                      caption="mainMsg://menu_config.tsadv_CertificateTemplate.browse"/>
+            </menu>
             <menu id="militaryRegister">
                 <item screen="tsadv$DicMilitaryDocumentType.browse"/>
                 <item screen="tsadv$DicMilitaryType.browse"/>
@@ -652,11 +659,6 @@
     </menu>
     <menu id="employeeSelfService">
         <menu id="employeeSelfServiceDic" caption="mainMsg://menu-config.Dictionary">
-            <item screen="tsadv_DicReceivingType.browse" caption="mainMsg://menu_config.tsadv_DicReceivingType.browse"/>
-            <item screen="tsadv_DicCertificateType.browse"
-                  caption="mainMsg://menu_config.tsadv_DicCertificateType.browse"/>
-            <item screen="tsadv_CertificateTemplate.browse"
-                  caption="mainMsg://menu_config.tsadv_CertificateTemplate.browse"/>
         </menu>
         <item screen="tsadv_CertificateRequest.browse" caption="mainMsg://menu_config.tsadv_CertificateRequest.browse"/>
     </menu>
