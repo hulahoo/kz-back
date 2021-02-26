@@ -145,4 +145,6 @@ public interface EmployeeService {
     DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId);
 
     List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);
+
+    List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll, String viewName);
 }

@@ -23342,10 +23342,13 @@
     <view entity="base$PersonGroupExt" name="personGroupExt-for-absenceRequest" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
-    <view entity="base$PersonGroupExt" name="personGroup-for-absenceRequest" extends="_local">
-        <property name="company" view="_minimal">
-            <property name="legacyId"/>
+    <view entity="base$PersonGroupExt" name="personGroup-with-position" extends="_minimal">
+        <property name="assignments" view="_local">
+            <property name="positionGroup" view="_local">
+                <property name="position" view="_local"/>
+                <property name="fullName"/>
+            </property>
+            <property name="assignmentStatus" view="_local"/>
         </property>
     </view>
-
 </views>
