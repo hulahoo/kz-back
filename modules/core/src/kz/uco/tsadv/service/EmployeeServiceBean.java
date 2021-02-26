@@ -48,6 +48,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service(EmployeeService.NAME)
 public class EmployeeServiceBean implements EmployeeService {
@@ -2457,4 +2458,11 @@ public class EmployeeServiceBean implements EmployeeService {
                 .list();
     }
 
+    @Override
+    public List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll, String viewName) {
+        return Optional.of(this.findManagerListByPositionGroup(positionGroupId, showAll)).orElse(Collections.emptyList())
+                .stream()
+                .map(p -> dataManager.reload(p, viewName))
+                .collect(Collectors.toList());
+    }
 }

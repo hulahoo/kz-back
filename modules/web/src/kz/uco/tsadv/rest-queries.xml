@@ -25,12 +25,18 @@
             <param name="userId" type="java.util.UUID"/>
         </params>
     </query>
-    <query name="personGroupInfo" entity="base$PersonGroupExt" view="_local">
+    <query name="personGroupInfo" entity="base$PersonGroupExt" view="personGroup-with-position">
         <jpql>
+            <![CDATA[
             select p
             from tsadv$UserExt u
-            inner join u.personGroup p
+                inner join u.personGroup p
+                inner join p.assignments a
             where u.id = :userId
+                and a.startDate <= CURRENT_DATE
+                and a.endDate >= CURRENT_DATE
+                and a.primaryFlag = true
+             ]]>
         </jpql>
         <params>
             <param name="userId" type="java.util.UUID"/>
@@ -267,5 +273,18 @@
                     d.order
             ]]>
         </jpql>
+    </query>
+    <query name="positionGroupGoals" entity="tsadv$Goal" view="_minimal">
+        <jpql>
+            <![CDATA[
+            select g
+                from tsadv$PositionGroupGoalLink e
+                    inner join e.goal g
+            where e.positionGroup.id = :positionGroupId
+            ]]>
+        </jpql>
+        <params>
+            <param name="positionGroupId" type="java.util.UUID"/>
+        </params>
     </query>
 </queries>
