@@ -113,13 +113,17 @@ public class EnrollmentChangedListener {
                     .parameter("fileDescriptorId", fileDescriptorId)
                     .list().stream().findFirst().orElse(null);
 
+            Map<String, Object> map = new HashMap<>();
+            map.put("courseName", enrollment.getCourse().getName());
+
             if (fileDescriptor != null) {
                 EmailAttachment[] emailAttachments = new EmailAttachment[0];
                 emailAttachments = getEmailAttachments(fileDescriptor, emailAttachments);
-                Map<String, Object> map = new HashMap<>();
-                map.put("courseName", enrollment.getCourse().getName());
                 notificationSender.sendParametrizedNotification("tdc.student.enrollmentClosed",
                         user, map, emailAttachments);
+            } else {
+                notificationSender.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                        user, map);
             }
         }
     }
