@@ -500,8 +500,10 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 params.put("fullNameEn", person.getFullNameLatin("en"));
                 params.put("absenceTypeRu", type.getLangValue1());
                 params.put("absenceTypeEn", type.getLangValue3());
-                params.put("dateFrom", dateFormat.format(absenceForRecall.getDateFrom()));
-                params.put("dateTo", dateFormat.format(absenceForRecall.getDateTo()));
+                params.put("dateFrom", absenceForRecall.getRecallDateFrom()!=null?
+                        dateFormat.format(absenceForRecall.getRecallDateFrom()):"");
+                params.put("dateTo", absenceForRecall.getRecallDateTo()!=null?
+                        dateFormat.format(absenceForRecall.getRecallDateTo()):"");
                 params.putIfAbsent("requestStatusRu", absenceForRecall.getStatus().getLangValue1());
                 params.putIfAbsent("requestStatusEn", absenceForRecall.getStatus().getLangValue3());
                 if (absenceForRecall.getPurpose() != null && absenceForRecall.getPurpose().getCode() != null) {
