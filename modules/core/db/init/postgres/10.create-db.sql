@@ -4721,6 +4721,7 @@ create table TSADV_DIC_ABSENCE_TYPE (
     MAX_DAY integer,
     MIN_DAY integer,
     DAYS_ADVANCE integer,
+    DAYS_BEFORE_ABSENCE integer,
     MANY_DAYS integer,
     --
     primary key (ID)
