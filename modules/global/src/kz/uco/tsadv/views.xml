@@ -23462,5 +23462,12 @@
         <property name="personGroup" view="_minimal"/>
         <property name="status" view="_local"/>
     </view>
-
+    <view entity="tsadv$StandardSchedule" name="standardSchedule-for-my-team" extends="_local">
+        <property name="baseStandardSchedule" view="_minimal"/>
+        <property name="calendar" view="_minimal"/>
+        <property name="standardOffsets" view="_minimal">
+            <property name="offsetDisplay"/>
+        </property>
+        <property name="standardShifts" view="_minimal"/>
+    </view>
 </views>

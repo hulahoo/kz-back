@@ -30,6 +30,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
@@ -558,6 +559,50 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                                 absenceRvdRequest.getPurpose().getLangValue1() : " ");
                         params.putIfAbsent("purposeEn", absenceRvdRequest.getPurpose().getLangValue3() != null ?
                                 absenceRvdRequest.getPurpose().getLangValue3() : " ");
+                    }
+                } else {
+                    params.putIfAbsent("purposeRu", " ");
+                    params.putIfAbsent("purposeEn", " ");
+                }
+
+
+                break;
+            }
+            case "bpm.scheduleOffsetsRequest.approved.notification":
+            case "bpm.scheduleOffsetsRequest.reject.notification":
+            case "bpm.scheduleOffsetsRequest.revision.notification":
+            case "bpm.scheduleOffsetsRequest.toapprove.notification": {
+                ScheduleOffsetsRequest scheduleOffsetsRequest = transactionalDataManager.load(ScheduleOffsetsRequest.class)
+                        .id(entity.getId()).view("scheduleOffsetsRequest-for-my-team").optional().orElse(null);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+                PersonExt person = commonService.getEntity(PersonExt.class,
+                        "select e from base$PersonExt e " +
+                                " where e.group.id = :groupId " +
+                                "   and current_date between e.startDate and e.endDate ",
+                        ParamsMap.of("groupId", scheduleOffsetsRequest.getPersonGroup().getId()),
+                        View.LOCAL);
+
+                StandardSchedule newSchedule = scheduleOffsetsRequest.getNewSchedule();
+                params.put("fullNameRu", person.getFullNameLatin("ru"));
+                params.put("fullNameEn", person.getFullNameLatin("en"));
+                params.put("absenceTypeRu", newSchedule != null ? newSchedule.getScheduleName() : "");
+                params.put("absenceTypeEn", newSchedule != null ? newSchedule.getScheduleName() : "");
+                params.put("dateFrom", dateFormat.format(scheduleOffsetsRequest.getRequestDate()));
+                params.put("dateTo", dateFormat.format(scheduleOffsetsRequest.getDateOfStartNewSchedule()));
+                params.putIfAbsent("requestStatusRu", scheduleOffsetsRequest.getStatus().getLangValue1());
+                params.putIfAbsent("requestStatusEn", scheduleOffsetsRequest.getStatus().getLangValue3());
+                if (scheduleOffsetsRequest.getPurpose() != null && scheduleOffsetsRequest.getPurpose().getCode() != null) {
+                    if (scheduleOffsetsRequest.getPurpose().getCode().equals("OTHER")) {
+                        params.putIfAbsent("purposeRu", scheduleOffsetsRequest.getPurposeText() != null ?
+                                scheduleOffsetsRequest.getPurposeText() : " ");
+                        params.putIfAbsent("purposeEn", scheduleOffsetsRequest.getPurposeText() != null ?
+                                scheduleOffsetsRequest.getPurposeText() : " ");
+                    } else {
+                        params.putIfAbsent("purposeRu", scheduleOffsetsRequest.getPurpose().getLangValue1() != null ?
+                                scheduleOffsetsRequest.getPurpose().getLangValue1() : " ");
+                        params.putIfAbsent("purposeEn", scheduleOffsetsRequest.getPurpose().getLangValue3() != null ?
+                                scheduleOffsetsRequest.getPurpose().getLangValue3() : " ");
                     }
                 } else {
                     params.putIfAbsent("purposeRu", " ");
