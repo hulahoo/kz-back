@@ -372,11 +372,12 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     .divide(BigDecimal.valueOf(100)))
                     .multiply(BigDecimal.valueOf(correctionCoefficient.getCompanyResult())
                             .divide(BigDecimal.valueOf(100)));
-        } else {
-            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                    .withCaption(messageBundle.getMessage("correctionCoefIsNull")).show();
-            assignedPerformancePlansDl.load();
         }
+//        else {
+//            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+//                    .withCaption(messageBundle.getMessage("correctionCoefIsNull")).show();
+//            assignedPerformancePlansDl.load();
+//        }
         return BigDecimal.ZERO;
     }
 
@@ -390,12 +391,13 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 .list();
         if (!scoreSettingList.isEmpty()) {
             return Double.valueOf(scoreSettingList.get(0).getFinalScore());
-        } else {
-            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                    .withCaption(messageBundle.getMessage("notScoreSetting")).show();
-            assignedPerformancePlansDl.load();
         }
-        return null;
+//        else {
+//            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+//                    .withCaption(messageBundle.getMessage("notScoreSetting")).show();
+//            assignedPerformancePlansDl.load();
+//        }
+        return 0.0;
     }
 
     @Subscribe("correctionCoefTable.create")
