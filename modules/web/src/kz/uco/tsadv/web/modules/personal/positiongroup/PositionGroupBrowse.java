@@ -515,7 +515,4 @@ public class PositionGroupBrowse extends AbstractLookup {
                 positionGroupsDs.refresh());
     }
 
-    public void openPositionHarmfulConditionScreen() {
-        screens.create(PositionHarmfulConditionBrowse.class).show();
-    }
 }
