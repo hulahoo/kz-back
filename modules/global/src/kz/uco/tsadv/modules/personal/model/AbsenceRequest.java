@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s (%s)|id,requestDate")
+@NamePattern("%s (%s)|requestNumber,requestDate")
 @Table(name = "TSADV_ABSENCE_REQUEST")
 @Entity(name = "tsadv$AbsenceRequest")
 public class AbsenceRequest extends AbstractBprocRequest {

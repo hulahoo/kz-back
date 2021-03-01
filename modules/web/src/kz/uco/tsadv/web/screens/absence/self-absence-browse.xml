@@ -25,12 +25,12 @@
                 </query>
             </loader>
         </collection>
-        <collection id="absenceRequestDc"
-                    class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
-                    view="absenceRequest.view">
+        <collection id="allAbsenceRequestDc"
+                    class="kz.uco.tsadv.modules.personal.views.AllAbsenceRequest"
+                    view="allAbsenceRequest-view">
             <loader id="absenceRequestDl">
                 <query>
-                    <![CDATA[  select e from tsadv$AbsenceRequest e order by e.requestNumber desc ]]>
+                    <![CDATA[  select e from tsadv_AllAbsenceRequest e order by e.requestNumber desc ]]>
                 </query>
             </loader>
         </collection>
@@ -117,13 +117,14 @@
                               spacing="true">
                             <table id="vacationScheduleRequestTable"
                                    sortable="false"
-                                   dataContainer="absenceRequestDc"
+                                   dataContainer="allAbsenceRequestDc"
                                    width="100%">
                                 <columns>
                                     <column id="requestNumber" link="true" linkInvoke="openRequest"/>
-                                    <column id="dateFrom"/>
-                                    <column id="dateTo"/>
+                                    <column id="startDate"/>
+                                    <column id="endDate"/>
                                     <column id="absenceDays"/>
+                                    <column id="type.langValue"/>
                                     <column id="status"/>
                                 </columns>
                             </table>

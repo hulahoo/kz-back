@@ -8,6 +8,7 @@ import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
+import kz.uco.tsadv.modules.personal.model.ChangeAbsenceDaysRequest;
 import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
 import kz.uco.uactivity.entity.ActivityType;
 
@@ -61,5 +62,7 @@ public interface BprocService {
     void changeStatusBprocRequest(AbstractBprocRequest entity, String status, String notificationCode);
 
     void changeStatusLeavingVacationRequest(LeavingVacationRequest entity, String status, String notificationCode);
+
+    void changeStatusChangeAbsenceDaysRequest(ChangeAbsenceDaysRequest entity, String status, String notificationCode);
 
 }

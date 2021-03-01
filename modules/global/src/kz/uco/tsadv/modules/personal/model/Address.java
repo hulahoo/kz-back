@@ -14,6 +14,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -47,6 +48,22 @@ public class Address extends AbstractParentEntity {
 
     @Column(name = "CITY_NAME")
     protected String cityName;
+
+    @NotNull
+    @Column(name = "FACT_ADDRESS")
+    protected String factAddress;
+
+    @NotNull
+    @Column(name = "REGISTRATION_ADDRESS")
+    protected String registrationAddress;
+
+    @NotNull
+    @Column(name = "FACT_ADDRESS_KATO_CODE")
+    protected String factAddressKATOCode;
+
+    @NotNull
+    @Column(name = "REGISTRATION_ADDRESS_KATO_CODE")
+    protected String registrationAddressKATOCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CITY_ID")
@@ -162,4 +179,35 @@ public class Address extends AbstractParentEntity {
     }
 
 
+    public String getFactAddress() {
+        return factAddress;
+    }
+
+    public void setFactAddress(String factAddress) {
+        this.factAddress = factAddress;
+    }
+
+    public String getRegistrationAddress() {
+        return registrationAddress;
+    }
+
+    public void setRegistrationAddress(String registrationAddress) {
+        this.registrationAddress = registrationAddress;
+    }
+
+    public String getFactAddressKATOCode() {
+        return factAddressKATOCode;
+    }
+
+    public void setFactAddressKATOCode(String factAddressKATOCode) {
+        this.factAddressKATOCode = factAddressKATOCode;
+    }
+
+    public String getRegistrationAddressKATOCode() {
+        return registrationAddressKATOCode;
+    }
+
+    public void setRegistrationAddressKATOCode(String registrationAddressKATOCode) {
+        this.registrationAddressKATOCode = registrationAddressKATOCode;
+    }
 }

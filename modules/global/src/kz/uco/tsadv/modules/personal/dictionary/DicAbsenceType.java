@@ -69,14 +69,6 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "INCLUDE_CALC_GZP", nullable = false)
     protected Boolean includeCalcGzp = false;
 
-    public Boolean getIncludeCalcGzp() {
-        return includeCalcGzp;
-    }
-
-    public void setIncludeCalcGzp(Boolean includeCalcGzp) {
-        this.includeCalcGzp = includeCalcGzp;
-    }
-
     @Column(name = "MAX_DAY")
     private Integer maxDay;
 
@@ -86,8 +78,27 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "DAYS_ADVANCE")
     private Integer daysAdvance;
 
+    @Column(name = "DAYS_BEFORE_ABSENCE")
+    protected Integer daysBeforeAbsence;
+
     @Column(name = "MANY_DAYS")
     private Integer manyDays;
+
+    public Boolean getIncludeCalcGzp() {
+        return includeCalcGzp;
+    }
+
+    public void setIncludeCalcGzp(Boolean includeCalcGzp) {
+        this.includeCalcGzp = includeCalcGzp;
+    }
+
+    public Integer getDaysBeforeAbsence() {
+        return daysBeforeAbsence;
+    }
+
+    public void setDaysBeforeAbsence(Integer daysBeforeAbsence) {
+        this.daysBeforeAbsence = daysBeforeAbsence;
+    }
 
     public void setManyDays(Integer manyDays) {
         this.manyDays = manyDays;

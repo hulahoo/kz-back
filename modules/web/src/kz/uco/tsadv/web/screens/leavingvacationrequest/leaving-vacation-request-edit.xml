@@ -26,12 +26,6 @@
                         </actions>
                     </pickerField>
                     <dateField id="requestDateField" property="requestDate" editable="false"/>
-                    <pickerField id="requestTypeField" property="requestType" editable="false">
-                        <actions>
-                            <action id="lookup" type="picker_lookup"/>
-                            <action id="clear" type="picker_clear"/>
-                        </actions>
-                    </pickerField>
                     <pickerField id="vacationField" property="vacation" editable="false" captionProperty="typeAndDate">
                         <actions>
                             <action id="lookup" type="picker_lookup"/>
@@ -39,7 +33,7 @@
                         </actions>
                     </pickerField>
                     <dateField id="startDateField" property="startDate" editable="false"/>
-                    <dateField id="endDataField" property="endData" editable="false"/>
+                    <dateField id="endDataField" property="endDate" editable="false"/>
                     <dateField id="plannedStartDateField" property="plannedStartDate"/>
                     <textArea id="commentField" property="comment" rowspan="3"/>
                 </column>

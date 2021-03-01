@@ -181,7 +181,7 @@ public class KpiServiceBean implements KpiService {
             query.setParameter(3, personGroupExt.getId());
 
             List<Object[]> rows = query.getResultList();
-            if (!rows.isEmpty()) {
+            if (!rows.isEmpty() && ((Vector) rows).firstElement() != null) {
                 return new BigDecimal(((Vector) rows).firstElement().toString());
             }
         }

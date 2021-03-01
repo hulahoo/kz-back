@@ -1,5 +1,6 @@
 package kz.uco.tsadv.entity.bproc;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.BeanLocator;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@NamePattern("%s (%s)|requestNumber,requestDate")
 @MappedSuperclass
 public abstract class AbstractBprocRequest extends AbstractParentEntity {
     private static final long serialVersionUID = -1908181720688177085L;

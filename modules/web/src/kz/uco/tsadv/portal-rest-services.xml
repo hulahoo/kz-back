@@ -118,10 +118,17 @@
         <method name="getMyInsuraces"/>
         <method name="getOffsetRequestsByPgId">
             <param name="personGroupExtId" type="java.util.UUID"/>
-         </method>
+        </method>
         <method name="getOffsetRequestsNew"/>
         <method name="calcTotalAmount">
             <param name="insuredPersonId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_EmployeeService">  
+        <method name="findManagerListByPositionGroup">
+            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="showAll" type="boolean"/>
+            <param name="viewName" type="java.lang.String"/>
         </method>
     </service>
 </services>
