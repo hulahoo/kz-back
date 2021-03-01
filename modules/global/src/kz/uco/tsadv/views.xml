@@ -23470,4 +23470,39 @@
         </property>
         <property name="standardShifts" view="_minimal"/>
     </view>
+    <view entity="tsadv_AbsenceRvdRequest" name="absenceRvdRequest.edit" extends="_local">
+        <property name="type" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="assignments" view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="primaryFlag"/>
+            </property>
+        </property>
+        <property name="purpose" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+            <property name="legacyId"/>
+            <property name="company" view="_minimal"/>
+        </property>
+    </view>
 </views>
