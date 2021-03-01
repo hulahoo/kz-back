@@ -153,6 +153,10 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
     protected Action hierarchyElementsTableReassignElement;
     @Inject
     protected ScreenBuilders screenBuilders;
+    @Named("harmFulConditionsTable.create")
+    private CreateAction harmFulConditionsTableCreate;
+    @Named("harmFulConditionsTable.edit")
+    private EditAction harmFulConditionsTableEdit;
 
     @Override
     protected FieldGroup getStartEndDateFieldGroup() {
@@ -264,6 +268,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         if (positionDs.getItem().getGradeGroup() != null && positionDs.getItem().getGradeRule() != null) {
             refreshGradeRuleValue();
         }
+        harmFulConditionsTableCreate.setInitialValues(ParamsMap.of("positionGroup",getEditedEntity().getGroup()));
     }
 
     @Override
