@@ -43,7 +43,8 @@ import java.util.stream.Collectors;
 @UiDescriptor("start-bproc-screen.xml")
 @ProcessForm(params = {
         @Param(name = "approverNotificationTemplateCode"),
-        @Param(name = "initiatorNotificationTemplateCode")
+        @Param(name = "initiatorNotificationTemplateCode"),
+        @Param(name = "afterApproveToInitiatorNotificationTemplateCode")
 })
 public class StartBprocScreen extends Screen {
 
@@ -82,6 +83,9 @@ public class StartBprocScreen extends Screen {
     @ProcessFormParam
     @SuppressWarnings("unused")
     private String initiatorNotificationTemplateCode;
+    @ProcessFormParam
+    @SuppressWarnings("unused")
+    private String afterApproveToInitiatorNotificationTemplateCode;
     @Inject
     protected MessageBundle messageBundle;
 
@@ -144,7 +148,9 @@ public class StartBprocScreen extends Screen {
                 .addProcessVariable("initiator", userSession.getUser())
                 .addProcessVariable("rolesLinks", linksDc.getItems())
                 .addProcessVariable("approverNotificationTemplateCode", approverNotificationTemplateCode)
-                .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode);
+                .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode)
+                .addProcessVariable("afterApproveToInitiatorNotificationTemplateCode"
+                        , afterApproveToInitiatorNotificationTemplateCode);
 
         Map<String, Object> params = startBprocParams.getParams();
         if (params != null && !params.isEmpty()) params.forEach(processStarting::addProcessVariable);
