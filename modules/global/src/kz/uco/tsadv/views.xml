@@ -5208,7 +5208,6 @@
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
-
                 </property>
                 <property name="organizationGroup"
                           view="_minimal">
@@ -5285,11 +5284,6 @@
         <property name="vacationSchedule" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
-            <property name="status" view="_minimal">
-                <property name="startDate"/>
-                <property name="code"/>
-                <property name="endDate"/>
-            </property>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
@@ -5320,11 +5314,6 @@
         <property name="vacationSchedule" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
-            <property name="status" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
         </property>
         <property name="vacationDurationType"/>
         <property name="files" view="_minimal"/>
@@ -21733,7 +21722,6 @@
     </view>
     <view entity="tsadv_VacationSchedule" name="vacation-view" extends="_local">
         <property name="personGroup" view="personGroupExt-view"/>
-        <property name="status" view="_local"/>
     </view>
     <view entity="tsadv$PersonalDataRequest" name="personalDataRequest-edit" extends="_local">
         <property name="status" view="_minimal">

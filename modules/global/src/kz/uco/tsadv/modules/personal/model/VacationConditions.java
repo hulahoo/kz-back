@@ -67,7 +67,6 @@ public class VacationConditions extends AbstractTimeBasedEntity implements IGrou
         return mainDaysNumber;
     }
 
-
     public DicAbsenceType getDaysType() {
         return daysType;
     }
