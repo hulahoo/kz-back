@@ -21156,7 +21156,9 @@
         </property>
     </view>
     <view entity="tsadv$UserExt" name="tsadvUserExt-view" extends="user.edit">
-        <property name="personGroup" view="_minimal"/>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal"/>
+        </property>
     </view>
     <view entity="base$OrganizationGroupExt"
           name="organizationGroupExt-receptionAssignment" extends="_local">
