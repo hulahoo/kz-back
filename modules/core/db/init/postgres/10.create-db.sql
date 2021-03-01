@@ -4723,6 +4723,9 @@ create table TSADV_DIC_ABSENCE_TYPE (
     DAYS_ADVANCE integer,
     DAYS_BEFORE_ABSENCE integer,
     MANY_DAYS integer,
+    AVAILABLE_FOR_RECALL_ABSENCE boolean not null,
+    AVAILABLE_FOR_CHANGE_DATE boolean not null,
+    AVAILABLE_FOR_LEAVING_VACATION boolean not null,
     --
     primary key (ID)
 )^

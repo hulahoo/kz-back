@@ -84,6 +84,42 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "MANY_DAYS")
     private Integer manyDays;
 
+    @NotNull
+    @Column(name = "AVAILABLE_FOR_RECALL_ABSENCE", nullable = false)
+    protected Boolean availableForRecallAbsence = false;
+
+    @NotNull
+    @Column(name = "AVAILABLE_FOR_CHANGE_DATE", nullable = false)
+    protected Boolean availableForChangeDate = false;
+
+    @NotNull
+    @Column(name = "AVAILABLE_FOR_LEAVING_VACATION", nullable = false)
+    protected Boolean availableForLeavingVacation = false;
+
+    public Boolean getAvailableForLeavingVacation() {
+        return availableForLeavingVacation;
+    }
+
+    public void setAvailableForLeavingVacation(Boolean availableForLeavingVacation) {
+        this.availableForLeavingVacation = availableForLeavingVacation;
+    }
+
+    public Boolean getAvailableForChangeDate() {
+        return availableForChangeDate;
+    }
+
+    public void setAvailableForChangeDate(Boolean availableForChangeDate) {
+        this.availableForChangeDate = availableForChangeDate;
+    }
+
+    public Boolean getAvailableForRecallAbsence() {
+        return availableForRecallAbsence;
+    }
+
+    public void setAvailableForRecallAbsence(Boolean availableForRecallAbsence) {
+        this.availableForRecallAbsence = availableForRecallAbsence;
+    }
+
     public Boolean getIncludeCalcGzp() {
         return includeCalcGzp;
     }

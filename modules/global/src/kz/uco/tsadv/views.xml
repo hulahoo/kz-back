@@ -22776,6 +22776,9 @@
             </property>
         </property>
         <property name="type" view="_minimal">
+            <property name="availableForRecallAbsence"/>
+            <property name="availableForChangeDate"/>
+            <property name="availableForLeavingVacation"/>
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -22795,12 +22798,7 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
-        <property name="personGroup" view="_minimal">
-            <property name="list" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
-        </property>
+        <property name="personGroup" view="_minimal"/>
         <property name="purpose" view="_minimal"/>
     </view>
     <view entity="tsadv$AbsenceRequest" name="absenceRequest-for-my-team" extends="_local">
