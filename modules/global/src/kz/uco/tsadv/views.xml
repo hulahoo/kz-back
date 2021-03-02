@@ -23491,4 +23491,8 @@
             <property name="company" view="_minimal"/>
         </property>
     </view>
+    <view entity="tsadv_VacationScheduleRequest" name="vacationScheduleRequest-edit" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+        <property name="status" view="_local"/>
+    </view>
 </views>
