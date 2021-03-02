@@ -27,11 +27,6 @@
         <collection id="vacationSchedulesDc" class="kz.uco.tsadv.entity.VacationSchedule">
             <view extends="_local">
                 <property name="personGroup" view="_minimal"/>
-                <property name="status" view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="code"/>
-                </property>
             </view>
             <loader id="vacationSchedulesDl">
                 <query>
