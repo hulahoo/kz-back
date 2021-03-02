@@ -23491,4 +23491,7 @@
             <property name="company" view="_minimal"/>
         </property>
     </view>
+    <view entity="tsadv_News" name="news-edit" extends="_local">
+        <property name="banner" view="_minimal"/>
+    </view>
 </views>

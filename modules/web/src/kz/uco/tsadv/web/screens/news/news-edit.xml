@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.news">
+    <data>
+        <instance id="newsDc"
+                  class="kz.uco.tsadv.modules.information.News"
+                  view="news-edit">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="newsDc">
+            <column width="250px">
+                <textField id="newsLang1Field" property="newsLang1"/>
+                <textField id="newsLang2Field" property="newsLang2"/>
+                <textField id="newsLang3Field" property="newsLang3"/>
+                <textField id="titleLang1Field" property="titleLang1"/>
+                <textField id="titleLang2Field" property="titleLang2"/>
+                <textField id="titleLang3Field" property="titleLang3"/>
+                <checkBox id="isPublishedField" property="isPublished"/>
+                <upload id="bannerField" fileStoragePutMode="IMMEDIATE" property="banner" showFileName="true"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
