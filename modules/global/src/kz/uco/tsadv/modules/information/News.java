@@ -4,13 +4,15 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_NEWS")
 @Entity(name = "tsadv_News")
 public class News extends StandardEntity {
     private static final long serialVersionUID = 8857548885814265223L;
 
-    @Column(name = "NEWS_LANG1", length = 2000)
+    @NotNull
+    @Column(name = "NEWS_LANG1", nullable = false, length = 2000)
     protected String newsLang1;
 
     @Column(name = "NEWS_LANG2", length = 2000)
@@ -19,7 +21,8 @@ public class News extends StandardEntity {
     @Column(name = "NEWS_LANG3", length = 2000)
     protected String newsLang3;
 
-    @Column(name = "TITLE_LANG1", length = 256)
+    @NotNull
+    @Column(name = "TITLE_LANG1", nullable = false, length = 256)
     protected String titleLang1;
 
     @Column(name = "TITLE_LANG2", length = 256)
@@ -28,12 +31,18 @@ public class News extends StandardEntity {
     @Column(name = "TITLE_LANG3", length = 256)
     protected String titleLang3;
 
-    @Column(name = "IS_PUBLISHED")
-    protected Boolean isPublished;
+    @NotNull
+    @Column(name = "IS_PUBLISHED", nullable = false)
+    protected Boolean isPublished = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "BANNER_ID")
     protected FileDescriptor banner;
+
+    public void setTitleLang1(String titleLang1) {
+        this.titleLang1 = titleLang1;
+    }
 
     public void setBanner(FileDescriptor banner) {
         this.banner = banner;
@@ -69,10 +78,6 @@ public class News extends StandardEntity {
 
     public String getTitleLang1() {
         return titleLang1;
-    }
-
-    public void setTitleLang1(String titleLang1) {
-        this.titleLang1 = titleLang1;
     }
 
     public String getNewsLang3() {

@@ -3,17 +3,20 @@ package kz.uco.tsadv.modules.information;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_NEWS_COMMENT")
 @Entity(name = "tsadv_NewsComment")
 public class NewsComment extends StandardEntity {
     private static final long serialVersionUID = -6206252196487472527L;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "NEWSID_ID")
     protected News newsid;
 
-    @Column(name = "COMMENT_LANG1", length = 2000)
+    @NotNull
+    @Column(name = "COMMENT_LANG1", nullable = false, length = 2000)
     protected String commentLang1;
 
     @Column(name = "COMMENT_LANG2", length = 2000)
