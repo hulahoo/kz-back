@@ -39,16 +39,18 @@
                            caption="mainMsg://organizationName"
                            editable="false"/>
                 <textField id="position" property="assignedPerson.currentAssignment.positionGroup"/>
-                <textField id="job" property="assignedPerson.currentAssignment.jobGroup"/>
+<!--                <textField id="job" property="assignedPerson.currentAssignment.jobGroup" visible="false"/>-->
                 <textField id="grade" property="assignedPerson.currentAssignment.gradeGroup"/>
                 <textField id="kpiScore" property="kpiScore"/>
                 <textField id="extraPoint" property="extraPoint"/>
                 <textField id="finalScore" property="finalScore"/>
                 <textField id="maxBonusPercent" property="maxBonusPercent"/>
                 <textField id="adjustedScore" property="adjustedScore"/>
+                <textField id="adjustedBonus" property="adjustedBonus"/>
             </column>
             <column id="column2" width="300px">
-                <lookupField id="status" property="stepStageStatus"/>
+                <lookupField id="stepStageStatus" property="stepStageStatus"/>
+                <lookupField id="status" property="status" editable="false"/>
                 <dateField id="startDate" property="startDate"/>
                 <dateField id="endDate" property="endDate"/>
                 <textField id="result" property="result" enable="false"/>
@@ -57,7 +59,6 @@
                 <textField id="personalBonus" property="personalBonus"/>
                 <textField id="companyBonus" property="companyBonus"/>
                 <textField id="finalBonus" property="finalBonus"/>
-                <textField id="adjustedBonus" property="adjustedBonus"/>
             </column>
         </form>
         <groupBox id="hbox" width="100%" spacing="true">
