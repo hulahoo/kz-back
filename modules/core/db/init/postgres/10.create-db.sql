@@ -17449,3 +17449,106 @@ create table TSADV_POSITION_HARMFUL_CONDITION (
     primary key (ID)
 )^
 -- end TSADV_POSITION_HARMFUL_CONDITION
+-- begin TSADV_NEWS
+create table TSADV_NEWS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NEWS_LANG1 varchar(2000),
+    NEWS_LANG2 varchar(2000),
+    NEWS_LANG3 varchar(2000),
+    TITLE_LANG1 varchar(256),
+    TITLE_LANG2 varchar(256),
+    TITLE_LANG3 varchar(256),
+    IS_PUBLISHED boolean,
+    BANNER_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_NEWS
+-- begin TSADV_NEWS_COMMENT
+create table TSADV_NEWS_COMMENT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NEWSID_ID uuid,
+    COMMENT_LANG1 varchar(2000),
+    COMMENT_LANG2 varchar(2000),
+    COMMENT_LANG3 varchar(2000),
+    --
+    primary key (ID)
+)^
+-- end TSADV_NEWS_COMMENT
+-- begin TSADV_NUMBER_OF_VIEW
+create table TSADV_NUMBER_OF_VIEW (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    ENTITY_NAME varchar(255),
+    ENTITY_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_NUMBER_OF_VIEW
+-- begin TSADV_NEWS_LIKE
+create table TSADV_NEWS_LIKE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    NEWS_ID_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_NEWS_LIKE
+-- begin TSADV_ALL_ABSENCE_REQUEST
+create table TSADV_ALL_ABSENCE_REQUEST (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
+    --
+    TYPE_ID uuid,
+    PERSON_GROUP_ID uuid,
+    ENTITY_NAME varchar(255),
+    start_date date,
+    end_date date,
+    ABSENCE_DAYS integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_ALL_ABSENCE_REQUEST
