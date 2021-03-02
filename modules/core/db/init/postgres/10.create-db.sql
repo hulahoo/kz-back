@@ -17460,14 +17460,14 @@ create table TSADV_NEWS (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    NEWS_LANG1 varchar(2000),
+    NEWS_LANG1 varchar(2000) not null,
     NEWS_LANG2 varchar(2000),
     NEWS_LANG3 varchar(2000),
-    TITLE_LANG1 varchar(256),
+    TITLE_LANG1 varchar(256) not null,
     TITLE_LANG2 varchar(256),
     TITLE_LANG3 varchar(256),
-    IS_PUBLISHED boolean,
-    BANNER_ID uuid,
+    IS_PUBLISHED boolean not null,
+    BANNER_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -17483,8 +17483,8 @@ create table TSADV_NEWS_COMMENT (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    NEWSID_ID uuid,
-    COMMENT_LANG1 varchar(2000),
+    NEWSID_ID uuid not null,
+    COMMENT_LANG1 varchar(2000) not null,
     COMMENT_LANG2 varchar(2000),
     COMMENT_LANG3 varchar(2000),
     --
@@ -17502,8 +17502,8 @@ create table TSADV_NUMBER_OF_VIEW (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    ENTITY_NAME varchar(255),
-    ENTITY_ID uuid,
+    ENTITY_NAME varchar(255) not null,
+    ENTITY_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -17519,7 +17519,7 @@ create table TSADV_NEWS_LIKE (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    NEWS_ID_ID uuid,
+    NEWS_ID_ID uuid not null,
     --
     primary key (ID)
 )^
