@@ -62,6 +62,9 @@
                         <field property="minDay"/>
                         <field property="daysAdvance"/>
                         <field property="daysBeforeAbsence"/>
+                        <field property="availableForRecallAbsence"/>
+                        <field property="availableForLeavingVacation"/>
+                        <field property="availableForChangeDate"/>
                     </column>
                 </fieldGroup>
             </groupBox>
