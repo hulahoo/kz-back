@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.entity.StandardEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Table(name = "TSADV_NUMBER_OF_VIEW")
@@ -12,10 +13,12 @@ import java.util.UUID;
 public class NumberOfView extends StandardEntity {
     private static final long serialVersionUID = -1010701463034415167L;
 
-    @Column(name = "ENTITY_NAME")
+    @NotNull
+    @Column(name = "ENTITY_NAME", nullable = false)
     protected String entityName;
 
-    @Column(name = "ENTITY_ID")
+    @NotNull
+    @Column(name = "ENTITY_ID", nullable = false)
     protected UUID entityId;
 
     public UUID getEntityId() {
