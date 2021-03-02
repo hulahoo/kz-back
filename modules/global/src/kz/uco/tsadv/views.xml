@@ -23373,14 +23373,21 @@
             <property name="legacyId"/>
         </property>
     </view>
-    <view entity="base$PersonGroupExt" name="personGroup-with-position" extends="_minimal">
+    <view entity="base$PersonGroupExt" name="personGroup-with-position" extends="_local">
+        <property name="list" view="_local">
+            <property name="type" view="_local"/>
+        </property>
         <property name="assignments" view="_local">
+            <property name="personGroup" view="_local">
+                <property name="person" view="_local"/>
+            </property>
             <property name="positionGroup" view="_local">
                 <property name="position" view="_local"/>
                 <property name="fullName"/>
             </property>
             <property name="assignmentStatus" view="_local"/>
         </property>
+        <property name="person" view="_local"/>
     </view>
     <view entity="tsadv_ChangeAbsenceDaysRequest" name="changeAbsenceDaysRequest.edit" extends="_local">
         <property name="requestType" view="_minimal">
