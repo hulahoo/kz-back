@@ -1903,5 +1903,17 @@
         <entity class="kz.uco.tsadv.modules.personal.views.AllAbsenceRequest">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.information.News">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NewsComment">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NewsLike">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NumberOfView">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
