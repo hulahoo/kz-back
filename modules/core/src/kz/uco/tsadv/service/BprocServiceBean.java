@@ -30,6 +30,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
@@ -351,7 +352,30 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
 
         notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
+        ProcessInstanceData processInstanceData = bprocHistoricService.createHistoricProcessInstanceDataQuery()
+                .processInstanceBusinessKey(entity.getId().toString())
+                .processDefinitionKey(entity.getProcessDefinitionKey())
+                .singleResult();
+        User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
+        if (initiator != null) {
+            String afterApproveInitiatorNotificationTemplateCode = getProcessVariable(processInstanceData.getId(),
+                    "afterApproveToInitiatorNotificationTemplateCode");
+            if (afterApproveInitiatorNotificationTemplateCode != null
+                    && !afterApproveInitiatorNotificationTemplateCode.isEmpty()) {
+                DicRequestStatus status = transactionalDataManager.load(DicRequestStatus.class)
+                        .query("select e.status from " + entity.getMetaClass().getName() + " e " +
+                                " where e.id = :requestId ").setParameters(ParamsMap.of("requestId", entity.getId()))
+                        .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                if (status != null && status.getCode() != null
+                        && "APPROVING".equals(status.getCode())) {
+                    notificationSender.sendParametrizedNotification(afterApproveInitiatorNotificationTemplateCode,
+                            (TsadvUser) initiator, notificationParams);
+                }
+            }
+        }
+
     }
+
 
     private <T extends AbstractBprocRequest> String getNotificationTemplateCode(T entity, String notificationTemplateCode) {
 
@@ -499,8 +523,10 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 params.put("fullNameEn", person.getFullNameLatin("en"));
                 params.put("absenceTypeRu", type.getLangValue1());
                 params.put("absenceTypeEn", type.getLangValue3());
-                params.put("dateFrom", dateFormat.format(absenceForRecall.getDateFrom()));
-                params.put("dateTo", dateFormat.format(absenceForRecall.getDateTo()));
+                params.put("dateFrom", absenceForRecall.getRecallDateFrom() != null ?
+                        dateFormat.format(absenceForRecall.getRecallDateFrom()) : "");
+                params.put("dateTo", absenceForRecall.getRecallDateTo() != null ?
+                        dateFormat.format(absenceForRecall.getRecallDateTo()) : "");
                 params.putIfAbsent("requestStatusRu", absenceForRecall.getStatus().getLangValue1());
                 params.putIfAbsent("requestStatusEn", absenceForRecall.getStatus().getLangValue3());
                 if (absenceForRecall.getPurpose() != null && absenceForRecall.getPurpose().getCode() != null) {
@@ -558,6 +584,50 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                                 absenceRvdRequest.getPurpose().getLangValue1() : " ");
                         params.putIfAbsent("purposeEn", absenceRvdRequest.getPurpose().getLangValue3() != null ?
                                 absenceRvdRequest.getPurpose().getLangValue3() : " ");
+                    }
+                } else {
+                    params.putIfAbsent("purposeRu", " ");
+                    params.putIfAbsent("purposeEn", " ");
+                }
+
+
+                break;
+            }
+            case "bpm.scheduleOffsetsRequest.approved.notification":
+            case "bpm.scheduleOffsetsRequest.reject.notification":
+            case "bpm.scheduleOffsetsRequest.revision.notification":
+            case "bpm.scheduleOffsetsRequest.toapprove.notification": {
+                ScheduleOffsetsRequest scheduleOffsetsRequest = transactionalDataManager.load(ScheduleOffsetsRequest.class)
+                        .id(entity.getId()).view("scheduleOffsetsRequest-for-my-team").optional().orElse(null);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+                PersonExt person = commonService.getEntity(PersonExt.class,
+                        "select e from base$PersonExt e " +
+                                " where e.group.id = :groupId " +
+                                "   and current_date between e.startDate and e.endDate ",
+                        ParamsMap.of("groupId", scheduleOffsetsRequest.getPersonGroup().getId()),
+                        View.LOCAL);
+
+                StandardSchedule newSchedule = scheduleOffsetsRequest.getNewSchedule();
+                params.put("fullNameRu", person.getFullNameLatin("ru"));
+                params.put("fullNameEn", person.getFullNameLatin("en"));
+                params.put("absenceTypeRu", newSchedule != null ? newSchedule.getScheduleName() : "");
+                params.put("absenceTypeEn", newSchedule != null ? newSchedule.getScheduleName() : "");
+                params.put("dateFrom", dateFormat.format(scheduleOffsetsRequest.getRequestDate()));
+                params.put("dateTo", dateFormat.format(scheduleOffsetsRequest.getDateOfStartNewSchedule()));
+                params.putIfAbsent("requestStatusRu", scheduleOffsetsRequest.getStatus().getLangValue1());
+                params.putIfAbsent("requestStatusEn", scheduleOffsetsRequest.getStatus().getLangValue3());
+                if (scheduleOffsetsRequest.getPurpose() != null && scheduleOffsetsRequest.getPurpose().getCode() != null) {
+                    if (scheduleOffsetsRequest.getPurpose().getCode().equals("OTHER")) {
+                        params.putIfAbsent("purposeRu", scheduleOffsetsRequest.getPurposeText() != null ?
+                                scheduleOffsetsRequest.getPurposeText() : " ");
+                        params.putIfAbsent("purposeEn", scheduleOffsetsRequest.getPurposeText() != null ?
+                                scheduleOffsetsRequest.getPurposeText() : " ");
+                    } else {
+                        params.putIfAbsent("purposeRu", scheduleOffsetsRequest.getPurpose().getLangValue1() != null ?
+                                scheduleOffsetsRequest.getPurpose().getLangValue1() : " ");
+                        params.putIfAbsent("purposeEn", scheduleOffsetsRequest.getPurpose().getLangValue3() != null ?
+                                scheduleOffsetsRequest.getPurpose().getLangValue3() : " ");
                     }
                 } else {
                     params.putIfAbsent("purposeRu", " ");

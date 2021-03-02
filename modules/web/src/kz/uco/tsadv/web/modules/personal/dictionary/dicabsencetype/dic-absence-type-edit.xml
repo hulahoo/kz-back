@@ -58,6 +58,13 @@
                         <field property="isRequiredOrderNumber"/>
                         <field property="availableToManager"/>
                         <field property="includeCalcGzp"/>
+                        <field property="maxDay"/>
+                        <field property="minDay"/>
+                        <field property="daysAdvance"/>
+                        <field property="daysBeforeAbsence"/>
+                        <field property="availableForRecallAbsence"/>
+                        <field property="availableForLeavingVacation"/>
+                        <field property="availableForChangeDate"/>
                     </column>
                 </fieldGroup>
             </groupBox>

@@ -130,8 +130,10 @@ public class SelfAbsence extends StandardLookup<Absence>
     @Subscribe(id = "absencesDc", target = Target.DATA_CONTAINER)
     protected void onAbsencesDcItemChange(InstanceContainer.ItemChangeEvent<Absence> event) {
 
-        boolean isEnabled = event.getItem() != null && "MATERNITY".equals(event.getItem().getType().getCode());
-        absencesTableNewLeavingVacationRequest.setEnabled(true);
+        boolean isEnabled = event.getItem() != null
+                && event.getItem().getType() != null
+                && event.getItem().getType().getAvailableForLeavingVacation();
+        absencesTableNewLeavingVacationRequest.setEnabled(isEnabled);
     }
 
     public void newVacationScheduleButton() {

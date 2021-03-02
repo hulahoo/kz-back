@@ -201,8 +201,6 @@
         <menu id="dms" caption="mainMsg://dms">
             <item screen="tsadv$InsuranceContract.browse" caption="mainMsg://menu_config.tsadv$InsuranceContract.browse"/>
         </menu>
-        <item screen="tsadv_VacationGraphic.browse" id="vacationGraphicBrowse"
-              caption="График заявок на отпуск" openType="NEW_TAB"/>
         <item screen="tsadv$AssignmentScheduleLite.browse"/>
         <item screen="tsadv_PositionHarmfulCondition.browse"/>
     </menu>

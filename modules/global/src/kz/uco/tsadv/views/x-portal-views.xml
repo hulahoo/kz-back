@@ -214,12 +214,7 @@
         <property name="goalLibrary" view="_minimal"/>
         <property name="category" view="_minimal"/>
     </view>
-    <view entity="tsadv$StandardSchedule" name="standardSchedule-for-my-team" extends="_local">
-        <property name="baseStandardSchedule" view="_minimal"/>
-        <property name="calendar" view="_minimal"/>
-        <property name="standardOffsets" view="_minimal"/>
-        <property name="standardShifts" view="_minimal"/>
-    </view>
+
     <view name="category-enrollment" entity="tsadv$DicCategory" extends="_minimal">
         <property name="langValue"/>
         <property name="langValue1"/>

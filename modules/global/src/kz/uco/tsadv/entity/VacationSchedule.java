@@ -4,7 +4,6 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -36,22 +35,6 @@ public class VacationSchedule extends AbstractParentEntity {
     @Column(name = "ABSENCE_DAYS")
     @NotNull
     private Integer absenceDays;
-
-    @Lookup(type = LookupType.SCREEN, actions = "lookup")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "STATUS_ID")
-    @NotNull
-    private DicRequestStatus status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-
-    public void setStatus(DicRequestStatus status) {
-        this.status = status;
-    }
-
-    public DicRequestStatus getStatus() {
-        return status;
-    }
 
     public void setAbsenceDays(Integer absenceDays) {
         this.absenceDays = absenceDays;
