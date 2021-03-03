@@ -1,12 +1,14 @@
 package kz.uco.tsadv.modules.learning.model;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_STUDENT_HOMEWORK")
 @Entity(name = "tsadv_StudentHomework")
 public class StudentHomework extends AbstractParentEntity {
