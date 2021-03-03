@@ -49,6 +49,15 @@
                 </query>
             </loader>
         </collection>
+        <collection id="homeworkDc"
+                    class="kz.uco.tsadv.modules.learning.model.Homework"
+                    view="homework.edit">
+            <loader id="homeworkDl">
+                <query>
+                    <![CDATA[select e from tsadv_Homework e where e.course = :course]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -355,6 +364,38 @@
                         <button action="trainersTable.create"/>
                         <button action="trainersTable.edit"/>
                         <button action="trainersTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="homeWorkTab"
+                 caption="msg://homework"
+                 expand="homeworkTable"
+                 margin="true,false,false,false">
+                <table id="homeworkTable"
+                       dataContainer="homeworkDc"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                type="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                type="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                type="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="instructions"/>
+                        <column id="instructionFile"/>
+                    </columns>
+                    <rows/>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button action="homeworkTable.create"/>
+                        <button action="homeworkTable.edit"/>
+                        <button action="homeworkTable.remove"/>
                     </buttonsPanel>
                 </table>
             </tab>

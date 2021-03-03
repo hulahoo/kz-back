@@ -23468,6 +23468,7 @@
     <view entity="tsadv_StudentHomework" name="studentHomework.edit" extends="_local">
         <property name="homework" view="_minimal"/>
         <property name="personGroup" view="_minimal"/>
+        <property name="answerFile" view="_minimal"/>
         <property name="trainer" view="_minimal"/>
     </view>
 </views>

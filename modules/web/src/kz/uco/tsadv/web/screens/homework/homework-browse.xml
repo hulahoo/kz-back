@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="homeworkTable"
+        messagesPack="kz.uco.tsadv.web.screens.homework">
+    <data readOnly="true">
+        <collection id="homeworkCollectionDc"
+                    class="kz.uco.tsadv.modules.learning.model.Homework"
+                    view="homework.edit">
+            <loader id="homeworkCollectionDl">
+                <query>
+                    <![CDATA[select e from tsadv_Homework e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="homeworkTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="homeworkTable"
+                dataLoader="homeworkCollectionDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="homeworkTable"
+                    width="100%"
+                    dataContainer="homeworkCollectionDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>>
+                <column id="course"/>
+                <column id="instructions"/>
+                <column id="instructionFile"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="homeworkTable.create"/>
+                <button id="editBtn" action="homeworkTable.edit"/>
+                <button id="removeBtn" action="homeworkTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
