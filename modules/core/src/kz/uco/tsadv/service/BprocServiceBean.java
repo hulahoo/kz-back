@@ -352,7 +352,30 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
 
         notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
+        ProcessInstanceData processInstanceData = bprocHistoricService.createHistoricProcessInstanceDataQuery()
+                .processInstanceBusinessKey(entity.getId().toString())
+                .processDefinitionKey(entity.getProcessDefinitionKey())
+                .singleResult();
+        User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
+        if (initiator != null) {
+            String afterApproveInitiatorNotificationTemplateCode = getProcessVariable(processInstanceData.getId(),
+                    "afterApproveToInitiatorNotificationTemplateCode");
+            if (afterApproveInitiatorNotificationTemplateCode != null
+                    && !afterApproveInitiatorNotificationTemplateCode.isEmpty()) {
+                DicRequestStatus status = transactionalDataManager.load(DicRequestStatus.class)
+                        .query("select e.status from " + entity.getMetaClass().getName() + " e " +
+                                " where e.id = :requestId ").setParameters(ParamsMap.of("requestId", entity.getId()))
+                        .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                if (status != null && status.getCode() != null
+                        && "APPROVING".equals(status.getCode())) {
+                    notificationSender.sendParametrizedNotification(afterApproveInitiatorNotificationTemplateCode,
+                            (TsadvUser) initiator, notificationParams);
+                }
+            }
+        }
+
     }
+
 
     private <T extends AbstractBprocRequest> String getNotificationTemplateCode(T entity, String notificationTemplateCode) {
 
@@ -500,10 +523,10 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 params.put("fullNameEn", person.getFullNameLatin("en"));
                 params.put("absenceTypeRu", type.getLangValue1());
                 params.put("absenceTypeEn", type.getLangValue3());
-                params.put("dateFrom", absenceForRecall.getRecallDateFrom()!=null?
-                        dateFormat.format(absenceForRecall.getRecallDateFrom()):"");
-                params.put("dateTo", absenceForRecall.getRecallDateTo()!=null?
-                        dateFormat.format(absenceForRecall.getRecallDateTo()):"");
+                params.put("dateFrom", absenceForRecall.getRecallDateFrom() != null ?
+                        dateFormat.format(absenceForRecall.getRecallDateFrom()) : "");
+                params.put("dateTo", absenceForRecall.getRecallDateTo() != null ?
+                        dateFormat.format(absenceForRecall.getRecallDateTo()) : "");
                 params.putIfAbsent("requestStatusRu", absenceForRecall.getStatus().getLangValue1());
                 params.putIfAbsent("requestStatusEn", absenceForRecall.getStatus().getLangValue3());
                 if (absenceForRecall.getPurpose() != null && absenceForRecall.getPurpose().getCode() != null) {

@@ -142,10 +142,9 @@ public class SsStructurePerson extends AbstractWindow {
 
         absenceTable1.addSelectionListener(absenceSelectionEvent -> {
             Set<Absence> absence = absenceSelectionEvent.getSelected();
-            if (absence.size() > 0 && absence.iterator().next().getType() != null
-                    && absence.iterator().next().getType().getCode().equals("ANNUAL")) {
-                absenceTable1RecallCreate.setEnabled(true);
-                absenceTable1ChangeAbsenceDaysCreate.setEnabled(true);
+            if (absence.size() > 0 && absence.iterator().next().getType() != null) {
+                absenceTable1RecallCreate.setEnabled(absence.iterator().next().getType().getAvailableForRecallAbsence());
+                absenceTable1ChangeAbsenceDaysCreate.setEnabled(absence.iterator().next().getType().getAvailableForChangeDate());
             } else {
                 absenceTable1RecallCreate.setEnabled(false);
                 absenceTable1ChangeAbsenceDaysCreate.setEnabled(false);

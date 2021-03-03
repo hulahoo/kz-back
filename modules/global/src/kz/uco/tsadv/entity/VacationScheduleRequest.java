@@ -1,43 +1,27 @@
 package kz.uco.tsadv.entity;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.Future;
-import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Table(name = "TSADV_VACATION_SCHEDULE_REQUEST")
 @Entity(name = "tsadv_VacationScheduleRequest")
-public class VacationScheduleRequest extends AbstractParentEntity {
+@NamePattern("%s %s|personGroup,absenceDays")
+public class VacationScheduleRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = 1975378160965313966L;
-
-    @Column(name = "REQUEST_NUMBER", nullable = false)
-    @NotNull
-    private Long requestNumber;
-
-    @Temporal(TemporalType.DATE)
-    @NotNull
-    @Column(name = "REQUEST_DATE", nullable = false)
-    private Date requestDate;
 
     @Lookup(type = LookupType.SCREEN, actions = "lookup")
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PERSON_GROUP_ID")
     private PersonGroupExt personGroup;
-
-
-    @Lookup(type = LookupType.SCREEN, actions = "lookup")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "STATUS_ID")
-    @NotNull
-    private DicRequestStatus status;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE")
@@ -54,33 +38,40 @@ public class VacationScheduleRequest extends AbstractParentEntity {
     @NotNull
     private Integer absenceDays;
 
-    public void setRequestNumber(Long requestNumber) {
-        this.requestNumber = requestNumber;
+    @Column(name = "BALANCE")
+    private Integer balance;
+
+    public Integer getBalance() {
+        return balance;
     }
 
-    public Long getRequestNumber() {
-        return requestNumber;
+    public void setBalance(Integer balance) {
+        this.balance = balance;
     }
 
-    public void setStatus(DicRequestStatus status) {
-        this.status = status;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public DicRequestStatus getStatus() {
-        return status;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getStartDate() {        return startDate;    }
+    public Date getEndDate() {
+        return endDate;
+    }
 
-    public void setStartDate(Date startDate) {        this.startDate = startDate;    }
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-    public Date getEndDate() {        return endDate;    }
+    public Integer getAbsenceDays() {
+        return absenceDays;
+    }
 
-    public void setEndDate(Date endDate) {        this.endDate = endDate;    }
-
-    public Integer getAbsenceDays() {        return absenceDays;    }
-
-    public void setAbsenceDays(Integer absenceDays) {        this.absenceDays = absenceDays;    }
+    public void setAbsenceDays(Integer absenceDays) {
+        this.absenceDays = absenceDays;
+    }
 
     public PersonGroupExt getPersonGroup() {
         return personGroup;
@@ -90,12 +81,8 @@ public class VacationScheduleRequest extends AbstractParentEntity {
         this.personGroup = personGroup;
     }
 
-    public Date getRequestDate() {
-        return requestDate;
+    @Override
+    public String getProcessDefinitionKey() {
+        throw new IllegalStateException("VacationScheduleRequest does not have ProcessDefinitionKey ");
     }
-
-    public void setRequestDate(Date requestDate) {
-        this.requestDate = requestDate;
-    }
-
 }

@@ -52,14 +52,13 @@ public class AbsenceBalanceV extends StandardEntity {
     @Column(name = "LONG_ABSENCE_DAYS")
     protected Integer longAbsenceDays;
 
-    public void setLegacyID(String legacyId) {
-        this.legacyId = legacyId;
-    }
-
-    public String getLegacyID() {
+    public String getLegacyId() {
         return legacyId;
     }
 
+    public void setLegacyId(String legacyId) {
+        this.legacyId = legacyId;
+    }
 
     public void setPersonGroup(PersonGroupExt personGroup) {
         this.personGroup = personGroup;

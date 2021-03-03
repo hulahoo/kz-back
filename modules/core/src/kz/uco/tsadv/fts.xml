@@ -1888,9 +1888,6 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicChangeType">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.entity.VacationGraphic">
-            <include re=".*"/>
-        </entity>
         <entity class="kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest">
             <include re=".*"/>
         </entity>
@@ -1904,6 +1901,18 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.personal.views.AllAbsenceRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.News">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NewsComment">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NewsLike">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NumberOfView">
             <include re=".*"/>
         </entity>
     </entities>

@@ -111,7 +111,7 @@
             select c
             from tsadv$DicCategory c
             join c.courses cc
-            where (lower ( cc.name) like :courseName)
+            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%')))
             ]]>
         </jpql>
         <params>

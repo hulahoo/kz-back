@@ -8,6 +8,7 @@ import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.builders.EditorBuilder;
+import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.TabSheet;
 import com.haulmont.cuba.gui.components.Table;
@@ -36,7 +37,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @UiController("tsadv$Absence.self.browse")
 @UiDescriptor("self-absence-browse.xml")
@@ -44,6 +44,12 @@ import java.util.UUID;
 @LoadDataBeforeShow
 public class SelfAbsence extends StandardLookup<Absence>
         implements SelfServiceMixin {
+    @Inject
+    protected CollectionContainer<Absence> absencesDc;
+    @Inject
+    protected CollectionLoader<Absence> absencesDl;
+    @Inject
+    protected CollectionLoader<AllAbsenceRequest> absenceRequestDl;
     @Inject
     protected TimeSource timeSource;
     @Inject
@@ -66,16 +72,12 @@ public class SelfAbsence extends StandardLookup<Absence>
     protected CommonService commonService;
     @Inject
     protected ScreenBuilders screenBuilders;
-    @Inject
-    protected TabSheet vacationTabSheet;
-    @Inject
-    protected CollectionContainer<Absence> absencesDc;
-    @Inject
-    protected CollectionLoader<Absence> absencesDl;
     @Named("absencesTable.newLeavingVacationRequest")
     protected BaseAction absencesTableNewLeavingVacationRequest;
     @Inject
     protected Table<Absence> absencesTable;
+    @Inject
+    protected TabSheet tabSheet;
     @Inject
     protected EmployeeService employeeService;
 
@@ -100,15 +102,13 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .view("absenceRequest.edit")
                 .list();
 
-        if (list != null && !list.isEmpty()) {
+        if (!list.isEmpty()) {
             absenceRequest = list.get(0);
         }
-        absenceRequest = null;
+
         if (absenceRequest == null) {
             absenceRequest = metadata.create(AbsenceRequest.class);
-            absenceRequest.setId(UUID.randomUUID());
             absenceRequest.setAssignmentGroup(assignmentGroup);
-            absenceRequest.setStatus(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
             absenceRequest.setPersonGroup(employeeService.getPersonGroupByUserId(userSession.getUser().getId()));
         }
 
@@ -130,8 +130,10 @@ public class SelfAbsence extends StandardLookup<Absence>
     @Subscribe(id = "absencesDc", target = Target.DATA_CONTAINER)
     protected void onAbsencesDcItemChange(InstanceContainer.ItemChangeEvent<Absence> event) {
 
-        boolean isEnabled = event.getItem() != null && "MATERNITY".equals(event.getItem().getType().getCode());
-        absencesTableNewLeavingVacationRequest.setEnabled(true);
+        boolean isEnabled = event.getItem() != null
+                && event.getItem().getType() != null
+                && event.getItem().getType().getAvailableForLeavingVacation();
+        absencesTableNewLeavingVacationRequest.setEnabled(isEnabled);
     }
 
     public void newVacationScheduleButton() {
@@ -154,12 +156,25 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .build()
                 .show()
                 .addAfterCloseListener(afterCloseEvent -> {
-//                    vacationScheduleRequestDl.load();
-                    vacationTabSheet.setSelectedTab("requestsTab");
+                    if (afterCloseEvent.getCloseAction().equals(WINDOW_COMMIT_AND_CLOSE_ACTION)) {
+                        absenceRequestDl.load();
+                        tabSheet.setSelectedTab("requestsTab");
+                    }
                 });
     }
 
-    public void newLeavingVacationRequest() {
+    @SuppressWarnings("unchecked")
+    public <T extends AbstractBprocRequest> void openRequest(AllAbsenceRequest absenceRequest, String columnId) {
+        Class<T> javaClass = metadata.getClassNN(absenceRequest.getEntityName()).getJavaClass();
+        T abstractBprocRequest = dataManager.load(Id.of(absenceRequest.getId(), javaClass)).one();
+        EditorBuilder<T> editor = screenBuilders.editor((Class<T>) abstractBprocRequest.getClass(), this);
+        if (abstractBprocRequest instanceof AbsenceRequest) editor.withScreenId("tsadv$AbsenceRequestNew.edit");
+        editor.editEntity(abstractBprocRequest)
+                .show();
+    }
+
+    @Subscribe("absencesTable.newLeavingVacationRequest")
+    protected void onAbsencesTableNewLeavingVacationRequest(Action.ActionPerformedEvent event) {
         Absence getItem = absencesDc.getItem();
         LeavingVacationRequest item = dataManager.create(LeavingVacationRequest.class);
 
@@ -170,16 +185,6 @@ public class SelfAbsence extends StandardLookup<Absence>
         screenBuilders.editor(LeavingVacationRequest.class, this)
                 .newEntity(item)
                 .build()
-                .show();
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends AbstractBprocRequest> void openRequest(AllAbsenceRequest absenceRequest, String columnId) {
-        Class<T> javaClass = metadata.getClassNN(absenceRequest.getEntityName()).getJavaClass();
-        T abstractBprocRequest = dataManager.load(Id.of(absenceRequest.getId(), javaClass)).one();
-        EditorBuilder<T> editor = screenBuilders.editor((Class<T>) abstractBprocRequest.getClass(), this);
-        if (abstractBprocRequest instanceof AbsenceRequest) editor.withScreenId("tsadv$AbsenceRequestNew.edit");
-        editor.editEntity(abstractBprocRequest)
                 .show();
     }
 }
