@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        caption="msg://editorCaption"
-        focusComponent="form"
+        caption="msg://newsProfile"
         messagesPack="kz.uco.tsadv.web.screens.news">
     <data>
         <instance id="newsDc"
@@ -12,19 +11,92 @@
     </data>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="editActions" spacing="true">
-        <form id="form" dataContainer="newsDc">
-            <column width="250px">
-                <textField id="newsLang1Field" property="newsLang1"/>
-                <textField id="newsLang2Field" property="newsLang2"/>
-                <textField id="newsLang3Field" property="newsLang3"/>
-                <textField id="titleLang1Field" property="titleLang1"/>
-                <textField id="titleLang2Field" property="titleLang2"/>
-                <textField id="titleLang3Field" property="titleLang3"/>
-                <checkBox id="isPublishedField" property="isPublished"/>
-                <upload id="bannerField" fileStoragePutMode="IMMEDIATE" property="banner" showFileName="true"/>
-            </column>
-        </form>
+    <layout expand="mainTabSheet" spacing="true">
+        <tabSheet id="mainTabSheet">
+            <tab id="mainInfoTab"
+                 caption="mainMsg://newsMainInfo"
+                 margin="true,true,true,false"
+                 spacing="true"
+                 expand="mainInfoScrollBox">
+                <scrollBox id="mainInfoScrollBox" height="100%">
+                    <tabSheet id="mainInfoEditTabSheet">
+                        <tab id="newsLang1Tab"
+                             caption="mainMsg://newsLang1"
+                             margin="true,true,true,false"
+                             spacing="true">
+                            <groupBox>
+                                <vbox>
+                                    <hbox spacing="true">
+                                        <label value="msg://newsTitle"/>
+                                        <textField dataContainer="newsDc" property="titleLang1"/>
+                                    </hbox>
+                                    <richTextArea caption="msg://new" dataContainer="newsDc"
+                                                  property="newsLang1" width="100%"/>
+                                </vbox>
+                            </groupBox>
+                        </tab>
+                        <tab id="newsLang2tab"
+                             caption="mainMsg://newsLang2"
+                             margin="true,true,true,false"
+                             spacing="true">
+                            <groupBox>
+                                <vbox>
+                                    <hbox spacing="true">
+                                        <label value="msg://newsTitle"/>
+                                        <textField dataContainer="newsDc" property="titleLang2"/>
+                                    </hbox>
+                                    <richTextArea caption="msg://new" dataContainer="newsDc"
+                                                  property="newsLang2" width="100%"/>
+                                </vbox>
+                            </groupBox>
+                        </tab>
+                        <tab id="newsLang3tab"
+                             caption="mainMsg://newsLang3"
+                             margin="true,true,true,false"
+                             spacing="true">
+                            <groupBox>
+                                <vbox>
+                                    <hbox spacing="true">
+                                        <label value="msg://newsTitle"/>
+                                        <textField dataContainer="newsDc" property="titleLang3"/>
+                                    </hbox>
+                                    <richTextArea caption="msg://new" dataContainer="newsDc"
+                                                  property="newsLang3" width="100%"/>
+                                </vbox>
+                            </groupBox>
+                        </tab>
+                    </tabSheet>
+                    <groupBox>
+                        <hbox>
+                            <image id="news_banner"
+                                   dataContainer="newsDc"
+                                   property="banner"
+                                   scaleMode="CONTAIN"
+                                   height="200px"
+                                   width="200px"/>
+                            <upload id="news_banner_upload"
+                                    dataContainer="newsDc"
+                                    property="banner"
+                                    fileStoragePutMode="IMMEDIATE"
+                                    align="BOTTOM_CENTER"
+                                    showFileName="false"
+                                    showClearButton="true"/>
+                        </hbox>
+                    </groupBox>
+                </scrollBox>
+            </tab>
+            <tab id="newsLikesTab"
+                 caption="mainMsg://newsLikes"
+                 margin="true,true,true,false"
+                 spacing="true">
+
+            </tab>
+            <tab id="newsCommentsTab"
+                 caption="mainMsg://newsComments"
+                 margin="true,true,true,false"
+                 spacing="true">
+            </tab>
+        </tabSheet>
         <hbox id="editActions" spacing="true">
             <button action="windowCommitAndClose"/>
             <button action="windowClose"/>

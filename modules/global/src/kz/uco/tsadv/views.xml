@@ -23493,5 +23493,6 @@
     </view>
     <view entity="tsadv_News" name="news-edit" extends="_local">
         <property name="banner" view="_minimal"/>
+        <property name="createTs"/>
     </view>
 </views>
