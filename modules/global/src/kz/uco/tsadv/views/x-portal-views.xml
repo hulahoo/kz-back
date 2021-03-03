@@ -222,7 +222,9 @@
         <property name="langValue3"/>
         <property name="courses" view="course-portal-browse">
             <property name="enrollments" view="_minimal">
-                <property name="personGroup" view="_minimal"/>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_local"/>
+                </property>
             </property>
         </property>
     </view>

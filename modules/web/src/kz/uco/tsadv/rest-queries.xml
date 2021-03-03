@@ -108,7 +108,7 @@
     <query name="searchCourses" entity="tsadv$DicCategory" view="category-courses">
         <jpql>
             <![CDATA[
-            select c
+            select distinct c
             from tsadv$DicCategory c
             join c.courses cc
             where (lower (cc.name) like lower (concat(concat('%', :courseName), '%')))
@@ -121,7 +121,7 @@
     <query name="searchEnrollments" entity="tsadv$DicCategory" view="category-enrollment">
         <jpql>
             <![CDATA[
-            select c
+            select distinct c
             from tsadv$DicCategory c
             join c.courses cc
             join cc.enrollments e
