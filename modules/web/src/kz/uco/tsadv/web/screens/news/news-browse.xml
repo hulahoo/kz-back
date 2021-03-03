@@ -6,8 +6,10 @@
         messagesPack="kz.uco.tsadv.web.screens.news">
     <data readOnly="true">
         <collection id="newsCollectionDc"
-                    class="kz.uco.tsadv.modules.information.News"
-                    view="_local">
+                    class="kz.uco.tsadv.modules.information.News">
+            <view extends="_local">
+                <property name="createTs"/>
+            </view>
             <loader id="newsCollectionDl">
                 <query>
                     <![CDATA[select e from tsadv_News e]]>
@@ -33,7 +35,7 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="updateTs" caption="msg://newsDate"/>
+                <column id="createTs" caption="msg://newsDate"/>
                 <column id="titleLang1" caption="msg://newsTitle"/>
                 <column id="isPublished" caption="msg://newsPublished"/>
             </columns>
