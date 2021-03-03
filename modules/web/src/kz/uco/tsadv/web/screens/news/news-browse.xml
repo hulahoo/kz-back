@@ -33,13 +33,9 @@
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <column id="newsLang1"/>
-                <column id="newsLang2"/>
-                <column id="newsLang3"/>
-                <column id="titleLang1"/>
-                <column id="titleLang2"/>
-                <column id="titleLang3"/>
-                <column id="isPublished"/>
+                <column id="updateTs" caption="msg://newsDate"/>
+                <column id="titleLang1" caption="msg://newsTitle"/>
+                <column id="isPublished" caption="msg://newsPublished"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
