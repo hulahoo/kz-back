@@ -10613,6 +10613,7 @@ create table TSADV_VACATION_SCHEDULE (
     START_DATE date,
     END_DATE date,
     ABSENCE_DAYS integer,
+    REQUEST_ID uuid,
     --
     primary key (ID)
 )^
@@ -13106,14 +13107,16 @@ create table TSADV_VACATION_SCHEDULE_REQUEST (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
-    --
     REQUEST_NUMBER bigint not null,
-    REQUEST_DATE date not null,
-    PERSON_GROUP_ID uuid not null,
     STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
+    --
+    PERSON_GROUP_ID uuid not null,
     START_DATE date,
     END_DATE date,
     ABSENCE_DAYS integer,
+    BALANCE integer,
     --
     primary key (ID)
 )^
@@ -17552,3 +17555,49 @@ create table TSADV_ALL_ABSENCE_REQUEST (
     primary key (ID)
 )^
 -- end TSADV_ALL_ABSENCE_REQUEST
+-- begin TSADV_STUDENT_HOMEWORK
+create table TSADV_STUDENT_HOMEWORK (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    HOMEWORK_ID uuid not null,
+    PERSON_GROUP_ID uuid not null,
+    ANSWER text,
+    ANSWER_FILE_ID uuid,
+    IS_DONE boolean not null,
+    TRAINER_COMMENT text,
+    TRAINER_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_STUDENT_HOMEWORK
+-- begin TSADV_HOMEWORK
+create table TSADV_HOMEWORK (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    COURSE_ID uuid not null,
+    INSTRUCTIONS varchar(255) not null,
+    INSTRUCTION_FILE_ID uuid,
+    --
+    primary key (ID)
+)^
+-- end TSADV_HOMEWORK

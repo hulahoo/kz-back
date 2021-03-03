@@ -25,12 +25,13 @@
             <properties include=".*"/>
         </filter>
         <dataGrid id="insuranceContractsTable"
-                    width="100%"
-                    dataContainer="insuranceContractsDc">
+                  width="100%"
+                  dataContainer="insuranceContractsDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
+                <action id="sendNotification" trackSelection="true" caption="msg://sendNotification"/>
             </actions>
             <columns>
                 <column id="contractField" property="contract"/>
@@ -46,6 +47,7 @@
                 <button id="createBtn" action="insuranceContractsTable.create"/>
                 <button id="editBtn" action="insuranceContractsTable.edit"/>
                 <button id="removeBtn" action="insuranceContractsTable.remove"/>
+                <button id="sendNotificationBtn" action="insuranceContractsTable.sendNotification"/>
             </buttonsPanel>
         </dataGrid>
         <hbox id="lookupActions" spacing="true" visible="false">
