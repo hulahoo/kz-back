@@ -112,6 +112,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     organizationGroupExt.setCompany(company);
                     organizationGroupExt.setLegacyId(organizationJson.getLegacyId());
+                    organizationGroupExt.setOrganizationNameLang1(organizationJson.getOrganizationNameLang1());
+                    organizationGroupExt.setOrganizationNameLang2(organizationJson.getOrganizationNameLang2());
+                    organizationGroupExt.setOrganizationNameLang3(organizationJson.getOrganizationNameLang3());
                     organizationGroupExt.setId(UUID.randomUUID());
                     organizationGroupExt.setList(new ArrayList<>());
                     organizationGroupExts.add(organizationGroupExt);
@@ -260,6 +263,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     jobGroup.setCompany(company);
                     jobGroup.setLegacyId(jobJson.getLegacyId());
+                    jobGroup.setJobNameLang1(jobJson.getJobNameLang1());
+                    jobGroup.setJobNameLang2(jobJson.getJobNameLang2());
+                    jobGroup.setJobNameLang3(jobJson.getJobNameLang3());
                     jobGroup.setId(UUID.randomUUID());
                     jobGroup.setList(new ArrayList<>());
                     jobGroups.add(jobGroup);
@@ -1171,11 +1177,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     }
 
     protected void createLog(String methodName, BaseResult baseResult, Serializable param) {
-        if (baseResult.getErrorMessage() != null && !baseResult.getErrorMessage().equals("")) {
-            UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
-            String login = userSessionSource.getUserSession().getUser().getLogin();
-            restIntegrationLogService.log(login, methodName, toJson(param), baseResult.getErrorMessage(), baseResult.isSuccess(), new Date());
-        }
+//        if (baseResult.getErrorMessage() != null && !baseResult.getErrorMessage().equals("")) {
+        UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
+        String login = userSessionSource.getUserSession().getUser().getLogin();
+        restIntegrationLogService.log(login, methodName, toJson(param), baseResult.isSuccess()
+                ? baseResult.getSuccessMessage() : baseResult.getErrorMessage(), baseResult.isSuccess(), new Date());
+//        }
     }
 
     protected String toJson(Serializable params) {
