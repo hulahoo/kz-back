@@ -635,5 +635,7 @@
         <class>kz.uco.tsadv.modules.information.NewsComment</class>
         <class>kz.uco.tsadv.modules.information.NewsLike</class>
         <class>kz.uco.tsadv.modules.information.NumberOfView</class>
+        <class>kz.uco.tsadv.modules.learning.model.Homework</class>
+        <class>kz.uco.tsadv.modules.learning.model.StudentHomework</class>
     </persistence-unit>
 </persistence>

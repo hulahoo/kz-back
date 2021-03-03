@@ -23461,4 +23461,13 @@
         <property name="personGroup" view="_minimal"/>
         <property name="status" view="_local"/>
     </view>
+    <view entity="tsadv_Homework" name="homework.edit" extends="_local">
+        <property name="course" view="_minimal"/>
+        <property name="instructionFile" view="_minimal"/>
+    </view>
+    <view entity="tsadv_StudentHomework" name="studentHomework.edit" extends="_local">
+        <property name="homework" view="_minimal"/>
+        <property name="personGroup" view="_minimal"/>
+        <property name="trainer" view="_minimal"/>
+    </view>
 </views>

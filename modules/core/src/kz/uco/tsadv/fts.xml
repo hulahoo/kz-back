@@ -1915,5 +1915,11 @@
         <entity class="kz.uco.tsadv.modules.information.NumberOfView">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.Homework">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.StudentHomework">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
