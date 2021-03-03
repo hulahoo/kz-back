@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://browseCaption"
         focusComponent="newsTable"
         messagesPack="kz.uco.tsadv.web.screens.news">
@@ -36,14 +35,14 @@
             </actions>
             <columns>
                 <column id="createTs" caption="msg://newsDate"/>
-                <column id="titleLang1" caption="msg://newsTitle"/>
+                <column id="titleLang1" caption="msg://newsTitle" link="true"/>
                 <column id="isPublished" caption="msg://newsPublished"/>
             </columns>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button id="createBtn" action="newsTable.create"/>
-                <button id="editBtn" action="newsTable.edit"/>
+                <button id="editBtn" action="newsTable.edit" caption="msg://publishNews"/>
                 <button id="removeBtn" action="newsTable.remove"/>
             </buttonsPanel>
         </groupTable>
