@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://vacationScheduleRequestBrowse.caption"
+        focusComponent="vacationScheduleRequestsTable"
+        messagesPack="kz.uco.tsadv.web.screens.vacationschedulerequest">
+    <data readOnly="true">
+        <collection id="vacationScheduleRequestsDc"
+                    class="kz.uco.tsadv.entity.VacationScheduleRequest">
+            <view extends="_local">
+                <property name="personGroup" view="_local">
+                    <property name="list" view="_local"/>
+                    <property name="person" view="_local"/>
+                    <property name="fioWithEmployeeNumber"/>
+                    <property name="assignments" view="_local">
+                        <property name="assignmentStatus" view="_local"/>
+                        <property name="organizationGroup" view="_minimal">
+                            <property name="list" view="_local"/>
+                            <property name="organizationName"/>
+                        </property>
+                        <property name="jobGroup" view="_minimal">
+                            <property name="list" view="_local"/>
+                        </property>
+                    </property>
+                    <property name="currentAssignment" view="_local">
+                        <property name="organizationGroup"/>
+                        <property name="jobGroup"/>
+                    </property>
+                </property>
+                <property name="status" view="_local"/>
+            </view>
+            <loader id="vacationScheduleRequestsDl">
+                <query>
+                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.status.code = 'DRAFT' order by e.requestNumber desc]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="vacationSchedulesDc"
+                    class="kz.uco.tsadv.entity.VacationSchedule">
+            <view extends="_local">
+                <property name="personGroup" view="_local">
+                    <property name="list" view="_local"/>
+                    <property name="person" view="_local"/>
+                    <property name="fioWithEmployeeNumber"/>
+                    <property name="assignments" view="_local">
+                        <property name="assignmentStatus" view="_local"/>
+                        <property name="organizationGroup" view="_minimal">
+                            <property name="list" view="_local"/>
+                            <property name="organizationName"/>
+                        </property>
+                        <property name="jobGroup" view="_minimal">
+                            <property name="list" view="_local"/>
+                        </property>
+                    </property>
+                    <property name="currentAssignment" view="_local">
+                        <property name="organizationGroup"/>
+                        <property name="jobGroup"/>
+                    </property>
+                </property>
+            </view>
+            <loader id="vacationSchedulesDl">
+                <query>
+                    <![CDATA[select e from tsadv_VacationSchedule e order by e.createTs desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="tabSheet">
+        <tabSheet id="tabSheet">
+            <tab id="vacationScheduleRequest"
+                 spacing="true"
+                 caption="msg://vacationScheduleRequests"
+                 expand="vacationScheduleRequestsTable">
+                <filter id="filter"
+                        applyTo="vacationScheduleRequestsTable"
+                        dataLoader="vacationScheduleRequestsDl">
+                    <properties include=".*"/>
+                </filter>
+                <groupTable id="vacationScheduleRequestsTable"
+                            width="100%"
+                            dataContainer="vacationScheduleRequestsDc">
+                    <columns>
+                        <column id="checkList" caption=" " generator="checkListGenerator"/>
+                        <column id="personGroup.fioWithEmployeeNumber" link="true" linkInvoke="openPersonCard"/>
+                        <column id="personGroup.currentAssignment.organizationGroup"
+                                captionProperty="personGroup.currentAssignment.organizationGroup.organization.organizationName"/>
+                        <column id="personGroup.currentAssignment.jobGroup"
+                                captionProperty="personGroup.currentAssignment.jobGroup.job.jobName"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="absenceDays"/>
+                        <column id="comment"/>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button id="sendToOracleBtn" caption="msg://sendToOracle"/>
+                    </buttonsPanel>
+                </groupTable>
+            </tab>
+            <tab id="vacationScheduleTab"
+                 caption="msg://vacationSchedule"
+                 spacing="true"
+                 expand="vacationSchedulesTable">
+                <filter id="filterVacationSchedule"
+                        applyTo="vacationSchedulesTable"
+                        dataLoader="vacationSchedulesDl">
+                    <properties include=".*"/>
+                </filter>
+                <groupTable id="vacationSchedulesTable"
+                            width="100%"
+                            dataContainer="vacationScheduleRequestsDc">
+                    <columns>
+                        <column id="personGroup.fioWithEmployeeNumber" link="true" linkInvoke="openPersonCard"/>
+                        <column id="personGroup.currentAssignment.organizationGroup"
+                                captionProperty="personGroup.currentAssignment.organizationGroup.organization.organizationName"/>
+                        <column id="personGroup.currentAssignment.jobGroup"
+                                captionProperty="personGroup.currentAssignment.jobGroup.job.jobName"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="absenceDays"/>
+                    </columns>
+                    <rowsCount/>
+                </groupTable>
+            </tab>
+        </tabSheet>
+    </layout>
+</window>

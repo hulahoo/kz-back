@@ -1008,7 +1008,7 @@ public class TimesheetServiceBean implements TimesheetService {
 
     protected void checkIsDatesNull(Date startDate, Date endDate) {
         if (startDate == null || endDate == null) {
-            throw new NullPointerException("Dates must  not be null");
+            throw new NullPointerException("Dates must not be null");
         }
     }
 
@@ -1025,17 +1025,15 @@ public class TimesheetServiceBean implements TimesheetService {
         }
         checkIsDatesNull(startDate, endDate);
 
-        if (ignoreHolidays==null){
-            ignoreHolidays=false;
+        if (ignoreHolidays == null) {
+            ignoreHolidays = false;
         }
 
         if (endDate.compareTo(startDate) <= 0) {
             throw new ItemNotFoundException(messages.getMainMessage("startDate.validatorMsg"));
         }
 
-        int days = 0;
-
-        days = datesService.getFullDaysCount(startDate, endDate);
+        int days = datesService.getFullDaysCount(startDate, endDate);
 
         if (!ignoreHolidays) {
             days = days - timesheetService.getAllHolidays(calendar, startDate, endDate);

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.homework">
+    <data>
+        <instance id="homeworkDc"
+                  class="kz.uco.tsadv.modules.learning.model.Homework"
+                  view="homework.edit">
+            <loader id="homeworkDl"/>
+        </instance>
+        <collection id="studentHomeworkDc"
+                    class="kz.uco.tsadv.modules.learning.model.StudentHomework"
+                    view="studentHomework.edit">
+            <loader id="studentHomeworkDl">
+                <query>
+                    <![CDATA[select e from tsadv_StudentHomework e where e.homework = :homework]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="homeworkDc">
+            <column width="250px">
+                <textArea id="instructionsField" property="instructions" rows="5"/>
+                <upload id="instructionFileField" fileStoragePutMode="IMMEDIATE" property="instructionFile"
+                        showFileName="true"/>
+            </column>
+        </form>
+        <tabSheet id="tabSheet">
+            <tab id="studentTab" spacing="true" margin="true, false, false, false"
+                 caption="msg://studentTab">
+                <table id="studentTable" width="100%" height="100%" dataContainer="studentHomeworkDc">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="personGroup"/>
+                        <column id="answer"/>
+                        <column id="answerFile"/>
+                        <column id="isDone"/>
+                        <column id="trainer"/>
+                        <column id="trainerComment"/>
+                    </columns>
+                    <rows/>
+                    <buttonsPanel id="studentBtnPanel">
+                        <button id="studentCreateBtn" action="studentTable.create"/>
+                        <button id="studentEditBtn" action="studentTable.edit"/>
+                        <button id="studentRemoveBtn" action="studentTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

@@ -36,6 +36,18 @@ public class VacationSchedule extends AbstractParentEntity {
     @NotNull
     private Integer absenceDays;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REQUEST_ID")
+    private VacationScheduleRequest request;
+
+    public VacationScheduleRequest getRequest() {
+        return request;
+    }
+
+    public void setRequest(VacationScheduleRequest request) {
+        this.request = request;
+    }
+
     public void setAbsenceDays(Integer absenceDays) {
         this.absenceDays = absenceDays;
     }

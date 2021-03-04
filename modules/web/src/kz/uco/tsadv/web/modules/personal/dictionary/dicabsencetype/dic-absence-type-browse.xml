@@ -49,6 +49,9 @@
                 <column id="order"/>
                 <column id="isRequiredOrderNumber"/>
                 <column id="includeCalcGzp"/>
+                <column id="availableForChangeDate"/>
+                <column id="availableForLeavingVacation"/>
+                <column id="availableForRecallAbsence"/>
                 <column id="company"/>
             </columns>
             <rows datasource="dicAbsenceTypesDs"/>
