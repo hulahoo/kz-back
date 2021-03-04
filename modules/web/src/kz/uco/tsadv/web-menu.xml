@@ -601,6 +601,7 @@
         <item screen="learner-group-complex-edit"/>
         <item screen="tsadv$LearnerGroup.browse"/>
         <item screen="tsadv$Learner.browse"/>
+        <item screen="tsadv$LmsSlider.browse"/>
     </menu>
     <menu id="recruitment"
           icon="font-icon:SEARCH"
@@ -770,7 +771,6 @@
         <item screen="tsadv$LookupType.browse"/>
         <item screen="security"/>
         <item screen="tsadv$BpmUserSubstitution.browse"/>
-        <item screen="tsadv$LmsSlider.browse"/>
         <item screen="emailtemplates$EmailTemplate.browse"/>
         <menu id="data-import">
             <item id="ddcdi$import-wizard"/>
