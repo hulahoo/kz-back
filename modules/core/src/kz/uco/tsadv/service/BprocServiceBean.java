@@ -332,30 +332,36 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         notificationParams.put("requestLinkRu", "");
         notificationParams.put("requestLinkEn", "");
-
-        Activity activity = activityService.createActivity(
-                user,
-                sessionUser,
-                activityType,
-                StatusEnum.active,
-                "description",
-                null,
-                new Date(),
-                null,
-                null,
-                entity.getId(),
-                notificationTemplateCode,
-                notificationParams);
-
-        String requestLink = getRequestLink(entity, activity);
-        notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
-        notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
-
-        notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
+        Activity activity = null;
         ProcessInstanceData processInstanceData = bprocHistoricService.createHistoricProcessInstanceDataQuery()
                 .processInstanceBusinessKey(entity.getId().toString())
                 .processDefinitionKey(entity.getProcessDefinitionKey())
                 .singleResult();
+        if (notificationTemplateCode != null && notificationTemplateCode
+                .equals(getProcessVariable(processInstanceData.getId(), "initiatorNotificationTemplateCode"))) {
+            activity = transactionalDataManager.load(Activity.class)
+                    .query("select e from uactivity$Activity e where e.referenceId = :entityId")
+                    .parameter("entityId", entity.getId()).view("activity.view.tsadv").list().stream()
+                    .findFirst().orElse(null);
+        } else {
+            activity = activityService.createActivity(
+                    user,
+                    sessionUser,
+                    activityType,
+                    StatusEnum.active,
+                    "description",
+                    null,
+                    new Date(),
+                    null,
+                    null,
+                    entity.getId(),
+                    notificationTemplateCode,
+                    notificationParams);
+        }
+        String requestLink = getRequestLink(entity, activity);
+        notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
+        notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
+        notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
         User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
         if (initiator != null) {
             String afterApproveInitiatorNotificationTemplateCode = getProcessVariable(processInstanceData.getId(),
@@ -596,6 +602,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             }
             case "bpm.scheduleOffsetsRequest.approved.notification":
             case "bpm.scheduleOffsetsRequest.reject.notification":
+            case "bpm.scheduleOffsetsRequest.initiator.notification":
             case "bpm.scheduleOffsetsRequest.revision.notification":
             case "bpm.scheduleOffsetsRequest.toapprove.notification": {
                 ScheduleOffsetsRequest scheduleOffsetsRequest = transactionalDataManager.load(ScheduleOffsetsRequest.class)
