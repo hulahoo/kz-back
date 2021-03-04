@@ -7626,6 +7626,7 @@ create table TSADV_LMS_SLIDER (
     DELETED_BY varchar(50),
     --
     POSITION_ varchar(50) not null,
+    URL varchar(1000),
     --
     primary key (ID)
 )^
