@@ -22813,6 +22813,31 @@
             <property name="code"/>
         </property>
     </view>
+    <view entity="tsadv$AbsenceRequest" name="absenceRequest-for-mobile" extends="_local">
+        <property name="type" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="purpose" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="files" view="_local"/>
+    </view>
     <view entity="base$PersonGroupExt" name="personGroupExt.mobile" extends="_minimal">
         <property name="assignments" view="assignment.view">
             <property name="positionGroup" view="positionGroup.list"/>
