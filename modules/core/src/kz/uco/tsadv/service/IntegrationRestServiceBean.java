@@ -2142,10 +2142,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no companyCode");
                 }
 
+                if(personContactJson.getValue() == null || personContactJson.getValue().isEmpty()){
+                    return prepareError(result, methodName, personContactData,
+                            "no value");
+                }
+
                 PersonContact personContact = personContactsCommitList.stream().filter(filterPersonContact ->
                         filterPersonContact.getLegacyId() != null
                                 && filterPersonContact.getType() != null
                                 && filterPersonContact.getType().getLegacyId() != null
+                                && filterPersonContact.getContactValue() != null
+                                && filterPersonContact.getContactValue().equals(personContactJson.getValue())
                                 && filterPersonContact.getPersonGroup() != null
                                 && filterPersonContact.getPersonGroup().getLegacyId() != null
                                 && filterPersonContact.getPersonGroup().getCompany() != null
@@ -2162,10 +2169,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .query(
                                     " select e from tsadv$PersonContact e " +
                                             " where e.legacyId = :legacyId " +
+                                            " and e.contactValue = :value" +
                                             " and e.personGroup.legacyId = :pgLegacyId " +
                                             " and e.personGroup.company.legacyId = :companyCode " +
                                             " and e.type.legacyId = :tpLegacyId")
                             .setParameters(ParamsMap.of(
+                                    "value",personContactJson.getValue(),
                                     "legacyId", personContactJson.getLegacyId(),
                                     "pgLegacyId", personContactJson.getPersonId(),
                                     "companyCode", personContactJson.getCompanyCode(),
