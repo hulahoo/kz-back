@@ -552,6 +552,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             case "bpm.absenceRvdRequest.approved.notification":
             case "bpm.absenceRvdRequest.reject.notification":
             case "bpm.absenceRvdRequest.revision.notification":
+            case "bpm.absenceRvdRequest.forInitiator.notification":
             case "bpm.absenceRvdRequest.toapprove.notification": {
                 AbsenceRvdRequest absenceRvdRequest = transactionalDataManager.load(AbsenceRvdRequest.class)
                         .id(entity.getId()).view("absenceRvdRequest.edit").optional().orElse(null);
