@@ -23492,7 +23492,12 @@
         </property>
     </view>
     <view entity="tsadv_News" name="news-edit" extends="_local">
-        <property name="banner" view="_minimal"/>
         <property name="createTs"/>
+        <property name="banner" view="_minimal"/>
+        <property name="likes" view="new-like-edit"/>
+    </view>
+    <view entity="tsadv_NewsLike" name="new-like-edit" extends="_local">
+        <property name="createTs"/>
+        <property name="createdBy"/>
     </view>
 </views>

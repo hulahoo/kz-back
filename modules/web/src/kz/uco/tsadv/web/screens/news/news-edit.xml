@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://newsProfile"
         messagesPack="kz.uco.tsadv.web.screens.news">
     <data>
@@ -8,9 +9,21 @@
                   view="news-edit">
             <loader/>
         </instance>
+        <collection id="newsLikesDc" class="kz.uco.tsadv.modules.information.NewsLike">
+            <view extends="_local">
+                <property name="newsId" view="_minimal"/>
+            </view>
+            <loader id="newsLikesDl">
+                <query>
+                    <![CDATA[select e from tsadv_NewsLike e where e.newsId = :currentNew]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
+    <facets>
+    </facets>
     <layout expand="mainTabSheet" spacing="true">
         <tabSheet id="mainTabSheet">
             <tab id="mainInfoTab"
@@ -88,8 +101,23 @@
             <tab id="newsLikesTab"
                  caption="mainMsg://newsLikes"
                  margin="true,true,true,false"
-                 spacing="true">
-
+                 spacing="true"
+                 expand="likesScrollBox">
+                <scrollBox id="likesScrollBox" spacing="true">
+                    <filter id="filter"
+                            applyTo="likesTable"
+                            dataLoader="newsLikesDl" >
+                        <properties include=".*"/>
+                    </filter>
+                    <table id="likesTable" dataContainer="newsLikesDc" width="100%">
+                        <columns>
+                            <column id="createTs"/>
+                            <column id="createdBy"/>
+                            <column id="removeLike" caption="msg://action" generator="generateRemoveLikeColumn"/>
+                        </columns>
+                        <rows/>
+                    </table>
+                </scrollBox>
             </tab>
             <tab id="newsCommentsTab"
                  caption="mainMsg://newsComments"
