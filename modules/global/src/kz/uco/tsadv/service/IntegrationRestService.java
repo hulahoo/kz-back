@@ -85,4 +85,6 @@ public interface IntegrationRestService {
     BaseResult createOrUpdatePersonLanguages(PersonLanguageDataJson personLanguageData);
 
     BaseResult deletePersonLanguages(PersonLanguageDataJson personLanguageData);
+
+    BaseResult createOrUpdateUser(UserDataJson userData);
 }

@@ -21,6 +21,7 @@ import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSchedule;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
+import kz.uco.tsadv.modules.learning.model.Homework;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.web.modules.personal.common.Utils;
 
@@ -69,6 +70,10 @@ public class CourseEdit extends StandardEditor<Course> {
     protected Table<CourseSchedule> courseScheduleTable;
     @Inject
     protected CollectionLoader<DicLearningType> dicLearningTypesDl;
+    @Inject
+    protected Table<Homework> homeworkTable;
+    @Inject
+    protected CollectionLoader<Homework> homeworkDl;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -78,6 +83,8 @@ public class CourseEdit extends StandardEditor<Course> {
         courseScheduleDl.setParameter("course", courseDc.getItem());
         courseScheduleDl.load();
         dicLearningTypesDl.load();
+        homeworkDl.setParameter("course", courseDc.getItem());
+        homeworkDl.load();
     }
 
 
@@ -330,5 +337,13 @@ public class CourseEdit extends StandardEditor<Course> {
                 .newEntity()
                 .withInitializer(courseSchedule -> courseSchedule.setCourse(courseDc.getItem())).build().show()
                 .addAfterCloseListener(afterCloseEvent -> courseScheduleDl.load());
+    }
+
+    @Subscribe("homeworkTable.create")
+    protected void onHomeworkTableCreate(Action.ActionPerformedEvent event) {
+        screenBuilders.editor(homeworkTable)
+                .newEntity()
+                .withInitializer(homework -> homework.setCourse(courseDc.getItem())).build().show()
+                .addAfterCloseListener(afterCloseEvent -> homeworkDl.load());
     }
 }

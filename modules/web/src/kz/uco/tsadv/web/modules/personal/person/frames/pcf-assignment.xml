@@ -19,19 +19,16 @@
                                 width="100%">
                             <field id="organizationName"
                                    editable="false"
+                                   caption="msg://organization"
                                    property="organizationGroup.organization.organizationName"/>
                             <field id="positionName"
                                    editable="false"
+                                   caption="msg://position"
                                    property="positionGroup.position.positionFullName"/>
                             <field id="jobName"
                                    editable="false"
+                                   caption="msg://job"
                                    property="positionGroup.position.jobGroup.job.jobName"/>
-                            <field id="gradeName"
-                                   editable="false"
-                                   property="gradeGroup.grade.gradeName"/>
-                            <field id="managerFlag"
-                                   editable="false"
-                                   property="positionGroup.position.managerFlag"/>
                             <field id="substituteEmployee"
                                    captionProperty="fullName"
                                    editable="false"
@@ -39,27 +36,16 @@
                         </column>
                         <column id="column2"
                                 width="100%">
-                            <field id="payroll.langValue"
-                                   editable="false"
-                                   property="positionGroup.position.payroll.langValue"/>
                             <field id="fte"
                                    editable="false"
                                    property="fte"/>
-                            <field id="location.langValue"
+                            <field id="gradeName"
                                    editable="false"
-                                   property="location.langValue"/>
+                                   property="gradeGroup.grade.gradeName"/>
                             <field id="assignmentStatus"
                                    editable="false"
+                                   caption="msg://assignmentStatus"
                                    property="assignmentStatus"/>
-                            <field id="ruleName"
-                                   editable="false"
-                                   property="positionGroup.position.gradeRule.ruleName"/>
-                            <field id="orderNumber"
-                                   editable="false"
-                                   property="orderNumber"/>
-                            <field id="orderDate"
-                                   editable="false"
-                                   property="orderDate"/>
                         </column>
                     </fieldGroup>
                 </hbox>

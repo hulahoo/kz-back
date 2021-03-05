@@ -1,10 +1,12 @@
 package kz.uco.tsadv.modules.information;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Table(name = "TSADV_NEWS")
 @Entity(name = "tsadv_News")
@@ -14,6 +16,14 @@ public class News extends StandardEntity {
     @NotNull
     @Column(name = "NEWS_LANG1", nullable = false, length = 2000)
     protected String newsLang1;
+
+    @Composition
+    @OneToMany(mappedBy = "newsId")
+    protected List<NewsLike> likes;
+
+    @Composition
+    @OneToMany(mappedBy = "newsid")
+    protected List<NewsComment> comments;
 
     @Column(name = "NEWS_LANG2", length = 2000)
     protected String newsLang2;
@@ -39,6 +49,22 @@ public class News extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "BANNER_ID")
     protected FileDescriptor banner;
+
+    public List<NewsComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<NewsComment> comments) {
+        this.comments = comments;
+    }
+
+    public List<NewsLike> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<NewsLike> likes) {
+        this.likes = likes;
+    }
 
     public void setTitleLang1(String titleLang1) {
         this.titleLang1 = titleLang1;

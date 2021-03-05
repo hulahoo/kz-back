@@ -16,6 +16,7 @@ import kz.uco.tsadv.modules.personal.model.PositionExt;
 import kz.uco.tsadv.service.OrganizationService;
 
 import javax.inject.Inject;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SuppressWarnings("all")
@@ -88,7 +89,8 @@ public class PcfAssignment extends EditableFrame {
                 .map(PositionExt::getJobGroup).ifPresent(jobGroup -> jobGroup.getJobInDate(endDate));
 
         Label startDateLbl = componentsFactory.createComponent(Label.class);
-        startDateLbl.setValue(assignmentExt.getStartDate());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        startDateLbl.setValue(dateFormat.format(assignmentExt.getStartDate()));
         return startDateLbl;
     }
 }

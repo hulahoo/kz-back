@@ -1,1 +1,1 @@
-drop table if exists TSADV_BPROC_INSTANCE_ROLES_LINK__U51994 cascade ;
+drop table if exists tsadv_bproc_instance_roles_link cascade ;
