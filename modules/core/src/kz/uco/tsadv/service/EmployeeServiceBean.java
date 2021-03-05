@@ -2460,7 +2460,7 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll, String viewName) {
-        return Optional.of(this.findManagerListByPositionGroup(positionGroupId, showAll)).orElse(Collections.emptyList())
+        return Optional.ofNullable(this.findManagerListByPositionGroup(positionGroupId, showAll)).orElse(Collections.emptyList())
                 .stream()
                 .map(p -> dataManager.reload(p, viewName))
                 .collect(Collectors.toList());

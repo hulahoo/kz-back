@@ -287,4 +287,21 @@
             <param name="positionGroupId" type="java.util.UUID"/>
         </params>
     </query>
+    <query name="courseFeedbacks" entity="tsadv$LearningFeedbackTemplate" view="_local">
+        <jpql>
+            <![CDATA[
+            select e
+            from tsadv$LearningFeedbackTemplate e
+            where e.id in (select cft.feedbackTemplate.id from tsadv$CourseFeedbackTemplate cft where cft.course.id = :courseId and :systemDate between cft.startDate and cft.endDate)
+                and e.active = True
+                and e.employee = True
+                and e.usageType = :usageType
+            ]]>
+        </jpql>
+        <params>
+            <param name="courseId" type="java.util.UUID"/>
+            <param name="systemDate" type="java.util.Date"/>
+            <param name="usageType" type="java.lang.String"/>
+        </params>
+    </query>
 </queries>
