@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://newsProfile"
+        messagesPack="kz.uco.tsadv.web.screens.news">
+    <data>
+        <instance id="newsDc"
+                  class="kz.uco.tsadv.modules.information.News"
+                  view="news-edit">
+            <loader/>
+        </instance>
+        <collection id="newsLikesDc" class="kz.uco.tsadv.modules.information.NewsLike">
+            <view extends="_local">
+                <property name="newsId" view="_minimal"/>
+            </view>
+            <loader id="newsLikesDl">
+                <query>
+                    <![CDATA[select e from tsadv_NewsLike e where e.newsId = :currentNew]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="newsCommentsDc" class="kz.uco.tsadv.modules.information.NewsComment">
+            <view extends="_local">
+                <property name="newsid" view="_minimal"/>
+                <property name="createTs"/>
+                <property name="createdBy"/>
+            </view>
+            <loader id="newsCommentDl">
+                <query>
+                    <![CDATA[select e from tsadv_NewsComment e where e.newsid = :currentNew]]>
+                </query>
+            </loader>
+        </collection>
+
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <facets>
+    </facets>
+    <layout expand="mainTabSheet" spacing="true">
+        <tabSheet id="mainTabSheet">
+            <tab id="mainInfoTab"
+                 caption="mainMsg://newsMainInfo"
+                 margin="true,true,true,false"
+                 spacing="true"
+                 expand="mainInfoScrollBox">
+                <scrollBox id="mainInfoScrollBox" height="100%">
+                    <tabSheet id="mainInfoEditTabSheet">
+                        <tab id="newsLang1Tab"
+                             caption="mainMsg://newsLang1"
+                             margin="true,true,true,false"
+                             spacing="true">
+                            <groupBox>
+                                <vbox>
+                                    <hbox spacing="true">
+                                        <label value="msg://newsTitle"/>
+                                        <textField dataContainer="newsDc" property="titleLang1"/>
+                                    </hbox>
+                                    <richTextArea caption="msg://new" dataContainer="newsDc"
+                                                  property="newsLang1" width="100%"/>
+                                </vbox>
+                            </groupBox>
+                        </tab>
+                        <tab id="newsLang2tab"
+                             caption="mainMsg://newsLang2"
+                             margin="true,true,true,false"
+                             spacing="true">
+                            <groupBox>
+                                <vbox>
+                                    <hbox spacing="true">
+                                        <label value="msg://newsTitle"/>
+                                        <textField dataContainer="newsDc" property="titleLang2"/>
+                                    </hbox>
+                                    <richTextArea caption="msg://new" dataContainer="newsDc"
+                                                  property="newsLang2" width="100%"/>
+                                </vbox>
+                            </groupBox>
+                        </tab>
+                        <tab id="newsLang3tab"
+                             caption="mainMsg://newsLang3"
+                             margin="true,true,true,false"
+                             spacing="true">
+                            <groupBox>
+                                <vbox>
+                                    <hbox spacing="true">
+                                        <label value="msg://newsTitle"/>
+                                        <textField dataContainer="newsDc" property="titleLang3"/>
+                                    </hbox>
+                                    <richTextArea caption="msg://new" dataContainer="newsDc"
+                                                  property="newsLang3" width="100%"/>
+                                </vbox>
+                            </groupBox>
+                        </tab>
+                    </tabSheet>
+                    <groupBox>
+                        <hbox>
+                            <image id="news_banner"
+                                   dataContainer="newsDc"
+                                   property="banner"
+                                   scaleMode="CONTAIN"
+                                   height="200px"
+                                   width="200px"/>
+                            <upload id="news_banner_upload"
+                                    dataContainer="newsDc"
+                                    property="banner"
+                                    fileStoragePutMode="IMMEDIATE"
+                                    align="BOTTOM_CENTER"
+                                    showFileName="false"
+                                    showClearButton="true"/>
+                        </hbox>
+                    </groupBox>
+                </scrollBox>
+            </tab>
+            <tab id="newsLikesTab"
+                 caption="mainMsg://newsLikes"
+                 margin="true,true,true,false"
+                 spacing="true"
+                 expand="likesScrollBox">
+                <scrollBox id="likesScrollBox" spacing="true">
+                    <filter id="likesFilter"
+                            applyTo="likesTable"
+                            dataLoader="newsLikesDl" >
+                        <properties include=".*"/>
+                    </filter>
+                    <table id="likesTable" dataContainer="newsLikesDc" width="100%">
+                        <columns>
+                            <column id="createTs"/>
+                            <column id="createdBy"/>
+                            <column id="removeLike" caption="msg://action" generator="generateRemoveLikeColumn"/>
+                        </columns>
+                        <rows/>
+                    </table>
+                </scrollBox>
+            </tab>
+            <tab id="newsCommentsTab"
+                 caption="mainMsg://newsComments"
+                 margin="true,true,true,false"
+                 spacing="true">
+                <scrollBox id="commentsScrollBox" spacing="true">
+                    <filter id="commentsFilter"
+                            applyTo="commentsTable"
+                            dataLoader="newsCommentDl" >
+                        <properties include=".*"/>
+                    </filter>
+                    <table id="commentsTable" dataContainer="newsCommentsDc" width="100%">
+                        <columns>
+                            <column id="createTs"/>
+                            <column id="createdBy"/>
+                            <column id="commentLang1" caption="msg://comment"/>
+                            <column id="actions" caption="msg://action" generator="generateActionsColumn"/>
+                        </columns>
+                        <rows/>
+                    </table>
+                </scrollBox>
+            </tab>
+        </tabSheet>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
