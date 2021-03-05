@@ -26,9 +26,6 @@
                             <field id="jobName"
                                    editable="false"
                                    property="positionGroup.position.jobGroup.job.jobName"/>
-                            <field id="gradeName"
-                                   editable="false"
-                                   property="gradeGroup.grade.gradeName"/>
                             <field id="substituteEmployee"
                                    captionProperty="fullName"
                                    editable="false"
@@ -39,6 +36,9 @@
                             <field id="fte"
                                    editable="false"
                                    property="fte"/>
+                            <field id="gradeName"
+                                   editable="false"
+                                   property="gradeGroup.grade.gradeName"/>
                             <field id="assignmentStatus"
                                    editable="false"
                                    property="assignmentStatus"/>
