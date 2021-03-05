@@ -19,12 +19,15 @@
                                 width="100%">
                             <field id="organizationName"
                                    editable="false"
+                                   caption="msg://organization"
                                    property="organizationGroup.organization.organizationName"/>
                             <field id="positionName"
                                    editable="false"
+                                   caption="msg://position"
                                    property="positionGroup.position.positionFullName"/>
                             <field id="jobName"
                                    editable="false"
+                                   caption="msg://job"
                                    property="positionGroup.position.jobGroup.job.jobName"/>
                             <field id="substituteEmployee"
                                    captionProperty="fullName"
@@ -41,6 +44,7 @@
                                    property="gradeGroup.grade.gradeName"/>
                             <field id="assignmentStatus"
                                    editable="false"
+                                   caption="msg://assignmentStatus"
                                    property="assignmentStatus"/>
                         </column>
                     </fieldGroup>
