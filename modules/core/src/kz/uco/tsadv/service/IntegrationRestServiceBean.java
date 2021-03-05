@@ -19,6 +19,7 @@ import kz.uco.tsadv.entity.tb.PositionHarmfulCondition;
 import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.dictionary.DicNationality;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
 import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.enums.GrossNet;
@@ -4535,5 +4536,147 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         }
 
         return prepareSuccess(result, methodName, personLanguageData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateUser(UserDataJson userData) {
+        String methodName = "createOrUpdateUser";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<UserJson> users = new ArrayList<>();
+        ArrayList<UserJson> completedUsers = new ArrayList<>();
+
+        if (userData.getUsers() != null) {
+            users = userData.getUsers();
+        }
+
+        try {
+
+            for (UserJson userJson : users) {
+
+                if (userJson.getLogin() == null || userJson.getLogin().isEmpty()) {
+                    continue;
+                }
+
+                if (userJson.getEmployeeNumber() == null || userJson.getEmployeeNumber().isEmpty()) {
+                    continue;
+                }
+
+                if (userJson.getEmail() == null || userJson.getEmail().isEmpty()) {
+                    continue;
+                }
+
+                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.login = :login")
+                        .parameter("login", userJson.getLogin())
+                        .view("userExt.edit")
+                        .list().stream().findFirst().orElse(null);
+
+                if (tsadvUser != null) {
+
+                    if (!tsadvUser.getEmail().equals(userJson.getEmail())) {
+                        tsadvUser.setEmail(userJson.getEmail());
+                    }
+
+                    String empNumber = "";
+
+                    List<String> codes = new ArrayList<>();
+
+                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("VCM");
+                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("KBL");
+                        codes.add("KAL");
+                    } else if ("KMM".equals(userJson.getEmployeeNumber().substring(0, 3))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(3));
+                        codes.add("KMM");
+                    }
+
+                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                            .query(String.format("select e from base$PersonGroupExt e " +
+                                            " join e.list l " +
+                                            " where current_date between l.startDate and l.endDate " +
+                                            " and l.employeeNumber = :empNumber " +
+                                            " and e.company.code in (%s)",
+                                    codes.stream()
+                                            .map(s -> String.format("'%s'", s))
+                                            .collect(Collectors.joining())))
+                            .parameter("empNumber", empNumber)
+                            .view("personGroupExt-for-integration-rest")
+                            .list();
+
+                    if (personGroupExtList.size() == 1 && !tsadvUser.getPersonGroup().equals(personGroupExtList.get(0))) {
+                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                    } else {
+                        continue;
+                    }
+
+                    commitContext.addInstanceToCommit(tsadvUser);
+                    completedUsers.add(userJson);
+
+                } else {
+
+                    tsadvUser = dataManager.create(TsadvUser.class);
+                    tsadvUser.setLogin(userJson.getLogin());
+                    tsadvUser.setEmail(userJson.getEmail());
+
+                    String empNumber = "";
+
+                    List<String> codes = new ArrayList<>();
+
+                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("VCM");
+                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("KBL");
+                        codes.add("KAL");
+                    } else if ("KMM".equals(userJson.getEmployeeNumber().substring(0, 3))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(3));
+                        codes.add("KMM");
+                    }
+
+                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                            .query(String.format("select e from base$PersonGroupExt e " +
+                                            " join e.list l " +
+                                            " where current_date between l.startDate and l.endDate " +
+                                            " and l.employeeNumber = :empNumber " +
+                                            " and e.company.code in (%s)",
+                                    codes.stream()
+                                            .map(s -> String.format("'%s'", s))
+                                            .collect(Collectors.joining())))
+                            .parameter("empNumber", empNumber)
+                            .view("personGroupExt-for-integration-rest")
+                            .list();
+
+                    if (personGroupExtList.size() == 1) {
+                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                    } else {
+                        continue;
+                    }
+
+                    commitContext.addInstanceToCommit(tsadvUser);
+                    completedUsers.add(userJson);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, userData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, completedUsers);
+    }
+
+    private String getEmpNumber(String jsonEmpNumber) {
+        for (int i = 0; i < jsonEmpNumber.length(); i++) {
+            if (jsonEmpNumber.charAt(i) != '0') {
+                return jsonEmpNumber.substring(i);
+            }
+        }
+        return "";
     }
 }

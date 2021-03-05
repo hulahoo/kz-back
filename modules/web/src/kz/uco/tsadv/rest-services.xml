@@ -774,22 +774,28 @@
             <param name="beneficiaryData" type="kz.uco.tsadv.modules.integration.jsonobject.BeneficiaryDataJson"/>
         </method>
         <method name="createOrUpdatePersonDismissal">
-            <param name="personDismissalData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
+            <param name="personDismissalData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
         </method>
         <method name="deletePersonDismissal">
-            <param name="personDismissalData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
+            <param name="personDismissalData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.PersonDismissalDataJson"/>
         </method>
         <method name="createOrUpdateHarmfulCondition">
-            <param name="harmfulConditionData" type="kz.uco.tsadv.modules.integration.jsonobject.HarmfulConditionDataJson"/>
+            <param name="harmfulConditionData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HarmfulConditionDataJson"/>
         </method>
         <method name="deleteHarmfulCondition">
-            <param name="harmfulConditionData" type="kz.uco.tsadv.modules.integration.jsonobject.HarmfulConditionDataJson"/>
+            <param name="harmfulConditionData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.HarmfulConditionDataJson"/>
         </method>
         <method name="createOrUpdateAssignmentSchedule">
-            <param name="assignmentScheduleData" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
+            <param name="assignmentScheduleData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
         </method>
         <method name="deleteAssignmentSchedule">
-            <param name="assignmentScheduleData" type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
+            <param name="assignmentScheduleData"
+                   type="kz.uco.tsadv.modules.integration.jsonobject.AssignmentScheduleJsonData"/>
         </method>
         <method name="createOrUpdatePersonAddress">
             <param name="personAddressData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonAddressDataJson"/>
@@ -802,6 +808,9 @@
         </method>
         <method name="deletePersonLanguages">
             <param name="personLanguageData" type="kz.uco.tsadv.modules.integration.jsonobject.PersonLanguageDataJson"/>
+        </method>
+        <method name="createOrUpdateUser">
+            <param name="userData" type="kz.uco.tsadv.modules.integration.jsonobject.UserDataJson"/>
         </method>
     </service>
 </services>
