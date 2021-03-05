@@ -844,18 +844,40 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("hierarchy.view").list().stream().findFirst().orElse(null);
                 hierarchyElementExt.setHierarchy(hierarchy);
                 HierarchyElementExt parent = null;
+                HierarchyElementGroup parentGroup = null;
                 if (organizationHierarchyElementJson.getParentOrganizationId() != null
                         && !organizationHierarchyElementJson.getParentOrganizationId().isEmpty()) {
-                    parent = dataManager.load(HierarchyElementExt.class).query(
-                            "select e from base$HierarchyElementExt e " +
-                                    " where e.organizationGroup.legacyId = :legacyId " +
-                                    " and e.organizationGroup.company.legacyId = :companyCode ")
-                            .setParameters(ParamsMap.of("legacyId"
-                                    , organizationHierarchyElementJson.getParentOrganizationId()
-                                    , "companyCode", organizationHierarchyElementJson.getCompanyCode()))
-                            .view("hierarchyElementExt-for-integration-rest").list().stream().findFirst().orElse(null);
-                    hierarchyElementExt.setParent(parent);
-                    hierarchyElementExt.setParentGroup(parent != null ? parent.getGroup() : null);
+                    parentGroup = organizationHierarchyElementGroups.stream().filter(
+                            hierarchyElementGroup1 ->
+                                    hierarchyElementGroup1.getList() != null
+                                            && hierarchyElementGroup1.getList().stream().anyMatch(hierarchyElementExt1 ->
+                                            hierarchyElementExt1.getOrganizationGroup() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany()
+                                                    .getLegacyId() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany()
+                                                    .getLegacyId().equals(organizationHierarchyElementJson.getCompanyCode()))
+                                            && hierarchyElementGroup1.getLegacyId() != null
+                                            && hierarchyElementGroup1.getLegacyId()
+                                            .equals(organizationHierarchyElementJson.getParentOrganizationId()))
+                            .findFirst().orElse(null);
+                    if (parentGroup == null) {
+                        parentGroup = dataManager.load(HierarchyElementGroup.class).query(
+                                "select e.group from base$HierarchyElementExt e " +
+                                        " where e.organizationGroup.legacyId = :legacyId " +
+                                        " and e.organizationGroup.company.legacyId = :companyCode ")
+                                .setParameters(ParamsMap.of("legacyId"
+                                        , organizationHierarchyElementJson.getParentOrganizationId()
+                                        , "companyCode", organizationHierarchyElementJson.getCompanyCode()))
+                                .view("hierarchyElementGroup-for-integration-rest").list().stream()
+                                .findFirst().orElse(null);
+                    }
+                    if (parentGroup == null) {
+                        return prepareError(result, methodName, hierarchyElementData,
+                                "no exist parentOrganization");
+                    }
+                    hierarchyElementExt.setParent(parentGroup.getList().stream().findFirst().orElse(null));
+                    hierarchyElementExt.setParentGroup(parentGroup);
                 }
                 hierarchyElementExt.setLegacyId(organizationHierarchyElementJson.getLegacyId());
                 hierarchyElementExt.setStartDate(organizationHierarchyElementJson.getStartDate() != null
@@ -2143,7 +2165,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no companyCode");
                 }
 
-                if(personContactJson.getValue() == null || personContactJson.getValue().isEmpty()){
+                if (personContactJson.getValue() == null || personContactJson.getValue().isEmpty()) {
                     return prepareError(result, methodName, personContactData,
                             "no value");
                 }
@@ -2175,7 +2197,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             " and e.personGroup.company.legacyId = :companyCode " +
                                             " and e.type.legacyId = :tpLegacyId")
                             .setParameters(ParamsMap.of(
-                                    "value",personContactJson.getValue(),
+                                    "value", personContactJson.getValue(),
                                     "legacyId", personContactJson.getLegacyId(),
                                     "pgLegacyId", personContactJson.getPersonId(),
                                     "companyCode", personContactJson.getCompanyCode(),
