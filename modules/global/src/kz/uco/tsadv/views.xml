@@ -23494,7 +23494,7 @@
     </view>
     <view entity="tsadv_VacationScheduleRequest" name="vacationScheduleRequest-edit" extends="_local">
         <property name="personGroup" view="_minimal"/>
-        <property name="status" view="_local"/>
+        <property name="attachment" view="_local"/>
     </view>
     <view entity="tsadv_Homework" name="homework.edit" extends="_local">
         <property name="course" view="_minimal"/>

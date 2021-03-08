@@ -22,7 +22,6 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
@@ -51,6 +50,8 @@ public class SelfAbsence extends StandardLookup<Absence>
     @Inject
     protected CollectionLoader<AllAbsenceRequest> absenceRequestDl;
     @Inject
+    protected CollectionLoader<VacationScheduleRequest> vacationScheduleDl;
+    @Inject
     protected TimeSource timeSource;
     @Inject
     protected EmployeeNumberService employeeNumberService;
@@ -76,6 +77,8 @@ public class SelfAbsence extends StandardLookup<Absence>
     protected BaseAction absencesTableNewLeavingVacationRequest;
     @Inject
     protected Table<Absence> absencesTable;
+    @Inject
+    protected Table<VacationScheduleRequest> vacationScheduleTable;
     @Inject
     protected TabSheet tabSheet;
     @Inject
@@ -140,16 +143,13 @@ public class SelfAbsence extends StandardLookup<Absence>
         VacationScheduleRequest item = dataManager.create(VacationScheduleRequest.class);
         Date today = timeSource.currentTimestamp();
 
-        item.setRequestDate(today);
         item.setStartDate(today);
 
-        item.setRequestNumber(employeeNumberService.generateNextRequestNumber());
         item.setPersonGroup(dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +
                 "where e.id = :uId").parameter("uId", userSession.getUser().getId())
                 .view("personGroupExt-view")
                 .list().stream().findFirst().orElse(null));
-        item.setStatus(commonService.getEntity(DicRequestStatus.class, "DRAFT"));
 
         screenBuilders.editor(VacationScheduleRequest.class, this)
                 .editEntity(item)
@@ -157,8 +157,7 @@ public class SelfAbsence extends StandardLookup<Absence>
                 .show()
                 .addAfterCloseListener(afterCloseEvent -> {
                     if (afterCloseEvent.getCloseAction().equals(WINDOW_COMMIT_AND_CLOSE_ACTION)) {
-                        absenceRequestDl.load();
-                        tabSheet.setSelectedTab("requestsTab");
+                        vacationScheduleDl.load();
                     }
                 });
     }
@@ -171,6 +170,12 @@ public class SelfAbsence extends StandardLookup<Absence>
         if (abstractBprocRequest instanceof AbsenceRequest) editor.withScreenId("tsadv$AbsenceRequestNew.edit");
         editor.editEntity(abstractBprocRequest)
                 .show();
+    }
+
+    public void openRequest(VacationScheduleRequest vacationScheduleRequest, String columnId) {
+        screenBuilders.editor(vacationScheduleTable)
+                .editEntity(vacationScheduleRequest)
+                .build().show();
     }
 
     @Subscribe("absencesTable.newLeavingVacationRequest")

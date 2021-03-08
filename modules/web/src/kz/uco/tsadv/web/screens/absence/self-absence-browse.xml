@@ -15,13 +15,13 @@
                 </query>
             </loader>
         </collection>
-        <collection id="vacationScheduleDc"
-                    class="kz.uco.tsadv.entity.VacationSchedule"
-                    view="vacation-view">
+
+        <collection id="vacationScheduleRequestsDc"
+                    class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <loader id="vacationScheduleDl">
                 <query>
-                    <![CDATA[select e from tsadv_VacationSchedule e where e.personGroup.id = :session$userPersonGroupId
- order by e.startDate desc]]>
+                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.personGroup.id = :session$userPersonGroupId
+ order by e.requestNumber desc]]>
                 </query>
             </loader>
         </collection>
@@ -87,11 +87,17 @@
                  caption="msg://kz.uco.tsadv.web/Vacations"
                  expand="vacationScheduleTable"
                  margin="true">
+                <filter id="filterVacationScheduleRequest"
+                        applyTo="vacationScheduleTable"
+                        dataLoader="vacationScheduleDl">
+                    <properties include=".*"/>
+                </filter>
                 <table id="vacationScheduleTable"
                        sortable="false"
-                       dataContainer="vacationScheduleDc"
+                       dataContainer="vacationScheduleRequestsDc"
                        width="100%">
                     <columns>
+                        <column id="requestNumber" link="true" linkInvoke="openRequest"/>
                         <column id="startDate"/>
                         <column id="endDate"/>
                         <column id="absenceDays"/>

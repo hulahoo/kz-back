@@ -26,16 +26,15 @@
                         <property name="jobGroup"/>
                     </property>
                 </property>
-                <property name="status" view="_local"/>
             </view>
             <loader id="vacationScheduleRequestsDl">
                 <query>
-                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.status.code = 'DRAFT' order by e.requestNumber desc]]>
+                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.sentToOracle = 'FALSE' order by e.requestNumber desc]]>
                 </query>
             </loader>
         </collection>
         <collection id="vacationSchedulesDc"
-                    class="kz.uco.tsadv.entity.VacationSchedule">
+                    class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <view extends="_local">
                 <property name="personGroup" view="_local">
                     <property name="list" view="_local"/>
@@ -59,7 +58,7 @@
             </view>
             <loader id="vacationSchedulesDl">
                 <query>
-                    <![CDATA[select e from tsadv_VacationSchedule e order by e.createTs desc]]>
+                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.sentToOracle = 'TRUE' order by e.requestNumber desc]]>
                 </query>
             </loader>
         </collection>
@@ -82,6 +81,7 @@
                             dataContainer="vacationScheduleRequestsDc">
                     <columns>
                         <column id="checkList" caption=" " generator="checkListGenerator"/>
+                        <column id="requestNumber" link="true" linkInvoke="openRequest"/>
                         <column id="personGroup.fioWithEmployeeNumber" link="true" linkInvoke="openPersonCard"/>
                         <column id="personGroup.currentAssignment.organizationGroup"
                                 captionProperty="personGroup.currentAssignment.organizationGroup.organization.organizationName"/>
@@ -109,8 +109,9 @@
                 </filter>
                 <groupTable id="vacationSchedulesTable"
                             width="100%"
-                            dataContainer="vacationScheduleRequestsDc">
+                            dataContainer="vacationSchedulesDc">
                     <columns>
+                        <column id="requestNumber" link="true" linkInvoke="openRequest"/>
                         <column id="personGroup.fioWithEmployeeNumber" link="true" linkInvoke="openPersonCard"/>
                         <column id="personGroup.currentAssignment.organizationGroup"
                                 captionProperty="personGroup.currentAssignment.organizationGroup.organization.organizationName"/>
