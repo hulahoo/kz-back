@@ -1660,10 +1660,10 @@
         <entity class="kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.lms.entity.LmsSlider">
+        <entity class="kz.uco.tsadv.modules.learning.model.LmsSlider">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.lms.entity.LmsSliderImage">
+        <entity class="kz.uco.tsadv.modules.learning.model.LmsSliderImage">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription">
@@ -1919,6 +1919,9 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.learning.model.StudentHomework">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicLmsSliderPosition">
             <include re=".*"/>
         </entity>
     </entities>

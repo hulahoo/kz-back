@@ -21078,7 +21078,7 @@
         <property name="kf8"
                   view="_minimal"/>
     </view>
-    <view class="kz.uco.tsadv.lms.entity.LmsSlider"
+    <view class="kz.uco.tsadv.modules.learning.model.LmsSlider"
           extends="_local"
           name="lmsSlider.with.images">
         <property name="images"
@@ -21088,7 +21088,7 @@
             <property name="order"/>
         </property>
     </view>
-    <view class="kz.uco.tsadv.lms.entity.LmsSliderImage"
+    <view class="kz.uco.tsadv.modules.learning.model.LmsSliderImage"
           extends="_local"
           name="lmsSliderImage.with.image">
         <property name="image"
@@ -23348,6 +23348,16 @@
             <property name="type" view="_local"/>
         </property>
         <property name="assignments" view="_local">
+            <property name="personGroup" view="_local">
+                <property name="person" view="_local"/>
+            </property>
+            <property name="positionGroup" view="_local">
+                <property name="position" view="_local"/>
+                <property name="fullName"/>
+            </property>
+            <property name="assignmentStatus" view="_local"/>
+        </property>
+        <property name="currentAssignment" view="_minimal">
             <property name="personGroup" view="_local">
                 <property name="person" view="_local"/>
             </property>

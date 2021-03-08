@@ -2,7 +2,7 @@ package kz.uco.tsadv.web.lmssliderimage;
 
 import com.haulmont.cuba.gui.components.AbstractEditor;
 import com.haulmont.cuba.gui.components.FileUploadField;
-import kz.uco.tsadv.lms.entity.LmsSliderImage;
+import kz.uco.tsadv.modules.learning.model.LmsSliderImage;
 
 import javax.inject.Named;
 import java.util.Collections;

@@ -1,0 +1,1 @@
+alter table TSADV_LMS_SLIDER add constraint FK_TSADV_LMS_SLIDER_POSITION foreign key (POSITION_ID) references TSADV_DIC_LMS_SLIDER_POSITION(ID);

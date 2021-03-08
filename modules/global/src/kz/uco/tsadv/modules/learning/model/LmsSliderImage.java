@@ -1,15 +1,11 @@
-package kz.uco.tsadv.lms.entity;
+package kz.uco.tsadv.modules.learning.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import com.haulmont.cuba.core.entity.StandardEntity;
-import javax.persistence.Column;
+
+import javax.persistence.*;
 
 @Table(name = "TSADV_LMS_SLIDER_IMAGE")
 @Entity(name = "tsadv$LmsSliderImage")
@@ -20,6 +16,10 @@ public class LmsSliderImage extends StandardEntity {
     @JoinColumn(name = "IMAGE_ID")
     protected FileDescriptor image;
 
+    @Lob
+    @Column(name = "URL")
+    protected String url;
+
     @Column(name = "ORDER_")
     protected Integer order;
 
@@ -27,6 +27,14 @@ public class LmsSliderImage extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SLIDER_ID")
     protected LmsSlider slider;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     public void setOrder(Integer order) {
         this.order = order;

@@ -1,17 +1,16 @@
-package kz.uco.tsadv.lms.enums;
+package kz.uco.tsadv.modules.learning.enums;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
 import javax.annotation.Nullable;
 
-
-public enum LmsSliderPosition implements EnumClass<String> {
-
-    HOME("HOME");
+public enum BookType implements EnumClass<String> {
+    PDF("PDF"),
+    DJVU("DJVU");
 
     private String id;
 
-    LmsSliderPosition(String value) {
+    BookType(String value) {
         this.id = value;
     }
 
@@ -20,8 +19,8 @@ public enum LmsSliderPosition implements EnumClass<String> {
     }
 
     @Nullable
-    public static LmsSliderPosition fromId(String id) {
-        for (LmsSliderPosition at : LmsSliderPosition.values()) {
+    public static BookType fromId(String id) {
+        for (BookType at : BookType.values()) {
             if (at.getId().equals(id)) {
                 return at;
             }

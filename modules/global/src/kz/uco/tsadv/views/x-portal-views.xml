@@ -36,6 +36,21 @@
         <property name="endDate"/>
         <property name="stepStageStatus"/>
     </view>
+    <view entity="base$AssignmentExt" name="assignedPerformancePlan-assignment" extends="_minimal">
+        <property name="personGroup">
+            <property name="list" view="_local"/>
+        </property>
+        <property name="jobGroup">
+            <property name="jobNameLang1"/>
+        </property>
+        <property name="organizationGroup" view="_minimal">
+            <property name="list" view="_local"/>
+            <property name="organization" view="_minimal">
+                <property name="organizationNameLang1"/>
+            </property>
+        </property>
+        <property name="positionGroup" view="_local"/>
+    </view>
     <view entity="tsadv$AssignedPerformancePlan" name="assignedPerformancePlan-myKpi-edit" extends="_minimal">
         <property name="performancePlan">
             <property name="performancePlanName"/>
@@ -46,22 +61,9 @@
         </property>
         <property name="stepStageStatus"/>
         <property name="assignedPerson" view="_local">
+            <property name="currentAssignment" view="assignedPerformancePlan-assignment"/>
             <property name="person" view="_local"/>
-            <property name="assignments" view="_minimal">
-                <property name="personGroup">
-                    <property name="list" view="_local"/>
-                </property>
-                <property name="jobGroup">
-                    <property name="jobNameLang1"/>
-                </property>
-                <property name="organizationGroup" view="_minimal">
-                    <property name="list" view="_local"/>
-                    <property name="organization" view="_minimal">
-                        <property name="organizationNameLang1"/>
-                    </property>
-                </property>
-                <property name="positionGroup" view="_minimal"/>
-            </property>
+            <property name="assignments" view="assignedPerformancePlan-assignment"/>
         </property>
         <property name="status" view="_minimal">
             <property name="code"/>

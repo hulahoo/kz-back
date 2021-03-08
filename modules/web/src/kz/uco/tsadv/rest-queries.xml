@@ -304,4 +304,20 @@
             <param name="usageType" type="java.lang.String"/>
         </params>
     </query>
+    <query name="sliderImages" entity="tsadv$LmsSliderImage" view="lmsSliderImage.with.image">
+        <jpql>
+            <![CDATA[
+            select i
+            from tsadv$LmsSliderImage i
+                join i.slider s
+                join s.position sp
+            where sp.code = :code
+            order by
+                i.order
+            ]]>
+        </jpql>
+        <params>
+            <param name="code" type="java.lang.String"/>
+        </params>
+    </query>
 </queries>
