@@ -1933,5 +1933,8 @@
         <entity class="kz.uco.tsadv.modules.learning.model.PortalFeedbackQuestions">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.CoursePersonNote">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

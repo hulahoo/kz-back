@@ -23545,4 +23545,8 @@
             <property name="email"/>
         </property>
     </view>
+    <view entity="tsadv_CoursePersonNote" name="coursePersonNote-view" extends="_local">
+        <property name="course" view="_minimal"/>
+        <property name="personGroup" view="_minimal"/>
+    </view>
 </views>
