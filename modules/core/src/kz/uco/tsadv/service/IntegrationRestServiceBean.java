@@ -374,6 +374,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, positionData,
                             "no organizationLegacyId");
                 }
+                if (positionJson.getJobLegacyId() == null || positionJson.getJobLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, positionData,
+                            "no jobLegacyId");
+                }
                 PositionGroupExt positionGroupExt = positionGroupExts.stream().filter(positionGroupExt1 ->
                         positionGroupExt1.getList().stream().filter(positionExt1 ->
                                 positionExt1.getOrganizationGroupExt() != null
@@ -435,6 +439,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getGradeLegacyId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                    if (gradeGroup==null){
+                        return prepareError(result, methodName, positionData,
+                                "no GradeGroup with legacyId " + positionJson.getGradeLegacyId());
+                    }
                     positionExt.setGradeGroup(gradeGroup);
                 }
                 JobGroup jobGroup = null;
@@ -444,6 +452,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getJobLegacyId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                    if (jobGroup==null){
+                        return prepareError(result, methodName, positionData,
+                                "no JobGroup with legacyId " + positionJson.getJobLegacyId());
+                    }
                     positionExt.setJobGroup(jobGroup);
                 }
                 OrganizationGroupExt organizationGroupExt = null;
@@ -454,6 +466,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getOrganizationLegacyId()))
                             .view("organizationGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    if (organizationGroupExt==null){
+                        return prepareError(result, methodName, positionData,
+                                "no OrganizationGroupExt with legacyId " + positionJson.getOrganizationLegacyId());
+                    }
                     positionExt.setOrganizationGroupExt(organizationGroupExt);
                 }
                 DicEmployeeCategory employeeCategory = null;
