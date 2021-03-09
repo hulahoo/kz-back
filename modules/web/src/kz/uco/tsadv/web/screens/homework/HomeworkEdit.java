@@ -1,5 +1,6 @@
 package kz.uco.tsadv.web.screens.homework;
 
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Action;
 import com.haulmont.cuba.gui.components.Table;
@@ -26,6 +27,10 @@ public class HomeworkEdit extends StandardEditor<Homework> {
     protected ScreenBuilders screenBuilders;
     @Inject
     protected Table<StudentHomework> studentTable;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected MessageBundle messageBundle;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -36,9 +41,14 @@ public class HomeworkEdit extends StandardEditor<Homework> {
 
     @Subscribe("studentTable.create")
     protected void onStudentTableCreate(Action.ActionPerformedEvent event) {
-        screenBuilders.editor(studentTable)
-                .newEntity()
-                .withInitializer(studentHomework -> studentHomework.setHomework(homeworkDc.getItem())).build().show()
-                .addAfterCloseListener(afterCloseEvent -> studentHomeworkDl.load());
+        if (homeworkDc.getItem().getInstructions() != null) {
+            screenBuilders.editor(studentTable)
+                    .newEntity()
+                    .withInitializer(studentHomework -> studentHomework.setHomework(homeworkDc.getItem())).build().show()
+                    .addAfterCloseListener(afterCloseEvent -> studentHomeworkDl.load());
+        } else {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("fillInstructions")).show();
+        }
     }
 }
