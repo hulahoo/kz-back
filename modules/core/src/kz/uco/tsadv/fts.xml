@@ -1924,5 +1924,14 @@
         <entity class="kz.uco.tsadv.modules.learning.dictionary.DicLmsSliderPosition">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicPortalFeedbackQuestion">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.PortalFeedback">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.PortalFeedbackQuestions">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

@@ -23520,4 +23520,29 @@
         <property name="createTs"/>
         <property name="createdBy"/>
     </view>
+    <view entity="tsadv_DicPortalFeedbackQuestion" name="dicPortalFeedbackQuestion.edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv_PortalFeedback" name="portalFeedback.edit" extends="_local">
+        <property name="company" view="_minimal"/>
+        <property name="category" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
+    <view entity="tsadv_PortalFeedbackQuestions" name="portalFeedbackQuestions.edit" extends="_local">
+        <property name="user" view="_minimal">
+            <property name="personGroup" view="_minimal"/>
+            <property name="name"/>
+            <property name="firstName"/>
+            <property name="email"/>
+        </property>
+        <property name="portalFeedback" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="category" view="_minimal"/>
+            <property name="email"/>
+        </property>
+    </view>
 </views>

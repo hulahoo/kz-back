@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="portalFeedbackQuestionsesTable"
+        messagesPack="kz.uco.tsadv.web.screens.portalfeedbackquestions">
+    <data readOnly="true">
+        <collection id="portalFeedbackQuestionsesDc"
+                    class="kz.uco.tsadv.modules.learning.model.PortalFeedbackQuestions"
+                    view="portalFeedbackQuestions.edit">
+            <loader id="portalFeedbackQuestionsesDl">
+                <query>
+                    <![CDATA[select e from tsadv_PortalFeedbackQuestions e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="portalFeedbackQuestionsesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="portalFeedbackQuestionsesTable"
+                dataLoader="portalFeedbackQuestionsesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="portalFeedbackQuestionsesTable"
+                    width="100%"
+                    dataContainer="portalFeedbackQuestionsesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="user"/>
+                <column id="portalFeedback"/>
+                <column id="topic"/>
+                <column id="text"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="portalFeedbackQuestionsesTable.create"/>
+                <button id="editBtn" action="portalFeedbackQuestionsesTable.edit"/>
+                <button id="removeBtn" action="portalFeedbackQuestionsesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
