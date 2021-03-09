@@ -1064,35 +1064,46 @@ public class LmsServiceBean implements LmsService {
             TestSectionPojo testSectionPojo = new TestSectionPojo();
             testSectionPojo.setId(testSection.getId().toString());
             testSectionPojo.setName(testSection.getSectionName());
-
-            testSectionPojo.setQuestionsAndAnswers(testSection.getQuestions().stream().map(questionInSection -> {
-                Question question = questionInSection.getQuestion();
-
-                QuestionPojo questionPojo = new QuestionPojo();
-                questionPojo.setId(question.getId());
-                questionPojo.setText(question.getText());
-                questionPojo.setType(question.getType());
-
-                if (question.getType().equals(QuestionType.ONE) || question.getType().equals(QuestionType.MANY)) {
-                    List<Answer> answers = em.createQuery(
-                            "select a " +
-                                    "from tsadv$Question q " +
-                                    "   join q.answers a " +
-                                    "where q.id = :questionId ", Answer.class)
-                            .setParameter("questionId", question.getId()).setView(Answer.class, View.LOCAL).getResultList();
-
-                    questionPojo.setAnswers(answers.stream().map(answer -> {
-                        AnswerPojo answerPojo = new AnswerPojo();
-                        answerPojo.setId(answer.getId());
-                        answerPojo.setText(answer.getAnswer());
-                        return answerPojo;
-                    }).collect(Collectors.toList()));
-                }
-                return questionPojo;
-            }).collect(Collectors.toList()));
+            if (testSection.getDynamicLoad() != null && testSection.getDynamicLoad()
+                    && testSection.getGenerateCount() != null && testSection.getQuestionBank() != null
+                    && testSection.getQuestionBank().getQuestions() != null) {
+                List<Question> questions = testSection.getQuestionBank().getQuestions();
+                Collections.shuffle(questions);
+                testSectionPojo.setQuestionsAndAnswers(questions.stream().limit(testSection.getGenerateCount())
+                        .map(question -> getQuestionPojo(em, question)).collect(Collectors.toList()));
+            } else {
+                testSectionPojo.setQuestionsAndAnswers(testSection.getQuestions().stream().map(questionInSection -> {
+                    Question question = questionInSection.getQuestion();
+                    return getQuestionPojo(em, question);
+                }).collect(Collectors.toList()));
+            }
             return testSectionPojo;
         }).collect(Collectors.toList()));
         return testPojo;
+    }
+
+    private QuestionPojo getQuestionPojo(EntityManager em, Question question) {
+        QuestionPojo questionPojo = new QuestionPojo();
+        questionPojo.setId(question.getId());
+        questionPojo.setText(question.getText());
+        questionPojo.setType(question.getType());
+
+        if (question.getType().equals(QuestionType.ONE) || question.getType().equals(QuestionType.MANY)) {
+            List<Answer> answers = em.createQuery(
+                    "select a " +
+                            "from tsadv$Question q " +
+                            "   join q.answers a " +
+                            "where q.id = :questionId ", Answer.class)
+                    .setParameter("questionId", question.getId()).setView(Answer.class, View.LOCAL).getResultList();
+
+            questionPojo.setAnswers(answers.stream().map(answer -> {
+                AnswerPojo answerPojo = new AnswerPojo();
+                answerPojo.setId(answer.getId());
+                answerPojo.setText(answer.getAnswer());
+                return answerPojo;
+            }).collect(Collectors.toList()));
+        }
+        return questionPojo;
     }
 
     private CourseSectionAttempt createAndGetAttempt(EntityManager em, Test test, CourseSection courseSection, Enrollment enrollment, boolean isSuccess) {
