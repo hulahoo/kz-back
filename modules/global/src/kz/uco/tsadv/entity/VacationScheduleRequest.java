@@ -1,6 +1,7 @@
 package kz.uco.tsadv.entity;
 
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
@@ -40,6 +41,30 @@ public class VacationScheduleRequest extends AbstractBprocRequest {
 
     @Column(name = "BALANCE")
     private Integer balance;
+
+    @NotNull
+    @Column(name = "SENT_TO_ORACLE", nullable = false)
+    private Boolean sentToOracle = false;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ATTACHMENT_ID")
+    private FileDescriptor attachment;
+
+    public FileDescriptor getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(FileDescriptor attachment) {
+        this.attachment = attachment;
+    }
+
+    public Boolean getSentToOracle() {
+        return sentToOracle;
+    }
+
+    public void setSentToOracle(Boolean sentToOracle) {
+        this.sentToOracle = sentToOracle;
+    }
 
     public Integer getBalance() {
         return balance;

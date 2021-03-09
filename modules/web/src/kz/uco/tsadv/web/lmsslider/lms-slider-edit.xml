@@ -7,7 +7,7 @@
         messagesPack="kz.uco.tsadv.web.lmsslider">
     <dsContext>
         <datasource id="lmsSliderDs"
-                    class="kz.uco.tsadv.lms.entity.LmsSlider"
+                    class="kz.uco.tsadv.modules.learning.model.LmsSlider"
                     view="lmsSlider.with.images">
             <collectionDatasource id="imagesDs"
                                   property="images"/>

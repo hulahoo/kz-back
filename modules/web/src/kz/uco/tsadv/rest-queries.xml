@@ -304,4 +304,45 @@
             <param name="usageType" type="java.lang.String"/>
         </params>
     </query>
+    <query name="sliderImages" entity="tsadv$LmsSliderImage" view="lmsSliderImage.with.image">
+        <jpql>
+            <![CDATA[
+            select i
+            from tsadv$LmsSliderImage i
+                join i.slider s
+                join s.position sp
+            where sp.code = :code
+            order by
+                i.order
+            ]]>
+        </jpql>
+        <params>
+            <param name="code" type="java.lang.String"/>
+        </params>
+    </query>
+    <query name="homeworksByEnrollment" entity="tsadv_Homework" view="homework.edit">
+        <jpql>
+            <![CDATA[
+            select e
+                from tsadv_Homework e
+                    inner join e.course c
+            where c.id in ( select e.course.id from tsadv$Enrollment e where e.id = :enrollmentId)
+            ]]>
+        </jpql>
+        <params>
+            <param name="enrollmentId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="studentHomework" entity="tsadv_StudentHomework" view="studentHomework.edit">
+        <jpql>
+            <![CDATA[
+            select e from tsadv_StudentHomework e
+            where e.homework.id = :homeworkId and e.personGroup.id = :personGroupId
+            ]]>
+        </jpql>
+        <params>
+            <param name="homeworkId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
 </queries>

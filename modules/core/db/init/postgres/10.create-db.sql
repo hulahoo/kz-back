@@ -7625,8 +7625,7 @@ create table TSADV_LMS_SLIDER (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    POSITION_ varchar(50) not null,
-    URL varchar(1000),
+    POSITION_ID uuid,
     --
     primary key (ID)
 )^
@@ -8691,6 +8690,7 @@ create table TSADV_LMS_SLIDER_IMAGE (
     DELETED_BY varchar(50),
     --
     IMAGE_ID uuid,
+    URL text,
     ORDER_ integer,
     SLIDER_ID uuid,
     --
@@ -13118,6 +13118,8 @@ create table TSADV_VACATION_SCHEDULE_REQUEST (
     END_DATE date,
     ABSENCE_DAYS integer,
     BALANCE integer,
+    SENT_TO_ORACLE boolean not null,
+    ATTACHMENT_ID uuid,
     --
     primary key (ID)
 )^
@@ -17244,111 +17246,9 @@ create table TSADV_ABSENCE_RVD_REQUEST (
     primary key (ID)
 )^
 -- end TSADV_ABSENCE_RVD_REQUEST
--- begin TSADV_DIC_ASSESSMENT_EVENTS
-create table TSADV_DIC_ASSESSMENT_EVENTS (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    COMPANY_ID uuid not null,
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_EVENTS
--- begin TSADV_DIC_ASSESSMENT_RESULT
-create table TSADV_DIC_ASSESSMENT_RESULT (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    COMPANY_ID uuid not null,
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_RESULT
--- begin TSADV_DIC_ASSESSMENT_TYPE
-create table TSADV_DIC_ASSESSMENT_TYPE (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    COMPANY_ID uuid not null,
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
-)^
--- end TSADV_DIC_ASSESSMENT_TYPE
+
+
+
 -- begin TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
 create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (
     ABSENCE_REQUEST_ID uuid,
@@ -17602,3 +17502,38 @@ create table TSADV_HOMEWORK (
     primary key (ID)
 )^
 -- end TSADV_HOMEWORK
+-- begin TSADV_DIC_LMS_SLIDER_POSITION
+create table TSADV_DIC_LMS_SLIDER_POSITION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_LMS_SLIDER_POSITION

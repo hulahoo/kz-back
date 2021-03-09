@@ -857,7 +857,9 @@ public class CourseServiceBean implements CourseService {
         coursePojo.setDescription(course.getDescription());
         coursePojo.setEducationDuration(ObjectUtils.defaultIfNull(course.getEducationDuration(), 0L));
         coursePojo.setEducationPeriod(ObjectUtils.defaultIfNull(course.getEducationPeriod(), 0L));
-        coursePojo.setHasEnrollment(course.getEnrollments().stream().anyMatch(e -> e.getPersonGroup().getId().equals(personGroupId)));
+        coursePojo.setEnrollmentId(course.getEnrollments().stream().filter(e -> e.getPersonGroup().getId().equals(personGroupId)).findFirst()
+                .map(e -> e.getId().toString())
+                .orElse(null));
 
         coursePojo.setSelfEnrollment(course.getSelfEnrollment());
 

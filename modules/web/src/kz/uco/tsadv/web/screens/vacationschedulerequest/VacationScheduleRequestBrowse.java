@@ -1,6 +1,5 @@
 package kz.uco.tsadv.web.screens.vacationschedulerequest;
 
-import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
@@ -13,9 +12,7 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.LookupComponent;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.entity.VacationSchedule;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.service.AssignmentService;
@@ -35,7 +32,7 @@ import java.util.Set;
 public class VacationScheduleRequestBrowse extends StandardLookup<VacationScheduleRequest> {
 
     @Inject
-    protected CollectionLoader<VacationSchedule> vacationSchedulesDl;
+    protected CollectionLoader<VacationScheduleRequest> vacationSchedulesDl;
     @Inject
     protected CollectionLoader<VacationScheduleRequest> vacationScheduleRequestsDl;
     @Inject
@@ -74,22 +71,21 @@ public class VacationScheduleRequestBrowse extends StandardLookup<VacationSchedu
     protected void onSendToOracleBtnClick(Button.ClickEvent event) {
         CommitContext commitContext = new CommitContext();
 
-        DicRequestStatus approved = commonService.getEntity(DicRequestStatus.class, "APPROVED");
-
         selectedVacationScheduleRequests.stream()
-                .peek(vacationScheduleRequest -> vacationScheduleRequest.setStatus(approved))
-                .peek(commitContext::addInstanceToCommit)
-                .map(this::createVacationSchedule)
+                .peek(vacationScheduleRequest -> vacationScheduleRequest.setSentToOracle(true))
+//                .peek(commitContext::addInstanceToCommit)
+//                .map(this::createVacationSchedule)
                 .forEach(commitContext::addInstanceToCommit);
 
         dataManager.commit(commitContext);
 
+        selectedVacationScheduleRequests.clear();
         vacationScheduleRequestsDl.load();
         vacationSchedulesDl.load();
         tabSheet.setSelectedTab("vacationScheduleTab");
     }
 
-    protected VacationSchedule createVacationSchedule(VacationScheduleRequest scheduleRequest) {
+   /* protected VacationSchedule createVacationSchedule(VacationScheduleRequest scheduleRequest) {
         VacationSchedule vacationSchedule = metadata.create(VacationSchedule.class);
         vacationSchedule.setAbsenceDays(scheduleRequest.getAbsenceDays());
         vacationSchedule.setStartDate(scheduleRequest.getStartDate());
@@ -97,10 +93,10 @@ public class VacationScheduleRequestBrowse extends StandardLookup<VacationSchedu
         vacationSchedule.setPersonGroup(scheduleRequest.getPersonGroup());
         vacationSchedule.setRequest(scheduleRequest);
         return vacationSchedule;
-    }
+    }*/
 
-    public void openPersonCard(Entity item, String columnId) {
-        PersonGroupExt personGroup = item.getValue("personGroup");
+    public void openPersonCard(VacationScheduleRequest request, String columnId) {
+        PersonGroupExt personGroup = request.getPersonGroup();
 
         AssignmentExt assignment = assignmentService.getAssignment(personGroup.getId(), View.MINIMAL);
 
@@ -109,5 +105,13 @@ public class VacationScheduleRequestBrowse extends StandardLookup<VacationSchedu
                 .withScreenId("person-card")
                 .build()
                 .show();
+    }
+
+    public void openRequest(VacationScheduleRequest request, String columnId) {
+        screenBuilders.editor(VacationScheduleRequest.class, this)
+                .editEntity(request)
+                .build()
+                .show()
+                .addAfterCloseListener(afterCloseEvent -> vacationScheduleRequestsDl.load());
     }
 }

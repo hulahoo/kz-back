@@ -558,8 +558,8 @@
         <class>kz.uco.tsadv.entity.dbview.PersonAllLearningHistory</class>
         <class>kz.uco.tsadv.modules.learning.dictionary.DicLearningFeedbackQuestionType</class>
         <class>kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile</class>
-        <class>kz.uco.tsadv.lms.entity.LmsSlider</class>
-        <class>kz.uco.tsadv.lms.entity.LmsSliderImage</class>
+        <class>kz.uco.tsadv.modules.learning.model.LmsSlider</class>
+        <class>kz.uco.tsadv.modules.learning.model.LmsSliderImage</class>
         <class>kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription</class>
         <class>kz.uco.tsadv.modules.administration.TsadvUser</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicCompany</class>
@@ -637,5 +637,6 @@
         <class>kz.uco.tsadv.modules.information.NumberOfView</class>
         <class>kz.uco.tsadv.modules.learning.model.Homework</class>
         <class>kz.uco.tsadv.modules.learning.model.StudentHomework</class>
+        <class>kz.uco.tsadv.modules.learning.dictionary.DicLmsSliderPosition</class>
     </persistence-unit>
 </persistence>

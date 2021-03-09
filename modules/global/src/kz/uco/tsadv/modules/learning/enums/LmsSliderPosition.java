@@ -1,16 +1,17 @@
-package kz.uco.tsadv.lms.enums;
+package kz.uco.tsadv.modules.learning.enums;
 
 import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
 import javax.annotation.Nullable;
 
-public enum BookType implements EnumClass<String> {
-    PDF("PDF"),
-    DJVU("DJVU");
+
+public enum LmsSliderPosition implements EnumClass<String> {
+
+    HOME("HOME");
 
     private String id;
 
-    BookType(String value) {
+    LmsSliderPosition(String value) {
         this.id = value;
     }
 
@@ -19,8 +20,8 @@ public enum BookType implements EnumClass<String> {
     }
 
     @Nullable
-    public static BookType fromId(String id) {
-        for (BookType at : BookType.values()) {
+    public static LmsSliderPosition fromId(String id) {
+        for (LmsSliderPosition at : LmsSliderPosition.values()) {
             if (at.getId().equals(id)) {
                 return at;
             }
