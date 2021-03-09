@@ -1,0 +1,1 @@
+alter table TSADV_LEAVING_VACATION_REQUEST add column ATTACHMENT_ID uuid ;

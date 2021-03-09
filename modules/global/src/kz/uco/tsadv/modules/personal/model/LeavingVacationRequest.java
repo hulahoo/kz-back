@@ -1,12 +1,9 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.global.AppBeans;
-import kz.uco.base.service.common.CommonService;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
-import kz.uco.tsadv.modules.recruitment.dictionary.DicRequisitionType;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -38,6 +35,18 @@ public class LeavingVacationRequest extends AbstractBprocRequest {
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date plannedStartDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ATTACHMENT_ID")
+    private FileDescriptor attachment;
+
+    public FileDescriptor getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(FileDescriptor attachment) {
+        this.attachment = attachment;
+    }
 
     @Override
     public String getProcessDefinitionKey() {
