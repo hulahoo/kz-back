@@ -9510,6 +9510,7 @@ create table TSADV_LEAVING_VACATION_REQUEST (
     START_DATE date,
     END_DATE date,
     PLANNED_START_DATE date,
+    ATTACHMENT_ID uuid,
     --
     primary key (ID)
 )^

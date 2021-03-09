@@ -332,54 +332,23 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         notificationParams.put("requestLinkRu", "");
         notificationParams.put("requestLinkEn", "");
-        Activity activity = null;
-        ProcessInstanceData processInstanceData = bprocHistoricService.createHistoricProcessInstanceDataQuery()
-                .processInstanceBusinessKey(entity.getId().toString())
-                .processDefinitionKey(entity.getProcessDefinitionKey())
-                .singleResult();
-        if (notificationTemplateCode != null && notificationTemplateCode
-                .equals(getProcessVariable(processInstanceData.getId(), "initiatorNotificationTemplateCode"))) {
-            activity = transactionalDataManager.load(Activity.class)
-                    .query("select e from uactivity$Activity e where e.referenceId = :entityId")
-                    .parameter("entityId", entity.getId()).view("activity.view.tsadv").list().stream()
-                    .findFirst().orElse(null);
-        } else {
-            activity = activityService.createActivity(
-                    user,
-                    sessionUser,
-                    activityType,
-                    StatusEnum.active,
-                    "description",
-                    null,
-                    new Date(),
-                    null,
-                    null,
-                    entity.getId(),
-                    notificationTemplateCode,
-                    notificationParams);
-        }
+        Activity activity = activityService.createActivity(
+                user,
+                sessionUser,
+                activityType,
+                StatusEnum.active,
+                "description",
+                null,
+                new Date(),
+                null,
+                null,
+                entity.getId(),
+                notificationTemplateCode,
+                notificationParams);
         String requestLink = getRequestLink(entity, activity);
         notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
         notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
-        User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
-        if (initiator != null) {
-            String afterApproveInitiatorNotificationTemplateCode = getProcessVariable(processInstanceData.getId(),
-                    "afterApproveToInitiatorNotificationTemplateCode");
-            if (afterApproveInitiatorNotificationTemplateCode != null
-                    && !afterApproveInitiatorNotificationTemplateCode.isEmpty()) {
-                DicRequestStatus status = transactionalDataManager.load(DicRequestStatus.class)
-                        .query("select e.status from " + entity.getMetaClass().getName() + " e " +
-                                " where e.id = :requestId ").setParameters(ParamsMap.of("requestId", entity.getId()))
-                        .view(View.LOCAL).list().stream().findFirst().orElse(null);
-                if (status != null && status.getCode() != null
-                        && "APPROVING".equals(status.getCode())) {
-                    notificationSender.sendParametrizedNotification(afterApproveInitiatorNotificationTemplateCode,
-                            (TsadvUser) initiator, notificationParams);
-                }
-            }
-        }
-
     }
 
 
@@ -705,6 +674,20 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 }
             }
         }
+        List<ExtTaskData> processTasks = getProcessTasks(processInstanceData);
+        String lastApprovedUserRu = "";
+        String lastApprovedUserEn = "";
+        for (ExtTaskData processTask : processTasks) {
+            if (processTask.getOutcome() != null && AbstractBprocRequest.OUTCOME_APPROVE.equals(processTask.getOutcome())
+                    && processTask.getAssigneeOrCandidates() != null && !processTask.getAssigneeOrCandidates().isEmpty()) {
+                lastApprovedUserRu = processTask.getAssigneeOrCandidates().stream().map(tsadvUser ->
+                        tsadvUser.getFullNameWithLogin(Locale.forLanguageTag("ru"))).findFirst().orElse("");
+                lastApprovedUserEn = processTask.getAssigneeOrCandidates().stream().map(tsadvUser ->
+                        tsadvUser.getFullNameWithLogin(Locale.forLanguageTag("en"))).findFirst().orElse("");
+            }
+        }
+        params.put("lastApprovedUserRu", lastApprovedUserRu);
+        params.put("lastApprovedUserEn", lastApprovedUserEn);
         params.put("approversTableRu", getApproversTable("Ru", processInstanceData));
         params.put("approversTableEn", getApproversTable("En", processInstanceData));
         params.put("comment", StringUtils.defaultString(getProcessVariable(processInstanceData.getId(), "comment"), ""));
