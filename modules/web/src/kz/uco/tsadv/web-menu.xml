@@ -787,6 +787,7 @@
             <item id="ddcdi$ImportExecution.browse"/>
         </menu>
         <item screen="tsadv_News.browse"/>
+        <item screen="base$AppNameAndLogo.browse"/>
     </menu>
     <menu id="help" icon="font-icon:QUESTION_CIRCLE">
         <item id="aboutWindow" openType="DIALOG"/>
