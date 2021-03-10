@@ -23550,4 +23550,7 @@
         <property name="course" view="_minimal"/>
         <property name="personGroup" view="_minimal"/>
     </view>
+    <view entity="tsadv_PortalFeedback" name="portalFeedback-portal" extends="_minimal">
+        <property name="category" view="_local"/>
+    </view>
 </views>
