@@ -69,7 +69,7 @@ public class InsuredPersonChangedListener {
                             int age = employeeService.calculateAge(insuredPerson.getBirthdate());
                             for (ContractConditions conditions : employee.getInsuranceContract().getProgramConditions()) {
                                 if (insuredPerson.getAmount().signum() > 0 && !insuredPerson.getId().equals(person.getId())
-                                        && conditions.getIsFree() && conditions.getAgeMin() <= age && conditions.getAgeMax() >= age){
+                                        && conditions.getIsFree() && conditions.getAgeMin() <= age && conditions.getAgeMax() >= age) {
                                     BigDecimal minusAmount = insuredPerson.getAmount();
                                     BigDecimal temp = employee.getTotalAmount();
 
@@ -131,13 +131,13 @@ public class InsuredPersonChangedListener {
                         .view("insuredPerson-editView")
                         .list().stream().findFirst().orElse(null);
 
-                if (oldVal != null && oldVal.signum() == 0){
+                if (oldVal != null && oldVal.signum() == 0) {
                     boolean changed = true;
-                    for (InsuredPerson insuredPerson : personList){
+                    for (InsuredPerson insuredPerson : personList) {
                         int age = employeeService.calculateAge(insuredPerson.getBirthdate());
-                        if (changed && !insuredPerson.getId().equals(person.getId()) && insuredPerson.getAmount().signum() > 0){
+                        if (changed && !insuredPerson.getId().equals(person.getId()) && insuredPerson.getAmount().signum() > 0) {
                             for (ContractConditions conditions : employee.getInsuranceContract().getProgramConditions()) {
-                                if (changed && conditions.getIsFree() && conditions.getAgeMin() <= age && conditions.getAgeMax() >= age){
+                                if (changed && conditions.getIsFree() && conditions.getAgeMin() <= age && conditions.getAgeMax() >= age) {
                                     BigDecimal minusAmount = insuredPerson.getAmount();
 
                                     insuredPerson.setAmount(BigDecimal.valueOf(0));
@@ -152,6 +152,13 @@ public class InsuredPersonChangedListener {
                     }
                 }
             }
+
+        }
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void afterCommit(EntityChangedEvent<InsuredPerson, UUID> event) {
+        if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
 
         }
     }

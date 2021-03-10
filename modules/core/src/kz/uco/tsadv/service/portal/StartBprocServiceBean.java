@@ -86,7 +86,7 @@ public class StartBprocServiceBean implements StartBprocService {
                         .list();
 
             if (hrUsersForPerson.isEmpty()) {
-                if (!link.getIsAddableApprover())
+                if (!link.getIsAddableApprover() && link.getRequired())
                     throw new PortalException(String.format(messages.getMainMessage("hr.user.not.found"), hrRole.getLangValue()));
 
                 if (link.getRequired()) {

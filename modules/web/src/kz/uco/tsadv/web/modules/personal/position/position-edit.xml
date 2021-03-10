@@ -158,6 +158,15 @@
                 <![CDATA[select e from tsadv$DicHrRole e]]>
             </query>
         </collectionDatasource>
+        <collectionDatasource id="positionHarmfulConditionDs"
+                class="kz.uco.tsadv.entity.tb.PositionHarmfulCondition"
+                view="_local">
+            <query>
+                <![CDATA[select e from tsadv_PositionHarmfulCondition e
+                where e.positionGroup.id = :ds$positionGroupDs.id]]>
+            </query>
+
+        </collectionDatasource>
     </dsContext>
     <actions>
         <action id="windowCommit"
@@ -800,6 +809,33 @@
                                 caption="mainMsg://table.btn.empty"/>
                     </buttonsPanel>
                 </groupTable>
+            </tab>
+            <tab id="harmfulConditions"
+                 margin="true,false,false,false">
+                <table id="harmFulConditionsTable"
+                       height="100%"
+                       width="100%">
+                    <actions>
+                        <action id="create"/>
+                        <action id="edit"/>
+                        <action id="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="legacyId"/>
+                        <column id="days"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                    </columns>
+                    <rows datasource="positionHarmfulConditionDs"/>
+                    <buttonsPanel id="harmFulConditionsTableButtons">
+                        <button
+                                action="harmFulConditionsTable.create"/>
+                        <button
+                                action="harmFulConditionsTable.edit"/>
+                        <button
+                                action="harmFulConditionsTable.remove"/>
+                    </buttonsPanel>
+                </table>
             </tab>
         </tabSheet>
 

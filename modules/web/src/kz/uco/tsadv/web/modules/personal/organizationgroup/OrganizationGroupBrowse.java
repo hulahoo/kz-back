@@ -8,20 +8,16 @@ import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
-import com.haulmont.cuba.gui.screen.OpenMode;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.dictionary.DicOrgType;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.base.web.components.CustomFilter;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
-import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.model.Job;
 import kz.uco.tsadv.modules.personal.model.OrganizationExt;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.web.modules.filterconfig.FilterConfig;
-import kz.uco.tsadv.web.modules.personal.job.JobEdit;
 import kz.uco.tsadv.web.modules.personal.organization.OrganizationEdit;
 
 import javax.inject.Inject;
@@ -176,7 +172,7 @@ public class OrganizationGroupBrowse extends AbstractLookup {
     }
 
     protected void openOrganizationEditor(OrganizationExt organization, Map<String, Object> params) {
-        organization.setGroup(organizationGroupsDs.getItem());
+//        organization.setGroup(organizationGroupsDs.getItem());
         OrganizationEdit organizationEdit = (OrganizationEdit) openEditor("base$Organization.edit", organization, WindowManager.OpenType.THIS_TAB, params);
         organizationEdit.addCloseWithCommitListener(new CloseWithCommitListener() {
             @Override
@@ -185,7 +181,11 @@ public class OrganizationGroupBrowse extends AbstractLookup {
                 organizationGroupsDs.refresh();
                 organizationGroupsTable.repaint();
                 try {
-                    organizationGroupsTable.setSelected(organizationGroup);
+                    if (organizationGroup != null && organizationGroupsDs.getItems().stream()
+                            .anyMatch(organizationGroupExt ->
+                                    organizationGroupExt.getId().equals(organizationGroup.getId()))) {
+                        organizationGroupsTable.setSelected(organizationGroup);
+                    }
                 } catch (IllegalStateException e) {
                 }
             }

@@ -70,6 +70,9 @@
         <method name="courseTrainerInfo">
             <param name="trainerId" type="java.util.UUID"/>
         </method>
+        <method name="searchCourses">
+            <param name="courseName" type="java.lang.String"/>
+        </method>
     </service>
     <service name="bproc_BprocTaskService">
         <method name="completeWithOutcome">
@@ -116,6 +119,23 @@
             <param name="relativeTypeId" type="java.util.UUID"/>
         </method>
         <method name="getMyInsuraces"/>
+        <method name="getOffsetRequestsByPgId">
+            <param name="personGroupExtId" type="java.util.UUID"/>
+        </method>
+        <method name="getOffsetRequestsNew"/>
+        <method name="calcTotalAmount">
+            <param name="insuredPersonId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_EmployeeService">
+        <method name="findManagerListByPositionGroup">
+            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="showAll" type="boolean"/>
+            <param name="viewName" type="java.lang.String"/>
+        </method>
+        <method name="getCompanyByPersonGroupId">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">
         <method name="initialCreate"/>

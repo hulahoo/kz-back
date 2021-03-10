@@ -8,10 +8,6 @@
                   class="kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest">
             <view extends="_local">
                 <property name="personGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
                     <property name="assignments" view="_minimal">
                         <property name="assignmentStatus" view="_minimal">
                             <property name="langValue1"/>
@@ -23,9 +19,10 @@
                             <property name="endDate"/>
                             <property name="code"/>
                         </property>
+                        <property name="organizationGroup" view="_minimal">
+                            <property name="organizationName"/>
+                        </property>
                         <property name="primaryFlag"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
                     </property>
                     <property name="personExperience" view="_minimal"/>
                 </property>
@@ -34,11 +31,23 @@
                     <property name="scheduleName"/>
                     <property name="startDate"/>
                     <property name="endDate"/>
+                    <property name="standardOffsets" view="_minimal">
+                        <property name="offsetDisplay"/>
+                        <property name="offsetDisplayDays"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
                 </property>
                 <property name="newSchedule" view="_minimal">
                     <property name="scheduleName"/>
                     <property name="startDate"/>
                     <property name="endDate"/>
+                    <property name="standardOffsets" view="_minimal">
+                        <property name="offsetDisplay"/>
+                        <property name="offsetDisplayDays"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
                 </property>
                 <property name="status" view="_minimal">
                     <property name="startDate"/>

@@ -36,6 +36,21 @@
         <property name="endDate"/>
         <property name="stepStageStatus"/>
     </view>
+    <view entity="base$AssignmentExt" name="assignedPerformancePlan-assignment" extends="_minimal">
+        <property name="personGroup">
+            <property name="list" view="_local"/>
+        </property>
+        <property name="jobGroup">
+            <property name="jobNameLang1"/>
+        </property>
+        <property name="organizationGroup" view="_minimal">
+            <property name="list" view="_local"/>
+            <property name="organization" view="_minimal">
+                <property name="organizationNameLang1"/>
+            </property>
+        </property>
+        <property name="positionGroup" view="_local"/>
+    </view>
     <view entity="tsadv$AssignedPerformancePlan" name="assignedPerformancePlan-myKpi-edit" extends="_minimal">
         <property name="performancePlan">
             <property name="performancePlanName"/>
@@ -46,21 +61,12 @@
         </property>
         <property name="stepStageStatus"/>
         <property name="assignedPerson" view="_local">
+            <property name="currentAssignment" view="assignedPerformancePlan-assignment"/>
             <property name="person" view="_local"/>
-            <property name="assignments" view="_minimal">
-                <property name="personGroup">
-                    <property name="list" view="_local"/>
-                </property>
-                <property name="jobGroup">
-                    <property name="jobNameLang1"/>
-                </property>
-                <property name="organizationGroup" view="_minimal">
-                    <property name="list" view="_local"/>
-                    <property name="organization" view="_minimal">
-                        <property name="organizationNameLang1"/>
-                    </property>
-                </property>
-            </property>
+            <property name="assignments" view="assignedPerformancePlan-assignment"/>
+        </property>
+        <property name="status" view="_minimal">
+            <property name="code"/>
         </property>
     </view>
     <view entity="tsadv$AssignedGoal" name="assignedGoal-portal-kpi-create-default" extends="_local">
@@ -71,6 +77,11 @@
             <property name="successCriteria"/>
         </property>
         <property name="goalLibrary" view="_minimal"/>
+        <property name="assignedByPersonGroup" view="_minimal">
+            <property name="assignments" view="_minimal">
+                <property name="positionGroup" view="_minimal"/>
+            </property>
+        </property>
     </view>
     <view entity="base$AssignmentExt" name="assignment-portal-kpi" extends="_local">
         <property name="jobGroup" view="_local"/>
@@ -205,12 +216,7 @@
         <property name="goalLibrary" view="_minimal"/>
         <property name="category" view="_minimal"/>
     </view>
-    <view entity="tsadv$StandardSchedule" name="standardSchedule-for-my-team" extends="_local">
-        <property name="baseStandardSchedule" view="_minimal"/>
-        <property name="calendar" view="_minimal"/>
-        <property name="standardOffsets" view="_minimal"/>
-        <property name="standardShifts" view="_minimal"/>
-    </view>
+
     <view name="category-enrollment" entity="tsadv$DicCategory" extends="_minimal">
         <property name="langValue"/>
         <property name="langValue1"/>
@@ -218,7 +224,9 @@
         <property name="langValue3"/>
         <property name="courses" view="course-portal-browse">
             <property name="enrollments" view="_minimal">
-                <property name="personGroup" view="_minimal"/>
+                <property name="personGroup" view="_minimal">
+                    <property name="list" view="_local"/>
+                </property>
             </property>
         </property>
     </view>
@@ -304,6 +312,14 @@
     </view>
     <view name="portal-book-info-reviews" entity="tsadv$BookReview" extends="_local">
         <property name="author" view="_minimal"/>
+    </view>
+    <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
+          extends="_local"
+          name="portal-assignment-group">
+        <property name="group"
+                  view="_minimal"/>
+        <property name="personGroup"
+                  view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
           extends="_local"

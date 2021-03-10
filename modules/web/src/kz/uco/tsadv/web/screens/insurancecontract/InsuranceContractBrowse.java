@@ -1,31 +1,34 @@
 package kz.uco.tsadv.web.screens.insurancecontract;
 
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.GlobalConfig;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
-import com.haulmont.cuba.gui.actions.list.RemoveAction;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.Button;
+import com.haulmont.cuba.gui.components.DataGrid;
+import com.haulmont.cuba.gui.components.LinkButton;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
-import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
-import com.haulmont.cuba.gui.screen.LookupComponent;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.base.service.NotificationService;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
-import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonBrowse;
-import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonEdit;
-import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonMemberEdit;
 
 import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @UiController("tsadv$InsuranceContract.browse")
 @UiDescriptor("insurance-contract-browse.xml")
 @LookupComponent("insuranceContractsTable")
 @LoadDataBeforeShow
 public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
+    @Inject
+    protected GlobalConfig globalConfig;
     @Inject
     private ScreenBuilders screenBuilders;
     @Inject
@@ -38,16 +41,17 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
     private Metadata metadata;
     @Inject
     private DataManager dataManager;
-
+    @Inject
+    protected NotificationService notificationService;
 
     @Subscribe
     public void onInit(InitEvent event) {
-        DataGrid.Column column = insuranceContractsTable.addGeneratedColumn("contractField", new DataGrid.ColumnGenerator<InsuranceContract, LinkButton>(){
+        DataGrid.Column column = insuranceContractsTable.addGeneratedColumn("contractField", new DataGrid.ColumnGenerator<InsuranceContract, LinkButton>() {
             @Override
-            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuranceContract> event){
+            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuranceContract> event) {
                 LinkButton linkButton = uiComponents.create(LinkButton.class);
                 linkButton.setCaption(event.getItem().getContract());
-                linkButton.setAction(new BaseAction("contractField").withHandler(e->{
+                linkButton.setAction(new BaseAction("contractField").withHandler(e -> {
                     screenBuilders.editor(insuranceContractsTable)
                             .withScreenClass(InsuranceContractEdit.class)
                             .editEntity(event.getItem())
@@ -57,7 +61,7 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
             }
 
             @Override
-            public Class<LinkButton> getType(){
+            public Class<LinkButton> getType() {
                 return LinkButton.class;
             }
 
@@ -68,10 +72,10 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
 
     @Subscribe(id = "insuranceContractsDc", target = Target.DATA_CONTAINER)
     protected void onInsuranceContractsDcItemChange(InstanceContainer.ItemChangeEvent<InsuranceContract> event) {
-        if (event.getItem() != null){
+        if (event.getItem() != null) {
             InsuredPerson person = dataManager.load(InsuredPerson.class)
                     .query("select e from tsadv$InsuredPerson e " +
-                    "where e.insuranceContract.id = :contractId")
+                            "where e.insuranceContract.id = :contractId")
                     .parameter("contractId", event.getItem().getId())
                     .view("insuredPerson-editView")
                     .list().stream().findFirst().orElse(null);
@@ -91,8 +95,24 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
         contractEdit.show();
     }
 
-
-
+    @Subscribe("insuranceContractsTable.sendNotification")
+    protected void onInsuranceContractsTableSendNotification(Action.ActionPerformedEvent event) {
+        List<TsadvUser> tsadvUsers = dataManager.load(TsadvUser.class)
+                .query("select e from tsadv$UserExt e " +
+                        " where e.personGroup.company = :company")
+                .parameter("company", insuranceContractsTable.getSingleSelected().getCompany())
+                .view("tsadvUserExt-view")
+                .list();
+        if (!tsadvUsers.isEmpty()) {
+            tsadvUsers.forEach(tsadvUser -> {
+                Map<String, Object> params = new HashMap<>();
+                params.put("fio", tsadvUser.getPersonGroup().getFullName());
+                params.put("linkRu", "<a href=\"" + globalConfig.getWebAppUrl() + "\">ссылке</a>");
+                notificationService.sendParametrizedNotification("insurance.contract.dms",
+                        tsadvUser, params);
+            });
+        }
+    }
 
 //
 //    public void showInsuredPersons() {

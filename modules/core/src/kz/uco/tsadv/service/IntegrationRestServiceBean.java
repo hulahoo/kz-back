@@ -6,20 +6,20 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
-import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.base.entity.dictionary.*;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.tb.PersonQualification;
-import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
-import kz.uco.tsadv.entity.tb.PersonQualification;
+import kz.uco.tsadv.entity.tb.PositionHarmfulCondition;
 import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.dictionary.DicNationality;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
 import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.enums.GrossNet;
@@ -29,6 +29,10 @@ import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.recruitment.model.PersonEducation;
 import kz.uco.tsadv.modules.recruitment.model.PersonExperience;
+import kz.uco.tsadv.modules.timesheet.enums.MaterialDesignColorsEnum;
+import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
+import kz.uco.tsadv.modules.timesheet.model.StandardOffset;
+import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,6 +56,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     @Inject
     protected PositionStructureConfig positionStructureConfig;
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
 
     @Transactional
     @Override
@@ -107,6 +113,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     organizationGroupExt.setCompany(company);
                     organizationGroupExt.setLegacyId(organizationJson.getLegacyId());
+                    organizationGroupExt.setOrganizationNameLang1(organizationJson.getOrganizationNameLang1());
+                    organizationGroupExt.setOrganizationNameLang2(organizationJson.getOrganizationNameLang2());
+                    organizationGroupExt.setOrganizationNameLang3(organizationJson.getOrganizationNameLang3());
                     organizationGroupExt.setId(UUID.randomUUID());
                     organizationGroupExt.setList(new ArrayList<>());
                     organizationGroupExts.add(organizationGroupExt);
@@ -255,6 +264,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     jobGroup.setCompany(company);
                     jobGroup.setLegacyId(jobJson.getLegacyId());
+                    jobGroup.setJobNameLang1(jobJson.getJobNameLang1());
+                    jobGroup.setJobNameLang2(jobJson.getJobNameLang2());
+                    jobGroup.setJobNameLang3(jobJson.getJobNameLang3());
                     jobGroup.setId(UUID.randomUUID());
                     jobGroup.setList(new ArrayList<>());
                     jobGroups.add(jobGroup);
@@ -362,6 +374,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, positionData,
                             "no organizationLegacyId");
                 }
+                if (positionJson.getJobLegacyId() == null || positionJson.getJobLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, positionData,
+                            "no jobLegacyId");
+                }
                 PositionGroupExt positionGroupExt = positionGroupExts.stream().filter(positionGroupExt1 ->
                         positionGroupExt1.getList().stream().filter(positionExt1 ->
                                 positionExt1.getOrganizationGroupExt() != null
@@ -423,6 +439,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getGradeLegacyId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                    if (gradeGroup==null){
+                        return prepareError(result, methodName, positionData,
+                                "no GradeGroup with legacyId " + positionJson.getGradeLegacyId());
+                    }
                     positionExt.setGradeGroup(gradeGroup);
                 }
                 JobGroup jobGroup = null;
@@ -432,6 +452,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getJobLegacyId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                    if (jobGroup==null){
+                        return prepareError(result, methodName, positionData,
+                                "no JobGroup with legacyId " + positionJson.getJobLegacyId());
+                    }
                     positionExt.setJobGroup(jobGroup);
                 }
                 OrganizationGroupExt organizationGroupExt = null;
@@ -442,6 +466,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getOrganizationLegacyId()))
                             .view("organizationGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    if (organizationGroupExt==null){
+                        return prepareError(result, methodName, positionData,
+                                "no OrganizationGroupExt with legacyId " + positionJson.getOrganizationLegacyId());
+                    }
                     positionExt.setOrganizationGroupExt(organizationGroupExt);
                 }
                 DicEmployeeCategory employeeCategory = null;
@@ -488,7 +516,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, positionJsons);
+        return prepareSuccess(result, methodName, positionData);
 
     }
 
@@ -832,18 +860,40 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("hierarchy.view").list().stream().findFirst().orElse(null);
                 hierarchyElementExt.setHierarchy(hierarchy);
                 HierarchyElementExt parent = null;
+                HierarchyElementGroup parentGroup = null;
                 if (organizationHierarchyElementJson.getParentOrganizationId() != null
                         && !organizationHierarchyElementJson.getParentOrganizationId().isEmpty()) {
-                    parent = dataManager.load(HierarchyElementExt.class).query(
-                            "select e from base$HierarchyElementExt e " +
-                                    " where e.organizationGroup.legacyId = :legacyId " +
-                                    " and e.organizationGroup.company.legacyId = :companyCode ")
-                            .setParameters(ParamsMap.of("legacyId"
-                                    , organizationHierarchyElementJson.getParentOrganizationId()
-                                    , "companyCode", organizationHierarchyElementJson.getCompanyCode()))
-                            .view("hierarchyElementExt-for-integration-rest").list().stream().findFirst().orElse(null);
-                    hierarchyElementExt.setParent(parent);
-                    hierarchyElementExt.setParentGroup(parent != null ? parent.getGroup() : null);
+                    parentGroup = organizationHierarchyElementGroups.stream().filter(
+                            hierarchyElementGroup1 ->
+                                    hierarchyElementGroup1.getList() != null
+                                            && hierarchyElementGroup1.getList().stream().anyMatch(hierarchyElementExt1 ->
+                                            hierarchyElementExt1.getOrganizationGroup() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany()
+                                                    .getLegacyId() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany()
+                                                    .getLegacyId().equals(organizationHierarchyElementJson.getCompanyCode()))
+                                            && hierarchyElementGroup1.getLegacyId() != null
+                                            && hierarchyElementGroup1.getLegacyId()
+                                            .equals(organizationHierarchyElementJson.getParentOrganizationId()))
+                            .findFirst().orElse(null);
+                    if (parentGroup == null) {
+                        parentGroup = dataManager.load(HierarchyElementGroup.class).query(
+                                "select e.group from base$HierarchyElementExt e " +
+                                        " where e.organizationGroup.legacyId = :legacyId " +
+                                        " and e.organizationGroup.company.legacyId = :companyCode ")
+                                .setParameters(ParamsMap.of("legacyId"
+                                        , organizationHierarchyElementJson.getParentOrganizationId()
+                                        , "companyCode", organizationHierarchyElementJson.getCompanyCode()))
+                                .view("hierarchyElementGroup-for-integration-rest").list().stream()
+                                .findFirst().orElse(null);
+                    }
+                    if (parentGroup == null) {
+                        return prepareError(result, methodName, hierarchyElementData,
+                                "no exist parentOrganization");
+                    }
+                    hierarchyElementExt.setParent(parentGroup.getList().stream().findFirst().orElse(null));
+                    hierarchyElementExt.setParentGroup(parentGroup);
                 }
                 hierarchyElementExt.setLegacyId(organizationHierarchyElementJson.getLegacyId());
                 hierarchyElementExt.setStartDate(organizationHierarchyElementJson.getStartDate() != null
@@ -1166,15 +1216,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     }
 
     protected void createLog(String methodName, BaseResult baseResult, Serializable param) {
-        if (baseResult.getErrorMessage() != null && !baseResult.getErrorMessage().equals("")) {
-            UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
-            String login = userSessionSource.getUserSession().getUser().getLogin();
-            restIntegrationLogService.log(login, methodName, toJson(param), baseResult.getErrorMessage(), baseResult.isSuccess(), new Date());
-        }
+//        if (baseResult.getErrorMessage() != null && !baseResult.getErrorMessage().equals("")) {
+        UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
+        String login = userSessionSource.getUserSession().getUser().getLogin();
+        restIntegrationLogService.log(login, methodName, toJson(param), baseResult.isSuccess()
+                ? baseResult.getSuccessMessage() : baseResult.getErrorMessage(), baseResult.isSuccess(), new Date());
+//        }
     }
 
     protected String toJson(Serializable params) {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         return gson.toJson(params);
     }
 
@@ -2112,29 +2162,36 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonContactJson personContactJson : personContacts) {
 
                 if (personContactJson.getPersonId() == null || personContactJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no personId");
                 }
 
                 if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no legacyId");
                 }
 
                 if (personContactJson.getType() == null || personContactJson.getType().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no type");
                 }
 
                 if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no companyCode");
+                }
+
+                if (personContactJson.getValue() == null || personContactJson.getValue().isEmpty()) {
+                    return prepareError(result, methodName, personContactData,
+                            "no value");
                 }
 
                 PersonContact personContact = personContactsCommitList.stream().filter(filterPersonContact ->
                         filterPersonContact.getLegacyId() != null
                                 && filterPersonContact.getType() != null
                                 && filterPersonContact.getType().getLegacyId() != null
+                                && filterPersonContact.getContactValue() != null
+                                && filterPersonContact.getContactValue().equals(personContactJson.getValue())
                                 && filterPersonContact.getPersonGroup() != null
                                 && filterPersonContact.getPersonGroup().getLegacyId() != null
                                 && filterPersonContact.getPersonGroup().getCompany() != null
@@ -2151,10 +2208,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .query(
                                     " select e from tsadv$PersonContact e " +
                                             " where e.legacyId = :legacyId " +
+                                            " and e.contactValue = :value" +
                                             " and e.personGroup.legacyId = :pgLegacyId " +
                                             " and e.personGroup.company.legacyId = :companyCode " +
                                             " and e.type.legacyId = :tpLegacyId")
                             .setParameters(ParamsMap.of(
+                                    "value", personContactJson.getValue(),
                                     "legacyId", personContactJson.getLegacyId(),
                                     "pgLegacyId", personContactJson.getPersonId(),
                                     "companyCode", personContactJson.getCompanyCode(),
@@ -2175,7 +2234,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (personGroupExt != null) {
                             personContact.setPersonGroup(personGroupExt);
                         } else {
-                            return prepareError(result, methodName, personContacts,
+                            return prepareError(result, methodName, personContactData,
                                     "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
                                             + " and company legacyId " + personContactJson.getCompanyCode());
                         }
@@ -2189,7 +2248,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (type != null) {
                             personContact.setType(type);
                         } else {
-                            return prepareError(result, methodName, personContactJson.getType(), "" +
+                            return prepareError(result, methodName, personContactData, "" +
                                     "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                         }
                         personContact.setContactValue(personContactJson.getValue());
@@ -2212,7 +2271,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (personGroupExt != null) {
                             personContact.setPersonGroup(personGroupExt);
                         } else {
-                            return prepareError(result, methodName, personContacts,
+                            return prepareError(result, methodName, personContactData,
                                     "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
                                             + " and company legacyId " + personContactJson.getCompanyCode());
                         }
@@ -2226,7 +2285,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (type != null) {
                             personContact.setType(type);
                         } else {
-                            return prepareError(result, methodName, personContactJson.getType(), "" +
+                            return prepareError(result, methodName, personContactData, "" +
                                     "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                         }
                         personContact.setContactValue(personContactJson.getValue());
@@ -2246,7 +2305,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personContact.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personContacts,
+                        return prepareError(result, methodName, personContactData,
                                 "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
                                         + " and company legacyId " + personContactJson.getCompanyCode());
                     }
@@ -2260,7 +2319,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (type != null) {
                         personContact.setType(type);
                     } else {
-                        return prepareError(result, methodName, personContactJson.getType(), "" +
+                        return prepareError(result, methodName, personContactData, "" +
                                 "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                     }
                     personContact.setContactValue(personContactJson.getValue());
@@ -2295,12 +2354,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonContactJson personContactJson : personContacts) {
 
                 if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no legacyId");
                 }
 
                 if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no companyCode");
                 }
 
@@ -2315,7 +2374,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("personContact.edit").list().stream().findFirst().orElse(null);
 
                 if (personContact == null) {
-                    return prepareError(result, methodName, personContactJson,
+                    return prepareError(result, methodName, personContactData,
                             "no tsadv$PersonContact with legacyId " + personContactJson.getLegacyId()
                                     + " and company legacyId " + personContactJson.getCompanyCode());
                 }
@@ -2479,7 +2538,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, personEducations);
+        return prepareSuccess(result, methodName, personEducationData);
     }
 
     @Override
@@ -3169,27 +3228,27 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonDismissalJson personDismissalJson : personDismissals) {
 
                 if (personDismissalJson.getPersonId() == null || personDismissalJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no personId");
                 }
 
                 if (personDismissalJson.getLegacyId() == null || personDismissalJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no legacyId");
                 }
 
                 if (personDismissalJson.getDismissalReasonCode() == null || personDismissalJson.getDismissalReasonCode().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no dismissalReasonCode");
                 }
 
                 if (personDismissalJson.getDismissalDate() == null || personDismissalJson.getDismissalDate().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no dismissalDate");
                 }
 
                 if (personDismissalJson.getCompanyCode() == null || personDismissalJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no companyCode");
                 }
 
@@ -3224,7 +3283,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     "pgLegacyId", personDismissalJson.getPersonId(),
                                     "companyCode", personDismissalJson.getCompanyCode(),
                                     "drLegacyId", personDismissalJson.getDismissalReasonCode(),
-                                    "dsDate",formatter.parse(personDismissalJson.getDismissalDate())))
+                                    "dsDate", formatter.parse(personDismissalJson.getDismissalDate())))
                             .view("dismissal.edit").list().stream().findFirst().orElse(null);
 
                     if (personDismissal != null) {
@@ -3254,7 +3313,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (personGroupExt != null) {
                             personDismissal.setPersonGroup(personGroupExt);
                         } else {
-                            return prepareError(result, methodName, personDismissals,
+                            return prepareError(result, methodName, personDismissalData,
                                     "no base$PersonGroupExt with legacyId " + personDismissalJson.getPersonId()
                                             + " and company legacyId " + personDismissalJson.getCompanyCode());
                         }
@@ -3268,7 +3327,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (reason != null) {
                             personDismissal.setLcArticle(reason);
                         } else {
-                            return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
+                            return prepareError(result, methodName, personDismissalData, "" +
                                     "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
                         }
 
@@ -3302,7 +3361,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (personGroupExt != null) {
                             personDismissal.setPersonGroup(personGroupExt);
                         } else {
-                            return prepareError(result, methodName, personDismissals,
+                            return prepareError(result, methodName, personDismissalData,
                                     "no base$PersonGroupExt with legacyId " + personDismissalJson.getPersonId()
                                             + " and company legacyId " + personDismissalJson.getCompanyCode());
                         }
@@ -3316,7 +3375,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (reason != null) {
                             personDismissal.setLcArticle(reason);
                         } else {
-                            return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
+                            return prepareError(result, methodName, personDismissalData, "" +
                                     "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
                         }
 
@@ -3348,7 +3407,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personDismissal.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personDismissals,
+                        return prepareError(result, methodName, personDismissalData,
                                 "no base$PersonGroupExt with legacyId " + personDismissalJson.getPersonId()
                                         + " and company legacyId " + personDismissalJson.getCompanyCode());
                     }
@@ -3362,13 +3421,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (reason != null) {
                         personDismissal.setLcArticle(reason);
                     } else {
-                        return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
+                        return prepareError(result, methodName, personDismissalData, "" +
                                 "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
                     }
                 }
             }
 
-            for (Dismissal personDismissal : personDismissalsCommitList ) {
+            for (Dismissal personDismissal : personDismissalsCommitList) {
                 commitContext.addInstanceToCommit(personDismissal);
             }
             dataManager.commit(commitContext);
@@ -3396,12 +3455,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonDismissalJson personDismissalJson : personDismissals) {
 
                 if (personDismissalJson.getLegacyId() == null || personDismissalJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no legacyId");
                 }
 
                 if (personDismissalJson.getCompanyCode() == null || personDismissalJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no companyCode");
                 }
 
@@ -3416,7 +3475,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("dismissal.edit").list().stream().findFirst().orElse(null);
 
                 if (personDismissal == null) {
-                    return prepareError(result, methodName, personDismissalJson,
+                    return prepareError(result, methodName, personDismissalData,
                             "no tsadv$Dismissal with legacyId " + personDismissalJson.getLegacyId()
                                     + " and company legacyId " + personDismissalJson.getCompanyCode());
                 }
@@ -3438,5 +3497,1233 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         }
 
         return prepareSuccess(result, methodName, personDismissalData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateHarmfulCondition(HarmfulConditionDataJson harmfulConditionData) {
+        String methodName = "createOrUpdateHarmfulCondition";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<HarmfulConditionJson> harmfulConditions = new ArrayList<>();
+        if (harmfulConditionData.getHarmfulConditions() != null) {
+            harmfulConditions = harmfulConditionData.getHarmfulConditions();
+        }
+        try {
+            ArrayList<PositionHarmfulCondition> harmfulConditionsCommitList = new ArrayList<>();
+            for (HarmfulConditionJson harmfulConditionJson : harmfulConditions) {
+
+                if (harmfulConditionJson.getLegacyId() == null || harmfulConditionJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "no legacyId");
+                }
+
+                if (harmfulConditionJson.getPositionId() == null || harmfulConditionJson.getPositionId().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "no positionId");
+                }
+
+                if (harmfulConditionJson.getStartDate() == null || harmfulConditionJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "no startDate");
+                }
+
+                if (harmfulConditionJson.getEndDate() == null || harmfulConditionJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "no endDate");
+                }
+
+                if (harmfulConditionJson.getDays() < 0) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "days is negative");
+                }
+
+                if (harmfulConditionJson.getCompanyCode() == null || harmfulConditionJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "no companyCode");
+                }
+
+                Date startDate = CommonUtils.truncDate(formatter.parse(harmfulConditionJson.getStartDate()));
+                Date endDate = CommonUtils.truncDate(formatter.parse(harmfulConditionJson.getEndDate()));
+
+                PositionHarmfulCondition harmfulCondition = harmfulConditionsCommitList.stream().filter(filterHarmfulCondition ->
+                        filterHarmfulCondition.getLegacyId() != null
+                                && filterHarmfulCondition.getLegacyId().equals(harmfulConditionJson.getLegacyId())
+                                && filterHarmfulCondition.getPositionGroup() != null
+                                && filterHarmfulCondition.getPositionGroup() != null
+                                && filterHarmfulCondition.getPositionGroup().getLegacyId() != null
+                                && filterHarmfulCondition.getPositionGroup().getLegacyId().equals(harmfulConditionJson.getPositionId())
+                                && filterHarmfulCondition.getPositionGroup().getPosition().getOrganizationGroupExt().getCompany() != null
+                                && filterHarmfulCondition.getPositionGroup().getPosition().getOrganizationGroupExt().getCompany().getLegacyId().equals(harmfulConditionJson.getCompanyCode())
+                                && filterHarmfulCondition.getStartDate() != null
+                                && filterHarmfulCondition.getStartDate().equals(startDate)
+                                && filterHarmfulCondition.getEndDate() != null
+                                && filterHarmfulCondition.getEndDate().equals(endDate)
+                ).findFirst().orElse(null);
+                if (harmfulCondition == null) {
+                    harmfulCondition = dataManager.load(PositionHarmfulCondition.class)
+                            .query(
+                                    " select e from tsadv_PositionHarmfulCondition e " +
+                                            " where e.legacyId = :legacyId " +
+                                            " and e.positionGroup.legacyId = :pgLegacyId " +
+                                            " and e.positionGroup.legacyId in" +
+                                            " (select p.group.legacyId from base$PositionExt p " +
+                                            "where p.organizationGroupExt.company.legacyId = :companyCode) ")
+                            .setParameters(ParamsMap.of(
+                                    "legacyId", harmfulConditionJson.getLegacyId(),
+                                    "pgLegacyId", harmfulConditionJson.getPositionId(),
+                                    "companyCode", harmfulConditionJson.getCompanyCode()))
+                            .view("positionHarmfulCondition.edit").list().stream().findFirst().orElse(null);
+
+                    if (harmfulCondition != null) {
+                        harmfulCondition.setLegacyId(harmfulConditionJson.getLegacyId());
+                        harmfulCondition.setStartDate(startDate);
+                        harmfulCondition.setEndDate(endDate);
+                        harmfulCondition.setDays(harmfulConditionJson.getDays());
+
+                        PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
+                                .query(
+                                        "select e from base$PositionGroupExt e " +
+                                                " where e.legacyId = :id" +
+                                                " and e.legacyId in " +
+                                                "(select p.group.legacyId from base$PositionExt p" +
+                                                " where p.organizationGroupExt.company.legacyId = :companyCode)")
+                                .parameter("id", harmfulConditionJson.getPositionId())
+                                .parameter("companyCode", harmfulConditionJson.getCompanyCode())
+                                .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (positionGroupExt != null) {
+                            harmfulCondition.setPositionGroup(positionGroupExt);
+                        } else {
+                            return prepareError(result, methodName, harmfulConditionData,
+                                    "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
+                                            + " and company legacyId " + harmfulConditionJson.getCompanyCode());
+                        }
+
+
+                        harmfulConditionsCommitList.add(harmfulCondition);
+                    } else {
+                        harmfulCondition = metadata.create(PositionHarmfulCondition.class);
+                        harmfulCondition.setId(UUID.randomUUID());
+                        harmfulCondition.setLegacyId(harmfulConditionJson.getLegacyId());
+                        harmfulCondition.setStartDate(startDate);
+                        harmfulCondition.setEndDate(endDate);
+                        harmfulCondition.setDays(harmfulConditionJson.getDays());
+
+                        PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
+                                .query(
+                                        "select e from base$PositionGroupExt e " +
+                                                " where e.legacyId = :id" +
+                                                " and e.legacyId in " +
+                                                "(select p.group.legacyId from base$PositionExt p" +
+                                                " where p.organizationGroupExt.company.legacyId = :companyCode)")
+                                .parameter("id", harmfulConditionJson.getPositionId())
+                                .parameter("companyCode", harmfulConditionJson.getCompanyCode())
+                                .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (positionGroupExt != null) {
+                            harmfulCondition.setPositionGroup(positionGroupExt);
+                        } else {
+                            return prepareError(result, methodName, harmfulConditionData,
+                                    "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
+                                            + " and company legacyId " + harmfulConditionJson.getCompanyCode());
+                        }
+
+                        harmfulConditionsCommitList.add(harmfulCondition);
+                    }
+                } else {
+                    harmfulCondition.setLegacyId(harmfulConditionJson.getLegacyId());
+                    harmfulCondition.setStartDate(startDate);
+                    harmfulCondition.setEndDate(endDate);
+                    harmfulCondition.setDays(harmfulConditionJson.getDays());
+
+                    PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
+                            .query(
+                                    "select e from base$PositionGroupExt e " +
+                                            " where e.legacyId = :id" +
+                                            " and e.legacyId in " +
+                                            "(select p.group.legacyId from base$PositionExt p" +
+                                            " where p.organizationGroupExt.company.legacyId = :companyCode)")
+                            .parameter("id", harmfulConditionJson.getPositionId())
+                            .parameter("companyCode", harmfulConditionJson.getCompanyCode())
+                            .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                    if (positionGroupExt != null) {
+                        harmfulCondition.setPositionGroup(positionGroupExt);
+                    } else {
+                        return prepareError(result, methodName, harmfulConditionData,
+                                "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
+                                        + " and company legacyId " + harmfulConditionJson.getCompanyCode());
+                    }
+                }
+            }
+
+            for (PositionHarmfulCondition positionHarmfulCondition : harmfulConditionsCommitList) {
+                commitContext.addInstanceToCommit(positionHarmfulCondition);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, harmfulConditionData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, harmfulConditionData);
+    }
+
+    @Override
+    public BaseResult deleteHarmfulCondition(HarmfulConditionDataJson harmfulConditionData) {
+        String methodName = "deleteHarmfulCondition";
+        BaseResult result = new BaseResult();
+        ArrayList<HarmfulConditionJson> harmfulConditions = new ArrayList<>();
+        if (harmfulConditionData.getHarmfulConditions() != null) {
+            harmfulConditions = harmfulConditionData.getHarmfulConditions();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PositionHarmfulCondition> harmfulCondtionsArrayList = new ArrayList<>();
+            for (HarmfulConditionJson harmfulConditionJson : harmfulConditions) {
+
+                if (harmfulConditionJson.getLegacyId() == null || harmfulConditionJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "no legacyId");
+                }
+
+                if (harmfulConditionJson.getCompanyCode() == null || harmfulConditionJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "no companyCode");
+                }
+
+                PositionHarmfulCondition harmfulCondition = dataManager.load(PositionHarmfulCondition.class)
+                        .query(
+                                " select e from tsadv_PositionHarmfulCondition e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.positionGroup.legacyId in" +
+                                        " (select p.group.legacyId from base$PositionExt p " +
+                                        "where p.organizationGroupExt.company.legacyId = :companyCode) ")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", harmfulConditionJson.getLegacyId(),
+                                "companyCode", harmfulConditionJson.getCompanyCode()))
+                        .view("positionHarmfulCondition.edit").list().stream().findFirst().orElse(null);
+
+                if (harmfulCondition == null) {
+                    return prepareError(result, methodName, harmfulConditionData,
+                            "no tsadv$PositionHarmfulCondition with legacyId " + harmfulConditionJson.getLegacyId()
+                                    + " and company legacyId " + harmfulConditionJson.getCompanyCode());
+                }
+
+                if (!harmfulCondtionsArrayList.stream().filter(harmfulCondition1 ->
+                        harmfulCondition1.getId().equals(harmfulCondition.getId())).findAny().isPresent()) {
+                    harmfulCondtionsArrayList.add(harmfulCondition);
+                }
+            }
+
+            for (PositionHarmfulCondition harmfulCondition : harmfulCondtionsArrayList) {
+                entityManager.remove(harmfulCondition);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, harmfulConditionData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, harmfulConditionData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateAssignmentSchedule(AssignmentScheduleJsonData assignmentScheduleData) {
+        String methodName = "createOrUpdateAssignmentSchedule";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<AssignmentScheduleJson> assignmentSchedules = new ArrayList<>();
+        if (assignmentScheduleData.getAssignmentSchedules() != null) {
+            assignmentSchedules = assignmentScheduleData.getAssignmentSchedules();
+        }
+        try {
+            ArrayList<AssignmentSchedule> assignmentSchedulesCommitList = new ArrayList<>();
+            for (AssignmentScheduleJson assignmentScheduleJson : assignmentSchedules) {
+
+                if (assignmentScheduleJson.getAssignmentId() == null || assignmentScheduleJson.getAssignmentId().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no assignmentId");
+                }
+
+                if (assignmentScheduleJson.getScheduleId() == null || assignmentScheduleJson.getScheduleId().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no scheduleId");
+                }
+
+                if (assignmentScheduleJson.getStartDate() == null || assignmentScheduleJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no startDate");
+                }
+
+                if (assignmentScheduleJson.getEndDate() == null || assignmentScheduleJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no endDate");
+                }
+
+                if (assignmentScheduleJson.getEndPolicyCode() == null || assignmentScheduleJson.getEndPolicyCode().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no endPolicyCode");
+                }
+
+                if (assignmentScheduleJson.getCompanyCode() == null || assignmentScheduleJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no companyCode");
+                }
+
+
+                //todo check this default values for non null constraint
+                StandardOffset offset = dataManager.load(StandardOffset.class)
+                        .query("select e from tsadv$StandardOffset e")
+                        .view(View.BASE)
+                        .list().stream().findFirst().orElse(null);
+
+                MaterialDesignColorsEnum colorSet = MaterialDesignColorsEnum.AMBER;
+
+                Date startDate = CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getStartDate()));
+                Date endDate = CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getEndDate()));
+
+                AssignmentSchedule assignmentSchedule = assignmentSchedulesCommitList.stream().filter(filterAssignmentSchedule ->
+                        filterAssignmentSchedule.getAssignmentGroup() != null
+                                && filterAssignmentSchedule.getAssignmentGroup().getLegacyId() != null
+                                && filterAssignmentSchedule.getAssignmentGroup().getLegacyId().equals(assignmentScheduleJson.getAssignmentId())
+                                && filterAssignmentSchedule.getSchedule() != null
+                                && filterAssignmentSchedule.getSchedule().getLegacyId() != null
+                                && filterAssignmentSchedule.getSchedule().getLegacyId().equals(assignmentScheduleJson.getScheduleId())
+                                && filterAssignmentSchedule.getEndPolicyCode() != null
+                                && filterAssignmentSchedule.getEndPolicyCode().equals(assignmentScheduleJson.getEndPolicyCode())
+                                && filterAssignmentSchedule.getAssignmentGroup().getAssignment().getOrganizationGroup().getCompany() != null
+                                && filterAssignmentSchedule.getAssignmentGroup().getAssignment().getOrganizationGroup().getCompany().getLegacyId().equals(assignmentScheduleJson.getCompanyCode())
+                                && filterAssignmentSchedule.getStartDate() != null
+                                && filterAssignmentSchedule.getStartDate().equals(startDate)
+                                && filterAssignmentSchedule.getEndDate() != null
+                                && filterAssignmentSchedule.getEndDate().equals(endDate)
+                                && filterAssignmentSchedule.getEndPolicyCode() != null
+                                && filterAssignmentSchedule.getEndPolicyCode().equals(assignmentScheduleJson.getEndPolicyCode())
+                ).findFirst().orElse(null);
+                if (assignmentSchedule == null) {
+                    assignmentSchedule = dataManager.load(AssignmentSchedule.class)
+                            .query(
+                                    " select e from tsadv$AssignmentSchedule e " +
+                                            " where e.endPolicyCode = :epc" +
+                                            " and e.schedule.legacyId = :shLegacyId " +
+                                            " and e.assignmentGroup.legacyId = :agLegacyId " +
+                                            " and e.assignmentGroup.legacyId in " +
+                                            " (select p.group.legacyId from base$AssignmentExt p " +
+                                            " where p.organizationGroup.company.legacyId = :companyCode) ")
+                            .setParameters(ParamsMap.of(
+                                    "epc", assignmentScheduleJson.getEndPolicyCode(),
+                                    "agLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                    "shLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                    "companyCode", assignmentScheduleJson.getCompanyCode()))
+                            .view("assignmentSchedule.edit").list().stream().findFirst().orElse(null);
+
+                    if (assignmentSchedule != null) {
+                        assignmentSchedule.setStartDate(startDate);
+                        assignmentSchedule.setEndDate(endDate);
+                        assignmentSchedule.setEndPolicyCode(assignmentScheduleJson.getEndPolicyCode());
+                        assignmentSchedule.setOffset(offset);
+                        assignmentSchedule.setColorsSet(colorSet);
+
+                        AssignmentGroupExt assignmentGroupExt = dataManager.load(AssignmentGroupExt.class)
+                                .query("select e.group from base$AssignmentExt e " +
+                                        " where e.group.legacyId = :legacyId " +
+                                        " and e.group.legacyId in " +
+                                        "(select p.group.legacyId from base$AssignmentExt p " +
+                                        " where p.organizationGroup.company.legacyId = :companyCode)")
+                                .setParameters(
+                                        ParamsMap.of(
+                                                "legacyId", assignmentScheduleJson.getAssignmentId(),
+                                                "companyCode", assignmentScheduleJson.getCompanyCode())
+                                )
+                                .view("assignmentGroup.view")
+                                .list().stream().findFirst().orElse(null);
+                        if (assignmentGroupExt != null) {
+                            assignmentSchedule.setAssignmentGroup(assignmentGroupExt);
+                        } else {
+                            return prepareError(result, methodName, assignmentScheduleData,
+                                    "no base$AssignmentGroupExt with legacyId " + assignmentScheduleJson.getAssignmentId()
+                                            + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
+                        }
+
+                        StandardSchedule schedule = dataManager.load(StandardSchedule.class)
+                                .query("select e from tsadv$StandardSchedule e " +
+                                        "where e.legacyId = :shLegacyId")
+                                .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
+                                .view(View.BASE)
+                                .list().stream().findFirst().orElse(null);
+
+                        if (schedule != null) {
+                            assignmentSchedule.setSchedule(schedule);
+                        } else {
+                            return prepareError(result, methodName, assignmentScheduleData,
+                                    "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                        }
+
+                        assignmentSchedulesCommitList.add(assignmentSchedule);
+                    } else {
+                        assignmentSchedule = metadata.create(AssignmentSchedule.class);
+                        assignmentSchedule.setId(UUID.randomUUID());
+                        assignmentSchedule.setStartDate(startDate);
+                        assignmentSchedule.setEndDate(endDate);
+                        assignmentSchedule.setEndPolicyCode(assignmentScheduleJson.getEndPolicyCode());
+                        assignmentSchedule.setOffset(offset);
+                        assignmentSchedule.setColorsSet(colorSet);
+
+
+                        AssignmentGroupExt assignmentGroupExt = dataManager.load(AssignmentGroupExt.class)
+                                .query("select e.group from base$AssignmentExt e " +
+                                        " where e.group.legacyId = :legacyId " +
+                                        " and e.group.legacyId in " +
+                                        "(select p.group.legacyId from base$AssignmentExt p " +
+                                        " where p.organizationGroup.company.legacyId = :companyCode)")
+                                .setParameters(
+                                        ParamsMap.of(
+                                                "legacyId", assignmentScheduleJson.getAssignmentId(),
+                                                "companyCode", assignmentScheduleJson.getCompanyCode())
+                                )
+                                .view("assignmentGroup.view")
+                                .list().stream().findFirst().orElse(null);
+                        if (assignmentGroupExt != null) {
+                            assignmentSchedule.setAssignmentGroup(assignmentGroupExt);
+                        } else {
+                            return prepareError(result, methodName, assignmentScheduleData,
+                                    "no base$AssignmentGroupExt with legacyId " + assignmentScheduleJson.getAssignmentId()
+                                            + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
+                        }
+
+                        StandardSchedule schedule = dataManager.load(StandardSchedule.class)
+                                .query("select e from tsadv$StandardSchedule e " +
+                                        "where e.legacyId = :shLegacyId")
+                                .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
+                                .view(View.MINIMAL)
+                                .list().stream().findFirst().orElse(null);
+
+                        if (schedule != null) {
+                            assignmentSchedule.setSchedule(schedule);
+                        } else {
+                            return prepareError(result, methodName, assignmentScheduleData,
+                                    "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                        }
+
+                        assignmentSchedulesCommitList.add(assignmentSchedule);
+                    }
+                } else {
+                    assignmentSchedule.setStartDate(startDate);
+                    assignmentSchedule.setEndDate(endDate);
+                    assignmentSchedule.setEndPolicyCode(assignmentScheduleJson.getEndPolicyCode());
+                    assignmentSchedule.setOffset(offset);
+                    assignmentSchedule.setColorsSet(colorSet);
+
+                    AssignmentGroupExt assignmentGroupExt = dataManager.load(AssignmentGroupExt.class)
+                            .query("select e.group from base$AssignmentExt e " +
+                                    " where e.group.legacyId = :legacyId " +
+                                    " and e.group.legacyId in " +
+                                    "(select p.group.legacyId from base$AssignmentExt p " +
+                                    " where p.organizationGroup.company.legacyId = :companyCode)")
+                            .setParameters(
+                                    ParamsMap.of(
+                                            "legacyId", assignmentScheduleJson.getAssignmentId(),
+                                            "companyCode", assignmentScheduleJson.getCompanyCode())
+                            )
+                            .view("assignmentGroup.view")
+                            .list().stream().findFirst().orElse(null);
+                    if (assignmentGroupExt != null) {
+                        assignmentSchedule.setAssignmentGroup(assignmentGroupExt);
+                    } else {
+                        return prepareError(result, methodName, assignmentScheduleData,
+                                "no base$AssignmentGroupExt with legacyId " + assignmentScheduleJson.getAssignmentId()
+                                        + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
+                    }
+
+                    StandardSchedule schedule = dataManager.load(StandardSchedule.class)
+                            .query("select e from tsadv$StandardSchedule e " +
+                                    "where e.legacyId = :shLegacyId")
+                            .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
+                            .view(View.MINIMAL)
+                            .list().stream().findFirst().orElse(null);
+
+                    if (schedule != null) {
+                        assignmentSchedule.setSchedule(schedule);
+                    } else {
+                        return prepareError(result, methodName, assignmentScheduleData,
+                                "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                    }
+                }
+            }
+
+            for (AssignmentSchedule assignmentSchedule : assignmentSchedulesCommitList) {
+                commitContext.addInstanceToCommit(assignmentSchedule);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, assignmentScheduleData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, assignmentScheduleData);
+    }
+
+    @Override
+    public BaseResult deleteAssignmentSchedule(AssignmentScheduleJsonData assignmentScheduleData) {
+        String methodName = "deleteAssignmentSchedule";
+        BaseResult result = new BaseResult();
+        ArrayList<AssignmentScheduleJson> assignmentSchedules = new ArrayList<>();
+        if (assignmentScheduleData.getAssignmentSchedules() != null) {
+            assignmentSchedules = assignmentScheduleData.getAssignmentSchedules();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<AssignmentSchedule> assignmentSchedulesArrayList = new ArrayList<>();
+            for (AssignmentScheduleJson assignmentScheduleJson : assignmentSchedules) {
+
+                if (assignmentScheduleJson.getAssignmentId() == null || assignmentScheduleJson.getAssignmentId().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no assignmentId");
+                }
+
+                if (assignmentScheduleJson.getStartDate() == null || assignmentScheduleJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no startDate");
+                }
+                if (assignmentScheduleJson.getCompanyCode() == null || assignmentScheduleJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no companyCode");
+                }
+
+                AssignmentSchedule assignmentSchedule = dataManager.load(AssignmentSchedule.class)
+                        .query(
+                                " select e from tsadv$AssignmentSchedule e " +
+                                        " where e.startDate = :startDate" +
+                                        " and e.assignmentGroup.legacyId = :agLegacyId " +
+                                        " and e.assignmentGroup.legacyId in " +
+                                        " (select p.group.legacyId from base$AssignmentExt p " +
+                                        " where p.organizationGroup.company.legacyId = :companyCode) ")
+                        .setParameters(
+                                ParamsMap.of(
+                                        "startDate", CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getStartDate())),
+                                        "agLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                        "companyCode", assignmentScheduleJson.getCompanyCode()
+                                )
+                        )
+                        .view("assignmentSchedule.edit").list().stream().findFirst().orElse(null);
+
+                if (assignmentSchedule == null) {
+                    return prepareError(result, methodName, assignmentScheduleData,
+                            "no tsadv$AssignmentSchedule with assignmentId " + assignmentScheduleJson.getAssignmentId()
+                                    + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
+                }
+
+                if (!assignmentSchedulesArrayList.stream().filter(assignmentSchedule1 ->
+                        assignmentSchedule1.getId().equals(assignmentSchedule.getId())).findAny().isPresent()) {
+                    assignmentSchedulesArrayList.add(assignmentSchedule);
+                }
+            }
+
+            for (AssignmentSchedule assignmentSchedule : assignmentSchedulesArrayList) {
+                entityManager.remove(assignmentSchedule);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, assignmentScheduleData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, assignmentScheduleData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonAddress(PersonAddressDataJson personAddressData) {
+        String methodName = "createOrUpdatePersonAddress";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<PersonAddressJson> personAdresses = new ArrayList<>();
+        if (personAddressData.getPersonAddresses() != null) {
+            personAdresses = personAddressData.getPersonAddresses();
+        }
+        try {
+            ArrayList<Address> personAddressesCommitList = new ArrayList<>();
+            for (PersonAddressJson personAddressJson : personAdresses) {
+
+                if (personAddressJson.getLegacyId() == null || personAddressJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no legacyId");
+                }
+
+                if (personAddressJson.getPersonId() == null || personAddressJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no personId");
+                }
+
+                if (personAddressJson.getFactAddress() == null || personAddressJson.getFactAddress().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no factAddress");
+                }
+
+                if (personAddressJson.getRegistrationAddress() == null || personAddressJson.getRegistrationAddress().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no registrationAddress");
+                }
+
+                if (personAddressJson.getFactAddressKATOCode() == null || personAddressJson.getFactAddressKATOCode().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no factAddressKATOCode");
+                }
+
+                if (personAddressJson.getRegistrationAddressKATOCode() == null || personAddressJson.getRegistrationAddressKATOCode().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no registrationAddressKATOCode");
+                }
+
+                if (personAddressJson.getCompanyCode() == null || personAddressJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no companyCode");
+                }
+
+                //todo check default values
+                DicAddressType addressType = dataManager.load(DicAddressType.class)
+                        .query("select e from tsadv$DicAddressType e")
+                        .list().stream().findFirst().orElse(null);
+                DicCountry country = dataManager.load(DicCountry.class)
+                        .query("select e from base$DicCountry e")
+                        .list().stream().findFirst().orElse(null);
+                String addressString = "default_address";
+
+                Date startDate = CommonUtils.getSystemDate();
+                Date endDate = CommonUtils.getMaxDate();
+
+                Address address = personAddressesCommitList.stream().filter(filterAddress ->
+                        filterAddress.getLegacyId() != null
+                                && filterAddress.getLegacyId().equals(personAddressJson.getLegacyId())
+                                && filterAddress.getPersonGroup() != null
+                                && filterAddress.getPersonGroup().getLegacyId() != null
+                                && filterAddress.getPersonGroup().getLegacyId().equals(personAddressJson.getPersonId())
+                                && filterAddress.getPersonGroup().getCompany() != null
+                                && filterAddress.getPersonGroup().getCompany().getLegacyId().equals(personAddressJson.getCompanyCode())
+                                && filterAddress.getFactAddress() != null
+                                && filterAddress.getFactAddress().equals(personAddressJson.getFactAddress())
+                                && filterAddress.getRegistrationAddress() != null
+                                && filterAddress.getRegistrationAddress().equals(personAddressJson.getRegistrationAddress())
+                                && filterAddress.getFactAddressKATOCode() != null
+                                && filterAddress.getFactAddressKATOCode().equals(personAddressJson.getFactAddressKATOCode())
+                                && filterAddress.getRegistrationAddressKATOCode() != null
+                                && filterAddress.getRegistrationAddressKATOCode().equals(personAddressJson.getRegistrationAddressKATOCode())
+                ).findFirst().orElse(null);
+                if (address == null) {
+                    address = dataManager.load(Address.class)
+                            .query(
+                                    " select e from tsadv$Address e " +
+                                            " where e.legacyId = " + personAddressJson.getLegacyId() + " " +
+                                            " and e.personGroup.legacyId = :pgLegacyId " +
+                                            " and e.personGroup.company.legacyId = :companyCode " +
+                                            " and e.factAddress = :fd " +
+                                            " and e.registrationAddress = :rd" +
+                                            " and e.factAddressKATOCode = :fdkc" +
+                                            " and e.registrationAddressKATOCode = :rdkc ")
+                            .setParameters(
+                                    ParamsMap.of(
+                                            "pgLegacyId", personAddressJson.getPersonId(),
+                                            "companyCode", personAddressJson.getCompanyCode(),
+                                            "fd", personAddressJson.getFactAddress(),
+                                            "rd", personAddressJson.getRegistrationAddress(),
+                                            "fdkc", personAddressJson.getFactAddressKATOCode(),
+                                            "rdkc", personAddressJson.getRegistrationAddressKATOCode()
+                                    )
+                            )
+                            .view("address.view").list().stream().findFirst().orElse(null);
+
+                    if (address != null) {
+
+                        address.setStartDate(startDate);
+                        address.setEndDate(endDate);
+                        address.setAddressType(addressType);
+                        address.setCountry(country);
+                        address.setAddress(addressString);
+
+                        address.setLegacyId(personAddressJson.getLegacyId());
+                        address.setFactAddress(personAddressJson.getFactAddress());
+                        address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
+                        address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
+                        address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", personAddressJson.getPersonId(),
+                                        "company", personAddressJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            address.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, personAddressData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
+                        }
+
+                        personAddressesCommitList.add(address);
+                    } else {
+                        address = metadata.create(Address.class);
+                        address.setId(UUID.randomUUID());
+                        address.setLegacyId(personAddressJson.getLegacyId());
+                        address.setFactAddress(personAddressJson.getFactAddress());
+                        address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
+                        address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
+                        address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
+
+                        address.setStartDate(startDate);
+                        address.setEndDate(endDate);
+                        address.setAddressType(addressType);
+                        address.setCountry(country);
+                        address.setAddress(addressString);
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", personAddressJson.getPersonId(),
+                                        "company", personAddressJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            address.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, personAddressData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
+                        }
+
+                        personAddressesCommitList.add(address);
+                    }
+                } else {
+
+                    address.setStartDate(startDate);
+                    address.setEndDate(endDate);
+                    address.setAddressType(addressType);
+                    address.setCountry(country);
+                    address.setAddress(addressString);
+
+                    address.setLegacyId(personAddressJson.getLegacyId());
+                    address.setFactAddress(personAddressJson.getFactAddress());
+                    address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
+                    address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
+                    address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
+
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personAddressJson.getPersonId(),
+                                    "company", personAddressJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                    if (personGroupExt != null) {
+                        address.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personAddressData,
+                                "no personGroup with legacyId and companyCode : "
+                                        + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
+                    }
+                }
+            }
+
+            for (Address address : personAddressesCommitList) {
+                commitContext.addInstanceToCommit(address);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, personAddressData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personAddressData);
+    }
+
+    @Override
+    public BaseResult deletePersonAddress(PersonAddressDataJson personAddressData) {
+        String methodName = "deletePersonAddress";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonAddressJson> personAddresses = new ArrayList<>();
+        if (personAddressData.getPersonAddresses() != null) {
+            personAddresses = personAddressData.getPersonAddresses();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<Address> personAddressesArrayList = new ArrayList<>();
+            for (PersonAddressJson personAddressJson : personAddresses) {
+
+                if (personAddressJson.getLegacyId() == null || personAddressJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no legacyId");
+                }
+
+                if (personAddressJson.getCompanyCode() == null || personAddressJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no companyCode");
+                }
+
+                Address address = dataManager.load(Address.class)
+                        .query(
+                                " select e from tsadv$Address e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", personAddressJson.getLegacyId(),
+                                "companyCode", personAddressJson.getCompanyCode()))
+                        .view("address.view").list().stream().findFirst().orElse(null);
+
+                if (address == null) {
+                    return prepareError(result, methodName, personAddressData,
+                            "no tsadv$Address with legacyId " + personAddressJson.getLegacyId()
+                                    + " and company legacyId " + personAddressJson.getCompanyCode());
+                }
+
+                if (!personAddressesArrayList.stream().filter(harmfulCondition1 ->
+                        harmfulCondition1.getId().equals(address.getId())).findAny().isPresent()) {
+                    personAddressesArrayList.add(address);
+                }
+            }
+
+            for (Address address : personAddressesArrayList) {
+                entityManager.remove(address);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personAddressData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, personAddressData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonLanguages(PersonLanguageDataJson personLanguageData) {
+        String methodName = "createOrUpdatePersonLanguages";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<PersonLanguageJson> personLanguages = new ArrayList<>();
+        if (personLanguageData.getPersonLanguages() != null) {
+            personLanguages = personLanguageData.getPersonLanguages();
+        }
+        try {
+            ArrayList<PersonLanguage> personLanguagesCommitList = new ArrayList<>();
+            for (PersonLanguageJson personLanguageJson : personLanguages) {
+
+                if (personLanguageJson.getLegacyId() == null || personLanguageJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguageData,
+                            "no legacyId");
+                }
+
+                if (personLanguageJson.getPersonId() == null || personLanguageJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguageData,
+                            "no personId");
+                }
+
+                if (personLanguageJson.getLanguageId() == null || personLanguageJson.getLanguageId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguageData,
+                            "no languageId");
+                }
+
+                if (personLanguageJson.getLevelId() == null || personLanguageJson.getLevelId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguageData,
+                            "no levelId");
+                }
+
+                if (personLanguageJson.getCompanyCode() == null || personLanguageJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personLanguageData,
+                            "no companyCode");
+                }
+
+                PersonLanguage personLanguage = personLanguagesCommitList.stream().filter(filterPersonLanguage ->
+                        filterPersonLanguage.getLegacyId() != null
+                                && filterPersonLanguage.getLegacyId().equals(personLanguageJson.getLegacyId())
+                                && filterPersonLanguage.getPersonGroup() != null
+                                && filterPersonLanguage.getPersonGroup().getLegacyId() != null
+                                && filterPersonLanguage.getPersonGroup().getLegacyId().equals(personLanguageJson.getPersonId())
+                                && filterPersonLanguage.getPersonGroup().getCompany() != null
+                                && filterPersonLanguage.getPersonGroup().getCompany().getLegacyId().equals(personLanguageJson.getCompanyCode())
+                                && filterPersonLanguage.getLanguage() != null
+                                && filterPersonLanguage.getLanguage().getLegacyId().equals(personLanguageJson.getLanguageId())
+                                && filterPersonLanguage.getLanguageLevel() != null
+                                && filterPersonLanguage.getLanguageLevel().getLegacyId().equals(personLanguageJson.getLevelId())
+                ).findFirst().orElse(null);
+                if (personLanguage == null) {
+                    personLanguage = dataManager.load(PersonLanguage.class)
+                            .query(
+                                    " select e from tsadv_PersonLanguage e " +
+                                            " where e.legacyId = :legacyId" +
+                                            " and e.personGroup.legacyId = :pgLegacyId " +
+                                            " and e.personGroup.company.legacyId = :companyCode " +
+                                            " and e.language.legacyId = :lgLegacyId " +
+                                            " and e.languageLevel.legacyId = :lglvLegacyId")
+                            .setParameters(
+                                    ParamsMap.of(
+                                            "legacyId", personLanguageJson.getLegacyId(),
+                                            "pgLegacyId", personLanguageJson.getPersonId(),
+                                            "companyCode", personLanguageJson.getCompanyCode(),
+                                            "lgLegacyId", personLanguageJson.getLanguageId(),
+                                            "lglvLegacyId", personLanguageJson.getLevelId()
+                                    )
+                            )
+                            .view("personLanguage.edit").list().stream().findFirst().orElse(null);
+
+                    if (personLanguage != null) {
+                        personLanguage.setLegacyId(personLanguageJson.getLegacyId());
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", personLanguageJson.getPersonId(),
+                                        "company", personLanguageJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            personLanguage.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
+                        }
+
+                        DicLanguage language = dataManager.load(DicLanguage.class)
+                                .query("select e from base$DicLanguage e " +
+                                        " where e.legacyId = :lgLegacyId")
+                                .parameter("lgLegacyId", personLanguageJson.getLanguageId())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        if (language != null) {
+                            personLanguage.setLanguage(language);
+                        } else {
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
+                        }
+
+                        DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
+                                .query("select e from tsadv_DicLanguageLevel e " +
+                                        " where e.legacyId = :lglvLegacyId")
+                                .parameter("lglvLegacyId", personLanguageJson.getLevelId())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        if (languageLevel != null) {
+                            personLanguage.setLanguageLevel(languageLevel);
+                        } else {
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
+                        }
+
+                        personLanguagesCommitList.add(personLanguage);
+                    } else {
+                        personLanguage = metadata.create(PersonLanguage.class);
+                        personLanguage.setId(UUID.randomUUID());
+                        personLanguage.setLegacyId(personLanguageJson.getLegacyId());
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", personLanguageJson.getPersonId(),
+                                        "company", personLanguageJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            personLanguage.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
+                        }
+
+                        DicLanguage language = dataManager.load(DicLanguage.class)
+                                .query("select e from base$DicLanguage e " +
+                                        " where e.legacyId = :lgLegacyId")
+                                .parameter("lgLegacyId", personLanguageJson.getLanguageId())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        if (language != null) {
+                            personLanguage.setLanguage(language);
+                        } else {
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
+                        }
+
+                        DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
+                                .query("select e from tsadv_DicLanguageLevel e " +
+                                        " where e.legacyId = :lglvLegacyId")
+                                .parameter("lglvLegacyId", personLanguageJson.getLevelId())
+                                .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                        if (languageLevel != null) {
+                            personLanguage.setLanguageLevel(languageLevel);
+                        } else {
+                            return prepareError(result, methodName, personLanguageData,
+                                    "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
+                        }
+
+                        personLanguagesCommitList.add(personLanguage);
+                    }
+                } else {
+                    personLanguage.setLegacyId(personLanguageJson.getLegacyId());
+
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", personLanguageJson.getPersonId(),
+                                    "company", personLanguageJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                    if (personGroupExt != null) {
+                        personLanguage.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, personLanguageData,
+                                "no personGroup with legacyId and companyCode : "
+                                        + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
+                    }
+
+                    DicLanguage language = dataManager.load(DicLanguage.class)
+                            .query("select e from base$DicLanguage e " +
+                                    " where e.legacyId = :lgLegacyId")
+                            .parameter("lgLegacyId", personLanguageJson.getLanguageId())
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                    if (language != null) {
+                        personLanguage.setLanguage(language);
+                    } else {
+                        return prepareError(result, methodName, personLanguageData,
+                                "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
+                    }
+
+                    DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
+                            .query("select e from tsadv_DicLanguageLevel e " +
+                                    " where e.legacyId = :lglvLegacyId")
+                            .parameter("lglvLegacyId", personLanguageJson.getLevelId())
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+
+                    if (languageLevel != null) {
+                        personLanguage.setLanguageLevel(languageLevel);
+                    } else {
+                        return prepareError(result, methodName, personLanguageData,
+                                "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
+                    }
+                }
+            }
+
+            for (PersonLanguage personLanguage : personLanguagesCommitList) {
+                commitContext.addInstanceToCommit(personLanguage);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, personLanguageData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personLanguageData);
+    }
+
+    @Override
+    public BaseResult deletePersonLanguages(PersonLanguageDataJson personLanguageData) {
+        String methodName = "deletePersonLanguages";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonLanguageJson> personLanguages = new ArrayList<>();
+        if (personLanguageData.getPersonLanguages() != null) {
+            personLanguages = personLanguageData.getPersonLanguages();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonLanguage> personLanguagesArrayList = new ArrayList<>();
+            for (PersonLanguageJson personLanguageJson : personLanguages) {
+
+                if (personLanguageJson.getLegacyId() == null || personLanguageJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, personLanguageData,
+                            "no legacyId");
+                }
+
+                if (personLanguageJson.getCompanyCode() == null || personLanguageJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personLanguageData,
+                            "no companyCode");
+                }
+
+                PersonLanguage personLanguage = dataManager.load(PersonLanguage.class)
+                        .query(
+                                " select e from tsadv_PersonLanguage e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of(
+                                "legacyId", personLanguageJson.getLegacyId(),
+                                "companyCode", personLanguageJson.getCompanyCode()))
+                        .view("personLanguage.edit").list().stream().findFirst().orElse(null);
+
+                if (personLanguage == null) {
+                    return prepareError(result, methodName, personLanguageData,
+                            "no tsadv_PersonLanguage with legacyId " + personLanguageJson.getLegacyId()
+                                    + " and company legacyId " + personLanguageJson.getCompanyCode());
+                }
+
+                if (!personLanguagesArrayList.stream().filter(harmfulCondition1 ->
+                        harmfulCondition1.getId().equals(personLanguage.getId())).findAny().isPresent()) {
+                    personLanguagesArrayList.add(personLanguage);
+                }
+            }
+
+            for (PersonLanguage personLanguage : personLanguagesArrayList) {
+                entityManager.remove(personLanguage);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personLanguageData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, personLanguageData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateUser(UserDataJson userData) {
+        String methodName = "createOrUpdateUser";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<UserJson> users = new ArrayList<>();
+        ArrayList<UserJson> completedUsers = new ArrayList<>();
+
+        if (userData.getUsers() != null) {
+            users = userData.getUsers();
+        }
+
+        try {
+
+            for (UserJson userJson : users) {
+
+                if (userJson.getLogin() == null || userJson.getLogin().isEmpty()) {
+                    continue;
+                }
+
+                if (userJson.getEmployeeNumber() == null || userJson.getEmployeeNumber().isEmpty()) {
+                    continue;
+                }
+
+                if (userJson.getEmail() == null || userJson.getEmail().isEmpty()) {
+                    continue;
+                }
+
+                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.login = :login")
+                        .parameter("login", userJson.getLogin())
+                        .view("userExt.edit")
+                        .list().stream().findFirst().orElse(null);
+
+                if (tsadvUser != null) {
+
+                    if (!tsadvUser.getEmail().equals(userJson.getEmail())) {
+                        tsadvUser.setEmail(userJson.getEmail());
+                    }
+
+                    String empNumber = "";
+
+                    List<String> codes = new ArrayList<>();
+
+                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("VCM");
+                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("KBL");
+                        codes.add("KAL");
+                    } else if ("KMM".equals(userJson.getEmployeeNumber().substring(0, 3))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(3));
+                        codes.add("KMM");
+                    }
+
+                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                            .query(String.format("select e from base$PersonGroupExt e " +
+                                            " join e.list l " +
+                                            " where current_date between l.startDate and l.endDate " +
+                                            " and l.employeeNumber = :empNumber " +
+                                            " and e.company.code in (%s)",
+                                    codes.stream()
+                                            .map(s -> String.format("'%s'", s))
+                                            .collect(Collectors.joining())))
+                            .parameter("empNumber", empNumber)
+                            .view("personGroupExt-for-integration-rest")
+                            .list();
+
+                    if (personGroupExtList.size() == 1 && !tsadvUser.getPersonGroup().equals(personGroupExtList.get(0))) {
+                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                    } else {
+                        continue;
+                    }
+
+                    commitContext.addInstanceToCommit(tsadvUser);
+                    completedUsers.add(userJson);
+
+                } else {
+
+                    tsadvUser = dataManager.create(TsadvUser.class);
+                    tsadvUser.setLogin(userJson.getLogin());
+                    tsadvUser.setEmail(userJson.getEmail());
+
+                    String empNumber = "";
+
+                    List<String> codes = new ArrayList<>();
+
+                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("VCM");
+                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("KBL");
+                        codes.add("KAL");
+                    } else if ("KMM".equals(userJson.getEmployeeNumber().substring(0, 3))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(3));
+                        codes.add("KMM");
+                    }
+
+                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                            .query(String.format("select e from base$PersonGroupExt e " +
+                                            " join e.list l " +
+                                            " where current_date between l.startDate and l.endDate " +
+                                            " and l.employeeNumber = :empNumber " +
+                                            " and e.company.code in (%s)",
+                                    codes.stream()
+                                            .map(s -> String.format("'%s'", s))
+                                            .collect(Collectors.joining())))
+                            .parameter("empNumber", empNumber)
+                            .view("personGroupExt-for-integration-rest")
+                            .list();
+
+                    if (personGroupExtList.size() == 1) {
+                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                    } else {
+                        continue;
+                    }
+
+                    commitContext.addInstanceToCommit(tsadvUser);
+                    completedUsers.add(userJson);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, userData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, completedUsers);
+    }
+
+    private String getEmpNumber(String jsonEmpNumber) {
+        for (int i = 0; i < jsonEmpNumber.length(); i++) {
+            if (jsonEmpNumber.charAt(i) != '0') {
+                return jsonEmpNumber.substring(i);
+            }
+        }
+        return "";
     }
 }

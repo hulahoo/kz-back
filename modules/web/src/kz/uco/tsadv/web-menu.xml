@@ -12,6 +12,14 @@
                   caption="mainMsg://menu_config.tsadv_AbsPurposeSetting.browse"/>
             <item id="countrye"
                   screen="base$DicCountry.browse"/>
+            <menu id="reference" caption="mainMsg://menu_config.reference">
+                <item screen="tsadv_DicReceivingType.browse"
+                      caption="mainMsg://menu_config.tsadv_DicReceivingType.browse"/>
+                <item screen="tsadv_DicCertificateType.browse"
+                      caption="mainMsg://menu_config.tsadv_DicCertificateType.browse"/>
+                <item screen="tsadv_CertificateTemplate.browse"
+                      caption="mainMsg://menu_config.tsadv_CertificateTemplate.browse"/>
+            </menu>
             <menu id="militaryRegister">
                 <item screen="tsadv$DicMilitaryDocumentType.browse"/>
                 <item screen="tsadv$DicMilitaryType.browse"/>
@@ -192,10 +200,13 @@
         <item screen="tsadv_CertificateRequestHR.browse"
               caption="mainMsg://menu_config.tsadv_CertificateRequestHR.browse"/>
         <menu id="dms" caption="mainMsg://dms">
-            <item screen="tsadv$InsuranceContract.browse" caption="mainMsg://menu_config.tsadv$InsuranceContract.browse"/>
+            <item screen="tsadv$InsuranceContract.browse"
+                  caption="mainMsg://menu_config.tsadv$InsuranceContract.browse"/>
         </menu>
-        <item screen="tsadv_VacationGraphic.browse" id="vacationGraphicBrowse"
-              caption="График заявок на отпуск" openType="NEW_TAB"/>
+        <item screen="tsadv$AssignmentScheduleLite.browse"/>
+        <item screen="tsadv_PositionHarmfulCondition.browse"/>
+        <item screen="tsadv_VacationScheduleRequest.browse"
+              caption="mainMsg://menu_config.tsadv_VacationScheduleRequest.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
@@ -399,6 +410,7 @@
         </item>
         <item screen="tsadv_PersonData" caption="mainMsg://menu_config.tsadv_PersonData"/>
         <item screen="tsadv$MyMICInsuredPerson.browse" caption="mainMsg://menu_config.tsadv$MyMICInsuredPerson.browse"/>
+        <item screen="tsadv_DicPurposeAbsence.browse"/>
     </menu>
     <menu id="performanceManagement"
           icon="font-icon:BAR_CHART_O"
@@ -591,6 +603,7 @@
         <item screen="learner-group-complex-edit"/>
         <item screen="tsadv$LearnerGroup.browse"/>
         <item screen="tsadv$Learner.browse"/>
+        <item screen="tsadv$LmsSlider.browse"/>
     </menu>
     <menu id="recruitment"
           icon="font-icon:SEARCH"
@@ -649,11 +662,6 @@
     </menu>
     <menu id="employeeSelfService">
         <menu id="employeeSelfServiceDic" caption="mainMsg://menu-config.Dictionary">
-            <item screen="tsadv_DicReceivingType.browse" caption="mainMsg://menu_config.tsadv_DicReceivingType.browse"/>
-            <item screen="tsadv_DicCertificateType.browse"
-                  caption="mainMsg://menu_config.tsadv_DicCertificateType.browse"/>
-            <item screen="tsadv_CertificateTemplate.browse"
-                  caption="mainMsg://menu_config.tsadv_CertificateTemplate.browse"/>
         </menu>
         <item screen="tsadv_CertificateRequest.browse" caption="mainMsg://menu_config.tsadv_CertificateRequest.browse"/>
     </menu>
@@ -705,7 +713,7 @@
         <item screen="bproc_AllTasks.browse"/>
         <item screen="bproc_DmnDecisionTableBrowse"/>
         <item screen="bproc_DecisionTableModelerScreen"/>
-<!--        <item screen="tsadv$BpmRolesDefiner.browse"/>-->
+        <!--        <item screen="tsadv$BpmRolesDefiner.browse"/>-->
         <item screen="tsadv_BpmRolesDefinerCompany" caption="mainMsg://menu_config.tsadv_BpmRolesDefinerCompany"/>
     </menu>
     <menu id="application-uactivity" insertBefore="administration">
@@ -735,6 +743,13 @@
         <item id="sec$Group.browse"/>
         <item id="sec$Role.browse"/>
         <separator/>
+        <menu id="portalFeedback">
+            <menu id="portalFeedbackDictionary">
+                <item screen="tsadv_DicPortalFeedbackQuestion.browse"/>
+            </menu>
+            <item screen="tsadv_PortalFeedback.browse"/>
+            <item screen="tsadv_PortalFeedbackQuestions.browse"/>
+        </menu>
         <item screen="base$Query.browse"/>
         <item screen="sys$Category.browse" id="sys$Category.browse"/>
         <item id="sec$UserSessionEntity.browse"/>
@@ -765,13 +780,14 @@
         <item screen="tsadv$LookupType.browse"/>
         <item screen="security"/>
         <item screen="tsadv$BpmUserSubstitution.browse"/>
-        <item screen="tsadv$LmsSlider.browse"/>
         <item screen="emailtemplates$EmailTemplate.browse"/>
         <menu id="data-import">
             <item id="ddcdi$import-wizard"/>
             <item id="ddcdi$ImportConfiguration.browse"/>
             <item id="ddcdi$ImportExecution.browse"/>
         </menu>
+        <item screen="tsadv_News.browse"/>
+        <item screen="base$AppNameAndLogo.browse"/>
     </menu>
     <menu id="help" icon="font-icon:QUESTION_CIRCLE">
         <item id="aboutWindow" openType="DIALOG"/>

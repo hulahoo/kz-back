@@ -10,7 +10,7 @@
                     class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
                     view="assignmentSchedule.view"/>
     </dsContext>
-    <dialogMode forceDialog="true"
+    <dialogMode forceDialog="false"
                 height="AUTO"
                 width="AUTO"/>
     <layout expand="windowActions"
@@ -18,10 +18,11 @@
         <fieldGroup id="fieldGroup"
                     datasource="assignmentScheduleDs">
             <column width="250px">
+                <field property="assignmentGroup" captionProperty="assignmentPersonFioWithEmployeeNumber" caption="Сотрудник"/>
                 <field property="startDate"/>
                 <field property="endDate" editable="false"/>
                 <field property="offset" captionProperty="offsetScheduleName"/>
-                <field property="colorsSet"  caption="msg://Color"/>
+                <field property="colorsSet" caption="msg://Color"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

@@ -10,6 +10,7 @@ import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
+import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.performance.model.Trainer;
@@ -856,7 +857,9 @@ public class CourseServiceBean implements CourseService {
         coursePojo.setDescription(course.getDescription());
         coursePojo.setEducationDuration(ObjectUtils.defaultIfNull(course.getEducationDuration(), 0L));
         coursePojo.setEducationPeriod(ObjectUtils.defaultIfNull(course.getEducationPeriod(), 0L));
-        coursePojo.setHasEnrollment(course.getEnrollments().stream().anyMatch(e -> e.getPersonGroup().getId().equals(personGroupId)));
+        coursePojo.setEnrollmentId(course.getEnrollments().stream().filter(e -> e.getPersonGroup().getId().equals(personGroupId)).findFirst()
+                .map(e -> e.getId().toString())
+                .orElse(null));
 
         coursePojo.setSelfEnrollment(course.getSelfEnrollment());
 
@@ -873,6 +876,21 @@ public class CourseServiceBean implements CourseService {
         response.put("finished", trainer.getCourseTrainer().stream().flatMap(ct -> ct.getCourse().getEnrollments().stream()).filter(e -> e.getStatus().equals(EnrollmentStatus.COMPLETED)).count());
         response.put("image", trainer.getEmployee().getPerson().getImage());
         return response;
+    }
+
+    @Override
+    public List<DicCategory> searchCourses(String courseName) {
+        return dataManager.loadList(LoadContext.create(DicCategory.class)
+                .setQuery(LoadContext.createQuery("" +
+                        "select distinct c " +
+                        "            from tsadv$DicCategory c " +
+                        "            join c.courses cc " +
+                        "            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%'))) ")
+                        .setParameter("courseName", courseName))
+                .setView("category-courses"))
+                .stream()
+                .peek(c -> c.setCourses(c.getCourses().stream().filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList())))
+                .collect(Collectors.toList());
     }
 
     protected void completeEnrollment(UUID enrollmentId) {

@@ -10,7 +10,7 @@
                          class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"
                          view="standardOffset.view">
             <query>
-                <![CDATA[select e from tsadv$StandardOffset e order by e.standardSchedule.scheduleName]]>
+                <![CDATA[select e from tsadv$StandardOffset e ]]>
             </query>
         </groupDatasource>
     </dsContext>

@@ -34,17 +34,17 @@ public class StandardOffsetBrowse extends AbstractLookup {
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
-        Object startDateValue = params.get("startDateValue");
-        Object endDateValue = params.get("endDateValue");
-        if (startDateValue != null && endDateValue != null) {
-            standardOffsetsDs.setQuery("select e from tsadv$StandardOffset e " +
-                    "  where (:param$startDateValue >= e.startDate) " +
-//                    " and (:param$endDateValue <= e.endDate) " +
-                    " order by e.standardSchedule.scheduleName");
-        }
-        if (timecardConfig.getAllowableSchedulesForPositionOn()) {
-            constrainByAllowedSchedules(params);
-        }
+//        Object startDateValue = params.get("startDateValue");
+//        Object endDateValue = params.get("endDateValue");
+//        if (startDateValue != null && endDateValue != null) {
+//            standardOffsetsDs.setQuery("select e from tsadv$StandardOffset e " +
+//                    "  where (:param$startDateValue >= e.startDate) " +
+////                    " and (:param$endDateValue <= e.endDate) " +
+//                    " order by e.standardSchedule.scheduleName");
+//        }
+//        if (timecardConfig.getAllowableSchedulesForPositionOn()) {
+//            constrainByAllowedSchedules(params);
+//        }
     }
 
     protected void constrainByAllowedSchedules(Map<String, Object> params) {

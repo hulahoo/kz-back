@@ -98,7 +98,7 @@
                         <action id="remove" type="remove"/>
                         <action id="massGoals" caption="msg://massGoals" trackSelection="true"/>
                         <action id="calculateGZP" caption="msg://calculateGZP" trackSelection="true"/>
-                        <action id="exportExcel" caption="msg://exportExcel"/>
+                        <action id="exportExcel" caption="msg://exportExcel" trackSelection="true"/>
                         <action id="importExcel" caption="msg://importExcel"/>
                     </actions>
                     <columns>
@@ -111,6 +111,7 @@
                         <column property="result"/>
                         <column property="gzp"/>
                         <column property="stepStageStatus"/>
+                        <column property="status"/>
                         <column property="assignedPerson.company"/>
                     </columns>
                     <rowsCount/>

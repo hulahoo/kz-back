@@ -8,13 +8,12 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.filter.Op;
 import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
-import com.haulmont.cuba.gui.screen.OpenMode;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.base.service.common.CommonService;
@@ -25,7 +24,10 @@ import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
-import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
+import kz.uco.tsadv.modules.personal.model.GradeRule;
+import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
+import kz.uco.tsadv.modules.personal.model.PositionExt;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.web.modules.filterconfig.FilterConfig;
 import kz.uco.tsadv.web.modules.personal.position.PositionEdit;
@@ -82,6 +84,8 @@ public class PositionGroupBrowse extends AbstractLookup {
     protected Object openedFromAssignmentHistoryEdit;
     @Inject
     protected ScreenBuilders screenBuilders;
+    @Inject
+    private Screens screens;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -510,4 +514,5 @@ public class PositionGroupBrowse extends AbstractLookup {
         abstractEditor.addCloseWithCommitListener(() ->
                 positionGroupsDs.refresh());
     }
+
 }

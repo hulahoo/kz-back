@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="portalFeedbacksTable"
+        messagesPack="kz.uco.tsadv.web.screens.portalfeedback">
+    <data readOnly="true">
+        <collection id="portalFeedbacksDc"
+                    class="kz.uco.tsadv.modules.learning.model.PortalFeedback"
+                    view="portalFeedback.edit">
+            <loader id="portalFeedbacksDl">
+                <query>
+                    <![CDATA[select e from tsadv_PortalFeedback e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="portalFeedbacksTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="portalFeedbacksTable"
+                dataLoader="portalFeedbacksDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="portalFeedbacksTable"
+                    width="100%"
+                    dataContainer="portalFeedbacksDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="company"/>
+                <column id="category"/>
+                <column id="email"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="portalFeedbacksTable.create"/>
+                <button id="editBtn" action="portalFeedbacksTable.edit"/>
+                <button id="removeBtn" action="portalFeedbacksTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

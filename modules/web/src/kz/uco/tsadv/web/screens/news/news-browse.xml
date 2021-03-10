@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="newsTable"
+        messagesPack="kz.uco.tsadv.web.screens.news">
+    <data readOnly="true">
+        <collection id="newsCollectionDc"
+                    class="kz.uco.tsadv.modules.information.News">
+            <view extends="_local">
+                <property name="createTs"/>
+            </view>
+            <loader id="newsCollectionDl">
+                <query>
+                    <![CDATA[select e from tsadv_News e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="newsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="newsTable"
+                dataLoader="newsCollectionDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="newsTable"
+                    width="100%"
+                    dataContainer="newsCollectionDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="createTs" caption="msg://newsDate"/>
+                <column id="titleLang1" caption="msg://newsTitle" link="true"/>
+                <column id="isPublished" caption="msg://newsPublished"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="newsTable.create"/>
+                <button id="editBtn" action="newsTable.edit" caption="msg://publishNews"/>
+                <button id="removeBtn" action="newsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

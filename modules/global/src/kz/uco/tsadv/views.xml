@@ -874,6 +874,18 @@
                       view="_minimal"/>
         </property>
     </view>
+    <view class="kz.uco.tsadv.entity.tb.PositionHarmfulCondition"
+          extends="_local"
+          name="positionHarmfulCondition.edit">
+        <property name="positionGroup"
+                  view="_minimal">
+            <property name="position" view="_minimal">
+                <property name="organizationGroupExt" view="_minimal">
+                    <property name="company" view="_minimal"/>
+                </property>
+            </property>
+        </property>
+    </view>
     <view class="kz.uco.tsadv.entity.tb.HarmfullFactors"
           extends="_minimal"
           name="harmfullFactors-view">
@@ -1906,8 +1918,6 @@
                       view="_minimal"/>
             <property name="list"
                       view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
                 <property name="maritalStatus"
                           view="_minimal">
                     <property name="langValue1"/>
@@ -1952,6 +1962,20 @@
                 <property name="nationalIdentifier"/>
                 <property name="dateOfBirth"/>
             </property>
+            <property name="assignments" view="_minimal">
+                <property name="organizationGroup">
+                    <property name="organizationNameLang1"/>
+                    <property name="organizationNameLang2"/>
+                    <property name="organizationNameLang3"/>
+                    <property name="organizationNameLang4"/>
+                    <property name="organizationNameLang5"/>
+                    <property name="organizationName"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="code"/>
+                </property>
+            </property>
         </property>
         <property name="legacyId"/>
         <property name="nonresidentType"/>
@@ -1967,11 +1991,6 @@
           name="assignment.view">
         <property name="personGroup"
                   view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
             <property name="personFirstLastNameLatin"/>
         </property>
         <property name="gradeGroup"
@@ -1984,8 +2003,6 @@
                       view="_local">
                 <property name="gradeGroup"
                           view="_minimal">
-                    <property name="grade"
-                              view="_minimal"/>
                     <property name="list"
                               view="_minimal"/>
                 </property>
@@ -1996,8 +2013,6 @@
                       view="_local">
                 <property name="gradeGroup"
                           view="_minimal">
-                    <property name="grade"
-                              view="_minimal"/>
                     <property name="list"
                               view="_minimal"/>
                 </property>
@@ -2011,20 +2026,15 @@
                       view="_local">
                 <property name="updatedBy"/>
             </property>
-            <property name="assignmentNumber"/>
         </property>
         <property name="organizationGroup"
                   view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="organizationNameLang1"/>
-                <property name="organizationNameLang2"/>
-                <property name="organizationNameLang3"/>
-                <property name="organizationNameLang4"/>
-                <property name="organizationNameLang5"/>
-            </property>
+            <property name="organizationName"/>
+            <property name="organizationNameLang2"/>
+            <property name="organizationNameLang3"/>
+            <property name="organizationNameLang4"/>
+            <property name="organizationNameLang5"/>
+            <property name="organizationNameLang1"/>
         </property>
         <property name="jobGroup"
                   view="_minimal">
@@ -4595,8 +4605,8 @@
                   view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.Dismissal"
-        extends="_local"
-        name="dismissal.edit">
+          extends="_local"
+          name="dismissal.edit">
         <property name="status" view="_minimal"/>
         <property name="personGroup" view="_minimal"/>
         <property name="lcArticle" view="_minimal"/>
@@ -5198,7 +5208,6 @@
                         <property name="startDate"/>
                         <property name="endDate"/>
                     </property>
-
                 </property>
                 <property name="organizationGroup"
                           view="_minimal">
@@ -5275,11 +5284,6 @@
         <property name="vacationSchedule" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
-            <property name="status" view="_minimal">
-                <property name="startDate"/>
-                <property name="code"/>
-                <property name="endDate"/>
-            </property>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
@@ -5310,11 +5314,6 @@
         <property name="vacationSchedule" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
-            <property name="status" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
         </property>
         <property name="vacationDurationType"/>
         <property name="files" view="_minimal"/>
@@ -6134,10 +6133,6 @@
           name="assignedPerformancePlan.browse">
         <property name="performancePlan" view="_minimal"/>
         <property name="assignedPerson" view="_minimal">
-            <property name="list" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="langValue1"/>
@@ -6180,8 +6175,6 @@
                 <property name="gradeGroup" view="_minimal">
                     <property name="list" view="_minimal">
                         <property name="bonusPercent"/>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
                     </property>
                     <property name="grade">
                         <property name="startDate"/>
@@ -6189,21 +6182,8 @@
                     </property>
                 </property>
                 <property name="organizationGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                        <property name="organizationNameLang1"/>
-                        <property name="organizationNameLang2"/>
-                        <property name="organizationNameLang3"/>
-                        <property name="organizationNameLang4"/>
-                        <property name="organizationNameLang5"/>
-                    </property>
+                    <property name="organizationName"/>
                     <property name="company" view="_minimal"/>
-                    <property name="organizationNameLang1"/>
-                    <property name="organizationNameLang2"/>
-                    <property name="organizationNameLang3"/>
-                    <property name="organizationNameLang4"/>
-                    <property name="organizationNameLang5"/>
                     <property name="goals" view="_minimal">
                         <property name="weight"/>
                         <property name="targetValue"/>
@@ -6214,28 +6194,25 @@
                                 <property name="endDate"/>
                             </property>
                         </property>
-                        <property name="organizationGroup" view="_minimal"/>
+                        <property name="organizationGroup" view="_minimal">
+                            <property name="organizationName"/>
+                        </property>
                     </property>
                 </property>
                 <property name="primaryFlag"/>
                 <property name="positionGroup" view="_minimal">
                     <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
                         <property name="positionFullNameLang1"/>
                         <property name="positionFullNameLang2"/>
                         <property name="positionFullNameLang3"/>
                         <property name="positionFullNameLang4"/>
-                        <property name="positionNameLang1"/>
-                        <property name="positionNameLang2"/>
-                        <property name="positionNameLang3"/>
-                        <property name="positionNameLang4"/>
-                        <property name="positionNameLang5"/>
                     </property>
                     <property name="goals" view="_minimal">
                         <property name="weight"/>
                         <property name="targetValue"/>
-                        <property name="positionGroup" view="_minimal"/>
+                        <property name="positionGroup" view="_minimal">
+                            <property name="positionName"/>
+                        </property>
                         <property name="goal" view="_minimal">
                             <property name="library" view="_minimal">
                                 <property name="category" view="_minimal"/>
@@ -6244,9 +6221,8 @@
                             </property>
                         </property>
                     </property>
+                    <property name="positionName"/>
                 </property>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="personExperience" view="_minimal"/>
             <property name="company" view="_minimal"/>
@@ -6268,42 +6244,18 @@
                     </property>
                 </property>
                 <property name="gradeGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
+                    <property name="list" view="_minimal"/>
                 </property>
                 <property name="organizationGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                        <property name="organizationNameLang1"/>
-                        <property name="organizationNameLang2"/>
-                        <property name="organizationNameLang3"/>
-                        <property name="organizationNameLang4"/>
-                        <property name="organizationNameLang5"/>
-                    </property>
+                    <property name="organizationName"/>
                 </property>
                 <property name="positionGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                        <property name="positionNameLang1"/>
-                        <property name="positionNameLang2"/>
-                        <property name="positionNameLang3"/>
-                        <property name="positionNameLang4"/>
-                        <property name="positionNameLang5"/>
-                    </property>
+                    <property name="list" view="_minimal"/>
+                    <property name="positionName"/>
                 </property>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
         </property>
         <property name="assigned_by" view="_minimal">
-            <property name="list" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="langValue1"/>
@@ -6315,12 +6267,16 @@
                     <property name="endDate"/>
                     <property name="code"/>
                 </property>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                </property>
                 <property name="primaryFlag"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
                 <property name="assignDate"/>
             </property>
             <property name="personExperience" view="_minimal"/>
+        </property>
+        <property name="status" view="_minimal">
+            <property name="code"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.recruitment.model.Requisition"
@@ -8610,6 +8566,18 @@
                       view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
+            </property>
+        </property>
+    </view>
+    <view class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
+          extends="_local"
+          name="assignmentSchedule.edit">
+        <property name="schedule" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="assignmentGroup" view="_minimal">
+            <property name="assignment" view="_minimal">
+                <property name="organizationGroup" view="_minimal"/>
             </property>
         </property>
     </view>
@@ -11635,23 +11603,33 @@
     <view class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
           extends="_local"
           name="assignmentSchedule.view">
-        <property name="assignmentGroup"
-                  view="_minimal">
-            <property name="assignment"
-                      view="_minimal"/>
+        <property name="assignmentGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="personGroup" view="_minimal"/>
+            </property>
+            <property name="assignment" view="_minimal">
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                    <property name="organizationNameLang1"/>
+                    <property name="organizationNameLang2"/>
+                    <property name="organizationNameLang3"/>
+                    <property name="organizationNameLang4"/>
+                    <property name="organizationNameLang5"/>
+                </property>
+            </property>
+            <property name="assignmentPersonFioWithEmployeeNumber"/>
         </property>
-        <property name="schedule"
-                  view="_minimal">
+        <property name="schedule" view="_minimal">
             <property name="scheduleName"/>
         </property>
-        <property name="offset"
-                  view="_minimal">
-            <property name="standardSchedule"
-                      view="_minimal">
+        <property name="offset" view="_minimal">
+            <property name="standardSchedule" view="_minimal">
                 <property name="scheduleName"/>
             </property>
             <property name="offsetDisplay"/>
+            <property name="offsetScheduleName"/>
         </property>
+        <property name="name"/>
     </view>
     <view class="kz.uco.tsadv.modules.timesheet.model.TimecardHeader"
           extends="_minimal"
@@ -14145,6 +14123,13 @@
             </property>
         </property>
     </view>
+    <view class="kz.uco.tsadv.modules.personal.model.PersonLanguage"
+          extends="_local"
+          name="personLanguage.edit">
+        <property name="personGroup" view="_minimal"/>
+        <property name="language" view="_minimal"/>
+        <property name="languageLevel" view="_minimal"/>
+    </view>
     <view class="kz.uco.tsadv.modules.learning.model.PersonLearningContract"
           extends="_local"
           name="personLearningContract.edit">
@@ -14414,15 +14399,16 @@
     <view class="kz.uco.tsadv.modules.learning.model.Enrollment"
           extends="_minimal"
           name="enrollment.for.course">
+        <property name="course" view="_minimal">
+            <property name="courseTrainers" view="_minimal">
+                <property name="trainer" view="_minimal">
+                    <property name="employee" view="_minimal">
+                        <property name="fullName"/>
+                    </property>
+                </property>
+            </property>
+        </property>
         <property name="personGroup" view="_minimal">
-            <property name="list" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
-            <property name="person" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="code"/>
@@ -14445,15 +14431,16 @@
                     <property name="jobName"/>
                 </property>
                 <property name="gradeGroup" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                    </property>
+                    <property name="list" view="_minimal"/>
                     <property name="company" view="_minimal"/>
                 </property>
                 <property name="organizationGroup" view="_minimal">
-                    <property name="list" view="_local"/>
-                    <property name="organization" view="_local"/>
+                    <property name="organizationName"/>
+                    <property name="organizationNameLang1"/>
+                    <property name="organizationNameLang2"/>
+                    <property name="organizationNameLang3"/>
+                    <property name="organizationNameLang4"/>
+                    <property name="organizationNameLang5"/>
                 </property>
                 <property name="primaryFlag"/>
                 <property name="positionGroup" view="_minimal">
@@ -14461,16 +14448,19 @@
                     <property name="position" view="_local">
                         <property name="positionFullName"/>
                     </property>
+                    <property name="positionName"/>
                     <property name="fullName"/>
                 </property>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="personExperience" view="_minimal"/>
             <property name="currentAssignment" view="_minimal">
                 <property name="organizationGroup" view="_minimal">
-                    <property name="list" view="_local"/>
-                    <property name="organization" view="_local"/>
+                    <property name="organizationName"/>
+                    <property name="organizationNameLang1"/>
+                    <property name="organizationNameLang2"/>
+                    <property name="organizationNameLang3"/>
+                    <property name="organizationNameLang4"/>
+                    <property name="organizationNameLang5"/>
                 </property>
                 <property name="positionGroup" view="_minimal">
                     <property name="list" view="_local">
@@ -14479,10 +14469,9 @@
                     <property name="position" view="_local">
                         <property name="positionFullName"/>
                     </property>
+                    <property name="positionName"/>
                     <property name="fullName"/>
                 </property>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="fullName"/>
         </property>
@@ -21042,6 +21031,21 @@
         <property name="questions" view="_local">
             <property name="question" view="_minimal"/>
         </property>
+        <property name="questionBank" view="_minimal">
+            <property name="questions" view="_minimal">
+                <property name="score"/>
+                <property name="answers" view="_minimal">
+                    <property name="answer"/>
+                    <property name="correct"/>
+                    <property name="question" view="_minimal">
+                        <property name="type"/>
+                        <property name="score"/>
+                    </property>
+                </property>
+                <property name="text"/>
+                <property name="type"/>
+            </property>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile"
           name="enrollmentCertificateFile.with.certificateFile" extends="_local">
@@ -21089,7 +21093,7 @@
         <property name="kf8"
                   view="_minimal"/>
     </view>
-    <view class="kz.uco.tsadv.lms.entity.LmsSlider"
+    <view class="kz.uco.tsadv.modules.learning.model.LmsSlider"
           extends="_local"
           name="lmsSlider.with.images">
         <property name="images"
@@ -21099,7 +21103,7 @@
             <property name="order"/>
         </property>
     </view>
-    <view class="kz.uco.tsadv.lms.entity.LmsSliderImage"
+    <view class="kz.uco.tsadv.modules.learning.model.LmsSliderImage"
           extends="_local"
           name="lmsSliderImage.with.image">
         <property name="image"
@@ -21113,7 +21117,9 @@
         </property>
     </view>
     <view entity="tsadv$UserExt" name="tsadvUserExt-view" extends="user.edit">
-        <property name="personGroup" view="_minimal"/>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal"/>
+        </property>
     </view>
     <view entity="base$OrganizationGroupExt"
           name="organizationGroupExt-receptionAssignment" extends="_local">
@@ -21690,7 +21696,6 @@
     </view>
     <view entity="tsadv_VacationSchedule" name="vacation-view" extends="_local">
         <property name="personGroup" view="personGroupExt-view"/>
-        <property name="status" view="_local"/>
     </view>
     <view entity="tsadv$PersonalDataRequest" name="personalDataRequest-edit" extends="_local">
         <property name="status" view="_minimal">
@@ -21782,6 +21787,12 @@
     <view entity="uactivity$Activity" name="portal.notification" extends="_local" systemProperties="true">
         <property name="name"/>
     </view>
+    <view entity="uactivity$Activity" name="mobile.notification" extends="_local" systemProperties="true">
+        <property name="type" view="_local">
+            <property name="windowProperty" view="_local"/>
+        </property>
+        <property name="name"/>
+    </view>
     <view entity="tsadv_CertificateRequest" name="certificateRequest-view" extends="_local">
         <property name="personGroup" view="personGroup-view">
             <property name="assignments" view="assignment.view"/>
@@ -21793,19 +21804,6 @@
         <property name="certificateType" view="_local"/>
     </view>
     <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-editView" extends="_local">
-        <property name="requestType" view="_minimal">
-            <property name="legacyId"/>
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-            <property name="isSystemRecord"/>
-            <property name="active"/>
-        </property>
         <property name="vacation" view="_minimal">
             <property name="orderNum"/>
         </property>
@@ -21814,9 +21812,9 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="attachment" view="_minimal"/>
     </view>
     <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-browseView" extends="_local">
-        <property name="requestType" view="_minimal"/>
         <property name="vacation" view="_minimal"/>
         <property name="status" view="_minimal">
             <property name="startDate"/>
@@ -22759,6 +22757,9 @@
             </property>
         </property>
         <property name="type" view="_minimal">
+            <property name="availableForRecallAbsence"/>
+            <property name="availableForChangeDate"/>
+            <property name="availableForLeavingVacation"/>
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -22778,12 +22779,7 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
-        <property name="personGroup" view="_minimal">
-            <property name="list" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
-        </property>
+        <property name="personGroup" view="_minimal"/>
         <property name="purpose" view="_minimal"/>
     </view>
     <view entity="tsadv$AbsenceRequest" name="absenceRequest-for-my-team" extends="_local">
@@ -22809,6 +22805,31 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+    </view>
+    <view entity="tsadv$AbsenceRequest" name="absenceRequest-for-mobile" extends="_local">
+        <property name="type" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="purpose" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="files" view="_local"/>
     </view>
     <view entity="base$PersonGroupExt" name="personGroupExt.mobile" extends="_minimal">
         <property name="assignments" view="assignment.view">
@@ -22863,7 +22884,6 @@
                 <property name="endDate"/>
             </property>
         </property>
-        <property name="name"/>
         <property name="schedule" view="_minimal">
             <property name="scheduleName"/>
             <property name="startDate"/>
@@ -22875,9 +22895,12 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
+            <property name="offsetDisplay"/>
+            <property name="offsetDisplayDays"/>
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
+        <property name="name"/>
     </view>
     <view entity="tsadv_ScheduleOffsetsRequest" name="scheduleOffsetsRequest-for-my-team" extends="_local">
         <property name="personGroup" view="_minimal">
@@ -23336,6 +23359,220 @@
         <property name="company" view="_minimal">
             <property name="legacyId"/>
         </property>
+    </view>
+    <view entity="tsadv_DicPurposeAbsence" name="dicPurposeAbsence.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroup-with-position" extends="_local">
+        <property name="list" view="_local">
+            <property name="type" view="_local"/>
+        </property>
+        <property name="assignments" view="_local">
+            <property name="personGroup" view="_local">
+                <property name="person" view="_local"/>
+            </property>
+            <property name="positionGroup" view="_local">
+                <property name="position" view="_local"/>
+                <property name="fullName"/>
+            </property>
+            <property name="assignmentStatus" view="_local"/>
+        </property>
+        <property name="currentAssignment" view="_minimal">
+            <property name="personGroup" view="_local">
+                <property name="person" view="_local"/>
+            </property>
+            <property name="positionGroup" view="_local">
+                <property name="position" view="_local"/>
+                <property name="fullName"/>
+            </property>
+            <property name="assignmentStatus" view="_local"/>
+        </property>
+        <property name="person" view="_local"/>
+    </view>
+    <view entity="tsadv_ChangeAbsenceDaysRequest" name="changeAbsenceDaysRequest.edit" extends="_local">
+        <property name="requestType" view="_minimal">
+            <property name="legacyId"/>
+            <property name="company" view="_minimal"/>
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="employee" view="_minimal">
+            <property name="assignments" view="_minimal">
+                <property name="orderNumber"/>
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="jobGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="jobNameLang1"/>
+                        <property name="jobNameLang2"/>
+                        <property name="jobNameLang3"/>
+                        <property name="jobNameLang4"/>
+                        <property name="jobNameLang5"/>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                    </property>
+                    <property name="company" view="_minimal"/>
+                    <property name="jobName"/>
+                </property>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                    <property name="organizationNameLang1"/>
+                    <property name="organizationNameLang2"/>
+                    <property name="organizationNameLang3"/>
+                    <property name="organizationNameLang4"/>
+                    <property name="organizationNameLang5"/>
+                </property>
+                <property name="primaryFlag"/>
+                <property name="positionGroup" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="positionFullNameLang1"/>
+                        <property name="positionFullNameLang2"/>
+                        <property name="positionFullNameLang3"/>
+                        <property name="positionFullNameLang4"/>
+                        <property name="positionFullNameLang5"/>
+                    </property>
+                    <property name="positionName"/>
+                </property>
+            </property>
+            <property name="personExperience" view="_minimal"/>
+            <property name="company" view="_minimal"/>
+            <property name="fullName"/>
+        </property>
+        <property name="vacation" view="_minimal">
+            <property name="orderNum"/>
+            <property name="personGroup" view="_minimal"/>
+        </property>
+        <property name="file" view="_minimal"/>
+        <property name="purpose" view="dicPurposeAbsence.edit"/>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
+    <view entity="tsadv_AllAbsenceRequest" name="allAbsenceRequest-view" extends="_local">
+        <property name="type" view="_local"/>
+        <property name="personGroup" view="_minimal"/>
+        <property name="status" view="_local"/>
+    </view>
+    <view entity="tsadv$StandardSchedule" name="standardSchedule-for-my-team" extends="_local">
+        <property name="baseStandardSchedule" view="_minimal"/>
+        <property name="calendar" view="_minimal"/>
+        <property name="standardOffsets" view="_minimal">
+            <property name="offsetDisplay"/>
+        </property>
+        <property name="standardShifts" view="_minimal"/>
+    </view>
+    <view entity="tsadv_AbsenceRvdRequest" name="absenceRvdRequest.edit" extends="_local">
+        <property name="type" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="assignments" view="_minimal">
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="langValue1"/>
+                    <property name="langValue2"/>
+                    <property name="langValue3"/>
+                    <property name="langValue4"/>
+                    <property name="langValue5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="code"/>
+                </property>
+                <property name="primaryFlag"/>
+            </property>
+        </property>
+        <property name="purpose" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+            <property name="legacyId"/>
+            <property name="company" view="_minimal"/>
+        </property>
+    </view>
+    <view entity="tsadv_VacationScheduleRequest" name="vacationScheduleRequest-edit" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+        <property name="attachment" view="_local"/>
+    </view>
+    <view entity="tsadv_Homework" name="homework.edit" extends="_local">
+        <property name="course" view="_minimal"/>
+        <property name="instructionFile" view="_minimal"/>
+    </view>
+    <view entity="tsadv_StudentHomework" name="studentHomework.edit" extends="_local">
+        <property name="homework" view="_minimal">
+            <property name="course" view="_minimal"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="fullName"/>
+        </property>
+        <property name="answerFile" view="_minimal"/>
+        <property name="trainer" view="_minimal"/>
+    </view>
+    <view entity="tsadv_News" name="news-edit" extends="_local">
+        <property name="createTs"/>
+        <property name="banner" view="_minimal"/>
+        <property name="likes" view="new-like-edit"/>
+    </view>
+    <view entity="tsadv_NewsLike" name="new-like-edit" extends="_local">
+        <property name="createTs"/>
+        <property name="createdBy"/>
+    </view>
+    <view entity="tsadv_DicPortalFeedbackQuestion" name="dicPortalFeedbackQuestion.edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv_PortalFeedback" name="portalFeedback.edit" extends="_local">
+        <property name="company" view="_minimal"/>
+        <property name="category" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
+    <view entity="tsadv_PortalFeedbackQuestions" name="portalFeedbackQuestions.edit" extends="_local">
+        <property name="user" view="_minimal">
+            <property name="personGroup" view="_minimal"/>
+            <property name="name"/>
+            <property name="firstName"/>
+            <property name="email"/>
+        </property>
+        <property name="portalFeedback" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="category" view="_minimal"/>
+            <property name="email"/>
+        </property>
+        <property name="createTs"/>
+    </view>
+    <view entity="tsadv_CoursePersonNote" name="coursePersonNote-view" extends="_local">
+        <property name="course" view="_minimal"/>
+        <property name="personGroup" view="_minimal"/>
+    </view>
+    <view entity="tsadv_PortalFeedback" name="portalFeedback-portal" extends="_minimal">
+        <property name="category" view="_local"/>
     </view>
     <view entity="tsadv_OrgStructureRequest" name="orgStructureRequest-edit" extends="_local">
         <property name="requestStatus" view="_base"/>

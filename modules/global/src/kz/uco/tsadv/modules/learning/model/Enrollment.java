@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.learning.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.dictionary.DicReasonForLearning;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
@@ -12,6 +13,7 @@ import java.util.Date;
 /**
  * Зачисление на курс
  */
+@PublishEntityChangedEvents
 @NamePattern("%s|course")
 @Table(name = "TSADV_ENROLLMENT")
 @Entity(name = "tsadv$Enrollment")

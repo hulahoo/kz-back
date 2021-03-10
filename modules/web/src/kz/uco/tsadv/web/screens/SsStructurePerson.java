@@ -29,6 +29,7 @@ import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.MyTeamService;
 import kz.uco.tsadv.web.screens.absenceforrecall.AbsenceForRecallEdit;
 import kz.uco.tsadv.web.screens.absencerequest.AbsenceRvdRequestEdit;
+import kz.uco.tsadv.web.screens.changeabsencedaysrequest.ChangeAbsenceDaysRequestEdit;
 import kz.uco.tsadv.web.screens.scheduleoffsetsrequest.ScheduleOffsetsRequestSsMyTeamEdit;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
@@ -100,7 +101,8 @@ public class SsStructurePerson extends AbstractWindow {
     protected Table<Absence> absenceTable1;
     @Named("absenceTable1.recallCreate")
     protected Action absenceTable1RecallCreate;
-
+    @Named("absenceTable1.changeAbsenceDaysCreate")
+    protected Action absenceTable1ChangeAbsenceDaysCreate;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -140,11 +142,12 @@ public class SsStructurePerson extends AbstractWindow {
 
         absenceTable1.addSelectionListener(absenceSelectionEvent -> {
             Set<Absence> absence = absenceSelectionEvent.getSelected();
-            if (absence.size() > 0 && absence.iterator().next().getType() != null
-                    && absence.iterator().next().getType().getCode().equals("ANNUAL")) {
-                absenceTable1RecallCreate.setEnabled(true);
+            if (absence.size() > 0 && absence.iterator().next().getType() != null) {
+                absenceTable1RecallCreate.setEnabled(absence.iterator().next().getType().getAvailableForRecallAbsence());
+                absenceTable1ChangeAbsenceDaysCreate.setEnabled(absence.iterator().next().getType().getAvailableForChangeDate());
             } else {
                 absenceTable1RecallCreate.setEnabled(false);
+                absenceTable1ChangeAbsenceDaysCreate.setEnabled(false);
             }
         });
     }
@@ -365,6 +368,19 @@ public class SsStructurePerson extends AbstractWindow {
         screenBuilders.editor(AbsenceForRecall.class, this)
                 .withScreenClass(AbsenceForRecallEdit.class)
                 .newEntity(absenceForRecall)
+                .build()
+                .show();
+    }
+
+    public void changeAbsenceDaysCreate() {
+        ChangeAbsenceDaysRequest changeAbsenceDaysRequest = metadata.create(ChangeAbsenceDaysRequest.class);
+        changeAbsenceDaysRequest.setEmployee(personExtDs.getItem().getGroup());
+        changeAbsenceDaysRequest.setVacation(absenceTable1.getSingleSelected());
+        changeAbsenceDaysRequest.setScheduleStartDate(absenceTable1.getSingleSelected().getDateFrom());
+        changeAbsenceDaysRequest.setScheduleEndDate(absenceTable1.getSingleSelected().getDateTo());
+        screenBuilders.editor(ChangeAbsenceDaysRequest.class, this)
+                .withScreenClass(ChangeAbsenceDaysRequestEdit.class)
+                .newEntity(changeAbsenceDaysRequest)
                 .build()
                 .show();
     }

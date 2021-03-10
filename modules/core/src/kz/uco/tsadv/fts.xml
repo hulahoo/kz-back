@@ -1660,10 +1660,10 @@
         <entity class="kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.lms.entity.LmsSlider">
+        <entity class="kz.uco.tsadv.modules.learning.model.LmsSlider">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.lms.entity.LmsSliderImage">
+        <entity class="kz.uco.tsadv.modules.learning.model.LmsSliderImage">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.administration.appproperty.AppPropertyEntityDescription">
@@ -1888,10 +1888,52 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicChangeType">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.entity.VacationGraphic">
+        <entity class="kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest">
+        <entity class="kz.uco.tsadv.modules.personal.model.ChangeAbsenceDaysRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicPurposeAbsence">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.tb.PositionHarmfulCondition">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.views.AllAbsenceRequest">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.News">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NewsComment">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NewsLike">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.information.NumberOfView">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.Homework">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.StudentHomework">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicLmsSliderPosition">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicPortalFeedbackQuestion">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.PortalFeedback">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.PortalFeedbackQuestions">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.CoursePersonNote">
             <include re=".*"/>
         </entity>
     </entities>

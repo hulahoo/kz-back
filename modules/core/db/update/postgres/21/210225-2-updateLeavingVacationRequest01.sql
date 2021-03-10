@@ -1,0 +1,3 @@
+alter table TSADV_LEAVING_VACATION_REQUEST rename column request_type_id to request_type_id__u86502 ;
+alter table TSADV_LEAVING_VACATION_REQUEST drop constraint FK_TSADV_LEAVING_VACATION_REQUEST_REQUEST_TYPE ;
+drop index IDX_TSADV_LEAVING_VACATION_REQUEST_REQUEST_TYPE ;
