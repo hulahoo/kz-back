@@ -320,8 +320,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         User sessionUser = userSessionSource.getUserSession().getUser();
 
-        notificationTemplateCode = getNotificationTemplateCode(entity, notificationTemplateCode);
-
         Map<String, Object> notificationParams = getNotificationParams(notificationTemplateCode, entity);
 
         if (!PersistenceHelper.isLoadedWithView(user, "user-fioWithLogin"))
@@ -351,22 +349,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
     }
 
-
-    private <T extends AbstractBprocRequest> String getNotificationTemplateCode(T entity, String notificationTemplateCode) {
-
-        if (entity instanceof AbsenceRequest) {
-            AbsenceRequest absenceRequest = transactionalDataManager.load(AbsenceRequest.class)
-                    .id(entity.getId()).view("absenceRequest.view").optional().orElse(null);
-            if ("APPROVING".equals(absenceRequest.getStatus().getCode())) {
-                return "bpm.absenceRequest.toapprove.notification";
-            } else if ("DRAFT".equals(absenceRequest.getStatus().getCode())) {
-                return "bpm.absenceRequest.revision.notification";
-            } else if ("REJECT".equals(absenceRequest.getStatus().getCode())) {
-                return "bpm.absenceRequest.reject.notification";
-            }
-        }
-        return notificationTemplateCode;
-    }
 
     protected <T extends AbstractBprocRequest> String getRequestLink(T entity, Activity activity) {
         if (!"NOTIFICATION".equals(activity.getType().getCode())) {
@@ -432,6 +414,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         switch (templateCode) {
             case "bpm.absenceRequest.initiator.notification":
             case "bpm.absenceRequest.revision.notification":
+            case "bpm.absenceRequest.forInitiator.notification":
             case "bpm.absenceRequest.reject.notification":
             case "bpm.absenceRequest.approved.notification":
             case "bpm.absenceRequest.toapprove.notification": {
