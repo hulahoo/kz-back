@@ -23337,5 +23337,11 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="tsadv_OrgStructureRequest" name="orgStructureRequest-edit" extends="_local">
+        <property name="requestStatus" view="_base"/>
+        <property name="company" view="_base"/>
+        <property name="department" view="_base"/>
+        <property name="author" view="_base"/>
+    </view>
 
 </views>

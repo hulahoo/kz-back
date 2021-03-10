@@ -5,7 +5,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import kz.uco.tsadv.modules.personal.dictionary.DicCompany;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -25,6 +25,10 @@ public class OrgStructureRequest extends StandardEntity {
     @OneToMany(mappedBy = "orgStructureRequest")
     protected List<OrgStructureRequestDetail> orgStructureDetail;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "MODIFY_DATE")
+    private Date modifyDate;
+
     @NotNull
     @Column(name = "REQUEST_NUMBER", nullable = false)
     protected Long requestNumber;
@@ -43,12 +47,13 @@ public class OrgStructureRequest extends StandardEntity {
             joinColumns = @JoinColumn(name = "ORG_STRUCTURE_REQUEST_ID"),
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @ManyToMany
+    @OnDelete(DeletePolicy.CASCADE)
     protected List<FileDescriptor> file;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "COMPANY_ID")
-    protected DicCompany company;
+    private DicCompany company;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @NotNull
@@ -60,12 +65,12 @@ public class OrgStructureRequest extends StandardEntity {
     @JoinColumn(name = "AUTHOR_ID")
     protected PersonGroupExt author;
 
-    public List<OrgStructureRequestDetail> getOrgStructureDetail() {
-        return orgStructureDetail;
+    public Date getModifyDate() {
+        return modifyDate;
     }
 
-    public void setOrgStructureDetail(List<OrgStructureRequestDetail> orgStructureDetail) {
-        this.orgStructureDetail = orgStructureDetail;
+    public void setModifyDate(Date modifyDate) {
+        this.modifyDate = modifyDate;
     }
 
     public void setFile(List<FileDescriptor> file) {
@@ -74,6 +79,22 @@ public class OrgStructureRequest extends StandardEntity {
 
     public List<FileDescriptor> getFile() {
         return file;
+    }
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
+
+    public List<OrgStructureRequestDetail> getOrgStructureDetail() {
+        return orgStructureDetail;
+    }
+
+    public void setOrgStructureDetail(List<OrgStructureRequestDetail> orgStructureDetail) {
+        this.orgStructureDetail = orgStructureDetail;
     }
 
     public void setRequestDate(Date requestDate) {
@@ -98,14 +119,6 @@ public class OrgStructureRequest extends StandardEntity {
 
     public void setDepartment(OrganizationGroupExt department) {
         this.department = department;
-    }
-
-    public DicCompany getCompany() {
-        return company;
-    }
-
-    public void setCompany(DicCompany company) {
-        this.company = company;
     }
 
     public DicRequestStatus getRequestStatus() {

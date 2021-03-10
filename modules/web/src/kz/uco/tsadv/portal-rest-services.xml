@@ -117,4 +117,23 @@
         </method>
         <method name="getMyInsuraces"/>
     </service>
+    <service name="tsadv_OrgStructureRequestService">
+        <method name="initialCreate"/>
+        <method name="saveOrganization">
+            <param name="organizationRequestSaveModel" type="kz.uco.tsadv.pojo.OrganizationRequestSaveModel"/>
+        </method>
+        <method name="savePosition">
+            <param name="positionRequestSaveModel" type="kz.uco.tsadv.pojo.PositionRequestSaveModel"/>
+        </method>
+        <method name="getGrades"/>
+        <method name="exclude">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="requestDetailId" type="java.util.UUID"/>
+            <param name="elementGroupId" type="java.util.UUID"/>
+            <param name="elementType" type="int"/>
+        </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>
