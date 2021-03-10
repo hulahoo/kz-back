@@ -21031,6 +21031,21 @@
         <property name="questions" view="_local">
             <property name="question" view="_minimal"/>
         </property>
+        <property name="questionBank" view="_minimal">
+            <property name="questions" view="_minimal">
+                <property name="score"/>
+                <property name="answers" view="_minimal">
+                    <property name="answer"/>
+                    <property name="correct"/>
+                    <property name="question" view="_minimal">
+                        <property name="type"/>
+                        <property name="score"/>
+                    </property>
+                </property>
+                <property name="text"/>
+                <property name="type"/>
+            </property>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile"
           name="enrollmentCertificateFile.with.certificateFile" extends="_local">

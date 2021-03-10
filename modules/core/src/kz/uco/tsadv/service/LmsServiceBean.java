@@ -374,46 +374,85 @@ public class LmsServiceBean implements LmsService {
         return persistence.callInTransaction((final EntityManager em) -> {
             CourseSectionAttempt csa = em.find(CourseSectionAttempt.class, UUID.fromString(answeredTest.getAttemptId()));
             Objects.requireNonNull(csa);
-
             TestScorePojo response = new TestScorePojo();
-
             Test test = csa.getTest();
             test.getSections().forEach(ts -> {
                 TestSection testSection = dataManager.reload(ts, "testSection.with.questions");
-                response.setMaxScore(response.getMaxScore() + testSection.getQuestions().size());
-                testSection.getQuestions().forEach(testSectionQuestion -> {
-                    AttemptQuestionPojo questionAndAnswer = answeredTest.getQuestionsAndAnswers().stream()
-                            .filter(qa -> qa.getQuestionId().equals(testSectionQuestion.getQuestion().getId().toString()))
-                            .findFirst()
-                            .orElse(null);
-                    if (questionAndAnswer != null) {
-                        Question question = dataManager.load(LoadContext.create(Question.class)
-                                .setId(UUID.fromString(questionAndAnswer.getQuestionId()))
-                                .setView("question.edit"));
-                        Objects.requireNonNull(question);
+                if (testSection.getDynamicLoad() != null && testSection.getDynamicLoad()) {
+                    response.setMaxScore(response.getMaxScore() + testSection.getGenerateCount());
+                    AttemptTestSectionPojo attemptTestSection = answeredTest.getTestSections().stream()
+                            .filter(attemptTestSectionTemp ->
+                                    attemptTestSectionTemp.getTestSectionId().equals(testSection.getId().toString()))
+                            .findFirst().orElse(null);
+                    if (attemptTestSection != null) {
+                        attemptTestSection.getQuestionsAndAnswers().forEach(questionAndAnswer -> {
+                            if (questionAndAnswer != null) {
+                                Question question = dataManager.load(LoadContext.create(Question.class)
+                                        .setId(UUID.fromString(questionAndAnswer.getQuestionId()))
+                                        .setView("question.edit"));
+                                Objects.requireNonNull(question);
 
-                        String answer = getAnswer(questionAndAnswer.getAnswer(), question.getType());
-                        Objects.requireNonNull(answer);
+                                String answer = getAnswer(questionAndAnswer.getAnswer(), question.getType());
+                                Objects.requireNonNull(answer);
 
-                        PersonAnswer personAnswer = createPersonAnswer(em, question, csa, answer, testSection);
+                                PersonAnswer personAnswer = createPersonAnswer(em, question, csa, answer, testSection);
 
-                        QuestionFactory qf = getQuestionFactory(question.getType());
-                        Objects.requireNonNull(qf);
-
-                        List<Answer> answers = dataManager.loadList(LoadContext.create(Answer.class).setQuery(LoadContext.createQuery("" +
-                                "select a " +
-                                "from tsadv$Answer a " +
-                                "where a.question.id = :questionId")
-                                .setParameter("questionId", question.getId())));
-                        if (CollectionUtils.isEmpty(answers)) {
-                            throw new NullPointerException("Can not find answers by id " + question.getId());
-                        }
-
-                        qf.checkQuestion(question, personAnswer, testSection, answers);
-
-                        response.setScore(response.getScore() + personAnswer.getScore());
+                                QuestionFactory qf = getQuestionFactory(question.getType());
+                                Objects.requireNonNull(qf);
+                                List<Answer> answers = dataManager.loadList(LoadContext.create(Answer.class)
+                                        .setQuery(LoadContext.createQuery("select a " +
+                                                " from tsadv$Answer a " +
+                                                " where a.question.id = :questionId")
+                                                .setParameter("questionId", question.getId())));
+                                if (CollectionUtils.isEmpty(answers)) {
+                                    throw new NullPointerException("Can not find answers by id " + question.getId());
+                                }
+                                qf.checkQuestion(question, personAnswer, testSection, answers);
+                                em.merge(personAnswer);
+                                response.setScore(response.getScore() + (personAnswer.getCorrect() ? 1 : 0));
+                            }
+                        });
                     }
-                });
+                } else {
+                    response.setMaxScore(response.getMaxScore() + testSection.getQuestions().size());
+                    testSection.getQuestions().forEach(testSectionQuestion -> {
+                        AttemptQuestionPojo questionAndAnswer = answeredTest.getTestSections().stream()
+                                .filter(attemptTestSectionTemp ->
+                                        attemptTestSectionTemp.getTestSectionId().equals(testSection.getId().toString()))
+                                .map(attemptTestSectionTemp -> attemptTestSectionTemp.getQuestionsAndAnswers()
+                                        .stream().filter(attemptQuestionTemp ->
+                                                attemptQuestionTemp.getQuestionId()
+                                                        .equals(testSectionQuestion.getQuestion().getId().toString()))
+                                        .findFirst().orElse(null)).filter(attemptQuestionTemp ->
+                                        attemptQuestionTemp != null).findFirst().orElse(null);
+                        if (questionAndAnswer != null) {
+                            Question question = dataManager.load(LoadContext.create(Question.class)
+                                    .setId(UUID.fromString(questionAndAnswer.getQuestionId()))
+                                    .setView("question.edit"));
+                            Objects.requireNonNull(question);
+
+                            String answer = getAnswer(questionAndAnswer.getAnswer(), question.getType());
+                            Objects.requireNonNull(answer);
+
+                            PersonAnswer personAnswer = createPersonAnswer(em, question, csa, answer, testSection);
+
+                            QuestionFactory qf = getQuestionFactory(question.getType());
+                            Objects.requireNonNull(qf);
+
+                            List<Answer> answers = dataManager.loadList(LoadContext.create(Answer.class).setQuery(LoadContext.createQuery("" +
+                                    "select a " +
+                                    "from tsadv$Answer a " +
+                                    "where a.question.id = :questionId")
+                                    .setParameter("questionId", question.getId())));
+                            if (CollectionUtils.isEmpty(answers)) {
+                                throw new NullPointerException("Can not find answers by id " + question.getId());
+                            }
+                            qf.checkQuestion(question, personAnswer, testSection, answers);
+                            em.merge(personAnswer);
+                            response.setScore(response.getScore() + (personAnswer.getCorrect() ? 1 : 0));
+                        }
+                    });
+                }
                 csa.setTestResult(response.getScore());
                 csa.setSuccess(isSucceed(test, response.getScore()));
                 csa.setActiveAttempt(true);
@@ -431,7 +470,7 @@ public class LmsServiceBean implements LmsService {
                         .setId(UUID.fromString(userAnswer.get(0)))
                         .setView(View.LOCAL));
                 assert answer != null;
-                return Arrays.toString(new String[]{answer.getId().toString()});
+                return "\"" + answer.getId().toString() + "\"";
             }
             case MANY: {
                 List<Answer> answers = dataManager.loadList(LoadContext.create(Answer.class)
@@ -441,7 +480,11 @@ public class LmsServiceBean implements LmsService {
                                 "where a.id in :ids")
                                 .setParameter("ids", userAnswer.stream().map(UUID::fromString).collect(Collectors.toList())))
                         .setView(View.LOCAL));
-                return Arrays.toString(answers.stream().map(answer -> answer.getId().toString()).toArray());
+                List<String> answersIds = answers.stream().map(answer -> "\"" +
+                        answer.getId().toString() + "\"").collect(Collectors.toList());
+                answersIds.sort(String::compareTo);
+                String answersStr = answersIds.stream().collect(Collectors.joining(";"));
+                return answersStr;
             }
             case NUM:
             case TEXT: {
@@ -828,7 +871,8 @@ public class LmsServiceBean implements LmsService {
                 "   OR k is not null)";
     }
 
-    private void addAnswer(CourseFeedbackPersonAnswerDetail detail, LearningFeedbackQuestion question, String personAnswer) {
+    private void addAnswer(CourseFeedbackPersonAnswerDetail detail, LearningFeedbackQuestion question, String
+            personAnswer) {
         switch (question.getQuestionType()) {
             case NUM:
             case TEXT: {
@@ -880,7 +924,8 @@ public class LmsServiceBean implements LmsService {
         detail.setScore(0);
     }
 
-    protected boolean equalsAnswers(LearningFeedbackAnswer entityAnswer, List<String> personAnswers, LearningFeedbackQuestionType questionType) {
+    protected boolean equalsAnswers(LearningFeedbackAnswer
+                                            entityAnswer, List<String> personAnswers, LearningFeedbackQuestionType questionType) {
         switch (questionType) {
             case NUM:
             case TEXT: {
@@ -1024,7 +1069,8 @@ public class LmsServiceBean implements LmsService {
                 "   lti.attempt_date DESC";
     }
 
-    protected PersonAnswer createPersonAnswer(EntityManager em, Question question, CourseSectionAttempt csa, String answer, TestSection testSection) {
+    protected PersonAnswer createPersonAnswer(EntityManager em, Question question, CourseSectionAttempt csa, String
+            answer, TestSection testSection) {
         PersonAnswer personAnswer = metadata.create(PersonAnswer.class);
         personAnswer.setAttempt(csa);
         personAnswer.setQuestion(question);
@@ -1106,7 +1152,8 @@ public class LmsServiceBean implements LmsService {
         return questionPojo;
     }
 
-    private CourseSectionAttempt createAndGetAttempt(EntityManager em, Test test, CourseSection courseSection, Enrollment enrollment, boolean isSuccess) {
+    private CourseSectionAttempt createAndGetAttempt(EntityManager em, Test test, CourseSection
+            courseSection, Enrollment enrollment, boolean isSuccess) {
         final boolean isActiveAttempt = false;
 
         CourseSectionAttempt attempt = metadata.create(CourseSectionAttempt.class);
@@ -1142,7 +1189,8 @@ public class LmsServiceBean implements LmsService {
                 .setParameter("courseSectionObjectId", courseSectionObjectId).setView(Test.class, viewName).getSingleResult();
     }
 
-    private void fillQueryParameters(List<ConditionPojo> conditions, Query query, String queryString, Class<Course> courseClass) {
+    private void fillQueryParameters(List<ConditionPojo> conditions, Query query, String
+            queryString, Class<Course> courseClass) {
         StringBuilder conditionQuery = new StringBuilder();
         ObjectMapper mapper = new ObjectMapper();
         for (int i = 0; i < conditions.size(); i++) {
@@ -1170,7 +1218,8 @@ public class LmsServiceBean implements LmsService {
                 && cs.getCourseSectionAttempts().stream().anyMatch(courseSectionAttempt -> enrollment.equals(courseSectionAttempt.getEnrollment()));
     }
 
-    private void fillConditionQuery(StringBuilder queryBuilder, String property, String value, String operator, Class<?> conditionEntityClass) {
+    private void fillConditionQuery(StringBuilder queryBuilder, String property, String value, String
+            operator, Class<?> conditionEntityClass) {
         Class<?> propertyClass = Arrays.stream(conditionEntityClass.getDeclaredFields()).filter(el -> el.getName().equalsIgnoreCase(property)).findFirst().get().getType();
 
         queryBuilder.append(" AND ").append(getPropertyWrapper(property, propertyClass))
