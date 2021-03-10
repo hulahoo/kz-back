@@ -142,6 +142,7 @@ public interface EmployeeService {
 
     OrganizationGroupExt getOrganizationGroupByPersonGroupId(@Nonnull UUID personGroupId, String viewName);
 
+    @Nullable
     DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId);
 
     List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);

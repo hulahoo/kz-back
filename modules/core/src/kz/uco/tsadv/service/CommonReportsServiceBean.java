@@ -3,10 +3,7 @@ package kz.uco.tsadv.service;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.FileStorageException;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.core.global.*;
 import com.haulmont.reports.app.service.ReportService;
 import com.haulmont.reports.entity.Report;
 import com.haulmont.yarg.reporting.ReportOutputDocument;
@@ -19,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
+import java.util.UUID;
 
 @Service(CommonReportsService.NAME)
 public class CommonReportsServiceBean implements CommonReportsService {
@@ -41,19 +39,20 @@ public class CommonReportsServiceBean implements CommonReportsService {
 
         DicCompany company = employeeService.getCompanyByPersonGroupId(request.getPersonGroup().getId());
 
-        Report report = dataManager.load(Report.class)
+        FluentLoader.ByQuery<Report, UUID> parameter = dataManager.load(Report.class)
                 .query("select e.report from tsadv_CertificateTemplate e " +
-                        "   join e.organization.company c " +
+                        (company != null ? "   join e.organization.company c " : "") +
                         "   where e.language=:langId " +
                         "       and e.receivingType=:recTyId " +
                         "       and e.showSalary = :salary " +
                         "       and e.certificateType = :certType" +
-                        "       and c.id = :companyId ")
+                        (company != null ? "       and c.id = :companyId " : " and e.organization is null"))
                 .parameter("langId", request.getLanguage())
                 .parameter("recTyId", request.getReceivingType())
                 .parameter("certType", request.getCertificateType())
-                .parameter("salary", request.getShowSalary())
-                .parameter("companyId", company.getId())
+                .parameter("salary", request.getShowSalary());
+        if (company != null) parameter.parameter("companyId", company.getId());
+        Report report = parameter
                 .view("report.edit")
                 .optional().orElse(null);
 
