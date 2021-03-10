@@ -21790,6 +21790,12 @@
     <view entity="uactivity$Activity" name="portal.notification" extends="_local" systemProperties="true">
         <property name="name"/>
     </view>
+    <view entity="uactivity$Activity" name="mobile.notification" extends="_local" systemProperties="true">
+        <property name="type" view="_local">
+            <property name="windowProperty" view="_local"/>
+        </property>
+        <property name="name"/>
+    </view>
     <view entity="tsadv_CertificateRequest" name="certificateRequest-view" extends="_local">
         <property name="personGroup" view="personGroup-view">
             <property name="assignments" view="assignment.view"/>
