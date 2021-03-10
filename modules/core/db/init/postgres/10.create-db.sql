@@ -17587,10 +17587,10 @@ create table TSADV_PORTAL_FEEDBACK_QUESTIONS (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
-    USER_ID uuid,
-    PORTAL_FEEDBACK_ID uuid,
-    TOPIC varchar(255),
-    TEXT text,
+    USER_ID uuid not null,
+    PORTAL_FEEDBACK_ID uuid not null,
+    TOPIC varchar(255) not null,
+    TEXT text not null,
     --
     primary key (ID)
 )^
@@ -17609,9 +17609,9 @@ create table TSADV_PORTAL_FEEDBACK (
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
     --
-    COMPANY_ID uuid,
-    CATEGORY_ID uuid,
-    EMAIL varchar(255),
+    COMPANY_ID uuid not null,
+    CATEGORY_ID uuid not null,
+    EMAIL varchar(255) not null,
     --
     primary key (ID)
 )^

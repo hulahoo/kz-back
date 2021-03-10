@@ -1,28 +1,35 @@
 package kz.uco.tsadv.modules.learning.model;
 
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_PORTAL_FEEDBACK_QUESTIONS")
 @Entity(name = "tsadv_PortalFeedbackQuestions")
 public class PortalFeedbackQuestions extends AbstractParentEntity {
     private static final long serialVersionUID = -6641391280104550281L;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "USER_ID")
     protected TsadvUser user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PORTAL_FEEDBACK_ID")
     protected PortalFeedback portalFeedback;
 
-    @Column(name = "TOPIC")
+    @NotNull
+    @Column(name = "TOPIC", nullable = false)
     protected String topic;
 
+    @NotNull
     @Lob
-    @Column(name = "TEXT")
+    @Column(name = "TEXT", nullable = false)
     protected String text;
 
     public String getText() {

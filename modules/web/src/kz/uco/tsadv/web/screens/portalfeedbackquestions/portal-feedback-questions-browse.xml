@@ -34,7 +34,7 @@
             </actions>
             <columns>
                 <column id="user"/>
-                <column id="portalFeedback"/>
+                <column id="portalFeedback.company"/>
                 <column id="topic"/>
                 <column id="text"/>
             </columns>

@@ -5,21 +5,25 @@ import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.learning.dictionary.DicPortalFeedbackQuestion;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_PORTAL_FEEDBACK")
 @Entity(name = "tsadv_PortalFeedback")
 public class PortalFeedback extends AbstractParentEntity {
     private static final long serialVersionUID = 5811365451358538679L;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "COMPANY_ID")
     protected DicCompany company;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CATEGORY_ID")
     protected DicPortalFeedbackQuestion category;
 
-    @Column(name = "EMAIL")
+    @NotNull
+    @Column(name = "EMAIL", nullable = false)
     protected String email;
 
     public String getEmail() {
