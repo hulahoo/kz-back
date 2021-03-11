@@ -25,7 +25,7 @@ import java.util.List;
 import static kz.uco.base.common.Null.isNotEmpty;
 
 @Listeners("tsadv_PersonExtListener")
-@NamePattern("%s %s %s |lastName,firstName,middleName,employeeNumber,endDate,startDate")
+@NamePattern("%s %s %s |lastName,firstName,middleName,employeeNumber,endDate,startDate,firstNameLatin,lastNameLatin,middleNameLatin")
 @Extends(Person.class)
 @Entity(name = "base$PersonExt")
 public class PersonExt extends Person implements Categorized, IGroupedEntity<PersonGroupExt> {
