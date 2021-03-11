@@ -642,5 +642,6 @@
         <class>kz.uco.tsadv.modules.learning.model.PortalFeedback</class>
         <class>kz.uco.tsadv.modules.learning.model.PortalFeedbackQuestions</class>
         <class>kz.uco.tsadv.modules.learning.model.CoursePersonNote</class>
+        <class>kz.uco.tsadv.modules.learning.model.CourseCertificate</class>
     </persistence-unit>
 </persistence>
