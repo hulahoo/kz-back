@@ -17,6 +17,11 @@ public class CourseCertificate extends StandardEntity {
     @JoinColumn(name = "CERTIFICATE_ID")
     protected Report certificate;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "COURSE_ID")
+    protected Course course;
+
     @Temporal(TemporalType.DATE)
     @NotNull
     @Column(name = "START_DATE", nullable = false)
@@ -26,6 +31,14 @@ public class CourseCertificate extends StandardEntity {
     @NotNull
     @Column(name = "END_DATE", nullable = false)
     protected Date endDate;
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
 
     public Date getEndDate() {
         return endDate;
