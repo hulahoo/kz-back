@@ -8,7 +8,6 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.performance.model.Goal;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.PositionGroupGoalLink;
 import kz.uco.tsadv.service.EmployeeService;
@@ -26,8 +25,6 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
     @Inject
     protected EmployeeService employeeService;
     @Inject
-    protected CollectionLoader<PersonGroupExt> personGroupDl;
-    @Inject
     protected LookupField<Goal> goal;
     @Inject
     protected InstanceContainer<AssignedGoal> assignedGoalDc;
@@ -35,6 +32,8 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
     protected DataManager dataManager;
     @Inject
     protected CollectionLoader<Goal> goalDl;
+    @Inject
+    protected CollectionLoader<PositionGroupExt> positionGroupDl;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -43,11 +42,11 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
                 MapScreenOptions options = (MapScreenOptions) event.getOptions();
                 if (options.getParams().containsKey("positionGroupId")) {
                     UUID positionGroupId = (UUID) options.getParams().get("positionGroupId");
-                    List<PersonGroupExt> managerListByPositionGroup =
-                            employeeService.findManagerListByPositionGroup(positionGroupId, false);
+                    List<PositionGroupExt> managerListByPositionGroup =
+                            employeeService.findManagerListByPositionGroupReturnListPosition(positionGroupId, false);
                     if (managerListByPositionGroup != null && !managerListByPositionGroup.isEmpty()) {
-                        personGroupDl.setParameter("personGroupList", managerListByPositionGroup);
-                        personGroupDl.load();
+                        positionGroupDl.setParameter("positionGroupList", managerListByPositionGroup);
+                        positionGroupDl.load();
                     }
                 }
             } catch (Exception ignored) {
@@ -64,10 +63,7 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
                 item.setCategory(goalValueChangeEvent.getValue().getLibrary() != null
                         ? goalValueChangeEvent.getValue().getLibrary().getCategory()
                         : null);
-                item.setWeight(getWeightForPositionGoal(item.getAssignedByPersonGroup() != null
-                                && item.getAssignedByPersonGroup().getCurrentAssignment() != null
-                                ? item.getAssignedByPersonGroup().getCurrentAssignment().getPositionGroup()
-                                : null
+                item.setWeight(getWeightForPositionGoal(item.getPositionGroup()
                         , goalValueChangeEvent.getValue()));
                 item.setSuccessCritetia(goalValueChangeEvent.getValue().getSuccessCriteria());
             } else {
@@ -97,13 +93,11 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
     }
 
     @Subscribe("assignedByPersonGroupField")
-    protected void onAssignedByPersonGroupFieldValueChange(HasValue.ValueChangeEvent<PersonGroupExt> event) {
+    protected void onAssignedByPersonGroupFieldValueChange(HasValue.ValueChangeEvent<PositionGroupExt> event) {
         AssignedGoal item = assignedGoalDc.getItem();
         if (event != null && event.getValue() != null) {
             goal.setEnabled(true);
-            PositionGroupExt positionGroupExt = event.getValue().getCurrentAssignment() != null
-                    ? event.getValue().getCurrentAssignment().getPositionGroup()
-                    : null;
+            PositionGroupExt positionGroupExt = event.getValue();
             List<Goal> goals = getGoals(positionGroupExt);
             if (!goals.isEmpty()) {
                 goalDl.setParameter("goalList", goals);
