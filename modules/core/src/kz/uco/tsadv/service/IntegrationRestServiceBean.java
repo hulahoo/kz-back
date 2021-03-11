@@ -80,6 +80,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, organizationData,
                             "no companyCode");
                 }
+                if (organizationJson.getStartDate() == null || organizationJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, organizationData,
+                            "no startDate");
+                }
+                if (organizationJson.getEndDate() == null || organizationJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, organizationData,
+                            "no endDate");
+                }
                 OrganizationGroupExt organizationGroupExt = organizationGroupExts.stream().filter(organizationGroupExt1 ->
                         organizationGroupExt1.getCompany() != null
                                 && organizationGroupExt1.getCompany().getLegacyId() != null
@@ -95,10 +103,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("organizationGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
                     if (organizationGroupExt != null) {
                         for (OrganizationExt organizationExt : organizationGroupExt.getList()) {
-                            commitContext.addInstanceToRemove(organizationExt);
+                            if (formatter.parse(organizationJson.getStartDate()).before(organizationExt.getEndDate())
+                                    && formatter.parse(organizationJson.getEndDate()).after(organizationExt.getStartDate())) {
+                                commitContext.addInstanceToRemove(organizationExt);
+                            }
 //                            transactionalDataManager.remove(organizationExt);
                         }
-                        organizationGroupExt.getList().clear();
+//                        organizationGroupExt.getList().clear();
                         organizationGroupExts.add(organizationGroupExt);
                     }
                 }
@@ -439,7 +450,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getGradeLegacyId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
-                    if (gradeGroup==null){
+                    if (gradeGroup == null) {
                         return prepareError(result, methodName, positionData,
                                 "no GradeGroup with legacyId " + positionJson.getGradeLegacyId());
                     }
@@ -452,7 +463,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getJobLegacyId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
-                    if (jobGroup==null){
+                    if (jobGroup == null) {
                         return prepareError(result, methodName, positionData,
                                 "no JobGroup with legacyId " + positionJson.getJobLegacyId());
                     }
@@ -466,7 +477,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getOrganizationLegacyId()))
                             .view("organizationGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-                    if (organizationGroupExt==null){
+                    if (organizationGroupExt == null) {
                         return prepareError(result, methodName, positionData,
                                 "no OrganizationGroupExt with legacyId " + positionJson.getOrganizationLegacyId());
                     }

@@ -36,18 +36,21 @@
         <tabSheet id="tabSheet"
                   height="100%">
             <tab id="enrollment"
+                 spacing="true"
+                 margin="true, false, false, false"
                  caption="msg://enrollment.tab.enroll">
                 <split id="splitter"
                        height="100%"
                        orientation="vertical"
                        width="100%">
                     <vbox id="vbox"
+                          spacing="true"
                           expand="enrollmentsTable"
                           height="100%">
                         <filter id="filter"
                                 applyTo="enrollmentsTable"
                                 datasource="enrollmentsDs"
-                                margin="false,false,true,false">
+                                margin="true,false,true,false">
                             <properties include=".*"/>
                         </filter>
                         <table id="enrollmentsTable"
