@@ -4,7 +4,10 @@
        xmlns:gui="http://schemas.haulmont.com/cuba/spring/cuba-gui.xsd">
 
     <!-- Annotation-based beans -->
-    <context:component-scan base-package="kz.uco.tsadv"/>
+    <context:component-scan base-package="kz.uco.tsadv">
+        <context:exclude-filter type="regex" expression="kz\.uco\.tsadv\.rest\..*"/>
+    </context:component-scan>
+
     <gui:screens base-packages="kz.uco.tsadv.web"/>
 
     <bean class="com.haulmont.cuba.web.sys.remoting.WebRemoteProxyBeanCreator">
@@ -148,4 +151,5 @@
     <bean class="kz.uco.base.web.init.App"
           name="cuba_App"
           scope="vaadin"/>
+    <bean class="org.springframework.web.client.RestTemplate"/>
 </beans>
