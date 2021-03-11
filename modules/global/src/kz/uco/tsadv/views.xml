@@ -23518,6 +23518,10 @@
         <property name="createTs"/>
         <property name="banner" view="_minimal"/>
         <property name="likes" view="new-like-edit"/>
+        <property name="comments" view="_minimal">
+            <property name="createTs"/>
+            <property name="createdBy"/>
+        </property>
     </view>
     <view entity="tsadv_NewsLike" name="new-like-edit" extends="_local">
         <property name="createTs"/>
