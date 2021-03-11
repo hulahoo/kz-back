@@ -9,12 +9,12 @@
                   view="assignedGoalForKpi">
             <loader/>
         </instance>
-        <collection id="personGroupDc"
-                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
-                    view="personGroup.browse">
-            <loader id="personGroupDl">
+        <collection id="positionGroupDc"
+                    class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                    view="positionGroup.browse">
+            <loader id="positionGroupDl">
                 <query>
-                    <![CDATA[select e from base$PersonGroupExt e where e in :personGroupList]]>
+                    <![CDATA[select e from base$PositionGroupExt e where e in :positionGroupList]]>
                 </query>
             </loader>
         </collection>
@@ -37,8 +37,7 @@
                     <column width="250px">
                         <lookupField id="assignedByPersonGroupField" caption="msg://chooseMentorPosition"
                                      required="true"
-                                     captionProperty="currentAssignment.positionGroup.position.positionName"
-                                     property="assignedByPersonGroup" optionsContainer="personGroupDc"/>
+                                     property="positionGroup" optionsContainer="positionGroupDc"/>
                         <lookupField id="goal" property="goal"
                                      required="true"
                                      caption="msg://selectGoal"

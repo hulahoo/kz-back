@@ -7038,31 +7038,19 @@ create table TSADV_ORG_STRUCTURE_REQUEST_DETAIL (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    ORG_STRUCTURE_REQUEST_ID uuid,
-    CHANGE_TYPE_ID uuid not null,
-    CURRENT_ORGANIZATION_GROUP_ID uuid,
-    CURRENT_POSITION_GROUP_ID uuid,
-    CURRENT_GRADE_GROUP_ID uuid,
-    CURRENT_HEAD_COUNT integer,
-    CURRENT_BASE_SALARY decimal(19, 2),
-    CURRENT_MONTHLY_PAYROLL decimal(19, 2),
-    CURRENT_MONTHLY_TOTAL_PAYROLL decimal(19, 2),
+    ORG_STRUCTURE_REQUEST_ID uuid not null,
+    PARENT_ID uuid,
+    CHANGE_TYPE varchar(50) not null,
+    ORGANIZATION_NAME_RU varchar(1000),
+    ORGANIZATION_NAME_EN varchar(1000),
+    POSITION_NAME_RU varchar(1000),
+    POSITION_NAME_EN varchar(1000),
+    ORGANIZATION_GROUP_ID uuid,
     PARENT_ORGANIZATION_GROUP_ID uuid,
-    PARENT_POSITION_GROUP_ID uuid,
-    NEW_ORGANIZATION_ID uuid,
-    NEW_POSITION_GROUP_ID uuid,
-    NEW_GRADE_ID uuid,
-    NEW_HEAD_COUNT decimal(19, 2),
-    NEW_BASE_SALARY decimal(19, 2),
-    NEW_MONTHLY_PAYROLL decimal(19, 2),
-    NEW_MONTHLY_TOTAL_PAYROLL decimal(19, 2),
-    DIFFERENCE_ORGANIZATION_GROUP_ID uuid,
-    DIFFERENCE_POSITION_GROUP_ID uuid,
-    DIFFERENCE_GRADE_GROUP_ID uuid,
-    DIFFERENCE_HEAD_COUNT integer,
-    DIFFERENCE_BASE_SALARY decimal(19, 2),
-    DIFFERENCE_MONTHLY_PAYROLL decimal(19, 2),
-    DIFFERENCE_MONTHLY_TOTAL_PAYROLL decimal(19, 2),
+    POSITION_GROUP_ID uuid,
+    ELEMENT_TYPE integer not null,
+    GRADE_GROUP_ID uuid,
+    HEAD_COUNT decimal(19, 2),
     --
     primary key (ID)
 )^
@@ -8870,6 +8858,7 @@ create table TSADV_ORG_STRUCTURE_REQUEST (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
+    MODIFY_DATE date,
     REQUEST_NUMBER bigint not null,
     REQUEST_DATE date not null,
     REQUEST_STATUS_ID uuid not null,
@@ -9510,6 +9499,7 @@ create table TSADV_LEAVING_VACATION_REQUEST (
     START_DATE date,
     END_DATE date,
     PLANNED_START_DATE date,
+    ATTACHMENT_ID uuid,
     --
     primary key (ID)
 )^
@@ -17247,6 +17237,12 @@ create table TSADV_ABSENCE_RVD_REQUEST (
 )^
 -- end TSADV_ABSENCE_RVD_REQUEST
 
+-- begin TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (
+    ABSENCE_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (ABSENCE_REQUEST_ID, FILE_DESCRIPTOR_ID)
+
 
 
 -- begin TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
@@ -17537,3 +17533,204 @@ create table TSADV_DIC_LMS_SLIDER_POSITION (
     primary key (ID)
 )^
 -- end TSADV_DIC_LMS_SLIDER_POSITION
+-- begin TSADV_DIC_PORTAL_FEEDBACK_QUESTION
+create table TSADV_DIC_PORTAL_FEEDBACK_QUESTION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_PORTAL_FEEDBACK_QUESTION
+-- begin TSADV_PORTAL_FEEDBACK_QUESTIONS
+create table TSADV_PORTAL_FEEDBACK_QUESTIONS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    USER_ID uuid not null,
+    PORTAL_FEEDBACK_ID uuid not null,
+    TOPIC varchar(255) not null,
+    TEXT text not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PORTAL_FEEDBACK_QUESTIONS
+-- begin TSADV_PORTAL_FEEDBACK
+create table TSADV_PORTAL_FEEDBACK (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    COMPANY_ID uuid not null,
+    CATEGORY_ID uuid not null,
+    EMAIL varchar(255) not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PORTAL_FEEDBACK
+-- begin TSADV_DIC_ASSESSMENT_EVENTS
+create table TSADV_DIC_ASSESSMENT_EVENTS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_EVENTS
+-- begin TSADV_DIC_ASSESSMENT_RESULT
+create table TSADV_DIC_ASSESSMENT_RESULT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_RESULT
+-- begin TSADV_DIC_ASSESSMENT_TYPE
+create table TSADV_DIC_ASSESSMENT_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_COURSE_PERSON_NOTE
+create table TSADV_COURSE_PERSON_NOTE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    COURSE_ID uuid not null,
+    PERSON_GROUP_ID uuid not null,
+    NOTE varchar(2000) not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_COURSE_PERSON_NOTE

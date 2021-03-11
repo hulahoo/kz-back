@@ -1,8 +1,10 @@
 package kz.uco.tsadv.listener;
 
+import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.listener.AfterDeleteEntityListener;
 import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
 import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
+import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 import kz.uco.tsadv.IntegrationException;
 import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
@@ -15,7 +17,7 @@ import java.sql.Connection;
 import java.text.SimpleDateFormat;
 
 @Component("tsadv_HierarchyElementExtListener")
-public class HierarchyElementExtListener implements AfterDeleteEntityListener<HierarchyElementExt>, AfterInsertEntityListener<HierarchyElementExt>, AfterUpdateEntityListener<HierarchyElementExt> {
+public class HierarchyElementExtListener implements AfterDeleteEntityListener<HierarchyElementExt>, AfterInsertEntityListener<HierarchyElementExt>, AfterUpdateEntityListener<HierarchyElementExt>, BeforeUpdateEntityListener<HierarchyElementExt> {
 
     @Inject
     private IntegrationConfig integrationConfig;
@@ -75,5 +77,10 @@ public class HierarchyElementExtListener implements AfterDeleteEntityListener<Hi
         }
     }
 
-
+    @Override
+    public void onBeforeUpdate(HierarchyElementExt entity, EntityManager entityManager) {
+        if(entity.getParent() != null && entity.getParent().getGroup() != null){
+            entity.setParentGroup(entity.getParent().getGroup());
+        }
+    }
 }

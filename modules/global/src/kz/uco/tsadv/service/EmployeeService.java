@@ -100,6 +100,8 @@ public interface EmployeeService {
 
     List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll);
 
+    List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll);
+
     List<TsadvUser> recursiveFindManager(UUID positionGroupId);
 
     List<TsadvUser> recursiveFindManagerInActiveOne(UUID positionGroupId);
@@ -142,6 +144,7 @@ public interface EmployeeService {
 
     OrganizationGroupExt getOrganizationGroupByPersonGroupId(@Nonnull UUID personGroupId, String viewName);
 
+    @Nullable
     DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId);
 
     List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);

@@ -5638,30 +5638,35 @@
           name="enrollment.browse">
         <property name="course">
             <property name="name"/>
-            <property name="category"
-                      view="_local">
-            </property>
-            <property name="activeFlag"/>
             <property name="description"/>
-            <property name="shortDescription"/>
+            <property name="logo"/>
+            <property name="category" view="_local"/>
+            <property name="targetAudience"/>
+            <property name="activeFlag"/>
             <property name="sections">
-                <property name="sectionObject"
-                          view="_minimal">
+                <property name="course" view="_minimal"/>
+                <property name="sectionName"/>
+                <property name="order"/>
+                <property name="sectionObject" view="_minimal">
+                    <property name="objectType" view="_local"/>
+                    <property name="content" view="_minimal">
+                        <property name="objectName"/>
+                        <property name="description"/>
+                        <property name="url"/>
+                    </property>
                     <property name="test">
-                        <property name="maxAttempt"/>
                         <property name="name"/>
                         <property name="description"/>
-                        <property name="type"
-                                  view="_local"/>
+                        <property name="type" view="_local"/>
                         <property name="active"/>
+                        <property name="maxAttempt"/>
                         <property name="daysBetweenAttempts"/>
                         <property name="timer"/>
                         <property name="sectionOrder"/>
                         <property name="instruction"/>
                         <property name="targetScore"/>
                         <property name="showResults"/>
-                        <property name="sections"
-                                  view="_minimal">
+                        <property name="sections" view="_minimal">
                             <property name="sectionName"/>
                             <property name="questionOrder"/>
                             <property name="questionBank">
@@ -5671,8 +5676,7 @@
                                     <property name="text"/>
                                     <property name="type"/>
                                     <property name="score"/>
-                                    <property name="answers"
-                                              view="_minimal">
+                                    <property name="answers" view="_minimal">
                                         <property name="answer"/>
                                         <property name="correct"/>
                                     </property>
@@ -5680,18 +5684,15 @@
                             </property>
                             <property name="questionPerPage"/>
                             <property name="answerOrder"/>
-                            <property name="questions"
-                                      view="_minimal">
-                                <property name="question"
-                                          view="_minimal">
+                            <property name="questions" view="_minimal">
+                                <property name="question" view="_minimal">
                                     <property name="text"/>
                                     <property name="type"/>
                                     <property name="score"/>
                                     <property name="answers">
                                         <property name="answer"/>
                                         <property name="correct"/>
-                                        <property name="question"
-                                                  view="_minimal"/>
+                                        <property name="question" view="_minimal"/>
                                     </property>
                                 </property>
                             </property>
@@ -5699,61 +5700,36 @@
                         <property name="showSectionNewPage"/>
                         <property name="questionPerPage"/>
                     </property>
-                    <property name="objectType"
-                              view="_local"/>
-                    <property name="content"
-                              view="_minimal">
-                        <property name="objectName"/>
-                        <property name="description"/>
-                        <property name="url"/>
-                    </property>
                 </property>
-                <property name="course"
-                          view="_minimal"/>
-                <property name="sectionName"/>
-                <property name="order"/>
-                <property name="format"
-                          view="_local"/>
+                <property name="format" view="_local"/>
                 <property name="description"/>
                 <property name="session">
                     <property name="startDate"/>
                     <property name="endDate"/>
-                    <property name="learningCenter"
-                              view="_local"/>
+                    <property name="learningCenter" view="_local"/>
                     <property name="maxPerson"/>
-                    <property name="courseSection"
-                              view="_minimal"/>
+                    <property name="courseSection" view="_minimal"/>
                 </property>
             </property>
-            <property name="selfEnrollment"/>
-            <property name="targetAudience"/>
-            <property name="logo"/>
-            <property name="competences"
-                      view="_minimal">
-                <property name="competenceGroup"
-                          view="_minimal">
-                    <property name="list"
-                              view="_minimal">
-                        <property name="scale"
-                                  view="_minimal">
-                            <property name="scaleLevels"
-                                      view="_local">
-                            </property>
-                        </property>
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                        <property name="writeHistory"/>
+            <property name="shortDescription"/>
+            <property name="competences" view="_minimal">
+                <property name="competenceGroup" view="_minimal">
+                    <property name="list" view="_minimal">
                         <property name="competenceNameLang1"/>
                         <property name="competenceNameLang2"/>
                         <property name="competenceNameLang3"/>
                         <property name="competenceNameLang4"/>
                         <property name="competenceNameLang5"/>
-                        <property name="competeceType"
-                                  view="_minimal"/>
+                        <property name="competeceType" view="_minimal"/>
+                        <property name="scale" view="_minimal">
+                            <property name="scaleLevels" view="_local"/>
+                        </property>
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="writeHistory"/>
                     </property>
                 </property>
-                <property name="scaleLevel"
-                          view="_minimal">
+                <property name="scaleLevel" view="_minimal">
                     <property name="levelNameLang1"/>
                     <property name="levelNameLang2"/>
                     <property name="levelNameLang3"/>
@@ -5761,20 +5737,20 @@
                     <property name="levelNameLang5"/>
                 </property>
             </property>
+            <property name="selfEnrollment"/>
         </property>
-        <property name="personGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
-            <property name="person"
-                      view="_minimal"/>
-        </property>
+        <property name="personGroup" view="_minimal"/>
         <property name="status"/>
         <property name="date"/>
         <property name="reason"/>
+        <property name="certificationEnrollment" view="_minimal">
+            <property name="startDate"/>
+            <property name="nextDate"/>
+            <property name="certification" view="_minimal">
+                <property name="name"/>
+            </property>
+            <property name="status"/>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.group.AssignmentGroupExt"
           extends="_local"
@@ -21031,6 +21007,21 @@
         <property name="questions" view="_local">
             <property name="question" view="_minimal"/>
         </property>
+        <property name="questionBank" view="_minimal">
+            <property name="questions" view="_minimal">
+                <property name="score"/>
+                <property name="answers" view="_minimal">
+                    <property name="answer"/>
+                    <property name="correct"/>
+                    <property name="question" view="_minimal">
+                        <property name="type"/>
+                        <property name="score"/>
+                    </property>
+                </property>
+                <property name="text"/>
+                <property name="type"/>
+            </property>
+        </property>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile"
           name="enrollmentCertificateFile.with.certificateFile" extends="_local">
@@ -21772,6 +21763,12 @@
     <view entity="uactivity$Activity" name="portal.notification" extends="_local" systemProperties="true">
         <property name="name"/>
     </view>
+    <view entity="uactivity$Activity" name="mobile.notification" extends="_local" systemProperties="true">
+        <property name="type" view="_local">
+            <property name="windowProperty" view="_local"/>
+        </property>
+        <property name="name"/>
+    </view>
     <view entity="tsadv_CertificateRequest" name="certificateRequest-view" extends="_local">
         <property name="personGroup" view="personGroup-view">
             <property name="assignments" view="assignment.view"/>
@@ -21791,6 +21788,7 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="attachment" view="_minimal"/>
     </view>
     <view entity="tsadv$LeavingVacationRequest" name="leavingVacationRequest-browseView" extends="_local">
         <property name="vacation" view="_minimal"/>
@@ -23519,4 +23517,44 @@
         <property name="createTs"/>
         <property name="createdBy"/>
     </view>
+    <view entity="tsadv_DicPortalFeedbackQuestion" name="dicPortalFeedbackQuestion.edit" extends="_local">
+        <property name="company" view="_minimal"/>
+    </view>
+    <view entity="tsadv_PortalFeedback" name="portalFeedback.edit" extends="_local">
+        <property name="company" view="_minimal"/>
+        <property name="category" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+    </view>
+    <view entity="tsadv_PortalFeedbackQuestions" name="portalFeedbackQuestions.edit" extends="_local">
+        <property name="user" view="_minimal">
+            <property name="personGroup" view="_minimal"/>
+            <property name="name"/>
+            <property name="firstName"/>
+            <property name="email"/>
+        </property>
+        <property name="portalFeedback" view="_minimal">
+            <property name="company" view="_minimal"/>
+            <property name="category" view="_minimal"/>
+            <property name="email"/>
+        </property>
+        <property name="createTs"/>
+    </view>
+    <view entity="tsadv_CoursePersonNote" name="coursePersonNote-view" extends="_local">
+        <property name="course" view="_minimal"/>
+        <property name="personGroup" view="_minimal"/>
+    </view>
+    <view entity="tsadv_PortalFeedback" name="portalFeedback-portal" extends="_minimal">
+        <property name="category" view="_local"/>
+    </view>
+    <view entity="tsadv_OrgStructureRequest" name="orgStructureRequest-edit" extends="_local">
+        <property name="requestStatus" view="_base"/>
+        <property name="company" view="_base"/>
+        <property name="department" view="_base"/>
+        <property name="author" view="_base"/>
+    </view>
+
 </views>

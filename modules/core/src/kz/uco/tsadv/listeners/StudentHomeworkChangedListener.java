@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.GlobalConfig;
+import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.model.StudentHomework;
@@ -15,10 +16,7 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Component("tsadv_StudentHomeworkChangedListener")
 public class StudentHomeworkChangedListener {
@@ -56,9 +54,12 @@ public class StudentHomeworkChangedListener {
             List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                     .query("select e from tsadv$CourseTrainer e " +
                             " where e.course = :course " +
-                            " and current_date between e.dateFrom and e.dateTo " +
-                            " and e.trainer.employee is not null")
+                            " and e.trainer.employee is not null " +
+                            " and current_date between coalesce(e.dateFrom, :startDate) and coalesce(e.dateTo, :endDate) "
+                    )
                     .parameter("course", studentHomework.getHomework().getCourse())
+                    .parameter("startDate", new Date(20000101))
+                    .parameter("endDate", BaseCommonUtils.getEndOfTime())
                     .view("courseTrainer.edit")
                     .list();
 

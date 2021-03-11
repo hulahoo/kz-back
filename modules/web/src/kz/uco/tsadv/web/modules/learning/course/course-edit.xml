@@ -58,6 +58,15 @@
                 </query>
             </loader>
         </collection>
+        <collection id="studentHomeworkDc"
+                    class="kz.uco.tsadv.modules.learning.model.StudentHomework"
+                    view="studentHomework.edit">
+            <loader id="studentHomeworkDl">
+                <query>
+                    <![CDATA[select e from tsadv_StudentHomework e where e.homework = :homework]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -369,35 +378,76 @@
             </tab>
             <tab id="homeWorkTab"
                  caption="msg://homework"
-                 expand="homeworkTable"
+                 expand="vbox"
                  margin="true,false,false,false">
-                <table id="homeworkTable"
-                       dataContainer="homeworkDc"
-                       width="100%">
-                    <actions>
-                        <action id="create"
-                                type="create"
-                                caption="mainMsg://table.btn.empty"
-                                icon="icons/plus-btn.png"/>
-                        <action id="edit"
-                                type="edit"
-                                caption="mainMsg://table.btn.empty"/>
-                        <action id="remove"
-                                type="remove"
-                                caption="mainMsg://table.btn.empty"/>
-                    </actions>
-                    <columns>
-                        <column id="instructions"/>
-                        <column id="instructionFile"/>
-                    </columns>
-                    <rows/>
-                    <rowsCount/>
-                    <buttonsPanel>
-                        <button action="homeworkTable.create"/>
-                        <button action="homeworkTable.edit"/>
-                        <button action="homeworkTable.remove"/>
-                    </buttonsPanel>
-                </table>
+                <vbox id="vbox" height="100%" width="100%" spacing="true" margin="true, false, false, false">
+                    <groupBox id="homeworkGroupBox" expand="homeworkTable" spacing="true" height="100%" width="100%">
+                        <table id="homeworkTable"
+                               dataContainer="homeworkDc"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        type="create"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="edit"
+                                        type="edit"
+                                        caption="mainMsg://table.btn.empty"/>
+                                <action id="remove"
+                                        type="remove"
+                                        caption="mainMsg://table.btn.empty"/>
+                            </actions>
+                            <columns>
+                                <column id="instructions"/>
+                                <column id="instructionFile"/>
+                            </columns>
+                            <rows/>
+                            <rowsCount/>
+                            <buttonsPanel>
+                                <button action="homeworkTable.create"/>
+                                <button action="homeworkTable.edit"/>
+                                <button action="homeworkTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
+                    <groupBox id="groupBoxStudent" spacing="true" expand="studentHomeworkTable" height="100%">
+                        <filter id="filterStudent"
+                                applyTo="studentHomeworkTable"
+                                dataLoader="studentHomeworkDl">
+                            <properties include=".*"/>
+                        </filter>
+                        <table id="studentHomeworkTable" dataContainer="studentHomeworkDc"
+                               width="100%">
+                            <actions>
+                                <action id="create"
+                                        type="create"
+                                        enable="false"
+                                        caption="mainMsg://table.btn.empty"
+                                        icon="icons/plus-btn.png"/>
+                                <action id="edit"
+                                        type="edit"
+                                        caption="mainMsg://table.btn.empty"/>
+                                <action id="remove"
+                                        type="remove"
+                                        caption="mainMsg://table.btn.empty"/>
+                            </actions>
+                            <columns>
+                                <column id="personGroup"/>
+                                <column id="answer"/>
+                                <column id="answerFile"/>
+                                <column id="isDone"/>
+                                <column id="trainer"/>
+                                <column id="trainerComment"/>
+                            </columns>
+                            <rows/>
+                            <buttonsPanel>
+                                <button action="studentHomeworkTable.create"/>
+                                <button action="studentHomeworkTable.edit"/>
+                                <button action="studentHomeworkTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
+                </vbox>
             </tab>
         </tabSheet>
         <hbox id="windowActions" spacing="true" width="AUTO">
