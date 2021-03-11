@@ -20,6 +20,7 @@
                         property="feedbackTemplates"/>
             <collection id="trainerDc"
                         property="courseTrainers"/>
+            <collection id="ceritificateDc" property="certificate"/>
             <loader id="courseDl"/>
         </instance>
         <collection id="dicLearningTypesDc"
@@ -448,6 +449,29 @@
                         </table>
                     </groupBox>
                 </vbox>
+            </tab>
+            <tab id="certificateTab"
+                 caption="msg://certificate"
+                 expand="certificateTable"
+                 margin="true,false,false,false">
+                <groupTable id="certificateTable" dataContainer="ceritificateDc" width="100%">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="startDate" caption="msg://startDate"/>
+                        <column id="endDate" caption="msg://endDate"/>
+                        <column id="certificate" caption="msg://certificateCaption"/>
+                    </columns>
+                    <rows/>
+                    <buttonsPanel id="certificateButtonsPanel">
+                        <button action="certificateTable.create"/>
+                        <button action="certificateTable.edit"/>
+                        <button action="certificateTable.remove"/>
+                    </buttonsPanel>
+                </groupTable>
             </tab>
         </tabSheet>
         <hbox id="windowActions" spacing="true" width="AUTO">

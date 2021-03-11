@@ -26,6 +26,10 @@ public class Course extends AbstractParentEntity {
     @Column(name = "NAME", nullable = false)
     protected String name;
 
+    @Composition
+    @OneToMany(mappedBy = "course")
+    protected List<CourseCertificate> certificate;
+
     @NotNull
     @Column(name = "IS_ISSUED_CERTIFICATE", nullable = false)
     protected Boolean isIssuedCertificate = false;
@@ -110,11 +114,20 @@ public class Course extends AbstractParentEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "course")
     protected List<CourseSchedule> courseSchedule;
+
     @Column(name = "EDUCATION_PERIOD")
     protected Long educationPeriod;
 
     @Column(name = "EDUCATION_DURATION")
     protected Long educationDuration;
+
+    public List<CourseCertificate> getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(List<CourseCertificate> certificate) {
+        this.certificate = certificate;
+    }
 
     public Long getEducationDuration() {
         return educationDuration;

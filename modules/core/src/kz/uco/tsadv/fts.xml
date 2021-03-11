@@ -1936,5 +1936,8 @@
         <entity class="kz.uco.tsadv.modules.learning.model.CoursePersonNote">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.CourseCertificate">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
