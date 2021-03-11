@@ -23518,7 +23518,7 @@
         <property name="createTs"/>
         <property name="banner" view="_minimal"/>
         <property name="likes" view="new-like-edit"/>
-        <property name="comments" view="_minimal">
+        <property name="comments" view="_local">
             <property name="createTs"/>
             <property name="createdBy"/>
         </property>

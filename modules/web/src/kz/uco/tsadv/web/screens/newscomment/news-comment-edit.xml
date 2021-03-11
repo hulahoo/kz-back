@@ -5,8 +5,11 @@
         messagesPack="kz.uco.tsadv.web.screens.newscomment">
     <data>
         <instance id="newsCommentDc"
-                  class="kz.uco.tsadv.modules.information.NewsComment"
-                  view="_local">
+                  class="kz.uco.tsadv.modules.information.NewsComment">
+            <view extends="_local">
+                <property name="createTs"/>
+                <property name="createdBy"/>
+            </view>
             <loader/>
         </instance>
     </data>
