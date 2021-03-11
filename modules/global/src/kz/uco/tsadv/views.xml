@@ -21077,6 +21077,7 @@
     <view class="kz.uco.tsadv.modules.learning.model.LmsSlider"
           extends="_local"
           name="lmsSlider.with.images">
+        <property name="position" view="_minimal"/>
         <property name="images"
                   view="_minimal">
             <property name="image"
