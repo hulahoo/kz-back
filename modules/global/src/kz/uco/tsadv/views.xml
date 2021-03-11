@@ -9964,6 +9964,11 @@
     <view class="kz.uco.tsadv.modules.learning.model.Course"
           name="course.edit.new">
         <property name="name"/>
+        <property name="certificate" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="certificate" view="_minimal"/>
+        </property>
         <property name="enrollments" view="_minimal">
             <property name="personGroup" view="_minimal"/>
             <property name="status"/>

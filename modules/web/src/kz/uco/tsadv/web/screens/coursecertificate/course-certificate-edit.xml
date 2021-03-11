@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.coursecertificate">
+    <data>
+        <instance id="courseCertificateDc"
+                  class="kz.uco.tsadv.modules.learning.model.CourseCertificate">
+            <view>
+                <property name="certificate" view="_minimal"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </view>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="courseCertificateDc">
+            <column width="250px">
+                <dateField id="startDateField" property="startDate" caption="msg://startDate"/>
+                <dateField id="endDateField" property="endDate" caption="msg://endDate"/>
+                <field id="certificate" property="certificate" caption="msg://certificate"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
