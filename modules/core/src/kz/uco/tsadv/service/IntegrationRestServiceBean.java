@@ -644,15 +644,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 personExt.setMiddleName(personJson.getMiddleName());
                 personExt.setLastNameLatin(personJson.getLastNameLatin());
                 personExt.setFirstNameLatin(personJson.getFirstNameLatin());
-                personExt.setStartDate(personJson.getStartDate() != null
+                personExt.setStartDate(personJson.getStartDate() != null && !personJson.getStartDate().isEmpty()
                         ? formatter.parse(personJson.getStartDate()) : null);
-                personExt.setEndDate(personJson.getEndDate() != null
+                personExt.setEndDate(personJson.getEndDate() != null && !personJson.getEndDate().isEmpty()
                         ? formatter.parse(personJson.getEndDate()) : null);
-                personExt.setDateOfDeath(personJson.getDateOfDeath() != null
+                personExt.setDateOfDeath(personJson.getDateOfDeath() != null && !personJson.getDateOfDeath().isEmpty()
                         ? formatter.parse(personJson.getDateOfDeath()) : null);
-                personExt.setDateOfBirth(personJson.getDateOfBirth() != null
+                personExt.setDateOfBirth(personJson.getDateOfBirth() != null && !personJson.getDateOfBirth().isEmpty()
                         ? formatter.parse(personJson.getDateOfBirth()) : null);
-                personExt.setHireDate(personJson.getHireDate() != null
+                personExt.setHireDate(personJson.getHireDate() != null && !personJson.getHireDate().isEmpty()
                         ? formatter.parse(personJson.getHireDate()) : null);
                 personExt.setEmployeeNumber(personJson.getEmployeeNumber());
                 personExt.setBirthPlace(personJson.getPlaceOfBirth());
