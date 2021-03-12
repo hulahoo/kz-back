@@ -207,6 +207,7 @@
         <item screen="tsadv_PositionHarmfulCondition.browse"/>
         <item screen="tsadv_VacationScheduleRequest.browse"
               caption="mainMsg://menu_config.tsadv_VacationScheduleRequest.browse"/>
+        <item screen="tsadv_DicLmsSliderPosition.browse"/>
     </menu>
     <menu id="selfService"
           icon="font-icon:HAND_POINTER_O"
