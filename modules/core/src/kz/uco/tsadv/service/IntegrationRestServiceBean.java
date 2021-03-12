@@ -901,7 +901,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     if (parentGroup == null) {
                         return prepareError(result, methodName, hierarchyElementData,
-                                "no exist parentOrganization");
+                                "no exist hierarchy element for parentOrganization");
                     }
                     hierarchyElementExt.setParent(parentGroup.getList().stream().findFirst().orElse(null));
                     hierarchyElementExt.setParentGroup(parentGroup);
