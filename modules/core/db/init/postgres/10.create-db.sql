@@ -4729,6 +4729,7 @@ create table TSADV_DIC_ABSENCE_TYPE (
     IS_JUST_REQUIRED boolean not null,
     IS_ORIGINAL_SHEET boolean not null,
     IS_CHECK_WORK boolean not null,
+    IS_VACATION_DATE boolean not null,
     --
     primary key (ID)
 )^

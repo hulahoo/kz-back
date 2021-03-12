@@ -68,6 +68,7 @@
                         <field property="isJustRequired"/>
                         <field property="isOriginalSheet"/>
                         <field property="isCheckWork"/>
+                        <field property="isVacationDate"/>
                     </column>
                 </fieldGroup>
             </groupBox>

@@ -108,6 +108,18 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "IS_CHECK_WORK", nullable = false)
     protected Boolean isCheckWork = false;
 
+    @NotNull
+    @Column(name = "IS_VACATION_DATE", nullable = false)
+    protected Boolean isVacationDate = false;
+
+    public Boolean getIsVacationDate() {
+        return isVacationDate;
+    }
+
+    public void setIsVacationDate(Boolean isVacationDate) {
+        this.isVacationDate = isVacationDate;
+    }
+
     public Boolean getIsCheckWork() {
         return isCheckWork;
     }
