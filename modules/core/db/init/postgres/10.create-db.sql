@@ -4726,6 +4726,9 @@ create table TSADV_DIC_ABSENCE_TYPE (
     AVAILABLE_FOR_RECALL_ABSENCE boolean not null,
     AVAILABLE_FOR_CHANGE_DATE boolean not null,
     AVAILABLE_FOR_LEAVING_VACATION boolean not null,
+    IS_JUST_REQUIRED boolean not null,
+    IS_ORIGINAL_SHEET boolean not null,
+    IS_CHECK_WORK boolean not null,
     --
     primary key (ID)
 )^

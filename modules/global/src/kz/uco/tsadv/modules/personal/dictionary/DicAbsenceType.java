@@ -96,6 +96,42 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "AVAILABLE_FOR_LEAVING_VACATION", nullable = false)
     protected Boolean availableForLeavingVacation = false;
 
+    @NotNull
+    @Column(name = "IS_JUST_REQUIRED", nullable = false)
+    protected Boolean isJustRequired = false;
+
+    @NotNull
+    @Column(name = "IS_ORIGINAL_SHEET", nullable = false)
+    protected Boolean isOriginalSheet = false;
+
+    @NotNull
+    @Column(name = "IS_CHECK_WORK", nullable = false)
+    protected Boolean isCheckWork = false;
+
+    public Boolean getIsCheckWork() {
+        return isCheckWork;
+    }
+
+    public void setIsCheckWork(Boolean isCheckWork) {
+        this.isCheckWork = isCheckWork;
+    }
+
+    public Boolean getIsOriginalSheet() {
+        return isOriginalSheet;
+    }
+
+    public void setIsOriginalSheet(Boolean isOriginalSheet) {
+        this.isOriginalSheet = isOriginalSheet;
+    }
+
+    public Boolean getIsJustRequired() {
+        return isJustRequired;
+    }
+
+    public void setIsJustRequired(Boolean isJustRequired) {
+        this.isJustRequired = isJustRequired;
+    }
+
     public Boolean getAvailableForLeavingVacation() {
         return availableForLeavingVacation;
     }

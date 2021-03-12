@@ -22742,6 +22742,9 @@
             <property name="availableForRecallAbsence"/>
             <property name="availableForChangeDate"/>
             <property name="availableForLeavingVacation"/>
+            <property name="isJustRequired"/>
+            <property name="isOriginalSheet"/>
+            <property name="isCheckWork"/>
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>

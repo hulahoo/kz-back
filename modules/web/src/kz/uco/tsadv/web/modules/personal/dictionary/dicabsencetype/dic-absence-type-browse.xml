@@ -52,6 +52,9 @@
                 <column id="availableForChangeDate"/>
                 <column id="availableForLeavingVacation"/>
                 <column id="availableForRecallAbsence"/>
+                <column id="isJustRequired"/>
+                <column id="isOriginalSheet"/>
+                <column id="isCheckWork"/>
                 <column id="company"/>
             </columns>
             <rows datasource="dicAbsenceTypesDs"/>
