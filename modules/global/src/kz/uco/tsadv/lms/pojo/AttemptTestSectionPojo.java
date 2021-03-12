@@ -1,8 +1,9 @@
 package kz.uco.tsadv.lms.pojo;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AttemptTestSectionPojo {
+public class AttemptTestSectionPojo implements Serializable {
 
     protected String testSectionId;
 

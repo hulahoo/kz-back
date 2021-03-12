@@ -3,6 +3,7 @@ package kz.uco.tsadv.rest;
 import com.haulmont.addon.restapi.api.config.RestApiConfig;
 import com.haulmont.addon.restapi.api.ldap.RestLdapConfig;
 import com.haulmont.cuba.core.global.Configuration;
+import com.haulmont.cuba.web.auth.WebAuthConfig;
 import kz.uco.tsadv.components.RestUtilComponent;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -30,6 +31,9 @@ public class AuthController {
     protected RestLdapConfig ldapConfig;
 
     @Inject
+    protected WebAuthConfig webAuthConfig;
+
+    @Inject
     protected RestApiConfig restApiConfig;
 
     @RequestMapping(value = "/token", method = RequestMethod.POST)
@@ -44,7 +48,7 @@ public class AuthController {
 
         String password = parameters.get("password");
 
-        if (ldapConfig.getLdapEnabled()) {
+        if (ldapConfig.getLdapEnabled() && !webAuthConfig.getStandardAuthenticationUsers().contains(username)) {
             return restUtilComponent.getApplicationToken("/rest/v2/ldap/token", username, password);
         } else {
             return restUtilComponent.getApplicationToken("/rest/v2/oauth/token", username, password);
