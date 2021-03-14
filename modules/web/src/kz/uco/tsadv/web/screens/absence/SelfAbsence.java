@@ -22,6 +22,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.mixins.SelfServiceMixin;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.Absence;
@@ -83,6 +84,16 @@ public class SelfAbsence extends StandardLookup<Absence>
     protected TabSheet tabSheet;
     @Inject
     protected EmployeeService employeeService;
+
+    @Subscribe
+    protected void onBeforeShow(BeforeShowEvent event) {
+        TsadvUser tsadvUser = (TsadvUser) userSession.getUser();
+        absenceRequestDl.setQuery("select e from tsadv_AllAbsenceRequest e " +
+                " where e.personGroup = :personGroup");
+        absenceRequestDl.setParameter("personGroup", tsadvUser.getPersonGroup());
+        absenceRequestDl.load();
+    }
+
 
     @Subscribe("addBtn")
     public void onAddBtnClick(Button.ClickEvent event) {

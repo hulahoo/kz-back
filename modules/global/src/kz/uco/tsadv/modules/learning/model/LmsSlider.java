@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.learning.model;
 
 import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.StandardEntity;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
@@ -9,6 +10,7 @@ import kz.uco.tsadv.modules.learning.dictionary.DicLmsSliderPosition;
 import javax.persistence.*;
 import java.util.List;
 
+@NamePattern("%s|position")
 @Table(name = "TSADV_LMS_SLIDER")
 @Entity(name = "tsadv$LmsSlider")
 public class LmsSlider extends StandardEntity {

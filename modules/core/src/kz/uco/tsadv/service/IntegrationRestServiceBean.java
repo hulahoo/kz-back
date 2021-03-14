@@ -413,9 +413,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
                     if (positionGroupExt != null) {
                         for (PositionExt positionExt1 : positionGroupExt.getList()) {
-                            commitContext.addInstanceToRemove(positionExt1);
+                            if (formatter.parse(positionJson.getStartDate()).before(positionExt1.getEndDate())
+                                    && formatter.parse(positionJson.getEndDate()).after(positionExt1.getStartDate())) {
+                                commitContext.addInstanceToRemove(positionExt1);
+                            }
                         }
-                        positionGroupExt.getList().clear();
+//                        positionGroupExt.getList().clear();
 //                        positionGroupExt = dataManager.reload(positionGroupExt, "positionGroupExt-for-integration-rest");
                         positionGroupExts.add(positionGroupExt);
                     }
@@ -617,9 +620,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
                     if (personGroupExt != null) {
                         for (PersonExt personExt : personGroupExt.getList()) {
-                            commitContext.addInstanceToRemove(personExt);
+                            if (formatter.parse(personJson.getStartDate()).before(personExt.getEndDate())
+                                    && formatter.parse(personJson.getEndDate()).after(personExt.getStartDate())) {
+                                commitContext.addInstanceToRemove(personExt);
+                            }
                         }
-                        personGroupExt.getList().clear();
+//                        personGroupExt.getList().clear();
                         personGroupExts.add(personGroupExt);
                     }
                 }
@@ -644,15 +650,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 personExt.setMiddleName(personJson.getMiddleName());
                 personExt.setLastNameLatin(personJson.getLastNameLatin());
                 personExt.setFirstNameLatin(personJson.getFirstNameLatin());
-                personExt.setStartDate(personJson.getStartDate() != null
+                personExt.setStartDate(personJson.getStartDate() != null && !personJson.getStartDate().isEmpty()
                         ? formatter.parse(personJson.getStartDate()) : null);
-                personExt.setEndDate(personJson.getEndDate() != null
+                personExt.setEndDate(personJson.getEndDate() != null && !personJson.getEndDate().isEmpty()
                         ? formatter.parse(personJson.getEndDate()) : null);
-                personExt.setDateOfDeath(personJson.getDateOfDeath() != null
+                personExt.setDateOfDeath(personJson.getDateOfDeath() != null && !personJson.getDateOfDeath().isEmpty()
                         ? formatter.parse(personJson.getDateOfDeath()) : null);
-                personExt.setDateOfBirth(personJson.getDateOfBirth() != null
+                personExt.setDateOfBirth(personJson.getDateOfBirth() != null && !personJson.getDateOfBirth().isEmpty()
                         ? formatter.parse(personJson.getDateOfBirth()) : null);
-                personExt.setHireDate(personJson.getHireDate() != null
+                personExt.setHireDate(personJson.getHireDate() != null && !personJson.getHireDate().isEmpty()
                         ? formatter.parse(personJson.getHireDate()) : null);
                 personExt.setEmployeeNumber(personJson.getEmployeeNumber());
                 personExt.setBirthPlace(personJson.getPlaceOfBirth());
@@ -901,7 +907,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     if (parentGroup == null) {
                         return prepareError(result, methodName, hierarchyElementData,
-                                "no exist parentOrganization");
+                                "no exist hierarchy element for parentOrganization");
                     }
                     hierarchyElementExt.setParent(parentGroup.getList().stream().findFirst().orElse(null));
                     hierarchyElementExt.setParentGroup(parentGroup);
@@ -1321,9 +1327,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .list().stream().findFirst().orElse(null);
                     if (assignmentGroupExt != null) {
                         for (AssignmentExt assignmentExt : assignmentGroupExt.getList()) {
-                            commitContext.addInstanceToRemove(assignmentExt);
+                            if (formatter.parse(assignmentJson.getStartDate()).before(assignmentExt.getEndDate())
+                                    && formatter.parse(assignmentJson.getEndDate()).after(assignmentExt.getStartDate())) {
+                                commitContext.addInstanceToRemove(assignmentExt);
+                            }
                         }
-                        assignmentGroupExt.getList().clear();
+//                        assignmentGroupExt.getList().clear();
                         assignmentGroupExtList.add(assignmentGroupExt);
                     }
                 }
