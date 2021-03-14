@@ -41,4 +41,5 @@
 
     <bean id="cuba_MetadataTools" class="kz.uco.tsadv.beans.CustomMetadataTools"/>
 
+    <bean class="com.google.gson.Gson" />
 </beans>

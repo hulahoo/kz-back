@@ -156,7 +156,6 @@
             left join e.course c
             left join c.sections s
             left join s.courseSectionAttempts a
-                ON a.enrollment.id = :id
             where e.id = :id
             ]]>
         </jpql>

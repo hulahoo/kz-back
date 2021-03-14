@@ -56,4 +56,6 @@ public interface CourseService {
     Map<String, Object> courseTrainerInfo(UUID trainerId);
 
     List<DicCategory> searchCourses(String courseName);
+
+    Enrollment courseEnrollmentInfo(UUID enrollmentId);
 }
