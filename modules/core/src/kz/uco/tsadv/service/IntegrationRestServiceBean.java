@@ -1271,25 +1271,25 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no companyCode");
                 }
-                if (assignmentJson.getPersonGroup() == null || assignmentJson.getPersonGroup().isEmpty()) {
+                if (assignmentJson.getPersonId() == null || assignmentJson.getPersonId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no personGroup");
+                            "no personId");
                 }
-                if (assignmentJson.getOrganizationGroup() == null || assignmentJson.getOrganizationGroup().isEmpty()) {
+                if (assignmentJson.getOrganizationId() == null || assignmentJson.getOrganizationId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no organizationGroup()");
+                            "no organizationId");
                 }
-                if (assignmentJson.getJobGroup() == null || assignmentJson.getJobGroup().isEmpty()) {
+                if (assignmentJson.getJobId() == null || assignmentJson.getJobId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no jobGroup");
+                            "no jobId");
                 }
-                if (assignmentJson.getPositionGroup() == null || assignmentJson.getPositionGroup().isEmpty()) {
+                if (assignmentJson.getPositionId() == null || assignmentJson.getPositionId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no positionGroup");
+                            "no positionId");
                 }
-                if (assignmentJson.getGrade() == null || assignmentJson.getGrade().isEmpty()) {
+                if (assignmentJson.getGradeId() == null || assignmentJson.getGradeId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no grade");
+                            "no gradeId");
                 }
                 if (assignmentJson.getStartDate() == null || assignmentJson.getStartDate().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
@@ -1298,14 +1298,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (assignmentJson.getEndDate() == null || assignmentJson.getEndDate().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no endDate");
-                }
-                if (assignmentJson.getAssignmentNumber() == null || assignmentJson.getAssignmentNumber().isEmpty()) {
-                    return prepareError(result, methodName, assignmentDataJson,
-                            "no assignmentNumber");
-                }
-                if (assignmentJson.getAssignDate() == null || assignmentJson.getAssignDate().isEmpty()) {
-                    return prepareError(result, methodName, assignmentDataJson,
-                            "no assignDate");
                 }
 
                 AssignmentGroupExt assignmentGroupExt = assignmentGroupExtList.stream().filter(assignmentGroupExt1 ->
@@ -1317,7 +1309,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         .equals(assignmentJson.getCompanyCode())
                                         && assignmentExt.getPersonGroup().getLegacyId() != null
                                         && assignmentExt.getPersonGroup().getLegacyId()
-                                        .equals(assignmentJson.getPersonGroup())
+                                        .equals(assignmentJson.getPersonId())
                         ) && assignmentGroupExt1.getLegacyId().equals(assignmentJson.getLegacyId()))
                         .findFirst().orElse(null);
                 if (assignmentGroupExt == null) {
@@ -1328,7 +1320,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     " and e.personGroup.legacyId = :personLegacyId")
                             .setParameters(ParamsMap.of("legacyId", assignmentJson.getLegacyId(),
                                     "company", assignmentJson.getCompanyCode(),
-                                    "personLegacyId", assignmentJson.getPersonGroup()))
+                                    "personLegacyId", assignmentJson.getPersonId()))
                             .view("assignmentGroup.view")
                             .list().stream().findFirst().orElse(null);
                     if (assignmentGroupExt != null) {
@@ -1356,23 +1348,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     assignmentGroupExt.setLegacyId(assignmentJson.getLegacyId());
                     assignmentGroupExt.setId(UUID.randomUUID());
-                    assignmentGroupExt.setAssignmentNumber(assignmentJson.getAssignmentNumber());
+                    assignmentGroupExt.setAssignmentNumber(assignmentJson.getLegacyId());
                     assignmentGroupExt.setList(new ArrayList<>());
                     assignmentGroupExtList.add(assignmentGroupExt);
                 }
 
                 AssignmentExt assignmentExt = metadata.create(AssignmentExt.class);
-                assignmentExt.setAssignmentStatus(assignmentJson.getStatus() != null
-                        && !assignmentJson.getStatus().isEmpty()
-                        ? dataManager.load(DicAssignmentStatus.class)
-                        .query("select e from tsadv$DicAssignmentStatus e " +
-                                " where e.legacyId = :legacyId " +
-                                " and e.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("legacyId", assignmentJson.getStatus(),
-                                "companyCode", assignmentJson.getCompanyCode()))
-                        .view("dicAssignmentStatus-edit")
-                        .list().stream().findFirst().orElse(null)
-                        : dataManager.load(DicAssignmentStatus.class)
+                assignmentExt.setAssignmentStatus(dataManager.load(DicAssignmentStatus.class)
                         .query("select e from tsadv$DicAssignmentStatus e " +
                                 " where e.code = 'ACTIVE'")
                         .list().stream().findFirst().orElse(null));
@@ -1380,7 +1362,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .query("select e from base$PersonGroupExt e " +
                                 " where e.legacyId = :pgLegacyId " +
                                 " and e.company.legacyId = :companyCode ")
-                        .setParameters(ParamsMap.of("pgLegacyId", assignmentJson.getPersonGroup(),
+                        .setParameters(ParamsMap.of("pgLegacyId", assignmentJson.getPersonId(),
                                 "companyCode", assignmentJson.getCompanyCode()))
                         .view("personGroupExt-for-integration-rest")
                         .list().stream().findFirst().orElse(null);
@@ -1388,14 +1370,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentExt.setPersonGroup(personGroupExt);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no base$PersonGroupExt with legacyId " + assignmentJson.getPersonGroup()
+                            "no base$PersonGroupExt with legacyId " + assignmentJson.getPersonId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 OrganizationGroupExt organizationGroupExt = dataManager.load(OrganizationGroupExt.class)
                         .query("select e from base$OrganizationGroupExt e " +
                                 " where e.legacyId = :ogLegacyId " +
                                 " and e.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("ogLegacyId", assignmentJson.getOrganizationGroup(),
+                        .setParameters(ParamsMap.of("ogLegacyId", assignmentJson.getOrganizationId(),
                                 "companyCode", assignmentJson.getCompanyCode()))
                         .view("organizationGroupExt-for-integration-rest")
                         .list().stream().findFirst().orElse(null);
@@ -1403,14 +1385,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentExt.setOrganizationGroup(organizationGroupExt);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no base$OrganizationGroupExt with legacyId " + assignmentJson.getOrganizationGroup()
+                            "no base$OrganizationGroupExt with legacyId " + assignmentJson.getOrganizationId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 JobGroup jobGroup = dataManager.load(JobGroup.class)
                         .query("select e from tsadv$JobGroup e " +
                                 " where e.legacyId = :jgLegacyId " +
                                 " and e.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("jgLegacyId", assignmentJson.getJobGroup(),
+                        .setParameters(ParamsMap.of("jgLegacyId", assignmentJson.getJobId(),
                                 "companyCode", assignmentJson.getCompanyCode()))
                         .view("jobGroup-for-integration-rest")
                         .list().stream().findFirst().orElse(null);
@@ -1418,7 +1400,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentExt.setJobGroup(jobGroup);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no tsadv$JobGroup with legacyId " + assignmentJson.getJobGroup()
+                            "no tsadv$JobGroup with legacyId " + assignmentJson.getJobId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
@@ -1426,21 +1408,21 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 " where e.organizationGroupExt.company.legacyId = :companyCode " +
                                 " and e.group.legacyId = :legacyId ")
                         .setParameters(ParamsMap.of("companyCode", assignmentJson.getCompanyCode(),
-                                "legacyId", assignmentJson.getPositionGroup()))
+                                "legacyId", assignmentJson.getPositionId()))
                         .view("positionGroupExt-for-integration-rest")
                         .list().stream().findFirst().orElse(null);
                 if (positionGroupExt != null) {
                     assignmentExt.setPositionGroup(positionGroupExt);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no base$PositionGroupExt with legacyId " + assignmentJson.getPositionGroup()
+                            "no base$PositionGroupExt with legacyId " + assignmentJson.getPositionId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 GradeGroup gradeGroup = dataManager.load(GradeGroup.class)
                         .query("select e from tsadv$GradeGroup e" +
                                 " where e.legacyId = :ggLegacyId " +
                                 " and e.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("ggLegacyId", assignmentJson.getGrade(),
+                        .setParameters(ParamsMap.of("ggLegacyId", assignmentJson.getGradeId(),
                                 "companyCode", assignmentJson.getCompanyCode()))
                         .view("gradeGroup.browse")
                         .list().stream().findFirst().orElse(null);
@@ -1448,14 +1430,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentExt.setGradeGroup(gradeGroup);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no tsadv$GradeGroup with legacyId " + assignmentJson.getGrade()
+                            "no tsadv$GradeGroup with legacyId " + assignmentJson.getGradeId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 assignmentExt.setWriteHistory(false);
                 assignmentExt.setLegacyId(assignmentJson.getLegacyId());
                 assignmentExt.setStartDate(formatter.parse(assignmentJson.getStartDate()));
                 assignmentExt.setEndDate(formatter.parse(assignmentJson.getEndDate()));
-                assignmentExt.setAssignDate(formatter.parse(assignmentJson.getAssignDate()));
+                assignmentExt.setAssignDate(formatter.parse(assignmentJson.getStartDate()));
                 assignmentExt.setFte(assignmentJson.getFte() != null && !assignmentJson.getFte().isEmpty()
                         ? Double.parseDouble(assignmentJson.getFte()) : null);
                 assignmentExt.setProbationEndDate(formatter.parse(assignmentJson.getProbationPeriodEndDate()));
