@@ -65,6 +65,10 @@
                         <field property="availableForRecallAbsence"/>
                         <field property="availableForLeavingVacation"/>
                         <field property="availableForChangeDate"/>
+                        <field property="isJustRequired"/>
+                        <field property="isOriginalSheet"/>
+                        <field property="isCheckWork"/>
+                        <field property="isVacationDate"/>
                     </column>
                 </fieldGroup>
             </groupBox>
