@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.IEntityGroup;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.AssignmentGroup;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
@@ -51,6 +52,30 @@ public class AssignmentGroupExt extends AssignmentGroup implements IEntityGroup<
     @MetaProperty(related = "list")
     protected AssignmentExt assignment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PERSON_GROUP_ID")
+    protected PersonGroupExt personGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "JOB_GROUP_ID")
+    protected JobGroup jobGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GRADE_GROUP_ID")
+    protected GradeGroup gradeGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    protected DicCompany company;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORGANIZATION_GROUP_ID")
+    protected OrganizationGroupExt organizationGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "POSITION_GROUP_ID")
+    protected PositionGroupExt positionGroup;
+
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "group")
     protected AssignmentExt relevantAssignment; // Текущее (для момента в машине времени) назначение
 
@@ -73,6 +98,54 @@ public class AssignmentGroupExt extends AssignmentGroup implements IEntityGroup<
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ANALYTICS_ID")
     protected OrgAnalytics analytics;
+
+    public PositionGroupExt getPositionGroup() {
+        return positionGroup;
+    }
+
+    public void setPositionGroup(PositionGroupExt positionGroup) {
+        this.positionGroup = positionGroup;
+    }
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
+
+    public GradeGroup getGradeGroup() {
+        return gradeGroup;
+    }
+
+    public void setGradeGroup(GradeGroup gradeGroup) {
+        this.gradeGroup = gradeGroup;
+    }
+
+    public JobGroup getJobGroup() {
+        return jobGroup;
+    }
+
+    public void setJobGroup(JobGroup jobGroup) {
+        this.jobGroup = jobGroup;
+    }
+
+    public OrganizationGroupExt getOrganizationGroup() {
+        return organizationGroup;
+    }
+
+    public void setOrganizationGroup(OrganizationGroupExt organizationGroup) {
+        this.organizationGroup = organizationGroup;
+    }
+
+    public PersonGroupExt getPersonGroup() {
+        return personGroup;
+    }
+
+    public void setPersonGroup(PersonGroupExt personGroup) {
+        this.personGroup = personGroup;
+    }
 
     public void setAssignmentNumber(String assignmentNumber) {
         this.assignmentNumber = assignmentNumber;
