@@ -273,7 +273,7 @@
             ]]>
         </jpql>
     </query>
-    <query name="positionGroupGoals" entity="tsadv$Goal" view="_minimal">
+    <query name="positionGroupGoals" entity="tsadv$Goal" view="assigned-goal-cascade-position-group">
         <jpql>
             <![CDATA[
             select g

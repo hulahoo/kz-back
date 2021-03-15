@@ -1890,8 +1890,7 @@ public class EmployeeServiceBean implements EmployeeService {
                             ") " +
                             "SELECT " +
                             " n1.level, " +
-                            "  pg.id position_group_id, " +
-                            "  a.person_group_id " +
+                            "  pg.id position_group_id " +
                             "  FROM nodes n " +
                             "  join base_position_group pg " +
                             "  on n.path like concat('%', concat(pg.id, '%')) " +
@@ -1909,7 +1908,10 @@ public class EmployeeServiceBean implements EmployeeService {
                             "  and pg.delete_ts is null " +
                             "  and a.delete_ts is null " +
                             "  and das.delete_ts is null ) " +
-                            " select * from a t " + (showAll ? "" : " where t.level = (select max(level) from a)"));
+                            " select * from a t " + (showAll ? "" : " where t.level = (select max(level) from a) " +
+                            " group by " +
+                            " level," +
+                            " position_group_id "));
             query.setParameter(1, positionGroupId);
 
             List<Object[]> rows = query.getResultList();
@@ -2535,6 +2537,15 @@ public class EmployeeServiceBean implements EmployeeService {
     @Override
     public List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll, String viewName) {
         return Optional.ofNullable(this.findManagerListByPositionGroup(positionGroupId, showAll)).orElse(Collections.emptyList())
+                .stream()
+                .map(p -> dataManager.reload(p, viewName))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll, String viewName) {
+        return Optional.ofNullable(this.findManagerListByPositionGroupReturnListPosition(positionGroupId, showAll))
+                .orElse(Collections.emptyList())
                 .stream()
                 .map(p -> dataManager.reload(p, viewName))
                 .collect(Collectors.toList());

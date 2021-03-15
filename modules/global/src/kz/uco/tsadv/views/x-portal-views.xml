@@ -254,7 +254,7 @@
         <property name="logo"/>
     </view>
     <view name="enrollment-course" entity="tsadv$Enrollment" extends="_local">
-        <property name="course" view="course-enrollment" />
+        <property name="course" view="course-enrollment"/>
     </view>
     <view name="course-section-attempt" entity="tsadv$CourseSectionAttempt" extends="_local">
         <property name="courseSection" view="_minimal">
@@ -334,5 +334,15 @@
                   view="_minimal"/>
         <property name="personGroup"
                   view="_minimal"/>
+    </view>
+    <view class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+          extends="_local"
+          name="assigned-goal-cascade-positionGroupExt-view">
+        <property name="fullName"/>
+    </view>
+    <view entity="tsadv$Goal" name="assigned-goal-cascade-position-group" extends="_minimal">
+        <property name="library" view="_minimal">
+            <property name="category" view="_minimal"/>
+        </property>
     </view>
 </views>

@@ -139,6 +139,11 @@
         <method name="getCompanyByPersonGroupId">
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
+        <method name="findManagerListByPositionGroupReturnListPosition">
+            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="showAll" type="boolean"/>
+            <param name="viewName" type="java.lang.String"/>
+        </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">
         <method name="initialCreate"/>
