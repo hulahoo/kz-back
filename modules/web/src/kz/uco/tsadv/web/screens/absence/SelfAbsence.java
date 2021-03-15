@@ -88,6 +88,7 @@ public class SelfAbsence extends StandardLookup<Absence>
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         TsadvUser tsadvUser = (TsadvUser) userSession.getUser();
+        tsadvUser = dataManager.reload(tsadvUser, "userExt.edit");
         absenceRequestDl.setQuery("select e from tsadv_AllAbsenceRequest e " +
                 " where e.personGroup = :personGroup");
         absenceRequestDl.setParameter("personGroup", tsadvUser.getPersonGroup());
