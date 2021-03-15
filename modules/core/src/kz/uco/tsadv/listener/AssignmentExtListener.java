@@ -1,5 +1,7 @@
 package kz.uco.tsadv.listener;
 
+import com.haulmont.bali.db.QueryRunner;
+import com.haulmont.bali.db.ResultSetHandler;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.listener.AfterDeleteEntityListener;
 import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
@@ -9,8 +11,11 @@ import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.service.IntegrationService;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Component("tsadv_AssignmentExtListener")
 public class AssignmentExtListener implements
@@ -60,5 +65,29 @@ public class AssignmentExtListener implements
                 }
             }
         }*/
+
+        if(entity.getGroup().getId() != null){
+            QueryRunner queryRunner = new QueryRunner();
+            try {
+                String result = queryRunner.query(connection,
+                        "select deleted_by from base_assignment where id = '9fd6dd6b-aee8-189f-74f2-88812daaac42';",
+                        new ResultSetHandler<String>() {
+                            @Nullable
+                            @Override
+                            public String handle(ResultSet rs) throws SQLException {
+                                String deletedBy = "";
+                                while (rs.next()){
+                                    deletedBy =  rs.getString("deleted_by");
+                                }
+                                return  deletedBy;
+                            }
+                        });
+                System.out.println("RESULT: " + result);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 }
