@@ -607,6 +607,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, personData,
                             "no companyCode");
                 }
+                if (personJson.getPersonTypeId() == null || personJson.getPersonTypeId().isEmpty()) {
+                    return prepareError(result, methodName, personData,
+                            "no personTypeId");
+                }
                 PersonGroupExt personGroupExt = personGroupExts.stream().filter(personGroupExt1 ->
                         personGroupExt1.getCompany().getLegacyId().equals(personJson.getCompanyCode())
                                 && personGroupExt1.getLegacyId().equals(personJson.getLegacyId()))
@@ -677,16 +681,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         ? Boolean.parseBoolean(personJson.getHasCreditFromPrevEmployer()) : null);
                 personExt.setLegacyId(personJson.getLegacyId());
                 personExt.setWriteHistory(false);
-                DicPersonType personType = null;
-                if (personJson.getPersonTypeId() != null && !personJson.getPersonTypeId().isEmpty()) {
-                    personType = dataManager.load(DicPersonType.class)
+                DicPersonType personType = dataManager.load(DicPersonType.class)
                             .query("select e from tsadv$DicPersonType e " +
                                     " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
                             .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
                                     "companyCode", personJson.getCompanyCode()))
                             .view(View.BASE).list().stream().findFirst().orElse(null);
+                if (personType != null) {
+                    personExt.setType(personType);
+                } else {
+                    return prepareError(result, methodName, personData,
+                            "no tsadv$DicPersonType with legacyId " + personJson.getPersonTypeId());
                 }
-                personExt.setType(personType);
                 DicCitizenship citizenship = null;
                 if (personJson.getCitizenshipId() != null && !personJson.getCitizenshipId().isEmpty()) {
                     citizenship = dataManager.load(DicCitizenship.class)
