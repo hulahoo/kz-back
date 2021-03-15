@@ -20,7 +20,9 @@ import com.haulmont.reports.entity.Report;
 import com.haulmont.reports.gui.ReportGuiManager;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.base.notification.NotificationSenderAPI;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.*;
@@ -93,6 +95,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     @Inject
     protected ExportDisplay exportDisplay;
     private FileInputStream inputStream;
+    @Inject
+    protected NotificationSenderAPI notificationSender;
+
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -588,5 +593,22 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 .setQuery(LoadContext.createQuery("select e from report$Report e where e.code = 'KPI'")));
         reportGuiManager.printReport(report,
                 ParamsMap.of("id", assignedPerformancePlanTable.getSelected()));
+    }
+
+    @Subscribe("assignedPerformancePlanTable.sendLetterHappiness")
+    protected void onAssignedPerformancePlanTableSendLetterHappiness(Action.ActionPerformedEvent event) {
+        for (AssignedPerformancePlan assignedPerformancePlan : assignedPerformancePlanTable.getSelected()) {
+            TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                    .query("select e from tsadv$UserExt e " +
+                            " where e.personGroup = :personGroup")
+                    .parameter("personGroup", assignedPerformancePlan.getAssignedPerson())
+                    .view("userExt.edit")
+                    .list().stream().findFirst().orElse(null);
+            if (tsadvUser != null) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("fullName", assignedPerformancePlan.getAssignedPerson().getFullName());
+                notificationSender.sendParametrizedNotification("", tsadvUser, params);
+            }
+        }
     }
 }
