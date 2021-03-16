@@ -150,4 +150,6 @@ public interface EmployeeService {
     List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);
 
     List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll, String viewName);
+
+    List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll, String viewName);
 }

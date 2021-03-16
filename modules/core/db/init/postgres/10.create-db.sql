@@ -10216,7 +10216,7 @@ create table TSADV_COURSE_SESSION_ENROLLMENT (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     ENROLLMENT_ID uuid not null,
-    COURSE_SESSION_ID uuid not null,
+    COURSE_SESSION_ID uuid,
     ENROLLMENT_DATE date not null,
     STATUS integer,
     COMMENT_ varchar(1000),
@@ -17196,8 +17196,14 @@ update BASE_PERSON_GROUP set DTYPE = 'base$PersonGroupExt' where DTYPE is null ^
 alter table BASE_ASSIGNMENT_GROUP add column ASSIGNMENT_NUMBER varchar(255) ^
 update BASE_ASSIGNMENT_GROUP set ASSIGNMENT_NUMBER = '' where ASSIGNMENT_NUMBER is null ^
 alter table BASE_ASSIGNMENT_GROUP alter column ASSIGNMENT_NUMBER set not null ^
+alter table BASE_ASSIGNMENT_GROUP add column PERSON_GROUP_ID uuid ^
+alter table BASE_ASSIGNMENT_GROUP add column JOB_GROUP_ID uuid ^
+alter table BASE_ASSIGNMENT_GROUP add column GRADE_GROUP_ID uuid ^
+alter table BASE_ASSIGNMENT_GROUP add column COMPANY_ID uuid ^
+alter table BASE_ASSIGNMENT_GROUP add column ORGANIZATION_GROUP_ID uuid ^
+alter table BASE_ASSIGNMENT_GROUP add column POSITION_GROUP_ID uuid ^
 alter table BASE_ASSIGNMENT_GROUP add column ANALYTICS_ID uuid ^
-alter table BASE_ASSIGNMENT_GROUP add column DTYPE varchar(31) ^
+alter table BASE_ASSIGNMENT_GROUP add column DTYPE varchar(100) ^
 update BASE_ASSIGNMENT_GROUP set DTYPE = 'base$AssignmentGroupExt' where DTYPE is null ^
 -- end BASE_ASSIGNMENT_GROUP
 -- begin BASE_POSITION_GROUP

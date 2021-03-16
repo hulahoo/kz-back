@@ -73,6 +73,9 @@
         <method name="searchCourses">
             <param name="courseName" type="java.lang.String"/>
         </method>
+        <method name="courseEnrollmentInfo">
+            <param name="enrollmentId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="bproc_BprocTaskService">
         <method name="completeWithOutcome">
@@ -135,6 +138,11 @@
         </method>
         <method name="getCompanyByPersonGroupId">
             <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="findManagerListByPositionGroupReturnListPosition">
+            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="showAll" type="boolean"/>
+            <param name="viewName" type="java.lang.String"/>
         </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">

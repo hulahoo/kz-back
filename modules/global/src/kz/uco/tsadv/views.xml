@@ -23570,5 +23570,4 @@
         <property name="department" view="_base"/>
         <property name="author" view="_base"/>
     </view>
-
 </views>

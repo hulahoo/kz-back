@@ -1,5 +1,6 @@
 package kz.uco.tsadv.service;
 
+import com.google.gson.Gson;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
@@ -46,6 +47,9 @@ public class CourseServiceBean implements CourseService {
     protected CommonConfig commonConfig;
     @Inject
     protected NotificationSenderAPI notificationSenderAPI;
+
+    @Inject
+    protected Gson gson;
 
     protected String selectForMethodLoadAssignedTest =
             "SELECT " +
@@ -891,6 +895,25 @@ public class CourseServiceBean implements CourseService {
                 .stream()
                 .peek(c -> c.setCourses(c.getCourses().stream().filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Enrollment courseEnrollmentInfo(UUID enrollmentId) {
+        Enrollment enrollment = dataManager.load(Enrollment.class)
+                .id(enrollmentId)
+                .view("enrollment-course")
+                .one();
+        enrollment.setCourse(dataManager.reload(enrollment.getCourse(), "course-enrollment"));
+        enrollment.getCourse()
+                .getSections()
+                .forEach(section -> {
+                    section.setCourseSectionAttempts(section.getCourseSectionAttempts()
+                            .stream()
+                            .filter(attempt -> attempt.getEnrollment().getId().equals(enrollment.getId()))
+                            .map(attempt -> dataManager.reload(attempt, "course-section-attempt"))
+                            .collect(Collectors.toList()));
+                });
+        return enrollment;
     }
 
     protected void completeEnrollment(UUID enrollmentId) {
