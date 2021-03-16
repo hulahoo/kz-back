@@ -30,6 +30,17 @@ public class PersonJson implements Serializable {
     protected String hasNdaFromPrevEmployer;
     protected String hasCriminalRecord;
     protected String companyCode;
+    protected String maritalStatus;
+
+    @JsonProperty("maritalStatus")
+    public String getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    @JsonProperty("maritalStatus")
+    public void setMaritalStatus(String maritalStatus) {
+        this.maritalStatus = maritalStatus;
+    }
 
     @JsonProperty("lastName")
     public String getLastName() {
