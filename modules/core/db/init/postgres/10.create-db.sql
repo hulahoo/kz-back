@@ -10216,7 +10216,7 @@ create table TSADV_COURSE_SESSION_ENROLLMENT (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     ENROLLMENT_ID uuid not null,
-    COURSE_SESSION_ID uuid not null,
+    COURSE_SESSION_ID uuid,
     ENROLLMENT_DATE date not null,
     STATUS integer,
     COMMENT_ varchar(1000),
