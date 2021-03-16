@@ -181,6 +181,8 @@
                         <column id="company"/>
                         <column id="groupEfficiencyPercent"/>
                         <column id="companyResult"/>
+                        <column id="fullName"/>
+                        <column id="jobText"/>
                     </columns>
                     <rows/>
                     <buttonsPanel id="correctionCoefBtnPanel">

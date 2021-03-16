@@ -8666,6 +8666,8 @@ create table TSADV_CORRECTION_COEFFICIENT (
     COMPANY_RESULT double precision,
     PERFORMANCE_PLAN_ID uuid,
     COMPANY_ID uuid,
+    FULL_NAME varchar(1000),
+    JOB_TEXT varchar(1000),
     --
     primary key (ID)
 )^
