@@ -36,10 +36,6 @@ public class PositionGroupExt extends PositionGroup implements IEntityGroup<Posi
     protected OrganizationGroupExt organizationGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POSITION_GROUP_ID")
-    protected PositionGroupExt positionGroup;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JOB_GROUP_ID")
     protected JobGroup jobGroup;
 
@@ -131,14 +127,6 @@ public class PositionGroupExt extends PositionGroup implements IEntityGroup<Posi
 
     public void setJobGroup(JobGroup jobGroup) {
         this.jobGroup = jobGroup;
-    }
-
-    public PositionGroupExt getPositionGroup() {
-        return positionGroup;
-    }
-
-    public void setPositionGroup(PositionGroupExt positionGroup) {
-        this.positionGroup = positionGroup;
     }
 
     public OrganizationGroupExt getOrganizationGroup() {
