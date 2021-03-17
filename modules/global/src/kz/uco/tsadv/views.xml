@@ -21847,12 +21847,18 @@
         <property name="employee" view="_minimal"/>
     </view>
     <view entity="tsadv$InsuredPerson" name="insuredPerson-editView" extends="_local">
-        <property name="statusRequest" view="_minimal"/>
+        <property name="statusRequest" view="_minimal">
+            <property name="code"/>
+        </property>
         <property name="insuranceContract" view="_local">
             <property name="company" view="_local"/>
             <property name="defaultDocumentType"/>
             <property name="programConditions" view="_local">
                 <property name="relationshipType" view="_local"/>
+            </property>
+            <property name="contractAdministrator" view="_minimal">
+                <property name="notifyAboutNewAttachments"/>
+                <property name="employee" view="_minimal"/>
             </property>
             <property name="attachments" view="_local">
                 <property name="attachment" view="_local"/>
@@ -21860,25 +21866,25 @@
         </property>
         <property name="company" view="_minimal"/>
         <property name="employee" view="_local">
-            <property name="addresses" view="_local">
-                <property name="addressType" view="_local"/>
-            </property>
-            <property name="personExperience" view="_local"/>
             <property name="list" view="_local">
                 <property name="sex" view="_local"/>
             </property>
             <property name="assignments" view="_local">
-                <property name="organizationGroup" view="_local">
-                    <property name="company" view="_local"/>
-                    <property name="list" view="_local"/>
-                </property>
+                <property name="assignmentStatus" view="_local"/>
                 <property name="jobGroup" view="_local">
                     <property name="list" view="_local"/>
                 </property>
-                <property name="assignmentStatus" view="_local"/>
+                <property name="organizationGroup" view="_local">
+                    <property name="list" view="_local"/>
+                    <property name="company" view="_local"/>
+                </property>
             </property>
             <property name="personDocuments" view="_local">
                 <property name="documentType" view="_local"/>
+            </property>
+            <property name="personExperience" view="_local"/>
+            <property name="addresses" view="_local">
+                <property name="addressType" view="_local"/>
             </property>
         </property>
         <property name="relative" view="_local"/>

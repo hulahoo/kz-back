@@ -358,5 +358,10 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
         insuredPersonsDl.load();
     }
 
+    @Subscribe("insuredPersonsTable.sendNotification")
+    protected void onInsuredPersonsTableSendNotification(Action.ActionPerformedEvent event) {
+
+    }
+
 
 }
