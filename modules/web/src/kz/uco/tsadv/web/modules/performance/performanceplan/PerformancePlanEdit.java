@@ -104,6 +104,11 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     @Inject
     protected NotificationService notificationService;
     protected SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+    protected SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+    protected SimpleDateFormat monthTextFormatRu = new SimpleDateFormat("dd MMMM yyyy", Locale.forLanguageTag("ru"));
+    protected SimpleDateFormat monthTextFormatEn = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+    protected SimpleDateFormat monthYearTextFormatRu = new SimpleDateFormat("MMMM yyyy", Locale.forLanguageTag("ru"));
+    protected SimpleDateFormat monthYearTextFormatEn = new SimpleDateFormat("MMMM yyyy", Locale.ENGLISH);
 
 
     @Subscribe
@@ -617,7 +622,12 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 RuleBasedNumberFormat nfRu = getAmountINText("ru");
                 RuleBasedNumberFormat nfEn = getAmountINText("en");
 
-                params.put("fullName", assignedPerformancePlan.getAssignedPerson().getFullName());
+                params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getFioWithEmployeeNumber());
+                params.put("fullNameEn", assignedPerformancePlan.getAssignedPerson().getPersonLatinFioWithEmployeeNumber());
+                params.put("firstMiddleNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName()
+                        + " " + assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName());
+                params.put("firstMiddleNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstNameLatin()
+                        + " " + assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin());
                 params.put("amountInTextRu", assignedPerformancePlan.getAdjustedBonus() != null
                         && assignedPerformancePlan.getAdjustedBonus() > 0
                         ? nfRu.format(assignedPerformancePlan.getAdjustedBonus())
@@ -632,8 +642,15 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                         && assignedPerformancePlan.getFinalBonus() > 0
                         ? nfEn.format(assignedPerformancePlan.getFinalBonus())
                         : null);
-                params.put("year", assignedPerformancePlan.getPerformancePlan().getStartDate().getYear());
-                params.put("currentDate", format.format(BaseCommonUtils.getSystemDate()));
+                params.put("year", yearFormat.format(assignedPerformancePlan.getPerformancePlan().getStartDate()));
+                params.put("currentDateRu", monthTextFormatRu.format(BaseCommonUtils.getSystemDate()));
+                params.put("currentDateEn", monthTextFormatEn.format(BaseCommonUtils.getSystemDate()));
+                params.put("monthYearRu", assignedPerformancePlan.getPerformancePlan().getAccessibilityEndDate() != null
+                        ? monthYearTextFormatRu.format(assignedPerformancePlan.getPerformancePlan().getAccessibilityEndDate())
+                        : "");
+                params.put("monthYearEn", assignedPerformancePlan.getPerformancePlan().getAccessibilityEndDate() != null
+                        ? monthYearTextFormatEn.format(assignedPerformancePlan.getPerformancePlan().getAccessibilityEndDate())
+                        : "");
                 CorrectionCoefficient correctionCoefficient = getSigner(assignedPerformancePlan.getPerformancePlan(),
                         assignedPerformancePlan.getAssignedPerson());
                 params.put("signer", correctionCoefficient != null
