@@ -654,9 +654,13 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 CorrectionCoefficient correctionCoefficient = getSigner(assignedPerformancePlan.getPerformancePlan(),
                         assignedPerformancePlan.getAssignedPerson());
                 params.put("signer", correctionCoefficient != null
+                        && correctionCoefficient.getFullName() != null
+                        && !correctionCoefficient.getFullName().isEmpty()
                         ? correctionCoefficient.getFullName()
                         : "");
                 params.put("job", correctionCoefficient != null
+                        && correctionCoefficient.getJobText() != null
+                        && !correctionCoefficient.getJobText().isEmpty()
                         ? correctionCoefficient.getJobText()
                         : "");
                 notificationService.sendParametrizedNotification("kpi.letter.of.happiness", tsadvUser, params);
