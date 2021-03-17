@@ -7,7 +7,7 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -46,7 +46,7 @@ public class CourseServiceBean implements CourseService {
     @Inject
     protected CommonConfig commonConfig;
     @Inject
-    protected NotificationSenderAPI notificationSenderAPI;
+    protected NotificationSenderAPIService notificationSenderAPIService;
 
     @Inject
     protected Gson gson;
@@ -213,7 +213,7 @@ public class CourseServiceBean implements CourseService {
 
     @Override
     public void sendParametrizedNotification(String notificationCode, TsadvUser user, Map<String, Object> params) {
-        notificationSenderAPI.sendParametrizedNotification(notificationCode, user, params);
+        notificationSenderAPIService.sendParametrizedNotification(notificationCode, user, params);
     }
 
     @Override

@@ -24,6 +24,28 @@ public class CorrectionCoefficient extends StandardEntity {
     @JoinColumn(name = "COMPANY_ID")
     protected DicCompany company;
 
+    @Column(name = "FULL_NAME", length = 1000)
+    protected String fullName;
+
+    @Column(name = "JOB_TEXT", length = 1000)
+    protected String jobText;
+
+    public String getJobText() {
+        return jobText;
+    }
+
+    public void setJobText(String jobText) {
+        this.jobText = jobText;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public DicCompany getCompany() {
         return company;
     }

@@ -8668,6 +8668,8 @@ create table TSADV_CORRECTION_COEFFICIENT (
     COMPANY_RESULT double precision,
     PERFORMANCE_PLAN_ID uuid,
     COMPANY_ID uuid,
+    FULL_NAME varchar(1000),
+    JOB_TEXT varchar(1000),
     --
     primary key (ID)
 )^
@@ -10218,7 +10220,7 @@ create table TSADV_COURSE_SESSION_ENROLLMENT (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     ENROLLMENT_ID uuid not null,
-    COURSE_SESSION_ID uuid not null,
+    COURSE_SESSION_ID uuid,
     ENROLLMENT_DATE date not null,
     STATUS integer,
     COMMENT_ varchar(1000),
@@ -17211,9 +17213,13 @@ alter table BASE_ASSIGNMENT_GROUP add column DTYPE varchar(100) ^
 update BASE_ASSIGNMENT_GROUP set DTYPE = 'base$AssignmentGroupExt' where DTYPE is null ^
 -- end BASE_ASSIGNMENT_GROUP
 -- begin BASE_POSITION_GROUP
+alter table BASE_POSITION_GROUP add column ORGANIZATION_GROUP_ID uuid ^
+alter table BASE_POSITION_GROUP add column JOB_GROUP_ID uuid ^
+alter table BASE_POSITION_GROUP add column GRADE_GROUP_ID uuid ^
+alter table BASE_POSITION_GROUP add column COMPANY_ID uuid ^
 alter table BASE_POSITION_GROUP add column ANALYTICS_ID uuid ^
 alter table BASE_POSITION_GROUP add column ADMIN_APPROVE_ID uuid ^
-alter table BASE_POSITION_GROUP add column DTYPE varchar(31) ^
+alter table BASE_POSITION_GROUP add column DTYPE varchar(100) ^
 update BASE_POSITION_GROUP set DTYPE = 'base$PositionGroupExt' where DTYPE is null ^
 -- end BASE_POSITION_GROUP
 
@@ -17256,8 +17262,6 @@ create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (
     ABSENCE_REQUEST_ID uuid,
     FILE_DESCRIPTOR_ID uuid,
     primary key (ABSENCE_REQUEST_ID, FILE_DESCRIPTOR_ID)
-
-
 
 -- begin TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
 create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (

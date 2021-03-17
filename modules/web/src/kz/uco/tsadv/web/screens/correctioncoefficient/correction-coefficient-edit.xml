@@ -23,6 +23,8 @@
                 </pickerField>
                 <textField id="groupEfficiencyPercentField" property="groupEfficiencyPercent" required="true"/>
                 <textField id="companyResultField" property="companyResult"/>
+                <textField id="fullName" property="fullName"/>
+                <textField id="jobText" property="jobText"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

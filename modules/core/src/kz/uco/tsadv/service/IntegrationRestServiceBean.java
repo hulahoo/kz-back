@@ -21,6 +21,7 @@ import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.enums.GrossNet;
 import kz.uco.tsadv.modules.personal.enums.SalaryType;
@@ -682,11 +683,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 personExt.setLegacyId(personJson.getLegacyId());
                 personExt.setWriteHistory(false);
                 DicPersonType personType = dataManager.load(DicPersonType.class)
-                            .query("select e from tsadv$DicPersonType e " +
-                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
-                                    "companyCode", personJson.getCompanyCode()))
-                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                        .query("select e from tsadv$DicPersonType e " +
+                                " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
+                                "companyCode", personJson.getCompanyCode()))
+                        .view(View.BASE).list().stream().findFirst().orElse(null);
                 if (personType != null) {
                     personExt.setType(personType);
                 } else {
@@ -723,6 +724,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                 }
                 personExt.setSex(sex);
+                DicMaritalStatus maritalStatus = null;
+                if (personJson.getMaritalStatus() != null && !personJson.getMaritalStatus().isEmpty()) {
+                    maritalStatus = dataManager.load(DicMaritalStatus.class)
+                            .query("select e from tsadv$DicMaritalStatus e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getMaritalStatus(),
+                                    "companyCode", personJson.getCompanyCode()))
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                }
+                personExt.setMaritalStatus(maritalStatus);
 
                 personExt.setGroup(personGroupExt);
                 personGroupExt.getList().add(personExt);
