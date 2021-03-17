@@ -18,7 +18,7 @@ import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
 import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
@@ -62,7 +62,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Inject
     protected UserSessionSource userSessionSource;
     @Inject
-    protected NotificationSenderAPI notificationSender;
+    protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     protected BprocHistoricService bprocHistoricService;
     @Inject
@@ -346,7 +346,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         String requestLink = getRequestLink(entity, activity);
         notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
-        notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
+        notificationSenderAPIService.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
     }
 
 

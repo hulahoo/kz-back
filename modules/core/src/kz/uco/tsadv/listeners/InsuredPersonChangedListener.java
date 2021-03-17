@@ -6,7 +6,7 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.GlobalConfig;
 import com.haulmont.cuba.core.global.Resources;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.ContractConditions;
@@ -39,7 +39,7 @@ public class InsuredPersonChangedListener {
     private EmployeeService employeeService;
     protected SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     @Inject
-    protected NotificationSenderAPI notificationSender;
+    protected NotificationSenderAPIService notificationSenderAPIService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<InsuredPerson, UUID> event) {
@@ -207,7 +207,7 @@ public class InsuredPersonChangedListener {
                     .view("")
                     .list();
             tsadvUsers.forEach(tsadvUser -> {
-                notificationSender.sendParametrizedNotification("insurance.person.dms",
+                notificationSenderAPIService.sendParametrizedNotification("insurance.person.dms",
                         tsadvUser, params);
             });
         }
