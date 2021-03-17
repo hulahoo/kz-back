@@ -60,6 +60,10 @@
             <property name="endDate"/>
         </property>
         <property name="stepStageStatus"/>
+        <property name="extraPoint"/>
+        <property name="finalScore"/>
+        <property name="purpose"/>
+        <property name="file" view="_local"/>
         <property name="assignedPerson" view="_local">
             <property name="currentAssignment" view="assignedPerformancePlan-assignment"/>
             <property name="person" view="_local"/>

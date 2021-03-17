@@ -2886,7 +2886,7 @@
                   view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.AssignedGoal"
-          name="assignedGoal.edit">
+          name="assignedGoal.edit" extends="_local">
         <property name="goal" view="_minimal">
             <property name="library" view="_minimal">
                 <property name="category" view="_minimal">
@@ -2907,19 +2907,16 @@
                     <property name="code"/>
                 </property>
                 <property name="primaryFlag"/>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                </property>
             </property>
             <property name="personExperience" view="_minimal"/>
         </property>
         <property name="organizationGroup" view="_minimal">
-            <property name="list" view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
-            <property name="organization" view="_minimal"/>
         </property>
         <property name="positionGroup" view="_minimal">
             <property name="list" view="_local"/>
-            <property name="position" view="_minimal"/>
         </property>
         <property name="jobGroup" view="_minimal">
             <property name="list" view="_minimal">
@@ -2928,21 +2925,18 @@
             </property>
             <property name="job" view="_minimal"/>
         </property>
-        <property name="targetValue"/>
-        <property name="actualValue"/>
-        <property name="successCritetia"/>
         <property name="assignedByPersonGroup" view="_minimal">
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="code"/>
                 </property>
                 <property name="primaryFlag"/>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                </property>
             </property>
             <property name="personExperience" view="_minimal"/>
         </property>
-        <property name="startDate"/>
-        <property name="endDate"/>
-        <property name="weight"/>
         <property name="priority" view="_local"/>
         <property name="assignedPerformancePlan" view="_minimal">
             <property name="result"/>
@@ -2957,9 +2951,6 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
-        <property name="goalString"/>
-        <property name="goalType"/>
-        <property name="result"/>
     </view>
     <view class="kz.uco.tsadv.modules.performance.model.Questionnaire"
           name="questionnaire.browse">
