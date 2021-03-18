@@ -22,6 +22,7 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.base.entity.dictionary.DicCurrency;
 import kz.uco.base.service.NotificationService;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -621,28 +622,53 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
                 RuleBasedNumberFormat nfRu = getAmountINText("ru");
                 RuleBasedNumberFormat nfEn = getAmountINText("en");
+                int nextYear = Integer.parseInt(yearFormat.format(assignedPerformancePlan.getPerformancePlan().getStartDate())) + 1;
 
-                params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getFioWithEmployeeNumber());
-                params.put("fullNameEn", assignedPerformancePlan.getAssignedPerson().getPersonLatinFioWithEmployeeNumber());
-                params.put("firstMiddleNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName()
-                        + " " + assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName());
-                params.put("firstMiddleNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstNameLatin()
-                        + " " + assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin());
+                params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName()
+                        + " "
+                        + assignedPerformancePlan.getAssignedPerson().getPerson().getLastName());
+                params.put("middleNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName() != null
+                        && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName().isEmpty()
+                        ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName()
+                        : "");
+                params.put("fullNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstNameLatin()
+                        + " "
+                        + assignedPerformancePlan.getAssignedPerson().getPerson().getLastNameLatin());
+                params.put("middleNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin() != null
+                        && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin().isEmpty()
+                        ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin()
+                        : "");
+                params.put("firstNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName());
+                params.put("firstNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstNameLatin());
+                params.put("finalBonus", assignedPerformancePlan.getAdjustedBonus() != null
+                        && assignedPerformancePlan.getAdjustedBonus() > 0
+                        ? assignedPerformancePlan.getAdjustedBonus()
+                        : assignedPerformancePlan.getFinalBonus() != null
+                        && assignedPerformancePlan.getFinalBonus() > 0
+                        ? assignedPerformancePlan.getFinalBonus()
+                        : "");
+                DicCurrency currency = getSalaryCurrency(assignedPerformancePlan.getAssignedPerson().getCurrentAssignment());
+                params.put("currency", currency != null
+                        && currency.getCode() != null
+                        && !currency.getCode().isEmpty()
+                        ? currency.getCode()
+                        : "");
                 params.put("amountInTextRu", assignedPerformancePlan.getAdjustedBonus() != null
                         && assignedPerformancePlan.getAdjustedBonus() > 0
                         ? nfRu.format(assignedPerformancePlan.getAdjustedBonus())
                         : assignedPerformancePlan.getFinalBonus() != null
                         && assignedPerformancePlan.getFinalBonus() > 0
                         ? nfRu.format(assignedPerformancePlan.getFinalBonus())
-                        : null);
+                        : "");
                 params.put("amountInTextEn", assignedPerformancePlan.getAdjustedBonus() != null
                         && assignedPerformancePlan.getAdjustedBonus() > 0
                         ? nfEn.format(assignedPerformancePlan.getAdjustedBonus())
                         : assignedPerformancePlan.getFinalBonus() != null
                         && assignedPerformancePlan.getFinalBonus() > 0
                         ? nfEn.format(assignedPerformancePlan.getFinalBonus())
-                        : null);
+                        : "");
                 params.put("year", yearFormat.format(assignedPerformancePlan.getPerformancePlan().getStartDate()));
+                params.put("nextYear", nextYear);
                 params.put("currentDateRu", monthTextFormatRu.format(BaseCommonUtils.getSystemDate()));
                 params.put("currentDateEn", monthTextFormatEn.format(BaseCommonUtils.getSystemDate()));
                 params.put("monthYearRu", assignedPerformancePlan.getPerformancePlan().getAccessibilityEndDate() != null
@@ -653,19 +679,39 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                         : "");
                 CorrectionCoefficient correctionCoefficient = getSigner(assignedPerformancePlan.getPerformancePlan(),
                         assignedPerformancePlan.getAssignedPerson());
-                params.put("signer", correctionCoefficient != null
+                params.put("signerRu", correctionCoefficient != null
                         && correctionCoefficient.getFullName() != null
                         && !correctionCoefficient.getFullName().isEmpty()
                         ? correctionCoefficient.getFullName()
                         : "");
-                params.put("job", correctionCoefficient != null
+                params.put("jobRu", correctionCoefficient != null
                         && correctionCoefficient.getJobText() != null
                         && !correctionCoefficient.getJobText().isEmpty()
                         ? correctionCoefficient.getJobText()
                         : "");
+                params.put("signerEn", correctionCoefficient != null
+                        && correctionCoefficient.getFullNameEn() != null
+                        && !correctionCoefficient.getFullNameEn().isEmpty()
+                        ? correctionCoefficient.getFullNameEn()
+                        : "");
+                params.put("jobEn", correctionCoefficient != null
+                        && correctionCoefficient.getJobTextEn() != null
+                        && !correctionCoefficient.getJobTextEn().isEmpty()
+                        ? correctionCoefficient.getJobTextEn()
+                        : "");
                 notificationService.sendParametrizedNotification("kpi.letter.of.happiness", tsadvUser, params);
             }
         }
+    }
+
+    protected DicCurrency getSalaryCurrency(AssignmentExt currentAssignment) {
+        return dataManager.load(DicCurrency.class)
+                .query("select e.currency from tsadv$Salary e " +
+                        " where e.assignmentGroup = :assignmentGroup " +
+                        " and current_date between e.startDate and e.endDate")
+                .parameter("assignmentGroup", currentAssignment.getGroup())
+                .view("")
+                .list().stream().findFirst().orElse(null);
     }
 
     protected CorrectionCoefficient getSigner(PerformancePlan performancePlan, PersonGroupExt personGroupExt) {

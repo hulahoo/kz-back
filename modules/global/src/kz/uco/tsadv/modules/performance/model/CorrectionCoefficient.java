@@ -30,6 +30,28 @@ public class CorrectionCoefficient extends StandardEntity {
     @Column(name = "JOB_TEXT", length = 1000)
     protected String jobText;
 
+    @Column(name = "FULL_NAME_EN", length = 1000)
+    protected String fullNameEn;
+
+    @Column(name = "JOB_TEXT_EN", length = 1000)
+    protected String jobTextEn;
+
+    public String getJobTextEn() {
+        return jobTextEn;
+    }
+
+    public void setJobTextEn(String jobTextEn) {
+        this.jobTextEn = jobTextEn;
+    }
+
+    public String getFullNameEn() {
+        return fullNameEn;
+    }
+
+    public void setFullNameEn(String fullNameEn) {
+        this.fullNameEn = fullNameEn;
+    }
+
     public String getJobText() {
         return jobText;
     }

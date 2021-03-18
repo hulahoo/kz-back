@@ -25,6 +25,8 @@
                 <textField id="companyResultField" property="companyResult"/>
                 <textField id="fullName" property="fullName"/>
                 <textField id="jobText" property="jobText"/>
+                <textField id="fullNameEn" property="fullNameEn"/>
+                <textField id="jobTextEn" property="jobTextEn"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
