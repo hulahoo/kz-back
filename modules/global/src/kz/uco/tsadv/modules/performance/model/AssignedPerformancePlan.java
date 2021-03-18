@@ -257,6 +257,7 @@ public class AssignedPerformancePlan extends AbstractBprocRequest {
 
     @PostConstruct
     public void postConstruct() {
+        super.postConstruct();
         this.stepStageStatus = CardStatusEnum.DRAFT.getId();
     }
 
