@@ -191,9 +191,9 @@ public class InsuredPersonChangedListener {
                     ? format.format(insuredPerson.getAttachDate())
                     : "");
             params.put("linkRu", "<a href=\"" + globalConfig.getWebAppUrl() + "\">ссылке</a>");
-            if (!"PRIMARY".equals(insuredPerson.getRelative().getCode())) {
-                params.put("tableRu", getTable(insuredPerson));
-            }
+            params.put("tableRu", !"PRIMARY".equals(insuredPerson.getRelative().getCode())
+                    ? getTable(insuredPerson)
+                    : "");
             List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
                     .query("select e.employee from tsadv$InsuranceContractAdministrator e " +
                             " where e.insuranceContract = :insuranceContract " +
