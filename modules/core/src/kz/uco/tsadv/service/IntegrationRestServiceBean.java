@@ -1235,14 +1235,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return prepareSuccess(result, methodName, hierarchyElementData);
     }
 
-    protected <T extends Serializable> BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
+    @Override
+    public BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
         baseResult.setSuccess(true);
         baseResult.setSuccessMessage("success");
         createLog(methodName, baseResult, params);
         return baseResult;
     }
 
-    protected BaseResult prepareError(BaseResult baseResult, String methodName, Serializable params, String errorMessage) {
+    @Override
+    public BaseResult prepareError(BaseResult baseResult, String methodName, Serializable params, String errorMessage) {
         baseResult.setSuccess(false);
         baseResult.setErrorMessage(errorMessage);
         createLog(methodName, baseResult, params);
