@@ -247,7 +247,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     }
 
     protected ProcessInstanceData getProcessInstanceData() {
-        return bprocService.getProcessInstanceData(getEditedEntity().getId().toString(), getProcDefinitionKey());
+        return bprocService.getProcessInstanceData(getEditedEntity().getProcessInstanceBusinessKey(), getProcDefinitionKey());
     }
 
     protected void fillTasksDc() {

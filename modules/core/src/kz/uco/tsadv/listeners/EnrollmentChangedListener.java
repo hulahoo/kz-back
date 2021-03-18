@@ -8,7 +8,7 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.EmailAttachment;
 import com.haulmont.cuba.core.global.FileStorageException;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
@@ -28,7 +28,7 @@ import java.util.UUID;
 @Component("tsadv_EnrollmentChangedListener")
 public class EnrollmentChangedListener {
     @Inject
-    protected NotificationSenderAPI notificationSender;
+    protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     protected DataManager dataManager;
     @Inject
@@ -90,7 +90,7 @@ public class EnrollmentChangedListener {
                     Map<String, Object> map = new HashMap<>();
                     map.put("courseName", enrollment.getCourse().getName());
                     map.put("personFullName", enrollment.getPersonGroup().getFullName());
-                    notificationSender.sendParametrizedNotification(notificationCode,
+                    notificationSenderAPIService.sendParametrizedNotification(notificationCode,
                             tsadvUser, map);
                 }
             });
@@ -119,10 +119,10 @@ public class EnrollmentChangedListener {
             if (fileDescriptor != null) {
                 EmailAttachment[] emailAttachments = new EmailAttachment[0];
                 emailAttachments = getEmailAttachments(fileDescriptor, emailAttachments);
-                notificationSender.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                         user, map, emailAttachments);
             } else {
-                notificationSender.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                         user, map);
             }
         }

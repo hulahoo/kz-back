@@ -6,7 +6,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.ValueLoadContext;
 import kz.uco.base.common.BaseCommonUtils;
-import kz.uco.base.notification.NotificationSender;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
@@ -45,7 +45,7 @@ public class AssignmentServiceBean implements AssignmentService {
     @Inject
     protected ActivityService activityService;
     @Inject
-    protected NotificationSender notificationSender;
+    protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     protected PositionStructureConfig positionStructureConfig;
     @Inject
@@ -219,7 +219,7 @@ public class AssignmentServiceBean implements AssignmentService {
                         null,
                         "assignment.notify.temporaryEndDate",
                         param);
-                notificationSender.sendParametrizedNotification("assignment.notify.temporaryEndDate", manager, param);
+                notificationSenderAPIService.sendParametrizedNotification("assignment.notify.temporaryEndDate", manager, param);
             } catch (Exception e) {
                 log.error("Error", e);
             }

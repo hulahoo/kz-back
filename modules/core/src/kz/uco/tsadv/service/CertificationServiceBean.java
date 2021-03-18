@@ -7,7 +7,7 @@ import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.CertificationPeriod;
 import kz.uco.tsadv.modules.learning.enums.CertificationStatus;
@@ -29,7 +29,7 @@ public class CertificationServiceBean implements CertificationService {
     @Inject
     private Persistence persistence;
     @Inject
-    private NotificationSenderAPI notificationSenderAPI;
+    private NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     private Metadata metadata;
     @Inject
@@ -110,7 +110,7 @@ public class CertificationServiceBean implements CertificationService {
         maps.put("user", userExt);
         maps.put("enrollment", enrollment);
 
-        notificationSenderAPI.sendParametrizedNotification(notificationCode, userExt, maps);
+        notificationSenderAPIService.sendParametrizedNotification(notificationCode, userExt, maps);
     }
 
     private TsadvUser getUserExt(Enrollment enrollment) {

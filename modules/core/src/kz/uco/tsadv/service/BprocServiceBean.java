@@ -18,7 +18,7 @@ import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
 import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
@@ -26,6 +26,7 @@ import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
+import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
@@ -62,7 +63,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Inject
     protected UserSessionSource userSessionSource;
     @Inject
-    protected NotificationSenderAPI notificationSender;
+    protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     protected BprocHistoricService bprocHistoricService;
     @Inject
@@ -112,7 +113,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Override
     public <T extends AbstractBprocRequest> void sendNotificationAndActivityToInitiator(T bprocRequest, String notificationTemplateCode) {
         ProcessInstanceData processInstanceData =
-                this.getProcessInstanceData(bprocRequest.getId().toString(), bprocRequest.getProcessDefinitionKey());
+                this.getProcessInstanceData(bprocRequest.getProcessInstanceBusinessKey(), bprocRequest.getProcessDefinitionKey());
 
         User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
 
@@ -127,7 +128,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Override
     public <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest, String notificationTemplateCode) {
         ProcessInstanceData processInstanceData = bprocHistoricService.createHistoricProcessInstanceDataQuery()
-                .processInstanceBusinessKey(bprocRequest.getId().toString())
+                .processInstanceBusinessKey(bprocRequest.getProcessInstanceBusinessKey())
                 .processDefinitionKey(bprocRequest.getProcessDefinitionKey())
                 .singleResult();
 
@@ -312,6 +313,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         DicHrRole dicHrRole = metadata.create(DicHrRole.class);
         dicHrRole.setLangValue1("Инициатор");
         dicHrRole.setLangValue3("Initiator");
+        dicHrRole.setCode("INITIATOR");
         return dicHrRole;
     }
 
@@ -346,7 +348,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         String requestLink = getRequestLink(entity, activity);
         notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
-        notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
+        notificationSenderAPIService.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
     }
 
 
@@ -404,7 +406,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         params.put("entity", entity);
         params.put("requestNumber", entity.getRequestNumber());
 
-        ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getId().toString(), entity.getProcessDefinitionKey());
+        ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getProcessInstanceBusinessKey(), entity.getProcessDefinitionKey());
         TsadvUser initiator = getProcessVariable(processInstanceData.getId(), "initiator");
         Assert.notNull(initiator, "Initiator not found!");
         initiator = dataManager.reload(initiator, "user-fioWithLogin");
@@ -811,5 +813,15 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     public void changeStatusChangeAbsenceDaysRequest(ChangeAbsenceDaysRequest entity, String status, String notificationCode) {
         changeRequestStatus(entity, status);
         sendNotificationToInitiator(entity, notificationCode);
+    }
+
+    @Override
+    public void approveAssignedPerformancePlan(AssignedPerformancePlan request) {
+        EntityManager entityManager = persistence.getEntityManager();
+        request = entityManager.find(AssignedPerformancePlan.class, request.getId(), new View(AssignedPerformancePlan.class).addProperty("status"));
+        Assert.notNull(request, "bprocRequest not found!");
+        request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
+        request.setNextStep();
+        entityManager.merge(request);
     }
 }
