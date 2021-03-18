@@ -94,7 +94,7 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
             HttpResponse<String> response = Unirest.post("http://10.2.200.101:8290/api/ahruco/absence/request").body(absenceJson).asString();
 
             BaseResult baseResult = new BaseResult();
-            String methodName = "AbsenceRequestListener.onBeforeUpdate";
+            String methodName = "AbsenceRequestListener.onBeforeInsert";
             String responseBody = response.getBody();
             if(responseBody.contains("\"success\":\"true\"")){
                 integrationRestService.prepareSuccess(baseResult,
