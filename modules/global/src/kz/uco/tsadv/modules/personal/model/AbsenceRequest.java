@@ -3,7 +3,9 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.UserSessionSource;
@@ -23,6 +25,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+@Listeners("tsadv_AbsenceRequestListener")
 @NamePattern("%s (%s)|requestNumber,requestDate")
 @Table(name = "TSADV_ABSENCE_REQUEST")
 @Entity(name = "tsadv$AbsenceRequest")
