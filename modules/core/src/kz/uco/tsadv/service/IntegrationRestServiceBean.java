@@ -1576,17 +1576,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             : null);
                     DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
-                                    " where e.legacyId = :cLegacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency(),
-                                    "companyCode", salaryJson.getCompanyCode()))
+                                    " where e.legacyId = :cLegacyId")
+                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency()))
                             .list().stream().findFirst().orElse(null);
                     if (dicCurrency != null) {
                         salary.setCurrency(dicCurrency);
                     } else {
                         return prepareError(result, methodName, salaryData,
-                                "no base$DicCurrency with legacyId " + salaryJson.getCurrency()
-                                        + " and company legacyId " + salaryJson.getCompanyCode());
+                                "no base$DicCurrency with legacyId " + salaryJson.getCurrency());
                     }
                     salary.setNetGross(GrossNet.fromId(salaryJson.getNetGross() != null
                             && !salaryJson.getNetGross().isEmpty()
@@ -1629,17 +1626,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             : null);
                     DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
-                                    " where e.legacyId = :cLegacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency(),
-                                    "companyCode", salaryJson.getCompanyCode()))
+                                    " where e.legacyId = :cLegacyId")
+                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency()))
                             .list().stream().findFirst().orElse(null);
                     if (dicCurrency != null) {
                         salary.setCurrency(dicCurrency);
                     } else {
                         return prepareError(result, methodName, salaryData,
-                                "no base$DicCurrency with legacyId " + salaryJson.getCurrency()
-                                        + " and company legacyId " + salaryJson.getCompanyCode());
+                                "no base$DicCurrency with legacyId " + salaryJson.getCurrency());
                     }
                     salary.setNetGross(GrossNet.fromId(salaryJson.getNetGross() != null
                             && !salaryJson.getNetGross().isEmpty()
