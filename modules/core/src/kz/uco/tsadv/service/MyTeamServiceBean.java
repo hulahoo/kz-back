@@ -2,21 +2,29 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.MyTeamNew;
+import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.global.common.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service(MyTeamService.NAME)
 public class MyTeamServiceBean implements MyTeamService {
 
+    @Inject
+    protected DataManager dataManager;
     @Inject
     private Persistence persistence;
     @Inject
@@ -24,7 +32,80 @@ public class MyTeamServiceBean implements MyTeamService {
     @Inject
     protected UserSessionSource userSessionSource;
     @Inject
+    protected PositionStructureConfig positionStructureConfig;
+    @Inject
     protected Messages messages;
+
+    @Override
+    public List<MyTeamNew> searchMyTeam(UUID parentPositionGroupId, String searchFio) {
+        UUID positionStructureId = positionStructureConfig.getPositionStructureId();
+        List<Object[]> objectList = this.searchMyTeam(positionStructureId, parentPositionGroupId, searchFio,
+                null, null, false);
+
+        if (objectList.isEmpty()) {
+            throw new PortalException(String.format(messages.getMainMessage("search.not.found"), searchFio));
+        }
+
+        List<MyTeamNew> result = new ArrayList<>();
+
+        String pathParent;
+
+        for (Object[] objects : objectList) {
+            pathParent = (String) objects[1];
+            String[] path = (pathParent).split("\\*");
+            UUID foundPosGroupId = (UUID) objects[2];
+            UUID foundPersonGroupId = (UUID) objects[3];
+
+            for (int i = 0; i < path.length; i++) {
+                UUID posId = UUID.fromString(path[i]);
+                if (posId.equals(parentPositionGroupId)) continue;
+                if (result.stream().map(MyTeamNew::getPositionGroupId).noneMatch(id -> id.equals(posId))) {
+                    UUID parentId = i == 0 ? null : UUID.fromString(path[i - 1]);
+                    UUID personGroupId = posId.equals(foundPosGroupId) ? foundPersonGroupId : null;
+
+                    addItems(posId, parentId, personGroupId, result, positionStructureId);
+                }
+            }
+            List<UUID> childIdList = this.getChildPositionIdList(foundPosGroupId, positionStructureId);
+            if (!CollectionUtils.isEmpty(childIdList)) {
+                childIdList.forEach(child -> addItems(child, foundPosGroupId, null, result, positionStructureId));
+            }
+        }
+        return result;
+    }
+
+    protected void addItems(@Nonnull UUID posId, @Nullable UUID parentPosId, @Nullable UUID personGroupId, List<MyTeamNew> result, UUID positionStructureId) {
+        List<MyTeamNew> parentList = result.stream()
+                .filter(myTeamNew -> Objects.equals(myTeamNew.getPositionGroupId(), parentPosId))
+                .collect(Collectors.toList());
+
+        List<MyTeamNew> list = this.getMyTeamInPosition(posId, positionStructureId);
+
+        for (MyTeamNew myTeamNew : list) {
+            if (personGroupId == null
+                    || personGroupId.equals(myTeamNew.getPersonGroupId())) {
+                if (parentList.isEmpty()) {
+                    myTeamNew.setParent(null);
+                    result.add(myTeamNew);
+                } else {
+                    for (MyTeamNew teamNew : parentList) {
+                        MyTeamNew copy = copy(myTeamNew);
+                        copy.setParent(teamNew);
+                        result.add(copy);
+                    }
+                }
+            }
+        }
+    }
+
+    protected MyTeamNew copy(MyTeamNew myTeamNew) {
+        MyTeamNew copy = dataManager.create(MyTeamNew.class);
+        copy.setFullName(myTeamNew.getFullName());
+        copy.setPositionGroupId(myTeamNew.getPositionGroupId());
+        copy.setPersonGroupId(myTeamNew.getPersonGroupId());
+        copy.setHasChild(myTeamNew.getHasChild());
+        return copy;
+    }
 
     /**
      * Search in hierarchy myTeam
@@ -119,7 +200,17 @@ public class MyTeamServiceBean implements MyTeamService {
     }
 
     @Override
-    public List<Object[]> getChildren(@Nullable UUID parentPositionGroupId, UUID positionStructureId) {
+    public List<MyTeamNew> getChildren(UUID parentPositionGroupId) {
+        return getChildren(parentPositionGroupId, positionStructureConfig.getPositionStructureId(), null);
+    }
+
+    @Override
+    public List<MyTeamNew> getChildren(UUID parentPositionGroupId, MyTeamNew parent) {
+        return getChildren(parentPositionGroupId, positionStructureConfig.getPositionStructureId(), parent);
+    }
+
+    @Override
+    public List<MyTeamNew> getChildren(@Nullable UUID parentPositionGroupId, UUID positionStructureId, MyTeamNew parent) {
         String queryString = " with hierarchy_has_person as (\n" +
                 "  select h.parent_id \n" +
                 "  from base_hierarchy_element h\n" +
@@ -183,11 +274,14 @@ public class MyTeamServiceBean implements MyTeamService {
         params.put(1, currentDate);
         params.put(2, positionStructureId);
         List<Object[]> resultList = commonService.emNativeQueryResultList(queryString, params);
-        return resultList;
+        return resultList.stream()
+                .map(this::parseMyTeamNewObject)
+                .peek(myTeamNew -> myTeamNew.setParent(parent))
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<Object[]> getMyTeamInPosition(UUID positionGroupId, UUID positionStructureId) {
+    public List<MyTeamNew> getMyTeamInPosition(UUID positionGroupId, UUID positionStructureId) {
         String queryString = " with hierarchy_has_person as (\n" +
                 "  select h.parent_id \n" +
                 "  from base_hierarchy_element h\n" +
@@ -247,7 +341,9 @@ public class MyTeamServiceBean implements MyTeamService {
         params.put(2, positionStructureId);
         params.put(3, positionGroupId);
         List<Object[]> resultList = commonService.emNativeQueryResultList(queryString, params);
-        return resultList;
+        return resultList.stream()
+                .map(this::parseMyTeamNewObject)
+                .collect(Collectors.toList());
     }
 
 
@@ -305,8 +401,13 @@ public class MyTeamServiceBean implements MyTeamService {
     }
 
     @Override
+    public MyTeamNew parseMyTeamNewObject(Object[] entity) {
+        return this.parseMyTeamNewObject(entity, messages.getMessage(MyTeamNew.class, "vacantPosition"));
+    }
+
+    @Override
     public MyTeamNew parseMyTeamNewObject(Object[] entity, String vacantPosition) {
-        MyTeamNew myTeamNewObject = new MyTeamNew();
+        MyTeamNew myTeamNewObject = dataManager.create(MyTeamNew.class);
         myTeamNewObject.setLinkEnabled(true);
         myTeamNewObject.setFullName(getFullName(entity));
         myTeamNewObject.setPositionGroupId((UUID) entity[6]);
@@ -327,7 +428,7 @@ public class MyTeamServiceBean implements MyTeamService {
 
     @Override
     public MyTeamNew createFakeChild(@Nullable MyTeamNew parent) {
-        MyTeamNew fakeChild = new MyTeamNew();
+        MyTeamNew fakeChild = dataManager.create(MyTeamNew.class);
         fakeChild.setId(UUID.randomUUID());
         fakeChild.setFullName("FORDELETE!!");
         fakeChild.setParent(parent);

@@ -9,13 +9,21 @@ import java.util.UUID;
 public interface MyTeamService {
     String NAME = "tsadv_MyTeamService";
 
+    List<MyTeamNew> searchMyTeam(UUID parentPositionGroupId, String searchFio);
+
     List<Object[]> searchMyTeam(UUID hierarchyId, UUID parentPositionGroupId, String searchFio,
                                 @Nullable String lastFindPathNumber, @Nullable UUID lastFindPersonGroupId,
                                 boolean onlyFirstElement);
 
-    List<Object[]> getChildren(UUID parentPositionGroupId, UUID positionStructureId);
+    List<MyTeamNew> getChildren(UUID parentPositionGroupId);
 
-    List<Object[]> getMyTeamInPosition(UUID positionGroupId, UUID positionStructureId);
+    List<MyTeamNew> getChildren(UUID parentPositionGroupId, MyTeamNew parent);
+
+    List<MyTeamNew> getChildren(UUID parentPositionGroupId, UUID positionStructureId, MyTeamNew parent);
+
+    List<MyTeamNew> getMyTeamInPosition(UUID positionGroupId, UUID positionStructureId);
+
+    MyTeamNew parseMyTeamNewObject(Object[] entity);
 
     MyTeamNew parseMyTeamNewObject(Object[] entity, String vacantPosition);
 

@@ -18,6 +18,8 @@ import java.util.Date;
 public abstract class AbstractBprocRequest extends AbstractParentEntity {
     private static final long serialVersionUID = -1908181720688177085L;
 
+    public static final String OUTCOME_START = "START";
+
     public static final String OUTCOME_APPROVE = "APPROVE";
 
     public static final String OUTCOME_REJECT = "REJECT";

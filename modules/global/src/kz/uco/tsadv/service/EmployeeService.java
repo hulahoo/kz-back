@@ -8,6 +8,7 @@ import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
+import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -23,6 +24,8 @@ import java.util.UUID;
 
 public interface EmployeeService {
     String NAME = "tsadv_EmployeeService";
+
+    PersonProfileDto personProfile(UUID personGroupId);
 
     String generate(String personGroupId, String lang, String systemDate);
 
