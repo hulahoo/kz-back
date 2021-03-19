@@ -682,11 +682,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 personExt.setLegacyId(personJson.getLegacyId());
                 personExt.setWriteHistory(false);
                 DicPersonType personType = dataManager.load(DicPersonType.class)
-                            .query("select e from tsadv$DicPersonType e " +
-                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
-                                    "companyCode", personJson.getCompanyCode()))
-                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                        .query("select e from tsadv$DicPersonType e " +
+                                " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
+                                "companyCode", personJson.getCompanyCode()))
+                        .view(View.BASE).list().stream().findFirst().orElse(null);
                 if (personType != null) {
                     personExt.setType(personType);
                 } else {
@@ -1358,6 +1358,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .query("select e from tsadv$DicAssignmentStatus e " +
                                 " where e.code = 'ACTIVE'")
                         .list().stream().findFirst().orElse(null));
+                DicAssignmentStatus dicAssignmentStatus = dataManager.load(DicAssignmentStatus.class)
+                        .query("select e from tsadv$DicAssignmentStatus e " +
+                                " where e.legacyId = :legacyId")
+                        .parameter("legacyId", assignmentJson.getAssignmentStatus())
+                        .list().stream().findFirst().orElse(null);
+                if (dicAssignmentStatus != null) {
+                    assignmentExt.setAssignmentStatus(dicAssignmentStatus);
+                }
                 PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                         .query("select e from base$PersonGroupExt e " +
                                 " where e.legacyId = :pgLegacyId " +
