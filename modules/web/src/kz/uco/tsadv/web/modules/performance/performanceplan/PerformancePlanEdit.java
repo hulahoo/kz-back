@@ -33,6 +33,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.DatesService;
 import kz.uco.tsadv.service.KpiService;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -622,7 +623,6 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
                 RuleBasedNumberFormat nfRu = getAmountINText("ru");
                 RuleBasedNumberFormat nfEn = getAmountINText("en");
-                int nextYear = Integer.parseInt(yearFormat.format(assignedPerformancePlan.getPerformancePlan().getStartDate())) + 1;
 
                 params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName()
                         + " "
@@ -668,7 +668,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                         ? nfEn.format(assignedPerformancePlan.getFinalBonus())
                         : "");
                 params.put("year", yearFormat.format(assignedPerformancePlan.getPerformancePlan().getStartDate()));
-                params.put("nextYear", nextYear);
+                params.put("nextYear", yearFormat.format(DateUtils.addYears(assignedPerformancePlan.getPerformancePlan().getStartDate(), 1)));
                 params.put("currentDateRu", monthTextFormatRu.format(BaseCommonUtils.getSystemDate()));
                 params.put("currentDateEn", monthTextFormatEn.format(BaseCommonUtils.getSystemDate()));
                 params.put("monthYearRu", assignedPerformancePlan.getPerformancePlan().getAccessibilityEndDate() != null

@@ -175,7 +175,7 @@ public class SelfAbsence extends StandardLookup<Absence>
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends AbstractBprocRequest> void openRequest(AllAbsenceRequest absenceRequest, String columnId) {
+    public <T extends AbstractBprocRequest> void openRequest1(AllAbsenceRequest absenceRequest, String columnId) {
         Class<T> javaClass = metadata.getClassNN(absenceRequest.getEntityName()).getJavaClass();
         T abstractBprocRequest = dataManager.load(Id.of(absenceRequest.getId(), javaClass)).one();
         EditorBuilder<T> editor = screenBuilders.editor((Class<T>) abstractBprocRequest.getClass(), this);
