@@ -87,4 +87,8 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
     }
 
     public abstract String getProcessDefinitionKey();
+
+    public String getProcessInstanceBusinessKey() {
+        return getId().toString();
+    }
 }

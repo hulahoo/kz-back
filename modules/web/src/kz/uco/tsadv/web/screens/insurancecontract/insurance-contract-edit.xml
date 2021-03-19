@@ -188,6 +188,7 @@
                             <action id="remove" type="remove"/>
                             <action id="excel" type="excel"/>
                             <action id="bulk" icon="font-icon:TABLE" trackSelection="true"/>
+                            <action id="sendNotification" caption="msg://sendNotification" trackSelection="true"/>
                         </actions>
                         <columns>
                             <column id="contractFieldPerson" property="insuranceContract.contract"/>
@@ -220,6 +221,7 @@
                             <button id="bulkButton"
                                     caption="msg://bulkButton"
                                     action="insuredPersonsTable.bulk"/>
+                            <button id="sendNotificationBtn" action="insuredPersonsTable.sendNotification"/>
                         </buttonsPanel>
                     </dataGrid>
                 </tab>

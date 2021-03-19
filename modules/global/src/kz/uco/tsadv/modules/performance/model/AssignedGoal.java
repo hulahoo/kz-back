@@ -28,21 +28,17 @@ public class AssignedGoal extends AbstractParentEntity {
     @JoinColumn(name = "GOAL_ID")
     protected Goal goal;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PERSON_GROUP_ID")
     protected PersonGroupExt personGroup;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ORGANIZATION_GROUP_ID")
     protected OrganizationGroupExt organizationGroup;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POSITION_GROUP_ID")
     protected PositionGroupExt positionGroup;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "JOB_GROUP_ID")
@@ -60,7 +56,6 @@ public class AssignedGoal extends AbstractParentEntity {
 
     @Column(name = "SUCCESS_CRITETIA", length = 2000)
     protected String successCritetia;
-
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNED_BY_PERSON_GROUP_ID")
@@ -107,6 +102,28 @@ public class AssignedGoal extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GOAL_LIBRARY_ID")
     protected GoalLibrary goalLibrary;
+
+    @Column(name = "ASSESSMENT")
+    private Double assessment;
+
+    @Column(name = "MANAGER_ASSESSMENT")
+    private Double managerAssessment;
+
+    public Double getManagerAssessment() {
+        return managerAssessment;
+    }
+
+    public void setManagerAssessment(Double managerAssessment) {
+        this.managerAssessment = managerAssessment;
+    }
+
+    public Double getAssessment() {
+        return assessment;
+    }
+
+    public void setAssessment(Double assessment) {
+        this.assessment = assessment;
+    }
 
     public void setWeight(Double weight) {
         this.weight = weight;
@@ -180,7 +197,6 @@ public class AssignedGoal extends AbstractParentEntity {
         this.parentGoal = parentGoal;
     }
 
-
     public void setPriority(DicPriority priority) {
         this.priority = priority;
     }
@@ -188,7 +204,6 @@ public class AssignedGoal extends AbstractParentEntity {
     public DicPriority getPriority() {
         return priority;
     }
-
 
     public void setAssignedByPersonGroup(PersonGroupExt assignedByPersonGroup) {
         this.assignedByPersonGroup = assignedByPersonGroup;
@@ -198,7 +213,6 @@ public class AssignedGoal extends AbstractParentEntity {
         return assignedByPersonGroup;
     }
 
-
     public void setJobGroup(JobGroup jobGroup) {
         this.jobGroup = jobGroup;
     }
@@ -206,7 +220,6 @@ public class AssignedGoal extends AbstractParentEntity {
     public JobGroup getJobGroup() {
         return jobGroup;
     }
-
 
     public void setPositionGroup(PositionGroupExt positionGroup) {
         this.positionGroup = positionGroup;
@@ -216,7 +229,6 @@ public class AssignedGoal extends AbstractParentEntity {
         return positionGroup;
     }
 
-
     public void setOrganizationGroup(OrganizationGroupExt organizationGroup) {
         this.organizationGroup = organizationGroup;
     }
@@ -225,7 +237,6 @@ public class AssignedGoal extends AbstractParentEntity {
         return organizationGroup;
     }
 
-
     public void setPersonGroup(PersonGroupExt personGroup) {
         this.personGroup = personGroup;
     }
@@ -233,7 +244,6 @@ public class AssignedGoal extends AbstractParentEntity {
     public PersonGroupExt getPersonGroup() {
         return personGroup;
     }
-
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
@@ -250,7 +260,6 @@ public class AssignedGoal extends AbstractParentEntity {
     public Date getEndDate() {
         return endDate;
     }
-
 
     public void setTargetValue(Integer targetValue) {
         this.targetValue = targetValue;
@@ -275,7 +284,6 @@ public class AssignedGoal extends AbstractParentEntity {
     public String getSuccessCritetia() {
         return successCritetia;
     }
-
 
     public void setGoal(Goal goal) {
         this.goal = goal;

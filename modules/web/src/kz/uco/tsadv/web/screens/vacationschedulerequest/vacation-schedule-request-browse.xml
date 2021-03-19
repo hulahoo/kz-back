@@ -79,6 +79,10 @@
                 <groupTable id="vacationScheduleRequestsTable"
                             width="100%"
                             dataContainer="vacationScheduleRequestsDc">
+                    <actions>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
                     <columns>
                         <column id="checkList" caption=" " generator="checkListGenerator"/>
                         <column id="requestNumber" link="true" linkInvoke="openRequest"/>
@@ -94,6 +98,8 @@
                     </columns>
                     <rowsCount/>
                     <buttonsPanel>
+                        <button id="editBtn" action="vacationScheduleRequestsTable.edit"/>
+                        <button id="removeBtn" action="vacationScheduleRequestsTable.remove"/>
                         <button id="sendToOracleBtn" caption="msg://sendToOracle"/>
                     </buttonsPanel>
                 </groupTable>

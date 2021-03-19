@@ -20,8 +20,7 @@ public class CourseSessionEnrollment extends AbstractParentEntity {
     @JoinColumn(name = "ENROLLMENT_ID")
     protected Enrollment enrollment;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COURSE_SESSION_ID")
     protected CourseSectionSession courseSession;
 
