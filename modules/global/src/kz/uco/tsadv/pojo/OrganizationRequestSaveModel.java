@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * @author adilbekov.yernar
  */
-public class OrganizationRequestSaveModel extends RequestSaveModel {
+public class OrganizationRequestSaveModel extends RequestDetailSaveModel {
 
     private UUID organizationGroupId;
 

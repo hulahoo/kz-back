@@ -166,6 +166,9 @@
         <method name="getMergedOrgStructure">
             <param name="requestId" type="java.util.UUID"/>
         </method>
+        <method name="saveRequest">
+            <param name="orgRequestSaveModel" type="kz.uco.tsadv.pojo.OrgRequestSaveModel"/>
+        </method>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">

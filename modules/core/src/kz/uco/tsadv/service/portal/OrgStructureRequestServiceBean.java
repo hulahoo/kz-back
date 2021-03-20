@@ -5,9 +5,11 @@ import com.google.gson.Gson;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
@@ -18,12 +20,15 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequestDetail;
+import kz.uco.tsadv.pojo.OrgRequestSaveModel;
 import kz.uco.tsadv.pojo.OrganizationRequestSaveModel;
 import kz.uco.tsadv.pojo.PositionRequestSaveModel;
 import kz.uco.tsadv.pojo.RequestTreeData;
+import kz.uco.tsadv.service.EmployeeNumberService;
 import kz.uco.tsadv.service.EmployeeService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PGobject;
 import org.springframework.stereotype.Service;
 
@@ -51,6 +56,9 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
     @Inject
     private Persistence persistence;
 
+    @Inject
+    private EmployeeNumberService employeeNumberService;
+
     @SuppressWarnings("all")
     @Override
     public String getMergedOrgStructure(UUID requestId) {
@@ -71,7 +79,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
             List<RequestTreeData> treeDataList = gson.fromJson(jsonData, new TypeToken<List<RequestTreeData>>() {
             }.getType());
 
-            if(CollectionUtils.isEmpty(treeDataList)){
+            if (CollectionUtils.isEmpty(treeDataList)) {
                 return "[]";
             }
 
@@ -107,6 +115,18 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 }
             }
             requestTreeData.setHeadCount(totalHeadCounts);
+        }
+
+        if (StringUtils.isNotEmpty(requestTreeData.getChangeType())) {
+            if (requestTreeData.getChangeType().equalsIgnoreCase(OrgRequestChangeType.CLOSE.getId())) {
+                requestTreeData.getNameRu()[1] = null;
+                requestTreeData.getNameEn()[1] = null;
+                requestTreeData.getGrade()[1] = null;
+                requestTreeData.getHeadCount()[1] = BigDecimal.ZERO;
+                requestTreeData.getBaseSalary()[1] = BigDecimal.ZERO;
+                requestTreeData.getMtPayrollPer()[1] = BigDecimal.ZERO;
+                requestTreeData.getMtPayroll()[1] = BigDecimal.ZERO;
+            }
         }
     }
 
@@ -163,7 +183,40 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
             orgStructureRequest.setAuthor(em.getReference(PersonGroupExt.class, personGroupId));
             orgStructureRequest.setCompany(employeeService.getCompanyByPersonGroupId(personGroupId));
             orgStructureRequest.setDepartment(employeeService.getOrganizationGroupByPersonGroupId(personGroupId, View.MINIMAL));
-            em.persist(orgStructureRequest);
+            //em.persist(orgStructureRequest);
+            return orgStructureRequest;
+        });
+    }
+
+    @Override
+    public OrgStructureRequest saveRequest(OrgRequestSaveModel orgRequestSaveModel) {
+        return persistence.callInTransaction(em -> {
+            OrgStructureRequest orgStructureRequest;
+            UUID id = orgRequestSaveModel.getId();
+            if (id == null) {
+                orgStructureRequest = metadata.create(OrgStructureRequest.class);
+                orgStructureRequest.setCompany(em.getReference(DicCompany.class, orgRequestSaveModel.getCompany()));
+                orgStructureRequest.setDepartment(em.getReference(OrganizationGroupExt.class, orgRequestSaveModel.getDepartment()));
+                orgStructureRequest.setRequestStatus(em.getReference(DicRequestStatus.class, orgRequestSaveModel.getRequestStatus()));
+                orgStructureRequest.setAuthor(em.getReference(PersonGroupExt.class, orgRequestSaveModel.getAuthor()));
+                orgStructureRequest.setRequestDate(orgRequestSaveModel.getRequestDate());
+                orgStructureRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());
+            } else {
+                orgStructureRequest = em.find(OrgStructureRequest.class, id);
+                if (orgStructureRequest == null) {
+                    throw new PortalException(String.format("OrgStructureRequest by ID: [%s] is not found!", id));
+                }
+            }
+
+            orgStructureRequest.setModifyDate(orgRequestSaveModel.getModifyDate());
+            orgStructureRequest.setComment(orgRequestSaveModel.getComment());
+
+            if (PersistenceHelper.isNew(orgStructureRequest)) {
+                em.persist(orgStructureRequest);
+            } else {
+                em.merge(orgStructureRequest);
+            }
+            em.flush();
             return orgStructureRequest;
         });
     }
@@ -181,7 +234,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 }
 
                 detail = metadata.create(OrgStructureRequestDetail.class);
-                detail.setOrgStructureRequest(em.getReference(OrgStructureRequest.class,rId));
+                detail.setOrgStructureRequest(em.getReference(OrgStructureRequest.class, rId));
                 detail.setChangeType(OrgRequestChangeType.NEW);
                 detail.setElementType(ElementType.ORGANIZATION);
             } else {
@@ -258,7 +311,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 }
 
                 detail = metadata.create(OrgStructureRequestDetail.class);
-                detail.setOrgStructureRequest(em.getReference(OrgStructureRequest.class,rId));
+                detail.setOrgStructureRequest(em.getReference(OrgStructureRequest.class, rId));
                 detail.setChangeType(OrgRequestChangeType.NEW);
                 detail.setElementType(ElementType.POSITION);
             } else {

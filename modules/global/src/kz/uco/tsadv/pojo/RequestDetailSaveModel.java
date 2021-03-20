@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  * @author adilbekov.yernar
  */
-public class RequestSaveModel implements Serializable {
+public class RequestDetailSaveModel implements Serializable {
 
     protected UUID rId;
     protected UUID rdId;
