@@ -6,7 +6,7 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.GlobalConfig;
 import kz.uco.base.common.BaseCommonUtils;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.model.StudentHomework;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
@@ -25,7 +25,7 @@ public class StudentHomeworkChangedListener {
     protected DataManager dataManager;
 
     @Inject
-    protected NotificationSenderAPI notificationSender;
+    protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     protected GlobalConfig globalConfig;
 
@@ -75,7 +75,7 @@ public class StudentHomeworkChangedListener {
                         map.put("courseName", studentHomework.getHomework().getCourse().getName());
                         map.put("studentFullName", studentHomework.getPersonGroup().getFullName());
                         map.put("requestLink", String.format(requestLink, "ссылке"));
-                        notificationSender.sendParametrizedNotification(notificationCode,
+                        notificationSenderAPIService.sendParametrizedNotification(notificationCode,
                                 tsadvUser, map);
                     }
                 });
@@ -93,7 +93,7 @@ public class StudentHomeworkChangedListener {
                 map.put("isDone", studentHomework.getIsDone() ? "Сдан" : "Не сдан");
                 map.put("trainerComment", studentHomework.getTrainerComment());
 
-                notificationSender.sendParametrizedNotification(notificationCode,
+                notificationSenderAPIService.sendParametrizedNotification(notificationCode,
                         tsadvUser, map);
             }
         }

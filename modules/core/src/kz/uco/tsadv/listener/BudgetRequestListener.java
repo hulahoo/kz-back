@@ -4,7 +4,7 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.PersistenceTools;
 import com.haulmont.cuba.core.listener.AfterInsertEntityListener;
 import com.haulmont.cuba.core.listener.AfterUpdateEntityListener;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.model.BudgetRequest;
@@ -24,7 +24,7 @@ public class BudgetRequestListener implements AfterInsertEntityListener<BudgetRe
     private Persistence persistence;
 
     @Inject
-    private NotificationSenderAPI notificationSender;
+    private NotificationSenderAPIService notificationSenderAPIService;
 
     @Inject
     private CommonService commonService;
@@ -60,7 +60,7 @@ public class BudgetRequestListener implements AfterInsertEntityListener<BudgetRe
                 userParams,
                 "user.browse")) {
             params.put("user", user);
-            notificationSender.sendParametrizedNotification(notificationCode, user, params);
+            notificationSenderAPIService.sendParametrizedNotification(notificationCode, user, params);
         }
     }
 }

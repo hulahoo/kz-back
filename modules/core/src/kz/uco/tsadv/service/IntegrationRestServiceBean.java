@@ -21,6 +21,7 @@ import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.enums.GrossNet;
 import kz.uco.tsadv.modules.personal.enums.SalaryType;
@@ -682,11 +683,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 personExt.setLegacyId(personJson.getLegacyId());
                 personExt.setWriteHistory(false);
                 DicPersonType personType = dataManager.load(DicPersonType.class)
-                            .query("select e from tsadv$DicPersonType e " +
-                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
-                                    "companyCode", personJson.getCompanyCode()))
-                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                        .query("select e from tsadv$DicPersonType e " +
+                                " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
+                                "companyCode", personJson.getCompanyCode()))
+                        .view(View.BASE).list().stream().findFirst().orElse(null);
                 if (personType != null) {
                     personExt.setType(personType);
                 } else {
@@ -723,6 +724,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                 }
                 personExt.setSex(sex);
+                DicMaritalStatus maritalStatus = null;
+                if (personJson.getMaritalStatus() != null && !personJson.getMaritalStatus().isEmpty()) {
+                    maritalStatus = dataManager.load(DicMaritalStatus.class)
+                            .query("select e from tsadv$DicMaritalStatus e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getMaritalStatus(),
+                                    "companyCode", personJson.getCompanyCode()))
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                }
+                personExt.setMaritalStatus(maritalStatus);
 
                 personExt.setGroup(personGroupExt);
                 personGroupExt.getList().add(personExt);
@@ -1224,14 +1235,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return prepareSuccess(result, methodName, hierarchyElementData);
     }
 
-    protected <T extends Serializable> BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
+    @Override
+    public BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
         baseResult.setSuccess(true);
         baseResult.setSuccessMessage("success");
         createLog(methodName, baseResult, params);
         return baseResult;
     }
 
-    protected BaseResult prepareError(BaseResult baseResult, String methodName, Serializable params, String errorMessage) {
+    @Override
+    public BaseResult prepareError(BaseResult baseResult, String methodName, Serializable params, String errorMessage) {
         baseResult.setSuccess(false);
         baseResult.setErrorMessage(errorMessage);
         createLog(methodName, baseResult, params);
@@ -1358,6 +1371,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .query("select e from tsadv$DicAssignmentStatus e " +
                                 " where e.code = 'ACTIVE'")
                         .list().stream().findFirst().orElse(null));
+                DicAssignmentStatus dicAssignmentStatus = dataManager.load(DicAssignmentStatus.class)
+                        .query("select e from tsadv$DicAssignmentStatus e " +
+                                " where e.legacyId = :legacyId")
+                        .parameter("legacyId", assignmentJson.getAssignmentStatus())
+                        .list().stream().findFirst().orElse(null);
+                if (dicAssignmentStatus != null) {
+                    assignmentExt.setAssignmentStatus(dicAssignmentStatus);
+                }
                 PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                         .query("select e from base$PersonGroupExt e " +
                                 " where e.legacyId = :pgLegacyId " +
@@ -1561,18 +1582,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
                             ? Double.valueOf(salaryJson.getAmount())
                             : null);
-                    salary.setCurrency(salaryJson.getCurrency() != null && !salaryJson.getCurrency().isEmpty()
-                            ? dataManager.load(DicCurrency.class)
+                    DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
-                                    " where e.legacyId = :cLegacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency(),
-                                    "companyCode", salaryJson.getCompanyCode()))
-                            .list().stream().findFirst().orElse(null)
-                            : dataManager.load(DicCurrency.class)
-                            .query("select e from base$DicCurrency e " +
-                                    " where e.code = 'KZT'")
-                            .list().stream().findFirst().orElse(null));
+                                    " where e.legacyId = :cLegacyId")
+                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency()))
+                            .list().stream().findFirst().orElse(null);
+                    if (dicCurrency != null) {
+                        salary.setCurrency(dicCurrency);
+                    } else {
+                        return prepareError(result, methodName, salaryData,
+                                "no base$DicCurrency with legacyId " + salaryJson.getCurrency());
+                    }
                     salary.setNetGross(GrossNet.fromId(salaryJson.getNetGross() != null
                             && !salaryJson.getNetGross().isEmpty()
                             ? salaryJson.getNetGross()
@@ -1581,8 +1601,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             && !salaryJson.getSalaryType().isEmpty()
                             ? salaryJson.getNetGross()
                             : "MONTHLYRATE"));
-                    salary.setStartDate(formatter.parse(salaryJson.getStartDate()));
-                    salary.setEndDate(formatter.parse(salaryJson.getEndDate()));
+                    salary.setStartDate(salaryJson.getStartDate() != null && !salaryJson.getStartDate().isEmpty()
+                            ? formatter.parse(salaryJson.getStartDate())
+                            : null);
+                    salary.setEndDate(salaryJson.getEndDate() != null && !salaryJson.getEndDate().isEmpty()
+                            ? formatter.parse(salaryJson.getEndDate())
+                            : null);
                     salary.setWriteHistory(false);
                     commitContext.addInstanceToCommit(salary);
                 }
@@ -1608,18 +1632,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
                             ? Double.valueOf(salaryJson.getAmount())
                             : null);
-                    salary.setCurrency(salaryJson.getCurrency() != null && !salaryJson.getCurrency().isEmpty()
-                            ? dataManager.load(DicCurrency.class)
+                    DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
-                                    " where e.legacyId = :cLegacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency(),
-                                    "companyCode", salaryJson.getCompanyCode()))
-                            .list().stream().findFirst().orElse(null)
-                            : dataManager.load(DicCurrency.class)
-                            .query("select e from base$DicCurrency e " +
-                                    " where e.code = 'KZT'")
-                            .list().stream().findFirst().orElse(null));
+                                    " where e.legacyId = :cLegacyId")
+                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency()))
+                            .list().stream().findFirst().orElse(null);
+                    if (dicCurrency != null) {
+                        salary.setCurrency(dicCurrency);
+                    } else {
+                        return prepareError(result, methodName, salaryData,
+                                "no base$DicCurrency with legacyId " + salaryJson.getCurrency());
+                    }
                     salary.setNetGross(GrossNet.fromId(salaryJson.getNetGross() != null
                             && !salaryJson.getNetGross().isEmpty()
                             ? salaryJson.getNetGross()
@@ -1628,8 +1651,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             && !salaryJson.getSalaryType().isEmpty()
                             ? salaryJson.getSalaryType()
                             : "MONTHLYRATE"));
-                    salary.setStartDate(formatter.parse(salaryJson.getStartDate()));
-                    salary.setEndDate(formatter.parse(salaryJson.getEndDate()));
+                    salary.setStartDate(salaryJson.getStartDate() != null && !salaryJson.getStartDate().isEmpty()
+                            ? formatter.parse(salaryJson.getStartDate())
+                            : null);
+                    salary.setEndDate(salaryJson.getEndDate() != null && !salaryJson.getEndDate().isEmpty()
+                            ? formatter.parse(salaryJson.getEndDate())
+                            : null);
                     salary.setWriteHistory(false);
                     commitContext.addInstanceToCommit(salary);
                 }

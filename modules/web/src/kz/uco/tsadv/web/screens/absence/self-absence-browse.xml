@@ -123,7 +123,7 @@
                        dataContainer="allAbsenceRequestDc"
                        width="100%">
                     <columns>
-                        <column id="requestNumber" link="true" linkInvoke="openRequest"/>
+                        <column id="requestNumber" link="true" linkInvoke="openRequest1"/>
                         <column id="startDate"/>
                         <column id="endDate"/>
                         <column id="absenceDays"/>

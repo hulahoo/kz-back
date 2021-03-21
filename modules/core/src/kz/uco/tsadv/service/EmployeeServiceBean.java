@@ -9,8 +9,10 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.dictionary.DicCity;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLocation;
+import kz.uco.base.entity.shared.Organization;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.IncludeExternalExperienceConfig;
 import kz.uco.tsadv.config.PositionStructureConfig;
@@ -23,9 +25,12 @@ import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.enums.MatrixType;
 import kz.uco.tsadv.modules.performance.model.CalibrationMember;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
+import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
+import kz.uco.tsadv.modules.personal.dictionary.DicPhoneType;
 import kz.uco.tsadv.modules.personal.dto.OrgChartNode;
+import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.*;
 import kz.uco.tsadv.modules.personal.model.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -87,6 +92,97 @@ public class EmployeeServiceBean implements EmployeeService {
     private IncludeExternalExperienceConfig includeExternalExperienceConfig;
 
     protected int languageIndex = 0;
+
+    @Override
+    public PersonProfileDto personProfile(UUID personGroupId) {
+        PersonProfileDto dto = new PersonProfileDto();
+
+        PersonExt person = dataManager.load(PersonExt.class)
+                .query("select e from base$PersonExt e " +
+                        " where e.group.id = :personGroupId " +
+                        "   and :date between e.startDate and e.endDate ")
+                .parameter("personGroupId", personGroupId)
+                .parameter("date", CommonUtils.getSystemDate())
+                .view(new View(viewRepository.getView(PersonExt.class, View.LOCAL), "", false)
+                        .addProperty("sex")
+                        .addProperty("image")
+                        .addProperty("citizenship"))
+                .one();
+
+        AssignmentExt assignment = dataManager.load(AssignmentExt.class)
+                .query("select e from base$AssignmentExt e " +
+                        " where e.personGroup.id = :personGroupId " +
+                        "   and :date between e.startDate and e.endDate " +
+                        "   and e.primaryFlag = 'TRUE' " +
+                        "   and e.assignmentStatus.code in ('ACTIVE', 'SUSPENDED')")
+                .parameter("personGroupId", personGroupId)
+                .parameter("date", CommonUtils.getSystemDate())
+                .view(new View(AssignmentExt.class)
+                        .addProperty("organizationGroup", new View(OrganizationGroupExt.class)
+                                .addProperty("organizationName")
+                                .addProperty("list", viewRepository.getView(OrganizationExt.class, View.LOCAL)))
+                        .addProperty("positionGroup", new View(PositionGroupExt.class)
+                                .addProperty("positionName")
+                                .addProperty("list", viewRepository.getView(PositionExt.class, View.LOCAL))))
+                .one();
+
+        List<PersonContact> personContacts = dataManager.load(PersonContact.class)
+                .query("select e from tsadv$PersonContact e " +
+                        " where e.personGroup.id = :personGroupId " +
+                        "   and :date between e.startDate and e.endDate ")
+                .view(new View(PersonContact.class)
+                        .addProperty("contactValue")
+                        .addProperty("type", new View(DicPhoneType.class)
+                                .addProperty("code")))
+                .parameter("personGroupId", personGroupId)
+                .parameter("date", CommonUtils.getSystemDate())
+                .list();
+
+        List<Address> addresses = dataManager.load(Address.class)
+                .query("select e from tsadv$Address e " +
+                        " where e.personGroup.id = :personGroupId " +
+                        "   and :date between e.startDate and e.endDate ")
+                .view(new View(viewRepository.getView(Address.class, View.LOCAL), "", false)
+                        .addProperty("city", new View(DicCity.class))
+                        .addProperty("addressType", new View(DicAddressType.class)))
+                .parameter("personGroupId", personGroupId)
+                .parameter("date", CommonUtils.getSystemDate())
+                .list();
+
+        dto.setGroupId(personGroupId);
+
+        //set data from person
+        dto.setId(person.getId());
+        dto.setFullName(person.getFioWithEmployeeNumber());
+        dto.setBirthDate(person.getDateOfBirth());
+        dto.setHireDate(person.getHireDate());
+        dto.setSex(person.getSex() != null ? person.getSex().getLangValue() : "");
+        dto.setCitizenship(person.getCitizenship() != null ? person.getCitizenship().getLangValue() : "");
+        dto.setImageId(person.getImage() != null ? person.getImage().getId() : null);
+
+        //set data from assignment
+        dto.setOrganizationName(Optional.ofNullable(assignment.getOrganizationGroup())
+                .map(OrganizationGroupExt::getOrganization)
+                .map(Organization::getOrganizationName)
+                .orElse(""));
+        dto.setPositionName(Optional.ofNullable(assignment.getPositionGroup()).map(PositionGroupExt::getPositionName).orElse(""));
+
+        //set contacts
+        personContacts.forEach(personContact -> {
+            //todo
+            if ("email".equals(personContact.getType().getCode())) dto.setEmail(personContact.getContactValue());
+            else if ("mobile".equals(personContact.getType().getCode())) dto.setPhone(personContact.getContactValue());
+        });
+
+        //set address
+        //todo
+        addresses.stream().map(address -> address.getCityName() != null ? address.getCityName() : address.getCity() != null ? address.getCity().getLangValue() : null)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .ifPresent(dto::setCityOfResidence);
+
+        return dto;
+    }
 
     @Override
     public String generateOgrChart(String personGroupId) {

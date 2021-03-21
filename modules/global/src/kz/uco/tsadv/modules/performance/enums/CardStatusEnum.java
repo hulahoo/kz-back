@@ -7,18 +7,24 @@ import javax.annotation.Nullable;
 
 public enum CardStatusEnum implements EnumClass<String> {
 
-    DRAFT("DRAFT"),
-    COMPLETED("COMPLETED"),
-    ASSESSMENT("ASSESSMENT");
+    DRAFT("DRAFT", 0),
+    COMPLETED("COMPLETED", 1),
+    ASSESSMENT("ASSESSMENT", 2);
 
-    private String id;
+    private final String id;
+    private final int order;
 
-    CardStatusEnum(String value) {
+    CardStatusEnum(String value, int order) {
         this.id = value;
+        this.order = order;
     }
 
     public String getId() {
         return id;
+    }
+
+    public int getOrder() {
+        return order;
     }
 
     @Nullable
@@ -30,4 +36,15 @@ public enum CardStatusEnum implements EnumClass<String> {
         }
         return null;
     }
+
+    @Nullable
+    public static CardStatusEnum fromOrder(int order) {
+        for (CardStatusEnum at : CardStatusEnum.values()) {
+            if (at.getOrder() == order) {
+                return at;
+            }
+        }
+        return null;
+    }
+
 }

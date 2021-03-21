@@ -1,7 +1,5 @@
 package kz.uco.tsadv.modules.integration.jsonobject;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 public class AssignmentJson implements Serializable {
@@ -14,6 +12,7 @@ public class AssignmentJson implements Serializable {
     private String gradeId;
     private String primaryFlag;
     private String fte;
+    private String assignmentStatus;
     private String startDate;
     private String endDate;
     private String probationPeriodEndDate;
@@ -81,6 +80,14 @@ public class AssignmentJson implements Serializable {
 
     public void setFte(String fte) {
         this.fte = fte;
+    }
+
+    public String getAssignmentStatus() {
+        return assignmentStatus;
+    }
+
+    public void setAssignmentStatus(String assignmentStatus) {
+        this.assignmentStatus = assignmentStatus;
     }
 
     public String getStartDate() {
