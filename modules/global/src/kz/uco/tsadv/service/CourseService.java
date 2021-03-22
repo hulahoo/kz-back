@@ -57,5 +57,7 @@ public interface CourseService {
 
     List<DicCategory> searchCourses(String courseName);
 
+    List<DicCategory> allCourses();
+
     Enrollment courseEnrollmentInfo(UUID enrollmentId);
 }

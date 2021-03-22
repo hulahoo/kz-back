@@ -883,6 +883,21 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
+    public List<DicCategory> allCourses() {
+        return dataManager.loadList(LoadContext.create(DicCategory.class)
+                .setQuery(LoadContext.createQuery("" +
+                        "select distinct c " +
+                        "   from tsadv$DicCategory c "))
+                .setView("category-courses"))
+                .stream()
+                .peek(c -> c.setCourses(c.getCourses().stream()
+                        .filter(course -> BooleanUtils.isTrue(course.getActiveFlag()))
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
     public List<DicCategory> searchCourses(String courseName) {
         return dataManager.loadList(LoadContext.create(DicCategory.class)
                 .setQuery(LoadContext.createQuery("" +
@@ -893,7 +908,10 @@ public class CourseServiceBean implements CourseService {
                         .setParameter("courseName", courseName))
                 .setView("category-courses"))
                 .stream()
-                .peek(c -> c.setCourses(c.getCourses().stream().filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList())))
+                .peek(c -> c.setCourses(c.getCourses().stream()
+                        .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())
+                                && BooleanUtils.isTrue(course.getActiveFlag()))
+                        .collect(Collectors.toList())))
                 .collect(Collectors.toList());
     }
 

@@ -14,10 +14,13 @@ import kz.uco.base.importer.exception.ImportFileEofEvaluationException;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.importer.utils.XlsHelper;
+import kz.uco.tsadv.lms.pojo.LearningHistoryPojo;
 import kz.uco.tsadv.modules.learning.dictionary.DicTestType;
+import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.enums.TestSectionOrder;
 import kz.uco.tsadv.modules.learning.model.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service(LearningService.NAME)
 public class LearningServiceBean implements LearningService {
@@ -261,49 +265,81 @@ public class LearningServiceBean implements LearningService {
     }
 
     @Override
-    public List<Course> learningHistory(UUID personGroupId) {
-        List<Course> courses = persistence.callInTransaction(em ->
+    public List<LearningHistoryPojo> learningHistory(UUID personGroupId) {
+        List<Enrollment> enrollments = persistence.callInTransaction(em ->
                 em.createQuery("" +
-                        "select c  " +
-                        "from tsadv$Course c " +
-                        "   join c.sections cs " +
-                        "   join cs.session s " +
-                        "   join s.courseSessionEnrollmentList el  " +
-                        "   join el.enrollment e " +
-                        "where e.personGroup.id = :personGroupId", Course.class)
+                        "select e " +
+                        "from tsadv$Enrollment e " +
+                        "where e.personGroup.id = :personGroupId " +
+                        "   and e.status = :completedStatus ", Enrollment.class)
                         .setParameter("personGroupId", personGroupId)
-                        .setView(Course.class, "course-learning-history")
+                        .setParameter("completedStatus", EnrollmentStatus.COMPLETED)
+                        .setView(Enrollment.class, "learning-history")
                         .getResultList());
-        List<Course> coursesWithMaxSessionEndDate = courses.stream()
-                .peek(c -> {
-                    List<CourseSection> sections = c.getSections().stream().filter(cs -> !cs.getSession().isEmpty()).sorted((cs1, cs2) -> {
-                        CourseSectionSession courseSectionSession1 = cs1.getSession().stream().max(Comparator.comparing(CourseSectionSession::getEndDate)).orElse(null);
-                        CourseSectionSession courseSectionSession2 = cs2.getSession().stream().max(Comparator.comparing(CourseSectionSession::getEndDate)).orElse(null);
-                        //TODO: убрать
-                        if (courseSectionSession1 == null && courseSectionSession2 == null) {
-                            return 0;
-                        } else if (courseSectionSession1 == null) {
-                            return -1;
-                        } else if (courseSectionSession2 == null) {
-                            return 1;
-                        }
-                        return Objects.requireNonNull(courseSectionSession1).getEndDate().compareTo(Objects.requireNonNull(courseSectionSession2).getEndDate());
-                    })
-                            .peek(cs -> cs.setSession(Collections.singletonList(cs.getSession().get(0))))
-                            .peek(cs -> {
-                                CourseSectionAttempt lastSectionAttempt = cs.getCourseSectionAttempts().stream().max(Comparator.comparing(CourseSectionAttempt::getAttemptDate)).orElse(null);
-                                if (lastSectionAttempt == null) {
-                                    cs.setCourseSectionAttempts(Collections.emptyList());
-                                } else {
-                                    cs.setCourseSectionAttempts(Collections.singletonList(lastSectionAttempt));
-                                }
-                            })
-                            .collect(Collectors.toList());
-                    c.setSections(sections);
+        List<Enrollment> completedEnrollments = enrollments.stream()
+                .peek(e -> {
+                    e.getCourse().getSections()
+                            .forEach(s -> {
+                                CourseSectionAttempt lastCourseSectionAttempt = s.getCourseSectionAttempts()
+                                        .stream()
+                                        .filter(csa -> csa.getEnrollment().getId().equals(e.getId()))
+                                        .max(Comparator.comparing(CourseSectionAttempt::getAttemptDate))
+                                        .orElse(null);
+                                s.setCourseSectionAttempts(lastCourseSectionAttempt == null
+                                        ? null
+                                        : Collections.singletonList(lastCourseSectionAttempt));
+                            });
                 })
-                .peek(c -> c.setSections(Collections.singletonList(c.getSections().stream().max(Comparator.comparing(cs -> cs.getSession().get(0).getEndDate())).orElseThrow(NullPointerException::new))))
                 .collect(Collectors.toList());
-        return coursesWithMaxSessionEndDate;
+        List<Enrollment> reloadedCompletedEnrollments = completedEnrollments.stream()
+                .peek(e -> {
+                    e.getCourse()
+                            .getSections()
+                            .stream()
+                            .filter(s -> CollectionUtils.isNotEmpty(s.getCourseSectionAttempts()))
+                            .forEach(s -> {
+                                s.setCourseSectionAttempts(s.getCourseSectionAttempts()
+                                        .stream()
+                                        .map(a -> dataManager.reload(a, "course-section-attempt"))
+                                        .collect(Collectors.toList())
+                                );
+                            });
+                })
+                .collect(Collectors.toList());
+        return reloadedCompletedEnrollments.stream()
+                .map(e -> {
+                    List<CourseSection> sortedCourseSections = e.getCourse().getSections().stream().sorted((cs1, cs2) -> cs2.getOrder().compareTo(cs1.getOrder())).collect(Collectors.toList());
+                    CourseSection courseSection = sortedCourseSections.stream().filter(cs -> CollectionUtils.isNotEmpty(cs.getCourseSectionAttempts()) && cs.getCourseSectionAttempts().get(0).getTestResult() != null).findFirst().orElse(null);
+                    return new LearningHistoryPojo.Builder()
+                            .trainer(e.getCourse().getCourseTrainers().stream().map(t -> t.getTrainer().getTrainerFullName()).collect(Collectors.joining(" ,")))
+                            .startDate(getLearningHistoryStartDate(e, sortedCourseSections).orElse(null))
+                            .endDate(getLearningHistoryEndDate(e, sortedCourseSections).orElse(null))
+                            .course(e.getCourse().getName())
+                            .result(courseSection != null ? courseSection.getCourseSectionAttempts().get(0).getTestResult() : null)
+                            .certificate(null)
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
+    protected Optional<Date> getLearningHistoryStartDate(Enrollment enrollment, List<CourseSection> sortedCourseSections) {
+        try {
+            return Optional.ofNullable(enrollment.getCourseSchedule() != null
+                    ? enrollment.getCourseSchedule().getStartDate()
+                    : sortedCourseSections.get(0).getCourseSectionAttempts().get(0).getAttemptDate());
+        } catch (NullPointerException e) {
+            return Optional.empty();
+        }
+    }
+
+    protected Optional<Date> getLearningHistoryEndDate(Enrollment enrollment, List<CourseSection> sortedCourseSections) {
+        try {
+            return Optional.ofNullable(enrollment.getCourseSchedule() != null
+                    ? enrollment.getCourseSchedule().getStartDate()
+                    : sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts().get(0).getAttemptDate());
+        } catch (NullPointerException e) {
+            return Optional.empty();
+        }
     }
 
     /**

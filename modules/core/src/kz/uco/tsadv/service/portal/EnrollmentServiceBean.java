@@ -51,7 +51,8 @@ public class EnrollmentServiceBean implements EnrollmentService {
                     .setView(DicCategory.class, "category-enrollment")
                     .getResultList()
                     .stream()
-                    .peek(c -> c.setCourses(c.getCourses().stream().filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList())))
+                    .peek(c -> c.setCourses(c.getCourses().stream().filter(course ->
+                            course.getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList())))
                     .collect(Collectors.toList());
             return searchEnrollmentFilter(enrollmentCategory, userId);
         });
