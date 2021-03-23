@@ -1,6 +1,7 @@
 package kz.uco.tsadv.web.modules.learning.course;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
@@ -13,6 +14,7 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.common.IMAGE_SIZE;
 import kz.uco.base.cuba.actions.CreateActionExt;
@@ -81,6 +83,10 @@ public class CourseEdit extends StandardEditor<Course> {
     protected Table<StudentHomework> studentHomeworkTable;
     @Named("studentHomeworkTable.create")
     protected CreateActionExt studentHomeworkTableCreate;
+    @Inject
+    protected DataGrid<Enrollment> enrollmentsTable;
+    @Inject
+    protected ReportService reportService;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -373,5 +379,38 @@ public class CourseEdit extends StandardEditor<Course> {
                 .withInitializer(studentHomework -> studentHomework.setHomework(homeworkTable.getSingleSelected()))
                 .build().show()
                 .addAfterCloseListener(afterCloseEvent -> studentHomeworkDl.load());
+    }
+
+    @Subscribe("enrollmentsTable.generateCertificate")
+    protected void onEnrollmentsTableGenerateCertificate(Action.ActionPerformedEvent event) {
+        CommitContext commitContext = new CommitContext();
+        enrollmentsTable.getSelected().forEach(enrollment -> {
+            CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
+                    && !enrollment.getCourse().getCertificate().isEmpty()
+                    ? enrollment.getCourse().getCertificate().get(0)
+                    : null;
+            if (courseCertificate != null) {
+
+                FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
+                        ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
+
+
+                if (fd != null) {
+                    List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
+                            .query("select e from tsadv$EnrollmentCertificateFile e " +
+                                    " where e.enrollment = :enrollment ")
+                            .parameter("enrollment", enrollment)
+                            .view("enrollmentCertificateFile.with.certificateFile")
+                            .list();
+                    ecfList.forEach(commitContext::addInstanceToRemove);
+
+                    EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
+                    ecf.setCertificateFile(fd);
+                    ecf.setEnrollment(enrollment);
+                    commitContext.addInstanceToCommit(ecf);
+                }
+            }
+        });
+        dataManager.commit(commitContext);
     }
 }
