@@ -25,6 +25,10 @@ public class OrgStructureRequest extends StandardEntity {
     @OneToMany(mappedBy = "orgStructureRequest")
     protected List<OrgStructureRequestDetail> orgStructureDetail;
 
+    @Lob
+    @Column(name = "COMMENT_")
+    private String comment;
+
     @Temporal(TemporalType.DATE)
     @Column(name = "MODIFY_DATE")
     private Date modifyDate;
@@ -64,6 +68,14 @@ public class OrgStructureRequest extends StandardEntity {
     @NotNull
     @JoinColumn(name = "AUTHOR_ID")
     protected PersonGroupExt author;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public Date getModifyDate() {
         return modifyDate;

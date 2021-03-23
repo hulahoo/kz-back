@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.structure.person;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.Datasource;
@@ -62,6 +63,8 @@ public class StructurePerson extends AbstractLookup {
     protected String vacantPosition;
 
     protected UUID positionStructureId;
+    @Inject
+    protected DataManager dataManager;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -172,9 +175,7 @@ public class StructurePerson extends AbstractLookup {
                 .filter(myTeamNew -> Objects.equals(myTeamNew.getPositionGroupId(), parentPosId))
                 .collect(Collectors.toList());
 
-        List<MyTeamNew> list = myTeamService.getMyTeamInPosition(posId, positionStructureId)
-                .stream().map(objects -> myTeamService.parseMyTeamNewObject(objects, vacantPosition))
-                .collect(Collectors.toList());
+        List<MyTeamNew> list = myTeamService.getMyTeamInPosition(posId, positionStructureId);
 
         for (MyTeamNew myTeamNew : list) {
             if (personGroupId == null
@@ -197,7 +198,7 @@ public class StructurePerson extends AbstractLookup {
     }
 
     protected MyTeamNew copy(MyTeamNew myTeamNew) {
-        MyTeamNew copy = new MyTeamNew();
+        MyTeamNew copy = dataManager.create(MyTeamNew.class);
         copy.setFullName(myTeamNew.getFullName());
         copy.setPositionGroupId(myTeamNew.getPositionGroupId());
         copy.setPersonGroupId(myTeamNew.getPersonGroupId());

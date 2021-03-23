@@ -257,9 +257,7 @@ public class SsStructurePerson extends AbstractWindow {
                 .filter(myTeamNew -> Objects.equals(myTeamNew.getPositionGroupId(), parentPosId))
                 .collect(Collectors.toList());
 
-        List<MyTeamNew> list = myTeamService.getMyTeamInPosition(posId, positionStructureId)
-                .stream().map(objects -> myTeamService.parseMyTeamNewObject(objects, vacantPosition))
-                .collect(Collectors.toList());
+        List<MyTeamNew> list = myTeamService.getMyTeamInPosition(posId, positionStructureId);
 
         for (MyTeamNew myTeamNew : list) {
             if (personGroupId == null

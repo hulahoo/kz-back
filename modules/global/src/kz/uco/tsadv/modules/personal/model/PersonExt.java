@@ -565,7 +565,6 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
         return image;
     }
 
-
     public void setLegacyId(String legacyId) {
         this.legacyId = legacyId;
     }

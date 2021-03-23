@@ -128,6 +128,7 @@
         <property name="avgRate"/>
         <property name="logo"/>
         <property name="isOnline"/>
+        <property name="activeFlag"/>
     </view>
     <view name="category-courses" entity="tsadv$DicCategory">
         <property name="langValue"/>
@@ -347,6 +348,29 @@
     <view entity="tsadv$Goal" name="assigned-goal-cascade-position-group" extends="_minimal">
         <property name="library" view="_minimal">
             <property name="category" view="_minimal"/>
+        </property>
+    </view>
+    <view entity="tsadv$Enrollment" name="learning-history">
+        <property name="courseSchedule" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="course" view="_minimal">
+            <property name="courseTrainers" view="_minimal">
+                <property name="trainer" view="_minimal">
+                    <property name="employee" view="_minimal">
+                        <property name="person" view="_minimal"/>
+                    </property>
+                </property>
+            </property>
+            <property name="sections" view="_minimal">
+                <property name="courseSectionAttempts" view="_minimal">
+                    <property name="enrollment" view="_minimal"/>
+                    <property name="courseSection" view="_minimal">
+                        <property name="format" view="_minimal"/>
+                    </property>
+                </property>
+            </property>
         </property>
     </view>
 </views>

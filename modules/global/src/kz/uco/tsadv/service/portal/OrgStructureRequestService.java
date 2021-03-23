@@ -1,6 +1,7 @@
 package kz.uco.tsadv.service.portal;
 
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
+import kz.uco.tsadv.pojo.OrgRequestSaveModel;
 import kz.uco.tsadv.pojo.OrganizationRequestSaveModel;
 import kz.uco.tsadv.pojo.PositionRequestSaveModel;
 
@@ -12,6 +13,8 @@ public interface OrgStructureRequestService {
     String getMergedOrgStructure(UUID requestId);
 
     OrgStructureRequest initialCreate();
+
+    OrgStructureRequest saveRequest(OrgRequestSaveModel orgRequestSaveModel);
 
     String saveOrganization(OrganizationRequestSaveModel organizationRequestSaveModel);
 

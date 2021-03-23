@@ -76,6 +76,7 @@
         <method name="courseEnrollmentInfo">
             <param name="enrollmentId" type="java.util.UUID"/>
         </method>
+        <method name="allCourses"/>
     </service>
     <service name="bproc_BprocTaskService">
         <method name="completeWithOutcome">
@@ -131,6 +132,9 @@
         </method>
     </service>
     <service name="tsadv_EmployeeService">
+        <method name="personProfile">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
         <method name="findManagerListByPositionGroup">
             <param name="positionGroupId" type="java.util.UUID"/>
             <param name="showAll" type="boolean"/>
@@ -162,6 +166,18 @@
         </method>
         <method name="getMergedOrgStructure">
             <param name="requestId" type="java.util.UUID"/>
+        </method>
+        <method name="saveRequest">
+            <param name="orgRequestSaveModel" type="kz.uco.tsadv.pojo.OrgRequestSaveModel"/>
+        </method>
+    </service>
+    <service name="tsadv_MyTeamService">
+        <method name="getChildren">
+            <param name="parentPositionGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="searchMyTeam">
+            <param name="parentPositionGroupId" type="java.util.UUID"/>
+            <param name="searchFio" type="java.lang.String"/>
         </method>
     </service>
 </services>

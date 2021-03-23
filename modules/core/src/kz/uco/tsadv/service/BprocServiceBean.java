@@ -302,7 +302,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 initiatorTask.setCreateTime(processInstanceData.getStartTime());
                 initiatorTask.setEndTime(processInstanceData.getStartTime());
                 initiatorTask.setHrRole(getInitiatorHrRole());
-                initiatorTask.setOutcome("START");
+                initiatorTask.setOutcome(AbstractBprocRequest.OUTCOME_START);
                 return initiatorTask;
             }
         }
