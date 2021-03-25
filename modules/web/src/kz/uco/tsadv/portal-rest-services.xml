@@ -77,6 +77,10 @@
             <param name="enrollmentId" type="java.util.UUID"/>
         </method>
         <method name="allCourses"/>
+        <method name="courseSectionWithEnrollmentAttempts">
+            <param name="courseSectionId" type="java.util.UUID"/>
+            <param name="enrollmentId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="bproc_BprocTaskService">
         <method name="completeWithOutcome">

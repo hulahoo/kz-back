@@ -60,4 +60,6 @@ public interface CourseService {
     List<DicCategory> allCourses();
 
     Enrollment courseEnrollmentInfo(UUID enrollmentId);
+
+    CourseSection courseSectionWithEnrollmentAttempts(UUID courseSectionId, UUID enrollmentId);
 }

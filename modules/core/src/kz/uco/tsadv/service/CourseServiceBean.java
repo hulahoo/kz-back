@@ -934,6 +934,15 @@ public class CourseServiceBean implements CourseService {
         return enrollment;
     }
 
+    @Override
+    public CourseSection courseSectionWithEnrollmentAttempts(UUID courseSectionId, UUID enrollmentId) {
+        return persistence.callInTransaction(em -> {
+            CourseSection courseSection = em.find(CourseSection.class, courseSectionId, "course.section.with.format.session");
+            courseSection.setCourseSectionAttempts(courseSection.getCourseSectionAttempts().stream().filter(a -> a.getEnrollment().getId().equals(enrollmentId)).collect(Collectors.toList()));
+            return courseSection;
+        });
+    }
+
     protected void completeEnrollment(UUID enrollmentId) {
         try (Transaction transaction = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();

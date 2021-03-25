@@ -20968,6 +20968,7 @@
             </property>
             <property name="test" view="_local"/>
         </property>
+        <property name="courseSectionAttempts" view="_minimal"/>
         <property name="course" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Test" extends="_local" name="test.course.lms">
