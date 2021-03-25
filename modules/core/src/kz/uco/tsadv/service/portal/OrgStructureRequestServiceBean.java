@@ -179,7 +179,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
             OrgStructureRequest orgStructureRequest = metadata.create(OrgStructureRequest.class);
             orgStructureRequest.setRequestDate(new Date());
             orgStructureRequest.setRequestNumber(nextRequestNumber);
-            orgStructureRequest.setRequestStatus(dicRequestStatus);
+            orgStructureRequest.setStatus(dicRequestStatus);
             orgStructureRequest.setAuthor(em.getReference(PersonGroupExt.class, personGroupId));
             orgStructureRequest.setCompany(employeeService.getCompanyByPersonGroupId(personGroupId));
             orgStructureRequest.setDepartment(employeeService.getOrganizationGroupByPersonGroupId(personGroupId, View.MINIMAL));
@@ -197,7 +197,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 orgStructureRequest = metadata.create(OrgStructureRequest.class);
                 orgStructureRequest.setCompany(em.getReference(DicCompany.class, orgRequestSaveModel.getCompany()));
                 orgStructureRequest.setDepartment(em.getReference(OrganizationGroupExt.class, orgRequestSaveModel.getDepartment()));
-                orgStructureRequest.setRequestStatus(em.getReference(DicRequestStatus.class, orgRequestSaveModel.getRequestStatus()));
+                orgStructureRequest.setStatus(em.getReference(DicRequestStatus.class, orgRequestSaveModel.getRequestStatus()));
                 orgStructureRequest.setAuthor(em.getReference(PersonGroupExt.class, orgRequestSaveModel.getAuthor()));
                 orgStructureRequest.setRequestDate(orgRequestSaveModel.getRequestDate());
                 orgStructureRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());
