@@ -1700,8 +1700,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 if (salary == null) {
                     return prepareError(result, methodName, salaryData,
-                            "no salary with legacyId and assignmentLegacyId : "
-                                    + salaryJson.getLegacyId() + " , " + salaryJson.getAssignmentLegacyId());
+                            "no salary with legacyId and assignment with companyCode : "
+                                    + salaryJson.getLegacyId() + " , " + salaryJson.getCompanyCode());
                 }
                 if (!salaries.stream().filter(salary1 ->
                         salary1.getId().equals(salary.getId())).findAny().isPresent()) {
