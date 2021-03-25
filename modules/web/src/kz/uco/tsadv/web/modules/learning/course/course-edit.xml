@@ -326,6 +326,9 @@
                         <action id="remove"
                                 type="remove"
                                 caption="mainMsg://table.btn.empty"/>
+                        <action id="generateCertificate"
+                                trackSelection="true"
+                                caption="msg://generateCertificate"/>
                     </actions>
                     <columns>
                         <column property="personGroup"/>
@@ -341,6 +344,7 @@
                         <button action="enrollmentsTable.create"/>
                         <button action="enrollmentsTable.edit"/>
                         <button action="enrollmentsTable.remove"/>
+                        <button action="enrollmentsTable.generateCertificate"/>
                     </buttonsPanel>
                 </dataGrid>
             </tab>

@@ -6,7 +6,7 @@ import java.util.UUID;
 /**
  * @author adilbekov.yernar
  */
-public class PositionRequestSaveModel extends RequestSaveModel {
+public class PositionRequestSaveModel extends RequestDetailSaveModel {
 
     private UUID positionGroupId;
     private UUID gradeGroupId;
