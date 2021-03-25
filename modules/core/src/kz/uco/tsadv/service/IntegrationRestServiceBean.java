@@ -1693,9 +1693,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 Salary salary = dataManager.load(Salary.class)
                         .query("select e from tsadv$Salary e " +
                                 " where e.legacyId = :legacyId " +
-                                " and e.assignmentGroup.legacyId = :agLegacyId")
+                                " and e.assignmentGroup.company.legacyId = :companyCode")
                         .setParameters(ParamsMap.of("legacyId", salaryJson.getLegacyId(),
-                                "agLegacyId", salaryJson.getAssignmentLegacyId()))
+                                "companyCode", salaryJson.getCompanyCode()))
                         .view("salary.view").list().stream().findFirst().orElse(null);
 
                 if (salary == null) {
