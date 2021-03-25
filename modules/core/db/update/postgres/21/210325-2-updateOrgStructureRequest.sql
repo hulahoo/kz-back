@@ -7,9 +7,10 @@ alter table TSADV_ORG_STRUCTURE_REQUEST add column STATUS_ID uuid ^;
 update TSADV_ORG_STRUCTURE_REQUEST set STATUS_ID =
  (select f.id from
 ( (select tdrs.id from tsadv_dic_request_status tdrs
- where tdrs.code = 'DRAFT')
+ where tdrs.code = 'DRAFT' and tdrs.delete_ts is null)
  union all
  (select tdrs2.id from tsadv_dic_request_status tdrs2
+  where tdrs2.delete_ts is null
  order by tdrs2.code limit 1)) f
 limit 1);
  alter table TSADV_ORG_STRUCTURE_REQUEST alter column STATUS_ID set not null ;
