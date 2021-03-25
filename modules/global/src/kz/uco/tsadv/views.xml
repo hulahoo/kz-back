@@ -23581,7 +23581,7 @@
         <property name="category" view="_local"/>
     </view>
     <view entity="tsadv_OrgStructureRequest" name="orgStructureRequest-edit" extends="_local">
-        <property name="requestStatus" view="_base"/>
+        <property name="status" view="_base"/>
         <property name="company" view="_base"/>
         <property name="department" view="_base"/>
         <property name="author" view="_base"/>
