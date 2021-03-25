@@ -36,6 +36,7 @@
                 <columns>
                     <column id="image"/>
                     <column id="order"/>
+                    <column id="url"/>
                 </columns>
                 <rows datasource="imagesDs"/>
                 <buttonsPanel>

@@ -19,6 +19,7 @@
             <column width="250px">
                 <field property="image"/>
                 <field property="order"/>
+                <field property="url"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"
