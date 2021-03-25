@@ -3272,9 +3272,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no legacyId");
                 }
 
-                if (personDismissalJson.getDismissalReasonCode() == null || personDismissalJson.getDismissalReasonCode().isEmpty()) {
+                if (personDismissalJson.getDismissalArticle() == null || personDismissalJson.getDismissalArticle().isEmpty()) {
                     return prepareError(result, methodName, personDismissalData,
-                            "no dismissalReasonCode");
+                            "no dismissalArticle");
                 }
 
                 if (personDismissalJson.getDismissalDate() == null || personDismissalJson.getDismissalDate().isEmpty()) {
@@ -3317,7 +3317,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     "legacyId", personDismissalJson.getLegacyId(),
                                     "pgLegacyId", personDismissalJson.getPersonId(),
                                     "companyCode", personDismissalJson.getCompanyCode(),
-                                    "drLegacyId", personDismissalJson.getDismissalReasonCode(),
+                                    "drLegacyId", personDismissalJson.getDismissalArticle(),
                                     "dsDate", formatter.parse(personDismissalJson.getDismissalDate())))
                             .view("dismissal.edit").list().stream().findFirst().orElse(null);
 
@@ -3326,15 +3326,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         personDismissal.setDismissalDate(formatter.parse(personDismissalJson.getDismissalDate()));
                         personDismissal.setRequestDate(CommonUtils.getSystemDate());
 
-                        //use default id
                         DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
                                 .query(
                                         "select e from tsadv$DicDismissalStatus e " +
-                                                " where e.id = :id ")
-                                .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                                                " where e.code = 'ACTIVE' ")
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                        personDismissal.setStatus(status);
+                        if (status != null) {
+                            personDismissal.setStatus(status);
+                        } else {
+                            return prepareError(result, methodName, personDismissalData,
+                                    "no tsadv$DicDismissalStatus with code = 'ACTIVE'");
+                        }
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
@@ -3353,17 +3356,33 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             + " and company legacyId " + personDismissalJson.getCompanyCode());
                         }
 
-                        DicLCArticle reason = dataManager.load(DicLCArticle.class)
+                        DicLCArticle article = dataManager.load(DicLCArticle.class)
                                 .query(
                                         "select e from tsadv$DicLCArticle e " +
-                                                " where e.legacyId = :legacyId ")
-                                .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
-                                .view(View.BASE).list().stream().findFirst().orElse(null);
-                        if (reason != null) {
-                            personDismissal.setLcArticle(reason);
+                                                " where e.legacyId = :legacyId " +
+                                                " and e.company.legacyId = :companyCode")
+                                .parameter("legacyId", personDismissalJson.getDismissalArticle())
+                                .parameter("companyCode", personDismissalJson.getCompanyCode())
+                                .view("dicLCArticle-edit")
+                                .list().stream().findFirst().orElse(null);
+                        if (article != null) {
+                            personDismissal.setLcArticle(article);
                         } else {
                             return prepareError(result, methodName, personDismissalData, "" +
-                                    "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
+                                    "no tsadv$DicLCArticle with legacyId and companyCode " + personDismissalJson.getDismissalArticle()
+                                    + " " + personDismissalJson.getCompanyCode());
+                        }
+
+                        DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                                .query("select e from tsadv$DicDismissalReason e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode")
+                                .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
+                                .parameter("companyCode", personDismissalJson.getCompanyCode())
+                                .view("")
+                                .list().stream().findFirst().orElse(null);
+                        if (reason != null) {
+                            personDismissal.setDismissalReason(reason);
                         }
 
                         personDismissalsCommitList.add(personDismissal);
@@ -3374,15 +3393,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         personDismissal.setDismissalDate(formatter.parse(personDismissalJson.getDismissalDate()));
                         personDismissal.setRequestDate(CommonUtils.getSystemDate());
 
-                        //used default id
                         DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
                                 .query(
                                         "select e from tsadv$DicDismissalStatus e " +
-                                                " where e.id = :id ")
-                                .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                                                " where e.code = 'ACTIVE' ")
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                        personDismissal.setStatus(status);
+                        if (status != null) {
+                            personDismissal.setStatus(status);
+                        } else {
+                            return prepareError(result, methodName, personDismissalData,
+                                    "no tsadv$DicDismissalStatus with code = 'ACTIVE'");
+                        }
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
@@ -3401,17 +3423,33 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             + " and company legacyId " + personDismissalJson.getCompanyCode());
                         }
 
-                        DicLCArticle reason = dataManager.load(DicLCArticle.class)
+                        DicLCArticle article = dataManager.load(DicLCArticle.class)
                                 .query(
                                         "select e from tsadv$DicLCArticle e " +
-                                                " where e.legacyId = :legacyId ")
-                                .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
-                                .view(View.BASE).list().stream().findFirst().orElse(null);
-                        if (reason != null) {
-                            personDismissal.setLcArticle(reason);
+                                                " where e.legacyId = :legacyId " +
+                                                " and e.company.legacyId = :companyCode")
+                                .parameter("legacyId", personDismissalJson.getDismissalArticle())
+                                .parameter("companyCode", personDismissalJson.getCompanyCode())
+                                .view("dicLCArticle-edit")
+                                .list().stream().findFirst().orElse(null);
+                        if (article != null) {
+                            personDismissal.setLcArticle(article);
                         } else {
                             return prepareError(result, methodName, personDismissalData, "" +
-                                    "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
+                                    "no tsadv$DicLCArticle with legacyId and companyCode " + personDismissalJson.getDismissalArticle()
+                                    + " " + personDismissalJson.getCompanyCode());
+                        }
+
+                        DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                                .query("select e from tsadv$DicDismissalReason e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode")
+                                .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
+                                .parameter("companyCode", personDismissalJson.getCompanyCode())
+                                .view("")
+                                .list().stream().findFirst().orElse(null);
+                        if (reason != null) {
+                            personDismissal.setDismissalReason(reason);
                         }
 
                         personDismissalsCommitList.add(personDismissal);
@@ -3420,15 +3458,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDismissal.setLegacyId(personDismissalJson.getLegacyId());
                     personDismissal.setRequestDate(CommonUtils.getSystemDate());
 
-                    //used exists default id
                     DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
                             .query(
                                     "select e from tsadv$DicDismissalStatus e " +
-                                            " where e.id = :id ")
-                            .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                                            " where e.code = 'ACTIVE' ")
                             .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                    personDismissal.setStatus(status);
+                    if (status != null) {
+                        personDismissal.setStatus(status);
+                    } else {
+                        return prepareError(result, methodName, personDismissalData,
+                                "no tsadv$DicDismissalStatus with code = 'ACTIVE'");
+                    }
 
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query(
@@ -3447,18 +3488,36 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         + " and company legacyId " + personDismissalJson.getCompanyCode());
                     }
 
-                    DicLCArticle reason = dataManager.load(DicLCArticle.class)
+                    DicLCArticle article = dataManager.load(DicLCArticle.class)
                             .query(
                                     "select e from tsadv$DicLCArticle e " +
-                                            " where e.legacyId = :legacyId ")
-                            .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
-                            .view(View.BASE).list().stream().findFirst().orElse(null);
-                    if (reason != null) {
-                        personDismissal.setLcArticle(reason);
+                                            " where e.legacyId = :legacyId " +
+                                            " and e.company.legacyId = :companyCode")
+                            .parameter("legacyId", personDismissalJson.getDismissalArticle())
+                            .parameter("companyCode", personDismissalJson.getCompanyCode())
+                            .view("dicLCArticle-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (article != null) {
+                        personDismissal.setLcArticle(article);
                     } else {
                         return prepareError(result, methodName, personDismissalData, "" +
-                                "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
+                                "no tsadv$DicLCArticle with legacyId and companyCode " + personDismissalJson.getDismissalArticle()
+                                + " " + personDismissalJson.getCompanyCode());
                     }
+
+                    DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                            .query("select e from tsadv$DicDismissalReason e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
+                            .parameter("companyCode", personDismissalJson.getCompanyCode())
+                            .view("dicDismissalReason-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (reason != null) {
+                        personDismissal.setDismissalReason(reason);
+                    }
+
+                    personDismissalsCommitList.add(personDismissal);
                 }
             }
 

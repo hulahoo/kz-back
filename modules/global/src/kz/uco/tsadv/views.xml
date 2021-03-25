@@ -22385,7 +22385,9 @@
         <property name="company" view="_minimal"/>
     </view>
     <view entity="tsadv$DicDismissalReason" name="dicDismissalReason-edit" extends="_local">
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
     <view entity="tsadv$DicDismissalStatus" name="dicDismissalStatus-browse" extends="_local">
         <property name="company" view="_minimal"/>
@@ -22438,7 +22440,9 @@
         <property name="company" view="_minimal"/>
     </view>
     <view entity="tsadv$DicLCArticle" name="dicLCArticle-edit" extends="_local">
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
     <view entity="tsadv$DicMaritalStatus" name="dicMaritalStatus-browse" extends="_local">
         <property name="company" view="_minimal"/>
