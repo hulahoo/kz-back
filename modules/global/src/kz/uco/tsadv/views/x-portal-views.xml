@@ -34,6 +34,7 @@
         </property>
         <property name="startDate"/>
         <property name="endDate"/>
+        <property name="result"/>
         <property name="stepStageStatus"/>
     </view>
     <view entity="base$AssignmentExt" name="assignedPerformancePlan-assignment" extends="_minimal">

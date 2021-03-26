@@ -25,4 +25,9 @@ public interface OrganizationHrUserService {
     List<DicHrRole> getDicHrRoles(UUID userId);
 
     List<? extends User> getHrUsersForPerson(@Nonnull UUID personGroupId, @Nonnull String roleCode);
+
+    /**
+     * @return true is user is manager or sup_manager of employee else false
+     */
+    boolean isManagerOrSupManager(@Nonnull UUID userId, @Nonnull UUID employeePersonGroupId);
 }

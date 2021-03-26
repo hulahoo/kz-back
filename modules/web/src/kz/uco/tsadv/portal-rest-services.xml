@@ -184,4 +184,10 @@
             <param name="searchFio" type="java.lang.String"/>
         </method>
     </service>
+    <service name="tsadv_OrganizationHrUserService">
+        <method name="isManagerOrSupManager">
+            <param name="userId" type="java.util.UUID"/>
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>
