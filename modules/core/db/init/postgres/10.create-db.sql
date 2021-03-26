@@ -8821,7 +8821,7 @@ create table TSADV_BOOK (
     BOOK_NAME_LANG1 varchar(255),
     BOOK_DESCRIPTION_LANG1 varchar(2000),
     AUTHOR_LANG1 varchar(255),
-    PUBLISH_DATE date,
+    PUBLISH_DATE integer,
     ISBN varchar(255),
     ACTIVE boolean,
     AVERAGE_SCORE decimal(19, 2),
