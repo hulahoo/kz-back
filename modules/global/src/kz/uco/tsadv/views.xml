@@ -9978,9 +9978,9 @@
           name="course.edit.new">
         <property name="name"/>
         <property name="certificate" view="_minimal">
+            <property name="certificate" view="_minimal"/>
             <property name="startDate"/>
             <property name="endDate"/>
-            <property name="certificate" view="_minimal"/>
         </property>
         <property name="enrollments" view="_minimal">
             <property name="personGroup" view="_minimal"/>
@@ -10109,6 +10109,7 @@
         <property name="courseSchedule" view="courseSchedule.edit"/>
         <property name="educationPeriod"/>
         <property name="educationDuration"/>
+        <property name="learningProof" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CoursePreRequisition"
           name="coursePreRequisition.edit.new">
@@ -23589,5 +23590,10 @@
         <property name="company" view="_base"/>
         <property name="department" view="_base"/>
         <property name="author" view="_base"/>
+    </view>
+    <view entity="tsadv_DicLearningProof" name="dicLearningProof.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
 </views>

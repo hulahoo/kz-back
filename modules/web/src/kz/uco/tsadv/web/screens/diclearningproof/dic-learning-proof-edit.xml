@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.diclearningproof">
+    <data>
+        <instance id="dicLearningProofDc"
+                  class="kz.uco.tsadv.modules.learning.dictionary.DicLearningProof"
+                  view="dicLearningProof.edit">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="dicLearningProofDc">
+                <column width="250px">
+                    <textField id="langValue1Field" property="langValue1"/>
+                    <textField id="langValue2Field" property="langValue2"/>
+                    <textField id="langValue3Field" property="langValue3"/>
+                    <dateField id="startDateField" property="startDate"/>
+                    <dateField id="endDateField" property="endDate"/>
+                    <textField id="codeField" property="code"/>
+                    <pickerField id="companyField" property="company">
+                        <actions>
+                            <action id="lookup" type="picker_lookup"/>
+                            <action id="clear" type="picker_clear"/>
+                        </actions>
+                    </pickerField>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

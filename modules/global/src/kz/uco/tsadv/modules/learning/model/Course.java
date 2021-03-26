@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
+import kz.uco.tsadv.modules.learning.dictionary.DicLearningProof;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
@@ -120,6 +121,18 @@ public class Course extends AbstractParentEntity {
 
     @Column(name = "EDUCATION_DURATION")
     protected Long educationDuration;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LEARNING_PROOF_ID")
+    protected DicLearningProof learningProof;
+
+    public DicLearningProof getLearningProof() {
+        return learningProof;
+    }
+
+    public void setLearningProof(DicLearningProof learningProof) {
+        this.learningProof = learningProof;
+    }
 
     public List<CourseCertificate> getCertificate() {
         return certificate;

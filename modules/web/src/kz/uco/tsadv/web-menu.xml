@@ -519,6 +519,7 @@
             <item screen="tsadv$DicBudgetItem.browse"/>
             <item screen="tsadv$DicEducationalEstablishmentType.browse"/>
             <item screen="tsadv$DicEducationalEstablishment.browse"/>
+            <item screen="tsadv_DicLearningProof.browse"/>
         </menu>
         <menu id="lrnContent">
             <item id="lrnLearningObjects"
