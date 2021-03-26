@@ -55,7 +55,19 @@ public class EnrollmentChangedListener {
                 if (!EnrollmentStatus.APPROVED.equals(EnrollmentStatus.fromId(oldValue))
                         && EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 
-                    sendNotification(enrollment, "tdc.student.enrollmentApproved");
+                    TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                            .query("select e from tsadv$UserExt e " +
+                                    " where e.personGroup = :personGroup")
+                            .parameter("personGroup", enrollment.getPersonGroup())
+                            .list().stream().findFirst().orElse(null);
+                    if (tsadvUser != null) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("courseName", enrollment.getCourse().getName());
+                        map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                        notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
+                                tsadvUser, map);
+                    }
+
                 } else if (!EnrollmentStatus.COMPLETED.equals(EnrollmentStatus.fromId(oldValue))
                         && EnrollmentStatus.COMPLETED.equals(enrollment.getStatus())) {
 
@@ -118,7 +130,18 @@ public class EnrollmentChangedListener {
 
             if (EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 
-                sendNotification(enrollment, "tdc.student.enrollmentApproved");
+                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.personGroup = :personGroup")
+                        .parameter("personGroup", enrollment.getPersonGroup())
+                        .list().stream().findFirst().orElse(null);
+                if (tsadvUser != null) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("courseName", enrollment.getCourse().getName());
+                    map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
+                            tsadvUser, map);
+                }
             } else {
                 sendNotification(enrollment, "tdc.trainer.newEnrollment");
             }
