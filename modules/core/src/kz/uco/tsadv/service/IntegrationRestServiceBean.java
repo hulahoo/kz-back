@@ -1300,10 +1300,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no positionId");
                 }
-                if (assignmentJson.getGradeId() == null || assignmentJson.getGradeId().isEmpty()) {
-                    return prepareError(result, methodName, assignmentDataJson,
-                            "no gradeId");
-                }
                 if (assignmentJson.getStartDate() == null || assignmentJson.getStartDate().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no startDate");
@@ -1450,9 +1446,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (gradeGroup != null) {
                     assignmentExt.setGradeGroup(gradeGroup);
                 } else {
-                    return prepareError(result, methodName, assignmentDataJson,
-                            "no tsadv$GradeGroup with legacyId " + assignmentJson.getGradeId()
-                                    + " and company legacyId " + assignmentJson.getCompanyCode());
+                    assignmentExt.setGradeGroup(null);
                 }
                 assignmentExt.setWriteHistory(false);
                 assignmentExt.setLegacyId(assignmentJson.getLegacyId());
@@ -1461,7 +1455,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 assignmentExt.setAssignDate(formatter.parse(assignmentJson.getStartDate()));
                 assignmentExt.setFte(assignmentJson.getFte() != null && !assignmentJson.getFte().isEmpty()
                         ? Double.parseDouble(assignmentJson.getFte()) : null);
-                assignmentExt.setProbationEndDate(formatter.parse(assignmentJson.getProbationPeriodEndDate()));
+                assignmentExt.setProbationEndDate(assignmentJson.getProbationPeriodEndDate() != null
+                        && !assignmentJson.getProbationPeriodEndDate().isEmpty()
+                        ? formatter.parse(assignmentJson.getProbationPeriodEndDate())
+                        : null);
                 assignmentExt.setPrimaryFlag(Boolean.valueOf(assignmentJson.getPrimaryFlag()));
                 assignmentExt.setGroup(assignmentGroupExt);
                 assignmentGroupExt.getList().add(assignmentExt);
