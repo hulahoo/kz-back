@@ -13977,6 +13977,8 @@ create table TSADV_COURSE (
     EDUCATION_PERIOD bigint,
     EDUCATION_DURATION bigint,
     LEARNING_PROOF_ID uuid,
+    COMMENT_COUNT integer,
+    RATING decimal(19, 2),
     --
     primary key (ID)
 )^
