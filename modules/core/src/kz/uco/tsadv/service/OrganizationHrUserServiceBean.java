@@ -186,6 +186,15 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
         return new ArrayList<>();
     }
 
+    @Override
+    public boolean isManagerOrSupManager(@Nonnull UUID userId, @Nonnull UUID employeePersonGroupId) {
+        List<? extends User> managers = getHrUsersForPerson(employeePersonGroupId, "MANAGER");
+        if (managers.stream().anyMatch(user -> user.getId().equals(userId))) return true;
+
+        List<? extends User> supManagers = getHrUsersForPerson(employeePersonGroupId, "SUP_MANAGER");
+        return supManagers.stream().anyMatch(user -> user.getId().equals(userId));
+    }
+
     protected List<? extends User> getUsersByPersonGroups(List<? extends PersonGroupExt> personGroups) {
         if (CollectionUtils.isEmpty(personGroups)) return new ArrayList<>();
         return dataManager.load(TsadvUser.class)
