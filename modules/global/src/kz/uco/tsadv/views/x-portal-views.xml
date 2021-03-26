@@ -373,5 +373,8 @@
                 </property>
             </property>
         </property>
+        <property name="certificateFiles" view="_minimal">
+            <property name="certificateFile" view="_minimal"/>
+        </property>
     </view>
 </views>

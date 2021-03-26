@@ -394,7 +394,6 @@ public class CourseEdit extends StandardEditor<Course> {
                 FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
                         ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
 
-
                 if (fd != null) {
                     List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
                             .query("select e from tsadv$EnrollmentCertificateFile e " +

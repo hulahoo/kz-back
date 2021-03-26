@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.app.FileStorageAPI;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileLoader;
@@ -16,7 +17,6 @@ import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.importer.utils.XlsHelper;
 import kz.uco.tsadv.lms.pojo.LearningHistoryPojo;
 import kz.uco.tsadv.modules.learning.dictionary.DicTestType;
-import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.enums.TestSectionOrder;
 import kz.uco.tsadv.modules.learning.model.*;
@@ -32,7 +32,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service(LearningService.NAME)
 public class LearningServiceBean implements LearningService {
@@ -270,43 +269,26 @@ public class LearningServiceBean implements LearningService {
                 em.createQuery("" +
                         "select e " +
                         "from tsadv$Enrollment e " +
-                        "where e.personGroup.id = :personGroupId " +
-                        "   and e.status = :completedStatus ", Enrollment.class)
+                        "where e.personGroup.id = :personGroupId ", Enrollment.class)
                         .setParameter("personGroupId", personGroupId)
-                        .setParameter("completedStatus", EnrollmentStatus.COMPLETED)
                         .setView(Enrollment.class, "learning-history")
                         .getResultList());
+
         List<Enrollment> completedEnrollments = enrollments.stream()
-                .peek(e -> {
-                    e.getCourse().getSections()
-                            .forEach(s -> {
-                                CourseSectionAttempt lastCourseSectionAttempt = s.getCourseSectionAttempts()
-                                        .stream()
-                                        .filter(csa -> csa.getEnrollment().getId().equals(e.getId()))
-                                        .max(Comparator.comparing(CourseSectionAttempt::getAttemptDate))
-                                        .orElse(null);
-                                s.setCourseSectionAttempts(lastCourseSectionAttempt == null
-                                        ? null
-                                        : Collections.singletonList(lastCourseSectionAttempt));
-                            });
-                })
+                .peek(e -> e.getCourse().getSections()
+                        .forEach(s -> {
+                            CourseSectionAttempt lastCourseSectionAttempt = s.getCourseSectionAttempts()
+                                    .stream()
+                                    .filter(csa -> csa.getEnrollment().getId().equals(e.getId()))
+                                    .max(Comparator.comparing(CourseSectionAttempt::getAttemptDate))
+                                    .orElse(null);
+                            s.setCourseSectionAttempts(lastCourseSectionAttempt == null
+                                    ? null
+                                    : Collections.singletonList(dataManager.reload(lastCourseSectionAttempt, "course-section-attempt")));
+                        }))
                 .collect(Collectors.toList());
-        List<Enrollment> reloadedCompletedEnrollments = completedEnrollments.stream()
-                .peek(e -> {
-                    e.getCourse()
-                            .getSections()
-                            .stream()
-                            .filter(s -> CollectionUtils.isNotEmpty(s.getCourseSectionAttempts()))
-                            .forEach(s -> {
-                                s.setCourseSectionAttempts(s.getCourseSectionAttempts()
-                                        .stream()
-                                        .map(a -> dataManager.reload(a, "course-section-attempt"))
-                                        .collect(Collectors.toList())
-                                );
-                            });
-                })
-                .collect(Collectors.toList());
-        return reloadedCompletedEnrollments.stream()
+
+        return completedEnrollments.stream()
                 .map(e -> {
                     List<CourseSection> sortedCourseSections = e.getCourse().getSections().stream().sorted((cs1, cs2) -> cs2.getOrder().compareTo(cs1.getOrder())).collect(Collectors.toList());
                     CourseSection courseSection = sortedCourseSections.stream().filter(cs -> CollectionUtils.isNotEmpty(cs.getCourseSectionAttempts()) && cs.getCourseSectionAttempts().get(0).getTestResult() != null).findFirst().orElse(null);
@@ -316,7 +298,13 @@ public class LearningServiceBean implements LearningService {
                             .endDate(getLearningHistoryEndDate(e, sortedCourseSections).orElse(null))
                             .course(e.getCourse().getName())
                             .result(courseSection != null ? courseSection.getCourseSectionAttempts().get(0).getTestResult() : null)
-                            .certificate(null)
+                            .certificate(CollectionUtils.isEmpty(e.getCertificateFiles()) ? null :
+                                    e.getCertificateFiles().stream()
+                                            .map(EnrollmentCertificateFile::getCertificateFile)
+                                            .filter(Objects::nonNull)
+                                            .map(BaseUuidEntity::getId)
+                                            .map(UUID::toString)
+                                            .findAny().orElse(null))
                             .build();
                 })
                 .collect(Collectors.toList());
