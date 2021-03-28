@@ -39,7 +39,5 @@
 
     <bean id="bproc_BprocRuntimeService" class="kz.uco.tsadv.bproc.beans.ExtBprocRuntimeServiceBean"/>
 
-    <bean id="cuba_MetadataTools" class="kz.uco.tsadv.beans.CustomMetadataTools"/>
-
     <bean class="com.google.gson.Gson" />
 </beans>
