@@ -6770,9 +6770,12 @@
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CourseReview"
           name="courseReview.rate">
-        <property name="course"
-                  view="_minimal"/>
+        <property name="course" view="_minimal">
+            <property name="commentCount"/>
+            <property name="rating"/>
+        </property>
         <property name="rate"/>
+        <property name="text"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
           name="courseSectionAttempt.browse">

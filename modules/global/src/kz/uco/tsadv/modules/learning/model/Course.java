@@ -16,6 +16,7 @@ import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.List;
 
 @NamePattern("%s|name")
@@ -125,6 +126,28 @@ public class Course extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "LEARNING_PROOF_ID")
     protected DicLearningProof learningProof;
+
+    @Column(name = "COMMENT_COUNT")
+    protected Integer commentCount;
+
+    @Column(name = "RATING")
+    protected BigDecimal rating;
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public void setRating(BigDecimal rating) {
+        this.rating = rating;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
 
     public DicLearningProof getLearningProof() {
         return learningProof;
