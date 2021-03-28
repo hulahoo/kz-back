@@ -365,7 +365,9 @@
                 </property>
             </property>
             <property name="sections" view="_minimal">
+                <property name="order"/>
                 <property name="courseSectionAttempts" view="_minimal">
+                    <property name="attemptDate"/>
                     <property name="enrollment" view="_minimal"/>
                     <property name="courseSection" view="_minimal">
                         <property name="format" view="_minimal"/>
