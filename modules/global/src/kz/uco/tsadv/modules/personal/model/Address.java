@@ -30,16 +30,16 @@ public class Address extends AbstractParentEntity {
     protected PersonGroupExt personGroup;
 
     @Lookup(type = LookupType.SCREEN, actions = {"lookup", "open", "clear"})
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDRESS_TYPE_ID")
     protected DicAddressType addressType;
 
 
-    @Column(name = "ADDRESS", nullable = false, length = 500)
+    @Column(name = "ADDRESS", length = 500)
     protected String address;
 
     @OnDeleteInverse(DeletePolicy.DENY)
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COUNTRY_ID")
     protected DicCountry country;
 
