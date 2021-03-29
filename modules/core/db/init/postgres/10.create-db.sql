@@ -12733,9 +12733,9 @@ create table TSADV_ADDRESS (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     PERSON_GROUP_ID uuid not null,
-    ADDRESS_TYPE_ID uuid not null,
-    ADDRESS varchar(500) not null,
-    COUNTRY_ID uuid not null,
+    ADDRESS_TYPE_ID uuid,
+    ADDRESS varchar(500),
+    COUNTRY_ID uuid,
     POSTAL_CODE varchar(255),
     CITY_NAME varchar(255),
     FACT_ADDRESS varchar(255),
@@ -17194,13 +17194,13 @@ alter table BASE_ASSIGNMENT_GROUP add column ASSIGNMENT_NUMBER varchar(255) ^
 update BASE_ASSIGNMENT_GROUP set ASSIGNMENT_NUMBER = '' where ASSIGNMENT_NUMBER is null ^
 alter table BASE_ASSIGNMENT_GROUP alter column ASSIGNMENT_NUMBER set not null ^
 alter table BASE_ASSIGNMENT_GROUP add column ANALYTICS_ID uuid ^
-alter table BASE_ASSIGNMENT_GROUP add column DTYPE varchar(31) ^
+alter table BASE_ASSIGNMENT_GROUP add column DTYPE varchar(100) ^
 update BASE_ASSIGNMENT_GROUP set DTYPE = 'base$AssignmentGroupExt' where DTYPE is null ^
 -- end BASE_ASSIGNMENT_GROUP
 -- begin BASE_POSITION_GROUP
 alter table BASE_POSITION_GROUP add column ANALYTICS_ID uuid ^
 alter table BASE_POSITION_GROUP add column ADMIN_APPROVE_ID uuid ^
-alter table BASE_POSITION_GROUP add column DTYPE varchar(31) ^
+alter table BASE_POSITION_GROUP add column DTYPE varchar(100) ^
 update BASE_POSITION_GROUP set DTYPE = 'base$PositionGroupExt' where DTYPE is null ^
 -- end BASE_POSITION_GROUP
 -- begin TSADV_VACATION_GRAPHIC
