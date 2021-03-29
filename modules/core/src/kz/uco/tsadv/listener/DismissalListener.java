@@ -100,10 +100,12 @@ public class DismissalListener implements BeforeInsertEntityListener<Dismissal>,
         person.setUpdatedBy(person.getUpdatedBy() + "_integrationOff");
         entityManager.merge(person);
 
-        assignment.setStartDate(DateUtils.addDays(dismissalDate, 1));
-        assignment.setWriteHistory(!isUpdate);
-        assignment.setAssignmentStatus(commonService.getEntity(DicAssignmentStatus.class, "TERMINATED"));
-        entityManager.merge(assignment);
+        if (assignment != null) {
+            assignment.setStartDate(DateUtils.addDays(dismissalDate, 1));
+            assignment.setWriteHistory(!isUpdate);
+            assignment.setAssignmentStatus(commonService.getEntity(DicAssignmentStatus.class, "TERMINATED"));
+            entityManager.merge(assignment);
+        }
 
         if (isUpdate) {
             params.put("dismissalDate", dismissalDate);
