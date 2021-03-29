@@ -237,7 +237,6 @@ public class Course extends AbstractParentEntity {
         return feedbackTemplates;
     }
 
-
     public List<CourseSection> getSections() {
         return sections;
     }
@@ -245,8 +244,6 @@ public class Course extends AbstractParentEntity {
     public void setSections(List<CourseSection> sections) {
         this.sections = sections;
     }
-
-
 
     public PartyExt getParty() {
         return party;
@@ -264,7 +261,6 @@ public class Course extends AbstractParentEntity {
         return learningType;
     }
 
-
     public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
@@ -272,7 +268,6 @@ public class Course extends AbstractParentEntity {
     public Boolean getCompleted() {
         return completed;
     }
-
 
     public void setSelfEnrollment(Boolean selfEnrollment) {
         this.selfEnrollment = selfEnrollment;
@@ -282,7 +277,6 @@ public class Course extends AbstractParentEntity {
         return selfEnrollment;
     }
 
-
     public void setAvgRate(Double avgRate) {
         this.avgRate = avgRate;
     }
@@ -290,7 +284,6 @@ public class Course extends AbstractParentEntity {
     public Double getAvgRate() {
         return avgRate;
     }
-
 
     public void setPreRequisition(List<CoursePreRequisition> preRequisition) {
         this.preRequisition = preRequisition;
@@ -300,7 +293,6 @@ public class Course extends AbstractParentEntity {
         return preRequisition;
     }
 
-
     public void setCompetences(List<CourseCompetence> competences) {
         this.competences = competences;
     }
@@ -308,7 +300,6 @@ public class Course extends AbstractParentEntity {
     public List<CourseCompetence> getCompetences() {
         return competences;
     }
-
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
@@ -318,10 +309,6 @@ public class Course extends AbstractParentEntity {
         return shortDescription;
     }
 
-
-
-
-
     public DicCategory getCategory() {
         return category;
     }
@@ -329,7 +316,6 @@ public class Course extends AbstractParentEntity {
     public void setCategory(DicCategory category) {
         this.category = category;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -370,6 +356,5 @@ public class Course extends AbstractParentEntity {
     public Boolean getActiveFlag() {
         return activeFlag;
     }
-
 
 }
