@@ -1596,7 +1596,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             : "GROSS"));
                     salary.setType(SalaryType.fromId(salaryJson.getSalaryType() != null
                             && !salaryJson.getSalaryType().isEmpty()
-                            ? salaryJson.getNetGross()
+                            ? salaryJson.getSalaryType()
                             : "MONTHLYRATE"));
                     salary.setStartDate(salaryJson.getStartDate() != null && !salaryJson.getStartDate().isEmpty()
                             ? formatter.parse(salaryJson.getStartDate())
