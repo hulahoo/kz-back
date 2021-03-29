@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 import static kz.uco.base.common.Null.isNotEmpty;
 
 @Listeners("tsadv_PersonExtListener")
-@NamePattern("%s|personName")
+@NamePattern("%s|personName,lastName,firstName,middleName,employeeNumber,endDate,startDate,firstNameLatin,lastNameLatin,middleNameLatin")
 @Extends(Person.class)
 @Entity(name = "base$PersonExt")
 public class PersonExt extends Person implements Categorized, IGroupedEntity<PersonGroupExt> {
