@@ -6,12 +6,17 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.GlobalConfig;
 import com.haulmont.cuba.core.global.Resources;
+import com.haulmont.cuba.core.global.View;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.ContractConditions;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.service.EmployeeService;
+import kz.uco.uactivity.entity.Activity;
+import kz.uco.uactivity.entity.ActivityType;
+import kz.uco.uactivity.entity.StatusEnum;
+import kz.uco.uactivity.service.ActivityService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -19,10 +24,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import javax.inject.Inject;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Component("tsadv_InsuredPersonChangedListener")
 public class InsuredPersonChangedListener {
@@ -31,6 +33,8 @@ public class InsuredPersonChangedListener {
     protected Resources resources;
     @Inject
     protected GlobalConfig globalConfig;
+    @Inject
+    protected ActivityService activityService;
     @Inject
     private TransactionalDataManager txDataManager;
     @Inject
@@ -206,7 +210,26 @@ public class InsuredPersonChangedListener {
                     .parameter("personGroupList", personGroupExtList)
                     .view("")
                     .list();
+            ActivityType activityType = dataManager.load(ActivityType.class)
+                    .query("select e from uactivity$ActivityType e where e.code = :code")
+                    .parameter("code", "NOTIFICATION")
+                    .view(new View(ActivityType.class)
+                            .addProperty("code"))
+                    .one();
             tsadvUsers.forEach(tsadvUser -> {
+                Activity activity = activityService.createActivity(
+                        tsadvUser,
+                        tsadvUser,
+                        activityType,
+                        StatusEnum.active,
+                        "description",
+                        null,
+                        new Date(),
+                        null,
+                        null,
+                        null,
+                        "insurance.person.dms",
+                        params);
                 notificationSenderAPIService.sendParametrizedNotification("insurance.person.dms",
                         tsadvUser, params);
             });
