@@ -14484,10 +14484,31 @@
     <view class="kz.uco.tsadv.modules.learning.model.PartyExt"
           extends="_local"
           name="partyExt.edit">
-        <property name="course"
-                  view="_local"/>
-        <property name="contactInfo"
-                  view="_local"/>
+        <property name="course" view="_local"/>
+        <property name="addresses" view="_minimal">
+            <property name="streetAddressLang1"/>
+            <property name="streetAddressLang2"/>
+            <property name="streetAddressLang3"/>
+            <property name="streetAddressLang4"/>
+            <property name="streetAddressLang5"/>
+            <property name="latitude"/>
+            <property name="longitude"/>
+            <property name="parties" view="_minimal"/>
+            <property name="streetAddress"/>
+            <property name="country" view="_minimal"/>
+            <property name="region" view="_minimal"/>
+            <property name="city" view="_minimal"/>
+            <property name="cityDistrict" view="_minimal"/>
+            <property name="street"/>
+            <property name="house"/>
+            <property name="apartment"/>
+            <property name="additionalInformationLang1"/>
+            <property name="additionalInformationLang2"/>
+            <property name="additionalInformationLang3"/>
+            <property name="additionalInformationLang4"/>
+            <property name="additionalInformationLang5"/>
+        </property>
+        <property name="contactInfo" view="_local"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
           extends="_minimal"
