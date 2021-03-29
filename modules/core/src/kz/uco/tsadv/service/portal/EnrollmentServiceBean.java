@@ -1,6 +1,8 @@
 package kz.uco.tsadv.service.portal;
 
 import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.LoadContext;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +18,20 @@ public class EnrollmentServiceBean implements EnrollmentService {
     @Inject
     private Persistence persistence;
 
+    @Inject
+    private DataManager dataManager;
+
     @Override
     public List<DicCategory> searchEnrollment(UUID userId) {
         return persistence.callInTransaction(em -> {
-            List<DicCategory> enrollmentCategory = em.createQuery("" +
-                    "select c " +
-                    "            from tsadv$DicCategory c ", DicCategory.class)
-                    .setView(DicCategory.class, "category-enrollment")
-                    .getResultList();
+            List<DicCategory> enrollmentCategory = dataManager.loadList(LoadContext.create(DicCategory.class).setQuery(LoadContext.createQuery("" +
+                    "select distinct c " +
+                    "            from tsadv$DicCategory c " +
+                    "            join c.courses cc " +
+                    "            join cc.enrollments e " +
+                    "where e.personGroup.id = :userId")
+                    .setParameter("userId", userId))
+                    .setView("category-enrollment"));
             return searchEnrollmentFilter(enrollmentCategory, userId);
         });
     }
@@ -32,16 +40,20 @@ public class EnrollmentServiceBean implements EnrollmentService {
     public List<DicCategory> searchEnrollment(String courseName, UUID userId) {
         return persistence.callInTransaction(em -> {
             List<DicCategory> enrollmentCategory = em.createQuery("" +
-                    "select c " +
+                    "select distinct c " +
                     "            from tsadv$DicCategory c " +
                     "            join c.courses cc " +
                     "            join cc.enrollments e " +
-                    "            where (lower ( cc.name) like :courseName) " +
+                    "            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%'))) " +
                     "                and e.personGroup.id = :userId", DicCategory.class)
                     .setParameter("courseName", courseName)
                     .setParameter("userId", userId)
                     .setView(DicCategory.class, "category-enrollment")
-                    .getResultList();
+                    .getResultList()
+                    .stream()
+                    .peek(c -> c.setCourses(c.getCourses().stream().filter(course ->
+                            course.getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList())))
+                    .collect(Collectors.toList());
             return searchEnrollmentFilter(enrollmentCategory, userId);
         });
     }

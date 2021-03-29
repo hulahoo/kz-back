@@ -10,7 +10,7 @@
                     class="kz.uco.tsadv.modules.learning.model.PartyExt"
                     view="partyExt.edit">
             <collectionDatasource id="addressDs"
-                                  property="address"/>
+                                  property="addresses"/>
             <collectionDatasource id="contactInfoDs"
                                   property="contactInfo"/>
         </datasource>

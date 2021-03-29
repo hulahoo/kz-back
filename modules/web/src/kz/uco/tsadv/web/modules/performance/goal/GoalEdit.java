@@ -6,6 +6,7 @@ import kz.uco.tsadv.modules.performance.model.Goal;
 @UiController("tsadv$Goal.edit")
 @UiDescriptor("goal-edit.xml")
 @EditedEntityContainer("goalDc")
+@DialogMode(forceDialog = true)
 @LoadDataBeforeShow
 public class GoalEdit extends StandardEditor<Goal> {
 }

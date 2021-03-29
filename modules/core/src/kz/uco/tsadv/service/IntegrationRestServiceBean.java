@@ -6,11 +6,10 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
-import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
-import kz.uco.base.entity.dictionary.*;
 import kz.uco.base.entity.dictionary.DicLanguage;
+import kz.uco.base.entity.dictionary.*;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
@@ -18,11 +17,11 @@ import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.tb.PersonQualification;
 import kz.uco.tsadv.entity.tb.PositionHarmfulCondition;
 import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
-import kz.uco.tsadv.entity.tb.PersonQualification;
-import kz.uco.tsadv.entity.tb.dictionary.DicPersonQualificationType;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.global.dictionary.DicNationality;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.enums.GrossNet;
 import kz.uco.tsadv.modules.personal.enums.SalaryType;
@@ -35,7 +34,6 @@ import kz.uco.tsadv.modules.timesheet.enums.MaterialDesignColorsEnum;
 import kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule;
 import kz.uco.tsadv.modules.timesheet.model.StandardOffset;
 import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
-import org.apache.commons.math3.analysis.function.Add;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +57,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     @Inject
     protected PositionStructureConfig positionStructureConfig;
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
 
     @Transactional
     @Override
@@ -81,6 +81,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, organizationData,
                             "no companyCode");
                 }
+                if (organizationJson.getStartDate() == null || organizationJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, organizationData,
+                            "no startDate");
+                }
+                if (organizationJson.getEndDate() == null || organizationJson.getEndDate().isEmpty()) {
+                    return prepareError(result, methodName, organizationData,
+                            "no endDate");
+                }
                 OrganizationGroupExt organizationGroupExt = organizationGroupExts.stream().filter(organizationGroupExt1 ->
                         organizationGroupExt1.getCompany() != null
                                 && organizationGroupExt1.getCompany().getLegacyId() != null
@@ -96,10 +104,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("organizationGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
                     if (organizationGroupExt != null) {
                         for (OrganizationExt organizationExt : organizationGroupExt.getList()) {
-                            commitContext.addInstanceToRemove(organizationExt);
+                            if (formatter.parse(organizationJson.getStartDate()).before(organizationExt.getEndDate())
+                                    && formatter.parse(organizationJson.getEndDate()).after(organizationExt.getStartDate())) {
+                                commitContext.addInstanceToRemove(organizationExt);
+                            }
 //                            transactionalDataManager.remove(organizationExt);
                         }
-                        organizationGroupExt.getList().clear();
+//                        organizationGroupExt.getList().clear();
                         organizationGroupExts.add(organizationGroupExt);
                     }
                 }
@@ -114,6 +125,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     organizationGroupExt.setCompany(company);
                     organizationGroupExt.setLegacyId(organizationJson.getLegacyId());
+                    organizationGroupExt.setOrganizationNameLang1(organizationJson.getOrganizationNameLang1());
+                    organizationGroupExt.setOrganizationNameLang2(organizationJson.getOrganizationNameLang2());
+                    organizationGroupExt.setOrganizationNameLang3(organizationJson.getOrganizationNameLang3());
                     organizationGroupExt.setId(UUID.randomUUID());
                     organizationGroupExt.setList(new ArrayList<>());
                     organizationGroupExts.add(organizationGroupExt);
@@ -262,6 +276,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     jobGroup.setCompany(company);
                     jobGroup.setLegacyId(jobJson.getLegacyId());
+                    jobGroup.setJobNameLang1(jobJson.getJobNameLang1());
+                    jobGroup.setJobNameLang2(jobJson.getJobNameLang2());
+                    jobGroup.setJobNameLang3(jobJson.getJobNameLang3());
                     jobGroup.setId(UUID.randomUUID());
                     jobGroup.setList(new ArrayList<>());
                     jobGroups.add(jobGroup);
@@ -369,6 +386,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, positionData,
                             "no organizationLegacyId");
                 }
+                if (positionJson.getJobLegacyId() == null || positionJson.getJobLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, positionData,
+                            "no jobLegacyId");
+                }
                 PositionGroupExt positionGroupExt = positionGroupExts.stream().filter(positionGroupExt1 ->
                         positionGroupExt1.getList().stream().filter(positionExt1 ->
                                 positionExt1.getOrganizationGroupExt() != null
@@ -393,9 +414,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("positionGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
                     if (positionGroupExt != null) {
                         for (PositionExt positionExt1 : positionGroupExt.getList()) {
-                            commitContext.addInstanceToRemove(positionExt1);
+                            if (formatter.parse(positionJson.getStartDate()).before(positionExt1.getEndDate())
+                                    && formatter.parse(positionJson.getEndDate()).after(positionExt1.getStartDate())) {
+                                commitContext.addInstanceToRemove(positionExt1);
+                            }
                         }
-                        positionGroupExt.getList().clear();
+//                        positionGroupExt.getList().clear();
 //                        positionGroupExt = dataManager.reload(positionGroupExt, "positionGroupExt-for-integration-rest");
                         positionGroupExts.add(positionGroupExt);
                     }
@@ -430,6 +454,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getGradeLegacyId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                    if (gradeGroup == null) {
+                        return prepareError(result, methodName, positionData,
+                                "no GradeGroup with legacyId " + positionJson.getGradeLegacyId());
+                    }
                     positionExt.setGradeGroup(gradeGroup);
                 }
                 JobGroup jobGroup = null;
@@ -439,6 +467,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getJobLegacyId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                    if (jobGroup == null) {
+                        return prepareError(result, methodName, positionData,
+                                "no JobGroup with legacyId " + positionJson.getJobLegacyId());
+                    }
                     positionExt.setJobGroup(jobGroup);
                 }
                 OrganizationGroupExt organizationGroupExt = null;
@@ -449,6 +481,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
                                     "legacyId", positionJson.getOrganizationLegacyId()))
                             .view("organizationGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+                    if (organizationGroupExt == null) {
+                        return prepareError(result, methodName, positionData,
+                                "no OrganizationGroupExt with legacyId " + positionJson.getOrganizationLegacyId());
+                    }
                     positionExt.setOrganizationGroupExt(organizationGroupExt);
                 }
                 DicEmployeeCategory employeeCategory = null;
@@ -495,7 +531,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, positionJsons);
+        return prepareSuccess(result, methodName, positionData);
 
     }
 
@@ -572,6 +608,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, personData,
                             "no companyCode");
                 }
+                if (personJson.getPersonTypeId() == null || personJson.getPersonTypeId().isEmpty()) {
+                    return prepareError(result, methodName, personData,
+                            "no personTypeId");
+                }
                 PersonGroupExt personGroupExt = personGroupExts.stream().filter(personGroupExt1 ->
                         personGroupExt1.getCompany().getLegacyId().equals(personJson.getCompanyCode())
                                 && personGroupExt1.getLegacyId().equals(personJson.getLegacyId()))
@@ -585,9 +625,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
                     if (personGroupExt != null) {
                         for (PersonExt personExt : personGroupExt.getList()) {
-                            commitContext.addInstanceToRemove(personExt);
+                            if (formatter.parse(personJson.getStartDate()).before(personExt.getEndDate())
+                                    && formatter.parse(personJson.getEndDate()).after(personExt.getStartDate())) {
+                                commitContext.addInstanceToRemove(personExt);
+                            }
                         }
-                        personGroupExt.getList().clear();
+//                        personGroupExt.getList().clear();
                         personGroupExts.add(personGroupExt);
                     }
                 }
@@ -612,15 +655,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 personExt.setMiddleName(personJson.getMiddleName());
                 personExt.setLastNameLatin(personJson.getLastNameLatin());
                 personExt.setFirstNameLatin(personJson.getFirstNameLatin());
-                personExt.setStartDate(personJson.getStartDate() != null
+                personExt.setStartDate(personJson.getStartDate() != null && !personJson.getStartDate().isEmpty()
                         ? formatter.parse(personJson.getStartDate()) : null);
-                personExt.setEndDate(personJson.getEndDate() != null
+                personExt.setEndDate(personJson.getEndDate() != null && !personJson.getEndDate().isEmpty()
                         ? formatter.parse(personJson.getEndDate()) : null);
-                personExt.setDateOfDeath(personJson.getDateOfDeath() != null
+                personExt.setDateOfDeath(personJson.getDateOfDeath() != null && !personJson.getDateOfDeath().isEmpty()
                         ? formatter.parse(personJson.getDateOfDeath()) : null);
-                personExt.setDateOfBirth(personJson.getDateOfBirth() != null
+                personExt.setDateOfBirth(personJson.getDateOfBirth() != null && !personJson.getDateOfBirth().isEmpty()
                         ? formatter.parse(personJson.getDateOfBirth()) : null);
-                personExt.setHireDate(personJson.getHireDate() != null
+                personExt.setHireDate(personJson.getHireDate() != null && !personJson.getHireDate().isEmpty()
                         ? formatter.parse(personJson.getHireDate()) : null);
                 personExt.setEmployeeNumber(personJson.getEmployeeNumber());
                 personExt.setBirthPlace(personJson.getPlaceOfBirth());
@@ -639,16 +682,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         ? Boolean.parseBoolean(personJson.getHasCreditFromPrevEmployer()) : null);
                 personExt.setLegacyId(personJson.getLegacyId());
                 personExt.setWriteHistory(false);
-                DicPersonType personType = null;
-                if (personJson.getPersonTypeId() != null && !personJson.getPersonTypeId().isEmpty()) {
-                    personType = dataManager.load(DicPersonType.class)
-                            .query("select e from tsadv$DicPersonType e " +
-                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
-                                    "companyCode", personJson.getCompanyCode()))
-                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                DicPersonType personType = dataManager.load(DicPersonType.class)
+                        .query("select e from tsadv$DicPersonType e " +
+                                " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("legacyId", personJson.getPersonTypeId(),
+                                "companyCode", personJson.getCompanyCode()))
+                        .view(View.BASE).list().stream().findFirst().orElse(null);
+                if (personType != null) {
+                    personExt.setType(personType);
+                } else {
+                    return prepareError(result, methodName, personData,
+                            "no tsadv$DicPersonType with legacyId " + personJson.getPersonTypeId());
                 }
-                personExt.setType(personType);
                 DicCitizenship citizenship = null;
                 if (personJson.getCitizenshipId() != null && !personJson.getCitizenshipId().isEmpty()) {
                     citizenship = dataManager.load(DicCitizenship.class)
@@ -679,6 +724,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                 }
                 personExt.setSex(sex);
+                DicMaritalStatus maritalStatus = null;
+                if (personJson.getMaritalStatus() != null && !personJson.getMaritalStatus().isEmpty()) {
+                    maritalStatus = dataManager.load(DicMaritalStatus.class)
+                            .query("select e from tsadv$DicMaritalStatus e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getMaritalStatus(),
+                                    "companyCode", personJson.getCompanyCode()))
+                            .view(View.BASE).list().stream().findFirst().orElse(null);
+                }
+                personExt.setMaritalStatus(maritalStatus);
 
                 personExt.setGroup(personGroupExt);
                 personGroupExt.getList().add(personExt);
@@ -839,18 +894,40 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("hierarchy.view").list().stream().findFirst().orElse(null);
                 hierarchyElementExt.setHierarchy(hierarchy);
                 HierarchyElementExt parent = null;
+                HierarchyElementGroup parentGroup = null;
                 if (organizationHierarchyElementJson.getParentOrganizationId() != null
                         && !organizationHierarchyElementJson.getParentOrganizationId().isEmpty()) {
-                    parent = dataManager.load(HierarchyElementExt.class).query(
-                            "select e from base$HierarchyElementExt e " +
-                                    " where e.organizationGroup.legacyId = :legacyId " +
-                                    " and e.organizationGroup.company.legacyId = :companyCode ")
-                            .setParameters(ParamsMap.of("legacyId"
-                                    , organizationHierarchyElementJson.getParentOrganizationId()
-                                    , "companyCode", organizationHierarchyElementJson.getCompanyCode()))
-                            .view("hierarchyElementExt-for-integration-rest").list().stream().findFirst().orElse(null);
-                    hierarchyElementExt.setParent(parent);
-                    hierarchyElementExt.setParentGroup(parent != null ? parent.getGroup() : null);
+                    parentGroup = organizationHierarchyElementGroups.stream().filter(
+                            hierarchyElementGroup1 ->
+                                    hierarchyElementGroup1.getList() != null
+                                            && hierarchyElementGroup1.getList().stream().anyMatch(hierarchyElementExt1 ->
+                                            hierarchyElementExt1.getOrganizationGroup() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany()
+                                                    .getLegacyId() != null
+                                                    && hierarchyElementExt1.getOrganizationGroup().getCompany()
+                                                    .getLegacyId().equals(organizationHierarchyElementJson.getCompanyCode()))
+                                            && hierarchyElementGroup1.getLegacyId() != null
+                                            && hierarchyElementGroup1.getLegacyId()
+                                            .equals(organizationHierarchyElementJson.getParentOrganizationId()))
+                            .findFirst().orElse(null);
+                    if (parentGroup == null) {
+                        parentGroup = dataManager.load(HierarchyElementGroup.class).query(
+                                "select e.group from base$HierarchyElementExt e " +
+                                        " where e.organizationGroup.legacyId = :legacyId " +
+                                        " and e.organizationGroup.company.legacyId = :companyCode ")
+                                .setParameters(ParamsMap.of("legacyId"
+                                        , organizationHierarchyElementJson.getParentOrganizationId()
+                                        , "companyCode", organizationHierarchyElementJson.getCompanyCode()))
+                                .view("hierarchyElementGroup-for-integration-rest").list().stream()
+                                .findFirst().orElse(null);
+                    }
+                    if (parentGroup == null) {
+                        return prepareError(result, methodName, hierarchyElementData,
+                                "no exist hierarchy element for parentOrganization");
+                    }
+                    hierarchyElementExt.setParent(parentGroup.getList().stream().findFirst().orElse(null));
+                    hierarchyElementExt.setParentGroup(parentGroup);
                 }
                 hierarchyElementExt.setLegacyId(organizationHierarchyElementJson.getLegacyId());
                 hierarchyElementExt.setStartDate(organizationHierarchyElementJson.getStartDate() != null
@@ -1158,14 +1235,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return prepareSuccess(result, methodName, hierarchyElementData);
     }
 
-    protected <T extends Serializable> BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
+    @Override
+    public BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params) {
         baseResult.setSuccess(true);
         baseResult.setSuccessMessage("success");
         createLog(methodName, baseResult, params);
         return baseResult;
     }
 
-    protected BaseResult prepareError(BaseResult baseResult, String methodName, Serializable params, String errorMessage) {
+    @Override
+    public BaseResult prepareError(BaseResult baseResult, String methodName, Serializable params, String errorMessage) {
         baseResult.setSuccess(false);
         baseResult.setErrorMessage(errorMessage);
         createLog(methodName, baseResult, params);
@@ -1173,15 +1252,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     }
 
     protected void createLog(String methodName, BaseResult baseResult, Serializable param) {
-        if (baseResult.getErrorMessage() != null && !baseResult.getErrorMessage().equals("")) {
-            UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
-            String login = userSessionSource.getUserSession().getUser().getLogin();
-            restIntegrationLogService.log(login, methodName, toJson(param), baseResult.getErrorMessage(), baseResult.isSuccess(), new Date());
-        }
+//        if (baseResult.getErrorMessage() != null && !baseResult.getErrorMessage().equals("")) {
+        UserSessionSource userSessionSource = AppBeans.get(UserSessionSource.NAME);
+        String login = userSessionSource.getUserSession().getUser().getLogin();
+        restIntegrationLogService.log(login, methodName, toJson(param), baseResult.isSuccess()
+                ? baseResult.getSuccessMessage() : baseResult.getErrorMessage(), baseResult.isSuccess(), new Date());
+//        }
     }
 
     protected String toJson(Serializable params) {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         return gson.toJson(params);
     }
 
@@ -1205,25 +1284,21 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no companyCode");
                 }
-                if (assignmentJson.getPersonGroup() == null || assignmentJson.getPersonGroup().isEmpty()) {
+                if (assignmentJson.getPersonId() == null || assignmentJson.getPersonId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no personGroup");
+                            "no personId");
                 }
-                if (assignmentJson.getOrganizationGroup() == null || assignmentJson.getOrganizationGroup().isEmpty()) {
+                if (assignmentJson.getOrganizationId() == null || assignmentJson.getOrganizationId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no organizationGroup()");
+                            "no organizationId");
                 }
-                if (assignmentJson.getJobGroup() == null || assignmentJson.getJobGroup().isEmpty()) {
+                if (assignmentJson.getJobId() == null || assignmentJson.getJobId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no jobGroup");
+                            "no jobId");
                 }
-                if (assignmentJson.getPositionGroup() == null || assignmentJson.getPositionGroup().isEmpty()) {
+                if (assignmentJson.getPositionId() == null || assignmentJson.getPositionId().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no positionGroup");
-                }
-                if (assignmentJson.getGrade() == null || assignmentJson.getGrade().isEmpty()) {
-                    return prepareError(result, methodName, assignmentDataJson,
-                            "no grade");
+                            "no positionId");
                 }
                 if (assignmentJson.getStartDate() == null || assignmentJson.getStartDate().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
@@ -1232,14 +1307,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (assignmentJson.getEndDate() == null || assignmentJson.getEndDate().isEmpty()) {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no endDate");
-                }
-                if (assignmentJson.getAssignmentNumber() == null || assignmentJson.getAssignmentNumber().isEmpty()) {
-                    return prepareError(result, methodName, assignmentDataJson,
-                            "no assignmentNumber");
-                }
-                if (assignmentJson.getAssignDate() == null || assignmentJson.getAssignDate().isEmpty()) {
-                    return prepareError(result, methodName, assignmentDataJson,
-                            "no assignDate");
                 }
 
                 AssignmentGroupExt assignmentGroupExt = assignmentGroupExtList.stream().filter(assignmentGroupExt1 ->
@@ -1251,7 +1318,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         .equals(assignmentJson.getCompanyCode())
                                         && assignmentExt.getPersonGroup().getLegacyId() != null
                                         && assignmentExt.getPersonGroup().getLegacyId()
-                                        .equals(assignmentJson.getPersonGroup())
+                                        .equals(assignmentJson.getPersonId())
                         ) && assignmentGroupExt1.getLegacyId().equals(assignmentJson.getLegacyId()))
                         .findFirst().orElse(null);
                 if (assignmentGroupExt == null) {
@@ -1262,14 +1329,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     " and e.personGroup.legacyId = :personLegacyId")
                             .setParameters(ParamsMap.of("legacyId", assignmentJson.getLegacyId(),
                                     "company", assignmentJson.getCompanyCode(),
-                                    "personLegacyId", assignmentJson.getPersonGroup()))
+                                    "personLegacyId", assignmentJson.getPersonId()))
                             .view("assignmentGroup.view")
                             .list().stream().findFirst().orElse(null);
                     if (assignmentGroupExt != null) {
                         for (AssignmentExt assignmentExt : assignmentGroupExt.getList()) {
-                            commitContext.addInstanceToRemove(assignmentExt);
+                            if (formatter.parse(assignmentJson.getStartDate()).before(assignmentExt.getEndDate())
+                                    && formatter.parse(assignmentJson.getEndDate()).after(assignmentExt.getStartDate())) {
+                                commitContext.addInstanceToRemove(assignmentExt);
+                            }
                         }
-                        assignmentGroupExt.getList().clear();
+//                        assignmentGroupExt.getList().clear();
                         assignmentGroupExtList.add(assignmentGroupExt);
                     }
                 }
@@ -1287,31 +1357,29 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                     assignmentGroupExt.setLegacyId(assignmentJson.getLegacyId());
                     assignmentGroupExt.setId(UUID.randomUUID());
-                    assignmentGroupExt.setAssignmentNumber(assignmentJson.getAssignmentNumber());
+                    assignmentGroupExt.setAssignmentNumber(assignmentJson.getLegacyId());
                     assignmentGroupExt.setList(new ArrayList<>());
                     assignmentGroupExtList.add(assignmentGroupExt);
                 }
 
                 AssignmentExt assignmentExt = metadata.create(AssignmentExt.class);
-                assignmentExt.setAssignmentStatus(assignmentJson.getStatus() != null
-                        && !assignmentJson.getStatus().isEmpty()
-                        ? dataManager.load(DicAssignmentStatus.class)
-                        .query("select e from tsadv$DicAssignmentStatus e " +
-                                " where e.legacyId = :legacyId " +
-                                " and e.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("legacyId", assignmentJson.getStatus(),
-                                "companyCode", assignmentJson.getCompanyCode()))
-                        .view("dicAssignmentStatus-edit")
-                        .list().stream().findFirst().orElse(null)
-                        : dataManager.load(DicAssignmentStatus.class)
+                assignmentExt.setAssignmentStatus(dataManager.load(DicAssignmentStatus.class)
                         .query("select e from tsadv$DicAssignmentStatus e " +
                                 " where e.code = 'ACTIVE'")
                         .list().stream().findFirst().orElse(null));
+                DicAssignmentStatus dicAssignmentStatus = dataManager.load(DicAssignmentStatus.class)
+                        .query("select e from tsadv$DicAssignmentStatus e " +
+                                " where e.legacyId = :legacyId")
+                        .parameter("legacyId", assignmentJson.getAssignmentStatus())
+                        .list().stream().findFirst().orElse(null);
+                if (dicAssignmentStatus != null) {
+                    assignmentExt.setAssignmentStatus(dicAssignmentStatus);
+                }
                 PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                         .query("select e from base$PersonGroupExt e " +
                                 " where e.legacyId = :pgLegacyId " +
                                 " and e.company.legacyId = :companyCode ")
-                        .setParameters(ParamsMap.of("pgLegacyId", assignmentJson.getPersonGroup(),
+                        .setParameters(ParamsMap.of("pgLegacyId", assignmentJson.getPersonId(),
                                 "companyCode", assignmentJson.getCompanyCode()))
                         .view("personGroupExt-for-integration-rest")
                         .list().stream().findFirst().orElse(null);
@@ -1319,14 +1387,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentExt.setPersonGroup(personGroupExt);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no base$PersonGroupExt with legacyId " + assignmentJson.getPersonGroup()
+                            "no base$PersonGroupExt with legacyId " + assignmentJson.getPersonId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 OrganizationGroupExt organizationGroupExt = dataManager.load(OrganizationGroupExt.class)
                         .query("select e from base$OrganizationGroupExt e " +
                                 " where e.legacyId = :ogLegacyId " +
                                 " and e.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("ogLegacyId", assignmentJson.getOrganizationGroup(),
+                        .setParameters(ParamsMap.of("ogLegacyId", assignmentJson.getOrganizationId(),
                                 "companyCode", assignmentJson.getCompanyCode()))
                         .view("organizationGroupExt-for-integration-rest")
                         .list().stream().findFirst().orElse(null);
@@ -1334,14 +1402,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentExt.setOrganizationGroup(organizationGroupExt);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no base$OrganizationGroupExt with legacyId " + assignmentJson.getOrganizationGroup()
+                            "no base$OrganizationGroupExt with legacyId " + assignmentJson.getOrganizationId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 JobGroup jobGroup = dataManager.load(JobGroup.class)
                         .query("select e from tsadv$JobGroup e " +
                                 " where e.legacyId = :jgLegacyId " +
                                 " and e.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("jgLegacyId", assignmentJson.getJobGroup(),
+                        .setParameters(ParamsMap.of("jgLegacyId", assignmentJson.getJobId(),
                                 "companyCode", assignmentJson.getCompanyCode()))
                         .view("jobGroup-for-integration-rest")
                         .list().stream().findFirst().orElse(null);
@@ -1349,7 +1417,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentExt.setJobGroup(jobGroup);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no tsadv$JobGroup with legacyId " + assignmentJson.getJobGroup()
+                            "no tsadv$JobGroup with legacyId " + assignmentJson.getJobId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 PositionGroupExt positionGroupExt = dataManager.load(PositionGroupExt.class)
@@ -1357,39 +1425,40 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 " where e.organizationGroupExt.company.legacyId = :companyCode " +
                                 " and e.group.legacyId = :legacyId ")
                         .setParameters(ParamsMap.of("companyCode", assignmentJson.getCompanyCode(),
-                                "legacyId", assignmentJson.getPositionGroup()))
+                                "legacyId", assignmentJson.getPositionId()))
                         .view("positionGroupExt-for-integration-rest")
                         .list().stream().findFirst().orElse(null);
                 if (positionGroupExt != null) {
                     assignmentExt.setPositionGroup(positionGroupExt);
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
-                            "no base$PositionGroupExt with legacyId " + assignmentJson.getPositionGroup()
+                            "no base$PositionGroupExt with legacyId " + assignmentJson.getPositionId()
                                     + " and company legacyId " + assignmentJson.getCompanyCode());
                 }
                 GradeGroup gradeGroup = dataManager.load(GradeGroup.class)
                         .query("select e from tsadv$GradeGroup e" +
                                 " where e.legacyId = :ggLegacyId " +
                                 " and e.company.legacyId = :companyCode")
-                        .setParameters(ParamsMap.of("ggLegacyId", assignmentJson.getGrade(),
+                        .setParameters(ParamsMap.of("ggLegacyId", assignmentJson.getGradeId(),
                                 "companyCode", assignmentJson.getCompanyCode()))
                         .view("gradeGroup.browse")
                         .list().stream().findFirst().orElse(null);
                 if (gradeGroup != null) {
                     assignmentExt.setGradeGroup(gradeGroup);
                 } else {
-                    return prepareError(result, methodName, assignmentDataJson,
-                            "no tsadv$GradeGroup with legacyId " + assignmentJson.getGrade()
-                                    + " and company legacyId " + assignmentJson.getCompanyCode());
+                    assignmentExt.setGradeGroup(null);
                 }
                 assignmentExt.setWriteHistory(false);
                 assignmentExt.setLegacyId(assignmentJson.getLegacyId());
                 assignmentExt.setStartDate(formatter.parse(assignmentJson.getStartDate()));
                 assignmentExt.setEndDate(formatter.parse(assignmentJson.getEndDate()));
-                assignmentExt.setAssignDate(formatter.parse(assignmentJson.getAssignDate()));
+                assignmentExt.setAssignDate(formatter.parse(assignmentJson.getStartDate()));
                 assignmentExt.setFte(assignmentJson.getFte() != null && !assignmentJson.getFte().isEmpty()
                         ? Double.parseDouble(assignmentJson.getFte()) : null);
-                assignmentExt.setProbationEndDate(formatter.parse(assignmentJson.getProbationPeriodEndDate()));
+                assignmentExt.setProbationEndDate(assignmentJson.getProbationPeriodEndDate() != null
+                        && !assignmentJson.getProbationPeriodEndDate().isEmpty()
+                        ? formatter.parse(assignmentJson.getProbationPeriodEndDate())
+                        : null);
                 assignmentExt.setPrimaryFlag(Boolean.valueOf(assignmentJson.getPrimaryFlag()));
                 assignmentExt.setGroup(assignmentGroupExt);
                 assignmentGroupExt.getList().add(assignmentExt);
@@ -1510,28 +1579,31 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
                             ? Double.valueOf(salaryJson.getAmount())
                             : null);
-                    salary.setCurrency(salaryJson.getCurrency() != null && !salaryJson.getCurrency().isEmpty()
-                            ? dataManager.load(DicCurrency.class)
+                    DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
-                                    " where e.legacyId = :cLegacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency(),
-                                    "companyCode", salaryJson.getCompanyCode()))
-                            .list().stream().findFirst().orElse(null)
-                            : dataManager.load(DicCurrency.class)
-                            .query("select e from base$DicCurrency e " +
-                                    " where e.code = 'KZT'")
-                            .list().stream().findFirst().orElse(null));
+                                    " where e.legacyId = :cLegacyId")
+                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency()))
+                            .list().stream().findFirst().orElse(null);
+                    if (dicCurrency != null) {
+                        salary.setCurrency(dicCurrency);
+                    } else {
+                        return prepareError(result, methodName, salaryData,
+                                "no base$DicCurrency with legacyId " + salaryJson.getCurrency());
+                    }
                     salary.setNetGross(GrossNet.fromId(salaryJson.getNetGross() != null
                             && !salaryJson.getNetGross().isEmpty()
                             ? salaryJson.getNetGross()
                             : "GROSS"));
                     salary.setType(SalaryType.fromId(salaryJson.getSalaryType() != null
                             && !salaryJson.getSalaryType().isEmpty()
-                            ? salaryJson.getNetGross()
+                            ? salaryJson.getSalaryType()
                             : "MONTHLYRATE"));
-                    salary.setStartDate(formatter.parse(salaryJson.getStartDate()));
-                    salary.setEndDate(formatter.parse(salaryJson.getEndDate()));
+                    salary.setStartDate(salaryJson.getStartDate() != null && !salaryJson.getStartDate().isEmpty()
+                            ? formatter.parse(salaryJson.getStartDate())
+                            : null);
+                    salary.setEndDate(salaryJson.getEndDate() != null && !salaryJson.getEndDate().isEmpty()
+                            ? formatter.parse(salaryJson.getEndDate())
+                            : null);
                     salary.setWriteHistory(false);
                     commitContext.addInstanceToCommit(salary);
                 }
@@ -1557,18 +1629,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
                             ? Double.valueOf(salaryJson.getAmount())
                             : null);
-                    salary.setCurrency(salaryJson.getCurrency() != null && !salaryJson.getCurrency().isEmpty()
-                            ? dataManager.load(DicCurrency.class)
+                    DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
-                                    " where e.legacyId = :cLegacyId " +
-                                    " and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency(),
-                                    "companyCode", salaryJson.getCompanyCode()))
-                            .list().stream().findFirst().orElse(null)
-                            : dataManager.load(DicCurrency.class)
-                            .query("select e from base$DicCurrency e " +
-                                    " where e.code = 'KZT'")
-                            .list().stream().findFirst().orElse(null));
+                                    " where e.legacyId = :cLegacyId")
+                            .setParameters(ParamsMap.of("cLegacyId", salaryJson.getCurrency()))
+                            .list().stream().findFirst().orElse(null);
+                    if (dicCurrency != null) {
+                        salary.setCurrency(dicCurrency);
+                    } else {
+                        return prepareError(result, methodName, salaryData,
+                                "no base$DicCurrency with legacyId " + salaryJson.getCurrency());
+                    }
                     salary.setNetGross(GrossNet.fromId(salaryJson.getNetGross() != null
                             && !salaryJson.getNetGross().isEmpty()
                             ? salaryJson.getNetGross()
@@ -1577,8 +1648,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             && !salaryJson.getSalaryType().isEmpty()
                             ? salaryJson.getSalaryType()
                             : "MONTHLYRATE"));
-                    salary.setStartDate(formatter.parse(salaryJson.getStartDate()));
-                    salary.setEndDate(formatter.parse(salaryJson.getEndDate()));
+                    salary.setStartDate(salaryJson.getStartDate() != null && !salaryJson.getStartDate().isEmpty()
+                            ? formatter.parse(salaryJson.getStartDate())
+                            : null);
+                    salary.setEndDate(salaryJson.getEndDate() != null && !salaryJson.getEndDate().isEmpty()
+                            ? formatter.parse(salaryJson.getEndDate())
+                            : null);
                     salary.setWriteHistory(false);
                     commitContext.addInstanceToCommit(salary);
                 }
@@ -1615,15 +1690,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 Salary salary = dataManager.load(Salary.class)
                         .query("select e from tsadv$Salary e " +
                                 " where e.legacyId = :legacyId " +
-                                " and e.assignmentGroup.legacyId = :agLegacyId")
+                                " and e.assignmentGroup.company.legacyId = :companyCode")
                         .setParameters(ParamsMap.of("legacyId", salaryJson.getLegacyId(),
-                                "agLegacyId", salaryJson.getAssignmentLegacyId()))
+                                "companyCode", salaryJson.getCompanyCode()))
                         .view("salary.view").list().stream().findFirst().orElse(null);
 
                 if (salary == null) {
                     return prepareError(result, methodName, salaryData,
-                            "no salary with legacyId and assignmentLegacyId : "
-                                    + salaryJson.getLegacyId() + " , " + salaryJson.getAssignmentLegacyId());
+                            "no salary with legacyId and assignment with companyCode : "
+                                    + salaryJson.getLegacyId() + " , " + salaryJson.getCompanyCode());
                 }
                 if (!salaries.stream().filter(salary1 ->
                         salary1.getId().equals(salary.getId())).findAny().isPresent()) {
@@ -2119,29 +2194,36 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonContactJson personContactJson : personContacts) {
 
                 if (personContactJson.getPersonId() == null || personContactJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no personId");
                 }
 
                 if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no legacyId");
                 }
 
                 if (personContactJson.getType() == null || personContactJson.getType().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no type");
                 }
 
                 if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no companyCode");
+                }
+
+                if (personContactJson.getValue() == null || personContactJson.getValue().isEmpty()) {
+                    return prepareError(result, methodName, personContactData,
+                            "no value");
                 }
 
                 PersonContact personContact = personContactsCommitList.stream().filter(filterPersonContact ->
                         filterPersonContact.getLegacyId() != null
                                 && filterPersonContact.getType() != null
                                 && filterPersonContact.getType().getLegacyId() != null
+                                && filterPersonContact.getContactValue() != null
+                                && filterPersonContact.getContactValue().equals(personContactJson.getValue())
                                 && filterPersonContact.getPersonGroup() != null
                                 && filterPersonContact.getPersonGroup().getLegacyId() != null
                                 && filterPersonContact.getPersonGroup().getCompany() != null
@@ -2158,10 +2240,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .query(
                                     " select e from tsadv$PersonContact e " +
                                             " where e.legacyId = :legacyId " +
+                                            " and e.contactValue = :value" +
                                             " and e.personGroup.legacyId = :pgLegacyId " +
                                             " and e.personGroup.company.legacyId = :companyCode " +
                                             " and e.type.legacyId = :tpLegacyId")
                             .setParameters(ParamsMap.of(
+                                    "value", personContactJson.getValue(),
                                     "legacyId", personContactJson.getLegacyId(),
                                     "pgLegacyId", personContactJson.getPersonId(),
                                     "companyCode", personContactJson.getCompanyCode(),
@@ -2182,7 +2266,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (personGroupExt != null) {
                             personContact.setPersonGroup(personGroupExt);
                         } else {
-                            return prepareError(result, methodName, personContacts,
+                            return prepareError(result, methodName, personContactData,
                                     "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
                                             + " and company legacyId " + personContactJson.getCompanyCode());
                         }
@@ -2196,7 +2280,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (type != null) {
                             personContact.setType(type);
                         } else {
-                            return prepareError(result, methodName, personContactJson.getType(), "" +
+                            return prepareError(result, methodName, personContactData, "" +
                                     "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                         }
                         personContact.setContactValue(personContactJson.getValue());
@@ -2219,7 +2303,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (personGroupExt != null) {
                             personContact.setPersonGroup(personGroupExt);
                         } else {
-                            return prepareError(result, methodName, personContacts,
+                            return prepareError(result, methodName, personContactData,
                                     "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
                                             + " and company legacyId " + personContactJson.getCompanyCode());
                         }
@@ -2233,7 +2317,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (type != null) {
                             personContact.setType(type);
                         } else {
-                            return prepareError(result, methodName, personContactJson.getType(), "" +
+                            return prepareError(result, methodName, personContactData, "" +
                                     "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                         }
                         personContact.setContactValue(personContactJson.getValue());
@@ -2253,7 +2337,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personContact.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personContacts,
+                        return prepareError(result, methodName, personContactData,
                                 "no base$PersonGroupExt with legacyId " + personContactJson.getPersonId()
                                         + " and company legacyId " + personContactJson.getCompanyCode());
                     }
@@ -2267,7 +2351,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (type != null) {
                         personContact.setType(type);
                     } else {
-                        return prepareError(result, methodName, personContactJson.getType(), "" +
+                        return prepareError(result, methodName, personContactData, "" +
                                 "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                     }
                     personContact.setContactValue(personContactJson.getValue());
@@ -2302,12 +2386,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonContactJson personContactJson : personContacts) {
 
                 if (personContactJson.getLegacyId() == null || personContactJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no legacyId");
                 }
 
                 if (personContactJson.getCompanyCode() == null || personContactJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personContacts,
+                    return prepareError(result, methodName, personContactData,
                             "no companyCode");
                 }
 
@@ -2322,7 +2406,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("personContact.edit").list().stream().findFirst().orElse(null);
 
                 if (personContact == null) {
-                    return prepareError(result, methodName, personContactJson,
+                    return prepareError(result, methodName, personContactData,
                             "no tsadv$PersonContact with legacyId " + personContactJson.getLegacyId()
                                     + " and company legacyId " + personContactJson.getCompanyCode());
                 }
@@ -2486,7 +2570,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, personEducations);
+        return prepareSuccess(result, methodName, personEducationData);
     }
 
     @Override
@@ -3176,27 +3260,27 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonDismissalJson personDismissalJson : personDismissals) {
 
                 if (personDismissalJson.getPersonId() == null || personDismissalJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no personId");
                 }
 
                 if (personDismissalJson.getLegacyId() == null || personDismissalJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no legacyId");
                 }
 
-                if (personDismissalJson.getDismissalReasonCode() == null || personDismissalJson.getDismissalReasonCode().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
-                            "no dismissalReasonCode");
+                if (personDismissalJson.getDismissalArticle() == null || personDismissalJson.getDismissalArticle().isEmpty()) {
+                    return prepareError(result, methodName, personDismissalData,
+                            "no dismissalArticle");
                 }
 
                 if (personDismissalJson.getDismissalDate() == null || personDismissalJson.getDismissalDate().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no dismissalDate");
                 }
 
                 if (personDismissalJson.getCompanyCode() == null || personDismissalJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no companyCode");
                 }
 
@@ -3230,7 +3314,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     "legacyId", personDismissalJson.getLegacyId(),
                                     "pgLegacyId", personDismissalJson.getPersonId(),
                                     "companyCode", personDismissalJson.getCompanyCode(),
-                                    "drLegacyId", personDismissalJson.getDismissalReasonCode(),
+                                    "drLegacyId", personDismissalJson.getDismissalArticle(),
                                     "dsDate", formatter.parse(personDismissalJson.getDismissalDate())))
                             .view("dismissal.edit").list().stream().findFirst().orElse(null);
 
@@ -3239,15 +3323,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         personDismissal.setDismissalDate(formatter.parse(personDismissalJson.getDismissalDate()));
                         personDismissal.setRequestDate(CommonUtils.getSystemDate());
 
-                        //use default id
                         DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
                                 .query(
                                         "select e from tsadv$DicDismissalStatus e " +
-                                                " where e.id = :id ")
-                                .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                                                " where e.code = 'ACTIVE' ")
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                        personDismissal.setStatus(status);
+                        if (status != null) {
+                            personDismissal.setStatus(status);
+                        } else {
+                            return prepareError(result, methodName, personDismissalData,
+                                    "no tsadv$DicDismissalStatus with code = 'ACTIVE'");
+                        }
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
@@ -3261,22 +3348,38 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (personGroupExt != null) {
                             personDismissal.setPersonGroup(personGroupExt);
                         } else {
-                            return prepareError(result, methodName, personDismissals,
+                            return prepareError(result, methodName, personDismissalData,
                                     "no base$PersonGroupExt with legacyId " + personDismissalJson.getPersonId()
                                             + " and company legacyId " + personDismissalJson.getCompanyCode());
                         }
 
-                        DicLCArticle reason = dataManager.load(DicLCArticle.class)
+                        DicLCArticle article = dataManager.load(DicLCArticle.class)
                                 .query(
                                         "select e from tsadv$DicLCArticle e " +
-                                                " where e.legacyId = :legacyId ")
-                                .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
-                                .view(View.BASE).list().stream().findFirst().orElse(null);
-                        if (reason != null) {
-                            personDismissal.setLcArticle(reason);
+                                                " where e.legacyId = :legacyId " +
+                                                " and e.company.legacyId = :companyCode")
+                                .parameter("legacyId", personDismissalJson.getDismissalArticle())
+                                .parameter("companyCode", personDismissalJson.getCompanyCode())
+                                .view("dicLCArticle-edit")
+                                .list().stream().findFirst().orElse(null);
+                        if (article != null) {
+                            personDismissal.setLcArticle(article);
                         } else {
-                            return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
-                                    "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
+                            return prepareError(result, methodName, personDismissalData, "" +
+                                    "no tsadv$DicLCArticle with legacyId and companyCode " + personDismissalJson.getDismissalArticle()
+                                    + " " + personDismissalJson.getCompanyCode());
+                        }
+
+                        DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                                .query("select e from tsadv$DicDismissalReason e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode")
+                                .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
+                                .parameter("companyCode", personDismissalJson.getCompanyCode())
+                                .view("")
+                                .list().stream().findFirst().orElse(null);
+                        if (reason != null) {
+                            personDismissal.setDismissalReason(reason);
                         }
 
                         personDismissalsCommitList.add(personDismissal);
@@ -3287,15 +3390,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         personDismissal.setDismissalDate(formatter.parse(personDismissalJson.getDismissalDate()));
                         personDismissal.setRequestDate(CommonUtils.getSystemDate());
 
-                        //used default id
                         DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
                                 .query(
                                         "select e from tsadv$DicDismissalStatus e " +
-                                                " where e.id = :id ")
-                                .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                                                " where e.code = 'ACTIVE' ")
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                        personDismissal.setStatus(status);
+                        if (status != null) {
+                            personDismissal.setStatus(status);
+                        } else {
+                            return prepareError(result, methodName, personDismissalData,
+                                    "no tsadv$DicDismissalStatus with code = 'ACTIVE'");
+                        }
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
@@ -3309,22 +3415,38 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (personGroupExt != null) {
                             personDismissal.setPersonGroup(personGroupExt);
                         } else {
-                            return prepareError(result, methodName, personDismissals,
+                            return prepareError(result, methodName, personDismissalData,
                                     "no base$PersonGroupExt with legacyId " + personDismissalJson.getPersonId()
                                             + " and company legacyId " + personDismissalJson.getCompanyCode());
                         }
 
-                        DicLCArticle reason = dataManager.load(DicLCArticle.class)
+                        DicLCArticle article = dataManager.load(DicLCArticle.class)
                                 .query(
                                         "select e from tsadv$DicLCArticle e " +
-                                                " where e.legacyId = :legacyId ")
-                                .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
-                                .view(View.BASE).list().stream().findFirst().orElse(null);
-                        if (reason != null) {
-                            personDismissal.setLcArticle(reason);
+                                                " where e.legacyId = :legacyId " +
+                                                " and e.company.legacyId = :companyCode")
+                                .parameter("legacyId", personDismissalJson.getDismissalArticle())
+                                .parameter("companyCode", personDismissalJson.getCompanyCode())
+                                .view("dicLCArticle-edit")
+                                .list().stream().findFirst().orElse(null);
+                        if (article != null) {
+                            personDismissal.setLcArticle(article);
                         } else {
-                            return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
-                                    "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
+                            return prepareError(result, methodName, personDismissalData, "" +
+                                    "no tsadv$DicLCArticle with legacyId and companyCode " + personDismissalJson.getDismissalArticle()
+                                    + " " + personDismissalJson.getCompanyCode());
+                        }
+
+                        DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                                .query("select e from tsadv$DicDismissalReason e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode")
+                                .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
+                                .parameter("companyCode", personDismissalJson.getCompanyCode())
+                                .view("")
+                                .list().stream().findFirst().orElse(null);
+                        if (reason != null) {
+                            personDismissal.setDismissalReason(reason);
                         }
 
                         personDismissalsCommitList.add(personDismissal);
@@ -3333,15 +3455,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDismissal.setLegacyId(personDismissalJson.getLegacyId());
                     personDismissal.setRequestDate(CommonUtils.getSystemDate());
 
-                    //used exists default id
                     DicDismissalStatus status = dataManager.load(DicDismissalStatus.class)
                             .query(
                                     "select e from tsadv$DicDismissalStatus e " +
-                                            " where e.id = :id ")
-                            .parameter("id", UUID.fromString("e8ee683f-c801-4979-0008-62ce428249ae"))
+                                            " where e.code = 'ACTIVE' ")
                             .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                    personDismissal.setStatus(status);
+                    if (status != null) {
+                        personDismissal.setStatus(status);
+                    } else {
+                        return prepareError(result, methodName, personDismissalData,
+                                "no tsadv$DicDismissalStatus with code = 'ACTIVE'");
+                    }
 
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query(
@@ -3355,23 +3480,41 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (personGroupExt != null) {
                         personDismissal.setPersonGroup(personGroupExt);
                     } else {
-                        return prepareError(result, methodName, personDismissals,
+                        return prepareError(result, methodName, personDismissalData,
                                 "no base$PersonGroupExt with legacyId " + personDismissalJson.getPersonId()
                                         + " and company legacyId " + personDismissalJson.getCompanyCode());
                     }
 
-                    DicLCArticle reason = dataManager.load(DicLCArticle.class)
+                    DicLCArticle article = dataManager.load(DicLCArticle.class)
                             .query(
                                     "select e from tsadv$DicLCArticle e " +
-                                            " where e.legacyId = :legacyId ")
-                            .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
-                            .view(View.BASE).list().stream().findFirst().orElse(null);
-                    if (reason != null) {
-                        personDismissal.setLcArticle(reason);
+                                            " where e.legacyId = :legacyId " +
+                                            " and e.company.legacyId = :companyCode")
+                            .parameter("legacyId", personDismissalJson.getDismissalArticle())
+                            .parameter("companyCode", personDismissalJson.getCompanyCode())
+                            .view("dicLCArticle-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (article != null) {
+                        personDismissal.setLcArticle(article);
                     } else {
-                        return prepareError(result, methodName, personDismissalJson.getDismissalReasonCode(), "" +
-                                "no tsadv$DicLCArticle with legacyId " + personDismissalJson.getDismissalReasonCode());
+                        return prepareError(result, methodName, personDismissalData, "" +
+                                "no tsadv$DicLCArticle with legacyId and companyCode " + personDismissalJson.getDismissalArticle()
+                                + " " + personDismissalJson.getCompanyCode());
                     }
+
+                    DicDismissalReason reason = dataManager.load(DicDismissalReason.class)
+                            .query("select e from tsadv$DicDismissalReason e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.company.legacyId = :companyCode")
+                            .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
+                            .parameter("companyCode", personDismissalJson.getCompanyCode())
+                            .view("dicDismissalReason-edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (reason != null) {
+                        personDismissal.setDismissalReason(reason);
+                    }
+
+                    personDismissalsCommitList.add(personDismissal);
                 }
             }
 
@@ -3403,12 +3546,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonDismissalJson personDismissalJson : personDismissals) {
 
                 if (personDismissalJson.getLegacyId() == null || personDismissalJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no legacyId");
                 }
 
                 if (personDismissalJson.getCompanyCode() == null || personDismissalJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personDismissals,
+                    return prepareError(result, methodName, personDismissalData,
                             "no companyCode");
                 }
 
@@ -3423,7 +3566,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("dismissal.edit").list().stream().findFirst().orElse(null);
 
                 if (personDismissal == null) {
-                    return prepareError(result, methodName, personDismissalJson,
+                    return prepareError(result, methodName, personDismissalData,
                             "no tsadv$Dismissal with legacyId " + personDismissalJson.getLegacyId()
                                     + " and company legacyId " + personDismissalJson.getCompanyCode());
                 }
@@ -3461,32 +3604,32 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (HarmfulConditionJson harmfulConditionJson : harmfulConditions) {
 
                 if (harmfulConditionJson.getLegacyId() == null || harmfulConditionJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, harmfulConditions,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "no legacyId");
                 }
 
                 if (harmfulConditionJson.getPositionId() == null || harmfulConditionJson.getPositionId().isEmpty()) {
-                    return prepareError(result, methodName, harmfulConditions,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "no positionId");
                 }
 
                 if (harmfulConditionJson.getStartDate() == null || harmfulConditionJson.getStartDate().isEmpty()) {
-                    return prepareError(result, methodName, harmfulConditions,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "no startDate");
                 }
 
                 if (harmfulConditionJson.getEndDate() == null || harmfulConditionJson.getEndDate().isEmpty()) {
-                    return prepareError(result, methodName, harmfulConditions,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "no endDate");
                 }
 
                 if (harmfulConditionJson.getDays() < 0) {
-                    return prepareError(result, methodName, harmfulConditions,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "days is negative");
                 }
 
                 if (harmfulConditionJson.getCompanyCode() == null || harmfulConditionJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, harmfulConditions,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "no companyCode");
                 }
 
@@ -3542,7 +3685,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (positionGroupExt != null) {
                             harmfulCondition.setPositionGroup(positionGroupExt);
                         } else {
-                            return prepareError(result, methodName, harmfulConditions,
+                            return prepareError(result, methodName, harmfulConditionData,
                                     "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
                                             + " and company legacyId " + harmfulConditionJson.getCompanyCode());
                         }
@@ -3571,7 +3714,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         if (positionGroupExt != null) {
                             harmfulCondition.setPositionGroup(positionGroupExt);
                         } else {
-                            return prepareError(result, methodName, harmfulConditions,
+                            return prepareError(result, methodName, harmfulConditionData,
                                     "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
                                             + " and company legacyId " + harmfulConditionJson.getCompanyCode());
                         }
@@ -3598,7 +3741,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (positionGroupExt != null) {
                         harmfulCondition.setPositionGroup(positionGroupExt);
                     } else {
-                        return prepareError(result, methodName, harmfulConditions,
+                        return prepareError(result, methodName, harmfulConditionData,
                                 "no base$PositionGroupExt with legacyId " + harmfulConditionJson.getPositionId()
                                         + " and company legacyId " + harmfulConditionJson.getCompanyCode());
                     }
@@ -3633,12 +3776,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (HarmfulConditionJson harmfulConditionJson : harmfulConditions) {
 
                 if (harmfulConditionJson.getLegacyId() == null || harmfulConditionJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, harmfulConditions,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "no legacyId");
                 }
 
                 if (harmfulConditionJson.getCompanyCode() == null || harmfulConditionJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, harmfulConditions,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "no companyCode");
                 }
 
@@ -3655,7 +3798,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("positionHarmfulCondition.edit").list().stream().findFirst().orElse(null);
 
                 if (harmfulCondition == null) {
-                    return prepareError(result, methodName, harmfulConditionJson,
+                    return prepareError(result, methodName, harmfulConditionData,
                             "no tsadv$PositionHarmfulCondition with legacyId " + harmfulConditionJson.getLegacyId()
                                     + " and company legacyId " + harmfulConditionJson.getCompanyCode());
                 }
@@ -3693,32 +3836,32 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (AssignmentScheduleJson assignmentScheduleJson : assignmentSchedules) {
 
                 if (assignmentScheduleJson.getAssignmentId() == null || assignmentScheduleJson.getAssignmentId().isEmpty()) {
-                    return prepareError(result, methodName, assignmentSchedules,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no assignmentId");
                 }
 
                 if (assignmentScheduleJson.getScheduleId() == null || assignmentScheduleJson.getScheduleId().isEmpty()) {
-                    return prepareError(result, methodName, assignmentSchedules,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no scheduleId");
                 }
 
                 if (assignmentScheduleJson.getStartDate() == null || assignmentScheduleJson.getStartDate().isEmpty()) {
-                    return prepareError(result, methodName, assignmentSchedules,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no startDate");
                 }
 
                 if (assignmentScheduleJson.getEndDate() == null || assignmentScheduleJson.getEndDate().isEmpty()) {
-                    return prepareError(result, methodName, assignmentSchedules,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no endDate");
                 }
 
                 if (assignmentScheduleJson.getEndPolicyCode() == null || assignmentScheduleJson.getEndPolicyCode().isEmpty()) {
-                    return prepareError(result, methodName, assignmentSchedules,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no endPolicyCode");
                 }
 
                 if (assignmentScheduleJson.getCompanyCode() == null || assignmentScheduleJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, assignmentSchedules,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no companyCode");
                 }
 
@@ -3763,7 +3906,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             " (select p.group.legacyId from base$AssignmentExt p " +
                                             " where p.organizationGroup.company.legacyId = :companyCode) ")
                             .setParameters(ParamsMap.of(
-                                    "epc",assignmentScheduleJson.getEndPolicyCode(),
+                                    "epc", assignmentScheduleJson.getEndPolicyCode(),
                                     "agLegacyId", assignmentScheduleJson.getAssignmentId(),
                                     "shLegacyId", assignmentScheduleJson.getAssignmentId(),
                                     "companyCode", assignmentScheduleJson.getCompanyCode()))
@@ -3931,16 +4074,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (AssignmentScheduleJson assignmentScheduleJson : assignmentSchedules) {
 
                 if (assignmentScheduleJson.getAssignmentId() == null || assignmentScheduleJson.getAssignmentId().isEmpty()) {
-                    return prepareError(result, methodName, assignmentSchedules,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no assignmentId");
                 }
 
-                if(assignmentScheduleJson.getStartDate() == null || assignmentScheduleJson.getStartDate().isEmpty()){
-                    return prepareError(result, methodName, assignmentSchedules,
+                if (assignmentScheduleJson.getStartDate() == null || assignmentScheduleJson.getStartDate().isEmpty()) {
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no startDate");
                 }
                 if (assignmentScheduleJson.getCompanyCode() == null || assignmentScheduleJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, assignmentSchedules,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no companyCode");
                 }
 
@@ -3954,15 +4097,15 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         " where p.organizationGroup.company.legacyId = :companyCode) ")
                         .setParameters(
                                 ParamsMap.of(
-                                "startDate",CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getStartDate())),
-                                "agLegacyId", assignmentScheduleJson.getAssignmentId(),
-                                "companyCode", assignmentScheduleJson.getCompanyCode()
+                                        "startDate", CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getStartDate())),
+                                        "agLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                        "companyCode", assignmentScheduleJson.getCompanyCode()
                                 )
                         )
                         .view("assignmentSchedule.edit").list().stream().findFirst().orElse(null);
 
                 if (assignmentSchedule == null) {
-                    return prepareError(result, methodName, assignmentScheduleJson,
+                    return prepareError(result, methodName, assignmentScheduleData,
                             "no tsadv$AssignmentSchedule with assignmentId " + assignmentScheduleJson.getAssignmentId()
                                     + " and company legacyId " + assignmentScheduleJson.getCompanyCode());
                 }
@@ -4000,37 +4143,37 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonAddressJson personAddressJson : personAdresses) {
 
                 if (personAddressJson.getLegacyId() == null || personAddressJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personAdresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no legacyId");
                 }
 
                 if (personAddressJson.getPersonId() == null || personAddressJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personAdresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no personId");
                 }
 
                 if (personAddressJson.getFactAddress() == null || personAddressJson.getFactAddress().isEmpty()) {
-                    return prepareError(result, methodName, personAdresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no factAddress");
                 }
 
                 if (personAddressJson.getRegistrationAddress() == null || personAddressJson.getRegistrationAddress().isEmpty()) {
-                    return prepareError(result, methodName, personAdresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no registrationAddress");
                 }
 
                 if (personAddressJson.getFactAddressKATOCode() == null || personAddressJson.getFactAddressKATOCode().isEmpty()) {
-                    return prepareError(result, methodName, personAdresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no factAddressKATOCode");
                 }
 
                 if (personAddressJson.getRegistrationAddressKATOCode() == null || personAddressJson.getRegistrationAddressKATOCode().isEmpty()) {
-                    return prepareError(result, methodName, personAdresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no registrationAddressKATOCode");
                 }
 
                 if (personAddressJson.getCompanyCode() == null || personAddressJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personAdresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no companyCode");
                 }
 
@@ -4076,12 +4219,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             " and e.registrationAddressKATOCode = :rdkc ")
                             .setParameters(
                                     ParamsMap.of(
-                                        "pgLegacyId", personAddressJson.getPersonId(),
-                                        "companyCode", personAddressJson.getCompanyCode(),
-                                        "fd",personAddressJson.getFactAddress(),
-                                        "rd",personAddressJson.getRegistrationAddress(),
-                                        "fdkc",personAddressJson.getFactAddressKATOCode(),
-                                            "rdkc",personAddressJson.getRegistrationAddressKATOCode()
+                                            "pgLegacyId", personAddressJson.getPersonId(),
+                                            "companyCode", personAddressJson.getCompanyCode(),
+                                            "fd", personAddressJson.getFactAddress(),
+                                            "rd", personAddressJson.getRegistrationAddress(),
+                                            "fdkc", personAddressJson.getFactAddressKATOCode(),
+                                            "rdkc", personAddressJson.getRegistrationAddressKATOCode()
                                     )
                             )
                             .view("address.view").list().stream().findFirst().orElse(null);
@@ -4109,7 +4252,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (personGroupExt != null) {
                             address.setPersonGroup(personGroupExt);
-                        }else {
+                        } else {
                             return prepareError(result, methodName, personAddressData,
                                     "no personGroup with legacyId and companyCode : "
                                             + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
@@ -4140,7 +4283,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (personGroupExt != null) {
                             address.setPersonGroup(personGroupExt);
-                        }else {
+                        } else {
                             return prepareError(result, methodName, personAddressData,
                                     "no personGroup with legacyId and companyCode : "
                                             + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
@@ -4171,7 +4314,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     if (personGroupExt != null) {
                         address.setPersonGroup(personGroupExt);
-                    }else {
+                    } else {
                         return prepareError(result, methodName, personAddressData,
                                 "no personGroup with legacyId and companyCode : "
                                         + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
@@ -4207,12 +4350,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonAddressJson personAddressJson : personAddresses) {
 
                 if (personAddressJson.getLegacyId() == null || personAddressJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personAddresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no legacyId");
                 }
 
                 if (personAddressJson.getCompanyCode() == null || personAddressJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personAddresses,
+                    return prepareError(result, methodName, personAddressData,
                             "no companyCode");
                 }
 
@@ -4227,7 +4370,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("address.view").list().stream().findFirst().orElse(null);
 
                 if (address == null) {
-                    return prepareError(result, methodName, personAddressJson,
+                    return prepareError(result, methodName, personAddressData,
                             "no tsadv$Address with legacyId " + personAddressJson.getLegacyId()
                                     + " and company legacyId " + personAddressJson.getCompanyCode());
                 }
@@ -4265,27 +4408,27 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonLanguageJson personLanguageJson : personLanguages) {
 
                 if (personLanguageJson.getLegacyId() == null || personLanguageJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personLanguages,
+                    return prepareError(result, methodName, personLanguageData,
                             "no legacyId");
                 }
 
                 if (personLanguageJson.getPersonId() == null || personLanguageJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personLanguages,
+                    return prepareError(result, methodName, personLanguageData,
                             "no personId");
                 }
 
                 if (personLanguageJson.getLanguageId() == null || personLanguageJson.getLanguageId().isEmpty()) {
-                    return prepareError(result, methodName, personLanguages,
+                    return prepareError(result, methodName, personLanguageData,
                             "no languageId");
                 }
 
                 if (personLanguageJson.getLevelId() == null || personLanguageJson.getLevelId().isEmpty()) {
-                    return prepareError(result, methodName, personLanguages,
+                    return prepareError(result, methodName, personLanguageData,
                             "no levelId");
                 }
 
                 if (personLanguageJson.getCompanyCode() == null || personLanguageJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personLanguages,
+                    return prepareError(result, methodName, personLanguageData,
                             "no companyCode");
                 }
 
@@ -4313,11 +4456,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                             " and e.languageLevel.legacyId = :lglvLegacyId")
                             .setParameters(
                                     ParamsMap.of(
-                                            "legacyId",personLanguageJson.getLegacyId(),
+                                            "legacyId", personLanguageJson.getLegacyId(),
                                             "pgLegacyId", personLanguageJson.getPersonId(),
                                             "companyCode", personLanguageJson.getCompanyCode(),
-                                            "lgLegacyId",personLanguageJson.getLanguageId(),
-                                            "lglvLegacyId",personLanguageJson.getLevelId()
+                                            "lgLegacyId", personLanguageJson.getLanguageId(),
+                                            "lglvLegacyId", personLanguageJson.getLevelId()
                                     )
                             )
                             .view("personLanguage.edit").list().stream().findFirst().orElse(null);
@@ -4334,7 +4477,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (personGroupExt != null) {
                             personLanguage.setPersonGroup(personGroupExt);
-                        }else {
+                        } else {
                             return prepareError(result, methodName, personLanguageData,
                                     "no personGroup with legacyId and companyCode : "
                                             + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
@@ -4343,12 +4486,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         DicLanguage language = dataManager.load(DicLanguage.class)
                                 .query("select e from base$DicLanguage e " +
                                         " where e.legacyId = :lgLegacyId")
-                                .parameter("lgLegacyId",personLanguageJson.getLanguageId())
+                                .parameter("lgLegacyId", personLanguageJson.getLanguageId())
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                        if(language != null){
+                        if (language != null) {
                             personLanguage.setLanguage(language);
-                        }else{
+                        } else {
                             return prepareError(result, methodName, personLanguageData,
                                     "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
                         }
@@ -4356,12 +4499,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
                                 .query("select e from tsadv_DicLanguageLevel e " +
                                         " where e.legacyId = :lglvLegacyId")
-                                .parameter("lglvLegacyId",personLanguageJson.getLevelId())
+                                .parameter("lglvLegacyId", personLanguageJson.getLevelId())
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                        if(languageLevel != null){
+                        if (languageLevel != null) {
                             personLanguage.setLanguageLevel(languageLevel);
-                        }else{
+                        } else {
                             return prepareError(result, methodName, personLanguageData,
                                     "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
                         }
@@ -4381,7 +4524,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (personGroupExt != null) {
                             personLanguage.setPersonGroup(personGroupExt);
-                        }else {
+                        } else {
                             return prepareError(result, methodName, personLanguageData,
                                     "no personGroup with legacyId and companyCode : "
                                             + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
@@ -4390,12 +4533,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         DicLanguage language = dataManager.load(DicLanguage.class)
                                 .query("select e from base$DicLanguage e " +
                                         " where e.legacyId = :lgLegacyId")
-                                .parameter("lgLegacyId",personLanguageJson.getLanguageId())
+                                .parameter("lgLegacyId", personLanguageJson.getLanguageId())
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                        if(language != null){
+                        if (language != null) {
                             personLanguage.setLanguage(language);
-                        }else{
+                        } else {
                             return prepareError(result, methodName, personLanguageData,
                                     "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
                         }
@@ -4403,12 +4546,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
                                 .query("select e from tsadv_DicLanguageLevel e " +
                                         " where e.legacyId = :lglvLegacyId")
-                                .parameter("lglvLegacyId",personLanguageJson.getLevelId())
+                                .parameter("lglvLegacyId", personLanguageJson.getLevelId())
                                 .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                        if(languageLevel != null){
+                        if (languageLevel != null) {
                             personLanguage.setLanguageLevel(languageLevel);
-                        }else{
+                        } else {
                             return prepareError(result, methodName, personLanguageData,
                                     "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
                         }
@@ -4427,7 +4570,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     if (personGroupExt != null) {
                         personLanguage.setPersonGroup(personGroupExt);
-                    }else {
+                    } else {
                         return prepareError(result, methodName, personLanguageData,
                                 "no personGroup with legacyId and companyCode : "
                                         + personLanguageJson.getPersonId() + " , " + personLanguageJson.getCompanyCode());
@@ -4436,12 +4579,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     DicLanguage language = dataManager.load(DicLanguage.class)
                             .query("select e from base$DicLanguage e " +
                                     " where e.legacyId = :lgLegacyId")
-                            .parameter("lgLegacyId",personLanguageJson.getLanguageId())
+                            .parameter("lgLegacyId", personLanguageJson.getLanguageId())
                             .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                    if(language != null){
+                    if (language != null) {
                         personLanguage.setLanguage(language);
-                    }else{
+                    } else {
                         return prepareError(result, methodName, personLanguageData,
                                 "no base$DicLanguage with legacyId: " + personLanguageJson.getLanguageId());
                     }
@@ -4449,12 +4592,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     DicLanguageLevel languageLevel = dataManager.load(DicLanguageLevel.class)
                             .query("select e from tsadv_DicLanguageLevel e " +
                                     " where e.legacyId = :lglvLegacyId")
-                            .parameter("lglvLegacyId",personLanguageJson.getLevelId())
+                            .parameter("lglvLegacyId", personLanguageJson.getLevelId())
                             .view(View.BASE).list().stream().findFirst().orElse(null);
 
-                    if(languageLevel != null){
+                    if (languageLevel != null) {
                         personLanguage.setLanguageLevel(languageLevel);
-                    }else{
+                    } else {
                         return prepareError(result, methodName, personLanguageData,
                                 "no tsadv_DicLanguageLevel with legacyId: " + personLanguageJson.getLevelId());
                     }
@@ -4489,12 +4632,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (PersonLanguageJson personLanguageJson : personLanguages) {
 
                 if (personLanguageJson.getLegacyId() == null || personLanguageJson.getLegacyId().isEmpty()) {
-                    return prepareError(result, methodName, personLanguages,
+                    return prepareError(result, methodName, personLanguageData,
                             "no legacyId");
                 }
 
                 if (personLanguageJson.getCompanyCode() == null || personLanguageJson.getCompanyCode().isEmpty()) {
-                    return prepareError(result, methodName, personLanguages,
+                    return prepareError(result, methodName, personLanguageData,
                             "no companyCode");
                 }
 
@@ -4509,7 +4652,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .view("personLanguage.edit").list().stream().findFirst().orElse(null);
 
                 if (personLanguage == null) {
-                    return prepareError(result, methodName, personLanguageJson,
+                    return prepareError(result, methodName, personLanguageData,
                             "no tsadv_PersonLanguage with legacyId " + personLanguageJson.getLegacyId()
                                     + " and company legacyId " + personLanguageJson.getCompanyCode());
                 }
@@ -4531,5 +4674,147 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         }
 
         return prepareSuccess(result, methodName, personLanguageData);
+    }
+
+    @Override
+    public BaseResult createOrUpdateUser(UserDataJson userData) {
+        String methodName = "createOrUpdateUser";
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        ArrayList<UserJson> users = new ArrayList<>();
+        ArrayList<UserJson> completedUsers = new ArrayList<>();
+
+        if (userData.getUsers() != null) {
+            users = userData.getUsers();
+        }
+
+        try {
+
+            for (UserJson userJson : users) {
+
+                if (userJson.getLogin() == null || userJson.getLogin().isEmpty()) {
+                    continue;
+                }
+
+                if (userJson.getEmployeeNumber() == null || userJson.getEmployeeNumber().isEmpty()) {
+                    continue;
+                }
+
+                if (userJson.getEmail() == null || userJson.getEmail().isEmpty()) {
+                    continue;
+                }
+
+                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.login = :login")
+                        .parameter("login", userJson.getLogin())
+                        .view("userExt.edit")
+                        .list().stream().findFirst().orElse(null);
+
+                if (tsadvUser != null) {
+
+                    if (!tsadvUser.getEmail().equals(userJson.getEmail())) {
+                        tsadvUser.setEmail(userJson.getEmail());
+                    }
+
+                    String empNumber = "";
+
+                    List<String> codes = new ArrayList<>();
+
+                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("VCM");
+                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("KBL");
+                        codes.add("KAL");
+                    } else if ("KMM".equals(userJson.getEmployeeNumber().substring(0, 3))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(3));
+                        codes.add("KMM");
+                    }
+
+                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                            .query(String.format("select e from base$PersonGroupExt e " +
+                                            " join e.list l " +
+                                            " where current_date between l.startDate and l.endDate " +
+                                            " and l.employeeNumber = :empNumber " +
+                                            " and e.company.code in (%s)",
+                                    codes.stream()
+                                            .map(s -> String.format("'%s'", s))
+                                            .collect(Collectors.joining())))
+                            .parameter("empNumber", empNumber)
+                            .view("personGroupExt-for-integration-rest")
+                            .list();
+
+                    if (personGroupExtList.size() == 1 && !tsadvUser.getPersonGroup().equals(personGroupExtList.get(0))) {
+                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                    } else {
+                        continue;
+                    }
+
+                    commitContext.addInstanceToCommit(tsadvUser);
+                    completedUsers.add(userJson);
+
+                } else {
+
+                    tsadvUser = dataManager.create(TsadvUser.class);
+                    tsadvUser.setLogin(userJson.getLogin());
+                    tsadvUser.setEmail(userJson.getEmail());
+
+                    String empNumber = "";
+
+                    List<String> codes = new ArrayList<>();
+
+                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("VCM");
+                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                        codes.add("KBL");
+                        codes.add("KAL");
+                    } else if ("KMM".equals(userJson.getEmployeeNumber().substring(0, 3))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(3));
+                        codes.add("KMM");
+                    }
+
+                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                            .query(String.format("select e from base$PersonGroupExt e " +
+                                            " join e.list l " +
+                                            " where current_date between l.startDate and l.endDate " +
+                                            " and l.employeeNumber = :empNumber " +
+                                            " and e.company.code in (%s)",
+                                    codes.stream()
+                                            .map(s -> String.format("'%s'", s))
+                                            .collect(Collectors.joining())))
+                            .parameter("empNumber", empNumber)
+                            .view("personGroupExt-for-integration-rest")
+                            .list();
+
+                    if (personGroupExtList.size() == 1) {
+                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                    } else {
+                        continue;
+                    }
+
+                    commitContext.addInstanceToCommit(tsadvUser);
+                    completedUsers.add(userJson);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, userData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, completedUsers);
+    }
+
+    private String getEmpNumber(String jsonEmpNumber) {
+        for (int i = 0; i < jsonEmpNumber.length(); i++) {
+            if (jsonEmpNumber.charAt(i) != '0') {
+                return jsonEmpNumber.substring(i);
+            }
+        }
+        return "";
     }
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="dicPortalFeedbackQuestionsTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicportalfeedbackquestion">
+    <data readOnly="true">
+        <collection id="dicPortalFeedbackQuestionsDc"
+                    class="kz.uco.tsadv.modules.learning.dictionary.DicPortalFeedbackQuestion"
+                    view="dicPortalFeedbackQuestion.edit">
+            <loader id="dicPortalFeedbackQuestionsDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicPortalFeedbackQuestion e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicPortalFeedbackQuestionsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicPortalFeedbackQuestionsTable"
+                dataLoader="dicPortalFeedbackQuestionsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicPortalFeedbackQuestionsTable"
+                    width="100%"
+                    dataContainer="dicPortalFeedbackQuestionsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="company"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="isDefault"/>
+                <column id="order"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicPortalFeedbackQuestionsTable.create"/>
+                <button id="editBtn" action="dicPortalFeedbackQuestionsTable.edit"/>
+                <button id="removeBtn" action="dicPortalFeedbackQuestionsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

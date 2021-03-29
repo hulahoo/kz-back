@@ -4,9 +4,18 @@ import java.io.Serializable;
 import java.util.List;
 
 public class AnsweredTest implements Serializable {
-    protected String attemptId;
-    protected List<AttemptQuestionPojo> questionsAndAnswers;
 
+    protected String attemptId;
+
+    protected List<AttemptTestSectionPojo> testSections;
+
+    public List<AttemptTestSectionPojo> getTestSections() {
+        return testSections;
+    }
+
+    public void setTestSections(List<AttemptTestSectionPojo> testSections) {
+        this.testSections = testSections;
+    }
 
     public String getAttemptId() {
         return attemptId;
@@ -16,11 +25,5 @@ public class AnsweredTest implements Serializable {
         this.attemptId = attemptId;
     }
 
-    public List<AttemptQuestionPojo> getQuestionsAndAnswers() {
-        return questionsAndAnswers;
-    }
 
-    public void setQuestionsAndAnswers(List<AttemptQuestionPojo> questionsAndAnswers) {
-        this.questionsAndAnswers = questionsAndAnswers;
-    }
 }

@@ -68,6 +68,7 @@ public class Test extends AbstractParentEntity {
 
     @Column(name = "QUESTION_PER_PAGE")
     protected Integer questionPerPage;
+
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "test")

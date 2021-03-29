@@ -108,10 +108,10 @@
     <query name="searchCourses" entity="tsadv$DicCategory" view="category-courses">
         <jpql>
             <![CDATA[
-            select c
+            select distinct c
             from tsadv$DicCategory c
             join c.courses cc
-            where (lower ( cc.name) like :courseName)
+            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%')))
             ]]>
         </jpql>
         <params>
@@ -121,7 +121,7 @@
     <query name="searchEnrollments" entity="tsadv$DicCategory" view="category-enrollment">
         <jpql>
             <![CDATA[
-            select c
+            select distinct c
             from tsadv$DicCategory c
             join c.courses cc
             join cc.enrollments e
@@ -156,7 +156,6 @@
             left join e.course c
             left join c.sections s
             left join s.courseSectionAttempts a
-                ON a.enrollment.id = :id
             where e.id = :id
             ]]>
         </jpql>
@@ -274,7 +273,7 @@
             ]]>
         </jpql>
     </query>
-    <query name="positionGroupGoals" entity="tsadv$Goal" view="_minimal">
+    <query name="positionGroupGoals" entity="tsadv$Goal" view="assigned-goal-cascade-position-group">
         <jpql>
             <![CDATA[
             select g
@@ -285,6 +284,64 @@
         </jpql>
         <params>
             <param name="positionGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="courseFeedbacks" entity="tsadv$LearningFeedbackTemplate" view="_local">
+        <jpql>
+            <![CDATA[
+            select e
+            from tsadv$LearningFeedbackTemplate e
+            where e.id in (select cft.feedbackTemplate.id from tsadv$CourseFeedbackTemplate cft where cft.course.id = :courseId and :systemDate between cft.startDate and cft.endDate)
+                and e.active = True
+                and e.employee = True
+                and e.usageType = :usageType
+            ]]>
+        </jpql>
+        <params>
+            <param name="courseId" type="java.util.UUID"/>
+            <param name="systemDate" type="java.util.Date"/>
+            <param name="usageType" type="java.lang.String"/>
+        </params>
+    </query>
+    <query name="sliderImages" entity="tsadv$LmsSliderImage" view="lmsSliderImage.with.image">
+        <jpql>
+            <![CDATA[
+            select i
+            from tsadv$LmsSliderImage i
+                join i.slider s
+                join s.position sp
+            where sp.code = :code
+            order by
+                i.order
+            ]]>
+        </jpql>
+        <params>
+            <param name="code" type="java.lang.String"/>
+        </params>
+    </query>
+    <query name="homeworksByEnrollment" entity="tsadv_Homework" view="homework.edit">
+        <jpql>
+            <![CDATA[
+            select e
+                from tsadv_Homework e
+                    inner join e.course c
+            where c.id in ( select e.course.id from tsadv$Enrollment e where e.id = :enrollmentId)
+            ]]>
+        </jpql>
+        <params>
+            <param name="enrollmentId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="studentHomework" entity="tsadv_StudentHomework" view="studentHomework.edit">
+        <jpql>
+            <![CDATA[
+            select e from tsadv_StudentHomework e
+            where e.homework.id = :homeworkId and e.personGroup.id = :personGroupId
+            ]]>
+        </jpql>
+        <params>
+            <param name="homeworkId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
         </params>
     </query>
 </queries>

@@ -6,6 +6,7 @@ import com.haulmont.addon.bproc.form.FormData;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
+import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.ChangeAbsenceDaysRequest;
@@ -64,5 +65,7 @@ public interface BprocService {
     void changeStatusLeavingVacationRequest(LeavingVacationRequest entity, String status, String notificationCode);
 
     void changeStatusChangeAbsenceDaysRequest(ChangeAbsenceDaysRequest entity, String status, String notificationCode);
+
+    void approveAssignedPerformancePlan(AssignedPerformancePlan request);
 
 }

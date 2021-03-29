@@ -1,9 +1,10 @@
 package kz.uco.tsadv.web.screens.insurancecontract;
 
 
+import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.app.FileStorageService;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.RemoveOperation;
 import com.haulmont.cuba.gui.ScreenBuilders;
@@ -15,6 +16,9 @@ import com.haulmont.cuba.gui.export.ExportFormat;
 import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import com.haulmont.reports.app.service.ReportService;
+import com.haulmont.reports.entity.Report;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.tb.Attachment;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
@@ -23,15 +27,14 @@ import kz.uco.tsadv.modules.personal.model.ContractConditions;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuranceContractAdministrator;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
-import kz.uco.tsadv.web.screens.insurancecontractadministrator.InsuranceContractAdministratorEdit;
 import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonBulkEdit;
 import kz.uco.tsadv.web.screens.insuredperson.InsuredPersonEdit;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.inject.Inject;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @UiController("tsadv$InsuranceContract.edit")
 @UiDescriptor("insurance-contract-edit.xml")
@@ -40,6 +43,10 @@ import java.util.Set;
 public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Inject
     protected InstanceLoader<InsuranceContract> insuranceContractDl;
+    @Inject
+    protected DataManager dataManager;
+    @Inject
+    protected ReportService reportService;
     @Inject
     private CollectionPropertyContainer<Attachment> attachmentsDc;
     @Inject
@@ -81,6 +88,11 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     private ExportDisplay exportDisplay;
     @Inject
     private ComponentsFactory componentsFactory;
+    @Inject
+    protected FileStorageService fileStorageService;
+    @Inject
+    protected NotificationSenderAPIService notificationSenderAPIService;
+    protected SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
     @Subscribe
     public void onInit(InitEvent event) {
@@ -356,6 +368,40 @@ public class InsuranceContractEdit extends StandardEditor<InsuranceContract> {
     @Install(to = "programConditionsDataGrid.remove", subject = "afterActionPerformedHandler")
     private void programConditionsDataGridRemoveAfterActionPerformedHandler(RemoveOperation.AfterActionPerformedEvent<ContractConditions> afterActionPerformedEvent) {
         insuredPersonsDl.load();
+    }
+
+    @Subscribe("insuredPersonsTable.sendNotification")
+    protected void onInsuredPersonsTableSendNotification(Action.ActionPerformedEvent event) {
+        LoadContext<Report> reportLoadContext = LoadContext.create(Report.class)
+                .setQuery(LoadContext.createQuery("select e from report$Report e where e.code = :code")
+                        .setParameter("code", "DMS"))
+                .setView("report.edit");
+        Report report = dataManager.load(reportLoadContext);
+        if (report != null) {
+            Map<String, Object> params = new HashMap<>();
+            params.put("contractNumber", insuranceContractDc.getItem().getContract());
+            params.put("date", insuranceContractDc.getItem().getSignDate() != null
+                    ? dateFormat.format(insuranceContractDc.getItem().getSignDate())
+                    : "");
+            FileDescriptor fileDescriptor = reportService.createAndSaveReport(report,
+                    ParamsMap.of("isp", insuredPersonsTable.getSelected()), "Список исключенных");
+            if (fileDescriptor != null) {
+                EmailAttachment[] emailAttachments = new EmailAttachment[0];
+                emailAttachments = getEmailAttachments(fileDescriptor, emailAttachments);
+                notificationSenderAPIService.sendParametrizedNotification("insurance.person.excluded.dms",
+                        insuranceContractDc.getItem().getInsurerContacts(), params, emailAttachments);
+            }
+        }
+    }
+
+    private EmailAttachment[] getEmailAttachments(FileDescriptor fileDescriptor, EmailAttachment[] emailAttachments) {
+        try {
+            EmailAttachment emailAttachment = new EmailAttachment(fileStorageService.loadFile(fileDescriptor), "Список исключенных");
+            emailAttachments = (EmailAttachment[]) ArrayUtils.add(emailAttachments, emailAttachment);
+        } catch (FileStorageException e) {
+            e.printStackTrace();
+        }
+        return emailAttachments;
     }
 
 

@@ -3,8 +3,14 @@ package kz.uco.tsadv.service;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.modules.integration.jsonobject.*;
 
+import java.io.Serializable;
+
 public interface IntegrationRestService {
     String NAME = "tsadv_IntegrationRestService";
+
+    BaseResult prepareSuccess(BaseResult baseResult, String methodName, Serializable params);
+
+    BaseResult prepareError(BaseResult baseResult, String methodName, Serializable params, String errorMessage);
 
     BaseResult createOrUpdateOrganization(OrganizationDataJson organizationData);
 
@@ -85,4 +91,6 @@ public interface IntegrationRestService {
     BaseResult createOrUpdatePersonLanguages(PersonLanguageDataJson personLanguageData);
 
     BaseResult deletePersonLanguages(PersonLanguageDataJson personLanguageData);
+
+    BaseResult createOrUpdateUser(UserDataJson userData);
 }

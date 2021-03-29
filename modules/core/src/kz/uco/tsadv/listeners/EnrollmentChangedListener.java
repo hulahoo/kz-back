@@ -1,17 +1,17 @@
 package kz.uco.tsadv.listeners;
 
+import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.app.events.AttributeChanges;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.contracts.Id;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.EmailAttachment;
-import com.haulmont.cuba.core.global.FileStorageException;
-import kz.uco.base.notification.NotificationSenderAPI;
+import com.haulmont.cuba.core.global.*;
+import com.haulmont.reports.app.service.ReportService;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
-import kz.uco.tsadv.modules.learning.model.Enrollment;
+import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LmsService;
 import org.apache.commons.lang3.ArrayUtils;
@@ -28,13 +28,17 @@ import java.util.UUID;
 @Component("tsadv_EnrollmentChangedListener")
 public class EnrollmentChangedListener {
     @Inject
-    protected NotificationSenderAPI notificationSender;
+    protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     protected DataManager dataManager;
     @Inject
     protected LmsService lmsService;
     @Inject
     protected FileStorageAPI fileStorageAPI;
+    @Inject
+    protected ReportService reportService;
+    @Inject
+    protected Metadata metadata;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<Enrollment, UUID> event) {
@@ -51,25 +55,120 @@ public class EnrollmentChangedListener {
                 if (!EnrollmentStatus.APPROVED.equals(EnrollmentStatus.fromId(oldValue))
                         && EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 
-                    sendNotification(enrollment, "tdc.student.enrollmentApproved");
+                    TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                            .query("select e from tsadv$UserExt e " +
+                                    " where e.personGroup = :personGroup")
+                            .parameter("personGroup", enrollment.getPersonGroup())
+                            .list().stream().findFirst().orElse(null);
+                    if (tsadvUser != null) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("courseName", enrollment.getCourse().getName());
+                        map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                        notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
+                                tsadvUser, map);
+                    }
+
                 } else if (!EnrollmentStatus.COMPLETED.equals(EnrollmentStatus.fromId(oldValue))
                         && EnrollmentStatus.COMPLETED.equals(enrollment.getStatus())) {
 
-                    sendNotificationCompleted(enrollment);
+                    TsadvUser user = dataManager.load(TsadvUser.class)
+                            .query("select e from tsadv$UserExt e " +
+                                    " where e.personGroup = :personGroup")
+                            .parameter("personGroup", enrollment.getPersonGroup())
+                            .list().stream().findFirst().orElse(null);
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("courseName", enrollment.getCourse().getName());
+
+//                    sendNotificationCompleted(enrollment);
+                    if (generateCertificate(enrollment)) {
+                        CommitContext commitContext = new CommitContext();
+                        CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
+                                && !enrollment.getCourse().getCertificate().isEmpty()
+                                ? enrollment.getCourse().getCertificate().get(0)
+                                : null;
+                        if (courseCertificate != null) {
+
+                            FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
+                                    ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
+
+
+                            if (fd != null) {
+                                List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
+                                        .query("select e from tsadv$EnrollmentCertificateFile e " +
+                                                " where e.enrollment = :enrollment ")
+                                        .parameter("enrollment", enrollment)
+                                        .view("enrollmentCertificateFile.with.certificateFile")
+                                        .list();
+                                ecfList.forEach(commitContext::addInstanceToRemove);
+
+                                EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
+                                ecf.setCertificateFile(fd);
+                                ecf.setEnrollment(enrollment);
+                                commitContext.addInstanceToCommit(ecf);
+
+                                dataManager.commit(commitContext);
+
+                                EmailAttachment[] emailAttachments = new EmailAttachment[0];
+                                emailAttachments = getEmailAttachments(fd, emailAttachments);
+                                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                                        user, map, emailAttachments);
+                            } else {
+                                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                                        user, map);
+                            }
+                        } else {
+                            notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                                    user, map);
+                        }
+                    } else {
+                        notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                                user, map);
+                    }
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
 
             if (EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 
-                sendNotification(enrollment, "tdc.student.enrollmentApproved");
+                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.personGroup = :personGroup")
+                        .parameter("personGroup", enrollment.getPersonGroup())
+                        .list().stream().findFirst().orElse(null);
+                if (tsadvUser != null) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("courseName", enrollment.getCourse().getName());
+                    map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
+                            tsadvUser, map);
+                }
             } else {
                 sendNotification(enrollment, "tdc.trainer.newEnrollment");
             }
         }
+
     }
 
-    private void sendNotification(Enrollment enrollment, String notificationCode) {
+    protected boolean generateCertificate(Enrollment enrollment) {
+        boolean success = true;
+        if (enrollment.getCourse().getSelfEnrollment()) {
+            for (CourseSection section : enrollment.getCourse().getSections()) {
+                List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
+                        .query("select e from tsadv$CourseSectionAttempt e " +
+                                " where e.success = true " +
+                                " and e.courseSection = :section")
+                        .parameter("section", section)
+                        .view("courseSectionAttempt.edit")
+                        .list();
+                if (courseSectionAttemptList.size() < 1) {
+                    success = false;
+                }
+            }
+        }
+        return success;
+    }
+
+    protected void sendNotification(Enrollment enrollment, String notificationCode) {
         List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                 .query("select e from tsadv$CourseTrainer e " +
                         " where e.course = :course " +
@@ -90,45 +189,45 @@ public class EnrollmentChangedListener {
                     Map<String, Object> map = new HashMap<>();
                     map.put("courseName", enrollment.getCourse().getName());
                     map.put("personFullName", enrollment.getPersonGroup().getFullName());
-                    notificationSender.sendParametrizedNotification(notificationCode,
+                    notificationSenderAPIService.sendParametrizedNotification(notificationCode,
                             tsadvUser, map);
                 }
             });
         }
     }
 
-    private void sendNotificationCompleted(Enrollment enrollment) {
-        TsadvUser user = dataManager.load(TsadvUser.class)
-                .query("select e from tsadv$UserExt e " +
-                        " where e.personGroup = :personGroup")
-                .parameter("personGroup", enrollment.getPersonGroup())
-                .list().stream().findFirst().orElse(null);
-        if (user != null) {
+//    protected void sendNotificationCompleted(Enrollment enrollment) {
+//        TsadvUser user = dataManager.load(TsadvUser.class)
+//                .query("select e from tsadv$UserExt e " +
+//                        " where e.personGroup = :personGroup")
+//                .parameter("personGroup", enrollment.getPersonGroup())
+//                .list().stream().findFirst().orElse(null);
+//        if (user != null) {
+//
+//            UUID fileDescriptorId = UUID.fromString(lmsService.getCertificate(String.valueOf(enrollment.getId())));
+//
+//            FileDescriptor fileDescriptor = dataManager.load(FileDescriptor.class)
+//                    .query("select e from SYS_FILE e " +
+//                            " where e.id = :fileDescriptorId")
+//                    .parameter("fileDescriptorId", fileDescriptorId)
+//                    .list().stream().findFirst().orElse(null);
+//
+//            Map<String, Object> map = new HashMap<>();
+//            map.put("courseName", enrollment.getCourse().getName());
+//
+//            if (fileDescriptor != null) {
+//                EmailAttachment[] emailAttachments = new EmailAttachment[0];
+//                emailAttachments = getEmailAttachments(fileDescriptor, emailAttachments);
+//                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+//                        user, map, emailAttachments);
+//            } else {
+//                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+//                        user, map);
+//            }
+//        }
+//    }
 
-            UUID fileDescriptorId = UUID.fromString(lmsService.getCertificate(String.valueOf(enrollment.getId())));
-
-            FileDescriptor fileDescriptor = dataManager.load(FileDescriptor.class)
-                    .query("select e from SYS_FILE e " +
-                            " where e.id = :fileDescriptorId")
-                    .parameter("fileDescriptorId", fileDescriptorId)
-                    .list().stream().findFirst().orElse(null);
-
-            Map<String, Object> map = new HashMap<>();
-            map.put("courseName", enrollment.getCourse().getName());
-
-            if (fileDescriptor != null) {
-                EmailAttachment[] emailAttachments = new EmailAttachment[0];
-                emailAttachments = getEmailAttachments(fileDescriptor, emailAttachments);
-                notificationSender.sendParametrizedNotification("tdc.student.enrollmentClosed",
-                        user, map, emailAttachments);
-            } else {
-                notificationSender.sendParametrizedNotification("tdc.student.enrollmentClosed",
-                        user, map);
-            }
-        }
-    }
-
-    private EmailAttachment[] getEmailAttachments(FileDescriptor fileDescriptor, EmailAttachment[] emailAttachments) {
+    protected EmailAttachment[] getEmailAttachments(FileDescriptor fileDescriptor, EmailAttachment[] emailAttachments) {
         try {
             EmailAttachment emailAttachment = new EmailAttachment(fileStorageAPI.loadFile(fileDescriptor), "Сертификат");
             emailAttachments = (EmailAttachment[]) ArrayUtils.add(emailAttachments, emailAttachment);

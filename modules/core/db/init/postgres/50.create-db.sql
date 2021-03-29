@@ -206,3 +206,4 @@ $$;
 
 alter function get_hierarchy_exception(date) owner to tal;
 
+

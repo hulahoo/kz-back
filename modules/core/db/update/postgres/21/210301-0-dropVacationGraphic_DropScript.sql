@@ -1,0 +1,1 @@
+drop table if exists TSADV_VACATION_GRAPHIC__U23712 cascade ;

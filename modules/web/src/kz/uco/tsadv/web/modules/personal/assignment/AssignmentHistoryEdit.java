@@ -237,7 +237,8 @@ public class AssignmentHistoryEdit extends AbstractHrEditor<AssignmentExt> {
                     getItem().setGradeGroup(getItem().getPositionGroup().getPosition().getGradeGroup());
                     if (getItem().getPositionGroup().getPosition().getCostCenter() != null) {
                         getItem().setCostCenter(getItem().getPositionGroup().getPosition().getCostCenter());
-                    } else if (getItem().getOrganizationGroup().getOrganization().getCostCenter() != null) {
+                    } else if (getItem().getOrganizationGroup().getOrganization() != null
+                            && getItem().getOrganizationGroup().getOrganization().getCostCenter() != null) {
                         getItem().setCostCenter(getItem().getOrganizationGroup().getOrganization().getCostCenter());
                     } else {
                         getItem().setCostCenter(null);
