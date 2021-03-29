@@ -3,10 +3,9 @@ package kz.uco.tsadv.listeners;
 import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.GlobalConfig;
-import com.haulmont.cuba.core.global.Resources;
-import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.security.entity.User;
+import kz.uco.base.entity.core.notification.NotificationTemplate;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -15,6 +14,7 @@ import kz.uco.tsadv.modules.personal.model.InsuredPerson;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
+import kz.uco.uactivity.entity.Priority;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.service.ActivityService;
 import org.springframework.stereotype.Component;
@@ -35,6 +35,8 @@ public class InsuredPersonChangedListener {
     protected GlobalConfig globalConfig;
     @Inject
     protected ActivityService activityService;
+    @Inject
+    protected Metadata metadata;
     @Inject
     private TransactionalDataManager txDataManager;
     @Inject
@@ -120,6 +122,54 @@ public class InsuredPersonChangedListener {
                 employee.setTotalAmount(employee.getTotalAmount().add(person.getAmount()));
                 txDataManager.save(employee);
             }
+
+            if ("DRAFT".equals(person.getStatusRequest().getCode())) {
+                Map<String, Object> params = new HashMap<>();
+                params.put("mainFullName", person.getEmployee().getFioWithEmployeeNumber());
+                params.put("job", person.getEmployee().getCurrentAssignment() != null
+                        && person.getEmployee().getCurrentAssignment().getJobGroup() != null
+                        ? person.getEmployee().getCurrentAssignment().getJobGroup().getJobName()
+                        : "");
+                params.put("organization", person.getEmployee().getCurrentAssignment() != null
+                        && person.getEmployee().getCurrentAssignment().getOrganizationGroup() != null
+                        && person.getEmployee().getCurrentAssignment().getOrganizationGroup().getOrganization() != null
+                        ? person.getEmployee().getCurrentAssignment().getOrganizationGroup().getOrganization().getOrganizationName()
+                        : "");
+
+                params.put("contractNum", person.getInsuranceContract().getContract());
+                params.put("attachDate", person.getAttachDate() != null
+                        ? format.format(person.getAttachDate())
+                        : "");
+                params.put("linkRu", "<a href=\"" + globalConfig.getWebAppUrl() + "\">ссылке</a>");
+                params.put("tableRu", !"PRIMARY".equals(person.getRelative().getCode())
+                        ? getTable(person)
+                        : "");
+                List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                        .query("select e.employee from tsadv$InsuranceContractAdministrator e " +
+                                " where e.insuranceContract = :insuranceContract " +
+                                " and e.notifyAboutNewAttachments = 'TRUE'")
+                        .parameter("insuranceContract", person.getInsuranceContract())
+                        .list();
+                List<TsadvUser> tsadvUsers = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.personGroup in :personGroupList ")
+                        .parameter("personGroupList", personGroupExtList)
+                        .view("")
+                        .list();
+                ActivityType activityType = dataManager.load(ActivityType.class)
+                        .query("select e from uactivity$ActivityType e where e.code = :code")
+                        .parameter("code", "NOTIFICATION")
+                        .view(new View(ActivityType.class)
+                                .addProperty("code"))
+                        .one();
+                tsadvUsers.forEach(tsadvUser -> {
+                    notificationSenderAPIService.sendParametrizedNotification("insurance.person.dms",
+                            tsadvUser, params);
+                    activityService.createActivity(tsadvUser, tsadvUser, activityType, StatusEnum.active,
+                            "description", null, new Date(), null, null,
+                            person.getId(), "insurance.person.dms", params);
+                });
+            }
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
             if (event.getChanges().isChanged("amount") && (event.getChanges().isChanged("birthdate") || event.getChanges().isChanged("relative"))) {
                 Id<InsuredPerson, UUID> entityId = event.getEntityId();
@@ -169,70 +219,6 @@ public class InsuredPersonChangedListener {
                 }
             }
 
-        }
-    }
-
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void afterCommit(EntityChangedEvent<InsuredPerson, UUID> event) {
-        Id<InsuredPerson, UUID> entityId = event.getEntityId();
-        InsuredPerson insuredPerson = dataManager.load(entityId).view("insuredPerson-editView").one();
-        if (event.getType().equals(EntityChangedEvent.Type.CREATED)
-                && "DRAFT".equals(insuredPerson.getStatusRequest().getCode())) {
-            Map<String, Object> params = new HashMap<>();
-            params.put("mainFullName", insuredPerson.getEmployee().getFioWithEmployeeNumber());
-            params.put("job", insuredPerson.getEmployee().getCurrentAssignment() != null
-                    && insuredPerson.getEmployee().getCurrentAssignment().getJobGroup() != null
-                    ? insuredPerson.getEmployee().getCurrentAssignment().getJobGroup().getJobName()
-                    : "");
-            params.put("organization", insuredPerson.getEmployee().getCurrentAssignment() != null
-                    && insuredPerson.getEmployee().getCurrentAssignment().getOrganizationGroup() != null
-                    && insuredPerson.getEmployee().getCurrentAssignment().getOrganizationGroup().getOrganization() != null
-                    ? insuredPerson.getEmployee().getCurrentAssignment().getOrganizationGroup().getOrganization().getOrganizationName()
-                    : "");
-
-            params.put("contractNum", insuredPerson.getInsuranceContract().getContract());
-            params.put("attachDate", insuredPerson.getAttachDate() != null
-                    ? format.format(insuredPerson.getAttachDate())
-                    : "");
-            params.put("linkRu", "<a href=\"" + globalConfig.getWebAppUrl() + "\">ссылке</a>");
-            params.put("tableRu", !"PRIMARY".equals(insuredPerson.getRelative().getCode())
-                    ? getTable(insuredPerson)
-                    : "");
-            List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
-                    .query("select e.employee from tsadv$InsuranceContractAdministrator e " +
-                            " where e.insuranceContract = :insuranceContract " +
-                            " and e.notifyAboutNewAttachments = 'TRUE'")
-                    .parameter("insuranceContract", insuredPerson.getInsuranceContract())
-                    .list();
-            List<TsadvUser> tsadvUsers = dataManager.load(TsadvUser.class)
-                    .query("select e from tsadv$UserExt e " +
-                            " where e.personGroup in :personGroupList ")
-                    .parameter("personGroupList", personGroupExtList)
-                    .view("")
-                    .list();
-            ActivityType activityType = dataManager.load(ActivityType.class)
-                    .query("select e from uactivity$ActivityType e where e.code = :code")
-                    .parameter("code", "NOTIFICATION")
-                    .view(new View(ActivityType.class)
-                            .addProperty("code"))
-                    .one();
-            tsadvUsers.forEach(tsadvUser -> {
-                Activity activity = activityService.createActivity(
-                        tsadvUser,
-                        tsadvUser,
-                        activityType,
-                        StatusEnum.active,
-                        "description",
-                        null,
-                        new Date(),
-                        null,
-                        null,
-                        null,
-                        "insurance.person.dms",
-                        params);
-                notificationSenderAPIService.sendParametrizedNotification("insurance.person.dms",
-                        tsadvUser, params);
-            });
         }
     }
 
