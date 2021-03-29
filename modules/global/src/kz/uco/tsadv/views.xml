@@ -9612,6 +9612,10 @@
             <property name="list" view="_minimal">
                 <property name="startDate"/>
                 <property name="endDate"/>
+                <property name="firstName"/>
+                <property name="lastName"/>
+                <property name="middleName"/>
+                <property name="employeeNumber"/>
             </property>
         </property>
         <property name="status"/>
@@ -9955,15 +9959,24 @@
                   view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Course"
+          extends="_local"
           name="course.edit.new">
-        <property name="name"/>
         <property name="certificate" view="_minimal">
             <property name="certificate" view="_minimal"/>
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
         <property name="enrollments" view="_minimal">
-            <property name="personGroup" view="_minimal"/>
+            <property name="personGroup" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                    <property name="firstName"/>
+                    <property name="lastName"/>
+                    <property name="middleName"/>
+                    <property name="employeeNumber"/>
+                </property>
+            </property>
             <property name="status"/>
             <property name="date"/>
             <property name="reason"/>
@@ -9978,6 +9991,14 @@
         <property name="courseTrainers" view="_minimal">
             <property name="trainer" view="_minimal">
                 <property name="employee" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="startDate"/>
+                        <property name="endDate"/>
+                        <property name="firstName"/>
+                        <property name="lastName"/>
+                        <property name="middleName"/>
+                        <property name="employeeNumber"/>
+                    </property>
                     <property name="personExperience" view="_minimal"/>
                 </property>
             </property>
@@ -9992,11 +10013,7 @@
                 </property>
             </property>
         </property>
-        <property name="description"/>
-        <property name="logo"/>
         <property name="category" view="_local"/>
-        <property name="targetAudience"/>
-        <property name="activeFlag"/>
         <property name="sections" view="_minimal">
             <property name="mandatory"/>
             <property name="order"/>
@@ -10039,7 +10056,6 @@
                 <property name="courseSectionSession" view="_minimal"/>
             </property>
         </property>
-        <property name="shortDescription"/>
         <property name="competences" view="_minimal">
             <property name="competenceGroup">
                 <property name="list" view="_minimal">
@@ -10083,12 +10099,9 @@
             </property>
         </property>
         <property name="avgRate"/>
-        <property name="selfEnrollment"/>
-        <property name="learningType" view="_minimal"/>
-        <property name="isOnline"/>
+        <property name="learningType" view="dicLearningType-edit"/>
+        <property name="reviews" view="_minimal"/>
         <property name="courseSchedule" view="courseSchedule.edit"/>
-        <property name="educationPeriod"/>
-        <property name="educationDuration"/>
         <property name="learningProof" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CoursePreRequisition"
@@ -14390,6 +14403,14 @@
             <property name="selfEnrollment"/>
         </property>
         <property name="personGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="firstName"/>
+                <property name="lastName"/>
+                <property name="middleName"/>
+                <property name="employeeNumber"/>
+            </property>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="code"/>
