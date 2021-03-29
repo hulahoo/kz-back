@@ -12744,9 +12744,9 @@ create table TSADV_ADDRESS (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     PERSON_GROUP_ID uuid not null,
-    ADDRESS_TYPE_ID uuid not null,
-    ADDRESS varchar(500) not null,
-    COUNTRY_ID uuid not null,
+    ADDRESS_TYPE_ID uuid,
+    ADDRESS varchar(500),
+    COUNTRY_ID uuid,
     POSTAL_CODE varchar(255),
     CITY_NAME varchar(255),
     FACT_ADDRESS varchar(255),
