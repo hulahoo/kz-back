@@ -1596,7 +1596,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             : "GROSS"));
                     salary.setType(SalaryType.fromId(salaryJson.getSalaryType() != null
                             && !salaryJson.getSalaryType().isEmpty()
-                            ? salaryJson.getNetGross()
+                            ? salaryJson.getSalaryType()
                             : "MONTHLYRATE"));
                     salary.setStartDate(salaryJson.getStartDate() != null && !salaryJson.getStartDate().isEmpty()
                             ? formatter.parse(salaryJson.getStartDate())
@@ -4177,15 +4177,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no companyCode");
                 }
 
-                //todo check default values
-                DicAddressType addressType = dataManager.load(DicAddressType.class)
-                        .query("select e from tsadv$DicAddressType e")
-                        .list().stream().findFirst().orElse(null);
-                DicCountry country = dataManager.load(DicCountry.class)
-                        .query("select e from base$DicCountry e")
-                        .list().stream().findFirst().orElse(null);
-                String addressString = "default_address";
-
                 Date startDate = CommonUtils.getSystemDate();
                 Date endDate = CommonUtils.getMaxDate();
 
@@ -4230,12 +4221,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("address.view").list().stream().findFirst().orElse(null);
 
                     if (address != null) {
-
                         address.setStartDate(startDate);
                         address.setEndDate(endDate);
-                        address.setAddressType(addressType);
-                        address.setCountry(country);
-                        address.setAddress(addressString);
 
                         address.setLegacyId(personAddressJson.getLegacyId());
                         address.setFactAddress(personAddressJson.getFactAddress());
@@ -4270,9 +4257,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         address.setStartDate(startDate);
                         address.setEndDate(endDate);
-                        address.setAddressType(addressType);
-                        address.setCountry(country);
-                        address.setAddress(addressString);
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query("select e from base$PersonGroupExt e " +
@@ -4295,9 +4279,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     address.setStartDate(startDate);
                     address.setEndDate(endDate);
-                    address.setAddressType(addressType);
-                    address.setCountry(country);
-                    address.setAddress(addressString);
 
                     address.setLegacyId(personAddressJson.getLegacyId());
                     address.setFactAddress(personAddressJson.getFactAddress());
@@ -4375,8 +4356,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     + " and company legacyId " + personAddressJson.getCompanyCode());
                 }
 
-                if (!personAddressesArrayList.stream().filter(harmfulCondition1 ->
-                        harmfulCondition1.getId().equals(address.getId())).findAny().isPresent()) {
+                if (!personAddressesArrayList.stream().filter(personAddress1 ->
+                        personAddress1.getId().equals(address.getId())).findAny().isPresent()) {
                     personAddressesArrayList.add(address);
                 }
             }

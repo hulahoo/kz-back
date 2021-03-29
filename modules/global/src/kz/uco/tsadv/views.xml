@@ -2658,6 +2658,8 @@
                 <property name="code"/>
             </property>
             <property name="internal"/>
+            <property name="updatedBy"/>
+            <property name="legacyId"/>
             <property name="location" view="_minimal">
                 <property name="company" view="_minimal"/>
                 <property name="langValue1"/>
