@@ -58,8 +58,6 @@
                                property="isbn"/>
                         <field id="active"
                                property="active"/>
-                        <field id="averageScore"
-                               property="averageScore"/>
                         <field id="language"
                                property="language"/>
                         <field id="category"

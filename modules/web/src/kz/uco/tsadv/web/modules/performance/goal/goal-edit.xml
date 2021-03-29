@@ -9,9 +9,9 @@
             <loader id="goalDl"/>
         </instance>
     </data>
-    <dialogMode height="600"
-                width="800"/>
-    <layout expand="windowActions"
+    <dialogMode height="AUTO"
+                width="AUTO"/>
+    <layout expand="editActions"
             spacing="true">
         <form id="form" dataContainer="goalDc">
             <column width="250px">
@@ -33,7 +33,9 @@
                 <textArea id="successCriteria" property="successCriteria" rows="4"/>
             </column>
         </form>
-        <frame id="windowActions"
-               screen="editWindowActions"/>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
     </layout>
 </window>

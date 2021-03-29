@@ -1,15 +1,17 @@
 package kz.uco.tsadv.service;
 
+import com.google.gson.Gson;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
+import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.performance.model.Trainer;
@@ -44,7 +46,10 @@ public class CourseServiceBean implements CourseService {
     @Inject
     protected CommonConfig commonConfig;
     @Inject
-    protected NotificationSenderAPI notificationSenderAPI;
+    protected NotificationSenderAPIService notificationSenderAPIService;
+
+    @Inject
+    protected Gson gson;
 
     protected String selectForMethodLoadAssignedTest =
             "SELECT " +
@@ -208,7 +213,7 @@ public class CourseServiceBean implements CourseService {
 
     @Override
     public void sendParametrizedNotification(String notificationCode, TsadvUser user, Map<String, Object> params) {
-        notificationSenderAPI.sendParametrizedNotification(notificationCode, user, params);
+        notificationSenderAPIService.sendParametrizedNotification(notificationCode, user, params);
     }
 
     @Override
@@ -856,7 +861,9 @@ public class CourseServiceBean implements CourseService {
         coursePojo.setDescription(course.getDescription());
         coursePojo.setEducationDuration(ObjectUtils.defaultIfNull(course.getEducationDuration(), 0L));
         coursePojo.setEducationPeriod(ObjectUtils.defaultIfNull(course.getEducationPeriod(), 0L));
-        coursePojo.setHasEnrollment(course.getEnrollments().stream().anyMatch(e -> e.getPersonGroup().getId().equals(personGroupId)));
+        coursePojo.setEnrollmentId(course.getEnrollments().stream().filter(e -> e.getPersonGroup().getId().equals(personGroupId)).findFirst()
+                .map(e -> e.getId().toString())
+                .orElse(null));
 
         coursePojo.setSelfEnrollment(course.getSelfEnrollment());
 
@@ -873,6 +880,67 @@ public class CourseServiceBean implements CourseService {
         response.put("finished", trainer.getCourseTrainer().stream().flatMap(ct -> ct.getCourse().getEnrollments().stream()).filter(e -> e.getStatus().equals(EnrollmentStatus.COMPLETED)).count());
         response.put("image", trainer.getEmployee().getPerson().getImage());
         return response;
+    }
+
+    @Override
+    public List<DicCategory> allCourses() {
+        return dataManager.loadList(LoadContext.create(DicCategory.class)
+                .setQuery(LoadContext.createQuery("" +
+                        "select distinct c " +
+                        "   from tsadv$DicCategory c "))
+                .setView("category-courses"))
+                .stream()
+                .peek(c -> c.setCourses(c.getCourses().stream()
+                        .filter(course -> BooleanUtils.isTrue(course.getActiveFlag()))
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public List<DicCategory> searchCourses(String courseName) {
+        return dataManager.loadList(LoadContext.create(DicCategory.class)
+                .setQuery(LoadContext.createQuery("" +
+                        "select distinct c " +
+                        "            from tsadv$DicCategory c " +
+                        "            join c.courses cc " +
+                        "            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%'))) ")
+                        .setParameter("courseName", courseName))
+                .setView("category-courses"))
+                .stream()
+                .peek(c -> c.setCourses(c.getCourses().stream()
+                        .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())
+                                && BooleanUtils.isTrue(course.getActiveFlag()))
+                        .collect(Collectors.toList())))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Enrollment courseEnrollmentInfo(UUID enrollmentId) {
+        Enrollment enrollment = dataManager.load(Enrollment.class)
+                .id(enrollmentId)
+                .view("enrollment-course")
+                .one();
+        enrollment.setCourse(dataManager.reload(enrollment.getCourse(), "course-enrollment"));
+        enrollment.getCourse()
+                .getSections()
+                .forEach(section -> {
+                    section.setCourseSectionAttempts(section.getCourseSectionAttempts()
+                            .stream()
+                            .filter(attempt -> attempt.getEnrollment().getId().equals(enrollment.getId()))
+                            .map(attempt -> dataManager.reload(attempt, "course-section-attempt"))
+                            .collect(Collectors.toList()));
+                });
+        return enrollment;
+    }
+
+    @Override
+    public CourseSection courseSectionWithEnrollmentAttempts(UUID courseSectionId, UUID enrollmentId) {
+        return persistence.callInTransaction(em -> {
+            CourseSection courseSection = em.find(CourseSection.class, courseSectionId, "course.section.with.format.session");
+            courseSection.setCourseSectionAttempts(courseSection.getCourseSectionAttempts().stream().filter(a -> a.getEnrollment().getId().equals(enrollmentId)).collect(Collectors.toList()));
+            return courseSection;
+        });
     }
 
     protected void completeEnrollment(UUID enrollmentId) {

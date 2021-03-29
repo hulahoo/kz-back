@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Listeners("tsadv_AssignmentScheduleListener")
-@NamePattern("%s|id")
+@NamePattern("%s|id,schedule")
 @Table(name = "TSADV_ASSIGNMENT_SCHEDULE")
 @Entity(name = "tsadv$AssignmentSchedule")
 public class AssignmentSchedule extends AbstractParentEntity {
@@ -50,6 +50,10 @@ public class AssignmentSchedule extends AbstractParentEntity {
     @MetaProperty
     @Transient
     String name;
+
+    @NotNull
+    @Column(name = "END_POLICY_CODE")
+    protected String endPolicyCode;
 
     public void setAssignmentGroup(AssignmentGroupExt assignmentGroup) {
         this.assignmentGroup = assignmentGroup;
@@ -105,5 +109,13 @@ public class AssignmentSchedule extends AbstractParentEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEndPolicyCode() {
+        return endPolicyCode;
+    }
+
+    public void setEndPolicyCode(String endPolicyCode) {
+        this.endPolicyCode = endPolicyCode;
     }
 }

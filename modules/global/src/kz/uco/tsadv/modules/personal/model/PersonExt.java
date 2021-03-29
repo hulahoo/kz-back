@@ -6,7 +6,10 @@ import com.haulmont.cuba.core.entity.Categorized;
 import com.haulmont.cuba.core.entity.Category;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.*;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.entity.abstraction.IGroupedEntity;
 import kz.uco.base.entity.shared.Person;
 import kz.uco.tsadv.global.dictionary.DicNationality;
@@ -16,16 +19,21 @@ import kz.uco.tsadv.modules.personal.dictionary.DicNonresidentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static kz.uco.base.common.Null.isNotEmpty;
 
 @Listeners("tsadv_PersonExtListener")
-@NamePattern("%s %s %s |lastName,firstName,middleName,employeeNumber,endDate,startDate")
+@NamePattern("%s|personName,lastName,firstName,middleName,employeeNumber,endDate,startDate,firstNameLatin,lastNameLatin,middleNameLatin")
 @Extends(Person.class)
 @Entity(name = "base$PersonExt")
 public class PersonExt extends Person implements Categorized, IGroupedEntity<PersonGroupExt> {
@@ -226,6 +234,15 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
 
     @Column(name = "CRIMINAL_ADMINISTRATIVE_LIABILITY_PERIOID_REASON")
     protected String criminalAdministrativeLiabilityPerioidReason;
+
+    @Transient
+    @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin", "middleNameLatin"})
+    protected String personName;
+
+    @Transient
+    @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin"})
+    protected String fullName;
+
 
     public String getCriminalAdministrativeLiabilityPerioidReason() {
         return criminalAdministrativeLiabilityPerioidReason;
@@ -565,7 +582,6 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
         return image;
     }
 
-
     public void setLegacyId(String legacyId) {
         this.legacyId = legacyId;
     }
@@ -649,6 +665,46 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
                     .append(")");
         }
         return result.toString();
+    }
+
+    public String getPersonName() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String langOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+        String[] initials;
+        if (langOrder != null) {
+            List<String> langs = Arrays.asList(langOrder.split(";"));
+            if (langs.indexOf(language) == 2) {
+                initials = new String[]{lastNameLatin, firstNameLatin, middleNameLatin};
+            } else {
+                initials = new String[]{lastName, firstName, middleName};
+            }
+        } else {
+            initials = new String[]{lastName, firstName, middleName};
+        }
+
+        return Arrays.stream(initials).filter(Objects::nonNull).collect(Collectors.joining(" "));
+    }
+
+    public String getFullName() {
+        StringBuilder builder = new StringBuilder("");
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String langOrder = com.haulmont.cuba.core.sys.AppContext.getProperty("base.abstractDictionary.langOrder");
+        String language = userSessionSource.getLocale().getLanguage();
+
+        builder.append(lastName).append(" ");
+        builder.append(firstName).append(" ");
+        if (middleName != null) builder.append(middleName).append(" ");
+
+        if (langOrder != null) {
+            List<String> langs = Arrays.asList(langOrder.split(";")); //ru, kz, en
+            if (langs.indexOf(language) == 2 && StringUtils.isNotBlank(firstNameLatin) && StringUtils.isNotBlank(lastNameLatin)) {
+                builder = new StringBuilder("");
+                builder.append(firstNameLatin).append(" ");
+                builder.append(lastNameLatin).append(" ");
+            }
+        }
+        return builder.toString();
     }
 
     @Override

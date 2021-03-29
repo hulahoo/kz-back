@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.diclmssliderposition">
+    <data>
+        <instance id="dicLmsSliderPositionDc"
+                  class="kz.uco.tsadv.modules.learning.dictionary.DicLmsSliderPosition"
+                  view="_local">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form" dataContainer="dicLmsSliderPositionDc">
+                <column width="250px">
+                    <textField id="legacyIdField" property="legacyId"/>
+                    <textField id="organizationBinField" property="organizationBin"/>
+                    <textField id="integrationUserLoginField" property="integrationUserLogin"/>
+                    <textField id="langValue1Field" property="langValue1"/>
+                    <textField id="description1Field" property="description1"/>
+                    <textField id="langValue2Field" property="langValue2"/>
+                    <textField id="description2Field" property="description2"/>
+                    <textField id="langValue3Field" property="langValue3"/>
+                    <textField id="description3Field" property="description3"/>
+                    <textField id="langValue4Field" property="langValue4"/>
+                    <textField id="description4Field" property="description4"/>
+                    <textField id="langValue5Field" property="langValue5"/>
+                    <textField id="description5Field" property="description5"/>
+                    <dateField id="startDateField" property="startDate"/>
+                    <dateField id="endDateField" property="endDate"/>
+                    <textField id="codeField" property="code"/>
+                    <checkBox id="isSystemRecordField" property="isSystemRecord"/>
+                    <checkBox id="activeField" property="active"/>
+                    <checkBox id="isDefaultField" property="isDefault"/>
+                    <textField id="orderField" property="order"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

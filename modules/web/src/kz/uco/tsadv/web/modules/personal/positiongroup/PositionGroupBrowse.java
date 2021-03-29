@@ -13,9 +13,7 @@ import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
-import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.GroupDatasource;
-import com.haulmont.cuba.gui.screen.OpenMode;
 import kz.uco.base.entity.dictionary.DicLocation;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.base.service.common.CommonService;
@@ -26,11 +24,13 @@ import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
-import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
+import kz.uco.tsadv.modules.personal.model.GradeRule;
+import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
+import kz.uco.tsadv.modules.personal.model.PositionExt;
 import kz.uco.tsadv.modules.timesheet.model.OrgAnalytics;
 import kz.uco.tsadv.web.modules.filterconfig.FilterConfig;
 import kz.uco.tsadv.web.modules.personal.position.PositionEdit;
-import kz.uco.tsadv.web.screens.positionharmfulcondition.PositionHarmfulConditionBrowse;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -515,7 +515,4 @@ public class PositionGroupBrowse extends AbstractLookup {
                 positionGroupsDs.refresh());
     }
 
-    public void openPositionHarmfulConditionScreen() {
-        screens.create(PositionHarmfulConditionBrowse.class).show();
-    }
 }

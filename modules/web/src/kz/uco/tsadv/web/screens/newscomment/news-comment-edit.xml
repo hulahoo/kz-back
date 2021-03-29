@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.newscomment">
+    <data>
+        <instance id="newsCommentDc"
+                  class="kz.uco.tsadv.modules.information.NewsComment">
+            <view extends="_local">
+                <property name="createTs"/>
+                <property name="createdBy"/>
+            </view>
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="AUTO"
+                width="AUTO"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="newsCommentDc">
+            <column width="250px">
+                <textField id="commentLang1Field" property="commentLang1"/>
+                <textField id="commentLang2Field" property="commentLang2"/>
+                <textField id="commentLang3Field" property="commentLang3"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

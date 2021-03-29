@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.homework">
+    <data>
+        <instance id="homeworkDc"
+                  class="kz.uco.tsadv.modules.learning.model.Homework"
+                  view="homework.edit">
+            <loader id="homeworkDl"/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="homeworkDc">
+            <column width="250px">
+                <textArea id="instructionsField" property="instructions" rows="5"/>
+                <upload id="instructionFileField" fileStoragePutMode="IMMEDIATE" property="instructionFile"
+                        showFileName="true"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

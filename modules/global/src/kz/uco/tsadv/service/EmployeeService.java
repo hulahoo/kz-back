@@ -8,6 +8,7 @@ import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
+import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -23,6 +24,8 @@ import java.util.UUID;
 
 public interface EmployeeService {
     String NAME = "tsadv_EmployeeService";
+
+    PersonProfileDto personProfile(UUID personGroupId);
 
     String generate(String personGroupId, String lang, String systemDate);
 
@@ -100,6 +103,8 @@ public interface EmployeeService {
 
     List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll);
 
+    List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll);
+
     List<TsadvUser> recursiveFindManager(UUID positionGroupId);
 
     List<TsadvUser> recursiveFindManagerInActiveOne(UUID positionGroupId);
@@ -142,7 +147,12 @@ public interface EmployeeService {
 
     OrganizationGroupExt getOrganizationGroupByPersonGroupId(@Nonnull UUID personGroupId, String viewName);
 
+    @Nullable
     DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId);
 
     List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);
+
+    List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll, String viewName);
+
+    List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll, String viewName);
 }

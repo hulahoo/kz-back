@@ -2,8 +2,6 @@ package kz.uco.tsadv.service;
 
 
 import kz.uco.base.entity.core.notification.SendingNotification;
-import kz.uco.tsadv.entity.Book;
-import kz.uco.tsadv.lms.enums.BookType;
 import kz.uco.tsadv.lms.pojo.*;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSection;

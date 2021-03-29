@@ -69,14 +69,6 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "INCLUDE_CALC_GZP", nullable = false)
     protected Boolean includeCalcGzp = false;
 
-    public Boolean getIncludeCalcGzp() {
-        return includeCalcGzp;
-    }
-
-    public void setIncludeCalcGzp(Boolean includeCalcGzp) {
-        this.includeCalcGzp = includeCalcGzp;
-    }
-
     @Column(name = "MAX_DAY")
     private Integer maxDay;
 
@@ -86,8 +78,111 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "DAYS_ADVANCE")
     private Integer daysAdvance;
 
+    @Column(name = "DAYS_BEFORE_ABSENCE")
+    protected Integer daysBeforeAbsence;
+
     @Column(name = "MANY_DAYS")
     private Integer manyDays;
+
+    @NotNull
+    @Column(name = "AVAILABLE_FOR_RECALL_ABSENCE", nullable = false)
+    protected Boolean availableForRecallAbsence = false;
+
+    @NotNull
+    @Column(name = "AVAILABLE_FOR_CHANGE_DATE", nullable = false)
+    protected Boolean availableForChangeDate = false;
+
+    @NotNull
+    @Column(name = "AVAILABLE_FOR_LEAVING_VACATION", nullable = false)
+    protected Boolean availableForLeavingVacation = false;
+
+    @NotNull
+    @Column(name = "IS_JUST_REQUIRED", nullable = false)
+    protected Boolean isJustRequired = false;
+
+    @NotNull
+    @Column(name = "IS_ORIGINAL_SHEET", nullable = false)
+    protected Boolean isOriginalSheet = false;
+
+    @NotNull
+    @Column(name = "IS_CHECK_WORK", nullable = false)
+    protected Boolean isCheckWork = false;
+
+    @NotNull
+    @Column(name = "IS_VACATION_DATE", nullable = false)
+    protected Boolean isVacationDate = false;
+
+    public Boolean getIsVacationDate() {
+        return isVacationDate;
+    }
+
+    public void setIsVacationDate(Boolean isVacationDate) {
+        this.isVacationDate = isVacationDate;
+    }
+
+    public Boolean getIsCheckWork() {
+        return isCheckWork;
+    }
+
+    public void setIsCheckWork(Boolean isCheckWork) {
+        this.isCheckWork = isCheckWork;
+    }
+
+    public Boolean getIsOriginalSheet() {
+        return isOriginalSheet;
+    }
+
+    public void setIsOriginalSheet(Boolean isOriginalSheet) {
+        this.isOriginalSheet = isOriginalSheet;
+    }
+
+    public Boolean getIsJustRequired() {
+        return isJustRequired;
+    }
+
+    public void setIsJustRequired(Boolean isJustRequired) {
+        this.isJustRequired = isJustRequired;
+    }
+
+    public Boolean getAvailableForLeavingVacation() {
+        return availableForLeavingVacation;
+    }
+
+    public void setAvailableForLeavingVacation(Boolean availableForLeavingVacation) {
+        this.availableForLeavingVacation = availableForLeavingVacation;
+    }
+
+    public Boolean getAvailableForChangeDate() {
+        return availableForChangeDate;
+    }
+
+    public void setAvailableForChangeDate(Boolean availableForChangeDate) {
+        this.availableForChangeDate = availableForChangeDate;
+    }
+
+    public Boolean getAvailableForRecallAbsence() {
+        return availableForRecallAbsence;
+    }
+
+    public void setAvailableForRecallAbsence(Boolean availableForRecallAbsence) {
+        this.availableForRecallAbsence = availableForRecallAbsence;
+    }
+
+    public Boolean getIncludeCalcGzp() {
+        return includeCalcGzp;
+    }
+
+    public void setIncludeCalcGzp(Boolean includeCalcGzp) {
+        this.includeCalcGzp = includeCalcGzp;
+    }
+
+    public Integer getDaysBeforeAbsence() {
+        return daysBeforeAbsence;
+    }
+
+    public void setDaysBeforeAbsence(Integer daysBeforeAbsence) {
+        this.daysBeforeAbsence = daysBeforeAbsence;
+    }
 
     public void setManyDays(Integer manyDays) {
         this.manyDays = manyDays;

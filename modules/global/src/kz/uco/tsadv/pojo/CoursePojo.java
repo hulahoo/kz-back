@@ -23,7 +23,7 @@ public class CoursePojo implements Serializable {
     private String description;
     private Long educationDuration;
     private Long educationPeriod;
-    private Boolean hasEnrollment;
+    private String enrollmentId;
     private Boolean selfEnrollment;
 
     public List<CommentPojo> getComments() {
@@ -154,19 +154,19 @@ public class CoursePojo implements Serializable {
         this.educationPeriod = educationPeriod;
     }
 
-    public Boolean getHasEnrollment() {
-        return hasEnrollment;
-    }
-
-    public void setHasEnrollment(Boolean hasEnrollment) {
-        this.hasEnrollment = hasEnrollment;
-    }
-
     public Boolean getSelfEnrollment() {
         return selfEnrollment;
     }
 
     public void setSelfEnrollment(Boolean selfEnrollment) {
         this.selfEnrollment = selfEnrollment;
+    }
+
+    public String getEnrollmentId() {
+        return enrollmentId;
+    }
+
+    public void setEnrollmentId(String enrollmentId) {
+        this.enrollmentId = enrollmentId;
     }
 }

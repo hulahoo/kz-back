@@ -14,7 +14,6 @@ import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 @NamePattern("%s|bookNameLang1")
@@ -32,9 +31,8 @@ public class Book extends StandardEntity {
     @Column(name = "AUTHOR_LANG1")
     protected String authorLang1;
 
-    @Temporal(TemporalType.DATE)
     @Column(name = "PUBLISH_DATE")
-    protected Date publishDate;
+    protected Integer publishDate;
 
     @Column(name = "ISBN")
     protected String isbn;
@@ -47,7 +45,7 @@ public class Book extends StandardEntity {
     @Column(name = "AVERAGE_SCORE")
     protected BigDecimal averageScore;
 
-    @Lookup(type = LookupType.DROPDOWN, actions = {"lookup"})
+    @Lookup(type = LookupType.DROPDOWN, actions = "lookup")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
     protected DicBookCategory category;
@@ -87,6 +85,14 @@ public class Book extends StandardEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "book")
     protected List<BookReview> reviews;
+
+    public void setPublishDate(Integer publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public Integer getPublishDate() {
+        return publishDate;
+    }
 
     public void setReviews(List<BookReview> reviews) {
         this.reviews = reviews;
@@ -179,14 +185,6 @@ public class Book extends StandardEntity {
 
     public String getAuthorLang1() {
         return authorLang1;
-    }
-
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
-    }
-
-    public Date getPublishDate() {
-        return publishDate;
     }
 
     public void setActive(Boolean active) {

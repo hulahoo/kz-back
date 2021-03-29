@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.learning.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.dictionary.DicReasonForLearning;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
@@ -8,10 +9,12 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Зачисление на курс
  */
+@PublishEntityChangedEvents
 @NamePattern("%s|course")
 @Table(name = "TSADV_ENROLLMENT")
 @Entity(name = "tsadv$Enrollment")
@@ -36,7 +39,6 @@ public class Enrollment extends AbstractParentEntity {
     @Column(name = "REASON", length = 1000)
     protected String reason;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CERTIFICATION_ENROLLMENT_ID")
     protected CertificationEnrollment certificationEnrollment;
@@ -51,6 +53,17 @@ public class Enrollment extends AbstractParentEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COURSE_SCHEDULE_ID")
     protected CourseSchedule courseSchedule;
+
+    @OneToMany(mappedBy = "enrollment")
+    private List<EnrollmentCertificateFile> certificateFiles;
+
+    public List<EnrollmentCertificateFile> getCertificateFiles() {
+        return certificateFiles;
+    }
+
+    public void setCertificateFiles(List<EnrollmentCertificateFile> certificateFiles) {
+        this.certificateFiles = certificateFiles;
+    }
 
     public CourseSchedule getCourseSchedule() {
         return courseSchedule;
@@ -68,7 +81,6 @@ public class Enrollment extends AbstractParentEntity {
         return reasonForLearning;
     }
 
-
     public Course getCourse() {
         return course;
     }
@@ -76,8 +88,6 @@ public class Enrollment extends AbstractParentEntity {
     public void setCourse(Course course) {
         this.course = course;
     }
-
-
 
     public void setMoneyInBudget(Boolean moneyInBudget) {
         this.moneyInBudget = moneyInBudget;
@@ -87,7 +97,6 @@ public class Enrollment extends AbstractParentEntity {
         return moneyInBudget;
     }
 
-
     public EnrollmentStatus getStatus() {
         return status == null ? null : EnrollmentStatus.fromId(status);
     }
@@ -95,7 +104,6 @@ public class Enrollment extends AbstractParentEntity {
     public void setStatus(EnrollmentStatus status) {
         this.status = status == null ? null : status.getId();
     }
-
 
     public void setCertificationEnrollment(CertificationEnrollment certificationEnrollment) {
         this.certificationEnrollment = certificationEnrollment;
@@ -105,7 +113,6 @@ public class Enrollment extends AbstractParentEntity {
         return certificationEnrollment;
     }
 
-
     public void setReason(String reason) {
         this.reason = reason;
     }
@@ -113,9 +120,6 @@ public class Enrollment extends AbstractParentEntity {
     public String getReason() {
         return reason;
     }
-
-
-
 
     public void setPersonGroup(PersonGroupExt personGroup) {
         this.personGroup = personGroup;
@@ -132,6 +136,5 @@ public class Enrollment extends AbstractParentEntity {
     public Date getDate() {
         return date;
     }
-
 
 }

@@ -39,5 +39,4 @@ public class EnrollmentCertificateFile extends StandardEntity {
         return certificateFile;
     }
 
-
 }

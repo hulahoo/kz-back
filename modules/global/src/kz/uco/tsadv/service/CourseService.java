@@ -2,6 +2,7 @@ package kz.uco.tsadv.service;
 
 
 import kz.uco.tsadv.modules.administration.TsadvUser;
+import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.pojo.CoursePojo;
 
@@ -53,4 +54,12 @@ public interface CourseService {
     CoursePojo courseInfo(UUID courseId, UUID personGroupId);
 
     Map<String, Object> courseTrainerInfo(UUID trainerId);
+
+    List<DicCategory> searchCourses(String courseName);
+
+    List<DicCategory> allCourses();
+
+    Enrollment courseEnrollmentInfo(UUID enrollmentId);
+
+    CourseSection courseSectionWithEnrollmentAttempts(UUID courseSectionId, UUID enrollmentId);
 }

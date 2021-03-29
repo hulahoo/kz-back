@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.abstraction.IEntityGroup;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.PositionGroup;
 import kz.uco.tsadv.modules.performance.model.PerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
@@ -29,6 +30,22 @@ public class PositionGroupExt extends PositionGroup implements IEntityGroup<Posi
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "group")
     protected List<PositionExt> list;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORGANIZATION_GROUP_ID")
+    protected OrganizationGroupExt organizationGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "JOB_GROUP_ID")
+    protected JobGroup jobGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "GRADE_GROUP_ID")
+    protected GradeGroup gradeGroup;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    protected DicCompany company;
 
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
@@ -87,6 +104,38 @@ public class PositionGroupExt extends PositionGroup implements IEntityGroup<Posi
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADMIN_APPROVE_ID")
     protected DicHrRole adminApprove;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
+
+    public GradeGroup getGradeGroup() {
+        return gradeGroup;
+    }
+
+    public void setGradeGroup(GradeGroup gradeGroup) {
+        this.gradeGroup = gradeGroup;
+    }
+
+    public JobGroup getJobGroup() {
+        return jobGroup;
+    }
+
+    public void setJobGroup(JobGroup jobGroup) {
+        this.jobGroup = jobGroup;
+    }
+
+    public OrganizationGroupExt getOrganizationGroup() {
+        return organizationGroup;
+    }
+
+    public void setOrganizationGroup(OrganizationGroupExt organizationGroup) {
+        this.organizationGroup = organizationGroup;
+    }
 
     public DicHrRole getAdminApprove() {
         return adminApprove;

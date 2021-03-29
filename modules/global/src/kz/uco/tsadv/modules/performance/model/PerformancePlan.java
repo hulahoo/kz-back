@@ -1,6 +1,10 @@
 package kz.uco.tsadv.modules.performance.model;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -8,10 +12,13 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|performancePlanName")
+import static kz.uco.base.common.Null.nullReplace;
+
+@NamePattern("%s|localizePerformancePlanName")
 @Table(name = "TSADV_PERFORMANCE_PLAN")
 @Entity(name = "tsadv$PerformancePlan")
 public class PerformancePlan extends AbstractParentEntity {
@@ -72,6 +79,11 @@ public class PerformancePlan extends AbstractParentEntity {
 
     @Column(name = "PERFORMANCE_PLAN_NAME_EN")
     protected String performancePlanNameEn;
+
+    @Transient
+    @MetaProperty(related = {"performancePlanName", "performancePlanNameKz", "performancePlanNameEn"})
+    protected String localizePerformancePlanName;
+
 
     public String getPerformancePlanNameEn() {
         return performancePlanNameEn;
@@ -184,5 +196,21 @@ public class PerformancePlan extends AbstractParentEntity {
         return performancePlanName;
     }
 
-
+    public String getLocalizePerformancePlanName() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String organizationNameOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+        if (organizationNameOrder != null){
+            List<String> langs = Arrays.asList(organizationNameOrder.split(";"));
+            switch (langs.indexOf(language)){
+                case 1:
+                    return nullReplace(performancePlanNameKz, performancePlanName);
+                case 2:
+                    return nullReplace(performancePlanNameEn, performancePlanName);
+                default:
+                    return performancePlanName;
+            }
+        }
+        return performancePlanName;
+    }
 }

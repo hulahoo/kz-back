@@ -1,168 +1,123 @@
 package kz.uco.tsadv.modules.integration.jsonobject;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 
 public class AssignmentJson implements Serializable {
 
     private String legacyId;
-    private String personGroup;
-    private String organizationGroup;
-    private String jobGroup;
-    private String positionGroup;
-    private String grade;
+    private String personId;
+    private String organizationId;
+    private String jobId;
+    private String positionId;
+    private String gradeId;
     private String primaryFlag;
     private String fte;
+    private String assignmentStatus;
     private String startDate;
     private String endDate;
     private String probationPeriodEndDate;
     private String companyCode;
-    private String assignDate;
 
-    public String getAssignDate() {
-        return assignDate;
-    }
-
-    public void setAssignDate(String assignDate) {
-        this.assignDate = assignDate;
-    }
-
-    public String getAssignmentNumber() {
-        return assignmentNumber;
-    }
-
-    public void setAssignmentNumber(String assignmentNumber) {
-        this.assignmentNumber = assignmentNumber;
-    }
-
-    private String status;
-    private String assignmentNumber;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @JsonProperty("legacyId")
     public String getLegacyId() {
         return legacyId;
     }
 
-    @JsonProperty("legacyId")
     public void setLegacyId(String legacyId) {
         this.legacyId = legacyId;
     }
 
-    @JsonProperty("personGroup")
-    public String getPersonGroup() {
-        return personGroup;
+    public String getPersonId() {
+        return personId;
     }
 
-    @JsonProperty("personGroup")
-    public void setPersonGroup(String personGroup) {
-        this.personGroup = personGroup;
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 
-    @JsonProperty("organizationGroup")
-    public String getOrganizationGroup() {
-        return organizationGroup;
+    public String getOrganizationId() {
+        return organizationId;
     }
 
-    @JsonProperty("organizationGroup")
-    public void setOrganizationGroup(String organizationGroup) {
-        this.organizationGroup = organizationGroup;
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
     }
 
-    @JsonProperty("jobGroup")
-    public String getJobGroup() {
-        return jobGroup;
+    public String getJobId() {
+        return jobId;
     }
 
-    @JsonProperty("jobGroup")
-    public void setJobGroup(String jobGroup) {
-        this.jobGroup = jobGroup;
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 
-    @JsonProperty("positionGroup")
-    public String getPositionGroup() {
-        return positionGroup;
+    public String getPositionId() {
+        return positionId;
     }
 
-    @JsonProperty("positionGroup")
-    public void setPositionGroup(String positionGroup) {
-        this.positionGroup = positionGroup;
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
     }
 
-    @JsonProperty("grade")
-    public String getGrade() {
-        return grade;
+    public String getGradeId() {
+        return gradeId;
     }
 
-    @JsonProperty("grade")
-    public void setGrade(String grade) {
-        this.grade = grade;
+    public void setGradeId(String gradeId) {
+        this.gradeId = gradeId;
     }
 
-    @JsonProperty("primaryFlag")
     public String getPrimaryFlag() {
         return primaryFlag;
     }
 
-    @JsonProperty("primaryFlag")
     public void setPrimaryFlag(String primaryFlag) {
         this.primaryFlag = primaryFlag;
     }
 
-    @JsonProperty("fte")
     public String getFte() {
         return fte;
     }
 
-    @JsonProperty("fte")
     public void setFte(String fte) {
         this.fte = fte;
     }
 
-    @JsonProperty("startDate")
+    public String getAssignmentStatus() {
+        return assignmentStatus;
+    }
+
+    public void setAssignmentStatus(String assignmentStatus) {
+        this.assignmentStatus = assignmentStatus;
+    }
+
     public String getStartDate() {
         return startDate;
     }
 
-    @JsonProperty("startDate")
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    @JsonProperty("endDate")
     public String getEndDate() {
         return endDate;
     }
 
-    @JsonProperty("endDate")
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-    @JsonProperty("probationPeriodEndDate")
     public String getProbationPeriodEndDate() {
         return probationPeriodEndDate;
     }
 
-    @JsonProperty("probationPeriodEndDate")
     public void setProbationPeriodEndDate(String probationPeriodEndDate) {
         this.probationPeriodEndDate = probationPeriodEndDate;
     }
 
-    @JsonProperty("companyCode")
     public String getCompanyCode() {
         return companyCode;
     }
 
-    @JsonProperty("companyCode")
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
     }

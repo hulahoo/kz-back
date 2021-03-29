@@ -1,7 +1,5 @@
 package kz.uco.tsadv.lms.pojo;
 
-import kz.uco.tsadv.lms.enums.BookType;
-
 import java.io.Serializable;
 import java.util.List;
 

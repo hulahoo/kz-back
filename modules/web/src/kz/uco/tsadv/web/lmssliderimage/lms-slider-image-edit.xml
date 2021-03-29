@@ -7,7 +7,7 @@
         messagesPack="kz.uco.tsadv.web.lmssliderimage">
     <dsContext>
         <datasource id="lmsSliderImageDs"
-                    class="kz.uco.tsadv.lms.entity.LmsSliderImage"
+                    class="kz.uco.tsadv.modules.learning.model.LmsSliderImage"
                     view="lmsSliderImage.with.image"/>
     </dsContext>
     <dialogMode height="600"
@@ -19,6 +19,7 @@
             <column width="250px">
                 <field property="image"/>
                 <field property="order"/>
+                <field property="url"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"

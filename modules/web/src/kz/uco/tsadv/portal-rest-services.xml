@@ -70,6 +70,17 @@
         <method name="courseTrainerInfo">
             <param name="trainerId" type="java.util.UUID"/>
         </method>
+        <method name="searchCourses">
+            <param name="courseName" type="java.lang.String"/>
+        </method>
+        <method name="courseEnrollmentInfo">
+            <param name="enrollmentId" type="java.util.UUID"/>
+        </method>
+        <method name="allCourses"/>
+        <method name="courseSectionWithEnrollmentAttempts">
+            <param name="courseSectionId" type="java.util.UUID"/>
+            <param name="enrollmentId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="bproc_BprocTaskService">
         <method name="completeWithOutcome">
@@ -118,10 +129,65 @@
         <method name="getMyInsuraces"/>
         <method name="getOffsetRequestsByPgId">
             <param name="personGroupExtId" type="java.util.UUID"/>
-         </method>
+        </method>
         <method name="getOffsetRequestsNew"/>
         <method name="calcTotalAmount">
             <param name="insuredPersonId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_EmployeeService">
+        <method name="personProfile">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="findManagerListByPositionGroup">
+            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="showAll" type="boolean"/>
+            <param name="viewName" type="java.lang.String"/>
+        </method>
+        <method name="getCompanyByPersonGroupId">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="findManagerListByPositionGroupReturnListPosition">
+            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="showAll" type="boolean"/>
+            <param name="viewName" type="java.lang.String"/>
+        </method>
+    </service>
+    <service name="tsadv_OrgStructureRequestService">
+        <method name="initialCreate"/>
+        <method name="saveOrganization">
+            <param name="organizationRequestSaveModel" type="kz.uco.tsadv.pojo.OrganizationRequestSaveModel"/>
+        </method>
+        <method name="savePosition">
+            <param name="positionRequestSaveModel" type="kz.uco.tsadv.pojo.PositionRequestSaveModel"/>
+        </method>
+        <method name="getGrades"/>
+        <method name="exclude">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="requestDetailId" type="java.util.UUID"/>
+            <param name="elementGroupId" type="java.util.UUID"/>
+            <param name="elementType" type="int"/>
+        </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+        </method>
+        <method name="saveRequest">
+            <param name="orgRequestSaveModel" type="kz.uco.tsadv.pojo.OrgRequestSaveModel"/>
+        </method>
+    </service>
+    <service name="tsadv_MyTeamService">
+        <method name="getChildren">
+            <param name="parentPositionGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="searchMyTeam">
+            <param name="parentPositionGroupId" type="java.util.UUID"/>
+            <param name="searchFio" type="java.lang.String"/>
+        </method>
+    </service>
+    <service name="tsadv_OrganizationHrUserService">
+        <method name="isManagerOrSupManager">
+            <param name="userId" type="java.util.UUID"/>
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
         </method>
     </service>
 </services>

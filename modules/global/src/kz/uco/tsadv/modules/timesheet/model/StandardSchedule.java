@@ -14,7 +14,7 @@ import java.util.List;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 @Listeners("tsadv_StandardScheduleListener")
-@NamePattern("%s|id")
+@NamePattern("%s|id,legacyId")
 @Table(name = "TSADV_STANDARD_SCHEDULE")
 @Entity(name = "tsadv$StandardSchedule")
 public class StandardSchedule extends AbstractParentEntity {

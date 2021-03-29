@@ -15,22 +15,22 @@
                 </query>
             </loader>
         </collection>
-        <collection id="vacationScheduleDc"
-                    class="kz.uco.tsadv.entity.VacationSchedule"
-                    view="vacation-view">
+
+        <collection id="vacationScheduleRequestsDc"
+                    class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <loader id="vacationScheduleDl">
                 <query>
-                    <![CDATA[select e from tsadv_VacationSchedule e where e.personGroup.id = :session$userPersonGroupId
- order by e.startDate desc]]>
+                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.personGroup.id = :session$userPersonGroupId
+ order by e.requestNumber desc]]>
                 </query>
             </loader>
         </collection>
-        <collection id="absenceRequestDc"
-                    class="kz.uco.tsadv.modules.personal.model.AbsenceRequest"
-                    view="absenceRequest.view">
+        <collection id="allAbsenceRequestDc"
+                    class="kz.uco.tsadv.modules.personal.views.AllAbsenceRequest"
+                    view="allAbsenceRequest-view">
             <loader id="absenceRequestDl">
                 <query>
-                    <![CDATA[  select e from tsadv$AbsenceRequest e order by e.requestNumber desc ]]>
+                    <![CDATA[  select e from tsadv_AllAbsenceRequest e order by e.requestNumber desc ]]>
                 </query>
             </loader>
         </collection>
@@ -58,7 +58,6 @@
                             <actions>
                                 <action id="excel" type="excel"/>
                                 <action id="newLeavingVacationRequest"
-                                        invoke="newLeavingVacationRequest"
                                         trackSelection="true"/>
                             </actions>
                             <columns>
@@ -86,52 +85,54 @@
             </tab>
             <tab id="vacationScheduleTab"
                  caption="msg://kz.uco.tsadv.web/Vacations"
+                 expand="vacationScheduleTable"
                  margin="true">
-                <tabSheet id="vacationTabSheet">
-                    <tab id="schedulesTab" spacing="true" caption="msg://kz.uco.tsadv.web/Vacations">
-                        <vbox id="vBox3"
-                              expand="vacationScheduleTable"
-                              height="100%"
-                              spacing="true">
-                            <button id="newVacationScheduleButton"
-                                    caption="msg://newVacationScheduleButton"
-                                    stylename="primary"
-                                    invoke="newVacationScheduleButton"/>
-                            <table id="vacationScheduleTable"
-                                   sortable="false"
-                                   dataContainer="vacationScheduleDc"
-                                   width="100%">
-                                <columns>
-                                    <column id="startDate"/>
-                                    <column id="endDate"/>
-                                    <column id="absenceDays"/>
-                                    <column id="status"/>
-                                </columns>
-                            </table>
-                        </vbox>
-                    </tab>
-                    <tab id="requestsTab" spacing="true" caption="msg://myRequests">
-                        <vbox id="vBox4"
-                              expand="vacationScheduleRequestTable"
-                              height="100%"
-                              spacing="true">
-                            <table id="vacationScheduleRequestTable"
-                                   sortable="false"
-                                   dataContainer="absenceRequestDc"
-                                   width="100%">
-                                <columns>
-                                    <column id="requestNumber" link="true" linkInvoke="openRequest"/>
-                                    <column id="dateFrom"/>
-                                    <column id="dateTo"/>
-                                    <column id="absenceDays"/>
-                                    <column id="status"/>
-                                </columns>
-                            </table>
-                        </vbox>
-                    </tab>
-                </tabSheet>
+                <filter id="filterVacationScheduleRequest"
+                        applyTo="vacationScheduleTable"
+                        dataLoader="vacationScheduleDl">
+                    <properties include=".*"/>
+                </filter>
+                <table id="vacationScheduleTable"
+                       sortable="false"
+                       dataContainer="vacationScheduleRequestsDc"
+                       width="100%">
+                    <columns>
+                        <column id="requestNumber" link="true" linkInvoke="openRequest"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="absenceDays"/>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel>
+                        <button id="newVacationScheduleButton"
+                                caption="msg://newVacationScheduleButton"
+                                stylename="primary"
+                                invoke="newVacationScheduleButton"/>
+                    </buttonsPanel>
+                </table>
             </tab>
-
+            <tab id="requestsTab" spacing="true" caption="msg://myRequests"
+                 expand="absenceRequestTable">
+                <filter id="filterAbsenceRequest"
+                        applyTo="absenceRequestTable"
+                        dataLoader="absenceRequestDl">
+                    <properties include=".*"/>
+                </filter>
+                <table id="absenceRequestTable"
+                       sortable="false"
+                       dataContainer="allAbsenceRequestDc"
+                       width="100%">
+                    <columns>
+                        <column id="requestNumber" link="true" linkInvoke="openRequest1"/>
+                        <column id="startDate"/>
+                        <column id="endDate"/>
+                        <column id="absenceDays"/>
+                        <column id="type.langValue"/>
+                        <column id="status"/>
+                    </columns>
+                    <rowsCount/>
+                </table>
+            </tab>
         </tabSheet>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>

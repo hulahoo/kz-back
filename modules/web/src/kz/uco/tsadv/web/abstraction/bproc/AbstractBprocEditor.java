@@ -120,6 +120,8 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
         processInstanceData = getProcessInstanceData();
         fillTasksDc();
         activeTaskData = getActiveTaskData();
+
+        if (!isProcessStarted() && isDraft()) getEditedEntity().setRequestDate(new Date());
     }
 
     protected void initFields() {
@@ -245,7 +247,7 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
     }
 
     protected ProcessInstanceData getProcessInstanceData() {
-        return bprocService.getProcessInstanceData(getEditedEntity().getId().toString(), getProcDefinitionKey());
+        return bprocService.getProcessInstanceData(getEditedEntity().getProcessInstanceBusinessKey(), getProcDefinitionKey());
     }
 
     protected void fillTasksDc() {

@@ -9,12 +9,14 @@ import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
+import kz.uco.tsadv.modules.learning.dictionary.DicLearningProof;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.List;
 
 @NamePattern("%s|name")
@@ -25,6 +27,10 @@ public class Course extends AbstractParentEntity {
 
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @Composition
+    @OneToMany(mappedBy = "course")
+    protected List<CourseCertificate> certificate;
 
     @NotNull
     @Column(name = "IS_ISSUED_CERTIFICATE", nullable = false)
@@ -110,11 +116,54 @@ public class Course extends AbstractParentEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "course")
     protected List<CourseSchedule> courseSchedule;
+
     @Column(name = "EDUCATION_PERIOD")
     protected Long educationPeriod;
 
     @Column(name = "EDUCATION_DURATION")
     protected Long educationDuration;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LEARNING_PROOF_ID")
+    protected DicLearningProof learningProof;
+
+    @Column(name = "COMMENT_COUNT")
+    protected Integer commentCount;
+
+    @Column(name = "RATING")
+    protected BigDecimal rating;
+
+    public BigDecimal getRating() {
+        return rating;
+    }
+
+    public void setRating(BigDecimal rating) {
+        this.rating = rating;
+    }
+
+    public Integer getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(Integer commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public DicLearningProof getLearningProof() {
+        return learningProof;
+    }
+
+    public void setLearningProof(DicLearningProof learningProof) {
+        this.learningProof = learningProof;
+    }
+
+    public List<CourseCertificate> getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(List<CourseCertificate> certificate) {
+        this.certificate = certificate;
+    }
 
     public Long getEducationDuration() {
         return educationDuration;
@@ -188,7 +237,6 @@ public class Course extends AbstractParentEntity {
         return feedbackTemplates;
     }
 
-
     public List<CourseSection> getSections() {
         return sections;
     }
@@ -196,8 +244,6 @@ public class Course extends AbstractParentEntity {
     public void setSections(List<CourseSection> sections) {
         this.sections = sections;
     }
-
-
 
     public PartyExt getParty() {
         return party;
@@ -215,7 +261,6 @@ public class Course extends AbstractParentEntity {
         return learningType;
     }
 
-
     public void setCompleted(Boolean completed) {
         this.completed = completed;
     }
@@ -223,7 +268,6 @@ public class Course extends AbstractParentEntity {
     public Boolean getCompleted() {
         return completed;
     }
-
 
     public void setSelfEnrollment(Boolean selfEnrollment) {
         this.selfEnrollment = selfEnrollment;
@@ -233,7 +277,6 @@ public class Course extends AbstractParentEntity {
         return selfEnrollment;
     }
 
-
     public void setAvgRate(Double avgRate) {
         this.avgRate = avgRate;
     }
@@ -241,7 +284,6 @@ public class Course extends AbstractParentEntity {
     public Double getAvgRate() {
         return avgRate;
     }
-
 
     public void setPreRequisition(List<CoursePreRequisition> preRequisition) {
         this.preRequisition = preRequisition;
@@ -251,7 +293,6 @@ public class Course extends AbstractParentEntity {
         return preRequisition;
     }
 
-
     public void setCompetences(List<CourseCompetence> competences) {
         this.competences = competences;
     }
@@ -259,7 +300,6 @@ public class Course extends AbstractParentEntity {
     public List<CourseCompetence> getCompetences() {
         return competences;
     }
-
 
     public void setShortDescription(String shortDescription) {
         this.shortDescription = shortDescription;
@@ -269,10 +309,6 @@ public class Course extends AbstractParentEntity {
         return shortDescription;
     }
 
-
-
-
-
     public DicCategory getCategory() {
         return category;
     }
@@ -280,7 +316,6 @@ public class Course extends AbstractParentEntity {
     public void setCategory(DicCategory category) {
         this.category = category;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -321,6 +356,5 @@ public class Course extends AbstractParentEntity {
     public Boolean getActiveFlag() {
         return activeFlag;
     }
-
 
 }

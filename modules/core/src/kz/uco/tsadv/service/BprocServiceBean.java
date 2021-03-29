@@ -18,7 +18,7 @@ import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
-import kz.uco.base.notification.NotificationSenderAPI;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
 import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
@@ -26,10 +26,12 @@ import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
+import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
@@ -61,7 +63,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Inject
     protected UserSessionSource userSessionSource;
     @Inject
-    protected NotificationSenderAPI notificationSender;
+    protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     protected BprocHistoricService bprocHistoricService;
     @Inject
@@ -111,7 +113,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Override
     public <T extends AbstractBprocRequest> void sendNotificationAndActivityToInitiator(T bprocRequest, String notificationTemplateCode) {
         ProcessInstanceData processInstanceData =
-                this.getProcessInstanceData(bprocRequest.getId().toString(), bprocRequest.getProcessDefinitionKey());
+                this.getProcessInstanceData(bprocRequest.getProcessInstanceBusinessKey(), bprocRequest.getProcessDefinitionKey());
 
         User initiator = getProcessVariable(processInstanceData.getId(), "initiator");
 
@@ -126,7 +128,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Override
     public <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest, String notificationTemplateCode) {
         ProcessInstanceData processInstanceData = bprocHistoricService.createHistoricProcessInstanceDataQuery()
-                .processInstanceBusinessKey(bprocRequest.getId().toString())
+                .processInstanceBusinessKey(bprocRequest.getProcessInstanceBusinessKey())
                 .processDefinitionKey(bprocRequest.getProcessDefinitionKey())
                 .singleResult();
 
@@ -300,7 +302,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 initiatorTask.setCreateTime(processInstanceData.getStartTime());
                 initiatorTask.setEndTime(processInstanceData.getStartTime());
                 initiatorTask.setHrRole(getInitiatorHrRole());
-                initiatorTask.setOutcome("START");
+                initiatorTask.setOutcome(AbstractBprocRequest.OUTCOME_START);
                 return initiatorTask;
             }
         }
@@ -311,6 +313,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         DicHrRole dicHrRole = metadata.create(DicHrRole.class);
         dicHrRole.setLangValue1("Инициатор");
         dicHrRole.setLangValue3("Initiator");
+        dicHrRole.setCode("INITIATOR");
         return dicHrRole;
     }
 
@@ -318,8 +321,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     public <T extends AbstractBprocRequest> void sendNotificationAndActivity(T entity, User user, ActivityType activityType, String notificationTemplateCode) {
 
         User sessionUser = userSessionSource.getUserSession().getUser();
-
-        notificationTemplateCode = getNotificationTemplateCode(entity, notificationTemplateCode);
 
         Map<String, Object> notificationParams = getNotificationParams(notificationTemplateCode, entity);
 
@@ -331,7 +332,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         notificationParams.put("requestLinkRu", "");
         notificationParams.put("requestLinkEn", "");
-
         Activity activity = activityService.createActivity(
                 user,
                 sessionUser,
@@ -345,29 +345,12 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 entity.getId(),
                 notificationTemplateCode,
                 notificationParams);
-
         String requestLink = getRequestLink(entity, activity);
         notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
-
-        notificationSender.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
+        notificationSenderAPIService.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
     }
 
-    private <T extends AbstractBprocRequest> String getNotificationTemplateCode(T entity, String notificationTemplateCode) {
-
-        if (entity instanceof AbsenceRequest) {
-            AbsenceRequest absenceRequest = transactionalDataManager.load(AbsenceRequest.class)
-                    .id(entity.getId()).view("absenceRequest.view").optional().orElse(null);
-            if ("APPROVING".equals(absenceRequest.getStatus().getCode())) {
-                return "bpm.absenceRequest.toapprove.notification";
-            } else if ("DRAFT".equals(absenceRequest.getStatus().getCode())) {
-                return "bpm.absenceRequest.revision.notification";
-            } else if ("REJECT".equals(absenceRequest.getStatus().getCode())) {
-                return "bpm.absenceRequest.reject.notification";
-            }
-        }
-        return notificationTemplateCode;
-    }
 
     protected <T extends AbstractBprocRequest> String getRequestLink(T entity, Activity activity) {
         if (!"NOTIFICATION".equals(activity.getType().getCode())) {
@@ -423,7 +406,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         params.put("entity", entity);
         params.put("requestNumber", entity.getRequestNumber());
 
-        ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getId().toString(), entity.getProcessDefinitionKey());
+        ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getProcessInstanceBusinessKey(), entity.getProcessDefinitionKey());
         TsadvUser initiator = getProcessVariable(processInstanceData.getId(), "initiator");
         Assert.notNull(initiator, "Initiator not found!");
         initiator = dataManager.reload(initiator, "user-fioWithLogin");
@@ -433,6 +416,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         switch (templateCode) {
             case "bpm.absenceRequest.initiator.notification":
             case "bpm.absenceRequest.revision.notification":
+            case "bpm.absenceRequest.forInitiator.notification":
             case "bpm.absenceRequest.reject.notification":
             case "bpm.absenceRequest.approved.notification":
             case "bpm.absenceRequest.toapprove.notification": {
@@ -499,8 +483,10 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 params.put("fullNameEn", person.getFullNameLatin("en"));
                 params.put("absenceTypeRu", type.getLangValue1());
                 params.put("absenceTypeEn", type.getLangValue3());
-                params.put("dateFrom", dateFormat.format(absenceForRecall.getDateFrom()));
-                params.put("dateTo", dateFormat.format(absenceForRecall.getDateTo()));
+                params.put("dateFrom", absenceForRecall.getRecallDateFrom() != null ?
+                        dateFormat.format(absenceForRecall.getRecallDateFrom()) : "");
+                params.put("dateTo", absenceForRecall.getRecallDateTo() != null ?
+                        dateFormat.format(absenceForRecall.getRecallDateTo()) : "");
                 params.putIfAbsent("requestStatusRu", absenceForRecall.getStatus().getLangValue1());
                 params.putIfAbsent("requestStatusEn", absenceForRecall.getStatus().getLangValue3());
                 if (absenceForRecall.getPurpose() != null && absenceForRecall.getPurpose().getCode() != null) {
@@ -526,6 +512,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             case "bpm.absenceRvdRequest.approved.notification":
             case "bpm.absenceRvdRequest.reject.notification":
             case "bpm.absenceRvdRequest.revision.notification":
+            case "bpm.absenceRvdRequest.forInitiator.notification":
             case "bpm.absenceRvdRequest.toapprove.notification": {
                 AbsenceRvdRequest absenceRvdRequest = transactionalDataManager.load(AbsenceRvdRequest.class)
                         .id(entity.getId()).view("absenceRvdRequest.edit").optional().orElse(null);
@@ -567,6 +554,51 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
                 break;
             }
+            case "bpm.scheduleOffsetsRequest.approved.notification":
+            case "bpm.scheduleOffsetsRequest.reject.notification":
+            case "bpm.scheduleOffsetsRequest.initiator.notification":
+            case "bpm.scheduleOffsetsRequest.revision.notification":
+            case "bpm.scheduleOffsetsRequest.toapprove.notification": {
+                ScheduleOffsetsRequest scheduleOffsetsRequest = transactionalDataManager.load(ScheduleOffsetsRequest.class)
+                        .id(entity.getId()).view("scheduleOffsetsRequest-for-my-team").optional().orElse(null);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+                PersonExt person = commonService.getEntity(PersonExt.class,
+                        "select e from base$PersonExt e " +
+                                " where e.group.id = :groupId " +
+                                "   and current_date between e.startDate and e.endDate ",
+                        ParamsMap.of("groupId", scheduleOffsetsRequest.getPersonGroup().getId()),
+                        View.LOCAL);
+
+                StandardSchedule newSchedule = scheduleOffsetsRequest.getNewSchedule();
+                params.put("fullNameRu", person.getFullNameLatin("ru"));
+                params.put("fullNameEn", person.getFullNameLatin("en"));
+                params.put("absenceTypeRu", newSchedule != null ? newSchedule.getScheduleName() : "");
+                params.put("absenceTypeEn", newSchedule != null ? newSchedule.getScheduleName() : "");
+                params.put("dateFrom", dateFormat.format(scheduleOffsetsRequest.getRequestDate()));
+                params.put("dateTo", dateFormat.format(scheduleOffsetsRequest.getDateOfStartNewSchedule()));
+                params.putIfAbsent("requestStatusRu", scheduleOffsetsRequest.getStatus().getLangValue1());
+                params.putIfAbsent("requestStatusEn", scheduleOffsetsRequest.getStatus().getLangValue3());
+                if (scheduleOffsetsRequest.getPurpose() != null && scheduleOffsetsRequest.getPurpose().getCode() != null) {
+                    if (scheduleOffsetsRequest.getPurpose().getCode().equals("OTHER")) {
+                        params.putIfAbsent("purposeRu", scheduleOffsetsRequest.getPurposeText() != null ?
+                                scheduleOffsetsRequest.getPurposeText() : " ");
+                        params.putIfAbsent("purposeEn", scheduleOffsetsRequest.getPurposeText() != null ?
+                                scheduleOffsetsRequest.getPurposeText() : " ");
+                    } else {
+                        params.putIfAbsent("purposeRu", scheduleOffsetsRequest.getPurpose().getLangValue1() != null ?
+                                scheduleOffsetsRequest.getPurpose().getLangValue1() : " ");
+                        params.putIfAbsent("purposeEn", scheduleOffsetsRequest.getPurpose().getLangValue3() != null ?
+                                scheduleOffsetsRequest.getPurpose().getLangValue3() : " ");
+                    }
+                } else {
+                    params.putIfAbsent("purposeRu", " ");
+                    params.putIfAbsent("purposeEn", " ");
+                }
+
+
+                break;
+            }
             case "bpm.absenceRequest.approver.notification": {
                 AbsenceRequest absenceRequest = (AbsenceRequest) dataManager.reload(entity, "absenceRequest.view");
 
@@ -586,14 +618,11 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                     params.put("status", leavingVacationRequest.getStatus() != null
                             ? leavingVacationRequest.getStatus().getLangValue1()
                             : null);
-                    params.put("type", leavingVacationRequest.getRequestType() != null
-                            ? leavingVacationRequest.getRequestType().getLangValue1()
-                            : "");
                     params.put("dateFrom", leavingVacationRequest.getStartDate() != null
                             ? dateFormat.format(leavingVacationRequest.getStartDate())
                             : null);
-                    params.put("dateTo", leavingVacationRequest.getEndData() != null
-                            ? dateFormat.format(leavingVacationRequest.getEndData())
+                    params.put("dateTo", leavingVacationRequest.getEndDate() != null
+                            ? dateFormat.format(leavingVacationRequest.getEndDate())
                             : null);
                 }
             }
@@ -630,6 +659,20 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 }
             }
         }
+        List<ExtTaskData> processTasks = getProcessTasks(processInstanceData);
+        String lastApprovedUserRu = "";
+        String lastApprovedUserEn = "";
+        for (ExtTaskData processTask : processTasks) {
+            if (processTask.getOutcome() != null && AbstractBprocRequest.OUTCOME_APPROVE.equals(processTask.getOutcome())
+                    && processTask.getAssigneeOrCandidates() != null && !processTask.getAssigneeOrCandidates().isEmpty()) {
+                lastApprovedUserRu = processTask.getAssigneeOrCandidates().stream().map(tsadvUser ->
+                        tsadvUser.getFullNameWithLogin(Locale.forLanguageTag("ru"))).findFirst().orElse("");
+                lastApprovedUserEn = processTask.getAssigneeOrCandidates().stream().map(tsadvUser ->
+                        tsadvUser.getFullNameWithLogin(Locale.forLanguageTag("en"))).findFirst().orElse("");
+            }
+        }
+        params.put("lastApprovedUserRu", lastApprovedUserRu);
+        params.put("lastApprovedUserEn", lastApprovedUserEn);
         params.put("approversTableRu", getApproversTable("Ru", processInstanceData));
         params.put("approversTableEn", getApproversTable("En", processInstanceData));
         params.put("comment", StringUtils.defaultString(getProcessVariable(processInstanceData.getId(), "comment"), ""));
@@ -770,5 +813,15 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     public void changeStatusChangeAbsenceDaysRequest(ChangeAbsenceDaysRequest entity, String status, String notificationCode) {
         changeRequestStatus(entity, status);
         sendNotificationToInitiator(entity, notificationCode);
+    }
+
+    @Override
+    public void approveAssignedPerformancePlan(AssignedPerformancePlan request) {
+        EntityManager entityManager = persistence.getEntityManager();
+        request = entityManager.find(AssignedPerformancePlan.class, request.getId(), new View(AssignedPerformancePlan.class).addProperty("status"));
+        Assert.notNull(request, "bprocRequest not found!");
+        request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
+        request.setNextStep();
+        entityManager.merge(request);
     }
 }

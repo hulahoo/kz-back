@@ -1,15 +1,19 @@
 package kz.uco.tsadv.modules.performance.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "TSADV_ASSIGNED_PERFORMANCE_PLAN")
 @Entity(name = "tsadv$AssignedPerformancePlan")
+@NamePattern("%s|requestNumber,stepStageStatus")
 public class AssignedPerformancePlan extends AbstractBprocRequest {
     private static final long serialVersionUID = -5439003925414989525L;
 
@@ -73,6 +77,29 @@ public class AssignedPerformancePlan extends AbstractBprocRequest {
 
     @Column(name = "MAX_BONUS_PERCENT")
     protected Double maxBonusPercent;
+
+    @Column(name = "PURPOSE")
+    private String purpose;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FILE_ID")
+    private FileDescriptor file;
+
+    public FileDescriptor getFile() {
+        return file;
+    }
+
+    public void setFile(FileDescriptor file) {
+        this.file = file;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
 
     public Double getMaxBonusPercent() {
         return maxBonusPercent;
@@ -218,9 +245,30 @@ public class AssignedPerformancePlan extends AbstractBprocRequest {
         return assigned_by;
     }
 
-
     @Override
     public String getProcessDefinitionKey() {
         return PROCESS_DEFINITION_KEY;
     }
+
+    @Override
+    public String getProcessInstanceBusinessKey() {
+        return super.getProcessInstanceBusinessKey() + (getStepStageStatus() != null ? "/" + getStepStageStatus().getId() : null);
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        super.postConstruct();
+        this.stepStageStatus = CardStatusEnum.DRAFT.getId();
+    }
+
+    public void setNextStep() {
+        if (this.stepStageStatus == null) {
+            CardStatusEnum cardStatusEnum = CardStatusEnum.fromOrder(0);
+            if (cardStatusEnum != null) this.stepStageStatus = cardStatusEnum.getId();
+        } else {
+            CardStatusEnum cardStatusEnum = CardStatusEnum.fromOrder(getStepStageStatus().getOrder() + 1);
+            if (cardStatusEnum != null) this.stepStageStatus = cardStatusEnum.getId();
+        }
+    }
+
 }

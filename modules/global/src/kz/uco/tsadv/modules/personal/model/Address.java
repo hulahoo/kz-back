@@ -34,7 +34,6 @@ public class Address extends AbstractParentEntity {
     @JoinColumn(name = "ADDRESS_TYPE_ID")
     protected DicAddressType addressType;
 
-
     @Column(name = "ADDRESS", length = 500)
     protected String address;
 
@@ -73,12 +72,14 @@ public class Address extends AbstractParentEntity {
     @JoinColumn(name = "LANGUAGE_ID")
     private DicLanguage language;
 
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "START_DATE", nullable = false)
     protected Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "END_DATE", nullable = false)
+    @NotNull
     protected Date endDate;
 
     @OrderBy("name")
@@ -111,7 +112,6 @@ public class Address extends AbstractParentEntity {
     public void setCity(DicCity city) {
         this.city = city;
     }
-
 
     public void setPersonGroup(PersonGroupExt personGroup) {
         this.personGroup = personGroup;
@@ -169,7 +169,6 @@ public class Address extends AbstractParentEntity {
         return endDate;
     }
 
-
     public void setAddressType(DicAddressType addressType) {
         this.addressType = addressType;
     }
@@ -177,7 +176,6 @@ public class Address extends AbstractParentEntity {
     public DicAddressType getAddressType() {
         return addressType;
     }
-
 
     public String getFactAddress() {
         return factAddress;

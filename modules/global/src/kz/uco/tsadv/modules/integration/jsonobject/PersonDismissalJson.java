@@ -8,6 +8,7 @@ public class PersonDismissalJson implements Serializable {
     private String personId;
     private String legacyId;
     private String dismissalReasonCode;
+    private String dismissalArticle;
     private String dismissalDate;
     private String companyCode;
 
@@ -59,5 +60,15 @@ public class PersonDismissalJson implements Serializable {
     @JsonProperty("companyCode")
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    @JsonProperty("dismissalArticle")
+    public String getDismissalArticle() {
+        return dismissalArticle;
+    }
+
+    @JsonProperty("dismissalArticle")
+    public void setDismissalArticle(String dismissalArticle) {
+        this.dismissalArticle = dismissalArticle;
     }
 }
