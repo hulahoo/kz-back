@@ -130,6 +130,8 @@
         <property name="logo"/>
         <property name="isOnline"/>
         <property name="activeFlag"/>
+        <property name="rating"/>
+        <property name="commentCount"/>
     </view>
     <view name="category-courses" entity="tsadv$DicCategory">
         <property name="langValue"/>
