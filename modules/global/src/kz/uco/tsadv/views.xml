@@ -22715,10 +22715,10 @@
         <property name="company" view="_minimal"/>
     </view>
     <view entity="tsadv$DicRequestStatus" name="dicRequestStatus-browse" extends="_local">
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_local"/>
     </view>
     <view entity="tsadv$DicRequestStatus" name="dicRequestStatus-edit" extends="_local">
-        <property name="company" view="_minimal"/>
+        <property name="company" view="_local"/>
     </view>
     <view entity="tsadv$DicRequisitionAccessLevel" name="dicRequisitionAccessLevel-browse" extends="_local">
         <property name="company" view="_minimal"/>
