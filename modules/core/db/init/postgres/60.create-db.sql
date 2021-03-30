@@ -1,7 +1,7 @@
 
 --views
-drop view if exists TSADV_ALL_ABSENCE_REQUEST;
-CREATE VIEW TSADV_ALL_ABSENCE_REQUEST AS
+drop view if exists TSADV_ALL_ABSENCE_REQUEST_V;
+CREATE VIEW TSADV_ALL_ABSENCE_REQUEST_V AS
   SELECT r.id, r."version", r.create_ts, r.created_by, r.update_ts, r.updated_by, r.delete_ts, r.deleted_by,
   r.date_from as start_date, r.date_to as end_date, r.person_group_id, r.absence_days, r.status_id, r.type_id, r.request_date,  r.request_number,
   'tsadv$AbsenceRequest' as entity_name, r.comment_ , r.integration_user_login , r.legacy_id, r.organization_bin

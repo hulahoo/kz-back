@@ -17049,18 +17049,18 @@ create table TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK (
 -- begin SEC_USER
 alter table SEC_USER add column PERSON_GROUP_ID uuid ^
 alter table SEC_USER add column FULLNAMEWITHLOGIN varchar(255) ^
-alter table SEC_USER add column IMAGE_ID uuid ^
-alter table SEC_USER add column ATS_CODE varchar(255) ^
-alter table SEC_USER add column INNER_NUMBER varchar(255) ^
-alter table SEC_USER add column AVAILABILITY boolean ^
+alter table SEC_USER add column if not exists IMAGE_ID uuid ^
+alter table SEC_USER add column if not exists ATS_CODE varchar(255) ^
+alter table SEC_USER add column if not exists INNER_NUMBER varchar(255) ^
+alter table SEC_USER add column if not exists AVAILABILITY boolean ^
 update SEC_USER set AVAILABILITY = false where AVAILABILITY is null ^
 alter table SEC_USER alter column AVAILABILITY set not null ^
-alter table SEC_USER add column MOBILE_PHONE varchar(255) ^
-alter table SEC_USER add column TELEGRAM_CODE varchar(255) ^
-alter table SEC_USER add column TELEGRAM_CHAT_ID varchar(255) ^
-alter table SEC_USER add column PASSWORD_CHANGE_DATE date ^
-alter table SEC_USER add column SHORT_NAME varchar(100) ^
-alter table SEC_USER add column FULL_NAME varchar(100) ^
+alter table SEC_USER add column if not exists MOBILE_PHONE varchar(255) ^
+alter table SEC_USER add column if not exists TELEGRAM_CODE varchar(255) ^
+alter table SEC_USER add column if not exists TELEGRAM_CHAT_ID varchar(255) ^
+alter table SEC_USER add column if not exists PASSWORD_CHANGE_DATE date ^
+alter table SEC_USER add column if not exists SHORT_NAME varchar(100) ^
+alter table SEC_USER add column if not exists FULL_NAME varchar(100) ^
 -- end SEC_USER
 -- begin BASE_ASSIGNMENT
 -- alter table BASE_ASSIGNMENT add column PERSON_GROUP_ID uuid ^
@@ -17269,12 +17269,6 @@ create table TSADV_ABSENCE_RVD_REQUEST (
     primary key (ID)
 )^
 -- end TSADV_ABSENCE_RVD_REQUEST
-
--- begin TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
-create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (
-    ABSENCE_REQUEST_ID uuid,
-    FILE_DESCRIPTOR_ID uuid,
-    primary key (ABSENCE_REQUEST_ID, FILE_DESCRIPTOR_ID)
 
 -- begin TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK
 create table TSADV_ABSENCE_REQUEST_FILE_DESCRIPTOR_LINK (
@@ -17820,3 +17814,24 @@ create table TSADV_DIC_LEARNING_PROOF (
     primary key (ID)
 )^
 -- end TSADV_DIC_LEARNING_PROOF
+-- begin TSADV_SCORM_QUESTION_MAPPING
+create table TSADV_SCORM_QUESTION_MAPPING (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    LEARNING_OBJECT_ID uuid not null,
+    CODE varchar(255) not null,
+    QUESTION varchar(255) not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_SCORM_QUESTION_MAPPING

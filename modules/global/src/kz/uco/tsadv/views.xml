@@ -23631,4 +23631,15 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="tsadv_ScormQuestionMapping" name="scormQuestionMapping.edit" extends="_local">
+        <property name="learningObject" view="_minimal">
+            <property name="objectName"/>
+            <property name="description"/>
+            <property name="url"/>
+            <property name="contentType"/>
+            <property name="file" view="_minimal"/>
+            <property name="html"/>
+            <property name="text"/>
+        </property>
+    </view>
 </views>
