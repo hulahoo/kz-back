@@ -5301,6 +5301,7 @@
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="code"/>
+            <property name="langValue1"/>
         </property>
         <property name="purpose" view="_minimal"/>
         <property name="personGroup" view="_minimal"/>
