@@ -96,12 +96,12 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
         absenceBalance.setDateFrom(dateFrom);
         absenceBalance.setDateTo(dateTo);
         absenceBalance.setLongAbsenceDays(0);
-        absenceBalance.setDaysLeft(balanceDays - absenceBalance.getLongAbsenceDays());
+        absenceBalance.setDaysLeft((double) (balanceDays - absenceBalance.getLongAbsenceDays()));
         absenceBalance.setDaysSpent(0);
         absenceBalance.setAdditionalBalanceDays(additionalBalanceDays);
         absenceBalance.setExtraDaysSpent(0);
         absenceBalance.setPersonGroup(personGroup);
-        absenceBalance.setExtraDaysLeft(additionalBalanceDays);
+        absenceBalance.setExtraDaysLeft((double) additionalBalanceDays);
         return absenceBalance;
     }
 
@@ -127,11 +127,11 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
         absenceBalance.setDateTo(dateTo);
         absenceBalance.setPersonGroup(personGroup);
         absenceBalance.setLongAbsenceDays(calculateLongAbsenceDays(absenceBalance, absence, null));
-        absenceBalance.setDaysLeft(balanceDays - absenceBalance.getLongAbsenceDays());
+        absenceBalance.setDaysLeft((double) (balanceDays - absenceBalance.getLongAbsenceDays()));
         absenceBalance.setDaysSpent(0);
         absenceBalance.setAdditionalBalanceDays(additionalBalanceDays);
         absenceBalance.setExtraDaysSpent(0);
-        absenceBalance.setExtraDaysLeft(additionalBalanceDays);
+        absenceBalance.setExtraDaysLeft((double) additionalBalanceDays);
         return absenceBalance;
     }
 
@@ -180,9 +180,9 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
         newBalance.setAdditionalBalanceDays(additionalBalanceDays);
         newBalance.setDaysSpent(0);
         newBalance.setExtraDaysSpent(extraDaysSpent);
-        newBalance.setExtraDaysLeft(extraDaysLeft);
+        newBalance.setExtraDaysLeft((double) extraDaysLeft);
 
-        newBalance.setDaysLeft(balanceDays);
+        newBalance.setDaysLeft((double) balanceDays);
         newBalance = dataManager.commit(newBalance);
         return newBalance;
 
@@ -206,9 +206,9 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
         newBalance.setAdditionalBalanceDays(additionalBalanceDays);
         newBalance.setDaysSpent(0);
         newBalance.setExtraDaysSpent(extraDaysSpent);
-        newBalance.setExtraDaysLeft(extraDaysLeft);
+        newBalance.setExtraDaysLeft((double) extraDaysLeft);
 
-        newBalance.setDaysLeft(balanceDays);
+        newBalance.setDaysLeft((double) balanceDays);
         return newBalance;
     }
 
@@ -904,31 +904,31 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                 "_minimal");
     }
 
-    protected Integer distributionAbsenceDays(Integer totalAbsenceDays, AbsenceBalance ab) {
-        if (totalAbsenceDays > ab.getDaysLeft()) {
-            totalAbsenceDays -= ab.getDaysLeft();
-            ab.setDaysSpent(ab.getDaysLeft());
-            ab.setDaysLeft(0);
-        } else {
-            ab.setDaysSpent(ab.getDaysSpent() + totalAbsenceDays);
-            ab.setDaysLeft(ab.getDaysLeft() - totalAbsenceDays);
-            totalAbsenceDays = 0;
-        }
-        return totalAbsenceDays;
-    }
-
-    protected Integer distributionAdditionalAbsenceDays(Integer totalAdditionalAbsenceDays, AbsenceBalance ab) {
-        if (totalAdditionalAbsenceDays > ab.getExtraDaysLeft()) {
-            totalAdditionalAbsenceDays -= ab.getExtraDaysLeft();
-            ab.setExtraDaysSpent(ab.getExtraDaysLeft());
-            ab.setExtraDaysLeft(0);
-        } else {
-            ab.setExtraDaysSpent(ab.getExtraDaysSpent() + totalAdditionalAbsenceDays);
-            ab.setExtraDaysLeft(ab.getExtraDaysLeft() - totalAdditionalAbsenceDays);
-            totalAdditionalAbsenceDays = 0;
-        }
-        return totalAdditionalAbsenceDays;
-    }
+//    protected Integer distributionAbsenceDays(Integer totalAbsenceDays, AbsenceBalance ab) {
+//        if (totalAbsenceDays > ab.getDaysLeft()) {
+//            totalAbsenceDays -= ab.getDaysLeft();
+//            ab.setDaysSpent(ab.getDaysLeft());
+//            ab.setDaysLeft(0);
+//        } else {
+//            ab.setDaysSpent(ab.getDaysSpent() + totalAbsenceDays);
+//            ab.setDaysLeft(ab.getDaysLeft() - totalAbsenceDays);
+//            totalAbsenceDays = 0;
+//        }
+//        return totalAbsenceDays;
+//    }
+//
+//    protected Integer distributionAdditionalAbsenceDays(Integer totalAdditionalAbsenceDays, AbsenceBalance ab) {
+//        if (totalAdditionalAbsenceDays > ab.getExtraDaysLeft()) {
+//            totalAdditionalAbsenceDays -= ab.getExtraDaysLeft();
+//            ab.setExtraDaysSpent(ab.getExtraDaysLeft());
+//            ab.setExtraDaysLeft(0);
+//        } else {
+//            ab.setExtraDaysSpent(ab.getExtraDaysSpent() + totalAdditionalAbsenceDays);
+//            ab.setExtraDaysLeft(ab.getExtraDaysLeft() - totalAdditionalAbsenceDays);
+//            totalAdditionalAbsenceDays = 0;
+//        }
+//        return totalAdditionalAbsenceDays;
+//    }
 
     protected Integer getTotalAbsenceDays(List<Absence> absenceList) {
         Integer result = 0;

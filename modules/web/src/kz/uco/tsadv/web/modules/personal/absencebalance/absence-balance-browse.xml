@@ -56,14 +56,19 @@
             </actions>-->
             <columns>
                 <column id="dateFrom"/>
-                <column id="dateTo"/>
                 <column id="balanceDays"
                         caption="msg://overallBalanceDays"/>
                 <column id="additionalBalanceDays"/>
-                <column id="daysSpent"/>
-                <column id="extraDaysSpent"/>
+                <column id="ecologicalDueDays"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/AbsenceBalance.ecologicalDueDays"/>
+                <column id="disabilityDueDays"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/AbsenceBalance.disabilityDueDays"/>
                 <column id="daysLeft"/>
                 <column id="extraDaysLeft"/>
+                <column id="ecologicalDaysLeft"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/AbsenceBalance.ecologicalDaysLeft"/>
+                <column id="disabilityDaysLeft"
+                        caption="msg://kz.uco.tsadv.modules.personal.model/AbsenceBalance.disabilityDaysLeft"/>
             </columns>
             <rows datasource="absenceBalancesVDs"/>
             <!--<buttonsPanel id="buttonsPanel"

@@ -14525,11 +14525,15 @@ create table TSADV_ABSENCE_BALANCE (
     BALANCE_DAYS integer not null,
     ADDITIONAL_BALANCE_DAYS integer not null,
     DAYS_SPENT integer,
-    DAYS_LEFT integer,
+    DAYS_LEFT double precision,
     EXTRA_DAYS_SPENT integer,
-    EXTRA_DAYS_LEFT integer,
+    EXTRA_DAYS_LEFT double precision,
     LONG_ABSENCE_DAYS integer,
     ADD_BALANCE_DAYS_AIMS integer,
+    ECOLOGICAL_DUE_DAYS integer,
+    DISABILITY_DUE_DAYS integer,
+    ECOLOGICAL_DAYS_LEFT double precision,
+    DISABILITY_DAYS_LEFT double precision,
     --
     primary key (ID)
 )^
