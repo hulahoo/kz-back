@@ -187,7 +187,7 @@ public class MyAssignedGoalBrowse extends AbstractWindow {
         HBoxLayout hBoxLayout = componentsFactory.createComponent(HBoxLayout.class);
         RichTextArea textArea = componentsFactory.createComponent(RichTextArea.class);
 
-        textArea.setValue(entity.getSuccessCritetia());
+        textArea.setValue(entity.getSuccessCriteria());
         textArea.setEditable(false);
         textArea.setHeight("100px");
         textArea.setWidth("100%");

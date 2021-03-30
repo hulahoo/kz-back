@@ -563,7 +563,7 @@ public class AssignedGoalBrowse extends AbstractLookup {
                     ag.setJobGroup((Integer) o[0] == 3 ? commonService.getEntity(JobGroup.class, (UUID) o[1]) : null);
                     ag.setTargetValue(0);
                     ag.setActualValue(0);
-                    ag.setSuccessCritetia(g.getSuccessCriteria());
+                    ag.setSuccessCriteria(g.getSuccessCriteria());
                     ag.setAssignedByPersonGroup(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP));
                     ag.setStartDate(performancePlansDs.getItem().getStartDate());
                     ag.setEndDate(performancePlansDs.getItem().getEndDate());

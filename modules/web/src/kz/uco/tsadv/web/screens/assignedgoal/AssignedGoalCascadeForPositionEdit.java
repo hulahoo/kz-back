@@ -65,12 +65,12 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
                         : null);
                 item.setWeight(getWeightForPositionGoal(item.getPositionGroup()
                         , goalValueChangeEvent.getValue()));
-                item.setSuccessCritetia(goalValueChangeEvent.getValue().getSuccessCriteria());
+                item.setSuccessCriteria(goalValueChangeEvent.getValue().getSuccessCriteria());
             } else {
                 item.setGoalString(null);
                 item.setWeight(null);
                 item.setCategory(null);
-                item.setSuccessCritetia(null);
+                item.setSuccessCriteria(null);
             }
         });
     }

@@ -39,8 +39,8 @@
                     <field property="goal" id="goal"/>
                     <field property="targetValue" id="targetValue"/>
                     <field property="actualValue" id="actualValue"/>
-                    <field custom="true" id="successCritetia"
-                           property="successCritetia"/>
+                    <field custom="true" id="successCriteria"
+                           property="successCriteria"/>
                     <field property="startDate" id="startDate"/>
                     <field property="endDate" id="endDate"/>
                     <field property="weight" id="weight"/>

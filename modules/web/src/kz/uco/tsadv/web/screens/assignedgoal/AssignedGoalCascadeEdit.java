@@ -70,12 +70,12 @@ public class AssignedGoalCascadeEdit extends StandardEditor<AssignedGoal> {
             if (assignedGoalValueChangeEvent != null && assignedGoalValueChangeEvent.getValue() != null) {
                 item.setGoalString(assignedGoalValueChangeEvent.getValue().getGoalString());
                 item.setWeight(assignedGoalValueChangeEvent.getValue().getWeight());
-                item.setSuccessCritetia(assignedGoalValueChangeEvent.getValue().getSuccessCritetia());
+                item.setSuccessCriteria(assignedGoalValueChangeEvent.getValue().getSuccessCriteria());
                 item.setCategory(assignedGoalValueChangeEvent.getValue().getCategory());
             } else {
                 item.setGoalString(null);
                 item.setWeight(null);
-                item.setSuccessCritetia(null);
+                item.setSuccessCriteria(null);
                 item.setCategory(null);
             }
         });
@@ -95,7 +95,7 @@ public class AssignedGoalCascadeEdit extends StandardEditor<AssignedGoal> {
             } else {
                 assignedGoalForLookupDl.setParameter("assignedGoalList", null);
                 assignedGoalForLookupDl.load();
-                item.setSuccessCritetia(null);
+                item.setSuccessCriteria(null);
                 item.setWeight(null);
                 item.setResult(null);
                 item.setParentAssignedGoal(null);

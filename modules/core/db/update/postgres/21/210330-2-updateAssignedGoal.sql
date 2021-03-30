@@ -1,0 +1,1 @@
+alter table TSADV_ASSIGNED_GOAL rename column success_critetia to SUCCESS_CRITERIA ;

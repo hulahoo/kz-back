@@ -54,8 +54,8 @@ public class AssignedGoal extends AbstractParentEntity {
     @Column(name = "ACTUAL_VALUE")
     protected Integer actualValue;
 
-    @Column(name = "SUCCESS_CRITETIA", length = 2000)
-    protected String successCritetia;
+    @Column(name = "SUCCESS_CRITERIA", length = 2000)
+    protected String successCriteria;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ASSIGNED_BY_PERSON_GROUP_ID")
@@ -277,12 +277,12 @@ public class AssignedGoal extends AbstractParentEntity {
         return actualValue;
     }
 
-    public void setSuccessCritetia(String successCritetia) {
-        this.successCritetia = successCritetia;
+    public void setSuccessCriteria(String successCriteria) {
+        this.successCriteria = successCriteria;
     }
 
-    public String getSuccessCritetia() {
-        return successCritetia;
+    public String getSuccessCriteria() {
+        return successCriteria;
     }
 
     public void setGoal(Goal goal) {
@@ -292,6 +292,5 @@ public class AssignedGoal extends AbstractParentEntity {
     public Goal getGoal() {
         return goal;
     }
-
 
 }

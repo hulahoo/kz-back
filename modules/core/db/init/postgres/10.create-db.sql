@@ -10303,7 +10303,7 @@ create table TSADV_ASSIGNED_GOAL (
     PARENT_GOAL_ID uuid,
     TARGET_VALUE integer,
     ACTUAL_VALUE integer,
-    SUCCESS_CRITETIA varchar(2000),
+    SUCCESS_CRITERIA varchar(2000),
     ASSIGNED_BY_PERSON_GROUP_ID uuid,
     START_DATE date,
     END_DATE date,

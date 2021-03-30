@@ -43,7 +43,7 @@
                 </form>
                 <form id="form2" dataContainer="assignedGoalDc">
                     <column width="250px">
-                        <textArea id="commentField" property="successCritetia"
+                        <textArea id="commentField" property="successCriteria"
                                   caption="msg://comments"
                                   rows="7"/>
                     </column>

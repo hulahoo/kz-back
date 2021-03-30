@@ -2845,7 +2845,7 @@
         </property>
         <property name="targetValue"/>
         <property name="actualValue"/>
-        <property name="successCritetia"/>
+        <property name="successCriteria"/>
         <property name="startDate"/>
         <property name="endDate"/>
         <property name="weight"/>
@@ -21694,7 +21694,7 @@
         <property name="parentAssignedGoal" view="_minimal">
             <property name="targetValue"/>
             <property name="actualValue"/>
-            <property name="successCritetia"/>
+            <property name="successCriteria"/>
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="weight"/>
