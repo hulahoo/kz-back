@@ -14398,7 +14398,17 @@
             <property name="courseTrainers" view="_minimal">
                 <property name="trainer" view="_minimal">
                     <property name="employee" view="_minimal">
-                        <property name="fullName"/>
+                        <property name="list" view="_minimal">
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="firstName"/>
+                            <property name="firstNameLatin"/>
+                            <property name="middleName"/>
+                            <property name="middleNameLatin"/>
+                            <property name="lastName"/>
+                            <property name="lastNameLatin"/>
+                            <property name="employeeNumber"/>
+                        </property>
                     </property>
                 </property>
             </property>

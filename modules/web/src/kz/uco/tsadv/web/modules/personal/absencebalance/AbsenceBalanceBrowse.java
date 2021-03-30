@@ -179,7 +179,7 @@ public class AbsenceBalanceBrowse extends EditableFrame {
         if (daysLeft < 0) {
             daysLeft = 0;
         }
-        newBalance.setDaysLeft(daysLeft);
+        newBalance.setDaysLeft((double) daysLeft);
         dataManager.commit(newBalance);
     }
 

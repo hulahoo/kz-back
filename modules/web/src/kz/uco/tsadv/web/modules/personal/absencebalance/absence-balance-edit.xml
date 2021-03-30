@@ -25,14 +25,14 @@
                        property="balanceDays"
                        caption="msg://overallBalanceDays"/>
                 <field property="additionalBalanceDays"/>
-                <field editable="false"
-                       property="daysSpent"/>
+                <field property="ecologicalDueDays"/>
+                <field property="disabilityDueDays"/>
                 <field editable="false"
                        property="daysLeft"/>
                 <field editable="false"
-                       property="extraDaysSpent"/>
-                <field editable="false"
                        property="extraDaysLeft"/>
+                <field property="ecologicalDaysLeft"/>
+                <field property="disabilityDaysLeft"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"
