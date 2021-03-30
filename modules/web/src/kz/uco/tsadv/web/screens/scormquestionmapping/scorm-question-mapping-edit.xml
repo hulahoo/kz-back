@@ -15,12 +15,6 @@
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="scormQuestionMappingDc">
             <column width="250px">
-                <pickerField id="learningObjectField" property="learningObject">
-                    <actions>
-                        <action id="lookup" type="picker_lookup"/>
-                        <action id="clear" type="picker_clear"/>
-                    </actions>
-                </pickerField>
                 <textField id="codeField" property="code"/>
                 <textField id="questionField" property="question"/>
             </column>
