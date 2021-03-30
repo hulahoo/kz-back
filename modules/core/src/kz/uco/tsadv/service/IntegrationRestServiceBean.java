@@ -3868,7 +3868,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 //todo check this default values for non null constraint
                 StandardOffset offset = dataManager.load(StandardOffset.class)
-                        .query("select e from tsadv$StandardOffset e")
+                        .query("select e from tsadv$StandardOffset e where e.offsetDisplay = :ofd")
+                        .parameter("ofd","STD5")
                         .view(View.BASE)
                         .list().stream().findFirst().orElse(null);
 
