@@ -1942,5 +1942,8 @@
         <entity class="kz.uco.tsadv.modules.learning.dictionary.DicLearningProof">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.ScormQuestionMapping">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
