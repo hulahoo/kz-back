@@ -16,14 +16,14 @@ import javax.inject.Inject;
 @Component("tsadv_AbsenceRequestListener")
 public class AbsenceRequestListener implements BeforeUpdateEntityListener<AbsenceRequest>, BeforeInsertEntityListener<AbsenceRequest> {
 
-    private final String APPROVED_STATUS = "Утверждено";
+    private final String APPROVED_STATUS = "APPROVED";
 
     @Inject
     IntegrationRestService integrationRestService;
 
     @Override
     public void onBeforeUpdate(AbsenceRequest entity, EntityManager entityManager) {
-        if (entity.getStatus().getLangValue1() != null && entity.getStatus().getLangValue1().equals(APPROVED_STATUS)) {
+        if (entity.getStatus().getCode() != null && entity.getStatus().getCode().equals(APPROVED_STATUS)) {
             AbsenceRequestDataJson absenceJson = new AbsenceRequestDataJson();
             String personId = (entity.getPersonGroup() != null && entity.getPersonGroup().getLegacyId() != null) ? entity.getPersonGroup().getLegacyId() : "";
             absenceJson.setPersonId(personId);
