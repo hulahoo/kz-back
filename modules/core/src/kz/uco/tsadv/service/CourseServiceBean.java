@@ -20,6 +20,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.pojo.CommentPojo;
 import kz.uco.tsadv.pojo.CoursePojo;
 import kz.uco.tsadv.pojo.PairPojo;
+import kz.uco.tsadv.pojo.ScormInputData;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -942,6 +943,55 @@ public class CourseServiceBean implements CourseService {
             return courseSection;
         });
     }
+
+    @Override
+    public void createScormAttempt(UUID courseSectionId, UUID enrollmentId, List<ScormInputData> inputData, Boolean success) {
+        persistence.runInTransaction(em -> {
+            Date currentDate = new Date();
+
+            CourseSectionAttempt newAttempt = metadata.create(CourseSectionAttempt.class);
+            newAttempt.setCourseSection(dataManager.load(LoadContext.create(CourseSection.class).setId(courseSectionId).setView(View.MINIMAL)));
+            newAttempt.setEnrollment(dataManager.load(LoadContext.create(Enrollment.class).setId(enrollmentId).setView(View.MINIMAL)));
+            newAttempt.setActiveAttempt(false);
+            newAttempt.setAttemptDate(currentDate);
+            newAttempt.setSuccess(success);
+            em.persist(newAttempt);
+
+            inputData.forEach(id -> {
+                CourseSectionScormResult scormResult = metadata.create(CourseSectionScormResult.class);
+                scormResult.setAnswer(id.getAnswer());
+                scormResult.setAnswerTimeStamp(currentDate);
+                scormResult.setIsCorrect(false);
+                scormResult.setCourseSectionAttempt(newAttempt);
+                scormResult.setQuestion(dataManager.load(LoadContext.create(ScormQuestionMapping.class)
+                        .setQuery(LoadContext.createQuery("" +
+                                "select e " +
+                                "from tsadv_ScormQuestionMapping e " +
+                                "wher e.code = :code")
+                                .setParameter("code", id.getFieldId()))));
+                scormResult.setScore(id.getScore());
+                scormResult.setMaxScore(id.getMaxScore());
+                scormResult.setMinScore(id.getMinScore());
+
+                em.persist(scormResult);
+            });
+        });
+    }
+
+    @Override
+    public void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, Integer score, Integer minScore, Integer maxScore, Boolean success) {
+        CourseSectionAttempt newAttempt = metadata.create(CourseSectionAttempt.class);
+        newAttempt.setCourseSection(dataManager.load(LoadContext.create(CourseSection.class).setId(courseSectionId).setView(View.MINIMAL)));
+        newAttempt.setEnrollment(dataManager.load(LoadContext.create(Enrollment.class).setId(enrollmentId).setView(View.MINIMAL)));
+        newAttempt.setActiveAttempt(false);
+        newAttempt.setAttemptDate(new Date());
+        newAttempt.setSuccess(success);
+        newAttempt.setTestResult(score);
+        newAttempt.setTestResultPercent(((score - minScore) * 100) / (maxScore - minScore));
+
+        dataManager.commit(newAttempt);
+    }
+
 
     protected void completeEnrollment(UUID enrollmentId) {
         try (Transaction transaction = persistence.createTransaction()) {

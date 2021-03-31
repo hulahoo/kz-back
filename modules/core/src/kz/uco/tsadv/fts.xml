@@ -1945,5 +1945,8 @@
         <entity class="kz.uco.tsadv.modules.learning.model.ScormQuestionMapping">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.CourseSectionScormResult">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

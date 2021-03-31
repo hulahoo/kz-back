@@ -3376,7 +3376,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         " and e.company.legacyId = :companyCode")
                                 .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
                                 .parameter("companyCode", personDismissalJson.getCompanyCode())
-                                .view("")
+                                .view("dicDismissalReason-edit")
                                 .list().stream().findFirst().orElse(null);
                         if (reason != null) {
                             personDismissal.setDismissalReason(reason);
@@ -3443,7 +3443,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         " and e.company.legacyId = :companyCode")
                                 .parameter("legacyId", personDismissalJson.getDismissalReasonCode())
                                 .parameter("companyCode", personDismissalJson.getCompanyCode())
-                                .view("")
+                                .view("dicDismissalReason-edit")
                                 .list().stream().findFirst().orElse(null);
                         if (reason != null) {
                             personDismissal.setDismissalReason(reason);

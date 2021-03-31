@@ -645,5 +645,6 @@
         <class>kz.uco.tsadv.modules.learning.model.CourseCertificate</class>
         <class>kz.uco.tsadv.modules.learning.dictionary.DicLearningProof</class>
         <class>kz.uco.tsadv.modules.learning.model.ScormQuestionMapping</class>
+        <class>kz.uco.tsadv.modules.learning.model.CourseSectionScormResult</class>
     </persistence-unit>
 </persistence>

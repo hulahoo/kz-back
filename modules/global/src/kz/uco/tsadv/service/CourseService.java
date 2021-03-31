@@ -5,6 +5,7 @@ import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.pojo.CoursePojo;
+import kz.uco.tsadv.pojo.ScormInputData;
 
 import java.util.List;
 import java.util.Map;
@@ -62,4 +63,8 @@ public interface CourseService {
     Enrollment courseEnrollmentInfo(UUID enrollmentId);
 
     CourseSection courseSectionWithEnrollmentAttempts(UUID courseSectionId, UUID enrollmentId);
+
+    void createScormAttempt(UUID courseSectionId, UUID enrollmentId, List<ScormInputData> inputData, Boolean success);
+
+    void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, Integer score, Integer minScore, Integer maxScore, Boolean success);
 }

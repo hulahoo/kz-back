@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+@Listeners("tsadv_AbsenceForRecallListener")
 @Table(name = "TSADV_ABSENCE_FOR_RECALL")
 @Entity(name = "tsadv_AbsenceForRecall")
 public class AbsenceForRecall extends AbstractBprocRequest {
