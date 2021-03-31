@@ -32,7 +32,6 @@ public class CourseSectionObject extends AbstractParentEntity {
         this.content = content;
     }
 
-
     public DicLearningObjectType getObjectType() {
         return objectType;
     }
@@ -41,7 +40,6 @@ public class CourseSectionObject extends AbstractParentEntity {
         this.objectType = objectType;
     }
 
-
     public void setTest(Test test) {
         this.test = test;
     }
@@ -49,6 +47,5 @@ public class CourseSectionObject extends AbstractParentEntity {
     public Test getTest() {
         return test;
     }
-
 
 }

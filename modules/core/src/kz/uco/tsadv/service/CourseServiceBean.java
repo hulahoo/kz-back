@@ -820,6 +820,7 @@ public class CourseServiceBean implements CourseService {
         coursePojo.setAvgRate(course.getAvgRate());
         coursePojo.setFinished((int) course.getEnrollments().stream().filter(e -> e.getStatus().equals(EnrollmentStatus.COMPLETED)).count());
         coursePojo.setIssuedCertificate(course.getIsIssuedCertificate());
+        coursePojo.setLearningProof(course.getLearningProof() != null ? course.getLearningProof().getLangValue() : null);
 
         Double avgRate = course.getReviews().isEmpty()
                 ? 0D

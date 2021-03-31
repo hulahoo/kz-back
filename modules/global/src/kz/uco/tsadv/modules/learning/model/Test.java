@@ -84,6 +84,17 @@ public class Test extends AbstractParentEntity {
     @JoinColumn(name = "COURSE_ID")
     protected Course course;
 
+    @OneToMany(mappedBy = "test")
+    private List<CourseSectionObject> courseSectionObjects;
+
+    public List<CourseSectionObject> getCourseSectionObjects() {
+        return courseSectionObjects;
+    }
+
+    public void setCourseSectionObjects(List<CourseSectionObject> courseSectionObjects) {
+        this.courseSectionObjects = courseSectionObjects;
+    }
+
     public void setCourse(Course course) {
         this.course = course;
     }
@@ -91,7 +102,6 @@ public class Test extends AbstractParentEntity {
     public Course getCourse() {
         return course;
     }
-
 
     public void setJobTest(List<JobTest> jobTest) {
         this.jobTest = jobTest;
@@ -109,7 +119,6 @@ public class Test extends AbstractParentEntity {
         return positionTest;
     }
 
-
     public List<TestSection> getSections() {
         return sections;
     }
@@ -118,8 +127,6 @@ public class Test extends AbstractParentEntity {
         this.sections = sections;
     }
 
-
-
     public void setQuestionPerPage(Integer questionPerPage) {
         this.questionPerPage = questionPerPage;
     }
@@ -127,7 +134,6 @@ public class Test extends AbstractParentEntity {
     public Integer getQuestionPerPage() {
         return questionPerPage;
     }
-
 
     public void setShowSectionNewPage(Boolean showSectionNewPage) {
         this.showSectionNewPage = showSectionNewPage;
@@ -146,10 +152,6 @@ public class Test extends AbstractParentEntity {
         this.sectionOrder = sectionOrder == null ? null : sectionOrder.getId();
     }
 
-
-
-
-
     public void setTimer(Integer timer) {
         this.timer = timer;
     }
@@ -158,7 +160,6 @@ public class Test extends AbstractParentEntity {
         return timer;
     }
 
-
     public DicTestType getType() {
         return type;
     }
@@ -166,7 +167,6 @@ public class Test extends AbstractParentEntity {
     public void setType(DicTestType type) {
         this.type = type;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -231,6 +231,5 @@ public class Test extends AbstractParentEntity {
     public Boolean getShowResults() {
         return showResults;
     }
-
 
 }

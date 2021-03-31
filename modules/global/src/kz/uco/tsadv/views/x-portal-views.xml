@@ -180,6 +180,7 @@
             <property name="personGroup" view="_minimal"/>
         </property>
         <property name="selfEnrollment"/>
+        <property name="learningProof"/>
     </view>
     <view name="course-trainer-info" entity="tsadv$Trainer">
         <property name="employee">

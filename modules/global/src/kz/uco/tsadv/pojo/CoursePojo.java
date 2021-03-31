@@ -15,6 +15,7 @@ public class CoursePojo implements Serializable {
     private Date endDate;
     private Integer finished;
     private Boolean isIssuedCertificate;
+    private String learningProof;
     private List<PairPojo<UUID, String>> sections;
     private String logo;
     private List<CommentPojo> comments;
@@ -25,6 +26,14 @@ public class CoursePojo implements Serializable {
     private Long educationPeriod;
     private String enrollmentId;
     private Boolean selfEnrollment;
+
+    public String getLearningProof() {
+        return learningProof;
+    }
+
+    public void setLearningProof(String learningProof) {
+        this.learningProof = learningProof;
+    }
 
     public List<CommentPojo> getComments() {
         return comments;
