@@ -107,14 +107,6 @@ public class CourseEdit extends StandardEditor<Course> {
 //        lookupAction.setLookupScreen("base$PartyExt.browse");
 //        lookupAction.setLookupScreenParams(ParamsMap.of(PartyExtBrowse.TRAINING_PROVIDER, true));
 
-
-        imageUpload.setUploadButtonCaption("");
-        imageUpload.setClearButtonCaption("");
-
-        imageUpload.addFileUploadSucceedListener(this::fileUploadSucceed);
-
-        imageUpload.addBeforeValueClearListener(this::beforeValueClearPerformed);
-
 //        preRequisitionTable.addAction(new BaseAction("selectPreRequisition") {
 //            @Override
 //            public void actionPerform(Component component) {
@@ -411,5 +403,15 @@ public class CourseEdit extends StandardEditor<Course> {
             }
         });
         dataManager.commit(commitContext);
+    }
+
+    @Subscribe("imageUpload")
+    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        fileUploadSucceed(event);
+    }
+
+    @Subscribe("imageUpload")
+    protected void onImageUploadBeforeValueClear(FileUploadField.BeforeValueClearEvent event) {
+        beforeValueClearPerformed(event);
     }
 }
