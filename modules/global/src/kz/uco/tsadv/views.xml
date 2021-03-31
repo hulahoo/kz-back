@@ -22803,6 +22803,7 @@
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="code"/>
+            <property name="useInSelfService"/>
         </property>
         <property name="absenceStatus" view="_minimal">
             <property name="langValue1"/>

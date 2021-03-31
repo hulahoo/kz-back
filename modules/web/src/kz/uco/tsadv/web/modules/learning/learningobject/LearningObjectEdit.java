@@ -4,19 +4,23 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.modules.learning.enums.ContentType;
 import kz.uco.tsadv.modules.learning.model.LearningObject;
+import kz.uco.tsadv.modules.learning.model.ScormQuestionMapping;
 import kz.uco.tsadv.service.LearningService;
 import kz.uco.tsadv.service.VideoService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.UUID;
 
 public class LearningObjectEdit extends AbstractEditor<LearningObject> {
 
@@ -46,6 +50,14 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
     protected LearningService learningService;
     @Named("fieldGroup.objectName")
     protected TextField objectNameField;
+    @Inject
+    protected GroupBoxLayout groupBox;
+    @Inject
+    protected ScreenBuilders screenBuilders;
+    @Inject
+    protected Table<ScormQuestionMapping> scormQuestionMappingTable;
+    @Inject
+    protected CollectionDatasource<ScormQuestionMapping, UUID> scormQuestionMappingDc;
 
 
     @Override
@@ -88,6 +100,9 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
                 }
             }
         });
+        contentTypeField.addValueChangeListener(valueChangeEvent -> {
+            setVisibleField();
+        });
     }
 
     protected void itemPropertyChanged(Datasource.ItemPropertyChangeEvent<LearningObject> e) {
@@ -127,6 +142,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             text.setVisible(false);
             text.setValue(null);
             playButton.setVisible(true);
+            groupBox.setVisible(false);
 
         } else if (ContentType.VIDEO.equals(learningObjectDs.getItem().getContentType())
                 || ContentType.PDF.equals(learningObjectDs.getItem().getContentType())) {
@@ -142,6 +158,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             text.setVisible(false);
             text.setValue(null);
             playButton.setVisible(true);
+            groupBox.setVisible(false);
 
         } else if (ContentType.FILE.equals(learningObjectDs.getItem().getContentType())) {
             urlField.setValue(null);
@@ -156,6 +173,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             text.setVisible(false);
             text.setValue(null);
             playButton.setVisible(false);
+            groupBox.setVisible(false);
 
         } else if (ContentType.HTML.equals(learningObjectDs.getItem().getContentType())) {
             urlField.setValue(null);
@@ -172,6 +190,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             text.setVisible(false);
             text.setValue(null);
             playButton.setVisible(true);
+            groupBox.setVisible(false);
 
         } else if (ContentType.TEXT.equals(learningObjectDs.getItem().getContentType())) {
             urlField.setValue(null);
@@ -188,6 +207,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             text.setRequired(true);
             text.setVisible(true);
             playButton.setVisible(false);
+            groupBox.setVisible(false);
         } else if (ContentType.SCORM_ZIP.equals(learningObjectDs.getItem().getContentType())) {
             urlField.setVisible(true);
             urlField.setRequired(false);
@@ -200,6 +220,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             text.setRequired(false);
             text.setVisible(false);
             playButton.setVisible(true);
+            groupBox.setVisible(true);
         }
     }
 
@@ -264,5 +285,14 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
             } catch (Exception e) {
             }
         }
+    }
+
+    public void scormQuestionMappingCreate() {
+        screenBuilders.editor(scormQuestionMappingTable)
+                .newEntity()
+                .withInitializer(scormQuestionMapping -> {
+                    scormQuestionMapping.setLearningObject(learningObjectDs.getItem());
+                }).build().show()
+                .addAfterCloseListener(afterCloseEvent -> scormQuestionMappingDc.refresh());
     }
 }
