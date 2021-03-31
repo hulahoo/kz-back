@@ -87,6 +87,14 @@ public class CourseEdit extends StandardEditor<Course> {
     protected DataGrid<Enrollment> enrollmentsTable;
     @Inject
     protected ReportService reportService;
+    @Inject
+    protected CollectionLoader<CourseReview> courseReviewDl;
+    @Inject
+    protected GroupTable<CourseReview> courseReviewTable;
+    @Inject
+    protected Table<CoursePreRequisition> preRequisitionTable;
+    @Inject
+    protected CollectionLoader<CoursePreRequisition> preRequisitionDl;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -98,6 +106,10 @@ public class CourseEdit extends StandardEditor<Course> {
         dicLearningTypesDl.load();
         homeworkDl.setParameter("course", courseDc.getItem());
         homeworkDl.load();
+        courseReviewDl.setParameter("course", courseDc.getItem());
+        courseReviewDl.load();
+        preRequisitionDl.setParameter("course", courseDc.getItem());
+        preRequisitionDl.load();
     }
 
 
@@ -107,18 +119,10 @@ public class CourseEdit extends StandardEditor<Course> {
 //        lookupAction.setLookupScreen("base$PartyExt.browse");
 //        lookupAction.setLookupScreenParams(ParamsMap.of(PartyExtBrowse.TRAINING_PROVIDER, true));
 
-
-        imageUpload.setUploadButtonCaption("");
-        imageUpload.setClearButtonCaption("");
-
-        imageUpload.addFileUploadSucceedListener(this::fileUploadSucceed);
-
-        imageUpload.addBeforeValueClearListener(this::beforeValueClearPerformed);
-
 //        preRequisitionTable.addAction(new BaseAction("selectPreRequisition") {
 //            @Override
 //            public void actionPerform(Component component) {
-//                openLookup("tsadv$Course.browse", new Lookup.Handler() {
+//                openLookup("tsadv$Course.browse", new Window.Lookup.Handler() {
 //                    @Override
 //                    public void handleLookup(Collection items) {
 //                        for (Course selectedCourse : (Collection<Course>) items) {
@@ -411,5 +415,40 @@ public class CourseEdit extends StandardEditor<Course> {
             }
         });
         dataManager.commit(commitContext);
+    }
+
+    @Subscribe("imageUpload")
+    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        fileUploadSucceed(event);
+    }
+
+    @Subscribe("imageUpload")
+    protected void onImageUploadBeforeValueClear(FileUploadField.BeforeValueClearEvent event) {
+        beforeValueClearPerformed(event);
+    }
+
+    @Subscribe("courseReviewTable.create")
+    protected void onCourseReviewTableCreate(Action.ActionPerformedEvent event) {
+        screenBuilders.editor(courseReviewTable)
+                .newEntity()
+                .withInitializer(courseReview -> courseReview.setCourse(courseDc.getItem())).build().show()
+                .addAfterCloseListener(afterCloseEvent -> courseReviewDl.load());
+    }
+
+    @Subscribe("preRequisitionTable.create")
+    protected void onPreRequisitionTableCreate(Action.ActionPerformedEvent event) {
+        CommitContext commitContext = new CommitContext();
+        screenBuilders.lookup(Course.class, this)
+                .withSelectHandler(courses -> {
+                    courses.forEach(course -> {
+                        CoursePreRequisition coursePreRequisition = metadata.create(CoursePreRequisition.class);
+                        coursePreRequisition.setCourse(courseDc.getItem());
+                        coursePreRequisition.setRequisitionCourse(course);
+                        commitContext.addInstanceToCommit(coursePreRequisition);
+                    });
+                    dataManager.commit(commitContext);
+                    preRequisitionDl.load();
+                }).build().show()
+                .addAfterCloseListener(afterCloseEvent -> preRequisitionDl.load());
     }
 }

@@ -81,6 +81,20 @@
             <param name="courseSectionId" type="java.util.UUID"/>
             <param name="enrollmentId" type="java.util.UUID"/>
         </method>
+        <method name="createTestScormAttempt">
+            <param name="courseSectionId" type="java.util.UUID"/>
+            <param name="enrollmentId" type="java.util.UUID"/>
+            <param name="score" type="java.lang.Integer"/>
+            <param name="minScore" type="java.lang.Integer"/>
+            <param name="maxScore" type="java.lang.Integer"/>
+            <param name="success" type="java.lang.Boolean"/>
+        </method>
+        <method name="createScormAttempt">
+            <param name="courseSectionId" type="java.util.UUID"/>
+            <param name="enrollmentId" type="java.util.UUID"/>
+            <param name="inputData" type="java.util.List"/>
+            <param name="success" type="java.lang.Boolean"/>
+        </method>
     </service>
     <service name="bproc_BprocTaskService">
         <method name="completeWithOutcome">

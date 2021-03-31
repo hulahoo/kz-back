@@ -14,8 +14,6 @@
             </collection>
             <collection id="competencesDc"
                         property="competences"/>
-            <collection id="preRequisitionDc"
-                        property="preRequisition"/>
             <collection id="feedbackTemplatesDc"
                         property="feedbackTemplates"/>
             <collection id="trainerDc"
@@ -65,6 +63,24 @@
             <loader id="studentHomeworkDl">
                 <query>
                     <![CDATA[select e from tsadv_StudentHomework e where e.homework = :homework]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="courseReviewDc"
+                    class="kz.uco.tsadv.modules.learning.model.CourseReview"
+                    view="courseReview.browse">
+            <loader id="courseReviewDl">
+                <query>
+                    <![CDATA[select e from tsadv$CourseReview e where e.course = :course]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="preRequisitionDc"
+                    class="kz.uco.tsadv.modules.learning.model.CoursePreRequisition"
+                    view="coursePreRequisition.edit">
+            <loader id="preRequisitionDl">
+                <query>
+                    <![CDATA[select e from tsadv$CoursePreRequisition e where e.course = :course]]>
                 </query>
             </loader>
         </collection>
@@ -205,7 +221,7 @@
                        height="100%"
                        width="100%">
                     <actions>
-                        <action id="selectPreRequisition"/>
+                        <action id="create"/>
                         <action id="remove"
                                 type="remove"
                                 caption="mainMsg://table.btn.empty"/>
@@ -220,7 +236,7 @@
                     </columns>
                     <rows/>
                     <buttonsPanel id="preRequisitionButtonsPanel">
-                        <button action="preRequisitionTable.selectPreRequisition"
+                        <button action="preRequisitionTable.create"
                                 caption="mainMsg://table.btn.empty"
                                 icon="icons/plus-btn.png"/>
                         <button action="preRequisitionTable.remove"/>
@@ -480,6 +496,29 @@
                         <button action="certificateTable.create"/>
                         <button action="certificateTable.edit"/>
                         <button action="certificateTable.remove"/>
+                    </buttonsPanel>
+                </groupTable>
+            </tab>
+            <tab id="courseReviewTab"
+                 caption="msg://courseReview"
+                 expand="courseReviewTable"
+                 margin="true,false,false,false">
+                <groupTable id="courseReviewTable" dataContainer="courseReviewDc" width="100%">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="personGroup"/>
+                        <column id="rate"/>
+                        <column id="text"/>
+                    </columns>
+                    <rows/>
+                    <buttonsPanel id="courseReviewButtonsPanel">
+                        <button action="courseReviewTable.create"/>
+                        <button action="courseReviewTable.edit"/>
+                        <button action="courseReviewTable.remove"/>
                     </buttonsPanel>
                 </groupTable>
             </tab>
