@@ -967,7 +967,7 @@ public class CourseServiceBean implements CourseService {
                         .setQuery(LoadContext.createQuery("" +
                                 "select e " +
                                 "from tsadv_ScormQuestionMapping e " +
-                                "wher e.code = :code")
+                                "where e.code = :code")
                                 .setParameter("code", id.getFieldId()))));
                 scormResult.setScore(id.getScore());
                 scormResult.setMaxScore(id.getMaxScore());
