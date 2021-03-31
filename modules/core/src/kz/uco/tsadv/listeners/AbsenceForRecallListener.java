@@ -2,6 +2,7 @@ package kz.uco.tsadv.listeners;
 
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
@@ -18,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component("tsadv_AbsenceForRecallListener")
-public class AbsenceForRecallListener implements BeforeUpdateEntityListener<AbsenceForRecall> {
+public class AbsenceForRecallListener implements BeforeUpdateEntityListener<AbsenceForRecall>, BeforeInsertEntityListener<AbsenceForRecall> {
 
     private final String APPROVED_STATUS = "APPROVED";
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -28,6 +29,34 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
     @Inject
     protected DatesService datesService;
+
+
+    @Override
+    public void onBeforeInsert(AbsenceForRecall entity, EntityManager entityManager) {
+        if(isApproved(entity,entityManager)){
+            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity);
+
+            setupUnirest();
+            HttpResponse<String> response = Unirest
+                    .post("http://10.2.200.101:8290/api/ahruco/absence/recall/request")
+                    .body(absenceForRecallJson)
+                    .asString();
+
+            BaseResult baseResult = new BaseResult();
+            String methodName = "tsadv_AbsenceForRecallListener.onBeforeInsert";
+            String responseBody = response.getBody();
+            if (responseBody.contains("\"success\":\"true\"")) {
+                integrationRestService.prepareSuccess(baseResult,
+                        methodName,
+                        absenceForRecallJson);
+            } else {
+                integrationRestService.prepareError(baseResult,
+                        methodName,
+                        absenceForRecallJson,
+                        responseBody);
+            }
+        }
+    }
 
     @Override
     public void onBeforeUpdate(AbsenceForRecall entity, EntityManager entityManager) {
