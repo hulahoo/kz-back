@@ -8,6 +8,13 @@
         <datasource id="learningObjectDs"
                     class="kz.uco.tsadv.modules.learning.model.LearningObject"
                     view="learningObject.browse"/>
+        <collectionDatasource id="scormQuestionMappingDc"
+                              class="kz.uco.tsadv.modules.learning.model.ScormQuestionMapping"
+                              view="scormQuestionMapping.edit">
+            <query>
+                <![CDATA[select e from tsadv_ScormQuestionMapping e where e.learningObject = :ds$learningObjectDs]]>
+            </query>
+        </collectionDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -31,10 +38,10 @@
                         <field id="html"
                                property="html">
                             <resizableTextArea id="htmlText"
-                                      datasource="learningObjectDs"
-                                      property="html"
-                                      height="500px"
-                                      visible="false"/>
+                                               datasource="learningObjectDs"
+                                               property="html"
+                                               height="500px"
+                                               visible="false"/>
                         </field>
                         <field id="text"
                                property="text">
@@ -52,6 +59,25 @@
                             caption="msg://play"
                             invoke="play"/>
                 </vbox>
+                <groupBox id="groupBox" spacing="true" expand="scormQuestionMappingTable" visible="false">
+                    <table id="scormQuestionMappingTable" width="100%">
+                        <actions>
+                            <action id="create" caption="msg://create" invoke="scormQuestionMappingCreate"/>
+                            <action id="edit"/>
+                            <action id="remove"/>
+                        </actions>
+                        <columns>
+                            <column id="code"/>
+                            <column id="question"/>
+                        </columns>
+                        <rows datasource="scormQuestionMappingDc"/>
+                        <buttonsPanel>
+                            <button action="scormQuestionMappingTable.create"/>
+                            <button action="scormQuestionMappingTable.edit"/>
+                            <button action="scormQuestionMappingTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                </groupBox>
             </tab>
             <tab id="description"
                  caption="msg://LearningObject.description"
