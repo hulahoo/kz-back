@@ -344,4 +344,21 @@
             <param name="personGroupId" type="java.util.UUID"/>
         </params>
     </query>
+    <query name="absenceTypes" entity="tsadv$DicAbsenceType" view="_local">
+        <jpql>
+            <![CDATA[
+            select e from tsadv$DicAbsenceType e
+            where e.useInSelfService = 'TRUE'
+             and e.company.id = ( select o.company.id from base$AssignmentExt e
+                    join e.organizationGroup o
+                    where e.personGroup.id = :personGroupId
+                        and current_date between e.startDate and e.endDate
+                        and e.assignmentStatus.code <> 'TERMINATED'
+                        and e.primaryFlag = 'TRUE')
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
 </queries>
