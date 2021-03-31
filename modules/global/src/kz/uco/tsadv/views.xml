@@ -5286,14 +5286,7 @@
                   view="_minimal">
         </property>
         <property name="type"
-                  view="_minimal">
-            <property name="useInSelfService"/>
-            <property name="useInBalance"/>
-            <property name="ignoreHolidays"/>
-            <property name="code"/>
-            <property name="vacationDurationType"/>
-            <property name="isRequiredOrderNumber"/>
-        </property>
+                  view="_local"/>
         <property name="attachment"
                   view="_minimal"/>
         <property name="status"
