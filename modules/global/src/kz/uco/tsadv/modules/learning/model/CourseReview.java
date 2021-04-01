@@ -1,9 +1,7 @@
 package kz.uco.tsadv.modules.learning.model;
 
 import com.haulmont.cuba.core.entity.StandardEntity;
-import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
-import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -14,12 +12,10 @@ import javax.persistence.*;
 public class CourseReview extends StandardEntity {
     private static final long serialVersionUID = 3445274219830523927L;
 
-    @OnDelete(DeletePolicy.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "COURSE_ID")
     protected kz.uco.tsadv.modules.learning.model.Course course;
 
-    @OnDelete(DeletePolicy.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "PERSON_GROUP_ID")
     protected PersonGroupExt personGroup;
