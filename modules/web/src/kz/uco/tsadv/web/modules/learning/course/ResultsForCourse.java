@@ -107,8 +107,8 @@ public class ResultsForCourse extends AbstractWindow {
                                         if (attempt.getEnrollment().getPersonGroup().equals(event.getItem().getPersonGroup()) &&
                                                 attempt.getCourseSection().equals(section)) {
                                             if (isTest) {
-                                                if (max < (attempt.getTestResult() != null ? attempt.getTestResult() : 0)) {
-                                                    max = (attempt.getTestResult() != null ? attempt.getTestResult() : 0);
+                                                if (max < (attempt.getTestResult() != null ? attempt.getTestResult().intValue() : 0)) {
+                                                    max = (attempt.getTestResult() != null ? attempt.getTestResult().intValue() : 0);
                                                 }
                                             } else {
                                                 if (!isSuccess && attempt.getSuccess() != null ? attempt.getSuccess() : false) {
@@ -280,8 +280,8 @@ public class ResultsForCourse extends AbstractWindow {
                     if (attempt.getEnrollment().getPersonGroup().equals(person) &&
                             attempt.getCourseSection().equals(section)) {
                         if (isTest) {
-                            if (max < attempt.getTestResult()) {
-                                max = attempt.getTestResult();
+                            if (max < attempt.getTestResult().intValue()) {
+                                max = attempt.getTestResult().intValue();
                             }
                         } else {
                             if (!isSuccessed && attempt.getSuccess()) {
