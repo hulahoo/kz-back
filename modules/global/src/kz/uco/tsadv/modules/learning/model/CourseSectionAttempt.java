@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.entity.annotation.Listeners;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -27,10 +28,10 @@ public class CourseSectionAttempt extends AbstractParentEntity {
     protected Test test;
 
     @Column(name = "TEST_RESULT")
-    protected Integer testResult;
+    protected BigDecimal testResult;
 
     @Column(name = "TEST_RESULT_PERCENT")
-    protected Integer testResultPercent;
+    protected BigDecimal testResultPercent;
 
     @Column(name = "TIME_SPENT")
     protected Long timeSpent;
@@ -53,15 +54,22 @@ public class CourseSectionAttempt extends AbstractParentEntity {
     @JoinColumn(name = "COURSE_SECTION_SESSION_ID")
     protected CourseSectionSession courseSectionSession;
 
-
-
-    public void setTestResultPercent(Integer testResultPercent) {
+    public void setTestResultPercent(BigDecimal testResultPercent) {
         this.testResultPercent = testResultPercent;
     }
 
-    public Integer getTestResultPercent() {
+    public BigDecimal getTestResultPercent() {
         return testResultPercent;
     }
+
+    public void setTestResult(BigDecimal testResult) {
+        this.testResult = testResult;
+    }
+
+    public BigDecimal getTestResult() {
+        return testResult;
+    }
+
 
     public void setTest(Test test) {
         this.test = test;
@@ -69,14 +77,6 @@ public class CourseSectionAttempt extends AbstractParentEntity {
 
     public Test getTest() {
         return test;
-    }
-
-    public void setTestResult(Integer testResult) {
-        this.testResult = testResult;
-    }
-
-    public Integer getTestResult() {
-        return testResult;
     }
 
     public void setTimeSpent(Long timeSpent) {
@@ -115,6 +115,7 @@ public class CourseSectionAttempt extends AbstractParentEntity {
     }
 
 
+    @Transient
     @MetaProperty(related = "courseSection")
     public String getCourseSectionFormat() {
         return courseSection.getFormat().getLangValue();

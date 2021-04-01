@@ -84,9 +84,9 @@
         <method name="createTestScormAttempt">
             <param name="courseSectionId" type="java.util.UUID"/>
             <param name="enrollmentId" type="java.util.UUID"/>
-            <param name="score" type="java.lang.Integer"/>
-            <param name="minScore" type="java.lang.Integer"/>
-            <param name="maxScore" type="java.lang.Integer"/>
+            <param name="score" type="java.math.BigDecimal"/>
+            <param name="minScore" type="java.math.BigDecimal"/>
+            <param name="maxScore" type="java.math.BigDecimal"/>
             <param name="success" type="java.lang.Boolean"/>
         </method>
         <method name="createScormAttempt">

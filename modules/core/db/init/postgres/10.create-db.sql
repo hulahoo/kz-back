@@ -16044,15 +16044,14 @@ create table TSADV_COURSE_SECTION_ATTEMPT (
     --
     ATTEMPT_DATE date,
     TEST_ID uuid,
-    TEST_RESULT integer,
-    TEST_RESULT_PERCENT integer,
+    TEST_RESULT decimal(19, 2),
+    TEST_RESULT_PERCENT decimal(19, 2),
     TIME_SPENT bigint,
     ACTIVE_ATTEMPT boolean,
     SUCCESS boolean not null,
     ENROLLMENT_ID uuid not null,
     COURSE_SECTION_ID uuid,
     COURSE_SECTION_SESSION_ID uuid,
-    COURSESECTIONFORMAT varchar(255),
     --
     primary key (ID)
 )^
@@ -17851,9 +17850,9 @@ create table TSADV_COURSE_SECTION_SCORM_RESULT (
     ANSWER_TIME_STAMP timestamp,
     ANSWER text,
     IS_CORRECT boolean,
-    SCORE integer,
-    MAX_SCORE integer,
-    MIN_SCORE integer,
+    SCORE decimal(19, 2),
+    MAX_SCORE decimal(19, 2),
+    MIN_SCORE decimal(19, 2),
     --
     primary key (ID)
 )^

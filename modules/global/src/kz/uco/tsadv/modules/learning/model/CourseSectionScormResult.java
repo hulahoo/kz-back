@@ -3,6 +3,7 @@ package kz.uco.tsadv.modules.learning.model;
 import com.haulmont.cuba.core.entity.StandardEntity;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "TSADV_COURSE_SECTION_SCORM_RESULT")
@@ -30,36 +31,36 @@ public class CourseSectionScormResult extends StandardEntity {
     protected Boolean isCorrect = false;
 
     @Column(name = "SCORE")
-    protected Integer score;
+    protected BigDecimal score;
 
     @Column(name = "MAX_SCORE")
-    protected Integer maxScore;
+    protected BigDecimal maxScore;
 
     @Column(name = "MIN_SCORE")
-    protected Integer minScore;
+    protected BigDecimal minScore;
 
-    public Integer getMinScore() {
-        return minScore;
+    public void setScore(BigDecimal score) {
+        this.score = score;
     }
 
-    public void setMinScore(Integer minScore) {
-        this.minScore = minScore;
-    }
-
-    public Integer getMaxScore() {
-        return maxScore;
-    }
-
-    public void setMaxScore(Integer maxScore) {
-        this.maxScore = maxScore;
-    }
-
-    public Integer getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
-        this.score = score;
+    public void setMaxScore(BigDecimal maxScore) {
+        this.maxScore = maxScore;
+    }
+
+    public BigDecimal getMaxScore() {
+        return maxScore;
+    }
+
+    public void setMinScore(BigDecimal minScore) {
+        this.minScore = minScore;
+    }
+
+    public BigDecimal getMinScore() {
+        return minScore;
     }
 
     public ScormQuestionMapping getQuestion() {

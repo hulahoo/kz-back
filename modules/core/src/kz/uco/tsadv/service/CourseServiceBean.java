@@ -27,6 +27,8 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -980,7 +982,7 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, Integer score, Integer minScore, Integer maxScore, Boolean success) {
+    public void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, BigDecimal score, BigDecimal minScore, BigDecimal maxScore, Boolean success) {
         CourseSectionAttempt newAttempt = metadata.create(CourseSectionAttempt.class);
         newAttempt.setCourseSection(dataManager.load(LoadContext.create(CourseSection.class).setId(courseSectionId).setView(View.MINIMAL)));
         newAttempt.setEnrollment(dataManager.load(LoadContext.create(Enrollment.class).setId(enrollmentId).setView(View.MINIMAL)));
@@ -988,7 +990,7 @@ public class CourseServiceBean implements CourseService {
         newAttempt.setAttemptDate(new Date());
         newAttempt.setSuccess(success);
         newAttempt.setTestResult(score);
-        newAttempt.setTestResultPercent(score == null ? null : ((score - minScore) * 100) / (maxScore - minScore));
+        newAttempt.setTestResultPercent(score == null ? null : (score.subtract(minScore).multiply(BigDecimal.valueOf(100).divide(maxScore.subtract(minScore), 2, RoundingMode.DOWN))));
 
         dataManager.commit(newAttempt);
     }

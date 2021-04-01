@@ -1,13 +1,14 @@
 package kz.uco.tsadv.pojo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class ScormInputData implements Serializable {
     private String fieldId;
     private String answer;
-    private Integer score;
-    private Integer maxScore;
-    private Integer minScore;
+    private BigDecimal score;
+    private BigDecimal maxScore;
+    private BigDecimal minScore;
 
     public String getFieldId() {
         return fieldId;
@@ -25,27 +26,27 @@ public class ScormInputData implements Serializable {
         this.answer = answer;
     }
 
-    public Integer getScore() {
+    public BigDecimal getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(BigDecimal score) {
         this.score = score;
     }
 
-    public Integer getMaxScore() {
+    public BigDecimal getMaxScore() {
         return maxScore;
     }
 
-    public void setMaxScore(Integer maxScore) {
+    public void setMaxScore(BigDecimal maxScore) {
         this.maxScore = maxScore;
     }
 
-    public Integer getMinScore() {
+    public BigDecimal getMinScore() {
         return minScore;
     }
 
-    public void setMinScore(Integer minScore) {
+    public void setMinScore(BigDecimal minScore) {
         this.minScore = minScore;
     }
 }
