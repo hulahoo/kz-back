@@ -3869,7 +3869,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 //todo check this default values for non null constraint
                 StandardOffset offset = dataManager.load(StandardOffset.class)
                         .query("select e from tsadv$StandardOffset e where e.offsetDisplay = :ofd")
-                        .parameter("ofd","STD5")
+                        .parameter("ofd", "STD5")
                         .view(View.BASE)
                         .list().stream().findFirst().orElse(null);
 
@@ -4716,20 +4716,22 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
 
                     List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
-                            .query(String.format("select e from base$PersonGroupExt e " +
-                                            " join e.list l " +
-                                            " where current_date between l.startDate and l.endDate " +
-                                            " and l.employeeNumber = :empNumber " +
-                                            " and e.company.code in (%s)",
-                                    codes.stream()
-                                            .map(s -> String.format("'%s'", s))
-                                            .collect(Collectors.joining())))
+                            .query("select e from base$PersonGroupExt e " +
+                                    " join e.list l " +
+                                    " where current_date between l.startDate and l.endDate " +
+                                    " and l.employeeNumber = :empNumber " +
+                                    " and e.company.code in :codes")
                             .parameter("empNumber", empNumber)
+                            .parameter("codes", codes)
                             .view("personGroupExt-for-integration-rest")
                             .list();
 
-                    if (personGroupExtList.size() == 1 && !tsadvUser.getPersonGroup().equals(personGroupExtList.get(0))) {
+                    if (personGroupExtList.size() == 1) {
                         tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                    } else if (personGroupExtList.size() < 1) {
+                        return prepareError(result, methodName, userData,
+                                "no base$PersonGroupExt with employeeNumber and company code " + empNumber
+                                        + " " + codes);
                     } else {
                         continue;
                     }
@@ -4760,20 +4762,22 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
 
                     List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
-                            .query(String.format("select e from base$PersonGroupExt e " +
-                                            " join e.list l " +
-                                            " where current_date between l.startDate and l.endDate " +
-                                            " and l.employeeNumber = :empNumber " +
-                                            " and e.company.code in (%s)",
-                                    codes.stream()
-                                            .map(s -> String.format("'%s'", s))
-                                            .collect(Collectors.joining())))
+                            .query("select e from base$PersonGroupExt e " +
+                                    " join e.list l " +
+                                    " where current_date between l.startDate and l.endDate " +
+                                    " and l.employeeNumber = :empNumber " +
+                                    " and e.company.code in :codes")
                             .parameter("empNumber", empNumber)
+                            .parameter("codes", codes)
                             .view("personGroupExt-for-integration-rest")
                             .list();
 
                     if (personGroupExtList.size() == 1) {
                         tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                    } else if (personGroupExtList.size() < 1) {
+                        return prepareError(result, methodName, userData,
+                                "no base$PersonGroupExt with employeeNumber and company code " + empNumber
+                                        + " " + codes);
                     } else {
                         continue;
                     }

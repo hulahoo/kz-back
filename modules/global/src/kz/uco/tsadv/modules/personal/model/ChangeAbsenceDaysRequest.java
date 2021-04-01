@@ -1,9 +1,9 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
-import kz.uco.base.entity.dictionary.DicPartyAddressType;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicPurposeAbsence;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+@Listeners("tsadv_ChangeAbsenceDaysRequestListener")
 @Table(name = "TSADV_CHANGE_ABSENCE_DAYS_REQUEST")
 @Entity(name = "tsadv_ChangeAbsenceDaysRequest")
 public class ChangeAbsenceDaysRequest extends AbstractBprocRequest {

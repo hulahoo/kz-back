@@ -267,7 +267,9 @@ public class DismissalListener implements BeforeInsertEntityListener<Dismissal>,
                 queryString,
                 params,
                 "assignment.full");
-        assignmentExt.setWriteHistory(false);
+        if (assignmentExt != null) {
+            assignmentExt.setWriteHistory(false);
+        }
         return assignmentExt;
     }
 
