@@ -7,6 +7,7 @@ import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.pojo.CoursePojo;
 import kz.uco.tsadv.pojo.ScormInputData;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -66,5 +67,5 @@ public interface CourseService {
 
     void createScormAttempt(UUID courseSectionId, UUID enrollmentId, List<ScormInputData> inputData, Boolean success);
 
-    void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, Integer score, Integer minScore, Integer maxScore, Boolean success);
+    void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, BigDecimal score, BigDecimal minScore, BigDecimal maxScore, Boolean success);
 }

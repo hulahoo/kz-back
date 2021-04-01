@@ -1,6 +1,7 @@
 package kz.uco.tsadv.lms.pojo;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -9,7 +10,7 @@ public class LearningHistoryPojo implements Serializable {
     private Date endDate;
     private String course;
     private String trainer;
-    private Integer result;
+    private BigDecimal result;
     private String certificate;
 
     public Date getStartDate() {
@@ -44,11 +45,11 @@ public class LearningHistoryPojo implements Serializable {
         this.trainer = trainer;
     }
 
-    public Integer getResult() {
+    public BigDecimal getResult() {
         return result;
     }
 
-    public void setResult(Integer result) {
+    public void setResult(BigDecimal result) {
         this.result = result;
     }
 
@@ -92,7 +93,7 @@ public class LearningHistoryPojo implements Serializable {
             return this;
         }
 
-        public Builder result(Integer result) {
+        public Builder result(BigDecimal result) {
             learningHistoryPojo.setResult(result);
             return this;
         }

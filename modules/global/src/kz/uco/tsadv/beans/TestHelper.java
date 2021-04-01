@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import java.math.BigDecimal;
+
 import static kz.uco.base.common.Null.nullReplace;
 
 @Component(TestHelper.NAME)
@@ -16,7 +18,7 @@ public class TestHelper {
     public static final String NAME = "tsadv_TestHelper";
 
     @Nullable
-    public Integer calculateTestResultPercent(@Nonnull CourseSectionAttempt courseSectionAttempt) {
+    public BigDecimal calculateTestResultPercent(@Nonnull CourseSectionAttempt courseSectionAttempt) {
         Integer maxScore = 0;
 
         if (courseSectionAttempt.getTest() == null) return null;
@@ -31,7 +33,7 @@ public class TestHelper {
         }
 
         if (maxScore != 0) {
-            return nullReplace(courseSectionAttempt.getTestResult(), 0) * 100 / maxScore;
+            return nullReplace(courseSectionAttempt.getTestResult(), BigDecimal.ZERO).multiply(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(maxScore));
         } else {
             return null;
         }

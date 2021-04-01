@@ -19,6 +19,7 @@ import kz.uco.tsadv.service.CourseService;
 import org.apache.commons.lang3.BooleanUtils;
 
 import javax.inject.Inject;
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -440,7 +441,7 @@ public class StartOnlineSection extends AbstractWindow {
                     }
                 }
                 lastAttempt.setTest(test);
-                lastAttempt.setTestResult(totalScore);
+                lastAttempt.setTestResult(BigDecimal.valueOf(totalScore));
                 lastAttempt.setTestResultPercent(testHelper.calculateTestResultPercent(lastAttempt));
                 lastAttempt.setTimeSpent(lastAttempt.getTimeSpent() + 1);
                 lastAttempt.setActiveAttempt(true);
@@ -468,7 +469,7 @@ public class StartOnlineSection extends AbstractWindow {
                     message.append(String.format(getMessage("test.correct.answer.score"),
                             Integer.toString(totalScore))).append(", ");
                     message.append(String.format(getMessage("test.correct.answer.scorePercent"),
-                            Integer.toString(lastAttempt.getTestResultPercent())));
+                            lastAttempt.getTestResultPercent().toPlainString()));
                     Label resultLabel = createLabel(message.toString());
                     resultLabel.setHtmlEnabled(true);
                     vBoxLayout.add(resultLabel);
@@ -547,7 +548,7 @@ public class StartOnlineSection extends AbstractWindow {
 
                     if (test != null) {
                         lastAttempt.setTest(test);
-                        lastAttempt.setTestResult(totalScore);
+                        lastAttempt.setTestResult(BigDecimal.valueOf(totalScore));
                         lastAttempt.setTestResultPercent(testHelper.calculateTestResultPercent(lastAttempt));
                         lastAttempt.setActiveAttempt(true);
                         lastAttempt.setSuccess(test.getTargetScore() == null || totalScore >= test.getTargetScore());
@@ -568,7 +569,7 @@ public class StartOnlineSection extends AbstractWindow {
                             message.append(String.format(getMessage("test.correct.answer.score"),
                                     Integer.toString(totalScore))).append(", ");
                             message.append(String.format(getMessage("test.correct.answer.scorePercent"),
-                                    Integer.toString(lastAttempt.getTestResultPercent())));
+                                    lastAttempt.getTestResultPercent().toPlainString()));
                             Label resultLabel = createLabel(message.toString());
                             resultLabel.setHtmlEnabled(true);
                             vBoxLayout.add(resultLabel);

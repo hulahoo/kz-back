@@ -19,10 +19,13 @@ public class OrganizationGroupGoalLinkEdit extends AbstractEditor<OrganizationGr
     @Override
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
-        if (isCreat)
-            ((CollectionDatasource<OrganizationGroupGoalLink, UUID>) getParentDs()).getItems().forEach(gl -> {
-                if (getItem().getGoal().equals(gl.getGoal()))
-                    errors.add(getMessage("ValidationError.goalLink.uniqueGoal"));
-            });
+        if (isCreat) {
+            if (((CollectionDatasource<OrganizationGroupGoalLink, UUID>) getParentDs()) != null) {
+                ((CollectionDatasource<OrganizationGroupGoalLink, UUID>) getParentDs()).getItems().forEach(gl -> {
+                    if (getItem().getGoal().equals(gl.getGoal()))
+                        errors.add(getMessage("ValidationError.goalLink.uniqueGoal"));
+                });
+            }
+        }
     }
 }
