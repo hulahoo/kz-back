@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class TestScorePojo implements Serializable {
     protected Integer score = 0;
     protected Integer maxScore = 0;
+    protected Boolean success = false;
 
     public Integer getScore() {
         return score;
@@ -20,5 +21,13 @@ public class TestScorePojo implements Serializable {
 
     public void setMaxScore(Integer maxScore) {
         this.maxScore = maxScore;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(Boolean success) {
+        this.success = success;
     }
 }

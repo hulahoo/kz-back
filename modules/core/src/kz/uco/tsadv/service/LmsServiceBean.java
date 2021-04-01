@@ -453,8 +453,10 @@ public class LmsServiceBean implements LmsService {
                         }
                     });
                 }
+                response.setSuccess(isSucceed(test, response.getScore()));
+
                 csa.setTestResult(response.getScore());
-                csa.setSuccess(isSucceed(test, response.getScore()));
+                csa.setSuccess(response.getSuccess());
                 csa.setActiveAttempt(true);
                 em.merge(csa);
 

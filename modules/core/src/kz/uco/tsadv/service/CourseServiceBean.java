@@ -988,7 +988,7 @@ public class CourseServiceBean implements CourseService {
         newAttempt.setAttemptDate(new Date());
         newAttempt.setSuccess(success);
         newAttempt.setTestResult(score);
-        newAttempt.setTestResultPercent(((score - minScore) * 100) / (maxScore - minScore));
+        newAttempt.setTestResultPercent(score == null ? null : ((score - minScore) * 100) / (maxScore - minScore));
 
         dataManager.commit(newAttempt);
     }
