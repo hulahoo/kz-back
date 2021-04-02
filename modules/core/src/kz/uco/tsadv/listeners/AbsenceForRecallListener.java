@@ -10,6 +10,7 @@ import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.modules.integration.jsonobject.AbsenceForRecallDataJson;
+import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.service.DatesService;
@@ -23,8 +24,13 @@ import java.util.Date;
 @Component("tsadv_AbsenceForRecallListener")
 public class AbsenceForRecallListener implements BeforeUpdateEntityListener<AbsenceForRecall>, BeforeInsertEntityListener<AbsenceForRecall> {
 
-    private final String APPROVED_STATUS = "APPROVED";
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    protected String APPROVED_STATUS = "APPROVED";
+    protected String ABSENCE_TYPE_MATERNITY = "MATERNITY";
+    protected String ABSENCE_TYPE_MATERNITY_LEAVE = "MATERNITY LEAVE";
+    protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+    protected String ABSENCE_RECALL_API_URL = "http://10.2.200.101:8290/api/ahruco/absence/recall/request";
+    protected String MATERNITY_RECALL_API_URL = "http://10.2.200.101:8290/api/ahruco/maternity/recall/request";
 
     @Inject
     IntegrationRestService integrationRestService;
@@ -36,11 +42,12 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
     @Override
     public void onBeforeInsert(AbsenceForRecall entity, EntityManager entityManager) {
         if(isApproved(entity,entityManager)){
-            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity,entityManager);
+            boolean absenceTypeIsMaternityOrMaternityLeave = absenceTypeIsMaternityOrMaternityLeave(entity,entityManager);
+            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity,entityManager,absenceTypeIsMaternityOrMaternityLeave);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post("http://10.2.200.101:8290/api/ahruco/absence/recall/request")
+                    .post(getApiUrl(absenceTypeIsMaternityOrMaternityLeave))
                     .body(absenceForRecallJson)
                     .asString();
 
@@ -63,11 +70,12 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
     @Override
     public void onBeforeUpdate(AbsenceForRecall entity, EntityManager entityManager) {
         if(isApproved(entity,entityManager)){
-            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity,entityManager);
+            boolean absenceTypeIsMaternityOrMaternityLeave = absenceTypeIsMaternityOrMaternityLeave(entity,entityManager);
+            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity,entityManager,absenceTypeIsMaternityOrMaternityLeave);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
-                    .post("http://10.2.200.101:8290/api/ahruco/absence/recall/request")
+                    .post(getApiUrl(absenceTypeIsMaternityOrMaternityLeave))
                     .body(absenceForRecallJson)
                     .asString();
 
@@ -93,7 +101,18 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
         return APPROVED_STATUS.equals(entityManager.reloadNN(status, View.LOCAL).getCode());
     }
 
-    protected AbsenceForRecallDataJson getAbsenceForRecallDataJson(AbsenceForRecall entity,EntityManager entityManager) {
+    protected boolean absenceTypeIsMaternityOrMaternityLeave(AbsenceForRecall entity, EntityManager entityManager){
+        DicAbsenceType absenceType = entity.getAbsenceType();
+        if(absenceType == null) return false;
+        String absenceTypeCode = entityManager.reloadNN(absenceType,View.LOCAL).getCode();
+        return (ABSENCE_TYPE_MATERNITY.equals(absenceTypeCode) || ABSENCE_TYPE_MATERNITY_LEAVE.equals(absenceTypeCode));
+    }
+
+    protected String getApiUrl(boolean absenceTypeIsMaternityOrMaternityLeave){
+        return absenceTypeIsMaternityOrMaternityLeave ? MATERNITY_RECALL_API_URL : ABSENCE_RECALL_API_URL;
+    }
+
+    protected AbsenceForRecallDataJson getAbsenceForRecallDataJson(AbsenceForRecall entity,EntityManager entityManager,boolean absenceTypeIsMaternityOrMaternityLeave) {
             AbsenceForRecallDataJson absenceForRecallJson = new AbsenceForRecallDataJson();
             String personId = (entity.getEmployee() != null && entity.getEmployee().getLegacyId() != null) ? entity.getEmployee().getLegacyId() : "";
             absenceForRecallJson.setPersonId(personId);
@@ -112,14 +131,16 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
             absenceForRecallJson.setPurpose(purpose);
             absenceForRecallJson.setEmployeeAgree(wrapBoolean(entity.getIsAgree()));
             absenceForRecallJson.setEmployeeInformed(wrapBoolean(entity.getIsFamiliarization()));
-            String recallDaysMain = "";
-            if(entity.getRecallDateFrom() != null && entity.getRecallDateTo() != null) {
-                recallDaysMain = String.valueOf(datesService.getFullDaysCount(entity.getRecallDateFrom(), entity.getRecallDateTo()));
+            if(!absenceTypeIsMaternityOrMaternityLeave) {
+                String recallDaysMain = "";
+                if (entity.getRecallDateFrom() != null && entity.getRecallDateTo() != null) {
+                    recallDaysMain = String.valueOf(datesService.getFullDaysCount(entity.getRecallDateFrom(), entity.getRecallDateTo()));
+                }
+                absenceForRecallJson.setRecallDaysMain(recallDaysMain);
+                absenceForRecallJson.setRecallDaysEcological("");
+                absenceForRecallJson.setRecallDaysHarmful("");
+                absenceForRecallJson.setRecallDaysDisability("");
             }
-            absenceForRecallJson.setRecallDaysMain(recallDaysMain);
-            absenceForRecallJson.setRecallDaysEcological("");
-            absenceForRecallJson.setRecallDaysHarmful("");
-            absenceForRecallJson.setRecallDaysDisability("");
             String companyCode = "";
             if(entity.getEmployee() != null && entity.getEmployee().getCompany() != null){
                 DicCompany company = entity.getEmployee().getCompany();
