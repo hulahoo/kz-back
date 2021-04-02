@@ -4664,6 +4664,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         BaseResult result = new BaseResult();
         CommitContext commitContext = new CommitContext();
         ArrayList<UserJson> users = new ArrayList<>();
+        UserDataJson completedUserData = new UserDataJson();
         ArrayList<UserJson> completedUsers = new ArrayList<>();
 
         if (userData.getUsers() != null) {
@@ -4710,8 +4711,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
                         codes.add("KBL");
                         codes.add("KAL");
-                    } else if ("KMM".equals(userJson.getEmployeeNumber().substring(0, 3))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(3));
+                    } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
                         codes.add("KMM");
                     }
 
@@ -4728,10 +4729,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     if (personGroupExtList.size() == 1) {
                         tsadvUser.setPersonGroup(personGroupExtList.get(0));
-                    } else if (personGroupExtList.size() < 1) {
-                        return prepareError(result, methodName, userData,
-                                "no base$PersonGroupExt with employeeNumber and company code " + empNumber
-                                        + " " + codes);
                     } else {
                         continue;
                     }
@@ -4756,8 +4753,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
                         codes.add("KBL");
                         codes.add("KAL");
-                    } else if ("KMM".equals(userJson.getEmployeeNumber().substring(0, 3))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(3));
+                    } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
+                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
                         codes.add("KMM");
                     }
 
@@ -4774,10 +4771,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     if (personGroupExtList.size() == 1) {
                         tsadvUser.setPersonGroup(personGroupExtList.get(0));
-                    } else if (personGroupExtList.size() < 1) {
-                        return prepareError(result, methodName, userData,
-                                "no base$PersonGroupExt with employeeNumber and company code " + empNumber
-                                        + " " + codes);
                     } else {
                         continue;
                     }
@@ -4786,13 +4779,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     completedUsers.add(userJson);
                 }
             }
+            completedUserData.setUsers(completedUsers);
             dataManager.commit(commitContext);
         } catch (Exception e) {
             return prepareError(result, methodName, userData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, completedUsers);
+        return prepareSuccess(result, methodName, completedUserData);
     }
 
     private String getEmpNumber(String jsonEmpNumber) {
