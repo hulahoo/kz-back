@@ -17,10 +17,10 @@ public class AbsenceForRecallDataJson implements Serializable {
     protected String purpose;
     protected boolean isEmployeeAgree;
     protected boolean isEmployeeInformed;
-    protected int recallDaysMain;
-    protected int recallDaysEcological;
-    protected int recallDaysHarmful;
-    protected int recallDaysDisability;
+    protected String recallDaysMain;
+    protected String recallDaysEcological;
+    protected String recallDaysHarmful;
+    protected String recallDaysDisability;
     protected String companyCode;
 
     public String getPersonId() {
@@ -127,35 +127,35 @@ public class AbsenceForRecallDataJson implements Serializable {
         isEmployeeInformed = employeeInformed;
     }
 
-    public int getRecallDaysMain() {
+    public String getRecallDaysMain() {
         return recallDaysMain;
     }
 
-    public void setRecallDaysMain(int recallDaysMain) {
+    public void setRecallDaysMain(String recallDaysMain) {
         this.recallDaysMain = recallDaysMain;
     }
 
-    public int getRecallDaysEcological() {
+    public String getRecallDaysEcological() {
         return recallDaysEcological;
     }
 
-    public void setRecallDaysEcological(int recallDaysEcological) {
+    public void setRecallDaysEcological(String recallDaysEcological) {
         this.recallDaysEcological = recallDaysEcological;
     }
 
-    public int getRecallDaysHarmful() {
+    public String getRecallDaysHarmful() {
         return recallDaysHarmful;
     }
 
-    public void setRecallDaysHarmful(int recallDaysHarmful) {
+    public void setRecallDaysHarmful(String recallDaysHarmful) {
         this.recallDaysHarmful = recallDaysHarmful;
     }
 
-    public int getRecallDaysDisability() {
+    public String getRecallDaysDisability() {
         return recallDaysDisability;
     }
 
-    public void setRecallDaysDisability(int recallDaysDisability) {
+    public void setRecallDaysDisability(String recallDaysDisability) {
         this.recallDaysDisability = recallDaysDisability;
     }
 
