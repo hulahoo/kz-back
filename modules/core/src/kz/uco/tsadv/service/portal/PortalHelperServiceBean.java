@@ -7,13 +7,12 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.entity.abstraction.AbstractDictionary;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.tsadv.config.TsadvGlobalConfig;
 import kz.uco.tsadv.service.EmployeeService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service(PortalHelperService.NAME)
 public class PortalHelperServiceBean implements PortalHelperService {
@@ -24,6 +23,8 @@ public class PortalHelperServiceBean implements PortalHelperService {
     protected EmployeeService employeeService;
     @Inject
     protected DataManager dataManager;
+    @Inject
+    protected TsadvGlobalConfig tsadvGlobalConfig;
 
     @Override
     public <T extends BaseGenericIdEntity<K>, K> T newEntity(String entityName) {
@@ -32,20 +33,29 @@ public class PortalHelperServiceBean implements PortalHelperService {
         return entity;
     }
 
-    //todo
     @Override
-    public <T extends AbstractDictionary> List<T> loadDictionary(String dictionaryName, UUID personGroupId) {
+    public <T extends AbstractDictionary> List<T> loadDictionaries(String dictionaryName,
+                                                                   UUID personGroupId) {
         DicCompany company = employeeService.getCompanyByPersonGroupId(personGroupId);
         MetaClass metaClass = metadata.getClassNN(dictionaryName);
         Class<T> javaClass = metaClass.getJavaClass();
 
+        UUID generalCompanyId = tsadvGlobalConfig.getGeneralCompanyId();
+
         List<UUID> companyIds = new ArrayList<>();
         if (company != null)
             companyIds.add(company.getId());
+        if (generalCompanyId != null)
+            companyIds.add(generalCompanyId);
+
+        Map<String, Object> queryParameters = new HashMap<>();
+        queryParameters.put("companyIds", companyIds);
+
+        String queryString = "select e from " + dictionaryName + " e where e.company.id in :companyIds ";
 
         return dataManager.load(javaClass)
-                .query(String.format("select e from %s e where e.company.id in :companyIds", metaClass.getName()))
-                .parameter("companyIds", companyIds)
+                .query(queryString)
+                .setParameters(queryParameters)
                 .view(View.LOCAL)
                 .list();
     }

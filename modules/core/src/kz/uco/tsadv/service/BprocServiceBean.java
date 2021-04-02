@@ -22,7 +22,7 @@ import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
 import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
-import kz.uco.tsadv.config.AppConfig;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -80,7 +80,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Inject
     protected GlobalConfig globalConfig;
     @Inject
-    protected AppConfig appConfig;
+    protected FrontConfig frontConfig;
     @Inject
     protected BprocRepositoryService bprocRepositoryService;
     @Inject
@@ -352,7 +352,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 notificationParams);
 
         String requestLink = getRequestLink(globalConfig.getWebAppUrl(), entity, activity);
-        String requestFrontLink = getRequestLink(appConfig.getFrontAppUrl(), entity, activity);
+        String requestFrontLink = getRequestLink(frontConfig.getFrontAppUrl(), entity, activity);
 
         notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));

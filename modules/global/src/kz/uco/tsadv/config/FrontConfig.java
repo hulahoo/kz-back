@@ -10,10 +10,10 @@ import com.haulmont.cuba.core.config.defaults.DefaultString;
  * @author Alibek Berdaulet
  */
 @Source(type = SourceType.APP)
-public interface AppConfig extends Config {
+public interface FrontConfig extends Config {
 
     /**
-     * @return Front-client connection URL. Used for making external links to the application screens and for other purposes.
+     * @return Front-client connection URL.
      */
     @Property("cuba.frontAppUrl")
     @Source(type = SourceType.DATABASE)
