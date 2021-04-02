@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.modules.integration.jsonobject.ChangeAbsenceDaysRequestDataJson;
@@ -31,7 +32,7 @@ public class ChangeAbsenceDaysRequestListener implements BeforeUpdateEntityListe
     @Override
     public void onBeforeUpdate(ChangeAbsenceDaysRequest entity, EntityManager entityManager) {
         if(isApproved(entity,entityManager)){
-            ChangeAbsenceDaysRequestDataJson changeAbsenceDaysRequestJson = getChangeAbsenceDaysRequestDataJson(entity);
+            ChangeAbsenceDaysRequestDataJson changeAbsenceDaysRequestJson = getChangeAbsenceDaysRequestDataJson(entity,entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -59,7 +60,7 @@ public class ChangeAbsenceDaysRequestListener implements BeforeUpdateEntityListe
     @Override
     public void onBeforeInsert(ChangeAbsenceDaysRequest entity, EntityManager entityManager) {
         if(isApproved(entity,entityManager)){
-            ChangeAbsenceDaysRequestDataJson changeAbsenceDaysRequestJson = getChangeAbsenceDaysRequestDataJson(entity);
+            ChangeAbsenceDaysRequestDataJson changeAbsenceDaysRequestJson = getChangeAbsenceDaysRequestDataJson(entity,entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -89,7 +90,7 @@ public class ChangeAbsenceDaysRequestListener implements BeforeUpdateEntityListe
         return APPROVED_STATUS.equals(entityManager.reloadNN(status, View.LOCAL).getCode());
     }
 
-    protected ChangeAbsenceDaysRequestDataJson getChangeAbsenceDaysRequestDataJson(ChangeAbsenceDaysRequest entity){
+    protected ChangeAbsenceDaysRequestDataJson getChangeAbsenceDaysRequestDataJson(ChangeAbsenceDaysRequest entity, EntityManager entityManager){
         ChangeAbsenceDaysRequestDataJson changeAbsenceDaysRequestJson = new ChangeAbsenceDaysRequestDataJson();
         String personId = (entity.getEmployee() != null && entity.getEmployee().getLegacyId() != null) ? entity.getEmployee().getLegacyId() : "";
         changeAbsenceDaysRequestJson.setPersonId(personId);
@@ -114,9 +115,12 @@ public class ChangeAbsenceDaysRequestListener implements BeforeUpdateEntityListe
         changeAbsenceDaysRequestJson.setEmployeeAgree(isEmployeeAgree);
         boolean isEmployeeInformed = Null.nullReplace(entity.getFamiliarization(),false);
         changeAbsenceDaysRequestJson.setEmployeeInformed(isEmployeeInformed);
-        String companyCode = (entity.getEmployee() != null
-                && entity.getEmployee().getCompany() != null
-                && entity.getEmployee().getCompany().getLegacyId() != null) ? entity.getEmployee().getCompany().getLegacyId() : "";
+        String companyCode = "";
+        if(entity.getEmployee() != null && entity.getEmployee().getCompany() != null){
+            DicCompany company = entity.getEmployee().getCompany();
+            companyCode = entityManager.reloadNN(company,View.LOCAL).getLegacyId();
+            companyCode = Null.nullReplace(companyCode,"");
+        }
         changeAbsenceDaysRequestJson.setCompanyCode(companyCode);
 
         return changeAbsenceDaysRequestJson;
