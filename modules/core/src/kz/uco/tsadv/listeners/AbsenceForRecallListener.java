@@ -6,7 +6,9 @@ import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.modules.integration.jsonobject.AbsenceForRecallDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
@@ -34,7 +36,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
     @Override
     public void onBeforeInsert(AbsenceForRecall entity, EntityManager entityManager) {
         if(isApproved(entity,entityManager)){
-            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity);
+            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity,entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -61,7 +63,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
     @Override
     public void onBeforeUpdate(AbsenceForRecall entity, EntityManager entityManager) {
         if(isApproved(entity,entityManager)){
-            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity);
+            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity,entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -91,7 +93,7 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
         return APPROVED_STATUS.equals(entityManager.reloadNN(status, View.LOCAL).getCode());
     }
 
-    protected AbsenceForRecallDataJson getAbsenceForRecallDataJson(AbsenceForRecall entity) {
+    protected AbsenceForRecallDataJson getAbsenceForRecallDataJson(AbsenceForRecall entity,EntityManager entityManager) {
             AbsenceForRecallDataJson absenceForRecallJson = new AbsenceForRecallDataJson();
             String personId = (entity.getEmployee() != null && entity.getEmployee().getLegacyId() != null) ? entity.getEmployee().getLegacyId() : "";
             absenceForRecallJson.setPersonId(personId);
@@ -110,13 +112,20 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
             absenceForRecallJson.setPurpose(purpose);
             absenceForRecallJson.setEmployeeAgree(wrapBoolean(entity.getIsAgree()));
             absenceForRecallJson.setEmployeeInformed(wrapBoolean(entity.getIsFamiliarization()));
+            String recallDaysMain = "";
             if(entity.getRecallDateFrom() != null && entity.getRecallDateTo() != null) {
-                int recallDaysMain = datesService.getFullDaysCount(entity.getRecallDateFrom(), entity.getRecallDateTo());
-                absenceForRecallJson.setRecallDaysMain(recallDaysMain);
+                recallDaysMain = String.valueOf(datesService.getFullDaysCount(entity.getRecallDateFrom(), entity.getRecallDateTo()));
             }
-            String companyCode = (entity.getEmployee() != null
-                    && entity.getEmployee().getCompany() != null
-                    && entity.getEmployee().getCompany().getLegacyId() != null) ? entity.getEmployee().getCompany().getLegacyId() : "";
+            absenceForRecallJson.setRecallDaysMain(recallDaysMain);
+            absenceForRecallJson.setRecallDaysEcological("");
+            absenceForRecallJson.setRecallDaysHarmful("");
+            absenceForRecallJson.setRecallDaysDisability("");
+            String companyCode = "";
+            if(entity.getEmployee() != null && entity.getEmployee().getCompany() != null){
+                DicCompany company = entity.getEmployee().getCompany();
+                companyCode = entityManager.reloadNN(company,View.LOCAL).getLegacyId();
+                companyCode = Null.nullReplace(companyCode,"");
+            }
             absenceForRecallJson.setCompanyCode(companyCode);
 
             return absenceForRecallJson;
