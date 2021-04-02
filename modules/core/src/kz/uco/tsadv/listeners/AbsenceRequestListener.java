@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.listener.BeforeInsertEntityListener;
 import com.haulmont.cuba.core.listener.BeforeUpdateEntityListener;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.modules.integration.jsonobject.AbsenceRequestDataJson;
@@ -30,7 +31,7 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
     @Override
     public void onBeforeUpdate(AbsenceRequest entity, EntityManager entityManager) {
         if (isApproved(entity, entityManager)) {
-            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity);
+            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity,entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -57,7 +58,7 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
     @Override
     public void onBeforeInsert(AbsenceRequest entity, EntityManager entityManager) {
         if (isApproved(entity, entityManager)) {
-            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity);
+            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity,entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -87,7 +88,7 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
         return APPROVED_STATUS.equals(entityManager.reloadNN(status, View.LOCAL).getCode());
     }
 
-    protected AbsenceRequestDataJson getAbsenceRequestDataJson(AbsenceRequest entity) {
+    protected AbsenceRequestDataJson getAbsenceRequestDataJson(AbsenceRequest entity,EntityManager entityManager) {
         AbsenceRequestDataJson absenceJson = new AbsenceRequestDataJson();
         String personId = (entity.getPersonGroup() != null && entity.getPersonGroup().getLegacyId() != null) ? entity.getPersonGroup().getLegacyId() : "";
         absenceJson.setPersonId(personId);
@@ -106,9 +107,12 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
         boolean isProvideSheetOfTemporary = Null.nullReplace(entity.getOriginalSheet(),false);
         absenceJson.setIsProvideSheetOfTemporary(isProvideSheetOfTemporary);
         absenceJson.setIsOnRotation(false);
-        String companyCode = (entity.getPersonGroup() != null
-                && entity.getPersonGroup().getCompany() != null
-                && entity.getPersonGroup().getCompany().getLegacyId() != null) ? entity.getPersonGroup().getCompany().getLegacyId() : "";
+        String companyCode = "";
+        if(entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null){
+            DicCompany company = entity.getPersonGroup().getCompany();
+            companyCode = entityManager.reloadNN(company,View.LOCAL).getLegacyId();
+            companyCode = Null.nullReplace(companyCode,"");
+        }
         absenceJson.setCompanyCode(companyCode);
         return absenceJson;
     }
