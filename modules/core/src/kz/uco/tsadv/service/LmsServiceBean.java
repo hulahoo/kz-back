@@ -41,6 +41,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -379,7 +380,7 @@ public class LmsServiceBean implements LmsService {
             test.getSections().forEach(ts -> {
                 TestSection testSection = dataManager.reload(ts, "testSection.with.questions");
                 if (testSection.getDynamicLoad() != null && testSection.getDynamicLoad()) {
-                    response.setMaxScore(response.getMaxScore() + testSection.getGenerateCount());
+                    response.setMaxScore(response.getMaxScore().add(BigDecimal.valueOf(testSection.getGenerateCount())));
                     AttemptTestSectionPojo attemptTestSection = answeredTest.getTestSections().stream()
                             .filter(attemptTestSectionTemp ->
                                     attemptTestSectionTemp.getTestSectionId().equals(testSection.getId().toString()))
@@ -409,12 +410,12 @@ public class LmsServiceBean implements LmsService {
                                 }
                                 qf.checkQuestion(question, personAnswer, testSection, answers);
                                 em.merge(personAnswer);
-                                response.setScore(response.getScore() + (personAnswer.getCorrect() ? 1 : 0));
+                                response.setScore(response.getScore().add(personAnswer.getCorrect() ? BigDecimal.ONE : BigDecimal.ZERO));
                             }
                         });
                     }
                 } else {
-                    response.setMaxScore(response.getMaxScore() + testSection.getQuestions().size());
+                    response.setMaxScore(response.getMaxScore().add(BigDecimal.valueOf(testSection.getQuestions().size())));
                     testSection.getQuestions().forEach(testSectionQuestion -> {
                         AttemptQuestionPojo questionAndAnswer = answeredTest.getTestSections().stream()
                                 .filter(attemptTestSectionTemp ->
@@ -449,12 +450,14 @@ public class LmsServiceBean implements LmsService {
                             }
                             qf.checkQuestion(question, personAnswer, testSection, answers);
                             em.merge(personAnswer);
-                            response.setScore(response.getScore() + (personAnswer.getCorrect() ? 1 : 0));
+                            response.setScore(response.getScore().add(personAnswer.getCorrect() ? BigDecimal.ONE : BigDecimal.ZERO));
                         }
                     });
                 }
+                response.setSuccess(isSucceed(test, response.getScore().intValue()));
+
                 csa.setTestResult(response.getScore());
-                csa.setSuccess(isSucceed(test, response.getScore()));
+                csa.setSuccess(response.getSuccess());
                 csa.setActiveAttempt(true);
                 em.merge(csa);
 

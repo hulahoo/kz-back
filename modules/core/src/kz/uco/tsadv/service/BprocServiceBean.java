@@ -292,6 +292,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
             if (!CollectionUtils.isEmpty(initiatorVariableList)) {
                 TsadvUser initiator = dataManager.reload((TsadvUser) initiatorVariableList.get(0).getValue(), "user-fioWithLogin");
+                String startComment = getProcessVariable(processInstanceData.getId(), "startComment");
 
                 ExtTaskData initiatorTask = metadata.create(ExtTaskData.class);
                 initiatorTask.setId(UUID.randomUUID().toString());
@@ -303,6 +304,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 initiatorTask.setEndTime(processInstanceData.getStartTime());
                 initiatorTask.setHrRole(getInitiatorHrRole());
                 initiatorTask.setOutcome(AbstractBprocRequest.OUTCOME_START);
+                initiatorTask.setComment(startComment);
                 return initiatorTask;
             }
         }

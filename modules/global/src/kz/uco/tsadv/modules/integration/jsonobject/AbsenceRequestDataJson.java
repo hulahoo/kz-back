@@ -9,7 +9,7 @@ public class AbsenceRequestDataJson implements Serializable {
     protected String absenceTypeId;
     protected String startDate;
     protected String endDate;
-    protected int absenceDuration;
+    protected String absenceDuration;
     protected String purpose;
     protected boolean isProvideSheetOfTemporary;
     protected boolean isOnRotation;
@@ -55,11 +55,11 @@ public class AbsenceRequestDataJson implements Serializable {
         this.endDate = endDate;
     }
 
-    public int getAbsenceDuration() {
+    public String getAbsenceDuration() {
         return absenceDuration;
     }
 
-    public void setAbsenceDuration(int absenceDuration) {
+    public void setAbsenceDuration(String absenceDuration) {
         this.absenceDuration = absenceDuration;
     }
 
