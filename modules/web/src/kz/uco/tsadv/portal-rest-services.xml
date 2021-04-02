@@ -95,6 +95,10 @@
             <param name="inputData" type="java.util.List"/>
             <param name="success" type="java.lang.Boolean"/>
         </method>
+        <method name="validateEnroll">
+            <param name="courseId"/>
+            <param name="locale"/>
+        </method>
     </service>
     <service name="bproc_BprocTaskService">
         <method name="completeWithOutcome">

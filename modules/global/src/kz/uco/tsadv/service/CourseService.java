@@ -5,6 +5,7 @@ import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.pojo.CoursePojo;
+import kz.uco.tsadv.pojo.PairPojo;
 import kz.uco.tsadv.pojo.ScormInputData;
 
 import java.math.BigDecimal;
@@ -68,4 +69,6 @@ public interface CourseService {
     void createScormAttempt(UUID courseSectionId, UUID enrollmentId, List<ScormInputData> inputData, Boolean success);
 
     void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, BigDecimal score, BigDecimal minScore, BigDecimal maxScore, Boolean success);
+
+    PairPojo<Boolean, List<String>> validateEnroll(UUID courseId, String locale);
 }
