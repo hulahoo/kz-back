@@ -22,6 +22,7 @@ import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
 import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -78,6 +79,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     protected String templateFolder = "classpath:kz/uco/tsadv/templates/";
     @Inject
     protected GlobalConfig globalConfig;
+    @Inject
+    protected FrontConfig frontConfig;
     @Inject
     protected BprocRepositoryService bprocRepositoryService;
     @Inject
@@ -347,18 +350,25 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 entity.getId(),
                 notificationTemplateCode,
                 notificationParams);
-        String requestLink = getRequestLink(entity, activity);
+
+        String requestLink = getRequestLink(globalConfig.getWebAppUrl(), entity, activity);
+        String requestFrontLink = getRequestLink(frontConfig.getFrontAppUrl(), entity, activity);
+
         notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
+
+        notificationParams.put("requestFrontLinkRu", String.format(requestFrontLink, "Открыть заявку " + entity.getRequestNumber()));
+        notificationParams.put("requestFrontLinkEn", String.format(requestFrontLink, "Open request " + entity.getRequestNumber()));
+
         notificationSenderAPIService.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
     }
 
 
-    protected <T extends AbstractBprocRequest> String getRequestLink(T entity, Activity activity) {
+    protected <T extends AbstractBprocRequest> String getRequestLink(String webAppUrl, T entity, Activity activity) {
         if (!"NOTIFICATION".equals(activity.getType().getCode())) {
             ActivityType activityType = activity.getType();
             if (activityType.getWindowProperty() != null) {
-                return "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" + activity.getType().getWindowProperty().getScreenName() +
+                return "<a href=\"" + webAppUrl + "/open?screen=" + activity.getType().getWindowProperty().getScreenName() +
                         "&item=" + activityType.getWindowProperty().getEntityName() + "-" + activity.getReferenceId() +
                         "&params=activityId:" + activity.getId() +
                         "\" target=\"_blank\">%s " + "</a>";
@@ -371,7 +381,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 .setParameters(ParamsMap.of("entityName", entityName))
                 .one();
 
-        return "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" + windowProperty.getScreenName() +
+        return "<a href=\"" + webAppUrl + "/open?screen=" + windowProperty.getScreenName() +
                 "&item=" + entityName + "-" + entity.getId() +
                 "\" target=\"_blank\">%s " + "</a>";
     }

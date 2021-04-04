@@ -314,7 +314,9 @@ public class LearningServiceBean implements LearningService {
         try {
             return Optional.ofNullable(enrollment.getCourseSchedule() != null
                     ? enrollment.getCourseSchedule().getStartDate()
-                    : sortedCourseSections.get(0).getCourseSectionAttempts().get(0).getAttemptDate());
+                    : !CollectionUtils.isEmpty(sortedCourseSections.get(0).getCourseSectionAttempts())
+                    ? sortedCourseSections.get(0).getCourseSectionAttempts().get(0).getAttemptDate()
+                    : null);
         } catch (NullPointerException e) {
             return Optional.empty();
         }
@@ -324,7 +326,9 @@ public class LearningServiceBean implements LearningService {
         try {
             return Optional.ofNullable(enrollment.getCourseSchedule() != null
                     ? enrollment.getCourseSchedule().getStartDate()
-                    : sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts().get(0).getAttemptDate());
+                    : !CollectionUtils.isEmpty(sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts())
+                    ? sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts().get(0).getAttemptDate()
+                    : null);
         } catch (NullPointerException e) {
             return Optional.empty();
         }

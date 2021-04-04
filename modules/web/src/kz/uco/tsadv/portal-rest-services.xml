@@ -4,6 +4,10 @@
         <method name="newEntity">
             <param name="entityName" type="java.lang.String"/>
         </method>
+        <method name="loadDictionaries">
+            <param name="dictionaryName" type="java.lang.String"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_BprocService">
         <method name="getProcessInstanceData">

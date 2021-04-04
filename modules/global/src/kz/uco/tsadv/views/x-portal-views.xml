@@ -353,6 +353,7 @@
         <property name="library" view="_minimal">
             <property name="category" view="_minimal"/>
         </property>
+        <property name="successCriteria"/>
     </view>
     <view entity="tsadv$Enrollment" name="learning-history">
         <property name="courseSchedule" view="_minimal">
