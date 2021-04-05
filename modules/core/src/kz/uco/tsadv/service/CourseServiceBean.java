@@ -1002,12 +1002,11 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public PairPojo<Boolean, List<String>> validateEnroll(UUID courseId, String locale) {
+    public PairPojo<Boolean, String> validateEnroll(UUID courseId, String locale) {
         List<Object[]> result = persistence.callInTransaction(em -> em.createNativeQuery("" +
                 "SELECT c.id, " +
                 "       prc.name           AS course_name, " +
-                "       e.id           AS enrollment, " +
-                "       (e.status = 5) AS is_finished " +
+                "       e.id           AS enrollment " +
                 "FROM tsadv_course c " +
                 "         JOIN tsadv_course_pre_requisition pr " +
                 "              ON pr.course_id = c.id " +
@@ -1019,28 +1018,17 @@ public class CourseServiceBean implements CourseService {
                 "                   ON prc.id = e.course_id " +
                 "                       AND e.delete_ts IS NULL " +
                 "                       AND e.person_group_id = ?2 " +
-                "WHERE c.id = ?1;")
+                "WHERE c.id = ?1" +
+                "   AND ((NOT e.status = 5) OR (e.id IS NULL));")
                 .setParameter(1, courseId)
                 .setParameter(2, ((UUID) userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
                 .getResultList());
-        PairPojo<Boolean, List<String>> response = new PairPojo<>(true, Collections.EMPTY_LIST);
+        PairPojo<Boolean, String> response = new PairPojo<>(true, null);
         if (result.size() != 0) {
-            List<String> errors = result.stream()
-                    .map(row -> {
-                        UUID enrollmentId = (UUID) row[2];
-                        Boolean isFinished = (Boolean) row[3];
-
-                        if (enrollmentId == null || !isFinished) {
-                            return messages.getMessage("kz.uco.tsadv.service", "course.enroll.error.null", new Locale(locale)) + " " + row[1];
-                        }
-
-                        return null;
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-            if (errors.size() > 0) {
-                return new PairPojo<>(false, errors);
-            }
+            String notFininshedCourses = result.stream()
+                    .map(row -> (String) row[1])
+                    .collect(Collectors.joining(", "));
+            return new PairPojo<>(false, messages.getMessage("kz.uco.tsadv.service", "course.enroll.error.null", new Locale(locale)) + " " + notFininshedCourses);
         }
 
         return response;
