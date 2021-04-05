@@ -1,6 +1,8 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicSchedulePurpose;
@@ -11,6 +13,7 @@ import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.util.Date;
 
+@Listeners("tsadv_ScheduleOffsetsRequestChangedListener")
 @Table(name = "TSADV_SCHEDULE_OFFSETS_REQUEST")
 @Entity(name = "tsadv_ScheduleOffsetsRequest")
 public class ScheduleOffsetsRequest extends AbstractBprocRequest {
