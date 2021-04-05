@@ -70,5 +70,5 @@ public interface CourseService {
 
     void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, BigDecimal score, BigDecimal minScore, BigDecimal maxScore, Boolean success);
 
-    PairPojo<Boolean, List<String>> validateEnroll(UUID courseId, String locale);
+    PairPojo<Boolean, String> validateEnroll(UUID courseId, String locale);
 }
