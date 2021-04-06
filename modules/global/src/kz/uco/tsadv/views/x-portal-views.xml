@@ -318,6 +318,7 @@
         </property>
     </view>
     <view name="portal-book-info" entity="tsadv$Book" extends="_local">
+        <property name="image" view="_minimal"/>
         <property name="djvu" view="_minimal"/>
         <property name="epub" view="_minimal"/>
         <property name="fb2" view="_minimal"/>
