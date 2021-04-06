@@ -9350,6 +9350,10 @@ create table TSADV_GOAL (
     START_DATE date,
     END_DATE date,
     PARENT_GOAL_ID uuid,
+    GOAL_NAME_LANG2 varchar(255),
+    GOAL_NAME_LANG3 varchar(255),
+    SUCCESS_CRITERIA_LANG2 varchar(255),
+    SUCCESS_CRITERIA_LANG3 varchar(255),
     --
     primary key (ID)
 )^

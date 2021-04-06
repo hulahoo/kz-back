@@ -16,6 +16,8 @@
         <form id="form" dataContainer="goalDc">
             <column width="250px">
                 <textField id="goalName" property="goalName"/>
+                <textField id="goalName2" property="goalNameLang2"/>
+                <textField id="goalName3" property="goalNameLang3"/>
                 <pickerField id="library" property="library">
                     <actions>
                         <action id="lookup" type="picker_lookup"/>
@@ -31,6 +33,8 @@
                 <dateField id="startDate" property="startDate"/>
                 <dateField id="endDate" property="endDate"/>
                 <textArea id="successCriteria" property="successCriteria" rows="4"/>
+                <textArea id="successCriteria2" property="successCriteriaLang2" rows="4"/>
+                <textArea id="successCriteria3" property="successCriteriaLang3" rows="4"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">
