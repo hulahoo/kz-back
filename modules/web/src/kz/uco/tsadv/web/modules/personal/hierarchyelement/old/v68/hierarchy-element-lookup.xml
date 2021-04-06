@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://HierarchyElement.browseCaption"
-        class="kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68.HierarchyElementLookup"
-        focusComponent="hierarchyElementsTree"
-        lookupComponent="hierarchyElementsTree">
-    <dsContext>
-        <hierarchicalDatasource id="hierarchyElementsDs"
-                                class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
-                                hierarchyProperty="parent"
-                                view="hierarchyElement.lookup">
-            <query>
-                <![CDATA[select e
-                           from base$HierarchyElementExt e
-                          where :param$date between e.startDate and e.endDate
-                            and e.hierarchy.id = :component$hierarchyLookup.id
-                            and e.elementType IN (1, :param$elementType)]]>
-            </query>
-        </hierarchicalDatasource>
-        <collectionDatasource id="hierarchiesDs"
-                              class="kz.uco.base.entity.shared.Hierarchy"
-                              view="hierarchy.view">
-            <query>
-                <![CDATA[select e from base$Hierarchy e order by e.primaryFlag desc]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+        focusComponent="tree"
+        messagesPack="kz.uco.tsadv.web.modules.personal.hierarchyelement.old.v68">
+    <data>
+        <collection id="hierarchyElementDc"
+                    class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                    view="new.hierarchyElement.browse"/>
+        <collection id="hierarchiesDc"
+                    class="kz.uco.base.entity.shared.Hierarchy"
+                    view="hierarchy.view">
+            <loader id="hierarchiesDl">
+                <query>
+                    <![CDATA[select e from base$Hierarchy e order by e.primaryFlag desc]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
     <actions>
-        <action id="search"
-                invoke="searchForHierarchyElement"/>
+        <action id="search"/>
     </actions>
     <dialogMode height="800"
                 width="1100"/>
-    <layout expand="hierarchyElementsTree"
+    <layout expand="tree"
             spacing="true">
         <groupBox caption="msg://Hierarchy.Filter" width="100%">
             <hbox width="100%">
-                <lookupField optionsDatasource="hierarchiesDs" id="hierarchyLookup" width="100%"/>
+                <lookupField optionsContainer="hierarchiesDc" id="hierarchyLookup" width="100%"/>
             </hbox>
             <hbox id="searchHbox"
                   spacing="true"
@@ -43,15 +34,25 @@
                   width="100%"
                   expand="searchField">
                 <textField id="searchField"
-                           align="MIDDLE_CENTER" width="100%"/>
+                           align="MIDDLE_CENTER"/>
                 <button id="searchButton"
+                        invoke="search"
                         caption="msg://kz.uco.tsadv.web/table.btn.search"
                         action="search" width="100px"/>
             </hbox>
         </groupBox>
-        <tree id="hierarchyElementsTree"
+        <tree id="tree"
+              stylename="b-tree"
+              dataContainer="hierarchyElementDc"
+              captionProperty="name"
+              hierarchyProperty="parentFromGroup"
               width="100%">
-            <treechildren datasource="hierarchyElementsDs" captionProperty="name" hierarchyProperty="parent"/>
+            <actions>
+                <action id="edit"/>
+                <action id="close"
+                        caption="msg://table.btn.close"
+                        icon="icons/remove.png"/>
+            </actions>
         </tree>
     </layout>
 </window>
