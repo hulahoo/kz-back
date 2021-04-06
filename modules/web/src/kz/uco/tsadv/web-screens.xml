@@ -488,8 +488,8 @@
             template="/kz/uco/tsadv/web/modules/personal/globalvalue/global-value-edit.xml"/>
     <screen id="base$Hierarchy.browse"
             template="/kz/uco/tsadv/web/modules/personal/hierarchy/hierarchy-browse.xml"/>
-    <screen id="base$HierarchyElement.lookup"
-            template="/kz/uco/tsadv/web/modules/personal/hierarchyelement/old/v68/hierarchy-element-lookup.xml"/>
+<!--    <screen id="base$HierarchyElement.lookup"-->
+<!--            template="/kz/uco/tsadv/web/modules/personal/hierarchyelement/old/v68/hierarchy-element-lookup.xml"/>-->
     <screen id="tsadv$Agreement.edit"
             template="/kz/uco/tsadv/web/modules/personal/agreement/agreement-edit.xml"/>
     <screen id="tsadv$TradeUnion.edit"
