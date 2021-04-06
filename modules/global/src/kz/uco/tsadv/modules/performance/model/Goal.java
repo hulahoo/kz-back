@@ -54,6 +54,50 @@ public class Goal extends AbstractParentEntity {
     @JoinColumn(name = "PARENT_GOAL_ID")
     protected Goal parentGoal;
 
+    @Column(name = "GOAL_NAME_LANG2")
+    protected String goalNameLang2;
+
+    @Column(name = "GOAL_NAME_LANG3")
+    protected String goalNameLang3;
+
+    @Column(name = "SUCCESS_CRITERIA_LANG2")
+    protected String successCriteriaLang2;
+
+    @Column(name = "SUCCESS_CRITERIA_LANG3")
+    protected String successCriteriaLang3;
+
+    public String getSuccessCriteriaLang3() {
+        return successCriteriaLang3;
+    }
+
+    public void setSuccessCriteriaLang3(String successCriteriaLang3) {
+        this.successCriteriaLang3 = successCriteriaLang3;
+    }
+
+    public String getSuccessCriteriaLang2() {
+        return successCriteriaLang2;
+    }
+
+    public void setSuccessCriteriaLang2(String successCriteriaLang2) {
+        this.successCriteriaLang2 = successCriteriaLang2;
+    }
+
+    public String getGoalNameLang3() {
+        return goalNameLang3;
+    }
+
+    public void setGoalNameLang3(String goalNameLang3) {
+        this.goalNameLang3 = goalNameLang3;
+    }
+
+    public String getGoalNameLang2() {
+        return goalNameLang2;
+    }
+
+    public void setGoalNameLang2(String goalNameLang2) {
+        this.goalNameLang2 = goalNameLang2;
+    }
+
     public Goal getParentGoal() {
         return parentGoal;
     }

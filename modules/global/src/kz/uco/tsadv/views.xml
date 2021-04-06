@@ -2790,6 +2790,10 @@
         <property name="startDate"/>
         <property name="endDate"/>
         <property name="parentGoal" view="_minimal"/>
+        <property name="goalNameLang2"/>
+        <property name="goalNameLang3"/>
+        <property name="successCriteriaLang2"/>
+        <property name="successCriteriaLang3"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.dictionary.DicMeasureType"
           name="dicMeasureType.browse">
