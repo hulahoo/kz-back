@@ -112,6 +112,15 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "IS_VACATION_DATE", nullable = false)
     protected Boolean isVacationDate = false;
 
+    @Column(name = "WORK_ON_WEEKEND")
+    protected Boolean workOnWeekend;
+
+    @Column(name = "TEMPORARY_TRANSFER")
+    protected Boolean temporaryTransfer;
+
+    @Column(name = "OVERTIME_WORK")
+    protected Boolean overtimeWork;
+
     public Boolean getIsVacationDate() {
         return isVacationDate;
     }
@@ -336,4 +345,27 @@ public class DicAbsenceType extends AbstractDictionary {
         return useInSelfService;
     }
 
+    public Boolean getWorkOnWeekend() {
+        return workOnWeekend;
+    }
+
+    public void setWorkOnWeekend(Boolean workOnWeekend) {
+        this.workOnWeekend = workOnWeekend;
+    }
+
+    public Boolean getTemporaryTransfer() {
+        return temporaryTransfer;
+    }
+
+    public void setTemporaryTransfer(Boolean temporaryTransfer) {
+        this.temporaryTransfer = temporaryTransfer;
+    }
+
+    public Boolean getOvertimeWork() {
+        return overtimeWork;
+    }
+
+    public void setOvertimeWork(Boolean overtimeWork) {
+        this.overtimeWork = overtimeWork;
+    }
 }

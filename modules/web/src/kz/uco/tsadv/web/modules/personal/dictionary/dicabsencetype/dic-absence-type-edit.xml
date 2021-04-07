@@ -69,6 +69,9 @@
                         <field property="isOriginalSheet"/>
                         <field property="isCheckWork"/>
                         <field property="isVacationDate"/>
+                        <field property="workOnWeekend"/>
+                        <field property="temporaryTransfer"/>
+                        <field property="overtimeWork"/>
                     </column>
                 </fieldGroup>
             </groupBox>
