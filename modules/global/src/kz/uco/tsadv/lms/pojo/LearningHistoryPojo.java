@@ -12,6 +12,7 @@ public class LearningHistoryPojo implements Serializable {
     private String trainer;
     private BigDecimal result;
     private String certificate;
+    private String enrollmentStatus;
 
     public Date getStartDate() {
         return startDate;
@@ -61,6 +62,13 @@ public class LearningHistoryPojo implements Serializable {
         this.certificate = certificate;
     }
 
+    public String getEnrollmentStatus() {
+        return enrollmentStatus;
+    }
+
+    public void setEnrollmentStatus(String enrollmentStatus) {
+        this.enrollmentStatus = enrollmentStatus;
+    }
 
     public static final class Builder {
         private LearningHistoryPojo learningHistoryPojo;
@@ -100,6 +108,11 @@ public class LearningHistoryPojo implements Serializable {
 
         public Builder certificate(String certificate) {
             learningHistoryPojo.setCertificate(certificate);
+            return this;
+        }
+
+        public Builder enrollmentStatus(String enrollmentStatus) {
+            learningHistoryPojo.setEnrollmentStatus(enrollmentStatus);
             return this;
         }
 
