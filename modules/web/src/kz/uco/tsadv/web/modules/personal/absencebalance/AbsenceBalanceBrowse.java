@@ -28,11 +28,11 @@ public class AbsenceBalanceBrowse extends EditableFrame {
     @Inject
     protected Button removeButton;
     @Inject
-    protected CollectionDatasource<AbsenceBalanceV, UUID> absenceBalancesVDs;
+    private CollectionDatasource<AbsenceBalance, UUID> absenceBalancesDs;
     @Inject
     protected CallStoredFunctionService callStoredFunctionService;
     @Inject
-    protected Table<AbsenceBalanceV> absenceBalancesTable;
+    protected Table<AbsenceBalance> absenceBalancesTable;
     @Inject
     protected CommonService commonService;
     @Inject
@@ -54,7 +54,7 @@ public class AbsenceBalanceBrowse extends EditableFrame {
         Objects.requireNonNull(getDsContext().get("absenceBalancesVDs")).refresh();
         absenceBalancesTable.repaint();
         personGroup = (PersonGroupExt) Objects.requireNonNull(getDsContext().get("personGroupDs")).getItem();
-        absenceBalancesVDs = (CollectionDatasource<AbsenceBalanceV, UUID>) getDsContext().get("absenceBalancesVDs");
+//        absenceBalancesVDs = (CollectionDatasource<AbsenceBalanceV, UUID>) getDsContext().get("absenceBalancesVDs");
         unwrappedTable = absenceBalancesTable.unwrap(com.vaadin.v7.ui.Table.class);
         unwrappedTable.addItemClickListener(event -> {
             editButton.setEnabled(true);
@@ -63,6 +63,8 @@ public class AbsenceBalanceBrowse extends EditableFrame {
 
         vacationDurationType.setStyleName("float-right");
         vacationDurationType.setValue(getVacationDurationType());
+
+        recount();
 
         /*absenceBalancesTable.getAction("remove").setEnabled(false);
 
@@ -127,8 +129,8 @@ public class AbsenceBalanceBrowse extends EditableFrame {
     }
 
     protected boolean isLast(AbsenceBalance absenceBalance) {
-        return absenceBalancesVDs.getItems() != null
-                && absenceBalancesVDs.getItems().stream().noneMatch(ab -> ab.getDateFrom().after(absenceBalance.getDateFrom()));
+        return absenceBalancesDs.getItems() != null
+                && absenceBalancesDs.getItems().stream().noneMatch(ab -> ab.getDateFrom().after(absenceBalance.getDateFrom()));
     }
 
     @Override
@@ -185,15 +187,15 @@ public class AbsenceBalanceBrowse extends EditableFrame {
 
     public void recount() {
         if (personGroup != null) {
-            callRefreshPersonBalanceSqlFunction();
-            absenceBalancesVDs.refresh();
+//            callRefreshPersonBalanceSqlFunction();
+            absenceBalancesDs.refresh();
             absenceBalancesTable.repaint();
         }
     }
 
     public void createAbsenceBalance() {
         AbsenceBalance absenceBalance = metadata.create(AbsenceBalance.class);
-        absenceBalancesVDs.getItems().stream().max((o1, o2) ->
+        absenceBalancesDs.getItems().stream().max((o1, o2) ->
                 o1.getDateFrom().after(o2.getDateFrom()) ? 1 : -1).ifPresent(absenceBalanceV -> {
             absenceBalance.setBalanceDays(absenceBalanceV.getBalanceDays());
             absenceBalance.setAdditionalBalanceDays(absenceBalanceV.getAdditionalBalanceDays());
