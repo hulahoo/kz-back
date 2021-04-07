@@ -1,6 +1,9 @@
 package kz.uco.tsadv.service.portal;
 
+import com.haulmont.chile.core.model.MetaClass;
+import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.pojo.BellNotificationResponsePojo;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
@@ -20,6 +23,9 @@ public class NotificationServiceBean implements NotificationService {
 
     @Inject
     private NotificationDao notificationDao;
+
+    @Inject
+    protected Metadata metadata;
 
     //todo need to add fistResult and maxResult
     @Override
@@ -62,10 +68,12 @@ public class NotificationServiceBean implements NotificationService {
      * example: entityName = uactivity$ActivityType return value = activityType
      * </p>
      */
-    protected String getLinkByCode(ActivityType activityType) {
+    public String getLinkByCode(ActivityType activityType) {
         if (NotificationDao.NOTIFICATION_CODE.equals(activityType.getCode())) return null;
         WindowProperty windowProperty = activityType.getWindowProperty();
         if (windowProperty == null || windowProperty.getEntityName() == null) return null;
+        MetaClass aClass = metadata.getClass(windowProperty.getEntityName());
+        if (aClass != null && AssignedPerformancePlan.class.isAssignableFrom(aClass.getJavaClass())) return "kpi";
         String entityName = windowProperty.getEntityName();
         StringBuilder builder = new StringBuilder(entityName.substring(Math.max(entityName.indexOf("_"), entityName.indexOf("$")) + 1));
         builder.setCharAt(0, Character.toLowerCase(builder.charAt(0)));

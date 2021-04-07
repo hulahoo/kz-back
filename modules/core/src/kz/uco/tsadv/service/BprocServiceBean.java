@@ -33,6 +33,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
+import kz.uco.tsadv.service.portal.NotificationService;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
@@ -89,6 +90,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     protected DatesService datesService;
     @Inject
     protected TransactionalDataManager transactionalDataManager;
+    @Inject
+    protected NotificationService notificationService;
 
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
@@ -351,8 +354,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 notificationTemplateCode,
                 notificationParams);
 
-        String requestLink = getRequestLink(globalConfig.getWebAppUrl(), entity, activity);
-        String requestFrontLink = getRequestLink(frontConfig.getFrontAppUrl(), entity, activity);
+        String requestLink = getRequestLink(globalConfig.getWebAppUrl(), entity, activity, true);
+        String requestFrontLink = getRequestLink(frontConfig.getFrontAppUrl(), entity, activity, false);
 
         notificationParams.put("requestLinkRu", String.format(requestLink, "Открыть заявку " + entity.getRequestNumber()));
         notificationParams.put("requestLinkEn", String.format(requestLink, "Open request " + entity.getRequestNumber()));
@@ -363,15 +366,17 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         notificationSenderAPIService.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
     }
 
-
-    protected <T extends AbstractBprocRequest> String getRequestLink(String webAppUrl, T entity, Activity activity) {
+    protected <T extends AbstractBprocRequest> String getRequestLink(String appUrl, T entity, Activity activity, boolean isWebUrl) {
         if (!"NOTIFICATION".equals(activity.getType().getCode())) {
             ActivityType activityType = activity.getType();
             if (activityType.getWindowProperty() != null) {
-                return "<a href=\"" + webAppUrl + "/open?screen=" + activity.getType().getWindowProperty().getScreenName() +
-                        "&item=" + activityType.getWindowProperty().getEntityName() + "-" + activity.getReferenceId() +
-                        "&params=activityId:" + activity.getId() +
-                        "\" target=\"_blank\">%s " + "</a>";
+                if (isWebUrl)
+                    return "<a href=\"" + appUrl + "/open?screen=" + activityType.getWindowProperty().getScreenName() +
+                            "&item=" + activityType.getWindowProperty().getEntityName() + "-" + activity.getReferenceId() +
+                            "&params=activityId:" + activity.getId() +
+                            "\" target=\"_blank\">%s " + "</a>";
+                else
+                    return "<a href=\"" + appUrl + "/" + notificationService.getLinkByCode(activityType) + "/" + activity.getReferenceId() + "\" target=\"_blank\">%s " + "</a>";
             }
         }
 
@@ -381,9 +386,12 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 .setParameters(ParamsMap.of("entityName", entityName))
                 .one();
 
-        return "<a href=\"" + webAppUrl + "/open?screen=" + windowProperty.getScreenName() +
-                "&item=" + entityName + "-" + entity.getId() +
-                "\" target=\"_blank\">%s " + "</a>";
+        if (isWebUrl)
+            return "<a href=\"" + appUrl + "/open?screen=" + windowProperty.getScreenName() +
+                    "&item=" + entityName + "-" + entity.getId() +
+                    "\" target=\"_blank\">%s " + "</a>";
+        else
+            return "<a href=\"" + appUrl + "/activity/" + entity.getId() + "\" target=\"_blank\">%s " + "</a>";
     }
 
     @Override

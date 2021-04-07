@@ -7,6 +7,9 @@
         messagesPack="kz.uco.tsadv.web.modules.personal.absencebalance">
     <!--<dialogMode height="600"
                 width="800"/>-->
+    <dsContext>
+        <collectionDatasource id="absenceBalancesDs" class="kz.uco.tsadv.modules.personal.model.AbsenceBalance"/>
+    </dsContext>
     <layout spacing="true" width="100%" height="100%" expand="absenceBalancesTable">
         <hbox id="hBox" spacing="true" stylename="display-block">
             <button id="createButton"
@@ -70,7 +73,8 @@
                 <column id="disabilityDaysLeft"
                         caption="msg://kz.uco.tsadv.modules.personal.model/AbsenceBalance.disabilityDaysLeft"/>
             </columns>
-            <rows datasource="absenceBalancesVDs"/>
+            <rows datasource="absenceBalancesDs"/>
+
             <!--<buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
                 <button action="absenceBalancesTable.create"/>
