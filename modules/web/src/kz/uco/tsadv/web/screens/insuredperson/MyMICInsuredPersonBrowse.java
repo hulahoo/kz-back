@@ -177,24 +177,26 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                     .view("address.view")
                     .list().stream().findFirst().orElse(null);
 
-            boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
-            if (isEmptyDocument) {
-                insuredPerson.setDocumentType(contract.getDefaultDocumentType());
-            } else {
-                boolean isSetDocument = false;
-                for (PersonDocument document : personGroupExt.getPersonDocuments()) {
-                    if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
-                        insuredPerson.setDocumentType(document.getDocumentType());
-                        insuredPerson.setDocumentNumber(document.getDocumentNumber());
-                        isEmptyDocument = true;
-                        break;
-                    }
-                }
-                if (!isEmptyDocument) {
-                    insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
-                    insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
-                }
-            }
+           if (contract.getDefaultDocumentType() != null) {
+               boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
+               if (isEmptyDocument) {
+                   insuredPerson.setDocumentType(contract.getDefaultDocumentType());
+               } else {
+                   boolean isSetDocument = false;
+                   for (PersonDocument document : personGroupExt.getPersonDocuments()) {
+                       if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
+                           insuredPerson.setDocumentType(document.getDocumentType());
+                           insuredPerson.setDocumentNumber(document.getDocumentNumber());
+                           isEmptyDocument = true;
+                           break;
+                       }
+                   }
+                   if (!isEmptyDocument) {
+                       insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
+                       insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
+                   }
+               }
+           }
 
             if (!personGroupExt.getAddresses().isEmpty()) {
                 boolean isSetAddress = false;
