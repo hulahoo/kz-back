@@ -646,5 +646,7 @@
         <class>kz.uco.tsadv.modules.learning.dictionary.DicLearningProof</class>
         <class>kz.uco.tsadv.modules.learning.model.ScormQuestionMapping</class>
         <class>kz.uco.tsadv.modules.learning.model.CourseSectionScormResult</class>
+        <class>kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage</class>
+        <class>kz.uco.tsadv.modules.performance.model.AssignedPerformancePlanHistory</class>
     </persistence-unit>
 </persistence>

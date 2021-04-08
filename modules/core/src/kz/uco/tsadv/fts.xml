@@ -1948,5 +1948,11 @@
         <entity class="kz.uco.tsadv.modules.learning.model.CourseSectionScormResult">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlanHistory">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

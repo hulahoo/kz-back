@@ -2,7 +2,9 @@ package kz.uco.tsadv.modules.performance.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
@@ -11,6 +13,7 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_ASSIGNED_PERFORMANCE_PLAN")
 @Entity(name = "tsadv$AssignedPerformancePlan")
 @NamePattern("%s|requestNumber,stepStageStatus")
@@ -84,6 +87,18 @@ public class AssignedPerformancePlan extends AbstractBprocRequest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "FILE_ID")
     private FileDescriptor file;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STAGE_ID")
+    protected DicPerformanceStage stage;
+
+    public DicPerformanceStage getStage() {
+        return stage;
+    }
+
+    public void setStage(DicPerformanceStage stage) {
+        this.stage = stage;
+    }
 
     public FileDescriptor getFile() {
         return file;

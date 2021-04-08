@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.modules.performance.performanceplan;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
@@ -33,6 +34,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.DatesService;
 import kz.uco.tsadv.service.KpiService;
+import kz.uco.tsadv.web.modules.performance.assignedperformanceplan.AssignedPerformancePlanForChangeStatusEdit;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -102,6 +104,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected ExportDisplay exportDisplay;
     @Inject
     protected DatesService datesService;
+    @Inject
+    protected Dialogs dialogs;
     private FileInputStream inputStream;
     @Inject
     protected NotificationService notificationService;
@@ -728,5 +732,18 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected RuleBasedNumberFormat getAmountINText(String language) {
         return new RuleBasedNumberFormat(Locale.forLanguageTag(language),
                 RuleBasedNumberFormat.SPELLOUT);
+    }
+
+    @Subscribe("assignedPerformancePlanTable.changeStatusAndStage")
+    protected void onAssignedPerformancePlanTableChangeStatusAndStage(Action.ActionPerformedEvent event) {
+        Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
+        AssignedPerformancePlanForChangeStatusEdit edit = screenBuilders.editor(AssignedPerformancePlan.class, this)
+                .withScreenClass(AssignedPerformancePlanForChangeStatusEdit.class)
+                .withAfterCloseListener(e -> assignedPerformancePlansDl.load())
+                .build();
+        if (!assignedPerformancePlans.isEmpty()) {
+            edit.setParameter(assignedPerformancePlans);
+            edit.show();
+        }
     }
 }

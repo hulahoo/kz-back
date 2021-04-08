@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://changeStatusAndStage"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.modules.performance.assignedperformanceplan">
+    <data>
+        <instance id="assignedPerformancePlanDc"
+                  class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan"
+                  view="assignedPerformancePlan.browse">
+            <loader/>
+        </instance>
+        <collection id="statusDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus"
+                    view="dicRequestStatus-edit">
+            <loader id="statusDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicRequestStatus e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="stageDc"
+                    class="kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage"
+                    view="dicPerformanceStage.edit">
+            <loader id="stageDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicPerformanceStage e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode forceDialog="true"
+                height="AUTO"
+                width="AUTO"/>
+    <layout expand="scrollBox" spacing="true">
+        <scrollBox id="scrollBox" spacing="true">
+            <form id="form">
+                <column width="250px">
+                    <lookupField id="statusField" property="status" optionsContainer="statusDc"/>
+                    <lookupField id="stageField" property="stage" optionsContainer="stageDc" required="true"/>
+                </column>
+            </form>
+        </scrollBox>
+        <hbox id="editActions" spacing="true">
+            <button id="ok" caption="OK" stylename="primary"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

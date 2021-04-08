@@ -6251,6 +6251,7 @@
             </property>
             <property name="personExperience" view="_minimal"/>
         </property>
+        <property name="stage" view="dicPerformanceStage.edit"/>
         <property name="status" view="_minimal">
             <property name="code"/>
         </property>
@@ -23648,5 +23649,27 @@
             <property name="html"/>
             <property name="text"/>
         </property>
+    </view>
+    <view entity="tsadv_DicPerformanceStage" name="dicPerformanceStage.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_AssignedPerformancePlanHistory" name="assignedPerformancePlanHistory.edit" extends="_local">
+        <property name="stage" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="status" view="_minimal">
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
+        <property name="assignedPerformancePlan" view="_minimal"/>
+        <property name="createTs"/>
+        <property name="createdBy"/>
+        <property name="updateTs"/>
+        <property name="updatedBy"/>
     </view>
 </views>

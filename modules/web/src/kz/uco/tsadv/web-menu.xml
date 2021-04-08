@@ -440,6 +440,7 @@
                   screen="tsadv$DicPriority.browse"/>
             <item screen="tsadv$DicQuestionnaireQuestionSection.browse"/>
             <item screen="tsadv_DicJobGroup.browse"/>
+            <item screen="tsadv_DicPerformanceStage.browse"/>
         </menu>
         <menu id="pmCompetences">
             <item id="pmCompetenceGroups"

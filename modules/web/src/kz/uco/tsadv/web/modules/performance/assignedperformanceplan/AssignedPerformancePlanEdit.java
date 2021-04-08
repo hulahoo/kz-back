@@ -12,6 +12,7 @@ import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
+import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlanHistory;
 
 import javax.inject.Inject;
 
@@ -41,12 +42,16 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected DataManager dataManager;
     @Inject
     protected ExtAppPropertiesConfig extAppPropertiesConfig;
+    @Inject
+    protected CollectionLoader<AssignedPerformancePlanHistory> assignedHistoryDl;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         assignedPerformancePlanDl.load();
         assignedGoalDl.setParameter("assignedPerformancePlan", assignedPerformancePlanDc.getItem());
         assignedGoalDl.load();
+        assignedHistoryDl.setParameter("assignedPerformancePlan", assignedPerformancePlanDc.getItem());
+        assignedHistoryDl.load();
     }
 
     @Subscribe(id = "assignedGoalDc", target = Target.DATA_CONTAINER)

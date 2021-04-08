@@ -19,6 +19,16 @@
                 </query>
             </loader>
         </collection>
+        <collection id="assignedHistoryDc"
+                    class="kz.uco.tsadv.modules.performance.model.AssignedPerformancePlanHistory"
+                    view="assignedPerformancePlanHistory.edit">
+            <loader id="assignedHistoryDl">
+                <query>
+                    <![CDATA[select e from tsadv_AssignedPerformancePlanHistory e
+                              where e.assignedPerformancePlan = :assignedPerformancePlan]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <dialogMode height="600"
                 width="800"/>
@@ -39,7 +49,7 @@
                            caption="mainMsg://organizationName"
                            editable="false"/>
                 <textField id="position" property="assignedPerson.currentAssignment.positionGroup"/>
-<!--                <textField id="job" property="assignedPerson.currentAssignment.jobGroup" visible="false"/>-->
+                <!--                <textField id="job" property="assignedPerson.currentAssignment.jobGroup" visible="false"/>-->
                 <textField id="grade" property="assignedPerson.currentAssignment.gradeGroup"/>
                 <textField id="kpiScore" property="kpiScore"/>
                 <textField id="extraPoint" property="extraPoint"/>
@@ -49,6 +59,12 @@
                 <textField id="adjustedBonus" property="adjustedBonus"/>
             </column>
             <column id="column2" width="300px">
+                <pickerField id="stage" property="stage">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
                 <lookupField id="stepStageStatus" property="stepStageStatus"/>
                 <lookupField id="status" property="status" editable="false"/>
                 <dateField id="startDate" property="startDate"/>
@@ -61,37 +77,56 @@
                 <textField id="finalBonus" property="finalBonus"/>
             </column>
         </form>
-        <groupBox id="hbox" width="100%" spacing="true">
-            <table id="assignedGoalTable" width="100%" dataContainer="assignedGoalDc" editable="true"
-                   aggregatable="true">
-                <actions>
-                    <action id="edit" type="edit"/>
-                    <action id="remove" type="remove"/>
-                </actions>
-                <columns>
-                    <column id="category"/>
-                    <column id="goalString" editable="true" required="true"/>
-                    <column id="weight" editable="true" required="true">
-                        <aggregation type="SUM"/>
-                    </column>
-                    <column id="result" editable="true"/>
-                    <column id="goalType"/>
-                </columns>
-                <rowsCount/>
-                <buttonsPanel id="assignedGoalBtnPnl">
-                    <popupButton id="popup" caption="msg://addGoal">
-                        <actions>
-                            <action id="library" caption="msg://library"/>
-                            <action id="cascade" caption="msg://cascade"/>
-                            <action id="individual" caption="msg://individual"/>
-                        </actions>
-                    </popupButton>
-                    <button id="goalEdit" action="assignedGoalTable.edit"/>
-                    <button id="goalRemove" action="assignedGoalTable.remove"/>
-                </buttonsPanel>
-                <rows/>
-            </table>
-        </groupBox>
+        <tabSheet id="tabSheet">
+            <tab id="assignedGoalTab" caption="msg://goal" spacing="true" margin="true, false, false, false">
+                <table id="assignedGoalTable" width="100%" dataContainer="assignedGoalDc" editable="true"
+                       aggregatable="true">
+                    <actions>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="category"/>
+                        <column id="goalString" editable="true" required="true"/>
+                        <column id="weight" editable="true" required="true">
+                            <aggregation type="SUM"/>
+                        </column>
+                        <column id="result" editable="true"/>
+                        <column id="goalType"/>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel id="assignedGoalBtnPnl">
+                        <popupButton id="popup" caption="msg://addGoal">
+                            <actions>
+                                <action id="library" caption="msg://library"/>
+                                <action id="cascade" caption="msg://cascade"/>
+                                <action id="individual" caption="msg://individual"/>
+                            </actions>
+                        </popupButton>
+                        <button id="goalEdit" action="assignedGoalTable.edit"/>
+                        <button id="goalRemove" action="assignedGoalTable.remove"/>
+                    </buttonsPanel>
+                    <rows/>
+                </table>
+            </tab>
+            <tab id="assignedHistoryTab" caption="msg://history" spacing="true" margin="true, false, false, false">
+                <table id="historyTable" width="100%" dataContainer="assignedHistoryDc">
+                    <actions>
+                        <action id="excel" type="excel"/>
+                    </actions>
+                    <columns>
+                        <column id="createTs"/>
+                        <column id="createdBy"/>
+                        <column id="stage"/>
+                        <column id="status"/>
+                    </columns>
+                    <rows/>
+                    <buttonsPanel id="assignedHistoryBtnPanel">
+                        <button action="historyTable.excel"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+        </tabSheet>
         <hbox id="windowActions" spacing="true" width="AUTO">
             <button action="windowCommitAndClose"/>
             <button action="windowClose"/>
