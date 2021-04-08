@@ -20,11 +20,11 @@ public class InsuranceContract extends StandardEntity {
     private static final long serialVersionUID = 599161704312110269L;
 
     @NotNull
-    @Column(name = "POLICY_NAME", nullable = false, length = 25)
+    @Column(name = "POLICY_NAME", nullable = false)
     private String policyName;
 
     @NotNull
-    @Column(name = "CONTRACT", nullable = false, length = 10)
+    @Column(name = "CONTRACT", nullable = false)
     private String contract;
 
     @Temporal(TemporalType.DATE)

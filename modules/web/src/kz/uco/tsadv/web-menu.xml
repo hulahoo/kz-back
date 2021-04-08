@@ -529,6 +529,7 @@
                   screen="tsadv$QuestionBank.browse"/>
             <item id="lrnTests"
                   screen="tsadv$Test.browse"/>
+            <item screen="import-learning-data"/>
         </menu>
         <menu id="tsadv$PersonLearning">
             <item id="tsadv$PersonLearningContract"
@@ -577,7 +578,6 @@
         <item id="assigned-test-enrollment"
               screen="tsadv$AssignedTestEnrollment.browse"/>
         <item screen="assigned-test-browse"/>
-        <item screen="import-learning-data"/>
         <menu id="lrnInternalTrainers">
             <item screen="tsadv$TrainerLearning.browse"/>
             <!--<item screen="tsadv$CourseTrainer.browse"/>-->

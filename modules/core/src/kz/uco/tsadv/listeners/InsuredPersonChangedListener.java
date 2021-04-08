@@ -160,7 +160,7 @@ public class InsuredPersonChangedListener {
                         .query("select e from uactivity$ActivityType e where e.code = :code")
                         .parameter("code", "NOTIFICATION")
                         .view(new View(ActivityType.class)
-                                .addProperty("code"))
+                                .addProperty("code").addProperty("windowProperty"))
                         .one();
                 tsadvUsers.forEach(tsadvUser -> {
                     notificationSenderAPIService.sendParametrizedNotification("insurance.person.dms",

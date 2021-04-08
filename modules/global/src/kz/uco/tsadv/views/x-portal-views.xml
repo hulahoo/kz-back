@@ -138,7 +138,12 @@
         <property name="langValue1"/>
         <property name="langValue2"/>
         <property name="langValue3"/>
-        <property name="courses" view="course-portal-browse"/>
+        <property name="courses" view="course-portal-browse">
+            <property name="enrollments" view="_minimal">
+                <property name="personGroup" view="_minimal"/>
+                <property name="status"/>
+            </property>
+        </property>
     </view>
     <view name="portal-course-edit" entity="tsadv$Course" extends="_minimal">
         <property name="name"/>
@@ -233,6 +238,7 @@
         <property name="langValue3"/>
         <property name="courses" view="course-portal-browse">
             <property name="enrollments" view="_minimal">
+                <property name="status"/>
                 <property name="personGroup" view="_minimal">
                     <property name="list" view="_local"/>
                 </property>
