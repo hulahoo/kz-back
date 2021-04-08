@@ -1,6 +1,7 @@
 package kz.uco.tsadv.listeners;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.app.events.AttributeChanges;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
@@ -9,6 +10,7 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.service.NotificationSenderAPIService;
+import kz.uco.tsadv.beans.validation.tdc.enrollment.EnrollmentValidation;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
@@ -39,6 +41,24 @@ public class EnrollmentChangedListener {
     protected ReportService reportService;
     @Inject
     protected Metadata metadata;
+    @Inject
+    private TransactionalDataManager transactionalDataManager;
+    @Inject
+    private List<EnrollmentValidation> enrollmentValidations;
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void beforeCommit(EntityChangedEvent<Enrollment, UUID> event) {
+        if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            if (event.getChanges().isChanged("status")) {
+                Enrollment enrollment = transactionalDataManager.load(event.getEntityId())
+                        .view("enrollment.validation.status")
+                        .one();
+                for (EnrollmentValidation enrollmentValidation : enrollmentValidations) {
+                    enrollmentValidation.validate(enrollment);
+                }
+            }
+        }
+    }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<Enrollment, UUID> event) {

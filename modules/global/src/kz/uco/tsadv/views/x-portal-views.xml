@@ -390,4 +390,13 @@
             <property name="certificateFile" view="_minimal"/>
         </property>
     </view>
+    <view entity="tsadv$Enrollment" name="enrollment.validation.status" extends="_minimal">
+        <property name="course" view="_minimal">
+            <property name="feedbackTemplates" view="_minimal">
+                <property name="feedbackTemplate" view="_minimal"/>
+            </property>
+        </property>
+        <property name="personGroup" view="_minimal"/>
+        <property name="status"/>
+    </view>
 </views>
