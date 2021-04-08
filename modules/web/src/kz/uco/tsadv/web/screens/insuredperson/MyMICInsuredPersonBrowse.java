@@ -4,20 +4,20 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.TimeSource;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.DataGrid;
+import com.haulmont.cuba.gui.components.LinkButton;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
-import com.haulmont.cuba.gui.screen.LookupComponent;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.cuba.actions.CreateActionExt;
 import kz.uco.base.cuba.actions.EditActionExt;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.service.common.CommonService;
-
-import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
 import kz.uco.tsadv.modules.personal.enums.RelativeType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.*;
@@ -59,12 +59,12 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
     @Subscribe
     public void onInit(InitEvent event) {
 
-        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("contractField", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>(){
+        DataGrid.Column column = insuredPersonsTable.addGeneratedColumn("contractField", new DataGrid.ColumnGenerator<InsuredPerson, LinkButton>() {
             @Override
-            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event){
+            public LinkButton getValue(DataGrid.ColumnGeneratorEvent<InsuredPerson> event) {
                 LinkButton linkButton = uiComponents.create(LinkButton.class);
                 linkButton.setCaption(event.getItem().getInsuranceContract().getContract());
-                linkButton.setAction(new BaseAction("contractField").withHandler(e->{
+                linkButton.setAction(new BaseAction("contractField").withHandler(e -> {
                     InsuredPersonEdit editorBuilder = (InsuredPersonEdit) screenBuilders.editor(insuredPersonsTable)
                             .editEntity(event.getItem())
                             .build();
@@ -75,11 +75,12 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             }
 
             @Override
-            public Class<LinkButton> getType(){
+            public Class<LinkButton> getType() {
                 return LinkButton.class;
             }
 
         }, 0);
+
         column.setRenderer(insuredPersonsTable.createRenderer(DataGrid.ComponentRenderer.class));
 
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
@@ -93,7 +94,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
         DicCompany dicCompany = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
 
-        if (dicCompany != null){
+        if (dicCompany != null) {
             InsuranceContract contract = dataManager.load(InsuranceContract.class)
                     .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId" +
                             " and current_date between e.availabilityPeriodFrom and e.availabilityPeriodTo")
@@ -104,17 +105,13 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             long assignedDay = TimeUnit.DAYS.convert(
                     Math.abs(timeSource.currentTimestamp().getTime() - personGroupExt.getCurrentAssignment().getAssignDate().getTime()),
                     TimeUnit.MILLISECONDS);
-            if (contract != null && assignedDay > contract.getAttachingAnEmployee()){
-                insuredPersonsTableJoinMIC.setEnabled(true);
-            }else {
-                insuredPersonsTableJoinMIC.setEnabled(false);
-            }
+            insuredPersonsTableJoinMIC.setEnabled(contract != null && assignedDay > contract.getAttachingAnEmployee());
         }
     }
 
     @Subscribe("insuredPersonsTable.joinMIC")
     public void onInsuredPersonsTableJoinMIC(Action.ActionPerformedEvent event) {
-       joinEmployee("joinEmployee");
+        joinEmployee("joinEmployee");
     }
 
     @Subscribe(id = "insuredPersonsDc", target = Target.DATA_CONTAINER)
@@ -129,7 +126,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 Math.abs(timeSource.currentTimestamp().getTime() - personGroupExt.getCurrentAssignment().getAssignDate().getTime()),
                 TimeUnit.MILLISECONDS);
 
-        if (event.getItem() != null && assignedDay < 45){
+        if (event.getItem() != null && assignedDay < 45) {
             insuredPersonsTableJoinFamilyMember.setEnabled(false);
         }
     }
@@ -145,7 +142,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         editorBuilder.show();
     }
 
-    public InsuredPerson chekType(InsuredPerson insuredPerson, String whichButton){
+    public InsuredPerson chekType(InsuredPerson insuredPerson, String whichButton) {
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
         Date today = timeSource.currentTimestamp();
         insuredPerson.setAttachDate(today);
@@ -165,9 +162,9 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
 
         PersonExt person = personGroupExt.getPerson();
         AssignmentExt assignment = personGroupExt.getCurrentAssignment();
-        if (whichButton.equals("joinEmployee")){
+        if (whichButton.equals("joinEmployee")) {
             insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
-            if (contract != null){
+            if (contract != null) {
                 insuredPerson.setInsuranceContract(contract);
                 insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
             }
@@ -181,34 +178,34 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                     .list().stream().findFirst().orElse(null);
 
             boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
-            if (isEmptyDocument){
+            if (isEmptyDocument) {
                 insuredPerson.setDocumentType(contract.getDefaultDocumentType());
-            }else {
+            } else {
                 boolean isSetDocument = false;
-                for (PersonDocument document : personGroupExt.getPersonDocuments()){
-                    if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())){
+                for (PersonDocument document : personGroupExt.getPersonDocuments()) {
+                    if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
                         insuredPerson.setDocumentType(document.getDocumentType());
                         insuredPerson.setDocumentNumber(document.getDocumentNumber());
                         isEmptyDocument = true;
                         break;
                     }
                 }
-                if (!isEmptyDocument){
+                if (!isEmptyDocument) {
                     insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
                     insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
                 }
             }
 
-            if (!personGroupExt.getAddresses().isEmpty()){
+            if (!personGroupExt.getAddresses().isEmpty()) {
                 boolean isSetAddress = false;
-                for (Address a : personGroupExt.getAddresses()){
-                    if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())){
+                for (Address a : personGroupExt.getAddresses()) {
+                    if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
                         insuredPerson.setAddressType(a);
                         isSetAddress = true;
                         break;
                     }
                 }
-                if (!isSetAddress){
+                if (!isSetAddress) {
                     insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
                 }
             }

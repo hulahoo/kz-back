@@ -9055,8 +9055,8 @@ create table TSADV_INSURANCE_CONTRACT (
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
     --
-    POLICY_NAME varchar(25) not null,
-    CONTRACT varchar(10) not null,
+    POLICY_NAME varchar(255) not null,
+    CONTRACT varchar(255) not null,
     SIGN_DATE date not null,
     COMPANY_ID uuid not null,
     INSURER varchar(255),
