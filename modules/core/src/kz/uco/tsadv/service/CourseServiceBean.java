@@ -897,9 +897,19 @@ public class CourseServiceBean implements CourseService {
         return dataManager.loadList(LoadContext.create(DicCategory.class)
                 .setQuery(LoadContext.createQuery("" +
                         "select distinct c " +
-                        "   from tsadv$DicCategory c "))
+                        "   from tsadv$DicCategory c " +
+                        "   where c.courses is not empty"))
                 .setView("category-courses"))
                 .stream()
+                .peek(category ->
+                        category.getCourses()
+                                .forEach(course -> course.setEnrollments(
+                                        course.getEnrollments()
+                                                .stream()
+                                                .filter(e ->
+                                                        e.getPersonGroup().equals(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP))
+                                                                && e.getStatus().equals(EnrollmentStatus.COMPLETED))
+                                                .collect(Collectors.toList()))))
                 .peek(c -> c.setCourses(c.getCourses().stream()
                         .filter(course -> BooleanUtils.isTrue(course.getActiveFlag()))
                         .collect(Collectors.toList())))
@@ -914,7 +924,8 @@ public class CourseServiceBean implements CourseService {
                         "select distinct c " +
                         "            from tsadv$DicCategory c " +
                         "            join c.courses cc " +
-                        "            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%'))) ")
+                        "            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%'))) " +
+                        "            and c.courses is not empty")
                         .setParameter("courseName", courseName))
                 .setView("category-courses"))
                 .stream()
