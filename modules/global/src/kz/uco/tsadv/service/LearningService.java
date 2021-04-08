@@ -20,6 +20,4 @@ public interface LearningService {
     String unzipPackage(String packageName, FileDescriptor fileDescriptor);
 
     boolean deletePackage(String dirName);
-
-    List<LearningHistoryPojo> learningHistory(UUID personGroupId);
 }

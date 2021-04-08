@@ -17,6 +17,7 @@ import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@NamePattern("%s|id,organizationGroup,endDate,startDate,positionGroup,elementType,createdBy,createTs,updateTs,updatedBy")
 @Listeners("tsadv_HierarchyElementExtListener")
 @Extends(HierarchyElement.class)
 @Entity(name = "base$HierarchyElementExt")
