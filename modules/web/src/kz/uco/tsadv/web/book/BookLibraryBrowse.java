@@ -52,7 +52,11 @@ public class BookLibraryBrowse extends AbstractLookup {
             List<Book> books = new ArrayList<>(e.getDs().getItems());
             bookCategories.removeAll();
             if (!books.isEmpty()) {
-                books.sort(Comparator.comparing(Book::getBookNameLang1));
+                books.sort((o1, o2) -> {
+                    String firstBookName = (o1.getBookNameLang1() != null) ? o1.getBookNameLang1() : "";
+                    String secondBookName = (o2.getBookNameLang1() != null) ? o2.getBookNameLang1() : "";
+                    return firstBookName.compareTo(secondBookName);
+                });
                 for (Book book : books) {
                     if (book.getActive() != null && book.getActive()) {
                         bookCategories.add(createCardAllBooks(book, getWindowManager()));
