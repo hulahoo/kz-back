@@ -35,8 +35,11 @@
         <scrollBox id="scrollBox" spacing="true">
             <form id="form">
                 <column width="250px">
-                    <lookupField id="statusField" property="status" optionsContainer="statusDc"/>
-                    <lookupField id="stageField" property="stage" optionsContainer="stageDc" required="true"/>
+                    <lookupField id="statusField" caption="msg://kz.uco.tsadv.entity.bproc/AbstractBprocRequest.status"
+                                 property="status" optionsContainer="statusDc" required="true"/>
+                    <lookupField id="stageField"
+                                 caption="msg://kz.uco.tsadv.modules.performance.model/AssignedPerformancePlan.stage"
+                                 property="stage" optionsContainer="stageDc" required="true"/>
                 </column>
             </form>
         </scrollBox>
