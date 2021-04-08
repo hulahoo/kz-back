@@ -99,7 +99,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
             }
         });
 
-        setInvisibleFields();
+//        setInvisibleFields();
     }
 
     protected void setInvisibleFields() {
@@ -148,7 +148,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
 
     @Override
     protected boolean postCommit(boolean committed, boolean close) {
-        callRefreshPersonBalanceSqlFunction();
+//        callRefreshPersonBalanceSqlFunction();
         if (committed && close) {
             showNotification(getMessage("person.card.commit.title"), getMessage("person.card.commit.msg"), NotificationType.TRAY);
         }

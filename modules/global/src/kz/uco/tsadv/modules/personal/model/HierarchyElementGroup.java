@@ -16,7 +16,7 @@ import javax.persistence.Transient;
 import java.util.Date;
 import java.util.List;
 
-@NamePattern("%s|name")
+@NamePattern("%s|name,list")
 @Table(name = "TSADV_HIERARCHY_ELEMENT_GROUP")
 @Entity(name = "tsadv_HierarchyElementGroup")
 public class HierarchyElementGroup extends AbstractGroup implements IEntityGroup<HierarchyElementExt> {

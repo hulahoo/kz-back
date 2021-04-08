@@ -356,7 +356,7 @@
         </property>
         <property name="successCriteria"/>
     </view>
-    <view entity="tsadv$Enrollment" name="learning-history">
+    <view entity="tsadv$Enrollment" name="learning-history" extends="_local">
         <property name="courseSchedule" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
