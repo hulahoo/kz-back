@@ -113,7 +113,7 @@
                         <column property="result"/>
                         <column property="gzp"/>
                         <column property="stage"/>
-                        <column property="stepStageStatus"/>
+<!--                        <column property="stepStageStatus"/>-->
                         <column property="status"/>
                         <column property="assignedPerson.company"/>
                     </columns>

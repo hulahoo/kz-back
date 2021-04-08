@@ -9,6 +9,7 @@ import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.modules.performance.dictionary.DicPerformanceStage;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
@@ -44,6 +45,8 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
     protected ExtAppPropertiesConfig extAppPropertiesConfig;
     @Inject
     protected CollectionLoader<AssignedPerformancePlanHistory> assignedHistoryDl;
+    @Inject
+    protected CollectionLoader<DicPerformanceStage> dicPerformanceStageDl;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -52,6 +55,7 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
         assignedGoalDl.load();
         assignedHistoryDl.setParameter("assignedPerformancePlan", assignedPerformancePlanDc.getItem());
         assignedHistoryDl.load();
+        dicPerformanceStageDl.load();
     }
 
     @Subscribe(id = "assignedGoalDc", target = Target.DATA_CONTAINER)
