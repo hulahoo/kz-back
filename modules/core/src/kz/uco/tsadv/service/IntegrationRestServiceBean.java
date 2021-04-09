@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.security.entity.Group;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.base.entity.dictionary.*;
@@ -1354,6 +1355,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (company == null) {
                         return prepareError(result, methodName, assignmentDataJson,
                                 "no base$DicCompany with legacyId " + assignmentJson.getCompanyCode());
+                    } else {
+                        assignmentGroupExt.setCompany(company);
                     }
                     assignmentGroupExt.setLegacyId(assignmentJson.getLegacyId());
                     assignmentGroupExt.setId(UUID.randomUUID());
@@ -4771,6 +4774,16 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     if (personGroupExtList.size() == 1) {
                         tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                        Group group = dataManager.load(Group.class)
+                                .query("select e from sec$Group e " +
+                                        " where e.name = :name ")
+                                .parameter("name", tsadvUser.getPersonGroup().getCompany() != null
+                                        ? tsadvUser.getPersonGroup().getCompany().getCode()
+                                        : null)
+                                .list().stream().findFirst().orElse(null);
+                        if (group != null) {
+                            tsadvUser.setGroup(group);
+                        }
                     } else {
                         continue;
                     }

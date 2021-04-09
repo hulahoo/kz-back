@@ -21270,17 +21270,20 @@
         <property name="personGroup" view="_minimal"/>
     </view>
     <view entity="tsadv$UserExt" name="userExt.edit" extends="_minimal">
-        <property name="image"
-                  view="_minimal"/>
-        <property name="fullName"/>
+        <property name="personGroup" view="personGroupExt.edit">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+        </property>
         <property name="firstName"/>
         <property name="lastName"/>
         <property name="middleName"/>
-        <property name="mobilePhone"/>
-        <property name="telegramChatId"/>
         <property name="email"/>
         <property name="language"/>
-        <property name="personGroup" view="personGroupExt.edit"/>
+        <property name="image" view="_minimal"/>
+        <property name="mobilePhone"/>
+        <property name="telegramChatId"/>
+        <property name="fullName"/>
     </view>
     <view entity="base$PersonGroupExt" name="personGroupExt.edit" extends="_minimal">
         <!--        <property name="list"-->

@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -456,11 +457,11 @@ public class LmsServiceBean implements LmsService {
                 }
                 response.setSuccess(isSucceed(test, response.getScore().intValue()));
 
+                csa.setTestResultPercent(response.getScore().multiply(BigDecimal.valueOf(100)).divide(response.getMaxScore(), RoundingMode.DOWN));
                 csa.setTestResult(response.getScore());
                 csa.setSuccess(response.getSuccess());
                 csa.setActiveAttempt(true);
                 em.merge(csa);
-
             });
             return response;
         });
