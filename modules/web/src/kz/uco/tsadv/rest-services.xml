@@ -635,7 +635,8 @@
             <param name="feedbackTemplateId"/>
         </method>
         <method name="finishFeedback">
-            <param name="answeredFeedback"/>
+            <param name="answeredFeedback" type="kz.uco.tsadv.lms.pojo.AnsweredFeedback"/>
+            <param name="personGroupId" type="java.util.UUID"/>
         </method>
         <method name="loadCourseSectionData">
             <param name="enrollmentId"/>
