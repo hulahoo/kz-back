@@ -27,4 +27,6 @@ public interface LearningService {
     boolean allCourseSectionPassed(List<CourseSection> courseSectionList);
 
     boolean allHomeworkPassed(List<Homework> homeworkList, PersonGroupExt personGroup);
+
+    boolean haveAFeedbackQuestion(Course course, PersonGroupExt personGroup);
 }

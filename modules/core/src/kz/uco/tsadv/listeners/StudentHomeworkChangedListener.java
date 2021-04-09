@@ -42,12 +42,15 @@ public class StudentHomeworkChangedListener {
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void onTsadv_StudentHomeworkBeforeCommit(EntityChangedEvent<StudentHomework, UUID> event) {
         Id<StudentHomework, UUID> entityId = event.getEntityId();
-        StudentHomework studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
+        StudentHomework studentHomework;
         if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+            studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
             if (learningService.allCourseSectionPassed(studentHomework.getHomework().getCourse() != null
                     ? studentHomework.getHomework().getCourse().getSections()
                     : null)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
+                    studentHomework.getPersonGroup())
+                    && learningService.haveAFeedbackQuestion(studentHomework.getHomework().getCourse(),
                     studentHomework.getPersonGroup())) {
                 Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
                         .query("select e from tsadv$Enrollment e " +
@@ -63,10 +66,13 @@ public class StudentHomeworkChangedListener {
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
             if (learningService.allCourseSectionPassed(studentHomework.getHomework().getCourse() != null
                     ? studentHomework.getHomework().getCourse().getSections()
                     : null)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
+                    studentHomework.getPersonGroup())
+                    && learningService.haveAFeedbackQuestion(studentHomework.getHomework().getCourse(),
                     studentHomework.getPersonGroup())) {
                 Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
                         .query("select e from tsadv$Enrollment e " +
@@ -84,7 +90,7 @@ public class StudentHomeworkChangedListener {
         }
     }
 
-    private List<Homework> getHomeworkForCourse(Course course) {
+    protected List<Homework> getHomeworkForCourse(Course course) {
         return dataManager.load(Homework.class)
                 .query("select e from tsadv_Homework e " +
                         " where e.course = :course")

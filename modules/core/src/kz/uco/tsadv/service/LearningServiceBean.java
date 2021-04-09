@@ -18,6 +18,7 @@ import kz.uco.tsadv.modules.learning.dictionary.DicTestType;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.enums.TestSectionOrder;
 import kz.uco.tsadv.modules.learning.model.*;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -656,6 +657,23 @@ public class LearningServiceBean implements LearningService {
             if (studentHomeworks.size() < 1) {
                 success = false;
             }
+        }
+        return success;
+    }
+
+    @Override
+    public boolean haveAFeedbackQuestion(Course course, PersonGroupExt personGroup) {
+        boolean success = true;
+        List<CourseFeedbackPersonAnswer> courseFeedbackPersonAnswerList = dataManager.load(CourseFeedbackPersonAnswer.class)
+                .query("select e from tsadv$CourseFeedbackPersonAnswer e " +
+                        " where e.course = :course " +
+                        " and e.personGroup = :personGroup")
+                .parameter("course", course)
+                .parameter("personGroup", personGroup)
+                .view("courseFeedbackPersonAnswer.edit")
+                .list();
+        if (courseFeedbackPersonAnswerList.size() < 1) {
+            success = false;
         }
         return success;
     }

@@ -59,6 +59,10 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                     && learningService.allHomeworkPassed(getHomeworkForCourse(courseSectionAttempt.getCourseSection().getCourse()),
                     courseSectionAttempt.getEnrollment() != null
                             ? courseSectionAttempt.getEnrollment().getPersonGroup()
+                            : null)
+                    && learningService.haveAFeedbackQuestion(courseSectionAttempt.getCourseSection().getCourse(),
+                    courseSectionAttempt.getEnrollment() != null
+                            ? courseSectionAttempt.getEnrollment().getPersonGroup()
                             : null)) {
                 Enrollment enrollment = courseSectionAttempt.getEnrollment();
                 enrollment.setStatus(EnrollmentStatus.COMPLETED);
