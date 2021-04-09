@@ -725,14 +725,11 @@ public class LmsServiceBean implements LmsService {
     }
 
     @Override
-    public void finishFeedback(AnsweredFeedback answeredFeedback) {
+    public void finishFeedback(AnsweredFeedback answeredFeedback, UUID personGroupId) {
         List<LearningFeedbackQuestion> questions = getFeedbackQuestions(answeredFeedback.getTemplateId(), "question.with.answers");
         persistence.runInTransaction(em -> {
-            UUID userPersonGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
-            Objects.requireNonNull(userPersonGroupId);
-
-            PersonGroupExt personGroup = em.find(PersonGroupExt.class, userPersonGroupId);
-            Objects.requireNonNull(userPersonGroupId);
+            PersonGroupExt personGroup = em.find(PersonGroupExt.class, personGroupId);
+            Objects.requireNonNull(personGroupId);
 
             LearningFeedbackTemplate feedbackTemplate = em.find(LearningFeedbackTemplate.class, answeredFeedback.getTemplateId());
             Objects.requireNonNull(feedbackTemplate);

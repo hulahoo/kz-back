@@ -14382,7 +14382,7 @@ create table TSADV_LEARNING_OBJECT (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     OBJECT_NAME varchar(255) not null,
-    DESCRIPTION varchar(4000) not null,
+    DESCRIPTION varchar(4000),
     URL varchar(4000),
     CONTENT_TYPE varchar(50) not null,
     FILE_ID uuid,
@@ -17170,7 +17170,7 @@ alter table BASE_POSITION add column POSITION_STATUS_ID uuid ^
 alter table BASE_POSITION add column GRADE_RULE_ID uuid ^
 alter table BASE_POSITION add column ORGANIZATION_GROUP_EXT_ID uuid ^
 alter table BASE_POSITION add column EMPLOYEE_CATEGORY_ID uuid ^
-alter table BASE_POSITION add column DTYPE varchar(31) ^
+alter table BASE_POSITION add column DTYPE varchar(100) ^
 update BASE_POSITION set DTYPE = 'base$PositionExt' where DTYPE is null ^
 -- end BASE_POSITION
 -- begin BASE_ORGANIZATION
