@@ -5,7 +5,6 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.app.FileStorageAPI;
-import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileLoader;
@@ -15,12 +14,11 @@ import kz.uco.base.importer.exception.ImportFileEofEvaluationException;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.importer.utils.XlsHelper;
-import kz.uco.tsadv.lms.pojo.LearningHistoryPojo;
 import kz.uco.tsadv.modules.learning.dictionary.DicTestType;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.enums.TestSectionOrder;
 import kz.uco.tsadv.modules.learning.model.*;
-import org.apache.commons.collections.CollectionUtils;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,6 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Service(LearningService.NAME)
 public class LearningServiceBean implements LearningService {
@@ -623,5 +620,43 @@ public class LearningServiceBean implements LearningService {
             throw new FileStorageException(FileStorageException.Type.FILE_NOT_FOUND, "File was not loaded");
 
         return workbook;
+    }
+
+    @Override
+    public boolean allCourseSectionPassed(List<CourseSection> courseSectionList) {
+        boolean success = true;
+        for (CourseSection section : courseSectionList) {
+            List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
+                    .query("select e from tsadv$CourseSectionAttempt e " +
+                            " where e.success = true " +
+                            " and e.courseSection = :section")
+                    .parameter("section", section)
+                    .view("courseSectionAttempt.edit")
+                    .list();
+            if (courseSectionAttemptList.size() < 1) {
+                success = false;
+            }
+        }
+        return success;
+    }
+
+    @Override
+    public boolean allHomeworkPassed(List<Homework> homeworkList, PersonGroupExt personGroup) {
+        boolean success = true;
+        for (Homework homework : homeworkList) {
+            List<StudentHomework> studentHomeworks = dataManager.load(StudentHomework.class)
+                    .query("select e from tsadv_StudentHomework e " +
+                            " where e.isDone = true " +
+                            " and e.homework = :homework " +
+                            " and e.personGroup = :personGroup")
+                    .parameter("homework", homework)
+                    .parameter("personGroup", personGroup)
+                    .view("studentHomework.edit")
+                    .list();
+            if (studentHomeworks.size() < 1) {
+                success = false;
+            }
+        }
+        return success;
     }
 }

@@ -6790,28 +6790,22 @@
     <view class="kz.uco.tsadv.modules.learning.model.CourseSectionAttempt"
           name="courseSectionAttempt.edit">
         <property name="attemptDate"/>
-        <property name="success"/>
-        <property name="enrollment"
-                  view="_minimal">
-            <property name="personGroup"
-                      view="_minimal"/>
-        </property>
-        <property name="courseSection"
-                  view="_minimal">
-            <property name="format"
-                      view="_local"/>
-            <property name="course"
-                      view="_minimal">
-                <property name="id"/>
-            </property>
-        </property>
-        <property name="courseSectionFormat"/>
-        <property name="activeAttempt"/>
-        <property name="createTs"/>
-        <property name="test"
-                  view="_minimal"/>
+        <property name="test" view="_minimal"/>
         <property name="testResult"/>
         <property name="timeSpent"/>
+        <property name="activeAttempt"/>
+        <property name="success"/>
+        <property name="enrollment" view="_minimal">
+            <property name="personGroup" view="_minimal"/>
+        </property>
+        <property name="courseSection" view="_minimal">
+            <property name="course" view="_minimal">
+                <property name="sections" view="_minimal"/>
+            </property>
+            <property name="format" view="_local"/>
+        </property>
+        <property name="courseSectionFormat"/>
+        <property name="createTs"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CourseSection"
           name="courseSection.minimal">
@@ -23576,7 +23570,9 @@
     </view>
     <view entity="tsadv_StudentHomework" name="studentHomework.edit" extends="_local">
         <property name="homework" view="_minimal">
-            <property name="course" view="_minimal"/>
+            <property name="course" view="_minimal">
+                <property name="sections" view="_minimal"/>
+            </property>
         </property>
         <property name="personGroup" view="_minimal">
             <property name="fullName"/>
