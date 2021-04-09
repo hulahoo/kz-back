@@ -1355,6 +1355,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     if (company == null) {
                         return prepareError(result, methodName, assignmentDataJson,
                                 "no base$DicCompany with legacyId " + assignmentJson.getCompanyCode());
+                    } else {
+                        assignmentGroupExt.setCompany(company);
                     }
                     assignmentGroupExt.setLegacyId(assignmentJson.getLegacyId());
                     assignmentGroupExt.setId(UUID.randomUUID());
