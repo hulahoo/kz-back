@@ -24,60 +24,64 @@
         <tabSheet id="tabSheet">
             <tab id="mainInfo"
                  caption="msg://mainInfo"
+                 spacing="true"
                  margin="true,true,true,false">
-                <fieldGroup id="fieldGroup"
-                            datasource="learningObjectDs">
-                    <column width="1100px">
-                        <field id="objectName" width="500px"/>
-                        <field id="contentType" width="200px"/>
-                        <field id="file"
-                               width="500px"
-                               visible="false"/>
-                        <field id="url"
-                               visible="false"/>
-                        <field id="html"
-                               property="html">
-                            <resizableTextArea id="htmlText"
-                                               datasource="learningObjectDs"
-                                               property="html"
-                                               height="500px"
-                                               visible="false"/>
-                        </field>
-                        <field id="text"
-                               property="text">
-                            <richTextArea id="text"
-                                          height="500px"
-                                          datasource="learningObjectDs"
-                                          property="text"
-                                          visible="false"/>
-                        </field>
-                    </column>
-                </fieldGroup>
-                <vbox id="buttonBox"
-                      margin="true">
-                    <button id="playButton"
-                            caption="msg://play"
-                            invoke="play"/>
+                <vbox id="vbox" width="100%" expand="groupBox" height="100%" spacing="true" >
+                    <hbox id="hbox" width="AUTO" spacing="true" expand="fieldGroup"
+                          margin="true, false, false, false">
+                        <fieldGroup id="fieldGroup"
+                                    datasource="learningObjectDs">
+                            <column width="100%">
+                                <field id="objectName" width="500px"/>
+                                <field id="contentType" width="200px"/>
+                                <field id="file"
+                                       width="500px"
+                                       visible="false"/>
+                                <field id="url"
+                                       visible="false" width="500px"/>
+                                <field id="html"
+                                       property="html">
+                                    <resizableTextArea id="htmlText"
+                                                       datasource="learningObjectDs"
+                                                       property="html"
+                                                       width="500px"
+                                                       height="400px"
+                                                       visible="false"/>
+                                </field>
+                                <field id="text"
+                                       property="text">
+                                    <richTextArea id="text"
+                                                  height="400px"
+                                                  datasource="learningObjectDs"
+                                                  property="text"
+                                                  visible="false"/>
+                                </field>
+                            </column>
+                        </fieldGroup>
+                            <button id="playButton"
+                                    caption="msg://play"
+                                    invoke="play"/>
+                    </hbox>
+                    <groupBox id="groupBox" spacing="true" expand="scormQuestionMappingTable" visible="false">
+                        <table id="scormQuestionMappingTable" width="100%">
+                            <actions>
+                                <action id="create" caption="msg://create" invoke="scormQuestionMappingCreate"/>
+                                <action id="edit"/>
+                                <action id="remove"/>
+                            </actions>
+                            <columns>
+                                <column id="code"/>
+                                <column id="question"/>
+                            </columns>
+                            <rows datasource="scormQuestionMappingDc"/>
+                            <buttonsPanel>
+                                <button action="scormQuestionMappingTable.create"/>
+                                <button action="scormQuestionMappingTable.edit"/>
+                                <button action="scormQuestionMappingTable.remove"/>
+                            </buttonsPanel>
+                        </table>
+                    </groupBox>
                 </vbox>
-                <groupBox id="groupBox" spacing="true" expand="scormQuestionMappingTable" visible="false">
-                    <table id="scormQuestionMappingTable" width="100%">
-                        <actions>
-                            <action id="create" caption="msg://create" invoke="scormQuestionMappingCreate"/>
-                            <action id="edit"/>
-                            <action id="remove"/>
-                        </actions>
-                        <columns>
-                            <column id="code"/>
-                            <column id="question"/>
-                        </columns>
-                        <rows datasource="scormQuestionMappingDc"/>
-                        <buttonsPanel>
-                            <button action="scormQuestionMappingTable.create"/>
-                            <button action="scormQuestionMappingTable.edit"/>
-                            <button action="scormQuestionMappingTable.remove"/>
-                        </buttonsPanel>
-                    </table>
-                </groupBox>
             </tab>
             <tab id="description"
                  caption="msg://LearningObject.description"

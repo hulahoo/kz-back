@@ -1,17 +1,11 @@
 package kz.uco.tsadv.modules.learning.model;
 
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.enums.ContentType;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Table(name = "TSADV_LEARNING_OBJECT")
 @Entity(name = "tsadv$LearningObject")
@@ -21,7 +15,7 @@ public class LearningObject extends AbstractParentEntity {
     @Column(name = "OBJECT_NAME", nullable = false)
     protected String objectName;
 
-    @Column(name = "DESCRIPTION", nullable = false, length = 4000)
+    @Column(name = "DESCRIPTION", length = 4000)
     protected String description;
 
     @Column(name = "URL", length = 4000)
