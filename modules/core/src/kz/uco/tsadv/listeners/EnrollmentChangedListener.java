@@ -64,8 +64,9 @@ public class EnrollmentChangedListener {
     public void afterCommit(EntityChangedEvent<Enrollment, UUID> event) {
         AttributeChanges changes = event.getChanges();
         Id<Enrollment, UUID> entityId = event.getEntityId();
-        Enrollment enrollment = dataManager.load(entityId).view("enrollment.for.course").one();
+        Enrollment enrollment;
         if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            enrollment = dataManager.load(entityId).view("enrollment.for.course").one();
 
             for (String attribute : changes.getAttributes()) {
 
@@ -147,6 +148,7 @@ public class EnrollmentChangedListener {
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+            enrollment = dataManager.load(entityId).view("enrollment.for.course").one();
 
             if (EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 

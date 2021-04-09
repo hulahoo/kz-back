@@ -21,12 +21,14 @@ public class AssignedPerformancePlanChangedListener {
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<AssignedPerformancePlan, UUID> event) {
         Id<AssignedPerformancePlan, UUID> entityId = event.getEntityId();
-        AssignedPerformancePlan assignedPerformancePlan = txDataManager.load(entityId).view("assignedPerformancePlan.browse").one();
+        AssignedPerformancePlan assignedPerformancePlan;
         if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            assignedPerformancePlan = txDataManager.load(entityId).view("assignedPerformancePlan.browse").one();
             if (event.getChanges().isChanged("stage") || event.getChanges().isChanged("status")) {
                 createAssignedHistory(assignedPerformancePlan);
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+            assignedPerformancePlan = txDataManager.load(entityId).view("assignedPerformancePlan.browse").one();
             createAssignedHistory(assignedPerformancePlan);
         }
     }

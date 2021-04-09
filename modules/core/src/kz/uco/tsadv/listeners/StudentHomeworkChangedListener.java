@@ -33,11 +33,14 @@ public class StudentHomeworkChangedListener {
     public void afterCommit(EntityChangedEvent<StudentHomework, UUID> event) {
         AttributeChanges changes = event.getChanges();
         Id<StudentHomework, UUID> entityId = event.getEntityId();
-        StudentHomework studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
+        StudentHomework studentHomework;
         if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+
+            studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
             sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
 
+            studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
             for (String attribute : changes.getAttributes()) {
                 if (attribute.equals("answer") || attribute.equals("answerFile")) {
                     sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
