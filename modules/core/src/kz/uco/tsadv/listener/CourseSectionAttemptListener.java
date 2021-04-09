@@ -81,6 +81,7 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
     public void onBeforeUpdate(CourseSectionAttempt courseSectionAttempt, EntityManager entityManager) {
         if (courseSectionAttempt.getTest() != null &&
                 persistence.getTools().isDirty(courseSectionAttempt, "testResult")
+                && courseSectionAttempt.getTestResultPercent() == null
         ) {
             courseSectionAttempt.setTestResultPercent(testHelper.calculateTestResultPercent(courseSectionAttempt));
         }
