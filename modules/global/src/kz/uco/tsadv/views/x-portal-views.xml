@@ -378,6 +378,7 @@
             <property name="sections" view="_minimal">
                 <property name="order"/>
                 <property name="courseSectionAttempts" view="_minimal">
+                    <property name="createTs"/>
                     <property name="attemptDate"/>
                     <property name="enrollment" view="_minimal"/>
                     <property name="courseSection" view="_minimal">

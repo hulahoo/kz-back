@@ -49,7 +49,7 @@ public class LearningController {
                             CourseSectionAttempt lastCourseSectionAttempt = s.getCourseSectionAttempts()
                                     .stream()
                                     .filter(csa -> csa.getEnrollment().getId().equals(e.getId()))
-                                    .max(Comparator.comparing(CourseSectionAttempt::getAttemptDate))
+                                    .max(Comparator.comparing(CourseSectionAttempt::getCreateTs))
                                     .orElse(null);
                             s.setCourseSectionAttempts(lastCourseSectionAttempt == null
                                     ? null
