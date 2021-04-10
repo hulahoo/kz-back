@@ -3,7 +3,10 @@ package kz.uco.tsadv.service;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.tsadv.lms.pojo.LearningHistoryPojo;
 import kz.uco.tsadv.modules.learning.model.Course;
+import kz.uco.tsadv.modules.learning.model.CourseSection;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
+import kz.uco.tsadv.modules.learning.model.Homework;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,4 +23,10 @@ public interface LearningService {
     String unzipPackage(String packageName, FileDescriptor fileDescriptor);
 
     boolean deletePackage(String dirName);
+
+    boolean allCourseSectionPassed(List<CourseSection> courseSectionList);
+
+    boolean allHomeworkPassed(List<Homework> homeworkList, PersonGroupExt personGroup);
+
+    boolean haveAFeedbackQuestion(Course course, PersonGroupExt personGroup);
 }
