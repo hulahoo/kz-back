@@ -400,4 +400,9 @@
         <property name="personGroup" view="_minimal"/>
         <property name="status"/>
     </view>
+    <view entity="tsadv$CourseSection" name="courseSection.course.sections" extends="_minimal">
+        <property name="course" view="_minimal">
+            <property name="sections" view="_minimal"/>
+        </property>
+    </view>
 </views>
