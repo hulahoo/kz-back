@@ -33,7 +33,7 @@ public class CourseFeedbackPersonAnswerChangedListener {
         Id<CourseFeedbackPersonAnswer, UUID> entityId = event.getEntityId();
         CourseFeedbackPersonAnswer courseFeedbackPersonAnswer;
         if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            courseFeedbackPersonAnswer = dataManager.load(entityId).view("courseFeedbackPersonAnswer.edit").one();
+            courseFeedbackPersonAnswer = transactionalDataManager.load(entityId).view("courseFeedbackPersonAnswer.edit").one();
             if (learningService.allCourseSectionPassed(courseFeedbackPersonAnswer.getCourse() != null
                     ? courseFeedbackPersonAnswer.getCourse().getSections()
                     : null)
