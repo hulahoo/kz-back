@@ -99,7 +99,7 @@ public class DocumentServiceBean implements DocumentService {
             }
         }
 
-        if (!personGroupExt.getAddresses().isEmpty() || contract.getDefaultAddress() != null) {
+        if (!personGroupExt.getAddresses().isEmpty()) {
             boolean isSetAddress = false;
             for (Address a : personGroupExt.getAddresses()) {
                 if (a.getAddressType().equals(contract.getDefaultAddress())) {
