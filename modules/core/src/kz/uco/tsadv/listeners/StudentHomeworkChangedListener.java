@@ -44,7 +44,7 @@ public class StudentHomeworkChangedListener {
         Id<StudentHomework, UUID> entityId = event.getEntityId();
         StudentHomework studentHomework;
         if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
+            studentHomework = transactionalDataManager.load(entityId).view("studentHomework.edit").one();
             if (learningService.allCourseSectionPassed(studentHomework.getHomework().getCourse() != null
                     ? studentHomework.getHomework().getCourse().getSections()
                     : null)
@@ -66,7 +66,7 @@ public class StudentHomeworkChangedListener {
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-            studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
+            studentHomework = transactionalDataManager.load(entityId).view("studentHomework.edit").one();
             if (learningService.allCourseSectionPassed(studentHomework.getHomework().getCourse() != null
                     ? studentHomework.getHomework().getCourse().getSections()
                     : null)
