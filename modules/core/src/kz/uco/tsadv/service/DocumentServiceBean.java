@@ -4,6 +4,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
@@ -36,6 +37,10 @@ public class DocumentServiceBean implements DocumentService {
     protected TimeSource timeSource;
     @Inject
     private EmployeeNumberService employeeNumberService;
+    @Inject
+    protected Messages messages;
+    @Inject
+    protected Metadata metadata;
 
     @Override
     public List<InsuredPerson> getMyInsuraces() {
@@ -66,19 +71,22 @@ public class DocumentServiceBean implements DocumentService {
                 .parameter("companyId", company.getId())
                 .view("insuranceContract-editView")
                 .list().stream().findFirst().orElse(null);
-        insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
-        if (contract != null) {
-            insuredPerson.setInsuranceContract(contract);
-            insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
+
+        if (contract == null) {
+            throw new PortalException(String.format(messages.getMainMessage("hr.user.not.found"),
+                    messages.getTools().getEntityCaption(metadata.getClassNN(InsuranceContract.class))));
         }
+
+        insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
+        insuredPerson.setInsuranceContract(contract);
+        insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
 
         boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
         if (isEmptyDocument) {
             insuredPerson.setDocumentType(contract.getDefaultDocumentType());
         } else {
-            boolean isSetDocument = false;
             for (PersonDocument document : personGroupExt.getPersonDocuments()) {
-                if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
+                if (document.getDocumentType().equals(contract.getDefaultDocumentType())) {
                     insuredPerson.setDocumentType(document.getDocumentType());
                     insuredPerson.setDocumentNumber(document.getDocumentNumber());
                     isEmptyDocument = true;
@@ -91,10 +99,10 @@ public class DocumentServiceBean implements DocumentService {
             }
         }
 
-        if (!personGroupExt.getAddresses().isEmpty()) {
+        if (!personGroupExt.getAddresses().isEmpty() || contract.getDefaultAddress() != null) {
             boolean isSetAddress = false;
             for (Address a : personGroupExt.getAddresses()) {
-                if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
+                if (a.getAddressType().equals(contract.getDefaultAddress())) {
                     insuredPerson.setAddressType(a);
                     isSetAddress = true;
                     break;
@@ -239,14 +247,17 @@ public class DocumentServiceBean implements DocumentService {
                 .view("insuranceContract-editView")
                 .list().stream().findFirst().orElse(null);
 
+        if (contract == null) {
+            throw new PortalException(String.format(messages.getMainMessage("hr.user.not.found"),
+                    messages.getTools().getEntityCaption(metadata.getClassNN(InsuranceContract.class))));
+        }
+
         PersonExt person = personGroupExt.getPerson();
         AssignmentExt assignment = personGroupExt.getCurrentAssignment();
 
         insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
-        if (contract != null) {
-            insuredPerson.setInsuranceContract(contract);
-            insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
-        }
+        insuredPerson.setInsuranceContract(contract);
+        insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
 
         Address address = dataManager.load(Address.class).query("select e " +
                 "from tsadv$Address e " +
@@ -260,9 +271,8 @@ public class DocumentServiceBean implements DocumentService {
         if (isEmptyDocument) {
             insuredPerson.setDocumentType(contract.getDefaultDocumentType());
         } else {
-            boolean isSetDocument = false;
             for (PersonDocument document : personGroupExt.getPersonDocuments()) {
-                if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
+                if (document.getDocumentType().equals(contract.getDefaultDocumentType())) {
                     insuredPerson.setDocumentType(document.getDocumentType());
                     insuredPerson.setDocumentNumber(document.getDocumentNumber());
                     isEmptyDocument = true;
@@ -278,7 +288,7 @@ public class DocumentServiceBean implements DocumentService {
         if (!personGroupExt.getAddresses().isEmpty()) {
             boolean isSetAddress = false;
             for (Address a : personGroupExt.getAddresses()) {
-                if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
+                if (a.getAddressType().equals(contract.getDefaultAddress())) {
                     insuredPerson.setAddressType(a);
                     isSetAddress = true;
                     break;
