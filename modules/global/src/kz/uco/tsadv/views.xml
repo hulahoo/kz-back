@@ -21161,6 +21161,11 @@
             <property name="organizationGroupExt"
                       view="organizationGroupExt-receptionAssignment"/>
             <property name="jobGroup" view="_local">
+                <property name="list" view="_minimal">
+                    <property name = "legacyId"/>
+                    <property name = "startDate"/>
+                    <property name = "endDate"/>
+                </property>
                 <property name="jobNameDefault"/>
             </property>
             <property name="gradeGroup" view="gradeGroup-receptionAssignment"/>
