@@ -15,7 +15,7 @@ import java.util.List;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 @Listeners("tsadv_CalendarListener")
-@NamePattern("%s|id")
+@NamePattern("%s|id,description")
 @Table(name = "TSADV_CALENDAR")
 @Entity(name = "tsadv$Calendar")
 public class Calendar extends AbstractParentEntity {

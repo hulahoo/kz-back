@@ -9,16 +9,14 @@ import com.haulmont.cuba.core.listener.*;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.beans.TestHelper;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
-import kz.uco.tsadv.modules.learning.model.Course;
-import kz.uco.tsadv.modules.learning.model.CourseSectionAttempt;
-import kz.uco.tsadv.modules.learning.model.Enrollment;
-import kz.uco.tsadv.modules.learning.model.Homework;
+import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.service.LearningService;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
 import java.sql.Connection;
 import java.util.List;
+import java.util.UUID;
 
 @Component("tsadv_CourseSectionAttemptListener")
 public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<CourseSectionAttempt>, BeforeDetachEntityListener<CourseSectionAttempt>, BeforeInsertEntityListener<CourseSectionAttempt>, BeforeUpdateEntityListener<CourseSectionAttempt>, AfterDeleteEntityListener<CourseSectionAttempt>, AfterInsertEntityListener<CourseSectionAttempt>, AfterUpdateEntityListener<CourseSectionAttempt>, BeforeAttachEntityListener<CourseSectionAttempt> {
@@ -53,18 +51,20 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         if (courseSectionAttempt.getTest() != null) {
             courseSectionAttempt.setTestResultPercent(testHelper.calculateTestResultPercent(courseSectionAttempt));
         }
-        if (courseSectionAttempt.getCourseSection() != null && courseSectionAttempt.getCourseSection().getCourse() != null
-                && courseSectionAttempt.getCourseSection().getCourse().getSections() != null) {
-            if (learningService.allCourseSectionPassed(courseSectionAttempt.getCourseSection().getCourse().getSections())
-                    && learningService.allHomeworkPassed(getHomeworkForCourse(courseSectionAttempt.getCourseSection().getCourse()),
-                    courseSectionAttempt.getEnrollment() != null
-                            ? courseSectionAttempt.getEnrollment().getPersonGroup()
+        CourseSection courseSection = entityManager.find(CourseSection.class, courseSectionAttempt.getCourseSection().getId(), "courseSection.course.sections");
+        if (courseSection != null && courseSection.getCourse() != null
+                && courseSection.getCourse().getSections() != null) {
+            UUID enrollmentId = courseSectionAttempt.getEnrollment().getId();
+            Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.person");
+            if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections())
+                    && learningService.allHomeworkPassed(getHomeworkForCourse(courseSection.getCourse()),
+                    enrollment != null
+                            ? enrollment.getPersonGroup()
                             : null)
-                    && learningService.haveAFeedbackQuestion(courseSectionAttempt.getCourseSection().getCourse(),
-                    courseSectionAttempt.getEnrollment() != null
-                            ? courseSectionAttempt.getEnrollment().getPersonGroup()
+                    && learningService.haveAFeedbackQuestion(courseSection.getCourse(),
+                    enrollment != null
+                            ? enrollment.getPersonGroup()
                             : null)) {
-                Enrollment enrollment = courseSectionAttempt.getEnrollment();
                 enrollment.setStatus(EnrollmentStatus.COMPLETED);
                 transactionalDataManager.save(enrollment);
             }
@@ -89,14 +89,15 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         ) {
             courseSectionAttempt.setTestResultPercent(testHelper.calculateTestResultPercent(courseSectionAttempt));
         }
-        if (courseSectionAttempt.getCourseSection() != null && courseSectionAttempt.getCourseSection().getCourse() != null
-                && courseSectionAttempt.getCourseSection().getCourse().getSections() != null) {
-            if (learningService.allCourseSectionPassed(courseSectionAttempt.getCourseSection().getCourse().getSections())
-                    && learningService.allHomeworkPassed(getHomeworkForCourse(courseSectionAttempt.getCourseSection().getCourse()),
-                    courseSectionAttempt.getEnrollment() != null
-                            ? courseSectionAttempt.getEnrollment().getPersonGroup()
+        CourseSection courseSection = entityManager.find(CourseSection.class, courseSectionAttempt.getCourseSection().getId(), "courseSection.course.sections");
+        if (courseSection != null && courseSection.getCourse() != null
+                && courseSection.getCourse().getSections() != null) {
+            Enrollment enrollment = entityManager.find(Enrollment.class, courseSectionAttempt.getEnrollment().getId(), "enrollment.person");
+            if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections())
+                    && learningService.allHomeworkPassed(getHomeworkForCourse(courseSection.getCourse()),
+                    enrollment != null
+                            ? enrollment.getPersonGroup()
                             : null)) {
-                Enrollment enrollment = courseSectionAttempt.getEnrollment();
                 enrollment.setStatus(EnrollmentStatus.COMPLETED);
                 transactionalDataManager.save(enrollment);
             }

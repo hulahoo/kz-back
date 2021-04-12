@@ -2670,14 +2670,14 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, absenceData,
                             "no absenceDuration");
                 }
-                if (absenceJson.getOrderNumber() == null || absenceJson.getOrderNumber().isEmpty()) {
-                    return prepareError(result, methodName, absenceData,
-                            "no orderNumber");
-                }
-                if (absenceJson.getOrderDate() == null || absenceJson.getOrderDate().isEmpty()) {
-                    return prepareError(result, methodName, absenceData,
-                            "no orderDate");
-                }
+//                if (absenceJson.getOrderNumber() == null || absenceJson.getOrderNumber().isEmpty()) {
+//                    return prepareError(result, methodName, absenceData,
+//                            "no orderNumber");
+//                }
+//                if (absenceJson.getOrderDate() == null || absenceJson.getOrderDate().isEmpty()) {
+//                    return prepareError(result, methodName, absenceData,
+//                            "no orderDate");
+//                }
                 Absence absence = dataManager.load(Absence.class)
                         .query("select e from tsadv$Absence e " +
                                 " where e.legacyId = :legacyId " +
@@ -2709,7 +2709,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
                     absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
                     absence.setOrderNum(absenceJson.getOrderNumber());
-                    absence.setOrderDate(formatter.parse(absenceJson.getOrderDate()));
+                    absence.setOrderDate(absenceJson.getOrderDate() != null && !absenceJson.getOrderDate().isEmpty()
+                            ? formatter.parse(absenceJson.getOrderDate())
+                            : null);
                     DicAbsenceType absenceType = dataManager.load(DicAbsenceType.class)
                             .query("select e from tsadv$DicAbsenceType e " +
                                     " where e.legacyId = :legacyId " +
@@ -2750,7 +2752,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     absence.setDateTo(formatter.parse(absenceJson.getEndDate()));
                     absence.setAbsenceDays(Integer.valueOf(absenceJson.getAbsenceDuration()));
                     absence.setOrderNum(absenceJson.getOrderNumber());
-                    absence.setOrderDate(formatter.parse(absenceJson.getOrderDate()));
+                    absence.setOrderDate(absenceJson.getOrderDate() != null && !absenceJson.getOrderDate().isEmpty()
+                            ? formatter.parse(absenceJson.getOrderDate())
+                            : null);
                     DicAbsenceType absenceType = dataManager.load(DicAbsenceType.class)
                             .query("select e from tsadv$DicAbsenceType e " +
                                     " where e.legacyId = :legacyId " +
