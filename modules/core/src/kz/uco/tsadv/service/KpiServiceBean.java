@@ -1,22 +1,18 @@
 package kz.uco.tsadv.service;
 
-import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
-import kz.uco.tsadv.modules.administration.TsadvUser;
-import kz.uco.tsadv.modules.performance.dictionary.DicGoalCategory;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.model.OrganizationGroupGoalLink;
 import kz.uco.tsadv.modules.personal.model.Salary;
 import kz.uco.tsadv.pojo.PairPojo;
 import kz.uco.tsadv.pojo.kpi.AssignedPerformancePlanListPojo;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.fop.events.Event;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -31,6 +27,8 @@ public class KpiServiceBean implements KpiService {
     protected DataManager dataManager;
     @Inject
     protected DatesService datesService;
+    @Inject
+    protected Metadata metadata;
     @Inject
     private Persistence persistence;
 
@@ -206,5 +204,39 @@ public class KpiServiceBean implements KpiService {
                 .map((e) -> new PairPojo<>(e.getKey().getInstanceName(), e.getValue()))
                 .collect(Collectors.toList());
         return responseAssignedGoals;
+    }
+
+    @Override
+    public List<OrganizationGroupGoalLink> getHierarchyGoals(UUID organizationGroupId) {
+        List<OrganizationGroupGoalLink> organizationGroupGoalList = new ArrayList<>();
+        try (Transaction tx = persistence.createTransaction()) {
+            EntityManager em = persistence.getEntityManager();
+
+            Query query = em.createNativeQuery(
+                    " select t.lvl, " +
+                            "         toggl.id " +
+                            " from tsadv_organization_structure_vw t " +
+                            "         join tsadv_organization_group_goal_link toggl on t.organization_group_path " +
+                            " like '%'|| toggl.organization_group_id || '%' " +
+                            " where current_date between t.start_date and t.end_date " +
+                            "         and toggl.delete_ts is null " +
+                            "         and t.delete_ts is null" +
+                            "         and t.organization_group_id = ?1 "
+            );
+
+            query.setParameter(1, organizationGroupId);
+
+            List<Object[]> rows = query.getResultList();
+            if (!rows.isEmpty()) {
+                for (Object[] row : rows) {
+                    OrganizationGroupGoalLink organizationGroupGoalLink = metadata.create(OrganizationGroupGoalLink.class);
+                    organizationGroupGoalLink.setId((UUID) row[1]);
+                    organizationGroupGoalList.add(organizationGroupGoalLink);
+                }
+                ;
+                return organizationGroupGoalList;
+            }
+        }
+        return organizationGroupGoalList;
     }
 }
