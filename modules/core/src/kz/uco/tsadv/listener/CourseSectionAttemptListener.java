@@ -10,6 +10,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.beans.TestHelper;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.service.LearningService;
 import org.springframework.stereotype.Component;
 
@@ -56,17 +57,21 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 && courseSection.getCourse().getSections() != null) {
             UUID enrollmentId = courseSectionAttempt.getEnrollment().getId();
             Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.person");
-            if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections())
-                    && learningService.allHomeworkPassed(getHomeworkForCourse(courseSection.getCourse()),
-                    enrollment != null
-                            ? enrollment.getPersonGroup()
-                            : null)
-                    && learningService.haveAFeedbackQuestion(courseSection.getCourse(),
-                    enrollment != null
-                            ? enrollment.getPersonGroup()
-                            : null)) {
-                enrollment.setStatus(EnrollmentStatus.COMPLETED);
-                transactionalDataManager.save(enrollment);
+            if (enrollment != null && learningService.allCourseSectionPassed(courseSection.getCourse().getSections())) {
+                boolean homework = true;
+                boolean feedbackQuestion = true;
+                List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+                if (!courseFeedbackTemplateList.isEmpty()) {
+                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+                }
+                List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
+                if (!homeworkList.isEmpty()) {
+                    homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
+                }
+                if (homework && feedbackQuestion) {
+                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
+                    transactionalDataManager.save(enrollment);
+                }
             }
         }
     }

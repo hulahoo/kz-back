@@ -19,6 +19,7 @@ import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.enums.TestSectionOrder;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -662,18 +663,22 @@ public class LearningServiceBean implements LearningService {
     }
 
     @Override
-    public boolean haveAFeedbackQuestion(Course course, PersonGroupExt personGroup) {
+    public boolean haveAFeedbackQuestion(List<CourseFeedbackTemplate> feedbackTemplateList, PersonGroupExt personGroup) {
         boolean success = true;
-        List<CourseFeedbackPersonAnswer> courseFeedbackPersonAnswerList = dataManager.load(CourseFeedbackPersonAnswer.class)
-                .query("select e from tsadv$CourseFeedbackPersonAnswer e " +
-                        " where e.course = :course " +
-                        " and e.personGroup = :personGroup")
-                .parameter("course", course)
-                .parameter("personGroup", personGroup)
-                .view("courseFeedbackPersonAnswer.edit")
-                .list();
-        if (courseFeedbackPersonAnswerList.size() < 1) {
-            success = false;
+        for (CourseFeedbackTemplate courseFeedbackTemplate : feedbackTemplateList) {
+            List<CourseFeedbackPersonAnswer> courseFeedbackPersonAnswerList = dataManager.load(CourseFeedbackPersonAnswer.class)
+                    .query("select e from tsadv$CourseFeedbackPersonAnswer e " +
+                            " where e.course = :course " +
+                            " and e.feedbackTemplate = :feedbackTemplate " +
+                            " and e.personGroup = :personGroup")
+                    .parameter("course", courseFeedbackTemplate.getCourse())
+                    .parameter("feedbackTemplate", courseFeedbackTemplate)
+                    .parameter("personGroup", personGroup)
+                    .view("courseFeedbackPersonAnswer.edit")
+                    .list();
+            if (courseFeedbackPersonAnswerList.size() < 1) {
+                success = false;
+            }
         }
         return success;
     }

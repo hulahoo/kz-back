@@ -6,6 +6,7 @@ import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSection;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.Homework;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import java.io.Serializable;
@@ -28,5 +29,5 @@ public interface LearningService {
 
     boolean allHomeworkPassed(List<Homework> homeworkList, PersonGroupExt personGroup);
 
-    boolean haveAFeedbackQuestion(Course course, PersonGroupExt personGroup);
+    boolean haveAFeedbackQuestion(List<CourseFeedbackTemplate> feedbackTemplateList, PersonGroupExt personGroup);
 }
