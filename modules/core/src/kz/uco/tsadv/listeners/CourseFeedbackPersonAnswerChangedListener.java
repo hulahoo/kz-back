@@ -37,10 +37,13 @@ public class CourseFeedbackPersonAnswerChangedListener {
             if (learningService.allCourseSectionPassed(courseFeedbackPersonAnswer.getCourse() != null
                     ? courseFeedbackPersonAnswer.getCourse().getSections()
                     : null)
-                    && learningService.allHomeworkPassed(getHomeworkForCourse(courseFeedbackPersonAnswer.getCourse()),
-                    courseFeedbackPersonAnswer.getPersonGroup())
-                    && learningService.haveAFeedbackQuestion(courseFeedbackPersonAnswer.getCourse(),
+                    && learningService.haveAFeedbackQuestion(courseFeedbackPersonAnswer.getCourse().getFeedbackTemplates(),
                     courseFeedbackPersonAnswer.getPersonGroup())) {
+                boolean homework = true;
+                List<Homework> homeworkList = getHomeworkForCourse(courseFeedbackPersonAnswer.getCourse());
+                if (!homeworkList.isEmpty()) {
+                    homework = learningService.allHomeworkPassed(homeworkList, courseFeedbackPersonAnswer.getPersonGroup());
+                }
                 Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
                         .query("select e from tsadv$Enrollment e " +
                                 " where e.personGroup = :personGroup " +
@@ -49,7 +52,7 @@ public class CourseFeedbackPersonAnswerChangedListener {
                         .parameter("course", courseFeedbackPersonAnswer.getCourse())
                         .view("enrollment-view")
                         .list().stream().findFirst().orElse(null);
-                if (enrollment != null) {
+                if (enrollment != null && homework) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                 }
@@ -59,10 +62,13 @@ public class CourseFeedbackPersonAnswerChangedListener {
             if (learningService.allCourseSectionPassed(courseFeedbackPersonAnswer.getCourse() != null
                     ? courseFeedbackPersonAnswer.getCourse().getSections()
                     : null)
-                    && learningService.allHomeworkPassed(getHomeworkForCourse(courseFeedbackPersonAnswer.getCourse()),
-                    courseFeedbackPersonAnswer.getPersonGroup())
-                    && learningService.haveAFeedbackQuestion(courseFeedbackPersonAnswer.getCourse(),
+                    && learningService.haveAFeedbackQuestion(courseFeedbackPersonAnswer.getCourse().getFeedbackTemplates(),
                     courseFeedbackPersonAnswer.getPersonGroup())) {
+                boolean homework = true;
+                List<Homework> homeworkList = getHomeworkForCourse(courseFeedbackPersonAnswer.getCourse());
+                if (!homeworkList.isEmpty()) {
+                    homework = learningService.allHomeworkPassed(homeworkList, courseFeedbackPersonAnswer.getPersonGroup());
+                }
                 Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
                         .query("select e from tsadv$Enrollment e " +
                                 " where e.personGroup = :personGroup " +
@@ -71,7 +77,7 @@ public class CourseFeedbackPersonAnswerChangedListener {
                         .parameter("course", courseFeedbackPersonAnswer.getCourse())
                         .view("enrollment-view")
                         .list().stream().findFirst().orElse(null);
-                if (enrollment != null) {
+                if (enrollment != null && homework) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                 }

@@ -15909,6 +15909,10 @@
             <property name="courseFeedbackPersonAnswer" view="_minimal"/>
         </property>
         <property name="course" view="_minimal">
+            <property name="feedbackTemplates" view="_minimal">
+                <property name="feedbackTemplate" view="_minimal"/>
+                <property name="course" view="_minimal"/>
+            </property>
             <property name="sections" view="_minimal"/>
         </property>
         <property name="courseSectionSession" view="_minimal">

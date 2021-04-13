@@ -14,6 +14,7 @@ import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.Homework;
 import kz.uco.tsadv.modules.learning.model.StudentHomework;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.LearningService;
@@ -49,9 +50,12 @@ public class StudentHomeworkChangedListener {
                     ? studentHomework.getHomework().getCourse().getSections()
                     : null)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
-                    studentHomework.getPersonGroup())
-                    && learningService.haveAFeedbackQuestion(studentHomework.getHomework().getCourse(),
                     studentHomework.getPersonGroup())) {
+                boolean feedbackQuestion = true;
+                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
+                if (!courseFeedbackTemplateList.isEmpty()) {
+                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
+                }
                 Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
                         .query("select e from tsadv$Enrollment e " +
                                 " where e.personGroup = :personGroup " +
@@ -60,7 +64,7 @@ public class StudentHomeworkChangedListener {
                         .parameter("course", studentHomework.getHomework().getCourse())
                         .view("enrollment-view")
                         .list().stream().findFirst().orElse(null);
-                if (enrollment != null) {
+                if (enrollment != null && feedbackQuestion) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                 }
@@ -71,9 +75,12 @@ public class StudentHomeworkChangedListener {
                     ? studentHomework.getHomework().getCourse().getSections()
                     : null)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
-                    studentHomework.getPersonGroup())
-                    && learningService.haveAFeedbackQuestion(studentHomework.getHomework().getCourse(),
                     studentHomework.getPersonGroup())) {
+                boolean feedbackQuestion = true;
+                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
+                if (!courseFeedbackTemplateList.isEmpty()) {
+                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
+                }
                 Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
                         .query("select e from tsadv$Enrollment e " +
                                 " where e.personGroup = :personGroup " +
@@ -82,12 +89,13 @@ public class StudentHomeworkChangedListener {
                         .parameter("course", studentHomework.getHomework().getCourse())
                         .view("enrollment-view")
                         .list().stream().findFirst().orElse(null);
-                if (enrollment != null) {
+                if (enrollment != null && feedbackQuestion) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                 }
             }
         }
+
     }
 
     protected List<Homework> getHomeworkForCourse(Course course) {
