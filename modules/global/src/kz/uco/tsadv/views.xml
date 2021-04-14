@@ -23092,9 +23092,18 @@
         <property name="legacyId"/>
     </view>
     <view entity="base$PositionGroupExt" name="positionGroupExt-for-integration-rest" extends="_local">
+        <property name="legacyId"/>
         <property name="list" view="_minimal">
             <property name="jobGroup" view="_minimal">
-                <property name="legacyId"/>
+                <property name="list" view="_minimal">
+                    <property name="jobNameLang1"/>
+                    <property name="jobNameLang2"/>
+                    <property name="jobNameLang3"/>
+                    <property name="jobNameLang4"/>
+                    <property name="jobNameLang5"/>
+                    <property name="startDate"/>
+                    <property name="endDate"/>
+                </property>
             </property>
             <property name="gradeGroup" view="_minimal">
                 <property name="legacyId"/>
@@ -23190,15 +23199,31 @@
                             <property name="legacyId"/>
                         </property>
                         <property name="legacyId"/>
+                        <property name="organizationName"/>
                     </property>
+                    <property name="jobGroup" view="_minimal">
+                        <property name="list" view="_minimal">
+                            <property name="jobNameLang1"/>
+                            <property name="jobNameLang2"/>
+                            <property name="jobNameLang3"/>
+                            <property name="jobNameLang4"/>
+                            <property name="jobNameLang5"/>
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                        </property>
+                        <property name="jobName"/>
+                    </property>
+                    <property name="legacyId"/>
                 </property>
                 <property name="legacyId"/>
+                <property name="positionName"/>
             </property>
             <property name="organizationGroup" view="_minimal">
                 <property name="company" view="_minimal">
                     <property name="legacyId"/>
                 </property>
                 <property name="legacyId"/>
+                <property name="organizationName"/>
             </property>
             <property name="parentGroup" view="_minimal">
                 <property name="list" view="_minimal">
@@ -23209,30 +23234,29 @@
                                     <property name="legacyId"/>
                                 </property>
                                 <property name="legacyId"/>
+                                <property name="organizationName"/>
                             </property>
                             <property name="legacyId"/>
-                            <property name="startDate"/>
-                            <property name="endDate"/>
                         </property>
                         <property name="legacyId"/>
+                        <property name="positionName"/>
                     </property>
                     <property name="organizationGroup" view="_minimal">
                         <property name="company" view="_minimal">
                             <property name="legacyId"/>
                         </property>
+                        <property name="organizationName"/>
                     </property>
                     <property name="legacyId"/>
-                    <property name="startDate"/>
-                    <property name="endDate"/>
                     <property name="writeHistory"/>
-                    <property name="elementType"/>
                     <property name="hierarchy" view="_minimal"/>
                 </property>
+                <property name="createTs"/>
+                <property name="createdBy"/>
+                <property name="updateTs"/>
+                <property name="updatedBy"/>
             </property>
-            <property name="startDate"/>
-            <property name="endDate"/>
             <property name="writeHistory"/>
-            <property name="elementType"/>
             <property name="hierarchy" view="_minimal">
                 <property name="primaryFlag"/>
                 <property name="type" view="_minimal">
@@ -23245,37 +23269,62 @@
             <property name="parent" view="_minimal">
                 <property name="positionGroup" view="_minimal">
                     <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
                         <property name="writeHistory"/>
                         <property name="organizationGroupExt" view="_minimal">
                             <property name="company" view="_minimal">
                                 <property name="legacyId"/>
                             </property>
                             <property name="legacyId"/>
+                            <property name="organizationName"/>
                         </property>
                     </property>
                     <property name="legacyId"/>
+                    <property name="positionName"/>
                 </property>
                 <property name="organizationGroup" view="_minimal">
                     <property name="company" view="_minimal">
                         <property name="legacyId"/>
                     </property>
                     <property name="legacyId"/>
+                    <property name="organizationName"/>
                 </property>
-                <property name="startDate"/>
-                <property name="endDate"/>
                 <property name="writeHistory"/>
-                <property name="elementType"/>
                 <property name="hierarchy" view="_minimal"/>
-                <property name="group" view="_minimal"/>
+                <property name="group" view="_minimal">
+                    <property name="list" view="_minimal">
+                        <property name="positionGroup" view="_minimal">
+                            <property name="positionName"/>
+                        </property>
+                        <property name="organizationGroup" view="_minimal">
+                            <property name="organizationName"/>
+                        </property>
+                    </property>
+                    <property name="createTs"/>
+                    <property name="createdBy"/>
+                    <property name="updateTs"/>
+                    <property name="updatedBy"/>
+                </property>
             </property>
-            <property name="group" view="_minimal"/>
+            <property name="group" view="_minimal">
+                <property name="list" view="_minimal">
+                    <property name="positionGroup" view="_minimal">
+                        <property name="positionName"/>
+                    </property>
+                    <property name="organizationGroup" view="_minimal">
+                        <property name="organizationName"/>
+                    </property>
+                </property>
+                <property name="createTs"/>
+                <property name="createdBy"/>
+                <property name="updateTs"/>
+                <property name="updatedBy"/>
+            </property>
             <property name="legacyId"/>
         </property>
     </view>
     <view entity="base$HierarchyElementExt" name="hierarchyElementExt-for-integration-rest" extends="_local">
         <property name="positionGroup" view="_minimal">
+            <property name="legacyId"/>
             <property name="list" view="_minimal">
                 <property name="organizationGroupExt" view="_minimal">
                     <property name="company" view="_minimal">

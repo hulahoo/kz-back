@@ -923,10 +923,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .view("hierarchyElementGroup-for-integration-rest").list().stream()
                                 .findFirst().orElse(null);
                     }
-                    if (parentGroup == null) {
-                        return prepareError(result, methodName, hierarchyElementData,
-                                "no exist hierarchy element for parentOrganization");
-                    }
+//                    if (parentGroup == null) {
+//                        return prepareError(result, methodName, hierarchyElementData,
+//                                "no exist hierarchy element for parentOrganization");
+//                    }
                     hierarchyElementExt.setParent(parentGroup.getList().stream().findFirst().orElse(null));
                     hierarchyElementExt.setParentGroup(parentGroup);
                 }
@@ -963,6 +963,25 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     commitContext.addInstanceToCommit(hierarchyElementExt);
                 }
             }
+            for (HierarchyElementJson organizationHierarchyElementJson : organizationHierarchyElementJsons) {
+                if (organizationHierarchyElementJson.getParentOrganizationId() != null
+                        && !organizationHierarchyElementJson.getParentOrganizationId().isEmpty()) {
+                    HierarchyElementExt foundedHierarchyElementExt = commitContext.getCommitInstances().stream().filter(entity ->
+                            entity instanceof HierarchyElementExt && ((HierarchyElementExt) entity).getLegacyId()
+                                    .equals(organizationHierarchyElementJson.getLegacyId())).map(entity ->
+                            (HierarchyElementExt) entity).findFirst().orElse(null);
+                    if (foundedHierarchyElementExt == null
+                            || foundedHierarchyElementExt.getParent() == null
+                            || foundedHierarchyElementExt.getParent().getOrganizationGroup() == null
+                            || foundedHierarchyElementExt.getParent().getOrganizationGroup().getLegacyId() == null
+                            || !foundedHierarchyElementExt.getParent().getOrganizationGroup().getLegacyId()
+                            .equals(organizationHierarchyElementJson.getParentOrganizationId())) {
+                        return prepareError(result, methodName, hierarchyElementData,
+                                "no exist hierarchy element for parentOrganization");
+                    }
+                }
+            }
+
             dataManager.commit(commitContext);
         } catch (Exception e) {
             return prepareError(result, methodName, hierarchyElementData, e.getMessage() + "\r" +
@@ -1170,6 +1189,24 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 }
                             }));
                     commitContext.addInstanceToCommit(hierarchyElementExt);
+                }
+            }
+            for (HierarchyElementJson positionHierarchyElementJson : positionHierarchyElementJsons) {
+                if (positionHierarchyElementJson.getParentPositionId() != null
+                        && !positionHierarchyElementJson.getParentPositionId().isEmpty()) {
+                    HierarchyElementExt foundedHierarchyElementExt = commitContext.getCommitInstances().stream().filter(entity ->
+                            entity instanceof HierarchyElementExt && ((HierarchyElementExt) entity).getLegacyId()
+                                    .equals(positionHierarchyElementJson.getLegacyId())).map(entity ->
+                            (HierarchyElementExt) entity).findFirst().orElse(null);
+                    if (foundedHierarchyElementExt == null
+                            || foundedHierarchyElementExt.getParent() == null
+                            || foundedHierarchyElementExt.getParent().getPositionGroup() == null
+                            || foundedHierarchyElementExt.getParent().getPositionGroup().getLegacyId() == null
+                            || !foundedHierarchyElementExt.getParent().getPositionGroup().getLegacyId()
+                            .equals(positionHierarchyElementJson.getParentPositionId())) {
+                        return prepareError(result, methodName, hierarchyElementData,
+                                "no exist hierarchy element for parentPosition");
+                    }
                 }
             }
             dataManager.commit(commitContext);
