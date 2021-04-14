@@ -16280,6 +16280,9 @@ create table TSADV_ABSENCE (
     AGREE boolean,
     TRANSFER_PERIOD_START timestamp,
     TRANSFER_PERIOD_END timestamp,
+    TIME_START time,
+    TIME_END time,
+    ADDITIONAL_TIME integer,
     --
     primary key (ID)
 )^
