@@ -23358,6 +23358,16 @@
     </view>
     <view entity="tsadv$Absence" name="absence.for.integration" extends="_local">
         <property name="order" view="_minimal"/>
+        <property name="type" view="_minimal">
+            <property name="langValue1"/>
+            <property name="langValue2"/>
+            <property name="langValue3"/>
+            <property name="langValue4"/>
+            <property name="langValue5"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
+        </property>
         <property name="absenceStatus" view="_minimal">
             <property name="legacyId"/>
             <property name="company" view="_minimal">
