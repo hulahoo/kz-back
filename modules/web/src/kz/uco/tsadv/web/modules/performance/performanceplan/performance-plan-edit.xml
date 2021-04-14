@@ -179,7 +179,7 @@
                     </actions>
                     <columns>
                         <column id="company"/>
-                        <column id="groupEfficiencyPercent"/>
+                        <column id="groupEfficiencyPercent" caption="msg://groupPerfomancePercent"/>
                         <column id="companyResult"/>
                         <column id="fullName"/>
                         <column id="jobText"/>
