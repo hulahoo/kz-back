@@ -849,18 +849,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         .equals(organizationHierarchyElementJson.getLegacyId()))
                         .findFirst().orElse(null);
                 if (organizationHierarchyElementGroup == null) {
-                    organizationHierarchyElementGroup = dataManager.load(HierarchyElementGroup.class)
-                            .query("select e.group from base$HierarchyElementExt e " +
+                    List<HierarchyElementExt> hierarchyElementList = dataManager.load(HierarchyElementExt.class)
+                            .query("select e from base$HierarchyElementExt e " +
                                     " where e.legacyId = :legacyId and e.organizationGroup.company.legacyId = :company ")
                             .setParameters(ParamsMap.of("legacyId", organizationHierarchyElementJson.getLegacyId(),
                                     "company", organizationHierarchyElementJson.getCompanyCode()))
-                            .view("hierarchyElementGroup-for-integration-rest").list().stream().findFirst().orElse(null);
-                    if (organizationHierarchyElementGroup != null) {
-                        for (HierarchyElementExt hierarchyElementExt : organizationHierarchyElementGroup.getList()) {
-                            commitContext.addInstanceToRemove(hierarchyElementExt);
+                            .view("hierarchyElementExt-for-integration-rest").list();
+                    for (HierarchyElementExt hierarchyElementExt1 : hierarchyElementList) {
+                        if (!commitContext.getRemoveInstances().stream().filter(entity ->
+                                entity.getId().equals(hierarchyElementExt1.getGroup().getId())).findAny().isPresent()) {
+                            commitContext.addInstanceToRemove(hierarchyElementExt1.getGroup());
                         }
-                        organizationHierarchyElementGroup.getList().clear();
-                        organizationHierarchyElementGroups.add(organizationHierarchyElementGroup);
+                        commitContext.addInstanceToRemove(hierarchyElementExt1);
                     }
                 }
                 if (organizationHierarchyElementGroup == null) {
@@ -1085,20 +1085,20 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         .equals(positionHierarchyElementJson.getLegacyId()))
                         .findFirst().orElse(null);
                 if (positionHierarchyElementGroup == null) {
-                    positionHierarchyElementGroup = dataManager.load(HierarchyElementGroup.class)
-                            .query("select e.group from base$HierarchyElementExt e " +
+                    List<HierarchyElementExt> hierarchyElementList = dataManager.load(HierarchyElementExt.class)
+                            .query("select e from base$HierarchyElementExt e " +
                                     " where e.legacyId = :legacyId and e.positionGroup.id in " +
                                     " (select p.group.id from base$PositionExt p " +
                                     " where p.organizationGroupExt.company.legacyId = :company) ")
                             .setParameters(ParamsMap.of("legacyId", positionHierarchyElementJson.getLegacyId(),
                                     "company", positionHierarchyElementJson.getCompanyCode()))
-                            .view("hierarchyElementGroup-for-integration-rest").list().stream().findFirst().orElse(null);
-                    if (positionHierarchyElementGroup != null) {
-                        for (HierarchyElementExt hierarchyElementExt : positionHierarchyElementGroup.getList()) {
-                            commitContext.addInstanceToRemove(hierarchyElementExt);
+                            .view("hierarchyElementExt-for-integration-rest").list();
+                    for (HierarchyElementExt hierarchyElementExt1 : hierarchyElementList) {
+                        if (!commitContext.getRemoveInstances().stream().filter(entity ->
+                                entity.getId().equals(hierarchyElementExt1.getGroup().getId())).findAny().isPresent()) {
+                            commitContext.addInstanceToRemove(hierarchyElementExt1.getGroup());
                         }
-                        positionHierarchyElementGroup.getList().clear();
-                        positionHierarchyElementGroups.add(positionHierarchyElementGroup);
+                        commitContext.addInstanceToRemove(hierarchyElementExt1);
                     }
                 }
                 if (positionHierarchyElementGroup == null) {
