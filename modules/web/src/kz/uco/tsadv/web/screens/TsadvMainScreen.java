@@ -180,6 +180,19 @@ public class TsadvMainScreen extends BaseMainScreen {
     }
 
     @Override
+    protected Action toNotificationsAction() {
+        return new BaseAction("user-notification") {
+            @Override
+            public void actionPerform(Component component) {
+                screenBuilders.screen(mainMenuFrameOwner)
+                        .withScreenId("person-notification")
+                        .build()
+                        .show();
+            }
+        };
+    }
+
+    @Override
     protected Action toTasksAction() {
         return new BaseAction("user-notification") {
             @Override
