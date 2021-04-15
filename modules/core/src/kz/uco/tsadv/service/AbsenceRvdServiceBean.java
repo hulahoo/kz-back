@@ -31,7 +31,7 @@ public class AbsenceRvdServiceBean implements AbsenceRvdService {
             Calendar calendar = calendarService.getCalendar(assignmentGroup);
             long diff = (dateTo.getTime() - dateFrom.getTime()) / MILLIS_IN_HOUR;
             if (calendar != null && diff >= 0) {
-                int holidaysNumber = timesheetService.getAllHolidays(calendar, dateFrom, dateTo);
+                int holidaysNumber = timesheetService.getAllHolidays(calendar, dateFrom, dateTo) * 24;
                 return (int) (diff + 1 - holidaysNumber);
             } else {
                 return 0;
