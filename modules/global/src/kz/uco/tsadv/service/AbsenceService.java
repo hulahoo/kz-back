@@ -25,6 +25,8 @@ public interface AbsenceService {
 
     int countDays(Date dateFrom, Date dateTo, UUID absenceTypeId, UUID personGroupId);
 
+    int countDaysWithoutHolidays(Date dateFrom, Date dateTo, UUID personGroupId);
+
     int countWeekendDays(Date dateFrom, Date dateTo);
 
     int countAbsenceDays(Date dateFrom, Date dateTo, DicAbsenceType absenceType, AssignmentGroupExt assignmentGroup);

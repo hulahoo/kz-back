@@ -37,7 +37,7 @@
                 <query><![CDATA[select e from tsadv$DicDocumentType e]]></query>
             </loader>
         </collection>
-        <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup" view="_local">
+        <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup" view="jobGroup-for-integration-rest">
             <loader id="jobDl">
                 <query><![CDATA[select e from tsadv$JobGroup e]]></query>
             </loader>
