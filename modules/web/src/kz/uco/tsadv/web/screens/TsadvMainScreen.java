@@ -6,8 +6,11 @@ import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.CssLayout;
 import com.haulmont.cuba.gui.components.Label;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.NotificationMessagePojo;
 import kz.uco.base.service.common.CommonService;
@@ -174,5 +177,18 @@ public class TsadvMainScreen extends BaseMainScreen {
 
     protected void refreshNotifications() {
         refreshCount(true, false, true);
+    }
+
+    @Override
+    protected Action toNotificationsAction() {
+        return new BaseAction("user-notification") {
+            @Override
+            public void actionPerform(Component component) {
+                screenBuilders.screen(mainMenuFrameOwner)
+                        .withScreenId("person-notification")
+                        .build()
+                        .show();
+            }
+        };
     }
 }
