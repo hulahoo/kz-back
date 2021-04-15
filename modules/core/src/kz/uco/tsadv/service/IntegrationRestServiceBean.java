@@ -1501,6 +1501,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         : null);
                 assignmentExt.setPrimaryFlag(Boolean.valueOf(assignmentJson.getPrimaryFlag()));
                 assignmentExt.setGroup(assignmentGroupExt);
+                assignmentGroupExt.setGradeGroup(gradeGroup);
+                assignmentGroupExt.setJobGroup(jobGroup);
+                assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
+                assignmentGroupExt.setPositionGroup(positionGroupExt);
+                assignmentGroupExt.setPersonGroup(personGroupExt);
                 assignmentGroupExt.getList().add(assignmentExt);
             }
             for (AssignmentGroupExt assignmentGroupExt : assignmentGroupExtList) {
