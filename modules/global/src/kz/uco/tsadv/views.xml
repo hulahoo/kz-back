@@ -23180,7 +23180,6 @@
                     <property name="legacyId"/>
                 </property>
                 <property name="legacyId"/>
-                <property name="organizationName"/>
             </property>
             <property name="employeeCategory" view="_minimal">
                 <property name="legacyId"/>
