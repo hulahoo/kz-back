@@ -23152,7 +23152,6 @@
         <property name="legacyId"/>
     </view>
     <view entity="base$PositionGroupExt" name="positionGroupExt-for-integration-rest" extends="_local">
-        <property name="legacyId"/>
         <property name="list" view="_minimal">
             <property name="jobGroup" view="_minimal">
                 <property name="list" view="_minimal">
@@ -23164,15 +23163,19 @@
                     <property name="startDate"/>
                     <property name="endDate"/>
                 </property>
+                <property name="jobName"/>
             </property>
             <property name="gradeGroup" view="_minimal">
                 <property name="legacyId"/>
             </property>
-            <property name="group" view="_minimal"/>
+            <property name="group" view="_minimal">
+                <property name="positionName"/>
+            </property>
             <property name="positionStatus" view="_minimal">
                 <property name="legacyId"/>
             </property>
             <property name="organizationGroupExt" view="_minimal">
+                <property name="organizationName"/>
                 <property name="company" view="_minimal">
                     <property name="legacyId"/>
                 </property>
@@ -23182,22 +23185,14 @@
                 <property name="legacyId"/>
             </property>
             <property name="legacyId"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
             <property name="writeHistory"/>
-            <property name="positionFullNameLang1"/>
-            <property name="positionFullNameLang2"/>
-            <property name="positionFullNameLang3"/>
-            <property name="positionFullNameLang4"/>
-            <property name="positionFullNameLang5"/>
-            <property name="positionNameLang1"/>
-            <property name="positionNameLang2"/>
-            <property name="positionNameLang3"/>
-            <property name="positionNameLang4"/>
-            <property name="positionNameLang5"/>
             <property name="fte"/>
             <property name="maxPersons"/>
         </property>
+        <property name="organizationGroup" view="_minimal"/>
+        <property name="jobGroup" view="_minimal"/>
+        <property name="gradeGroup" view="_minimal"/>
+        <property name="company" view="_minimal"/>
     </view>
     <view entity="base$PersonGroupExt" name="personGroupExt-Mic" extends="_local">
         <property name="list" view="_local">

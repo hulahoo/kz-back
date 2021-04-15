@@ -434,6 +434,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         return prepareError(result, methodName, positionData,
                                 "no base$DicCompany with legacyId " + positionJson.getCompanyCode());
                     }
+                    positionGroupExt.setCompany(company);
                     positionGroupExt.setLegacyId(positionJson.getLegacyId());
                     positionGroupExt.setId(UUID.randomUUID());
                     positionGroupExt.setList(new ArrayList<>());
@@ -518,6 +519,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 positionExt.setMaxPersons(positionJson.getMaxPerson() != null && !positionJson.getMaxPerson().isEmpty()
                         ? Integer.parseInt(positionJson.getMaxPerson()) : null);
                 positionExt.setGroup(positionGroupExt);
+                positionGroupExt.setGradeGroup(gradeGroup);
+                positionGroupExt.setJobGroup(jobGroup);
+                positionGroupExt.setOrganizationGroup(organizationGroupExt);
                 positionGroupExt.getList().add(positionExt);
             }
             for (PositionGroupExt positionGroupExt : positionGroupExts) {
