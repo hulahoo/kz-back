@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswer;
 
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
@@ -12,9 +13,11 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.modules.administration.enums.RuleStatus;
+import kz.uco.tsadv.modules.learning.enums.feedback.FeedbackResponsibleRole;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSectionSession;
 import kz.uco.tsadv.modules.learning.model.feedback.*;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.BusinessRuleService;
 
 import javax.inject.Inject;
@@ -56,6 +59,12 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
     protected TextField avgScoreField;
     @Named("fieldGroup.sumScore")
     protected TextField sumScoreField;
+    @Named("fieldGroup.completeDate")
+    private DateField<Date> completeDateField;
+    @Named("fieldGroup.personGroup")
+    private PickerField<PersonGroupExt> personGroupField;
+    @Named("fieldGroup.responsibleRole")
+    private LookupField<FeedbackResponsibleRole> responsibleRoleField;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -175,6 +184,7 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
     @Override
     public void ready() {
         super.ready();
+        initUI();
         feedbackTemplateField.addValueChangeListener(this::feedbackTemplateFieldValueChangeListener);
     }
 
@@ -258,5 +268,19 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
+    }
+
+
+    protected void initUI(){
+        if(!PersistenceHelper.isNew(getItem())){
+            courseField.setEditable(false);
+            courseSectionSessionField.setEditable(false);
+            feedbackTemplateField.setEditable(false);
+            completeDateField.setEditable(false);
+            personGroupField.setEditable(false);
+            responsibleRoleField.setEditable(false);
+            sumScoreField.setEditable(false);
+            avgScoreField.setEditable(false);
+        }
     }
 }
