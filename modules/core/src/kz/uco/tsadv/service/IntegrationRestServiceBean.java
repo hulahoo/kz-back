@@ -894,8 +894,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     hierarchyElementExt.setOrganizationGroup(subordinateOrganizationGroupExt);
                 }
                 HierarchyElementExt parent = null;
-                if (organizationHierarchyElementJson.getParentPositionId() != null
-                        && !organizationHierarchyElementJson.getParentPositionId().isEmpty()) {
+                if (organizationHierarchyElementJson.getParentOrganizationId() != null
+                        && !organizationHierarchyElementJson.getParentOrganizationId().isEmpty()) {
                     List<HierarchyElementExt> parentList = dataManager.load(HierarchyElementExt.class).query(
                             "select e from base$HierarchyElementExt e " +
                                     " where e.organizationGroup.legacyId = :legacyId " +
