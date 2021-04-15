@@ -61,8 +61,12 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
     public void init(Map<String, Object> params) {
         super.init(params);
         detailsTable.sort("questionOrder", Table.SortDirection.DESCENDING);
-        courseField.addValueChangeListener(e -> courseSectionSessionsDsRefresh());
+        courseField.addValueChangeListener(e -> {
+            courseSectionSessionField.clear();
+            courseSectionSessionsDsRefresh();
+        });
         courseSectionSessionField.addLookupAction();
+        courseSectionSessionField.getLookupAction().addEnabledRule(() -> (getItem().getCourse() != null));
         courseSectionSessionField.getLookupAction().setLookupScreenParamsSupplier(() -> getCourseSectionSessionLookupParams());
 
         feedbackTemplateField.removeAction("lookup");
@@ -134,7 +138,7 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
         while (!detailsDs.getItems().isEmpty()) {
             detailsDs.removeItem(new ArrayList<>(detailsDs.getItems()).get(0));
         }
-        LearningFeedbackTemplate feedbackTemplate = (LearningFeedbackTemplate) e;
+        LearningFeedbackTemplate feedbackTemplate = (LearningFeedbackTemplate) ((HasValue.ValueChangeEvent) e).getValue();
         if (feedbackTemplate != null) {
             feedbackTemplate = dataManager.reload(feedbackTemplate, "learning-feedback-template");
             List<LearningFeedbackTemplateQuestion> templateQuestions = feedbackTemplate.getTemplateQuestions();
@@ -144,7 +148,7 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
 
             for (LearningFeedbackTemplateQuestion templateQuestion : templateQuestions) {
                 CourseFeedbackPersonAnswerDetail courseFeedbackPersonAnswerDetail = metadata.create(CourseFeedbackPersonAnswerDetail.class);
-                courseFeedbackPersonAnswerDetail.setFeedbackTemplate((LearningFeedbackTemplate) e);
+                courseFeedbackPersonAnswerDetail.setFeedbackTemplate((LearningFeedbackTemplate) ((HasValue.ValueChangeEvent) e).getValue());
                 courseFeedbackPersonAnswerDetail.setCourse(item.getCourse());
                 courseFeedbackPersonAnswerDetail.setPersonGroup(item.getPersonGroup());
                 courseFeedbackPersonAnswerDetail.setCourseSectionSession(item.getCourseSectionSession());
@@ -162,6 +166,9 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
                 courseFeedbackPersonAnswerDetail.setQuestionOrder(templateQuestion.getOrder());
                 detailsDs.addItem(courseFeedbackPersonAnswerDetail);
             }
+            detailsDs.refresh();
+            detailsTable.repaint();
+
         }
     }
 
@@ -237,8 +244,8 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
         lookupField.setCaptionProperty("answerLangValue");
         lookupField.setValue(entity.getAnswer());
         lookupField.addValueChangeListener(e -> {
-            entity.setAnswer(((LearningFeedbackAnswer) e));
-            entity.setScore(((LearningFeedbackAnswer) e).getScore());
+            entity.setAnswer(((LearningFeedbackAnswer) ((HasValue.ValueChangeEvent) e).getValue()));
+            entity.setScore(((LearningFeedbackAnswer) ((HasValue.ValueChangeEvent) e).getValue()).getScore());
         });
         lookupField.setRequired(true);
         return lookupField;
