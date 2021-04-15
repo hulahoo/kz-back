@@ -138,6 +138,14 @@ public class AbsenceServiceBean implements AbsenceService {
     }
 
     @Override
+    public int countDaysWithoutHolidays(Date dateFrom, Date dateTo, UUID personGroupId) {
+        AssignmentExt assignmentExt = employeeService.getAssignmentExt(personGroupId, dateFrom, "portal-assignment-group");
+        DicAbsenceType dicAbsenceType = metadata.create(DicAbsenceType.class);
+        dicAbsenceType.setIgnoreHolidays(false);
+        return this.countAbsenceDays(dateFrom, dateTo, dicAbsenceType, assignmentExt.getGroup());
+    }
+
+    @Override
     public int countWeekendDays(Date dateFrom, Date dateTo) {
         java.util.Calendar c = java.util.Calendar.getInstance();
         int result = 0;
