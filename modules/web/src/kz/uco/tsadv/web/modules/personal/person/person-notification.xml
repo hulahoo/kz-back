@@ -9,7 +9,7 @@
             <query>
                 <![CDATA[select e
                            from base$SendingNotification e
-                          where e.user.id = :session$user and e.sendDate is null
+                          where e.user = :session$user and e.sendDate is null
                             and (:component$filterRead = 'ALL'
                               or :component$filterRead = 'READ' and e.readed = TRUE
                               or :component$filterRead = 'NOT_READ' and e.readed = FALSE)]]>
@@ -46,7 +46,7 @@
                         captionProperty="template.name"/>
                 <column id="user"
                         captionProperty="user.login"/>
-                <column id="user.personGroup.personFioWithEmployeeNumber"/>
+<!--                <column id="user.personGroup.personFioWithEmployeeNumber"/>-->
                 <column id="sendingSms"
                         captionProperty="sendingSms.id"
                         link="true"

@@ -1,9 +1,6 @@
 package kz.uco.tsadv.service;
 
-import com.haulmont.cuba.core.EntityManager;
-import com.haulmont.cuba.core.Persistence;
-import com.haulmont.cuba.core.Query;
-import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.*;
 import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
@@ -37,6 +34,8 @@ public class LearningServiceBean implements LearningService {
 
     @Inject
     protected CommonService commonService;
+    @Inject
+    protected TransactionalDataManager transactionalDataManager;
 
     @Inject
     private Metadata metadata;
@@ -626,6 +625,7 @@ public class LearningServiceBean implements LearningService {
 
     @Override
     public boolean allCourseSectionPassed(List<CourseSection> courseSectionList) {
+        if(courseSectionList == null) return false;
         boolean success = true;
         for (CourseSection section : courseSectionList) {
             List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
@@ -646,7 +646,7 @@ public class LearningServiceBean implements LearningService {
     public boolean allHomeworkPassed(List<Homework> homeworkList, PersonGroupExt personGroup) {
         boolean success = true;
         for (Homework homework : homeworkList) {
-            List<StudentHomework> studentHomeworks = dataManager.load(StudentHomework.class)
+            List<StudentHomework> studentHomeworks = transactionalDataManager.load(StudentHomework.class)
                     .query("select e from tsadv_StudentHomework e " +
                             " where e.isDone = true " +
                             " and e.homework = :homework " +
@@ -666,13 +666,13 @@ public class LearningServiceBean implements LearningService {
     public boolean haveAFeedbackQuestion(List<CourseFeedbackTemplate> feedbackTemplateList, PersonGroupExt personGroup) {
         boolean success = true;
         for (CourseFeedbackTemplate courseFeedbackTemplate : feedbackTemplateList) {
-            List<CourseFeedbackPersonAnswer> courseFeedbackPersonAnswerList = dataManager.load(CourseFeedbackPersonAnswer.class)
+            List<CourseFeedbackPersonAnswer> courseFeedbackPersonAnswerList = transactionalDataManager.load(CourseFeedbackPersonAnswer.class)
                     .query("select e from tsadv$CourseFeedbackPersonAnswer e " +
                             " where e.course = :course " +
                             " and e.feedbackTemplate = :feedbackTemplate " +
                             " and e.personGroup = :personGroup")
                     .parameter("course", courseFeedbackTemplate.getCourse())
-                    .parameter("feedbackTemplate", courseFeedbackTemplate)
+                    .parameter("feedbackTemplate", courseFeedbackTemplate.getFeedbackTemplate())
                     .parameter("personGroup", personGroup)
                     .view("courseFeedbackPersonAnswer.edit")
                     .list();
