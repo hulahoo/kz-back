@@ -22404,11 +22404,11 @@
     <view entity="tsadv$DicUOM" name="dicUOM-browse" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
-    <view entity="tsadv$DicAssignmentStatus" name="dicAssignmentStatus-edit" extends="_local">
-        <property name="company" view="_minimal">
-            <property name="legacyId"/>
-        </property>
-    </view>
+<!--    <view entity="tsadv$DicAssignmentStatus" name="dicAssignmentStatus-edit" extends="_local">-->
+<!--        <property name="company" view="_minimal">-->
+<!--            <property name="legacyId"/>-->
+<!--        </property>-->
+<!--    </view>-->
     <view entity="tsadv$DicAttitudeToMilitary" name="dicAttitudeToMilitary-browse" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
