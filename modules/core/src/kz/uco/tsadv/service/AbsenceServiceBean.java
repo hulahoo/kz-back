@@ -87,32 +87,19 @@ public class AbsenceServiceBean implements AbsenceService {
         return result;
     }
 
-
-    //method overridden in AA
-    @Override
-    public void fillNextTaskIdRestForAA() {
-
-    }
-
     @Override
     public int countAbsenceDays(Date dateFrom, Date dateTo, DicAbsenceType absenceType, AssignmentGroupExt assignmentGroup) {
         final long MILLIS_IN_DAY = (24 * 60 * 60 * 1000);
+        long diff = (dateTo.getTime() - dateFrom.getTime()) / MILLIS_IN_DAY + 1;
         if (Boolean.TRUE.equals(absenceType.getIgnoreHolidays())) {
-            long diff = (dateTo.getTime() - dateFrom.getTime()) / MILLIS_IN_DAY;
-            if (diff >= 0) {
-                return (int) (diff + 1);
-            } else {
-                return 0;
-            }
+            return Math.max((int) diff, 0);
         } else {
             Calendar calendar = calendarService.getCalendar(assignmentGroup);
-            long diff = (dateTo.getTime() - dateFrom.getTime()) / MILLIS_IN_DAY;
             if (calendar != null && diff >= 0) {
                 int holidaysNumber = timesheetService.getAllHolidays(calendar, dateFrom, dateTo);
-                return (int) (diff + 1 - holidaysNumber);
-            } else {
-                return 0;
-            }
+                return (int) (diff - holidaysNumber);
+            } else
+                return Math.max((int) diff, 0);
         }
     }
 
