@@ -837,6 +837,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, hierarchyElementData,
                             "no subordinateOrganization");
                 }
+                if (organizationHierarchyElementJson.getParentOrganizationId() == null
+                        || organizationHierarchyElementJson.getParentOrganizationId().isEmpty()
+                        || organizationHierarchyElementJson.getParentOrganizationId().equals("0")) {
+                    return prepareSuccessWithMessage(result, methodName, hierarchyElementData,
+                            "not processed");
+                }
                 HierarchyElementGroup organizationHierarchyElementGroup = null;
                 HierarchyElementExt hierarchyElementExt = null;
                 if (organizationHierarchyElementGroup == null) {
@@ -971,6 +977,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return prepareSuccess(result, methodName, hierarchyElementData);
     }
 
+    protected BaseResult prepareSuccessWithMessage(BaseResult baseResult, String methodName, Serializable params, String message) {
+        baseResult.setSuccess(true);
+        baseResult.setSuccessMessage(message);
+        createLog(methodName, baseResult, params);
+        return baseResult;
+    }
+
     @Override
     public BaseResult deleteOrganizationHierarchyElement(HierarchyElementDataJson hierarchyElementData) {
         String methodName = "deleteOrganizationHierarchyElement";
@@ -1049,6 +1062,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         || positionHierarchyElementJson.getSubordinatePositionId().isEmpty()) {
                     return prepareError(result, methodName, hierarchyElementData,
                             "no subordinatePositionId");
+                }
+                if (positionHierarchyElementJson.getParentPositionId() == null
+                        || positionHierarchyElementJson.getParentPositionId().isEmpty()
+                        || positionHierarchyElementJson.getParentPositionId().equals("0")) {
+                    return prepareSuccessWithMessage(result, methodName, hierarchyElementData,
+                            "not processed");
                 }
                 HierarchyElementGroup positionHierarchyElementGroup = null;
                 HierarchyElementExt hierarchyElementExt = null;
@@ -4819,7 +4838,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return prepareSuccess(result, methodName, completedUserData);
     }
 
-    private String getEmpNumber(String jsonEmpNumber) {
+    protected String getEmpNumber(String jsonEmpNumber) {
         for (int i = 0; i < jsonEmpNumber.length(); i++) {
             if (jsonEmpNumber.charAt(i) != '0') {
                 return jsonEmpNumber.substring(i);
