@@ -344,14 +344,15 @@
         <property name="personGroup"
                   view="_minimal"/>
     </view>
-    <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
-          extends="_local"
-          name="portal-assignment-group">
-        <property name="group"
-                  view="_minimal"/>
-        <property name="personGroup"
-                  view="_minimal"/>
-    </view>
+<!--    unused-->
+<!--    <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"-->
+<!--          extends="_local"-->
+<!--          name="portal-assignment-group">-->
+<!--        <property name="group"-->
+<!--                  view="_minimal"/>-->
+<!--        <property name="personGroup"-->
+<!--                  view="_minimal"/>-->
+<!--    </view>-->
     <view class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
           extends="_local"
           name="assigned-goal-cascade-positionGroupExt-view">
