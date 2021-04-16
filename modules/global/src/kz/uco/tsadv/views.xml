@@ -22598,9 +22598,9 @@
     <view entity="tsadv$DicOrderType" name="dicOrderType-edit" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
-    <view entity="base$DicOrgType" name="dicOrgType-browse" extends="_local">
-        <property name="company" view="_minimal"/>
-    </view>
+<!--    <view entity="base$DicOrgType" name="dicOrgType-browse" extends="_local">-->
+<!--        <property name="company" view="_minimal"/>-->
+<!--    </view>-->
     <view entity="base$DicOrgType" name="dicOrgType-edit" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
