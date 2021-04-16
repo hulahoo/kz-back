@@ -16630,6 +16630,9 @@ create table TSADV_ABSENCE_REQUEST (
     ACQUAINTED boolean,
     AGREE boolean,
     VACATION_SCHEDULE_ID uuid,
+    START_TIME time,
+    END_TIME time,
+    ADDITIONAL_TIME integer,
     --
     primary key (ID)
 )^
