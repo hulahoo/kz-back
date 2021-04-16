@@ -22601,9 +22601,9 @@
 <!--    <view entity="base$DicOrgType" name="dicOrgType-browse" extends="_local">-->
 <!--        <property name="company" view="_minimal"/>-->
 <!--    </view>-->
-    <view entity="base$DicOrgType" name="dicOrgType-edit" extends="_local">
-        <property name="company" view="_minimal"/>
-    </view>
+<!--    <view entity="base$DicOrgType" name="dicOrgType-edit" extends="_local">-->
+<!--        <property name="company" view="_minimal"/>-->
+<!--    </view>-->
     <view entity="tsadv$DicPayroll" name="dicPayroll-browse" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
