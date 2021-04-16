@@ -22448,9 +22448,9 @@
 <!--    <view entity="base$DicCountry" name="dicCountry-browse" extends="_local">-->
 <!--        <property name="company" view="_minimal"/>-->
 <!--    </view>-->
-    <view entity="base$DicCountry" name="dicCountry-edit" extends="_local">
-        <property name="company" view="_minimal"/>
-    </view>
+<!--    <view entity="base$DicCountry" name="dicCountry-edit" extends="_local">-->
+<!--        <property name="company" view="_minimal"/>-->
+<!--    </view>-->
     <view entity="base$DicCurrency" name="dicCurrency-browse" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
