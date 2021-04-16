@@ -268,9 +268,10 @@
         <property name="sections" view="enrollment-course-section"/>
         <property name="logo"/>
     </view>
-    <view name="enrollment-course" entity="tsadv$Enrollment" extends="_local">
-        <property name="course" view="course-enrollment"/>
-    </view>
+<!--    unused-->
+<!--    <view name="enrollment-course" entity="tsadv$Enrollment" extends="_local">-->
+<!--        <property name="course" view="course-enrollment"/>-->
+<!--    </view>-->
     <view name="course-section-attempt" entity="tsadv$CourseSectionAttempt" extends="_local">
         <property name="courseSection" view="_minimal">
             <property name="format" view="_minimal"/>
