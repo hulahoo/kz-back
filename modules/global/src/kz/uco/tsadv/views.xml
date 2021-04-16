@@ -23195,7 +23195,6 @@
         <property name="organizationGroup" view="_minimal"/>
         <property name="jobGroup" view="_minimal"/>
         <property name="gradeGroup" view="_minimal"/>
-        <property name="company" view="_minimal"/>
     </view>
     <view entity="base$PersonGroupExt" name="personGroupExt-Mic" extends="_local">
         <property name="list" view="_local">
