@@ -21812,28 +21812,28 @@
 <!--        </property>-->
 <!--        <property name="attachments" view="_minimal"/>-->
 <!--    </view>-->
-    <view entity="base$PersonGroupExt" name="personGroupExt-for-person-data" extends="_local">
-        <property name="list" view="_minimal">
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-        <property name="assignments" view="_minimal">
-            <property name="assignmentStatus" view="_minimal">
-                <property name="langValue1"/>
-                <property name="langValue2"/>
-                <property name="langValue3"/>
-                <property name="langValue4"/>
-                <property name="langValue5"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
-                <property name="code"/>
-            </property>
-            <property name="primaryFlag"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-        </property>
-        <property name="personExperience" view="_minimal"/>
-    </view>
+<!--    <view entity="base$PersonGroupExt" name="personGroupExt-for-person-data" extends="_local">-->
+<!--        <property name="list" view="_minimal">-->
+<!--            <property name="startDate"/>-->
+<!--            <property name="endDate"/>-->
+<!--        </property>-->
+<!--        <property name="assignments" view="_minimal">-->
+<!--            <property name="assignmentStatus" view="_minimal">-->
+<!--                <property name="langValue1"/>-->
+<!--                <property name="langValue2"/>-->
+<!--                <property name="langValue3"/>-->
+<!--                <property name="langValue4"/>-->
+<!--                <property name="langValue5"/>-->
+<!--                <property name="startDate"/>-->
+<!--                <property name="endDate"/>-->
+<!--                <property name="code"/>-->
+<!--            </property>-->
+<!--            <property name="primaryFlag"/>-->
+<!--            <property name="startDate"/>-->
+<!--            <property name="endDate"/>-->
+<!--        </property>-->
+<!--        <property name="personExperience" view="_minimal"/>-->
+<!--    </view>-->
     <view entity="base$PersonGroupExt" name="personGroupExt-for-beneficary-request-edit" extends="_local">
         <property name="list" view="_minimal">
             <property name="startDate"/>
