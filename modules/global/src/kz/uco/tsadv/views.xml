@@ -22128,9 +22128,10 @@
     <view entity="tsadv$DicAttestationInterviewResult" name="dicAttestationInterviewResult-edit" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
-    <view entity="tsadv$DicAttestationInterviewResult" name="dicAttestationInterviewResult-edit" extends="_local">
-        <property name="company" view="_minimal"/>
-    </view>
+<!--    unused-->
+<!--    <view entity="tsadv$DicAttestationInterviewResult" name="dicAttestationInterviewResult-edit" extends="_local">-->
+<!--        <property name="company" view="_minimal"/>-->
+<!--    </view>-->
     <view entity="tsadv$DicAttestationType" name="dicAttestationType-browse" extends="_local">
         <property name="company" view="_minimal"/>
     </view>
