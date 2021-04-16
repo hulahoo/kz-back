@@ -20,6 +20,9 @@ public class ManyQuestion implements QuestionFactory {
             answer.setScore(testSection.getDynamicLoad() ? testSection.getPointsPerQuestion() != null
                     ? testSection.getPointsPerQuestion() : question.getScore() : question.getScore());
             answer.setCorrect(true);
+        } else {
+            answer.setScore(0);
+            answer.setCorrect(false);
         }
     }
 }

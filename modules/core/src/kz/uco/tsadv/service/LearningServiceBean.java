@@ -625,6 +625,7 @@ public class LearningServiceBean implements LearningService {
 
     @Override
     public boolean allCourseSectionPassed(List<CourseSection> courseSectionList) {
+        if(courseSectionList == null) return false;
         boolean success = true;
         for (CourseSection section : courseSectionList) {
             List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)

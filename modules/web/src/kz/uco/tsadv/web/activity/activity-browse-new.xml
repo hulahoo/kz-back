@@ -10,7 +10,7 @@
             <query>
                 <![CDATA[select e from tsadv$ActivityTask e
                             join e.activity a
-                            where a.assignedUser.id = :session$user.id
+                            where a.assignedUser = :session$user
                             and a.type.code <> 'NOTIFICATION'
                             order by e.orderDate desc
                 ]]>
@@ -21,7 +21,7 @@
                          view="_local">
             <query>
                 <![CDATA[select e from uactivity$Activity e
-                            where e.assignedUser.id = :session$user.id
+                            where e.assignedUser = :session$user
                             and e.type.code = 'NOTIFICATION'
                             order by e.startDateTime desc]]>
             </query>
