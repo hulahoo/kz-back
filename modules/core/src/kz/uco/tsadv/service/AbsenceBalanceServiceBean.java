@@ -1176,4 +1176,25 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
             absenceList.add(editedAbsence);
         }
     }
+
+    @Override
+    public double getAbsenceBalance(UUID personGroupId, Date absenceDate, UUID dicAbsenceTypeId) {
+        double finalAbsenceBalance = 0.0;
+        if (personGroupId != null && absenceDate != null && dicAbsenceTypeId != null) {
+            List<AbsenceBalance> absenceBalanceList = dataManager.load(AbsenceBalance.class)
+                    .query("select e from tsadv$AbsenceBalance e " +
+                            " where e.personGroup.id = :personGroupId " +
+                            " and :absenceDate between e.dateFrom and e.dateFrom ")
+                    .parameter("personGroupId", personGroupId)
+                    .parameter("absenceDate", absenceDate)
+                    .view("absenceBalance.edit")
+                    .list();
+            if (absenceBalanceList.size() != 2) {
+                return finalAbsenceBalance;
+            } else {
+
+            }
+        }
+        return finalAbsenceBalance;
+    }
 }

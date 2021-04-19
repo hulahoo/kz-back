@@ -67,4 +67,6 @@ public interface AbsenceBalanceService {
     void recountBalanceDays(PersonGroupExt personGroupExt, Absence absence, Absence excludedAbsence, AbsenceBalance absenceBalance, Integer previousAbsenceDays);
 
     void createMissingAbsenceBalances();
+
+    double getAbsenceBalance(UUID personGroupId, Date absenceDate, UUID dicAbsenceTypeId);
 }
