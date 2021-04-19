@@ -14,6 +14,7 @@ import kz.uco.base.entity.dictionary.*;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.tb.PersonQualification;
 import kz.uco.tsadv.entity.tb.PositionHarmfulCondition;
@@ -59,6 +60,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected PositionStructureConfig positionStructureConfig;
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    @Inject
+    protected IntegrationConfig integrationConfig;
 
 
     @Transactional
@@ -4735,7 +4738,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 if (tsadvUser != null) {
 
-                    if (!tsadvUser.getEmail().equals(userJson.getEmail())) {
+                    if (integrationConfig.getIsIntegrationActiveDirectory() && !tsadvUser.getEmail().equals(userJson.getEmail())) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
 
@@ -4780,7 +4783,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     tsadvUser = dataManager.create(TsadvUser.class);
                     tsadvUser.setLogin(userJson.getLogin());
-                    tsadvUser.setEmail(userJson.getEmail());
+                    if (integrationConfig.getIsIntegrationActiveDirectory()) {
+                        tsadvUser.setEmail(userJson.getEmail());
+                    }
 
                     String empNumber = "";
 
