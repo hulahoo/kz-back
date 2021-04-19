@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.learning.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.enums.ContentType;
@@ -7,6 +8,7 @@ import kz.uco.tsadv.modules.learning.enums.ContentType;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@NamePattern("%s|objectName")
 @Table(name = "TSADV_LEARNING_OBJECT")
 @Entity(name = "tsadv$LearningObject")
 public class LearningObject extends AbstractParentEntity {

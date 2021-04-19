@@ -882,7 +882,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 }
                 if (hierarchyElementExt == null) {
                     hierarchyElementExt = metadata.create(HierarchyElementExt.class);
+                    hierarchyElementExt.setGroup(organizationHierarchyElementGroup);
                     hierarchyElementExt.setLegacyId(organizationHierarchyElementJson.getLegacyId());
+                    organizationHierarchyElementGroup.getList().add(hierarchyElementExt);
                     commitContext.addInstanceToCommit(organizationHierarchyElementGroup);
                 }
                 OrganizationGroupExt subordinateOrganizationGroupExt = null;
@@ -941,6 +943,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 hierarchyElementExt.setHierarchy(hierarchy);
                 hierarchyElementExt.setWriteHistory(false);
                 hierarchyElementExt.setElementType(ElementType.ORGANIZATION);
+                if (organizationHierarchyElementGroup.getLegacyId() == null) {
+                    organizationHierarchyElementGroup.setLegacyId(organizationHierarchyElementJson.getLegacyId());
+                    commitContext.addInstanceToCommit(organizationHierarchyElementGroup);
+                }
                 commitContext.addInstanceToCommit(hierarchyElementExt);
             }
             for (HierarchyElementJson organizationHierarchyElementJson : organizationHierarchyElementJsons) {
@@ -1113,7 +1119,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 }
                 if (hierarchyElementExt == null) {
                     hierarchyElementExt = metadata.create(HierarchyElementExt.class);
+                    hierarchyElementExt.setGroup(positionHierarchyElementGroup);
                     hierarchyElementExt.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                    positionHierarchyElementGroup.getList().add(hierarchyElementExt);
                     commitContext.addInstanceToCommit(positionHierarchyElementGroup);
                 }
                 PositionGroupExt subordinatePositionGroupExt = null;
@@ -1172,6 +1180,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 hierarchyElementExt.setHierarchy(hierarchy);
                 hierarchyElementExt.setWriteHistory(false);
                 hierarchyElementExt.setElementType(ElementType.POSITION);
+                if (positionHierarchyElementGroup.getLegacyId() == null) {
+                    positionHierarchyElementGroup.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                    commitContext.addInstanceToCommit(positionHierarchyElementGroup);
+                }
                 commitContext.addInstanceToCommit(hierarchyElementExt);
             }
             for (HierarchyElementJson positionHierarchyElementJson : positionHierarchyElementJsons) {

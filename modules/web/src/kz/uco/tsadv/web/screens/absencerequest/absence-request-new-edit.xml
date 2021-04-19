@@ -43,34 +43,46 @@
             <groupBox id="fieldGroupGroupBox"
                       spacing="true"
                       width="1300px">
-                <form id="form" dataContainer="absenceRequestDc" childrenCaptionWidth="200px">
-                    <column id="column" width="750px">
-                        <textField id="requestNumberField" property="requestNumber" editable="false"/>
-                        <textField id="statusField" property="status" editable="false"/>
-                        <lookupPickerField id="typeField" required="true" property="type"
-                                           optionsContainer="dicAbsenceTypesDc"/>
-                        <lookupField id="vacationScheduleField" property="vacationSchedule"
-                                     optionsContainer="vacationSchedulesDc" visible="false"/>
-                        <dateField id="dateFromField" property="dateFrom" required="true"/>
-                        <dateField id="dateToField" property="dateTo" required="true"/>
-                        <textField id="absenceDaysField" property="absenceDays" editable="false"/>
-                        <textField id="reasonField" property="reason"/>
-                        <checkBox id="originalSheetField" property="originalSheet" visible="false"/>
-                        <dateField id="scheduleStartDateField" visible="false" required="true" editable="false"
-                                   property="scheduleStartDate"/>
-                        <dateField id="scheduleEndDateField" visible="false" required="true" editable="false"
-                                   property="scheduleEndDate"/>
-                        <checkBox id="addNextYearField" property="addNextYear" visible="false"/>
-                        <dateField id="newStartDateField" property="newStartDate" visible="false" required="true"
-                                   editable="false"/>
-                        <dateField id="newEndDateField" property="newEndDate" visible="false" required="true"
-                                   editable="false"/>
-                        <dateField id="periodDateFromField" property="periodDateFrom" visible="false" editable="false"/>
-                        <dateField id="periodDateToField" property="periodDateTo" visible="false" editable="false"/>
-                        <dateField id="requestDateField" property="requestDate" editable="false"/>
-                        <textArea id="commentField" property="comment" rows="3"/>
-                    </column>
-                </form>
+                <vbox id="vbox" spacing="true">
+                    <form id="form" dataContainer="absenceRequestDc" childrenCaptionWidth="200px">
+                        <column id="column" width="750px">
+                            <textField id="requestNumberField" property="requestNumber" editable="false"/>
+                            <textField id="statusField" property="status" editable="false"/>
+                            <lookupPickerField id="typeField" required="true" property="type"
+                                               optionsContainer="dicAbsenceTypesDc"/>
+                            <lookupField id="vacationScheduleField" property="vacationSchedule"
+                                         optionsContainer="vacationSchedulesDc" visible="false"/>
+                            <textField id="reasonField" property="reason"/>
+                            <checkBox id="originalSheetField" property="originalSheet" visible="false"/>
+                            <dateField id="scheduleStartDateField" visible="false" required="true" editable="false"
+                                       property="scheduleStartDate"/>
+                            <dateField id="scheduleEndDateField" visible="false" required="true" editable="false"
+                                       property="scheduleEndDate"/>
+                            <checkBox id="addNextYearField" property="addNextYear" visible="false"/>
+                            <dateField id="newStartDateField" property="newStartDate" visible="false" required="true"
+                                       editable="false"/>
+                            <dateField id="newEndDateField" property="newEndDate" visible="false" required="true"
+                                       editable="false"/>
+                            <dateField id="periodDateFromField" property="periodDateFrom" visible="false"
+                                       editable="false"/>
+                            <dateField id="periodDateToField" property="periodDateTo" visible="false" editable="false"/>
+                            <dateField id="requestDateField" property="requestDate" editable="false"/>
+                            <textArea id="commentField" property="comment" rows="3"/>
+                        </column>
+                    </form>
+                    <form id="form2" dataContainer="absenceRequestDc">
+                        <column id="column2" childrenCaptionWidth="200px" width="525px">
+                            <dateField id="dateFromField" property="dateFrom" required="true"/>
+                            <dateField id="dateToField" property="dateTo" required="true"/>
+                            <textField id="absenceDaysField" property="absenceDays" editable="false"/>
+                        </column>
+                        <column id="column3" width="193px">
+                            <timeField id="startTime" property="startTime" caption=" "/>
+                            <timeField id="endTime" property="endTime" caption=" "/>
+                            <textField id="additionalTime" property="additionalTime" caption=" "/>
+                        </column>
+                    </form>
+                </vbox>
                 <groupBox id="groupBox">
                     <table id="fileDescriptorsTable" width="100%" dataContainer="filesDc">
                         <actions>
