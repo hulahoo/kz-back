@@ -201,7 +201,8 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             if (!personGroupExt.getAddresses().isEmpty()) {
                 boolean isSetAddress = false;
                 for (Address a : personGroupExt.getAddresses()) {
-                    if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
+                    if (a.getAddressType().getId().equals(contract.getDefaultAddress() != null
+                            ? contract.getDefaultAddress().getId() : null)) {
                         insuredPerson.setAddressType(a);
                         isSetAddress = true;
                         break;
