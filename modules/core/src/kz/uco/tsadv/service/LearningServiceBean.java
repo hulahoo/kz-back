@@ -205,8 +205,12 @@ public class LearningServiceBean implements LearningService {
                 e.printStackTrace();
             } finally {
                 try {
-                    inputStream.close();
-                    fileOutputStream.close();
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                    if (fileOutputStream != null) {
+                        fileOutputStream.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -240,14 +244,22 @@ public class LearningServiceBean implements LearningService {
                 e.printStackTrace();
             } finally {
                 try {
-                    isrStdout.close();
-                    stdout.close();
-                    brStdout.close();
+                    if (isrStdout != null) {
+                        isrStdout.close();
+                    }
+                    if (stdout != null) {
+                        stdout.close();
+                    }
+                    if (brStdout != null) {
+                        brStdout.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            file.delete();
+            if (file != null) {
+                file.delete();
+            }
             result = commonConfig.getScormPackageDomainURL() + "/" + packageName + commonConfig.getDefualtIndexHtmlUrl();
         }
         return result;
@@ -625,7 +637,7 @@ public class LearningServiceBean implements LearningService {
 
     @Override
     public boolean allCourseSectionPassed(List<CourseSection> courseSectionList) {
-        if(courseSectionList == null) return false;
+        if (courseSectionList == null) return false;
         boolean success = true;
         for (CourseSection section : courseSectionList) {
             List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
