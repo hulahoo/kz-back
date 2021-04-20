@@ -250,30 +250,20 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         try {
             assignedPerformancePlans.forEach(assignedPerformancePlan -> {
                 AssignmentExt currentAssignment = assignedPerformancePlan.getAssignedPerson().getCurrentAssignment();
-                List<OrganizationGroupGoalLink> orgGoalList = currentAssignment.getOrganizationGroup() != null
-                        ? currentAssignment.getOrganizationGroup().getGoals()
-                        : Collections.emptyList();
                 List<PositionGroupGoalLink> positionGoalList = currentAssignment.getPositionGroup() != null
                         ? currentAssignment.getPositionGroup().getGoals()
                         : Collections.emptyList();
                 List<JobGroupGoalLink> jobGoalList = currentAssignment.getJobGroup() != null
                         ? currentAssignment.getJobGroup().getGoals()
                         : Collections.emptyList();
-                for (OrganizationGroupGoalLink organizationGoal : orgGoalList) {
-                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
-                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
-                    newAssignedGoal.setGoal(organizationGoal.getGoal());
-                    newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
-                    newAssignedGoal.setWeight(Double.valueOf(organizationGoal.getWeight()));
-                    newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
-                    newAssignedGoal.setCategory(organizationGoal.getGoal() != null
-                            && organizationGoal.getGoal().getLibrary() != null
-                            ? organizationGoal.getGoal().getLibrary().getCategory()
-                            : null);
-                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
-                    newAssignedGoal.setGoalLibrary(organizationGoal.getGoal().getLibrary());
-                    commitContext.addInstanceToCommit(newAssignedGoal);
-                }
+                List<OrganizationGroupGoalLink> orgGoalList = currentAssignment.getOrganizationGroup() != null
+                        ? currentAssignment.getOrganizationGroup().getGoals()
+                        : Collections.emptyList();
+                List<OrganizationGroupGoalLink> orgStructureGoal =
+                        kpiService.getHierarchyGoals(currentAssignment.getOrganizationGroup() != null
+                                ? currentAssignment.getOrganizationGroup().getId()
+                                : null);
+                Set<Goal> processedGoals = new HashSet<>();
                 for (PositionGroupGoalLink positionGoal : positionGoalList) {
                     AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
                     newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
@@ -288,8 +278,11 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
                     newAssignedGoal.setGoalLibrary(positionGoal.getGoal().getLibrary());
                     commitContext.addInstanceToCommit(newAssignedGoal);
+                    processedGoals.add(positionGoal.getGoal());
                 }
                 for (JobGroupGoalLink jobGoal : jobGoalList) {
+                    if (processedGoals.contains(jobGoal.getGoal())) continue;
+
                     AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
                     newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
                     newAssignedGoal.setGoal(jobGoal.getGoal());
@@ -303,12 +296,52 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
                     newAssignedGoal.setGoalLibrary(jobGoal.getGoal().getLibrary());
                     commitContext.addInstanceToCommit(newAssignedGoal);
+                    processedGoals.add(jobGoal.getGoal());
+                }
+                for (OrganizationGroupGoalLink organizationGoal : orgGoalList) {
+                    if (processedGoals.contains(organizationGoal.getGoal())) continue;
+
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(organizationGoal.getGoal());
+                    newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(organizationGoal.getWeight()));
+                    newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
+                    newAssignedGoal.setCategory(organizationGoal.getGoal() != null
+                            && organizationGoal.getGoal().getLibrary() != null
+                            ? organizationGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(organizationGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                    processedGoals.add(organizationGoal.getGoal());
+                }
+                for (OrganizationGroupGoalLink structureGoal : orgStructureGoal) {
+                    structureGoal = dataManager.reload(structureGoal, "organizationGroupGoalLink-view");
+
+                    if (processedGoals.contains(structureGoal.getGoal())) continue;
+
+                    AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
+                    newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
+                    newAssignedGoal.setGoal(structureGoal.getGoal());
+                    newAssignedGoal.setGoalString(structureGoal.getGoal().getGoalName());
+                    newAssignedGoal.setWeight(Double.valueOf(structureGoal.getWeight()));
+                    newAssignedGoal.setOrganizationGroup(structureGoal.getOrganizationGroup());
+                    newAssignedGoal.setCategory(structureGoal.getGoal() != null
+                            && structureGoal.getGoal().getLibrary() != null
+                            ? structureGoal.getGoal().getLibrary().getCategory()
+                            : null);
+                    newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setGoalLibrary(structureGoal.getGoal().getLibrary());
+                    commitContext.addInstanceToCommit(newAssignedGoal);
+                    processedGoals.add(structureGoal.getGoal());
                 }
             });
             dataManager.commit(commitContext);
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("addMassGoalSuccess")).show();
         } catch (Exception e) {
+            e.printStackTrace();
             notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
                     .withCaption(messageBundle.getMessage("addMassGoalNotSuccess")).show();
         }

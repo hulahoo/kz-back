@@ -23433,6 +23433,7 @@
                 </property>
                 <property name="parentGroup" view="_minimal"/>
             </property>
+            <property name="legacyId"/>
         </property>
         <property name="hierarchy" view="_minimal">
             <property name="primaryFlag"/>

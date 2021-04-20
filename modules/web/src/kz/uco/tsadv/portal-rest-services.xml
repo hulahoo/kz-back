@@ -178,6 +178,9 @@
             <param name="showAll" type="boolean"/>
             <param name="viewName" type="java.lang.String"/>
         </method>
+        <method name="personGroupInfo">
+            <param name="userId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">
         <method name="initialCreate"/>

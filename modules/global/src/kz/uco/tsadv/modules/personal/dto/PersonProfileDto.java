@@ -13,6 +13,10 @@ public class PersonProfileDto implements Serializable {
 
     private UUID groupId;
 
+    private UUID positionGroupId;
+
+    private UUID positionId;
+
     private String fullName;
 
     private Date hireDate;
@@ -137,5 +141,21 @@ public class PersonProfileDto implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public UUID getPositionGroupId() {
+        return positionGroupId;
+    }
+
+    public void setPositionGroupId(UUID positionGroupId) {
+        this.positionGroupId = positionGroupId;
+    }
+
+    public UUID getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(UUID positionId) {
+        this.positionId = positionId;
     }
 }

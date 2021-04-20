@@ -182,33 +182,25 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                if (isEmptyDocument) {
                    insuredPerson.setDocumentType(contract.getDefaultDocumentType());
                } else {
-                   boolean isSetDocument = false;
+                   insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
+                   insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
                    for (PersonDocument document : personGroupExt.getPersonDocuments()) {
-                       if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
+                       if (document.getDocumentType().equals(contract.getDefaultDocumentType())) {
                            insuredPerson.setDocumentType(document.getDocumentType());
                            insuredPerson.setDocumentNumber(document.getDocumentNumber());
-                           isEmptyDocument = true;
                            break;
                        }
-                   }
-                   if (!isEmptyDocument) {
-                       insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
-                       insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
                    }
                }
            }
 
             if (!personGroupExt.getAddresses().isEmpty()) {
-                boolean isSetAddress = false;
+                insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
                 for (Address a : personGroupExt.getAddresses()) {
-                    if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
+                    if (a.getAddressType().equals(contract.getDefaultAddress())) {
                         insuredPerson.setAddressType(a);
-                        isSetAddress = true;
                         break;
                     }
-                }
-                if (!isSetAddress) {
-                    insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
                 }
             }
             insuredPerson.setEmployee(personGroupExt);
