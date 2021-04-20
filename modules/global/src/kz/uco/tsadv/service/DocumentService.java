@@ -29,4 +29,6 @@ public interface DocumentService {
     ScheduleOffsetsRequest getOffsetRequestsNew();
 
     BigDecimal calcTotalAmount(UUID insuredPersonId);
+
+    InsuredPerson commitFromPortal(InsuredPerson insuredPerson);
 }
