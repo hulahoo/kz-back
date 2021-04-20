@@ -81,37 +81,6 @@ public class DocumentServiceBean implements DocumentService {
         insuredPerson.setInsuranceContract(contract);
         insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
 
-        boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
-        if (isEmptyDocument) {
-            insuredPerson.setDocumentType(contract.getDefaultDocumentType());
-        } else {
-            for (PersonDocument document : personGroupExt.getPersonDocuments()) {
-                if (document.getDocumentType().equals(contract.getDefaultDocumentType())) {
-                    insuredPerson.setDocumentType(document.getDocumentType());
-                    insuredPerson.setDocumentNumber(document.getDocumentNumber());
-                    isEmptyDocument = true;
-                    break;
-                }
-            }
-            if (!isEmptyDocument) {
-                insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
-                insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
-            }
-        }
-
-        if (!personGroupExt.getAddresses().isEmpty()) {
-            boolean isSetAddress = false;
-            for (Address a : personGroupExt.getAddresses()) {
-                if (a.getAddressType().equals(contract.getDefaultAddress())) {
-                    insuredPerson.setAddressType(a);
-                    isSetAddress = true;
-                    break;
-                }
-            }
-            if (!isSetAddress) {
-                insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
-            }
-        }
         insuredPerson.setEmployee(personGroupExt);
         insuredPerson.setCompany(company);
         insuredPerson.setTotalAmount(new BigDecimal(0));
@@ -177,7 +146,7 @@ public class DocumentServiceBean implements DocumentService {
 
         for (ContractConditions condition : insuranceContract.getProgramConditions()) {
             if (condition.getRelationshipType().getId().equals(relativeType.getId())) {
-                if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
+                if (condition.getAgeMin() <= age && age < condition.getAgeMax()) {
                     conditionsList.add(condition);
                 }
             }
