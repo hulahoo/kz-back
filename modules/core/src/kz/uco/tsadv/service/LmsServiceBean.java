@@ -773,7 +773,7 @@ public class LmsServiceBean implements LmsService {
                 }
             });
             feedbackPersonAnswer.setSumScore(details.stream().mapToInt(CourseFeedbackPersonAnswerDetail::getScore).mapToLong(v -> (long) v).reduce(0L, Long::sum));
-            feedbackPersonAnswer.setAvgScore((double) (feedbackPersonAnswer.getSumScore() / questions.size()));
+            feedbackPersonAnswer.setAvgScore(BigDecimal.valueOf(feedbackPersonAnswer.getSumScore()).divide(BigDecimal.valueOf(questions.size()), 2, RoundingMode.DOWN).doubleValue());
 
             cc.addInstanceToCommit(feedbackPersonAnswer);
             details.forEach(cc::addInstanceToCommit);

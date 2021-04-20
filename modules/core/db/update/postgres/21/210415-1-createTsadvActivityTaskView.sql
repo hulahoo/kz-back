@@ -1,7 +1,10 @@
 drop view if exists tsadv_activity_task_view;
 
+drop type if exists bproc_outcome;
+
+create TYPE bproc_outcome AS ("outcomeId" varchar(50), "executionId" varchar(50), "taskDefinitionKey" varchar(100), "user" uuid, "date" bigint);
+
 CREATE OR REPLACE VIEW tsadv_activity_task_view as
---create TYPE bproc_outcome AS ("outcomeId" varchar(50), "executionId" varchar(50), "taskDefinitionKey" varchar(100), "user" uuid, "date" bigint);
 
     with links as (
         select v.proc_inst_id_,

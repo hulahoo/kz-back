@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.modules.learning.coursefeedbackpersonanswer;
 
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.CreateAction;
@@ -12,9 +13,11 @@ import com.haulmont.cuba.gui.data.Datasource;
 import com.haulmont.cuba.gui.data.DsBuilder;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.tsadv.modules.administration.enums.RuleStatus;
+import kz.uco.tsadv.modules.learning.enums.feedback.FeedbackResponsibleRole;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSectionSession;
 import kz.uco.tsadv.modules.learning.model.feedback.*;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.BusinessRuleService;
 
 import javax.inject.Inject;
@@ -56,13 +59,23 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
     protected TextField avgScoreField;
     @Named("fieldGroup.sumScore")
     protected TextField sumScoreField;
+    @Named("fieldGroup.completeDate")
+    private DateField<Date> completeDateField;
+    @Named("fieldGroup.personGroup")
+    private PickerField<PersonGroupExt> personGroupField;
+    @Named("fieldGroup.responsibleRole")
+    private LookupField<FeedbackResponsibleRole> responsibleRoleField;
 
     @Override
     public void init(Map<String, Object> params) {
         super.init(params);
         detailsTable.sort("questionOrder", Table.SortDirection.DESCENDING);
-        courseField.addValueChangeListener(e -> courseSectionSessionsDsRefresh());
+        courseField.addValueChangeListener(e -> {
+            courseSectionSessionField.clear();
+            courseSectionSessionsDsRefresh();
+        });
         courseSectionSessionField.addLookupAction();
+        courseSectionSessionField.getLookupAction().addEnabledRule(() -> (getItem().getCourse() != null));
         courseSectionSessionField.getLookupAction().setLookupScreenParamsSupplier(() -> getCourseSectionSessionLookupParams());
 
         feedbackTemplateField.removeAction("lookup");
@@ -134,7 +147,7 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
         while (!detailsDs.getItems().isEmpty()) {
             detailsDs.removeItem(new ArrayList<>(detailsDs.getItems()).get(0));
         }
-        LearningFeedbackTemplate feedbackTemplate = (LearningFeedbackTemplate) e;
+        LearningFeedbackTemplate feedbackTemplate = (LearningFeedbackTemplate) ((HasValue.ValueChangeEvent) e).getValue();
         if (feedbackTemplate != null) {
             feedbackTemplate = dataManager.reload(feedbackTemplate, "learning-feedback-template");
             List<LearningFeedbackTemplateQuestion> templateQuestions = feedbackTemplate.getTemplateQuestions();
@@ -144,7 +157,7 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
 
             for (LearningFeedbackTemplateQuestion templateQuestion : templateQuestions) {
                 CourseFeedbackPersonAnswerDetail courseFeedbackPersonAnswerDetail = metadata.create(CourseFeedbackPersonAnswerDetail.class);
-                courseFeedbackPersonAnswerDetail.setFeedbackTemplate((LearningFeedbackTemplate) e);
+                courseFeedbackPersonAnswerDetail.setFeedbackTemplate((LearningFeedbackTemplate) ((HasValue.ValueChangeEvent) e).getValue());
                 courseFeedbackPersonAnswerDetail.setCourse(item.getCourse());
                 courseFeedbackPersonAnswerDetail.setPersonGroup(item.getPersonGroup());
                 courseFeedbackPersonAnswerDetail.setCourseSectionSession(item.getCourseSectionSession());
@@ -162,12 +175,16 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
                 courseFeedbackPersonAnswerDetail.setQuestionOrder(templateQuestion.getOrder());
                 detailsDs.addItem(courseFeedbackPersonAnswerDetail);
             }
+            detailsDs.refresh();
+            detailsTable.repaint();
+
         }
     }
 
     @Override
     public void ready() {
         super.ready();
+        initUI();
         feedbackTemplateField.addValueChangeListener(this::feedbackTemplateFieldValueChangeListener);
     }
 
@@ -237,8 +254,8 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
         lookupField.setCaptionProperty("answerLangValue");
         lookupField.setValue(entity.getAnswer());
         lookupField.addValueChangeListener(e -> {
-            entity.setAnswer(((LearningFeedbackAnswer) e));
-            entity.setScore(((LearningFeedbackAnswer) e).getScore());
+            entity.setAnswer(((LearningFeedbackAnswer) ((HasValue.ValueChangeEvent) e).getValue()));
+            entity.setScore(((LearningFeedbackAnswer) ((HasValue.ValueChangeEvent) e).getValue()).getScore());
         });
         lookupField.setRequired(true);
         return lookupField;
@@ -251,5 +268,19 @@ public class CourseFeedbackPersonAnswerEdit extends AbstractEditor<CourseFeedbac
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
+    }
+
+
+    protected void initUI(){
+        if(!PersistenceHelper.isNew(getItem())){
+            courseField.setEditable(false);
+            courseSectionSessionField.setEditable(false);
+            feedbackTemplateField.setEditable(false);
+            completeDateField.setEditable(false);
+            personGroupField.setEditable(false);
+            responsibleRoleField.setEditable(false);
+            sumScoreField.setEditable(false);
+            avgScoreField.setEditable(false);
+        }
     }
 }

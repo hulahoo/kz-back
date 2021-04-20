@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.TimeSource;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.export.ExportDisplay;
@@ -39,6 +40,12 @@ import java.util.Calendar;
 @LoadDataBeforeShow
 public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
+    @Inject
+    protected TextField<String> iinField;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected MessageBundle messageBundle;
     @Inject
     private CollectionLoader<DicRelationshipType> relativeDl;
     @Inject
@@ -82,8 +89,8 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("birthdateField")
     public void onBirthdateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
-        if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null && employeeField.getValue() != null
-                && relativeField.getValue() != null && insuranceContractField.getValue() != null){
+        if (isNewOrChangedInsuredPerson() && birthdateField.getValue() != null && employeeField.getValue() != null
+                && relativeField.getValue() != null && insuranceContractField.getValue() != null) {
             amountField.setValue(documentService.calcAmount(
                     insuranceContractField.getValue().getId(),
                     employeeField.getValue().getId(),
@@ -92,7 +99,7 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
         }
     }
 
-    public InsuredPerson getPerson(){
+    public InsuredPerson getPerson() {
         return dataManager.load(InsuredPerson.class).
                 query("select e from tsadv$InsuredPerson e where e.id =:id")
                 .parameter("id", getEditedEntity().getId())
@@ -100,13 +107,13 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
                 .list().stream().findFirst().orElse(null);
     }
 
-    public boolean isNewOrChangedInsuredPerson(){
+    public boolean isNewOrChangedInsuredPerson() {
         boolean result = true;
         if (getPerson() != null
                 && birthdateField.getValue() != null
                 && birthdateField.getValue().equals(getPerson().getBirthdate())
                 && relativeField.getValue() != null
-                && relativeField.getValue().getCode().equals(getPerson().getRelative().getCode())){
+                && relativeField.getValue().getCode().equals(getPerson().getRelative().getCode())) {
 
             result = false;
         }
@@ -116,8 +123,8 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
     @Subscribe("relativeField")
     public void onRelativeFieldValueChange(HasValue.ValueChangeEvent<DicRelationshipType> event) {
-        if (isNewOrChangedInsuredPerson()  && birthdateField.getValue() != null && employeeField.getValue() != null
-                && relativeField.getValue() != null && insuranceContractField.getValue() != null){
+        if (isNewOrChangedInsuredPerson() && birthdateField.getValue() != null && employeeField.getValue() != null
+                && relativeField.getValue() != null && insuranceContractField.getValue() != null) {
             amountField.setValue(documentService.calcAmount(
                     insuranceContractField.getValue().getId(),
                     employeeField.getValue().getId(),
@@ -127,7 +134,7 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
     }
 
 
-    protected void calculatedAmount(){
+    protected void calculatedAmount() {
         List<ContractConditions> conditionsList = new ArrayList<>();
         if (insuranceContractField.getValue() != null &&
                 employeeField.getValue() != null) {
@@ -154,19 +161,19 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
 
 
             if (conditionsList.size() > 1) {
-                if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size()){
+                if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size()) {
                     amountField.setValue(BigDecimal.ZERO);
-                }else {
-                    for (ContractConditions condition : conditionsList){
-                        if (!condition.getIsFree()){
+                } else {
+                    for (ContractConditions condition : conditionsList) {
+                        if (!condition.getIsFree()) {
                             amountField.setValue(condition.getCostInKzt());
                             break;
                         }
                     }
                 }
             } else {
-                for (ContractConditions condition : conditionsList){
-                    if (!condition.getIsFree()){
+                for (ContractConditions condition : conditionsList) {
+                    if (!condition.getIsFree()) {
                         amountField.setValue(condition.getCostInKzt());
                         break;
                     }
@@ -207,4 +214,16 @@ public class InsuredPersonMemberEdit extends StandardEditor<InsuredPerson> {
         });
         return linkButton;
     }
+
+    @Subscribe
+    protected void onBeforeCommitChanges(BeforeCommitChangesEvent event) {
+        if (iinField.getValue() != null && (iinField.getValue().length() > 12 || iinField.getValue().length() < 12)) {
+            event.preventCommit();
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("iinValidate"))
+                    .show();
+        }
+    }
+
+
 }

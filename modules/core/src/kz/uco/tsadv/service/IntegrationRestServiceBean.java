@@ -14,6 +14,7 @@ import kz.uco.base.entity.dictionary.*;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.tb.PersonQualification;
 import kz.uco.tsadv.entity.tb.PositionHarmfulCondition;
@@ -59,6 +60,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected PositionStructureConfig positionStructureConfig;
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    @Inject
+    protected IntegrationConfig integrationConfig;
 
 
     @Transactional
@@ -837,6 +840,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, hierarchyElementData,
                             "no subordinateOrganization");
                 }
+                if (organizationHierarchyElementJson.getParentOrganizationId() == null
+                        || organizationHierarchyElementJson.getParentOrganizationId().isEmpty()
+                        || organizationHierarchyElementJson.getParentOrganizationId().equals("0")) {
+                    return prepareSuccessWithMessage(result, methodName, hierarchyElementData,
+                            "not processed");
+                }
                 HierarchyElementGroup organizationHierarchyElementGroup = null;
                 HierarchyElementExt hierarchyElementExt = null;
                 if (organizationHierarchyElementGroup == null) {
@@ -873,7 +882,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 }
                 if (hierarchyElementExt == null) {
                     hierarchyElementExt = metadata.create(HierarchyElementExt.class);
+                    hierarchyElementExt.setGroup(organizationHierarchyElementGroup);
                     hierarchyElementExt.setLegacyId(organizationHierarchyElementJson.getLegacyId());
+                    organizationHierarchyElementGroup.getList().add(hierarchyElementExt);
                     commitContext.addInstanceToCommit(organizationHierarchyElementGroup);
                 }
                 OrganizationGroupExt subordinateOrganizationGroupExt = null;
@@ -894,8 +905,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     hierarchyElementExt.setOrganizationGroup(subordinateOrganizationGroupExt);
                 }
                 HierarchyElementExt parent = null;
-                if (organizationHierarchyElementJson.getParentPositionId() != null
-                        && !organizationHierarchyElementJson.getParentPositionId().isEmpty()) {
+                if (organizationHierarchyElementJson.getParentOrganizationId() != null
+                        && !organizationHierarchyElementJson.getParentOrganizationId().isEmpty()) {
                     List<HierarchyElementExt> parentList = dataManager.load(HierarchyElementExt.class).query(
                             "select e from base$HierarchyElementExt e " +
                                     " where e.organizationGroup.legacyId = :legacyId " +
@@ -932,6 +943,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 hierarchyElementExt.setHierarchy(hierarchy);
                 hierarchyElementExt.setWriteHistory(false);
                 hierarchyElementExt.setElementType(ElementType.ORGANIZATION);
+                if (organizationHierarchyElementGroup.getLegacyId() == null) {
+                    organizationHierarchyElementGroup.setLegacyId(organizationHierarchyElementJson.getLegacyId());
+                    commitContext.addInstanceToCommit(organizationHierarchyElementGroup);
+                }
                 commitContext.addInstanceToCommit(hierarchyElementExt);
             }
             for (HierarchyElementJson organizationHierarchyElementJson : organizationHierarchyElementJsons) {
@@ -969,6 +984,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, hierarchyElementData);
+    }
+
+    protected BaseResult prepareSuccessWithMessage(BaseResult baseResult, String methodName, Serializable params, String message) {
+        baseResult.setSuccess(true);
+        baseResult.setSuccessMessage(message);
+        createLog(methodName, baseResult, params);
+        return baseResult;
     }
 
     @Override
@@ -1050,6 +1072,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, hierarchyElementData,
                             "no subordinatePositionId");
                 }
+                if (positionHierarchyElementJson.getParentPositionId() == null
+                        || positionHierarchyElementJson.getParentPositionId().isEmpty()
+                        || positionHierarchyElementJson.getParentPositionId().equals("0")) {
+                    return prepareSuccessWithMessage(result, methodName, hierarchyElementData,
+                            "not processed");
+                }
                 HierarchyElementGroup positionHierarchyElementGroup = null;
                 HierarchyElementExt hierarchyElementExt = null;
                 if (positionHierarchyElementGroup == null) {
@@ -1091,7 +1119,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 }
                 if (hierarchyElementExt == null) {
                     hierarchyElementExt = metadata.create(HierarchyElementExt.class);
+                    hierarchyElementExt.setGroup(positionHierarchyElementGroup);
                     hierarchyElementExt.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                    positionHierarchyElementGroup.getList().add(hierarchyElementExt);
                     commitContext.addInstanceToCommit(positionHierarchyElementGroup);
                 }
                 PositionGroupExt subordinatePositionGroupExt = null;
@@ -1150,6 +1180,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 hierarchyElementExt.setHierarchy(hierarchy);
                 hierarchyElementExt.setWriteHistory(false);
                 hierarchyElementExt.setElementType(ElementType.POSITION);
+                if (positionHierarchyElementGroup.getLegacyId() == null) {
+                    positionHierarchyElementGroup.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                    commitContext.addInstanceToCommit(positionHierarchyElementGroup);
+                }
                 commitContext.addInstanceToCommit(hierarchyElementExt);
             }
             for (HierarchyElementJson positionHierarchyElementJson : positionHierarchyElementJsons) {
@@ -4716,7 +4750,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 if (tsadvUser != null) {
 
-                    if (!tsadvUser.getEmail().equals(userJson.getEmail())) {
+                    if (integrationConfig.getIsIntegrationActiveDirectory() && !tsadvUser.getEmail().equals(userJson.getEmail())) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
 
@@ -4724,89 +4758,95 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     List<String> codes = new ArrayList<>();
 
-                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
-                        codes.add("VCM");
-                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
-                        codes.add("KBL");
-                        codes.add("KAL");
-                    } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
-                        codes.add("KMM");
+                    if (userJson.getEmployeeNumber().length() > 5) {
+                        if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                            codes.add("VCM");
+                        } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                            codes.add("KBL");
+                            codes.add("KAL");
+                        } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
+                            codes.add("KMM");
+                        }
+
+                        List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " join e.list l " +
+                                        " where current_date between l.startDate and l.endDate " +
+                                        " and l.employeeNumber = :empNumber " +
+                                        " and e.company.code in :codes")
+                                .parameter("empNumber", empNumber)
+                                .parameter("codes", codes)
+                                .view("personGroupExt-for-integration-rest")
+                                .list();
+
+                        if (personGroupExtList.size() == 1) {
+                            tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                        } else {
+                            continue;
+                        }
+
+                        commitContext.addInstanceToCommit(tsadvUser);
+                        completedUsers.add(userJson);
                     }
-
-                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
-                            .query("select e from base$PersonGroupExt e " +
-                                    " join e.list l " +
-                                    " where current_date between l.startDate and l.endDate " +
-                                    " and l.employeeNumber = :empNumber " +
-                                    " and e.company.code in :codes")
-                            .parameter("empNumber", empNumber)
-                            .parameter("codes", codes)
-                            .view("personGroupExt-for-integration-rest")
-                            .list();
-
-                    if (personGroupExtList.size() == 1) {
-                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
-                    } else {
-                        continue;
-                    }
-
-                    commitContext.addInstanceToCommit(tsadvUser);
-                    completedUsers.add(userJson);
-
                 } else {
 
                     tsadvUser = dataManager.create(TsadvUser.class);
                     tsadvUser.setLogin(userJson.getLogin());
-                    tsadvUser.setEmail(userJson.getEmail());
+                    if (integrationConfig.getIsIntegrationActiveDirectory()) {
+                        tsadvUser.setEmail(userJson.getEmail());
+                    }
 
                     String empNumber = "";
 
                     List<String> codes = new ArrayList<>();
 
-                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
-                        codes.add("VCM");
-                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
-                        codes.add("KBL");
-                        codes.add("KAL");
-                    } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
-                        codes.add("KMM");
-                    }
-
-                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
-                            .query("select e from base$PersonGroupExt e " +
-                                    " join e.list l " +
-                                    " where current_date between l.startDate and l.endDate " +
-                                    " and l.employeeNumber = :empNumber " +
-                                    " and e.company.code in :codes")
-                            .parameter("empNumber", empNumber)
-                            .parameter("codes", codes)
-                            .view("personGroupExt-for-integration-rest")
-                            .list();
-
-                    if (personGroupExtList.size() == 1) {
-                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
-                        Group group = dataManager.load(Group.class)
-                                .query("select e from sec$Group e " +
-                                        " where e.name = :name ")
-                                .parameter("name", tsadvUser.getPersonGroup().getCompany() != null
-                                        ? tsadvUser.getPersonGroup().getCompany().getCode()
-                                        : null)
-                                .list().stream().findFirst().orElse(null);
-                        if (group != null) {
-                            tsadvUser.setGroup(group);
+                    if (userJson.getEmployeeNumber().length() > 5) {
+                        if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                            codes.add("VCM");
+                        } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                            codes.add("KBL");
+                            codes.add("KAL");
+                        } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
+                            codes.add("KMM");
                         }
-                    } else {
-                        continue;
-                    }
 
-                    commitContext.addInstanceToCommit(tsadvUser);
-                    completedUsers.add(userJson);
+                        List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " join e.list l " +
+                                        " where current_date between l.startDate and l.endDate " +
+                                        " and l.employeeNumber = :empNumber " +
+                                        " and e.company.code in :codes")
+                                .parameter("empNumber", empNumber)
+                                .parameter("codes", codes)
+                                .view("personGroupExt-for-integration-rest")
+                                .list();
+
+                        if (personGroupExtList.size() == 1) {
+                            tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                            Group group = dataManager.load(Group.class)
+                                    .query("select e from sec$Group e " +
+                                            " where e.name = :name ")
+                                    .parameter("name", tsadvUser.getPersonGroup().getCompany() != null
+                                            ? tsadvUser.getPersonGroup().getCompany().getCode()
+                                            : null)
+                                    .list().stream().findFirst().orElse(null);
+                            if (group != null) {
+                                tsadvUser.setGroup(group);
+                            }
+                        } else {
+                            continue;
+                        }
+
+                        commitContext.addInstanceToCommit(tsadvUser);
+                        completedUsers.add(userJson);
+
+                    }
                 }
             }
             completedUserData.setUsers(completedUsers);
@@ -4819,7 +4859,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         return prepareSuccess(result, methodName, completedUserData);
     }
 
-    private String getEmpNumber(String jsonEmpNumber) {
+    protected String getEmpNumber(String jsonEmpNumber) {
         for (int i = 0; i < jsonEmpNumber.length(); i++) {
             if (jsonEmpNumber.charAt(i) != '0') {
                 return jsonEmpNumber.substring(i);

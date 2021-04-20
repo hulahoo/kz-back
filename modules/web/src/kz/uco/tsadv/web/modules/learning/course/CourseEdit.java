@@ -117,10 +117,6 @@ public class CourseEdit extends StandardEditor<Course> {
 
     @Subscribe
     protected void onInitEntity(InitEntityEvent<Course> event) {
-        richTextArea.setValue("<i>Jackdaws </i><u>love</u> <font color=\"#0000ff\">my</font> " +
-                "<font size=\"7\">big</font> <sup>sphinx</sup> " +
-                "<font face=\"Verdana\">of</font> <span style=\"background-color: " +
-                "red;\">quartz</span>");
 //        PickerField.LookupAction lookupAction = partyField.getLookupAction();
 //        lookupAction.setLookupScreen("base$PartyExt.browse");
 //        lookupAction.setLookupScreenParams(ParamsMap.of(PartyExtBrowse.TRAINING_PROVIDER, true));

@@ -134,11 +134,16 @@ public class DocumentServiceBean implements DocumentService {
 
     @Override
     public Boolean checkPersonInsure(UUID personGroupId, UUID contractId) {
+        return this.checkPersonInsure(personGroupId, contractId, null);
+    }
+
+    protected Boolean checkPersonInsure(UUID personGroupId, UUID contractId, UUID insuredPersonId) {
         InsuredPerson person = dataManager.load(InsuredPerson.class).query("select e " +
                 "from tsadv$InsuredPerson e " +
                 "where e.insuranceContract.id = :contractId " +
                 " and e.employee.id = :employeeId " +
-                " and e.relative.code = 'PRIMARY' ")
+                " and e.relative.code = 'PRIMARY' " +
+                (insuredPersonId != null ? String.format(" and e.id <> '%s'", insuredPersonId) : ""))
                 .parameter("contractId", contractId)
                 .parameter("employeeId", personGroupId)
                 .view("insuredPerson-editView")
@@ -328,5 +333,40 @@ public class DocumentServiceBean implements DocumentService {
                         .mapToDouble(value -> value.getAmount().doubleValue())
                         .sum()
         );
+    }
+
+    @Override
+    public InsuredPerson commitFromPortal(InsuredPerson insuredPerson) {
+        CommitContext commitContext = new CommitContext();
+        UUID insuredPersonId = insuredPerson.getId();
+
+        if (checkPersonInsure(insuredPerson.getEmployee().getId(), insuredPerson.getInsuranceContract().getId(), insuredPersonId)) {
+            throw new PortalException(messages.getMainMessage("already.tied.contract"));
+        }
+
+        InsuredPerson insuranceContract = dataManager.load(InsuredPerson.class)
+                .id(insuredPerson.getId())
+                .view(new View(InsuredPerson.class)
+                        .addProperty("insuranceContract"))
+                .optional()
+                .orElse(null);
+
+        if (insuranceContract != null) {
+
+            if (insuredPerson.getInsuranceContract().equals(insuranceContract.getInsuranceContract()))
+                return insuredPerson;
+
+            insuranceContract.setInsuranceContract(insuredPerson.getInsuranceContract());
+
+            commitContext.addInstanceToCommit(insuranceContract);
+
+            List<InsuredPerson> insuredPersonMembers = getInsuredPersonMembers(insuredPersonId);
+            insuredPersonMembers.stream()
+                    .peek(member -> member.setInsuranceContract(insuredPerson.getInsuranceContract()))
+                    .forEach(commitContext::addInstanceToCommit);
+        } else commitContext.addInstanceToCommit(insuredPerson);
+        EntitySet commit = dataManager.commit(commitContext);
+        //noinspection OptionalGetWithoutIsPresent
+        return insuredPersonId != null ? commit.get(InsuredPerson.class, insuredPersonId) : (InsuredPerson) commit.stream().findAny().get();
     }
 }
