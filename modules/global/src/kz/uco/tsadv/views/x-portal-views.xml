@@ -268,9 +268,10 @@
         <property name="sections" view="enrollment-course-section"/>
         <property name="logo"/>
     </view>
-    <view name="enrollment-course" entity="tsadv$Enrollment" extends="_local">
-        <property name="course" view="course-enrollment"/>
-    </view>
+<!--    unused-->
+<!--    <view name="enrollment-course" entity="tsadv$Enrollment" extends="_local">-->
+<!--        <property name="course" view="course-enrollment"/>-->
+<!--    </view>-->
     <view name="course-section-attempt" entity="tsadv$CourseSectionAttempt" extends="_local">
         <property name="courseSection" view="_minimal">
             <property name="format" view="_minimal"/>
@@ -343,14 +344,15 @@
         <property name="personGroup"
                   view="_minimal"/>
     </view>
-    <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"
-          extends="_local"
-          name="portal-assignment-group">
-        <property name="group"
-                  view="_minimal"/>
-        <property name="personGroup"
-                  view="_minimal"/>
-    </view>
+<!--    unused-->
+<!--    <view class="kz.uco.tsadv.modules.personal.model.AssignmentExt"-->
+<!--          extends="_local"-->
+<!--          name="portal-assignment-group">-->
+<!--        <property name="group"-->
+<!--                  view="_minimal"/>-->
+<!--        <property name="personGroup"-->
+<!--                  view="_minimal"/>-->
+<!--    </view>-->
     <view class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
           extends="_local"
           name="assigned-goal-cascade-positionGroupExt-view">
