@@ -8,6 +8,7 @@ import kz.uco.tsadv.pojo.CoursePojo;
 import kz.uco.tsadv.pojo.PairPojo;
 import kz.uco.tsadv.pojo.ScormInputData;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -68,7 +69,7 @@ public interface CourseService {
 
     void createScormAttempt(UUID courseSectionId, UUID enrollmentId, List<ScormInputData> inputData, Boolean success);
 
-    void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, BigDecimal score, BigDecimal minScore, BigDecimal maxScore, Boolean success);
+    CourseSectionAttempt createTestScormAttempt(@NotNull UUID courseSectionId, @NotNull UUID enrollmentId, @NotNull BigDecimal score, @NotNull BigDecimal minScore, @NotNull BigDecimal maxScore);
 
     PairPojo<Boolean, String> validateEnroll(UUID courseId, String locale);
 }
