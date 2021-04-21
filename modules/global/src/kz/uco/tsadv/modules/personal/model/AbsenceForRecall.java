@@ -9,6 +9,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -195,5 +196,11 @@ public class AbsenceForRecall extends AbstractBprocRequest {
     @Override
     public String getProcessDefinitionKey() {
         return PROCESS_DEFINITION_KEY;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        super.postConstruct();
+        leaveOtherTime = true;
     }
 }

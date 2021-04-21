@@ -19,11 +19,11 @@ public interface AbsenceService {
 
     List<Absence> getAllAbsencesForPerson(PersonGroupExt personGroup);
 
-    void fillNextTaskIdRestForAA();
-
     int countBusinessDays(Date dateFrom, Date dateTo, DicAbsenceType absenceType, AssignmentGroupExt assignmentGroup);
 
     int countDays(Date dateFrom, Date dateTo, UUID absenceTypeId, UUID personGroupId);
+
+    int countDaysWithoutHolidays(Date dateFrom, Date dateTo, UUID personGroupId);
 
     int countWeekendDays(Date dateFrom, Date dateTo);
 

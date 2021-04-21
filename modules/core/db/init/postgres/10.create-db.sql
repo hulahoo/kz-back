@@ -14382,7 +14382,7 @@ create table TSADV_LEARNING_OBJECT (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     OBJECT_NAME varchar(255) not null,
-    DESCRIPTION varchar(4000) not null,
+    DESCRIPTION varchar(4000),
     URL varchar(4000),
     CONTENT_TYPE varchar(50) not null,
     FILE_ID uuid,
@@ -16280,6 +16280,9 @@ create table TSADV_ABSENCE (
     AGREE boolean,
     TRANSFER_PERIOD_START timestamp,
     TRANSFER_PERIOD_END timestamp,
+    TIME_START time,
+    TIME_END time,
+    ADDITIONAL_TIME integer,
     --
     primary key (ID)
 )^
@@ -16627,6 +16630,9 @@ create table TSADV_ABSENCE_REQUEST (
     ACQUAINTED boolean,
     AGREE boolean,
     VACATION_SCHEDULE_ID uuid,
+    START_TIME time,
+    END_TIME time,
+    ADDITIONAL_TIME integer,
     --
     primary key (ID)
 )^
@@ -17170,7 +17176,7 @@ alter table BASE_POSITION add column POSITION_STATUS_ID uuid ^
 alter table BASE_POSITION add column GRADE_RULE_ID uuid ^
 alter table BASE_POSITION add column ORGANIZATION_GROUP_EXT_ID uuid ^
 alter table BASE_POSITION add column EMPLOYEE_CATEGORY_ID uuid ^
-alter table BASE_POSITION add column DTYPE varchar(31) ^
+alter table BASE_POSITION add column DTYPE varchar(100) ^
 update BASE_POSITION set DTYPE = 'base$PositionExt' where DTYPE is null ^
 -- end BASE_POSITION
 -- begin BASE_ORGANIZATION
@@ -17865,3 +17871,21 @@ create table TSADV_DIC_ASSESSMENT_TYPE (
     primary key (ID)
 )^
 -- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_SCORM_SUSPEND_DATA
+create table TSADV_SCORM_SUSPEND_DATA (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    ENROLLMENT_ID uuid not null,
+    COURSE_SECTION_ID uuid not null,
+    SUSPEND_DATA text,
+    --
+    primary key (ID)
+)^
+-- end TSADV_SCORM_SUSPEND_DATA

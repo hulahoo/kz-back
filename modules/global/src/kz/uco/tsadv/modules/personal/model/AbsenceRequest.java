@@ -5,7 +5,6 @@ import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
-import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.UserSessionSource;
@@ -143,6 +142,41 @@ public class AbsenceRequest extends AbstractBprocRequest {
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @ManyToMany
     protected List<FileDescriptor> files;
+
+    @Temporal(TemporalType.TIME)
+    @Column(name = "START_TIME")
+    protected Date startTime;
+
+    @Temporal(TemporalType.TIME)
+    @Column(name = "END_TIME")
+    protected Date endTime;
+
+    @Column(name = "ADDITIONAL_TIME")
+    protected Integer additionalTime;
+
+    public Integer getAdditionalTime() {
+        return additionalTime;
+    }
+
+    public void setAdditionalTime(Integer additionalTime) {
+        this.additionalTime = additionalTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
     public List<FileDescriptor> getFiles() {
         return files;

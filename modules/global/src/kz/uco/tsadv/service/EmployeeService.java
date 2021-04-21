@@ -27,6 +27,8 @@ public interface EmployeeService {
 
     PersonProfileDto personProfile(UUID personGroupId);
 
+    PersonProfileDto personGroupInfo(UUID userId);
+
     String generate(String personGroupId, String lang, String systemDate);
 
     FileDescriptor getImage(String personId);

@@ -128,6 +128,11 @@
             <param name="absenceTypeId" type="java.util.UUID"/>
             <param name="dateFrom" type="java.util.Date"/>
         </method>
+        <method name="countDaysWithoutHolidays">
+            <param name="dateFrom" type="java.util.Date"/>
+            <param name="dateTo" type="java.util.Date"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_DocumentService">
         <method name="getInsuredPerson">
@@ -155,6 +160,9 @@
         <method name="calcTotalAmount">
             <param name="insuredPersonId" type="java.util.UUID"/>
         </method>
+        <method name="commitFromPortal">
+            <param name="insuredPerson" type="kz.uco.tsadv.modules.personal.model.InsuredPerson"/>
+        </method>
     </service>
     <service name="tsadv_EmployeeService">
         <method name="personProfile">
@@ -172,6 +180,9 @@
             <param name="positionGroupId" type="java.util.UUID"/>
             <param name="showAll" type="boolean"/>
             <param name="viewName" type="java.lang.String"/>
+        </method>
+        <method name="personGroupInfo">
+            <param name="userId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">

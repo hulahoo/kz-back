@@ -1,6 +1,7 @@
 package kz.uco.tsadv.listeners;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.app.events.AttributeChanges;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
@@ -9,9 +10,12 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.service.NotificationSenderAPIService;
+import kz.uco.tsadv.beans.validation.tdc.enrollment.EnrollmentValidation;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
-import kz.uco.tsadv.modules.learning.model.*;
+import kz.uco.tsadv.modules.learning.model.CourseCertificate;
+import kz.uco.tsadv.modules.learning.model.Enrollment;
+import kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LmsService;
 import org.apache.commons.lang3.ArrayUtils;
@@ -39,6 +43,24 @@ public class EnrollmentChangedListener {
     protected ReportService reportService;
     @Inject
     protected Metadata metadata;
+    @Inject
+    private TransactionalDataManager transactionalDataManager;
+    @Inject
+    private List<EnrollmentValidation> enrollmentValidations;
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void beforeCommit(EntityChangedEvent<Enrollment, UUID> event) {
+        if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            if (event.getChanges().isChanged("status")) {
+                Enrollment enrollment = transactionalDataManager.load(event.getEntityId())
+                        .view("enrollment.validation.status")
+                        .one();
+                for (EnrollmentValidation enrollmentValidation : enrollmentValidations) {
+                    enrollmentValidation.validate(enrollment);
+                }
+            }
+        }
+    }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<Enrollment, UUID> event) {
@@ -80,42 +102,37 @@ public class EnrollmentChangedListener {
                     map.put("courseName", enrollment.getCourse().getName());
 
 //                    sendNotificationCompleted(enrollment);
-                    if (generateCertificate(enrollment)) {
-                        CommitContext commitContext = new CommitContext();
-                        CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
-                                && !enrollment.getCourse().getCertificate().isEmpty()
-                                ? enrollment.getCourse().getCertificate().get(0)
-                                : null;
-                        if (courseCertificate != null) {
+                    CommitContext commitContext = new CommitContext();
+                    CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
+                            && !enrollment.getCourse().getCertificate().isEmpty()
+                            ? enrollment.getCourse().getCertificate().get(0)
+                            : null;
+                    if (courseCertificate != null) {
 
-                            FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
-                                    ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
+                        FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
+                                ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
 
 
-                            if (fd != null) {
-                                List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
-                                        .query("select e from tsadv$EnrollmentCertificateFile e " +
-                                                " where e.enrollment = :enrollment ")
-                                        .parameter("enrollment", enrollment)
-                                        .view("enrollmentCertificateFile.with.certificateFile")
-                                        .list();
-                                ecfList.forEach(commitContext::addInstanceToRemove);
+                        if (fd != null) {
+                            List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
+                                    .query("select e from tsadv$EnrollmentCertificateFile e " +
+                                            " where e.enrollment = :enrollment ")
+                                    .parameter("enrollment", enrollment)
+                                    .view("enrollmentCertificateFile.with.certificateFile")
+                                    .list();
+                            ecfList.forEach(commitContext::addInstanceToRemove);
 
-                                EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
-                                ecf.setCertificateFile(fd);
-                                ecf.setEnrollment(enrollment);
-                                commitContext.addInstanceToCommit(ecf);
+                            EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
+                            ecf.setCertificateFile(fd);
+                            ecf.setEnrollment(enrollment);
+                            commitContext.addInstanceToCommit(ecf);
 
-                                dataManager.commit(commitContext);
+                            dataManager.commit(commitContext);
 
-                                EmailAttachment[] emailAttachments = new EmailAttachment[0];
-                                emailAttachments = getEmailAttachments(fd, emailAttachments);
-                                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
-                                        user, map, emailAttachments);
-                            } else {
-                                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
-                                        user, map);
-                            }
+                            EmailAttachment[] emailAttachments = new EmailAttachment[0];
+                            emailAttachments = getEmailAttachments(fd, emailAttachments);
+                            notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                                    user, map, emailAttachments);
                         } else {
                             notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                                     user, map);
@@ -149,24 +166,24 @@ public class EnrollmentChangedListener {
 
     }
 
-    protected boolean generateCertificate(Enrollment enrollment) {
-        boolean success = true;
-        if (enrollment.getCourse().getSelfEnrollment()) {
-            for (CourseSection section : enrollment.getCourse().getSections()) {
-                List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
-                        .query("select e from tsadv$CourseSectionAttempt e " +
-                                " where e.success = true " +
-                                " and e.courseSection = :section")
-                        .parameter("section", section)
-                        .view("courseSectionAttempt.edit")
-                        .list();
-                if (courseSectionAttemptList.size() < 1) {
-                    success = false;
-                }
-            }
-        }
-        return success;
-    }
+//    protected boolean generateCertificate(Enrollment enrollment) {
+//        boolean success = true;
+//        if (enrollment.getCourse().getSelfEnrollment()) {
+//            for (CourseSection section : enrollment.getCourse().getSections()) {
+//                List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
+//                        .query("select e from tsadv$CourseSectionAttempt e " +
+//                                " where e.success = true " +
+//                                " and e.courseSection = :section")
+//                        .parameter("section", section)
+//                        .view("courseSectionAttempt.edit")
+//                        .list();
+//                if (courseSectionAttemptList.size() < 1) {
+//                    success = false;
+//                }
+//            }
+//        }
+//        return success;
+//    }
 
     protected void sendNotification(Enrollment enrollment, String notificationCode) {
         List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)

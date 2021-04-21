@@ -32,6 +32,8 @@
                 <field property="country"/>
                 <field property="postalCode"/>
                 <field property="cityName"/>
+                <field property="factAddress"/>
+                <field property="registrationAddress"/>
                 <field property="startDate"/>
                 <field property="endDate"/>
             </column>

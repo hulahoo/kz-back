@@ -634,14 +634,15 @@
         <method name="loadFeedbackData">
             <param name="feedbackTemplateId"/>
         </method>
-        <method name="finishFeedback">
-            <param name="answeredFeedback"/>
-        </method>
         <method name="loadCourseSectionData">
             <param name="enrollmentId"/>
             <param name="courseSectionId"/>
         </method>
         <method name="loadBooks"/>
+        <method name="finishFeedback">
+            <param name="answeredFeedback" type="kz.uco.tsadv.lms.pojo.AnsweredFeedback"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_UserSettingService">
         <method name="getTimeZones"/>

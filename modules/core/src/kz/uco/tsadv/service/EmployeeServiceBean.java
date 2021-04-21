@@ -185,6 +185,28 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
+    public PersonProfileDto personGroupInfo(UUID userId) {
+        PersonGroupExt personGroup = dataManager.load(PersonGroupExt.class)
+                .query("select p\n" +
+                        "            from tsadv$UserExt u\n" +
+                        "                inner join u.personGroup p\n" +
+                        "                inner join p.assignments a\n" +
+                        "            where u.id = :userId\n" +
+                        "                and a.startDate <= CURRENT_DATE\n" +
+                        "                and a.endDate >= CURRENT_DATE\n" +
+                        "                and a.primaryFlag = true")
+                .parameter("userId", userId)
+                .view("personGroup-with-position")
+                .one();
+        PersonProfileDto dto = new PersonProfileDto();
+        dto.setGroupId(personGroup.getId());
+        PositionGroupExt positionGroup = personGroup.getCurrentAssignment().getPositionGroup();
+        dto.setPositionGroupId(positionGroup.getId());
+        dto.setPositionId(positionGroup.getPosition().getId());
+        return dto;
+    }
+
+    @Override
     public String generateOgrChart(String personGroupId) {
         if (personGroupId == null) {
             return "";
@@ -2261,7 +2283,7 @@ public class EmployeeServiceBean implements EmployeeService {
             birthDateLocalDate = new java.sql.Date(birthDate.getTime()).toLocalDate();
         }
         LocalDate currentDateLocalDate = new java.sql.Date(currentDate.getTime()).toLocalDate();
-        if ((birthDate != null) && (currentDate != null)) {
+        if (birthDate != null) {
             return Period.between(birthDateLocalDate, currentDateLocalDate).getYears();
         } else {
             return 0;

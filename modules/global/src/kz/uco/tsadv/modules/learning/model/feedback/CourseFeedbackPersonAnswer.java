@@ -1,28 +1,21 @@
 package kz.uco.tsadv.modules.learning.model.feedback;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import kz.uco.tsadv.modules.learning.enums.feedback.LearningFeedbackUsageType;
+import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.DeletePolicy;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.learning.enums.feedback.FeedbackResponsibleRole;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSectionSession;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import com.haulmont.chile.core.annotations.Composition;
-import com.haulmont.cuba.core.entity.annotation.OnDelete;
-import com.haulmont.cuba.core.global.DeletePolicy;
-import java.util.List;
-import javax.persistence.OneToMany;
-import kz.uco.tsadv.modules.learning.enums.feedback.FeedbackResponsibleRole;
-import javax.persistence.OrderBy;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
+
+@PublishEntityChangedEvents
 @Table(name = "TSADV_COURSE_FEEDBACK_PERSON_ANSWER")
 @Entity(name = "tsadv$CourseFeedbackPersonAnswer")
 public class CourseFeedbackPersonAnswer extends AbstractParentEntity {

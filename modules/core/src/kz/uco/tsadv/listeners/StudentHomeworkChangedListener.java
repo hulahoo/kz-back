@@ -1,5 +1,6 @@
 package kz.uco.tsadv.listeners;
 
+import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.app.events.AttributeChanges;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
@@ -8,9 +9,15 @@ import com.haulmont.cuba.core.global.GlobalConfig;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
+import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
+import kz.uco.tsadv.modules.learning.model.Course;
+import kz.uco.tsadv.modules.learning.model.Enrollment;
+import kz.uco.tsadv.modules.learning.model.Homework;
 import kz.uco.tsadv.modules.learning.model.StudentHomework;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.service.LearningService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -28,6 +35,78 @@ public class StudentHomeworkChangedListener {
     protected NotificationSenderAPIService notificationSenderAPIService;
     @Inject
     protected GlobalConfig globalConfig;
+    @Inject
+    protected LearningService learningService;
+    @Inject
+    protected TransactionalDataManager transactionalDataManager;
+
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void onTsadv_StudentHomeworkBeforeCommit(EntityChangedEvent<StudentHomework, UUID> event) {
+        Id<StudentHomework, UUID> entityId = event.getEntityId();
+        StudentHomework studentHomework;
+        if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+            studentHomework = transactionalDataManager.load(entityId).view("studentHomework.edit").one();
+            if (learningService.allCourseSectionPassed(studentHomework.getHomework().getCourse() != null
+                    ? studentHomework.getHomework().getCourse().getSections()
+                    : null)
+                    && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
+                    studentHomework.getPersonGroup())) {
+                boolean feedbackQuestion = true;
+                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
+                if (!courseFeedbackTemplateList.isEmpty()) {
+                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
+                }
+                Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
+                        .query("select e from tsadv$Enrollment e " +
+                                " where e.personGroup = :personGroup " +
+                                " and e.course = :course")
+                        .parameter("personGroup", studentHomework.getPersonGroup())
+                        .parameter("course", studentHomework.getHomework().getCourse())
+                        .view("enrollment-view")
+                        .list().stream().findFirst().orElse(null);
+                if (enrollment != null && feedbackQuestion) {
+                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
+                    transactionalDataManager.save(enrollment);
+                }
+            }
+        } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            studentHomework = transactionalDataManager.load(entityId).view("studentHomework.edit").one();
+            if (learningService.allCourseSectionPassed(studentHomework.getHomework().getCourse() != null
+                    ? studentHomework.getHomework().getCourse().getSections()
+                    : null)
+                    && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
+                    studentHomework.getPersonGroup())) {
+                boolean feedbackQuestion = true;
+                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
+                if (!courseFeedbackTemplateList.isEmpty()) {
+                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
+                }
+                Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
+                        .query("select e from tsadv$Enrollment e " +
+                                " where e.personGroup = :personGroup " +
+                                " and e.course = :course")
+                        .parameter("personGroup", studentHomework.getPersonGroup())
+                        .parameter("course", studentHomework.getHomework().getCourse())
+                        .view("enrollment-view")
+                        .list().stream().findFirst().orElse(null);
+                if (enrollment != null && feedbackQuestion) {
+                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
+                    transactionalDataManager.save(enrollment);
+                }
+            }
+        }
+
+    }
+
+    protected List<Homework> getHomeworkForCourse(Course course) {
+        return dataManager.load(Homework.class)
+                .query("select e from tsadv_Homework e " +
+                        " where e.course = :course")
+                .parameter("course", course)
+                .view("homework.edit")
+                .list();
+    }
+
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<StudentHomework, UUID> event) {

@@ -4,6 +4,7 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
@@ -36,6 +37,10 @@ public class DocumentServiceBean implements DocumentService {
     protected TimeSource timeSource;
     @Inject
     private EmployeeNumberService employeeNumberService;
+    @Inject
+    protected Messages messages;
+    @Inject
+    protected Metadata metadata;
 
     @Override
     public List<InsuredPerson> getMyInsuraces() {
@@ -66,44 +71,16 @@ public class DocumentServiceBean implements DocumentService {
                 .parameter("companyId", company.getId())
                 .view("insuranceContract-editView")
                 .list().stream().findFirst().orElse(null);
+
+        if (contract == null) {
+            throw new PortalException(String.format(messages.getMainMessage("hr.user.not.found"),
+                    messages.getTools().getEntityCaption(metadata.getClassNN(InsuranceContract.class))));
+        }
+
         insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
-        if (contract != null) {
-            insuredPerson.setInsuranceContract(contract);
-            insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
-        }
+        insuredPerson.setInsuranceContract(contract);
+        insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
 
-        boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
-        if (isEmptyDocument) {
-            insuredPerson.setDocumentType(contract.getDefaultDocumentType());
-        } else {
-            boolean isSetDocument = false;
-            for (PersonDocument document : personGroupExt.getPersonDocuments()) {
-                if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
-                    insuredPerson.setDocumentType(document.getDocumentType());
-                    insuredPerson.setDocumentNumber(document.getDocumentNumber());
-                    isEmptyDocument = true;
-                    break;
-                }
-            }
-            if (!isEmptyDocument) {
-                insuredPerson.setDocumentType(personGroupExt.getPersonDocuments().get(0).getDocumentType());
-                insuredPerson.setDocumentNumber(personGroupExt.getPersonDocuments().get(0).getDocumentNumber());
-            }
-        }
-
-        if (!personGroupExt.getAddresses().isEmpty()) {
-            boolean isSetAddress = false;
-            for (Address a : personGroupExt.getAddresses()) {
-                if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
-                    insuredPerson.setAddressType(a);
-                    isSetAddress = true;
-                    break;
-                }
-            }
-            if (!isSetAddress) {
-                insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
-            }
-        }
         insuredPerson.setEmployee(personGroupExt);
         insuredPerson.setCompany(company);
         insuredPerson.setTotalAmount(new BigDecimal(0));
@@ -126,11 +103,16 @@ public class DocumentServiceBean implements DocumentService {
 
     @Override
     public Boolean checkPersonInsure(UUID personGroupId, UUID contractId) {
+        return this.checkPersonInsure(personGroupId, contractId, null);
+    }
+
+    protected Boolean checkPersonInsure(UUID personGroupId, UUID contractId, UUID insuredPersonId) {
         InsuredPerson person = dataManager.load(InsuredPerson.class).query("select e " +
                 "from tsadv$InsuredPerson e " +
                 "where e.insuranceContract.id = :contractId " +
                 " and e.employee.id = :employeeId " +
-                " and e.relative.code = 'PRIMARY' ")
+                " and e.relative.code = 'PRIMARY' " +
+                (insuredPersonId != null ? String.format(" and e.id <> '%s'", insuredPersonId) : ""))
                 .parameter("contractId", contractId)
                 .parameter("employeeId", personGroupId)
                 .view("insuredPerson-editView")
@@ -164,7 +146,7 @@ public class DocumentServiceBean implements DocumentService {
 
         for (ContractConditions condition : insuranceContract.getProgramConditions()) {
             if (condition.getRelationshipType().getId().equals(relativeType.getId())) {
-                if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
+                if (condition.getAgeMin() <= age && age < condition.getAgeMax()) {
                     conditionsList.add(condition);
                 }
             }
@@ -239,14 +221,17 @@ public class DocumentServiceBean implements DocumentService {
                 .view("insuranceContract-editView")
                 .list().stream().findFirst().orElse(null);
 
+        if (contract == null) {
+            throw new PortalException(String.format(messages.getMainMessage("hr.user.not.found"),
+                    messages.getTools().getEntityCaption(metadata.getClassNN(InsuranceContract.class))));
+        }
+
         PersonExt person = personGroupExt.getPerson();
         AssignmentExt assignment = personGroupExt.getCurrentAssignment();
 
         insuredPerson.setStatusRequest(commonService.getEntity(DicMICAttachmentStatus.class, "DRAFT"));
-        if (contract != null) {
-            insuredPerson.setInsuranceContract(contract);
-            insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
-        }
+        insuredPerson.setInsuranceContract(contract);
+        insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
 
         Address address = dataManager.load(Address.class).query("select e " +
                 "from tsadv$Address e " +
@@ -260,9 +245,8 @@ public class DocumentServiceBean implements DocumentService {
         if (isEmptyDocument) {
             insuredPerson.setDocumentType(contract.getDefaultDocumentType());
         } else {
-            boolean isSetDocument = false;
             for (PersonDocument document : personGroupExt.getPersonDocuments()) {
-                if (document.getDocumentType().getId().equals(contract.getDefaultDocumentType().getId())) {
+                if (document.getDocumentType().equals(contract.getDefaultDocumentType())) {
                     insuredPerson.setDocumentType(document.getDocumentType());
                     insuredPerson.setDocumentNumber(document.getDocumentNumber());
                     isEmptyDocument = true;
@@ -278,7 +262,7 @@ public class DocumentServiceBean implements DocumentService {
         if (!personGroupExt.getAddresses().isEmpty()) {
             boolean isSetAddress = false;
             for (Address a : personGroupExt.getAddresses()) {
-                if (a.getAddressType().getId().equals(contract.getDefaultAddress().getId())) {
+                if (a.getAddressType().equals(contract.getDefaultAddress())) {
                     insuredPerson.setAddressType(a);
                     isSetAddress = true;
                     break;
@@ -318,5 +302,40 @@ public class DocumentServiceBean implements DocumentService {
                         .mapToDouble(value -> value.getAmount().doubleValue())
                         .sum()
         );
+    }
+
+    @Override
+    public InsuredPerson commitFromPortal(InsuredPerson insuredPerson) {
+        CommitContext commitContext = new CommitContext();
+        UUID insuredPersonId = insuredPerson.getId();
+
+        if (checkPersonInsure(insuredPerson.getEmployee().getId(), insuredPerson.getInsuranceContract().getId(), insuredPersonId)) {
+            throw new PortalException(messages.getMainMessage("already.tied.contract"));
+        }
+
+        InsuredPerson insuranceContract = dataManager.load(InsuredPerson.class)
+                .id(insuredPerson.getId())
+                .view(new View(InsuredPerson.class)
+                        .addProperty("insuranceContract"))
+                .optional()
+                .orElse(null);
+
+        if (insuranceContract != null) {
+
+            if (insuredPerson.getInsuranceContract().equals(insuranceContract.getInsuranceContract()))
+                return insuredPerson;
+
+            insuranceContract.setInsuranceContract(insuredPerson.getInsuranceContract());
+
+            commitContext.addInstanceToCommit(insuranceContract);
+
+            List<InsuredPerson> insuredPersonMembers = getInsuredPersonMembers(insuredPersonId);
+            insuredPersonMembers.stream()
+                    .peek(member -> member.setInsuranceContract(insuredPerson.getInsuranceContract()))
+                    .forEach(commitContext::addInstanceToCommit);
+        } else commitContext.addInstanceToCommit(insuredPerson);
+        EntitySet commit = dataManager.commit(commitContext);
+        //noinspection OptionalGetWithoutIsPresent
+        return insuredPersonId != null ? commit.get(InsuredPerson.class, insuredPersonId) : (InsuredPerson) commit.stream().findAny().get();
     }
 }

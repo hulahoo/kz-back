@@ -1,11 +1,7 @@
 package kz.uco.tsadv.service;
 
-import com.haulmont.cuba.core.EntityManager;
-import com.haulmont.cuba.core.Persistence;
-import com.haulmont.cuba.core.Query;
-import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.*;
 import com.haulmont.cuba.core.app.FileStorageAPI;
-import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileLoader;
@@ -15,12 +11,13 @@ import kz.uco.base.importer.exception.ImportFileEofEvaluationException;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.importer.utils.XlsHelper;
-import kz.uco.tsadv.lms.pojo.LearningHistoryPojo;
 import kz.uco.tsadv.modules.learning.dictionary.DicTestType;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.enums.TestSectionOrder;
 import kz.uco.tsadv.modules.learning.model.*;
-import org.apache.commons.collections.CollectionUtils;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
+import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
@@ -31,13 +28,14 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Service(LearningService.NAME)
 public class LearningServiceBean implements LearningService {
 
     @Inject
     protected CommonService commonService;
+    @Inject
+    protected TransactionalDataManager transactionalDataManager;
 
     @Inject
     private Metadata metadata;
@@ -207,8 +205,12 @@ public class LearningServiceBean implements LearningService {
                 e.printStackTrace();
             } finally {
                 try {
-                    inputStream.close();
-                    fileOutputStream.close();
+                    if (inputStream != null) {
+                        inputStream.close();
+                    }
+                    if (fileOutputStream != null) {
+                        fileOutputStream.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -242,14 +244,22 @@ public class LearningServiceBean implements LearningService {
                 e.printStackTrace();
             } finally {
                 try {
-                    isrStdout.close();
-                    stdout.close();
-                    brStdout.close();
+                    if (isrStdout != null) {
+                        isrStdout.close();
+                    }
+                    if (stdout != null) {
+                        stdout.close();
+                    }
+                    if (brStdout != null) {
+                        brStdout.close();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            file.delete();
+            if (file != null) {
+                file.delete();
+            }
             result = commonConfig.getScormPackageDomainURL() + "/" + packageName + commonConfig.getDefualtIndexHtmlUrl();
         }
         return result;
@@ -623,5 +633,65 @@ public class LearningServiceBean implements LearningService {
             throw new FileStorageException(FileStorageException.Type.FILE_NOT_FOUND, "File was not loaded");
 
         return workbook;
+    }
+
+    @Override
+    public boolean allCourseSectionPassed(List<CourseSection> courseSectionList) {
+        if (courseSectionList == null) return false;
+        boolean success = true;
+        for (CourseSection section : courseSectionList) {
+            List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
+                    .query("select e from tsadv$CourseSectionAttempt e " +
+                            " where e.success = true " +
+                            " and e.courseSection = :section")
+                    .parameter("section", section)
+                    .view("courseSectionAttempt.edit")
+                    .list();
+            if (courseSectionAttemptList.size() < 1) {
+                success = false;
+            }
+        }
+        return success;
+    }
+
+    @Override
+    public boolean allHomeworkPassed(List<Homework> homeworkList, PersonGroupExt personGroup) {
+        boolean success = true;
+        for (Homework homework : homeworkList) {
+            List<StudentHomework> studentHomeworks = transactionalDataManager.load(StudentHomework.class)
+                    .query("select e from tsadv_StudentHomework e " +
+                            " where e.isDone = true " +
+                            " and e.homework = :homework " +
+                            " and e.personGroup = :personGroup")
+                    .parameter("homework", homework)
+                    .parameter("personGroup", personGroup)
+                    .view("studentHomework.edit")
+                    .list();
+            if (studentHomeworks.size() < 1) {
+                success = false;
+            }
+        }
+        return success;
+    }
+
+    @Override
+    public boolean haveAFeedbackQuestion(List<CourseFeedbackTemplate> feedbackTemplateList, PersonGroupExt personGroup) {
+        boolean success = true;
+        for (CourseFeedbackTemplate courseFeedbackTemplate : feedbackTemplateList) {
+            List<CourseFeedbackPersonAnswer> courseFeedbackPersonAnswerList = transactionalDataManager.load(CourseFeedbackPersonAnswer.class)
+                    .query("select e from tsadv$CourseFeedbackPersonAnswer e " +
+                            " where e.course = :course " +
+                            " and e.feedbackTemplate = :feedbackTemplate " +
+                            " and e.personGroup = :personGroup")
+                    .parameter("course", courseFeedbackTemplate.getCourse())
+                    .parameter("feedbackTemplate", courseFeedbackTemplate.getFeedbackTemplate())
+                    .parameter("personGroup", personGroup)
+                    .view("courseFeedbackPersonAnswer.edit")
+                    .list();
+            if (courseFeedbackPersonAnswerList.size() < 1) {
+                success = false;
+            }
+        }
+        return success;
     }
 }

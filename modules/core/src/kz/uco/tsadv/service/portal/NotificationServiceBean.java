@@ -30,7 +30,7 @@ public class NotificationServiceBean implements NotificationService {
     //todo need to add fistResult and maxResult
     @Override
     public List<BellNotificationResponsePojo> notifications() {
-        final int limit = 10;
+        final int limit = 5;
         UUID userId = userSessionSource.getUserSession().getUser().getId();
 
         return notificationDao.loadNotifications(userId, 0, limit)
@@ -42,7 +42,7 @@ public class NotificationServiceBean implements NotificationService {
     //todo need to add fistResult and maxResult
     @Override
     public List<BellNotificationResponsePojo> tasks() {
-        final int limit = 10;
+        final int limit = 5;
         UUID userId = userSessionSource.getUserSession().getUser().getId();
 
         return notificationDao.loadTasks(userId, 0, limit)

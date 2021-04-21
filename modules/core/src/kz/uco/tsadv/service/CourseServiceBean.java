@@ -970,8 +970,8 @@ public class CourseServiceBean implements CourseService {
             Date currentDate = new Date();
 
             CourseSectionAttempt newAttempt = metadata.create(CourseSectionAttempt.class);
-            newAttempt.setCourseSection(dataManager.load(LoadContext.create(CourseSection.class).setId(courseSectionId).setView(View.MINIMAL)));
-            newAttempt.setEnrollment(dataManager.load(LoadContext.create(Enrollment.class).setId(enrollmentId).setView(View.MINIMAL)));
+            newAttempt.setCourseSection(dataManager.load(LoadContext.create(CourseSection.class).setId(courseSectionId).setView("courseSection.course.sections")));
+            newAttempt.setEnrollment(dataManager.load(LoadContext.create(Enrollment.class).setId(enrollmentId).setView("enrollment.person")));
             newAttempt.setActiveAttempt(false);
             newAttempt.setAttemptDate(currentDate);
             newAttempt.setSuccess(success);

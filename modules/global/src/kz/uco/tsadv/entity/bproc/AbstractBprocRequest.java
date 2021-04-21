@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.BeanLocator;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.service.EmployeeNumberService;
 
@@ -85,7 +86,7 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
 
         this.setStatus(beanLocator.get(CommonService.class).getEntity(DicRequestStatus.class, "DRAFT"));
         this.setRequestNumber(beanLocator.get(EmployeeNumberService.class).generateNextRequestNumber());
-        this.setRequestDate(new Date());
+        this.setRequestDate(CommonUtils.getSystemDate());
     }
 
     public abstract String getProcessDefinitionKey();

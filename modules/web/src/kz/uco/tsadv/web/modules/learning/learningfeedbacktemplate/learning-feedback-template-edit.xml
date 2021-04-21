@@ -15,47 +15,48 @@
     </dsContext>
     <dialogMode height="AUTO"
                 width="600"/>
-    <layout expand="templateQuestionsBox"
-            spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="learningFeedbackTemplateDs"
-        border="visible">
-            <column width="450px">
-                <field property="name"/>
-                <field property="active"/>
-                <field property="description" rows="5"/>
-                <field property="usageType"/>
-                <field property="employee"/>
-                <field property="manager"/>
-                <field property="trainer"/>
-            </column>
-        </fieldGroup>
-        <groupBox id="templateQuestionsBox"
-                  caption="msg://kz.uco.tsadv.modules.learning.model.feedback/LearningFeedbackTemplate.templateQuestions" expand="templateQuestionsTable">
-            <table id="templateQuestionsTable"
-                   width="100%">
-                <actions>
-                    <action id="create"
-                            caption="mainMsg://table.btn.empty"
-                            icon="icons/plus-btn.png"/>
-                    <action id="edit"
-                            caption="mainMsg://table.btn.empty"/>
-                    <action id="remove"
-                            caption="mainMsg://table.btn.empty"/>
-                </actions>
-                <columns>
-                    <column id="order"/>
-                    <column id="feedbackQuestion.questionLangValue"/>
-                </columns>
-                <rows datasource="templateQuestionsDs"/>
-                <buttonsPanel>
-                    <button action="templateQuestionsTable.create"/>
-                    <button action="templateQuestionsTable.edit"/>
-                    <button action="templateQuestionsTable.remove"/>
-                </buttonsPanel>
-            </table>
-        </groupBox>
-        <frame id="windowActions"
-               screen="editWindowActions"/>
+    <layout>
+        <vbox id="templateVbox" spacing="true" margin="false,false,true,false">
+            <fieldGroup id="fieldGroup"
+                        datasource="learningFeedbackTemplateDs"
+            border="visible">
+                <column width="450px">
+                    <field property="name"/>
+                    <field property="active"/>
+                    <field property="description" rows="5"/>
+                    <field property="usageType"/>
+                    <field property="employee"/>
+                    <field property="manager"/>
+                    <field property="trainer"/>
+                </column>
+            </fieldGroup>
+            <groupBox id="templateQuestionsBox"
+                      caption="msg://kz.uco.tsadv.modules.learning.model.feedback/LearningFeedbackTemplate.templateQuestions" expand="templateQuestionsTable">
+                <table id="templateQuestionsTable"
+                       width="100%">
+                    <actions>
+                        <action id="create"
+                                caption="mainMsg://table.btn.empty"
+                                icon="icons/plus-btn.png"/>
+                        <action id="edit"
+                                caption="mainMsg://table.btn.empty"/>
+                        <action id="remove"
+                                caption="mainMsg://table.btn.empty"/>
+                    </actions>
+                    <columns>
+                        <column id="order"/>
+                        <column id="feedbackQuestion.questionLangValue"/>
+                    </columns>
+                    <rows datasource="templateQuestionsDs"/>
+                    <buttonsPanel>
+                        <button action="templateQuestionsTable.create"/>
+                        <button action="templateQuestionsTable.edit"/>
+                        <button action="templateQuestionsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </groupBox>
+            <frame id="windowActions"
+                   screen="editWindowActions"/>
+        </vbox>
     </layout>
 </window>

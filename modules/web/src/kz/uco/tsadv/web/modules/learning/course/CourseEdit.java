@@ -95,6 +95,8 @@ public class CourseEdit extends StandardEditor<Course> {
     protected Table<CoursePreRequisition> preRequisitionTable;
     @Inject
     protected CollectionLoader<CoursePreRequisition> preRequisitionDl;
+    @Inject
+    protected RichTextArea richTextArea;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -329,7 +331,7 @@ public class CourseEdit extends StandardEditor<Course> {
                             Enrollment enrollment = metadata.create(Enrollment.class);
                             enrollment.setCourse(courseDc.getItem());
                             enrollment.setPersonGroup(personExt.getGroup());
-                            enrollment.setStatus(EnrollmentStatus.REQUEST);
+                            enrollment.setStatus(EnrollmentStatus.APPROVED);
                             enrollment.setDate(BaseCommonUtils.getSystemDate());
                             if (courseScheduleDc.getItems().size() == 1) {
                                 enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
