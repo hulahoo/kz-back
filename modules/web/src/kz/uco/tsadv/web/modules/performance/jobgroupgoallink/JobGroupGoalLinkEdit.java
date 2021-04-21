@@ -19,10 +19,13 @@ public class JobGroupGoalLinkEdit extends AbstractEditor<JobGroupGoalLink> {
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
         if(getItem().getGoal() != null) {
-            ((CollectionDatasource<JobGroupGoalLink, UUID>) getParentDs()).getItems().forEach(gl -> {
-                if (getItem().getGoal().equals(gl.getGoal()) && !gl.getId().equals(getItem().getId()))
-                    errors.add(getMessage("ValidationError.goalLink.uniqueGoal"));
-            });
+            if (((CollectionDatasource<JobGroupGoalLink, UUID>) getParentDs()) != null
+            && ((CollectionDatasource<JobGroupGoalLink, UUID>) getParentDs()).getItems() != null) {
+                ((CollectionDatasource<JobGroupGoalLink, UUID>) getParentDs()).getItems().forEach(gl -> {
+                    if (getItem().getGoal().equals(gl.getGoal()) && !gl.getId().equals(getItem().getId()))
+                        errors.add(getMessage("ValidationError.goalLink.uniqueGoal"));
+                });
+            }
         }
     }
 }
