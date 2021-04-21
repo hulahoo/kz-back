@@ -39,9 +39,7 @@
             </actions>
             <columns>
                 <column id="logo"
-                        caption="msg://Logo"
-                        generator="generateCourseImageCell"
-                        sortable="false"/>
+                        caption="msg://Logo"/>
                 <column id="name"/>
                 <column id="shortDescription"/>
                 <column id="party"/>

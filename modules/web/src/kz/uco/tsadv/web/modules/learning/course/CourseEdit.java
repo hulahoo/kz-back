@@ -36,11 +36,11 @@ import java.util.List;
 @EditedEntityContainer("courseDc")
 public class CourseEdit extends StandardEditor<Course> {
 
-    @Inject
-    protected FileUploadField imageUpload;
+//    @Inject
+//    protected FileUploadField imageUpload;
 
-    @Inject
-    protected Embedded courseImage;
+//    @Inject
+//    protected Embedded courseImage;
 
     @Inject
     protected DataManager dataManager;
@@ -148,7 +148,7 @@ public class CourseEdit extends StandardEditor<Course> {
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
         Course course = courseDc.getItem();
-        Utils.getCourseImageEmbedded(course, null, courseImage);
+//        Utils.getCourseImageEmbedded(course, null, courseImage);
 
         homeworkTable.addSelectionListener(homeworkSelectionEvent -> {
             if (homeworkSelectionEvent.getSelected().size() > 0) {
@@ -266,36 +266,36 @@ public class CourseEdit extends StandardEditor<Course> {
 //        return dataManager.getCount(loadContext) > 0;
 //    }
 
-    protected void fileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
-        Course course = courseDc.getItem();
-        if (imageUpload.getFileContent() != null) {
-            try {
-                course.setLogo(CommonUtils.resize(imageUpload.getFileContent(), IMAGE_SIZE.XSS));
-                Utils.getCourseImageEmbedded(course, null, courseImage);
-            } catch (IOException e) {
-                notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                        .withCaption(messageBundle.getMessage("fileUploadErrorMessage")).show();
-            }
-        }
-        imageUpload.setValue(null);
-    }
+//    protected void fileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+//        Course course = courseDc.getItem();
+//        if (imageUpload.getFileContent() != null) {
+//            try {
+//                course.setLogo(CommonUtils.resize(imageUpload.getFileContent(), IMAGE_SIZE.XSS));
+//                Utils.getCourseImageEmbedded(course, null, courseImage);
+//            } catch (IOException e) {
+//                notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+//                        .withCaption(messageBundle.getMessage("fileUploadErrorMessage")).show();
+//            }
+//        }
+//        imageUpload.setValue(null);
+//    }
 
-    protected void beforeValueClearPerformed(FileUploadField.BeforeValueClearEvent beforeEvent) {
-        beforeEvent.preventClearAction();
-        dialogs.createOptionDialog()
-                .withCaption(messageBundle.getMessage("confirmation"))
-                .withMessage(messageBundle.getMessage("aUSure"))
-                .withType(Dialogs.MessageType.CONFIRMATION)
-                .withActions(
-                        new DialogAction(DialogAction.Type.YES)
-                                .withHandler(actionPerformedEvent -> {
-                                            courseDc.getItem().setLogo(null);
-                                            courseImage.resetSource();
-                                        }
-                                ),
-                        new DialogAction(DialogAction.Type.NO))
-                .show();
-    }
+//    protected void beforeValueClearPerformed(FileUploadField.BeforeValueClearEvent beforeEvent) {
+//        beforeEvent.preventClearAction();
+//        dialogs.createOptionDialog()
+//                .withCaption(messageBundle.getMessage("confirmation"))
+//                .withMessage(messageBundle.getMessage("aUSure"))
+//                .withType(Dialogs.MessageType.CONFIRMATION)
+//                .withActions(
+//                        new DialogAction(DialogAction.Type.YES)
+//                                .withHandler(actionPerformedEvent -> {
+//                                            courseDc.getItem().setLogo(null);
+//                                            courseImage.resetSource();
+//                                        }
+//                                ),
+//                        new DialogAction(DialogAction.Type.NO))
+//                .show();
+//    }
 
     @Subscribe("enrollmentsTable.create")
     protected void onEnrollmentsTableCreate(Action.ActionPerformedEvent event) {
@@ -419,15 +419,15 @@ public class CourseEdit extends StandardEditor<Course> {
         dataManager.commit(commitContext);
     }
 
-    @Subscribe("imageUpload")
-    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
-        fileUploadSucceed(event);
-    }
-
-    @Subscribe("imageUpload")
-    protected void onImageUploadBeforeValueClear(FileUploadField.BeforeValueClearEvent event) {
-        beforeValueClearPerformed(event);
-    }
+//    @Subscribe("imageUpload")
+//    protected void onImageUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+//        fileUploadSucceed(event);
+//    }
+//
+//    @Subscribe("imageUpload")
+//    protected void onImageUploadBeforeValueClear(FileUploadField.BeforeValueClearEvent event) {
+//        beforeValueClearPerformed(event);
+//    }
 
     @Subscribe("courseReviewTable.create")
     protected void onCourseReviewTableCreate(Action.ActionPerformedEvent event) {

@@ -136,7 +136,7 @@ public class LmsServiceBean implements LmsService {
             pojo.setId(enrollment.getCourse().getId().toString());
             pojo.setName(enrollment.getCourse().getName());
             if (enrollment.getCourse().getLogo() != null) {
-                pojo.setLogo(Base64.getEncoder().encodeToString(enrollment.getCourse().getLogo()));
+//                pojo.setLogo(Base64.getEncoder().encodeToString(enrollment.getCourse().getLogo()));
             }
             enrollmentsPojo.add(pojo);
         }
@@ -363,7 +363,7 @@ public class LmsServiceBean implements LmsService {
             pojo.setId(courseSectionObject.getId().toString());
             pojo.setName(course.getName() + ": " + courseSectionObject.getTest().getName());
             if (course.getLogo() != null) {
-                pojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
+//                pojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
             }
             enrollmentsPojo.add(pojo);
         }
