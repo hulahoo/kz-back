@@ -68,6 +68,7 @@ public class LearningController {
                             .startDate(getLearningHistoryStartDate(e, sortedCourseSections).orElse(null))
                             .endDate(getLearningHistoryEndDate(e, sortedCourseSections).orElse(null))
                             .course(e.getCourse().getName())
+                            .courseId(e.getCourse().getId())
                             .enrollmentStatus(messages.getMessage(e.getStatus(), userSessionSource.getLocale()))
                             .result(courseSection != null ? courseSection.getCourseSectionAttempts().get(0).getTestResultPercent() : null)
                             .certificate(CollectionUtils.isEmpty(e.getCertificateFiles()) ? null :
@@ -90,10 +91,17 @@ public class LearningController {
 
     protected Optional<Date> getLearningHistoryStartDate(Enrollment enrollment, List<CourseSection> sortedCourseSections) {
         try {
+            Date endDate = getLearningHistoryEndDate(enrollment, sortedCourseSections).orElse(null);
             return Optional.ofNullable(enrollment.getCourseSchedule() != null
                     ? enrollment.getCourseSchedule().getStartDate()
                     : sortedCourseSections.size() > 0 && !CollectionUtils.isEmpty(sortedCourseSections.get(0).getCourseSectionAttempts())
-                    ? sortedCourseSections.get(0).getCourseSectionAttempts().get(0).getAttemptDate()
+                    ? sortedCourseSections.get(0).getCourseSectionAttempts()
+                    .stream()
+                    .map(CourseSectionAttempt::getAttemptDate)
+                    .filter(Objects::nonNull)
+                    .filter(date -> !date.after(endDate) || endDate == null)
+                    .max(Date::compareTo)
+                    .orElse(null)
                     : null);
         } catch (NullPointerException e) {
             return Optional.empty();
@@ -105,7 +113,12 @@ public class LearningController {
             return Optional.ofNullable(enrollment.getCourseSchedule() != null
                     ? enrollment.getCourseSchedule().getStartDate()
                     : sortedCourseSections.size() > 0 && !CollectionUtils.isEmpty(sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts())
-                    ? sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts().get(0).getAttemptDate()
+                    ? sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts()
+                    .stream()
+                    .map(CourseSectionAttempt::getAttemptDate)
+                    .filter(Objects::nonNull)
+                    .max(Date::compareTo)
+                    .orElse(null)
                     : null);
         } catch (NullPointerException e) {
             return Optional.empty();

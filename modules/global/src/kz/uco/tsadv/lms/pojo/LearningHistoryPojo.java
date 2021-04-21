@@ -3,16 +3,26 @@ package kz.uco.tsadv.lms.pojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
 public class LearningHistoryPojo implements Serializable {
     private Date startDate;
     private Date endDate;
     private String course;
+    private UUID courseId;
     private String trainer;
     private BigDecimal result;
     private String certificate;
     private String enrollmentStatus;
     private String note;
+
+    public UUID getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(UUID courseId) {
+        this.courseId = courseId;
+    }
 
     public Date getStartDate() {
         return startDate;
@@ -101,6 +111,11 @@ public class LearningHistoryPojo implements Serializable {
 
         public Builder course(String course) {
             learningHistoryPojo.setCourse(course);
+            return this;
+        }
+
+        public Builder courseId(UUID courseId) {
+            learningHistoryPojo.setCourseId(courseId);
             return this;
         }
 
