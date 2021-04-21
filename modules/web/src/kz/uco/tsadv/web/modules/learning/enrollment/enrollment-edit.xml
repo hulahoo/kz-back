@@ -27,7 +27,7 @@
                 <field property="date"/>
                 <field property="status"/>
                 <field property="reasonForLearning"/>
-                <field property="courseSchedule" required="true" optionsDatasource="courseScheduleDs"/>
+                <field property="courseSchedule" optionsDatasource="courseScheduleDs"/>
                 <field id="reason" property="reason">
                     <textArea id="reasonTextArea" datasource="enrollmentDs" property="reason" maxLength="1000"/>
                 </field>
