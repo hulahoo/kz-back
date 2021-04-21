@@ -8,22 +8,21 @@ import kz.uco.tsadv.modules.personal.model.JobGroupGoalLink;
 import java.util.UUID;
 
 public class JobGroupGoalLinkEdit extends AbstractEditor<JobGroupGoalLink> {
-    private boolean isCreate;
 
     @Override
     protected void initNewItem(JobGroupGoalLink item) {
         super.initNewItem(item);
         item.setTargetValue(100);
-        isCreate = true;
     }
 
     @Override
     protected void postValidate(ValidationErrors errors) {
         super.postValidate(errors);
-        if (isCreate)
+        if(getItem().getGoal() != null) {
             ((CollectionDatasource<JobGroupGoalLink, UUID>) getParentDs()).getItems().forEach(gl -> {
-                if (getItem().getGoal().equals(gl.getGoal()))
+                if (getItem().getGoal().equals(gl.getGoal()) && !gl.getId().equals(getItem().getId()))
                     errors.add(getMessage("ValidationError.goalLink.uniqueGoal"));
             });
+        }
     }
 }
