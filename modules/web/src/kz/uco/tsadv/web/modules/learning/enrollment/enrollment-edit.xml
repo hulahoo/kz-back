@@ -15,27 +15,69 @@
                 <![CDATA[select e from tsadv_CourseSchedule e where e.course = :ds$enrollmentDs.course]]>
             </query>
         </collectionDatasource>
+        <groupDatasource id="courseSectionScormResultsDs"
+                         class="kz.uco.tsadv.modules.learning.model.CourseSectionScormResult"
+                         view="courseSectionScormResult-view">
+            <query>
+                <![CDATA[select e from tsadv_CourseSectionScormResult e
+                where e.courseSectionAttempt.enrollment = :ds$enrollmentDs
+                and e.answerTimeStamp in
+                (select max(a.answerTimeStamp) from tsadv_CourseSectionScormResult a
+                where a.courseSectionAttempt.enrollment = :ds$enrollmentDs
+                group by a.courseSectionAttempt.courseSection)
+                ]]>
+            </query>
+        </groupDatasource>
     </dsContext>
     <dialogMode height="AUTO"
                 width="AUTO"/>
-    <layout expand="windowActions"
+    <layout expand="tabSheet"
             spacing="true" width="100%">
         <fieldGroup id="fieldGroup"
                     datasource="enrollmentDs">
             <column width="350px">
                 <field property="personGroup" captionProperty="personFioWithEmployeeNumber" editable="false"/>
                 <field property="date"/>
+            </column>
+            <column width="350px">
                 <field property="status"/>
-                <field property="reasonForLearning"/>
                 <field property="courseSchedule" optionsDatasource="courseScheduleDs"/>
+            </column>
+        </fieldGroup>
+        <fieldGroup id="fieldGroup1"
+                    datasource="enrollmentDs">
+            <column width="700px">
                 <field id="reason" property="reason">
                     <textArea id="reasonTextArea" datasource="enrollmentDs" property="reason" maxLength="1000"/>
                 </field>
             </column>
         </fieldGroup>
-        <groupBox id="sessionGroupBox" caption="msg://CourseCard.course.sections" width="100%">
+        <tabSheet id="tabSheet" width="100%">
+            <tab id="tab" caption="msg://result">
+                <groupTable id="courseSectionScormResultTable" height="100%" width="100%" >
+                    <columns>
+                        <group>
+                            <column id="courseSectionAttempt.courseSection"
+                                    captionProperty="courseSectionAttempt.courseSection.sectionName"/>
+                        </group>
+                        <column id="question.question"/>
+                        <column id="answerTimeStamp"/>
+                        <column id="isCorrect"/>
+                        <column id="answer"/>
+                        <column id="score"/>
+                        <column id="maxScore"/>
+                        <column id="minScore"/>
+                    </columns>
+                    <rows datasource="courseSectionScormResultsDs"/>
+                    <rowsCount/>
+                </groupTable>
+            </tab>
+            <tab id="tab_1" caption="msg://sections">
+                <groupBox id="sessionGroupBox" caption="msg://CourseCard.course.sections" width="100%">
 
-        </groupBox>
+                </groupBox>
+            </tab>
+        </tabSheet>
         <frame id="windowActions"
                screen="editWindowActions"/>
     </layout>
