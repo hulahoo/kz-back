@@ -13,6 +13,7 @@ public class JobGroupGoalLinkEdit extends AbstractEditor<JobGroupGoalLink> {
     @Override
     protected void initNewItem(JobGroupGoalLink item) {
         super.initNewItem(item);
+        item.setTargetValue(100);
         isCreate = true;
     }
 
