@@ -6,6 +6,8 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.TransactionalDataManager;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.Group;
 import kz.uco.base.entity.dictionary.DicCompany;
@@ -52,6 +54,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected Persistence persistence;
     @Inject
     protected DataManager dataManager;
+    @Inject
+    protected TransactionalDataManager transactionalDataManager;
     @Inject
     protected RestIntegrationLogService restIntegrationLogService;
     @Inject
@@ -768,10 +772,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         if (personData.getPersons() != null) {
             personJsons = personData.getPersons();
         }
-        try (Transaction tx = persistence.getTransaction()) {
-            EntityManager entityManager = persistence.getEntityManager();
-            ArrayList<PersonGroupExt> personGroupExts = new ArrayList<>();
+        try (Transaction transaction = transactionalDataManager.transactions().create()) {
             for (PersonJson personJson : personJsons) {
+                List<Entity> removeList = new ArrayList<>();
+                List<Entity> removeGroupList = new ArrayList<>();
+
                 if (personJson.getLegacyId() == null || personJson.getLegacyId().isEmpty()) {
                     return prepareError(result, methodName, personData,
                             "no legacyId ");
@@ -786,30 +791,52 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .setParameters(ParamsMap.of("legacyId", personJson.getLegacyId(),
                                 "company", personJson.getCompanyCode()))
                         .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-
                 if (personGroupExt == null) {
                     return prepareError(result, methodName, personData,
-                            "no position with legacyId and companyCode : "
-                                    + personJson.getLegacyId() + " , " + personJson.getCompanyCode());
-                }
-                if (!personGroupExts.stream().filter(personGroupExt1 ->
-                        personGroupExt1.getId().equals(personGroupExt.getId())).findAny().isPresent()) {
-                    personGroupExts.add(personGroupExt);
+                            "not found person");
                 }
 
-            }
-            for (PersonGroupExt personGroupExt : personGroupExts) {
                 for (PersonExt personExt : personGroupExt.getList()) {
-                    entityManager.remove(personExt);
+                    if (removeList.stream().noneMatch(entity ->
+                            entity.getId().equals(personExt.getId()))) {
+                        removeList.add(personExt);
+                    }
                 }
-                entityManager.remove(personGroupExt);
+                List<AssignmentExt> assignmentExtList = dataManager.load(AssignmentExt.class)
+                        .query("select e from base$AssignmentExt e where e.personGroup.id = :personGroupId")
+                        .setParameters(ParamsMap.of("personGroupId", personGroupExt.getId()))
+                        .view("assignmentExt-for-integration").list();
+                for (AssignmentExt assignment : assignmentExtList) {
+                    if (removeList.stream().noneMatch(entity ->
+                            entity.getId().equals(assignment.getId()))) {
+                        removeList.add(assignment);
+                        if (removeList.stream().noneMatch(entity ->
+                                entity.getId().equals(assignment.getGroup().getId()))) {
+                            removeGroupList.add(assignment.getGroup());
+                            for (AssignmentExt assignmentExt : assignment.getGroup().getList()) {
+                                if (removeList.stream().noneMatch(entity ->
+                                        entity.getId().equals(assignmentExt.getId()))) {
+                                    removeList.add(assignmentExt);
+                                }
+                            }
+                        }
+                    }
+                }
+                for (Entity removeInstance : removeList) {
+                    transactionalDataManager.remove(removeInstance);
+                }
+                for (Entity removeInstance : removeGroupList) {
+                    transactionalDataManager.remove(removeInstance);
+                }
+                transactionalDataManager.remove(personGroupExt);
             }
-            tx.commit();
+            transaction.commit();
         } catch (Exception e) {
             return prepareError(result, methodName, personData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
+
         return prepareSuccess(result, methodName, personData);
     }
 

@@ -23230,12 +23230,7 @@
             <property name="haveNDA"/>
             <property name="criminalAdministrativeLiability"/>
             <property name="legacyId"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
             <property name="writeHistory"/>
-            <property name="firstNameLatin"/>
-            <property name="middleNameLatin"/>
-            <property name="lastNameLatin"/>
             <property name="hireDate"/>
             <property name="nationalIdentifier"/>
             <property name="dateOfBirth"/>
@@ -23247,6 +23242,11 @@
         </property>
         <property name="company" view="_minimal">
             <property name="legacyId"/>
+        </property>
+        <property name="assignments" view="_minimal">
+            <property name="group">
+                <property name="list" view="_minimal"/>
+            </property>
         </property>
     </view>
     <view entity="tsadv_HierarchyElementGroup" name="hierarchyElementGroup-for-integration-rest" extends="_local">
@@ -23758,6 +23758,39 @@
             <property name="file" view="_minimal"/>
             <property name="html"/>
             <property name="text"/>
+        </property>
+    </view>
+    <view entity="base$AssignmentExt" name="assignmentExt-for-integration" extends="_minimal">
+        <property name="personGroup" view="_minimal">
+            <property name="person">
+                <property name="personName"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="firstName"/>
+                <property name="firstNameLatin"/>
+                <property name="middleNameLatin"/>
+                <property name="lastName"/>
+                <property name="lastNameLatin"/>
+                <property name="middleName"/>
+                <property name="employeeNumber"/>
+            </property>
+            <property name="list">
+                <property name="personName"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="firstName"/>
+                <property name="firstNameLatin"/>
+                <property name="middleNameLatin"/>
+                <property name="lastName"/>
+                <property name="lastNameLatin"/>
+                <property name="middleName"/>
+                <property name="employeeNumber"/>
+            </property>
+        </property>
+        <property name="group" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="personGroup" view="_minimal"/>
+            </property>
         </property>
     </view>
 </views>
