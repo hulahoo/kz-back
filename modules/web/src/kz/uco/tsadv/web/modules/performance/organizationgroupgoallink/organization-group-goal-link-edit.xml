@@ -16,9 +16,9 @@
         <fieldGroup id="fieldGroup"
                     datasource="organizationGroupGoalLinkDs">
             <column width="300px">
-                <field property="goal"/>
-                <field property="weight"/>
-                <field property="targetValue"/>
+                <field property="goal" required="true"/>
+                <field property="weight" required="true"/>
+                <field property="targetValue" required="true"/>
             </column>
         </fieldGroup>
         <frame id="windowActions"
