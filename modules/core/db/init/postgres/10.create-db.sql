@@ -7152,7 +7152,7 @@ create table TSADV_INSURED_PERSON (
     DOCUMENT_TYPE_ID uuid not null,
     DOCUMENT_NUMBER varchar(255) not null,
     REGION_ID uuid not null,
-    ADDRESS_ID uuid,
+    ADDRESS_TYPE_ID uuid,
     ADDRESS varchar(255),
     INSURANCE_PROGRAM varchar(500) not null,
     STATEMENT_FILE_ID uuid,

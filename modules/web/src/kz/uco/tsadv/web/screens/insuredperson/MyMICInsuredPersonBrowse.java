@@ -147,6 +147,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
         Date today = timeSource.currentTimestamp();
         insuredPerson.setAttachDate(today);
+
         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).query("select e.personGroup " +
                 "from tsadv$UserExt e " +
                 "where e.id = :uId").parameter("uId", userSession.getUser().getId())
@@ -170,14 +171,6 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                 insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
             }
 
-            Address address = dataManager.load(Address.class).query("select e " +
-                    "from tsadv$Address e " +
-                    "where e.personGroup.id = :personGroupId " +
-                    " and current_date between e.startDate and e.endDate")
-                    .parameter("personGroupId", personGroupExt.getId())
-                    .view("address.view")
-                    .list().stream().findFirst().orElse(null);
-
            if (contract.getDefaultDocumentType() != null) {
                boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
                if (isEmptyDocument) {
@@ -195,15 +188,21 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
                }
            }
 
-            if (!personGroupExt.getAddresses().isEmpty()) {
-                insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
-                for (Address a : personGroupExt.getAddresses()) {
-                    if (Objects.equals(a.getAddressType(), contract.getDefaultAddress())) {
-                        insuredPerson.setAddressType(a);
-                        break;
-                    }
-                }
+            if (contract.getDefaultAddress() != null) {
+                dataManager.load(Address.class).query("select e " +
+                        "from tsadv$Address e " +
+                        "where e.personGroup.id = :personGroupId " +
+                        " and current_date between e.startDate and e.endDate" +
+                        " and :addressTypeId = e.addressType.id ")
+                        .parameter("personGroupId", personGroupExt.getId())
+                        .parameter("addressTypeId", contract.getDefaultAddress().getId())
+                        .view("address.view")
+                        .list().stream().findFirst()
+                        .map(Address::getAddress)
+                        .ifPresent(insuredPerson::setAddress);
             }
+
+            insuredPerson.setAddressType(contract.getDefaultAddress());
             insuredPerson.setEmployee(personGroupExt);
             insuredPerson.setFirstName(person.getFirstName());
             insuredPerson.setSecondName(person.getLastName());
