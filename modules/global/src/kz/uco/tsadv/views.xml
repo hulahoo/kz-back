@@ -10443,7 +10443,7 @@
         <property name="course"
                   view="_minimal">
             <property name="name"/>
-            <property name="logo"/>
+            <property name="logo" view="_minimal"/>
             <property name="sections"
                       view="_minimal">
                 <property name="sectionName"/>
@@ -23745,5 +23745,8 @@
             <property name="html"/>
             <property name="text"/>
         </property>
+    </view>
+    <view entity="tsadv$Course" name="course.with.logo" extends="_local">
+        <property name="logo" view="_minimal"/>
     </view>
 </views>
