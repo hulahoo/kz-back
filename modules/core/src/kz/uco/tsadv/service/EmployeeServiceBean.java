@@ -2283,7 +2283,7 @@ public class EmployeeServiceBean implements EmployeeService {
             birthDateLocalDate = new java.sql.Date(birthDate.getTime()).toLocalDate();
         }
         LocalDate currentDateLocalDate = new java.sql.Date(currentDate.getTime()).toLocalDate();
-        if ((birthDate != null) && (currentDate != null)) {
+        if (birthDate != null) {
             return Period.between(birthDateLocalDate, currentDateLocalDate).getYears();
         } else {
             return 0;

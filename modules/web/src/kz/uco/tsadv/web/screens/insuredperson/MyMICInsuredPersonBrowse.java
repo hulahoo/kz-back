@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -197,7 +198,7 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
             if (!personGroupExt.getAddresses().isEmpty()) {
                 insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
                 for (Address a : personGroupExt.getAddresses()) {
-                    if (a.getAddressType().equals(contract.getDefaultAddress())) {
+                    if (Objects.equals(a.getAddressType(), contract.getDefaultAddress())) {
                         insuredPerson.setAddressType(a);
                         break;
                     }

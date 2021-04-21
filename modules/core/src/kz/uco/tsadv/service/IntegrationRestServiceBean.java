@@ -726,9 +726,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (personJson.getSexId() != null && !personJson.getSexId().isEmpty()) {
                     sex = dataManager.load(DicSex.class)
                             .query("select e from base$DicSex e " +
-                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personJson.getSexId(),
-                                    "companyCode", personJson.getCompanyCode()))
+                                    " where e.legacyId = :legacyId")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getSexId()))
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                 }
                 personExt.setSex(sex);
