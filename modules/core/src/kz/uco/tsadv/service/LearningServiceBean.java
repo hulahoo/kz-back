@@ -636,15 +636,17 @@ public class LearningServiceBean implements LearningService {
     }
 
     @Override
-    public boolean allCourseSectionPassed(List<CourseSection> courseSectionList) {
+    public boolean allCourseSectionPassed(List<CourseSection> courseSectionList, Enrollment enrollment) {
         if (courseSectionList == null) return false;
         boolean success = true;
         for (CourseSection section : courseSectionList) {
-            List<CourseSectionAttempt> courseSectionAttemptList = dataManager.load(CourseSectionAttempt.class)
+            List<CourseSectionAttempt> courseSectionAttemptList = transactionalDataManager.load(CourseSectionAttempt.class)
                     .query("select e from tsadv$CourseSectionAttempt e " +
                             " where e.success = true " +
-                            " and e.courseSection = :section")
+                            " and e.courseSection = :section" +
+                            " and e.enrollment = :enrollment")
                     .parameter("section", section)
+                    .parameter("enrollment", enrollment)
                     .view("courseSectionAttempt.edit")
                     .list();
             if (courseSectionAttemptList.size() < 1) {

@@ -57,7 +57,8 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 && courseSection.getCourse().getSections() != null) {
             UUID enrollmentId = courseSectionAttempt.getEnrollment().getId();
             Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.person");
-            if (enrollment != null && learningService.allCourseSectionPassed(courseSection.getCourse().getSections())) {
+            if (enrollment != null && learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
+                    enrollment)) {
                 boolean homework = true;
                 boolean feedbackQuestion = true;
                 List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
@@ -98,7 +99,7 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         if (courseSection != null && courseSection.getCourse() != null
                 && courseSection.getCourse().getSections() != null) {
             Enrollment enrollment = entityManager.find(Enrollment.class, courseSectionAttempt.getEnrollment().getId(), "enrollment.person");
-            if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections())
+            if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(), enrollment)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(courseSection.getCourse()),
                     enrollment != null
                             ? enrollment.getPersonGroup()

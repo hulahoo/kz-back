@@ -2,6 +2,7 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import kz.uco.tsadv.modules.learning.model.CourseSection;
+import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.Homework;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -19,7 +20,7 @@ public interface LearningService {
 
     boolean deletePackage(String dirName);
 
-    boolean allCourseSectionPassed(List<CourseSection> courseSectionList);
+    boolean allCourseSectionPassed(List<CourseSection> courseSectionList, Enrollment enrollment);
 
     boolean allHomeworkPassed(List<Homework> homeworkList, PersonGroupExt personGroup);
 
