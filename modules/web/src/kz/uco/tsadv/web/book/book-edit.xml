@@ -50,6 +50,8 @@
                         <field id="bookName"
                                property="bookNameLang1"
                                required="true"/>
+                        <field id="numberOfPage"
+                               property="numberOfPage"/>
                         <field id="author"
                                property="authorLang1"/>
                         <field id="publishDate"
