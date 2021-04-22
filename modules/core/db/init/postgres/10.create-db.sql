@@ -4733,6 +4733,7 @@ create table TSADV_DIC_ABSENCE_TYPE (
     WORK_ON_WEEKEND boolean,
     TEMPORARY_TRANSFER boolean,
     OVERTIME_WORK boolean,
+    NUM_DAYS_CALENDAR_YEAR integer,
     --
     primary key (ID)
 )^

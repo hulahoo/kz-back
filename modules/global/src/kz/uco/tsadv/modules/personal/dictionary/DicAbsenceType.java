@@ -121,6 +121,17 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "OVERTIME_WORK")
     protected Boolean overtimeWork;
 
+    @Column(name = "NUM_DAYS_CALENDAR_YEAR")
+    protected Integer numDaysCalendarYear;
+
+    public Integer getNumDaysCalendarYear() {
+        return numDaysCalendarYear;
+    }
+
+    public void setNumDaysCalendarYear(Integer numDaysCalendarYear) {
+        this.numDaysCalendarYear = numDaysCalendarYear;
+    }
+
     public Boolean getIsVacationDate() {
         return isVacationDate;
     }
