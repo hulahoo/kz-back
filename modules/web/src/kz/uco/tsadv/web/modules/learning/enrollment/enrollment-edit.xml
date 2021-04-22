@@ -55,6 +55,12 @@
         <tabSheet id="tabSheet" width="100%">
             <tab id="tab" caption="msg://result">
                 <groupTable id="courseSectionScormResultTable" height="100%" width="100%" >
+                    <actions>
+                        <action id="edit" type="edit"/>
+                    </actions>
+                    <buttonsPanel>
+                        <button id="courseSectionScormResultTableEditBtn" action="courseSectionScormResultTable.edit"/>
+                    </buttonsPanel>
                     <columns>
                         <group>
                             <column id="courseSectionAttempt.courseSection"
@@ -64,9 +70,6 @@
                         <column id="answerTimeStamp"/>
                         <column id="isCorrect"/>
                         <column id="answer"/>
-                        <column id="score"/>
-                        <column id="maxScore"/>
-                        <column id="minScore"/>
                     </columns>
                     <rows datasource="courseSectionScormResultsDs"/>
                     <rowsCount/>

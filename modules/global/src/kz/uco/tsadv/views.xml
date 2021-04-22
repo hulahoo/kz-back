@@ -23794,7 +23794,11 @@
         </property>
     </view>
     <view entity="tsadv_CourseSectionScormResult" name="courseSectionScormResult-view" extends="_local">
-        <property name="courseSectionAttempt" view="_minimal"/>
+        <property name="courseSectionAttempt" view="_minimal">
+            <property name="courseSection" view="_minimal">
+                <property name="format" view="_minimal"/>
+            </property>
+        </property>
         <property name="question" view="_minimal">
             <property name="code"/>
             <property name="question"/>
