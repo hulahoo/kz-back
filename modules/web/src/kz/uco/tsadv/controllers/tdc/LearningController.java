@@ -2,15 +2,9 @@ package kz.uco.tsadv.controllers.tdc;
 
 
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.LoadContext;
-import com.haulmont.cuba.core.global.Messages;
-import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.global.*;
 import kz.uco.tsadv.lms.pojo.LearningHistoryPojo;
-import kz.uco.tsadv.modules.learning.model.CourseSection;
-import kz.uco.tsadv.modules.learning.model.CourseSectionAttempt;
-import kz.uco.tsadv.modules.learning.model.Enrollment;
-import kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile;
+import kz.uco.tsadv.modules.learning.model.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +15,7 @@ import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping("learning-history")
 public class LearningController {
@@ -57,6 +52,13 @@ public class LearningController {
                         }))
                 .collect(Collectors.toList());
 
+        List<CoursePersonNote> notes = dataManager.load(CoursePersonNote.class)
+                .query("select e from tsadv_CoursePersonNote e where e.personGroup.id = :personGroupId and e.course.id in :courseId")
+                .parameter("courseId", completedEnrollments.stream().map(Enrollment::getCourse).map(BaseUuidEntity::getId).collect(Collectors.toList()))
+                .parameter("personGroupId", personGroupId)
+                .view(new View(CoursePersonNote.class).addProperty("course").addProperty("note"))
+                .list();
+
         return completedEnrollments.stream()
                 .map(e -> {
                     List<CourseSection> sortedCourseSections = e.getCourse().getSections().stream().sorted((cs1, cs2) -> cs2.getOrder().compareTo(cs1.getOrder())).collect(Collectors.toList());
@@ -66,6 +68,7 @@ public class LearningController {
                             .startDate(getLearningHistoryStartDate(e, sortedCourseSections).orElse(null))
                             .endDate(getLearningHistoryEndDate(e, sortedCourseSections).orElse(null))
                             .course(e.getCourse().getName())
+                            .courseId(e.getCourse().getId())
                             .enrollmentStatus(messages.getMessage(e.getStatus(), userSessionSource.getLocale()))
                             .result(courseSection != null ? courseSection.getCourseSectionAttempts().get(0).getTestResultPercent() : null)
                             .certificate(CollectionUtils.isEmpty(e.getCertificateFiles()) ? null :
@@ -75,6 +78,12 @@ public class LearningController {
                                             .map(BaseUuidEntity::getId)
                                             .map(UUID::toString)
                                             .findAny().orElse(null))
+                            .note(notes.stream()
+                                    .filter(note -> note.getCourse().equals(e.getCourse()))
+                                    .map(CoursePersonNote::getNote)
+                                    .filter(Objects::nonNull)
+                                    .findAny()
+                                    .orElse(null))
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -82,10 +91,17 @@ public class LearningController {
 
     protected Optional<Date> getLearningHistoryStartDate(Enrollment enrollment, List<CourseSection> sortedCourseSections) {
         try {
+            Date endDate = getLearningHistoryEndDate(enrollment, sortedCourseSections).orElse(null);
             return Optional.ofNullable(enrollment.getCourseSchedule() != null
                     ? enrollment.getCourseSchedule().getStartDate()
                     : sortedCourseSections.size() > 0 && !CollectionUtils.isEmpty(sortedCourseSections.get(0).getCourseSectionAttempts())
-                    ? sortedCourseSections.get(0).getCourseSectionAttempts().get(0).getAttemptDate()
+                    ? sortedCourseSections.get(0).getCourseSectionAttempts()
+                    .stream()
+                    .map(CourseSectionAttempt::getAttemptDate)
+                    .filter(Objects::nonNull)
+                    .filter(date -> !date.after(endDate) || endDate == null)
+                    .max(Date::compareTo)
+                    .orElse(null)
                     : null);
         } catch (NullPointerException e) {
             return Optional.empty();
@@ -97,7 +113,12 @@ public class LearningController {
             return Optional.ofNullable(enrollment.getCourseSchedule() != null
                     ? enrollment.getCourseSchedule().getStartDate()
                     : sortedCourseSections.size() > 0 && !CollectionUtils.isEmpty(sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts())
-                    ? sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts().get(0).getAttemptDate()
+                    ? sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts()
+                    .stream()
+                    .map(CourseSectionAttempt::getAttemptDate)
+                    .filter(Objects::nonNull)
+                    .max(Date::compareTo)
+                    .orElse(null)
                     : null);
         } catch (NullPointerException e) {
             return Optional.empty();
