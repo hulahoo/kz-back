@@ -44,7 +44,7 @@
                                 invoke="onClearImageBtnClick"/>
                     </hbox>
                 </groupBox>
-                <fieldGroup id="fieldGroup"
+                <fieldGroup id="fieldGroup1"
                             datasource="bookDs">
                     <column width="300px"> <!--todo anuar 1 не хватает id -->
                         <field id="bookName"
@@ -64,6 +64,9 @@
                                optionsDatasource="categoriesDs"
                                property="category"/>
                     </column>
+                </fieldGroup>
+                <fieldGroup id="fieldGroup"
+                            datasource="bookDs">
                     <column width="350px"><!--todo anuar 1 не хватает id -->
                         <field id="bookDescription"
                                property="bookDescriptionLang1"
