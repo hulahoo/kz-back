@@ -8837,6 +8837,7 @@ create table TSADV_BOOK (
     KF8_ID uuid,
     PDF_ID uuid,
     DJVU_ID uuid,
+    NUMBER_OF_PAGE integer,
     --
     primary key (ID)
 )^
