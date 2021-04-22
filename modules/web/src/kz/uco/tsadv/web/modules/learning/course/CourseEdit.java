@@ -117,10 +117,6 @@ public class CourseEdit extends StandardEditor<Course> {
 
     @Subscribe
     protected void onInitEntity(InitEntityEvent<Course> event) {
-        richTextArea.setValue("<i>Jackdaws </i><u>love</u> <font color=\"#0000ff\">my</font> " +
-                "<font size=\"7\">big</font> <sup>sphinx</sup> " +
-                "<font face=\"Verdana\">of</font> <span style=\"background-color: " +
-                "red;\">quartz</span>");
 //        PickerField.LookupAction lookupAction = partyField.getLookupAction();
 //        lookupAction.setLookupScreen("base$PartyExt.browse");
 //        lookupAction.setLookupScreenParams(ParamsMap.of(PartyExtBrowse.TRAINING_PROVIDER, true));
@@ -303,7 +299,7 @@ public class CourseEdit extends StandardEditor<Course> {
 
     @Subscribe("enrollmentsTable.create")
     protected void onEnrollmentsTableCreate(Action.ActionPerformedEvent event) {
-        List<Enrollment> newEnrollmentList = new ArrayList<>();
+        List<Enrollment> changedEnrollmentList = new ArrayList<>();
         CommitContext newCommitContext = new CommitContext();
         screenBuilders.lookup(PersonExt.class, this)
                 .withScreenId("base$PersonForKpiCard.browse")
@@ -320,6 +316,13 @@ public class CourseEdit extends StandardEditor<Course> {
                             for (Enrollment enrollment : enrollmentList) {
                                 if (enrollment.getPersonGroup().equals(personExt.getGroup())) {
                                     isNew = false;
+                                    if (courseScheduleDc.getItems().size() == 1) {
+                                        enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
+                                    }else if(courseScheduleDc.getItems().size() == 0){
+                                        enrollment.setCourseSchedule(null);
+                                    }
+                                    newCommitContext.addInstanceToCommit(enrollment);
+                                    changedEnrollmentList.add(enrollment);
                                     break;
                                 }
                             }
@@ -333,11 +336,11 @@ public class CourseEdit extends StandardEditor<Course> {
                             if (courseScheduleDc.getItems().size() == 1) {
                                 enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
                             }
-                            newEnrollmentList.add(enrollment);
+                            changedEnrollmentList.add(enrollment);
                             newCommitContext.addInstanceToCommit(enrollment);
                         }
                     });
-                    if (courseScheduleDc.getItems().size() == 1) {
+                    if (courseScheduleDc.getItems().size() == 1 || courseScheduleDc.getItems().size() == 0) {
                         dataManager.commit(newCommitContext);
                         enrollmentDl.load();
                     }
@@ -349,7 +352,7 @@ public class CourseEdit extends StandardEditor<Course> {
                                 .withOptions(new MapScreenOptions(ParamsMap.of("course", courseDc.getItem())))
                                 .withSelectHandler(courseSchedules -> {
                                     courseSchedules.forEach(courseSchedule ->
-                                            newEnrollmentList.forEach(enrollment -> {
+                                            changedEnrollmentList.forEach(enrollment -> {
                                                 enrollment.setCourseSchedule(courseSchedule);
                                                 newCommitContext.addInstanceToCommit(enrollment);
                                             }));
@@ -359,8 +362,8 @@ public class CourseEdit extends StandardEditor<Course> {
                                 .build().show();
                     } else if (courseScheduleDc.getItems().size() == 0) {
                         notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-                                .withCaption(messageBundle.getMessage("notCourseSchedule"
-                                        + " " + courseDc.getItem().getName()))
+                                .withCaption(messageBundle.getMessage("notCourseSchedule")
+                                        + " " + courseDc.getItem().getName())
                                 .show();
                     }
                 });

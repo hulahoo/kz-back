@@ -306,6 +306,7 @@ public class PersonGroupExt extends PersonGroup implements IEntityGroup<PersonEx
     public Long getTotalExperience() {
         Long dateDiff = 0L; //TODO Сделать поле startDate в сущности Assignment обязательным или проверить на null
         Date curDate = new Date();
+        if (assignments == null || !PersistenceHelper.isLoaded(this, "assignments")) return dateDiff;
         for (AssignmentExt assignment : getAssignments()) {
             if (assignment.getEndDate() == null || assignment.getEndDate().after(curDate)) {
                 dateDiff += curDate.getTime() - assignment.getStartDate().getTime();

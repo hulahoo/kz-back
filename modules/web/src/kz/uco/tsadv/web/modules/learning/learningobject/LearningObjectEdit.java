@@ -4,11 +4,13 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.CollectionDatasource;
 import com.haulmont.cuba.gui.data.Datasource;
+import com.haulmont.cuba.gui.screen.MessageBundle;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
@@ -58,6 +60,10 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
     protected Table<ScormQuestionMapping> scormQuestionMappingTable;
     @Inject
     protected CollectionDatasource<ScormQuestionMapping, UUID> scormQuestionMappingDc;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected MessageBundle messageBundle;
 
 
     @Override
@@ -288,11 +294,17 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
     }
 
     public void scormQuestionMappingCreate() {
-        screenBuilders.editor(scormQuestionMappingTable)
-                .newEntity()
-                .withInitializer(scormQuestionMapping -> {
-                    scormQuestionMapping.setLearningObject(learningObjectDs.getItem());
-                }).build().show()
-                .addAfterCloseListener(afterCloseEvent -> scormQuestionMappingDc.refresh());
+        if (!PersistenceHelper.isNew(learningObjectDs.getItem())) {
+            screenBuilders.editor(scormQuestionMappingTable)
+                    .newEntity()
+                    .withInitializer(scormQuestionMapping -> {
+                        scormQuestionMapping.setLearningObject(learningObjectDs.getItem());
+                    }).build().show()
+                    .addAfterCloseListener(afterCloseEvent -> scormQuestionMappingDc.refresh());
+        } else {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("saveData"))
+                    .show();
+        }
     }
 }

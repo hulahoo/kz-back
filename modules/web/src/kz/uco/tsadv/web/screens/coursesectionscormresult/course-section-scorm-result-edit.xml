@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.coursesectionscormresult">
+    <data>
+        <instance id="courseSectionScormResultDc"
+                  class="kz.uco.tsadv.modules.learning.model.CourseSectionScormResult"
+                  view="courseSectionScormResult-view">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="600"
+                width="800" resizable="true"/>
+    <layout expand="vbox" spacing="true">
+        <form id="form" dataContainer="courseSectionScormResultDc" width="100%">
+            <column width="100%">
+                <pickerField id="courseSectionAttemptField" property="courseSectionAttempt" editable="false"
+                             caption="msg://section">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <pickerField id="questionField" property="question" editable="false" captionProperty="question">
+                    <actions>
+                        <action id="lookup" type="picker_lookup"/>
+                        <action id="clear" type="picker_clear"/>
+                    </actions>
+                </pickerField>
+                <dateField id="answerTimeStampField" property="answerTimeStamp" editable="false"/>
+                <textArea id="answerField" property="answer" rows="5" editable="false"/>
+                <checkBox id="isCorrectField" property="isCorrect"/>
+            </column>
+        </form>
+        <hbox id="vbox" height="100%" width="100%"/>
+        <hbox id="editActions" spacing="true" align="TOP_CENTER">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>

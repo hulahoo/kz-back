@@ -5,6 +5,7 @@ import com.haulmont.addon.bproc.data.OutcomesContainer;
 import com.haulmont.addon.bproc.entity.HistoricVariableInstanceData;
 import com.haulmont.addon.bproc.entity.ProcessDefinitionData;
 import com.haulmont.addon.bproc.entity.ProcessInstanceData;
+import com.haulmont.addon.bproc.entity.TaskData;
 import com.haulmont.addon.bproc.form.FormData;
 import com.haulmont.addon.bproc.service.BprocFormService;
 import com.haulmont.addon.bproc.service.BprocHistoricService;
@@ -330,6 +331,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         User sessionUser = userSessionSource.getUserSession().getUser();
 
+        notificationTemplateCode = changeNotificationTemplateCode(notificationTemplateCode, entity);
+
         Map<String, Object> notificationParams = getNotificationParams(notificationTemplateCode, entity);
 
         if (!PersistenceHelper.isLoadedWithView(user, "user-fioWithLogin"))
@@ -364,6 +367,24 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         notificationParams.put("requestFrontLinkEn", String.format(requestFrontLink, "Open request " + entity.getRequestNumber()));
 
         notificationSenderAPIService.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
+    }
+
+    private <T extends AbstractBprocRequest> String changeNotificationTemplateCode(String notificationTemplateCode, T entity) {
+        if (entity instanceof AssignedPerformancePlan && notificationTemplateCode.equals("forChangeTemplateCode")) {
+            ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getProcessInstanceBusinessKey(), entity.getProcessDefinitionKey());
+            List<ExtTaskData> processTasks = getProcessTasks(processInstanceData);
+            String outcome = processTasks.stream()
+                    .filter(taskData -> taskData.getEndTime() != null)
+                    .max(Comparator.comparing(TaskData::getEndTime))
+                    .map(ExtTaskData::getOutcome)
+                    .orElse(null);
+            if (AbstractBprocRequest.OUTCOME_REVISION.equals(outcome)) {
+                notificationTemplateCode = "bpm.kpi.initiator.revision2";
+            } else {
+                notificationTemplateCode = "bpm.kpi.approver";
+            }
+        }
+        return notificationTemplateCode;
     }
 
     protected <T extends AbstractBprocRequest> String getRequestLink(String appUrl, T entity, Activity activity, boolean isWebUrl) {

@@ -13,6 +13,7 @@ import kz.uco.tsadv.modules.learning.enums.Language;
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -85,6 +86,18 @@ public class Book extends StandardEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "book")
     protected List<BookReview> reviews;
+
+    @Positive(message = "{msg://tsadv$Book.numberOfPage.validation.Positive}")
+    @Column(name = "NUMBER_OF_PAGE")
+    protected Integer numberOfPage;
+
+    public Integer getNumberOfPage() {
+        return numberOfPage;
+    }
+
+    public void setNumberOfPage(Integer numberOfPage) {
+        this.numberOfPage = numberOfPage;
+    }
 
     public void setPublishDate(Integer publishDate) {
         this.publishDate = publishDate;
