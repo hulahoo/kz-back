@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.modules.performance.performanceplan;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
@@ -102,6 +103,10 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected ExportDisplay exportDisplay;
     @Inject
     protected DatesService datesService;
+    @Inject
+    protected GlobalConfig globalConfig;
+    @Inject
+    protected Dialogs dialogs;
     private FileInputStream inputStream;
     @Inject
     protected NotificationService notificationService;
@@ -761,5 +766,44 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected RuleBasedNumberFormat getAmountINText(String language) {
         return new RuleBasedNumberFormat(Locale.forLanguageTag(language),
                 RuleBasedNumberFormat.SPELLOUT);
+    }
+
+    @Subscribe("assignedPerformancePlanTable.startLetters")
+    protected void onAssignedPerformancePlanTableStartLetters(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog()
+                .withCaption(messageBundle.getMessage("confirmation"))
+                .withMessage(messageBundle.getMessage("aUSure"))
+                .withType(Dialogs.MessageType.CONFIRMATION)
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES)
+                                .withHandler(actionPerformedEvent -> {
+                                            for (AssignedPerformancePlan assignedPerformancePlan : assignedPerformancePlanTable.getSelected()) {
+                                                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                                                        .query("select e from tsadv$UserExt e " +
+                                                                " where e.personGroup = :personGroup")
+                                                        .parameter("personGroup", assignedPerformancePlan.getAssignedPerson())
+                                                        .view("userExt.edit")
+                                                        .list().stream().findFirst().orElse(null);
+                                                if (tsadvUser != null) {
+                                                    Map<String, Object> params = new HashMap<>();
+                                                    params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName()
+                                                            + " "
+                                                            + assignedPerformancePlan.getAssignedPerson().getPerson().getLastName());
+                                                    params.put("middleNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName() != null
+                                                            && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName().isEmpty()
+                                                            ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName()
+                                                            : "");
+                                                    String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
+                                                            "tsadv$PerformancePlan.edit" +
+                                                            "&item=" + "tsadv$PerformancePlan" + "-" + assignedPerformancePlan.getPerformancePlan().getId() +
+                                                            "\" target=\"_blank\">%s " + "</a>";
+                                                    params.put("requestLink", requestLink);
+                                                    notificationService.sendParametrizedNotification("kpi.start.letter", tsadvUser, params);
+                                                }
+                                            }
+                                        }
+                                ),
+                        new DialogAction(DialogAction.Type.NO))
+                .show();
     }
 }
