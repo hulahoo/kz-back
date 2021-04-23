@@ -854,7 +854,7 @@ public class CourseServiceBean implements CourseService {
         coursePojo.setPreRequisitions(course.getPreRequisition().stream().map(pr -> pr.getRequisitionCourse().getName()).collect(Collectors.joining(", ")));
         coursePojo.setTrainers(course.getCourseTrainers().stream().map(ct -> new PairPojo<>(ct.getTrainer().getId(), ct.getTrainer().getTrainerFullName())).collect(Collectors.toList()));
         if (course.getLogo() != null) {
-            coursePojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
+            coursePojo.setLogo(course.getLogo().getId());
         }
         coursePojo.setRateReviewCount(course.getReviews().size());
         coursePojo.setComments(course.getReviews().stream().map(r -> CommentPojo.CommentPojoBuilder.builder()
@@ -919,6 +919,7 @@ public class CourseServiceBean implements CourseService {
 
     @Override
     public List<DicCategory> searchCourses(String courseName) {
+        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP);
         return dataManager.loadList(LoadContext.create(DicCategory.class)
                 .setQuery(LoadContext.createQuery("" +
                         "select distinct c " +
@@ -930,6 +931,7 @@ public class CourseServiceBean implements CourseService {
                 .setView("category-courses"))
                 .stream()
                 .peek(c -> c.setCourses(c.getCourses().stream()
+                        .peek(course -> course.setEnrollments(course.getEnrollments().stream().filter(e -> e.getPersonGroup().getId().equals(personGroupId)).collect(Collectors.toList())))
                         .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())
                                 && BooleanUtils.isTrue(course.getActiveFlag()))
                         .collect(Collectors.toList())))
