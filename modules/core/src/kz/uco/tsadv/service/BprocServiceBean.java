@@ -862,7 +862,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         request = entityManager.find(AssignedPerformancePlan.class, request.getId(), new View(AssignedPerformancePlan.class).addProperty("status"));
         Assert.notNull(request, "bprocRequest not found!");
         request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
-        request.setNextStep();
+//        request.setNextStep();
         entityManager.merge(request);
     }
 }
