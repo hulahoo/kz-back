@@ -17,7 +17,7 @@ public class CoursePojo implements Serializable {
     private Boolean isIssuedCertificate;
     private String learningProof;
     private List<PairPojo<UUID, String>> sections;
-    private String logo;
+    private UUID logo;
     private List<CommentPojo> comments;
     private List<PairPojo<Double, Long>> rating;
     private Integer rateReviewCount;
@@ -107,11 +107,11 @@ public class CoursePojo implements Serializable {
         this.sections = sections;
     }
 
-    public String getLogo() {
+    public UUID getLogo() {
         return logo;
     }
 
-    public void setLogo(String logo) {
+    public void setLogo(UUID logo) {
         this.logo = logo;
     }
 

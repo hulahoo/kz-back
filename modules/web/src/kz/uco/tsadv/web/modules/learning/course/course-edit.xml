@@ -96,22 +96,18 @@
                 <scrollBox id="scrollBox"
                            height="100%"
                            spacing="true">
-                    <hbox margin="false,false,true,false">
-                        <label value="mainMsg://Logo"
-                               width="100px"/>
-                        <embedded id="courseImage"
-                                  align="MIDDLE_CENTER"
-                                  height="100px"
-                                  stylename="b-user-image-edit"
-                                  width="100px"/>
-                        <upload id="imageUpload"
-                                accept="*.jpg,*.png"
-                                align="MIDDLE_CENTER"
-                                clearButtonIcon="icons/item-remove.png"
-                                fileSizeLimit="1024000"
-                                showClearButton="true"
-                                uploadButtonIcon="icons/reports-template-upload.png"/>
-                    </hbox>
+                    <groupBox spacing="true" caption="msg://logo" height="270px" width="270px">
+                        <image id="photo"
+                               dataContainer="courseDc"
+                               width="100%"
+                               align="MIDDLE_CENTER"
+                               scaleMode="CONTAIN" property="logo"/>
+                        <hbox align="BOTTOM_CENTER"
+                              spacing="true">
+                            <upload id="photoField" fileStoragePutMode="IMMEDIATE" property="logo"
+                                    dataContainer="courseDc" showFileName="false" showClearButton="true"/>
+                        </hbox>
+                    </groupBox>
                     <form id="fieldGroup"
                           dataContainer="courseDc">
                         <column width="250px">
