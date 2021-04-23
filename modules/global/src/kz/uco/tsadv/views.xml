@@ -5512,6 +5512,7 @@
             </property>
         </property>
         <property name="description"/>
+        <property name="logo" view="_minimal"/>
         <property name="category" view="_local"/>
         <property name="targetAudience"/>
         <property name="activeFlag"/>
@@ -10015,16 +10016,7 @@
             <property name="endDate"/>
         </property>
         <property name="enrollments" view="_minimal">
-            <property name="personGroup" view="_minimal">
-                <property name="list" view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                    <property name="firstName"/>
-                    <property name="lastName"/>
-                    <property name="middleName"/>
-                    <property name="employeeNumber"/>
-                </property>
-            </property>
+            <property name="personGroup" view="_minimal"/>
             <property name="status"/>
             <property name="date"/>
             <property name="reason"/>
@@ -10039,14 +10031,6 @@
         <property name="courseTrainers" view="_minimal">
             <property name="trainer" view="_minimal">
                 <property name="employee" view="_minimal">
-                    <property name="list" view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                        <property name="firstName"/>
-                        <property name="lastName"/>
-                        <property name="middleName"/>
-                        <property name="employeeNumber"/>
-                    </property>
                     <property name="personExperience" view="_minimal"/>
                 </property>
             </property>
@@ -10061,6 +10045,7 @@
                 </property>
             </property>
         </property>
+        <property name="logo" view="_minimal"/>
         <property name="category" view="_local"/>
         <property name="sections" view="_minimal">
             <property name="mandatory"/>
@@ -10068,7 +10053,6 @@
             <property name="sectionObject">
                 <property name="objectType" view="_local"/>
                 <property name="content" view="_minimal">
-                    <property name="objectName"/>
                     <property name="description"/>
                     <property name="url"/>
                 </property>
