@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.modules.performance.performanceplan;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
@@ -105,6 +106,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     private FileInputStream inputStream;
     @Inject
     protected NotificationService notificationService;
+    @Inject
+    private Dialogs dialogs;
+
     protected SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     protected SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
     protected SimpleDateFormat monthTextFormatRu = new SimpleDateFormat("dd MMMM yyyy", Locale.forLanguageTag("ru"));
@@ -245,6 +249,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
     @Subscribe("assignedPerformancePlanTable.massGoals")
     protected void onAssignedPerformancePlanTableMassGoals(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                .withCaption(messageBundle.getMessage("confirmAction"))
+                .withMessage(messageBundle.getMessage("addMassGoalsConfirmation"))
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
+                            doMassGoals();
+                        }),
+                        new DialogAction(DialogAction.Type.NO)
+                )
+                .show();
+    }
+
+    protected void doMassGoals(){
         Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
         CommitContext commitContext = new CommitContext();
         try {
@@ -644,6 +661,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
     @Subscribe("assignedPerformancePlanTable.sendLetterHappiness")
     protected void onAssignedPerformancePlanTableSendLetterHappiness(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                .withCaption(messageBundle.getMessage("confirmAction"))
+                .withMessage(messageBundle.getMessage("sendLetterHappinessConfirmation"))
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
+                            sendLetterHappiness();
+                        }),
+                        new DialogAction(DialogAction.Type.NO)
+                )
+                .show();
+    }
+
+    protected void sendLetterHappiness(){
         for (AssignedPerformancePlan assignedPerformancePlan : assignedPerformancePlanTable.getSelected()) {
             TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
                     .query("select e from tsadv$UserExt e " +
@@ -735,6 +765,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 notificationService.sendParametrizedNotification("kpi.letter.of.happiness", tsadvUser, params);
             }
         }
+        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                .withCaption(messageBundle.getMessage("sendLetterHappinessSuccess")).show();
+
     }
 
     protected DicCurrency getSalaryCurrency(AssignmentExt currentAssignment) {
