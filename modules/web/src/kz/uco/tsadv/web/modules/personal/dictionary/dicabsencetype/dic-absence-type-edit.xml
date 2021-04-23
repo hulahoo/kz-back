@@ -42,6 +42,8 @@
                         <field property="useInBalance"/>
                         <field property="availableForTimecard"/>
                         <field property="numDaysCalendarYear"/>
+                        <field id="isEcologicalAbsence"
+                               property="isEcologicalAbsence"/>
                         <field property="company"/>
                     </column>
                 </fieldGroup>

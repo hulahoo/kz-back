@@ -57,6 +57,7 @@
                 <column id="isCheckWork"/>
                 <column id="isVacationDate"/>
                 <column id="numDaysCalendarYear"/>
+                <column id="isEcologicalAbsence"/>
                 <column id="company"/>
             </columns>
             <rows datasource="dicAbsenceTypesDs"/>

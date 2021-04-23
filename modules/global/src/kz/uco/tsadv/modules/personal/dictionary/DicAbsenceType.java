@@ -16,6 +16,9 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "USE_IN_SELF_SERVICE", nullable = false)
     protected Boolean useInSelfService = false;
 
+    @Column(name = "ECOLOGICAL_ABSENCE")
+    private Double isEcologicalAbsence;
+
     @Column(name = "AVAILABLE_TO_MANAGER")
     private Boolean availableToManager;
 
@@ -123,6 +126,14 @@ public class DicAbsenceType extends AbstractDictionary {
 
     @Column(name = "NUM_DAYS_CALENDAR_YEAR")
     protected Integer numDaysCalendarYear;
+
+    public Double getIsEcologicalAbsence() {
+        return isEcologicalAbsence;
+    }
+
+    public void setIsEcologicalAbsence(Double isEcologicalAbsence) {
+        this.isEcologicalAbsence = isEcologicalAbsence;
+    }
 
     public Integer getNumDaysCalendarYear() {
         return numDaysCalendarYear;
