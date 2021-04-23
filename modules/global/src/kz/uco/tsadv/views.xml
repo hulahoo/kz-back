@@ -5512,7 +5512,6 @@
             </property>
         </property>
         <property name="description"/>
-        <property name="logo" view="_minimal"/>
         <property name="category" view="_local"/>
         <property name="targetAudience"/>
         <property name="activeFlag"/>
@@ -5534,7 +5533,6 @@
         <property name="targetAudience"/>
         <property name="activeFlag"/>
         <property name="sections" view="_minimal">
-            <property name="mandatory"/>
             <property name="order"/>
             <property name="sectionObject" view="_minimal"/>
             <property name="format" view="_minimal">
@@ -5542,7 +5540,6 @@
                 <property name="endDate"/>
                 <property name="code"/>
             </property>
-            <property name="description"/>
             <property name="session" view="courseSectionSession.browse">
                 <property name="legacyId"/>
                 <property name="organizationBin"/>
@@ -5577,7 +5574,9 @@
                 <property name="levelNameLang5"/>
             </property>
         </property>
-        <property name="preRequisition" view="coursePreRequisition.edit"/>
+        <property name="preRequisition"
+                  view="coursePreRequisition.edit">
+        </property>
         <property name="selfEnrollment"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CourseSectionObject"
@@ -23234,6 +23233,11 @@
         <property name="company" view="_minimal">
             <property name="legacyId"/>
         </property>
+        <property name="assignments" view="_minimal">
+            <property name="group">
+                <property name="list" view="_minimal"/>
+            </property>
+        </property>
     </view>
     <view entity="tsadv_HierarchyElementGroup" name="hierarchyElementGroup-for-integration-rest" extends="_local">
         <property name="list" view="_minimal">
@@ -23744,6 +23748,50 @@
             <property name="file" view="_minimal"/>
             <property name="html"/>
             <property name="text"/>
+        </property>
+    </view>
+    <view entity="base$AssignmentExt" name="assignmentExt-for-integration" extends="_minimal">
+        <property name="personGroup" view="_minimal">
+            <property name="person">
+                <property name="personName"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="firstName"/>
+                <property name="firstNameLatin"/>
+                <property name="middleNameLatin"/>
+                <property name="lastName"/>
+                <property name="lastNameLatin"/>
+                <property name="middleName"/>
+                <property name="employeeNumber"/>
+            </property>
+            <property name="list">
+                <property name="personName"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="firstName"/>
+                <property name="firstNameLatin"/>
+                <property name="middleNameLatin"/>
+                <property name="lastName"/>
+                <property name="lastNameLatin"/>
+                <property name="middleName"/>
+                <property name="employeeNumber"/>
+            </property>
+        </property>
+        <property name="group" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="personGroup" view="_minimal"/>
+            </property>
+        </property>
+    </view>
+    <view entity="tsadv_CourseSectionScormResult" name="courseSectionScormResult-view" extends="_local">
+        <property name="courseSectionAttempt" view="_minimal">
+            <property name="courseSection" view="_minimal">
+                <property name="format" view="_minimal"/>
+            </property>
+        </property>
+        <property name="question" view="_minimal">
+            <property name="code"/>
+            <property name="question"/>
         </property>
     </view>
     <view entity="tsadv$Course" name="course.with.logo" extends="_local">

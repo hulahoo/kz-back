@@ -233,13 +233,19 @@ public class DocumentServiceBean implements DocumentService {
         insuredPerson.setInsuranceContract(contract);
         insuredPerson.setInsuranceProgram(contract.getInsuranceProgram());
 
-        Address address = dataManager.load(Address.class).query("select e " +
-                "from tsadv$Address e " +
-                "where e.personGroup.id = :personGroupId " +
-                " and current_date between e.startDate and e.endDate")
-                .parameter("personGroupId", personGroupExt.getId())
-                .view("address.view")
-                .list().stream().findFirst().orElse(null);
+        if (contract.getDefaultAddress() != null) {
+            dataManager.load(Address.class).query("select e " +
+                    "from tsadv$Address e " +
+                    "where e.personGroup.id = :personGroupId " +
+                    " and current_date between e.startDate and e.endDate" +
+                    " and :addressTypeId = e.addressType.id ")
+                    .parameter("personGroupId", personGroupExt.getId())
+                    .parameter("addressTypeId", contract.getDefaultAddress().getId())
+                    .view("address.view")
+                    .list().stream().findFirst()
+                    .map(Address::getAddress)
+                    .ifPresent(insuredPerson::setAddress);
+        }
 
         boolean isEmptyDocument = personGroupExt.getPersonDocuments().isEmpty();
         if (isEmptyDocument) {
@@ -259,19 +265,7 @@ public class DocumentServiceBean implements DocumentService {
             }
         }
 
-        if (!personGroupExt.getAddresses().isEmpty()) {
-            boolean isSetAddress = false;
-            for (Address a : personGroupExt.getAddresses()) {
-                if (a.getAddressType().equals(contract.getDefaultAddress())) {
-                    insuredPerson.setAddressType(a);
-                    isSetAddress = true;
-                    break;
-                }
-            }
-            if (!isSetAddress) {
-                insuredPerson.setAddressType(personGroupExt.getAddresses().get(0));
-            }
-        }
+        insuredPerson.setAddressType(contract.getDefaultAddress());
         insuredPerson.setEmployee(personGroupExt);
         insuredPerson.setFirstName(person.getFirstName());
         insuredPerson.setSecondName(person.getLastName());

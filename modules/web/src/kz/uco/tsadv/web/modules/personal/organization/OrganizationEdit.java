@@ -58,6 +58,8 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
     protected HierarchyService hierarchyService;
     @Named("goalsTable.create")
     protected CreateAction goalsTableCreate;
+    @Named("goalsTable.edit")
+    private EditAction goalsTableEdit;
     @Named("orgHrUsersTable.create")
     protected CreateAction orgHrUsersTableCreate;
     @Inject
@@ -141,6 +143,8 @@ public class OrganizationEdit extends AbstractHrEditor<OrganizationExt> {
             getDsContext().addBeforeCommitListener(context -> context.addInstanceToCommit(analyticsDs.getItem()));
         }
         goalsTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("organizationGroup", getItem().getGroup()));
+        goalsTableCreate.setWindowParams(ParamsMap.of("goalsDs",goalsDs));
+        goalsTableEdit.setWindowParams(ParamsMap.of("goalsDs",goalsDs));
         orgHrUsersTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("organizationGroup", getItem().getGroup()));
         competenceOrgTableCreate.setInitialValuesSupplier(() -> ParamsMap.of("organizationGroup", getItem().getGroup()));
     }

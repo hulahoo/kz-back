@@ -314,8 +314,8 @@
                     <buttonsPanel>
                         <button id="goalsTableCreate"
                                 action="goalsTable.create"/>
-                        <button id="competenceOrgTableEdit"
-                                action="competenceOrgTable.edit"/>
+                        <button id="goalsTableEdit"
+                                action="goalsTable.edit"/>
                         <button id="goalsTableRemove"
                                 action="goalsTable.remove"/>
                     </buttonsPanel>

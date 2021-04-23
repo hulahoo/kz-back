@@ -721,12 +721,10 @@
                     <actions>
                         <action id="create"
                                 caption="mainMsg://table.btn.create"
-                                icon="icons/create.png"
-                                invoke="onCreate"/>
+                                icon="icons/create.png"/>
                         <action id="edit"
                                 caption="mainMsg://table.btn.edit"
-                                icon="icons/edit.png"
-                                invoke="onEdit"/>
+                                icon="icons/edit.png"/>
                         <action id="remove"/>
                     </actions>
                     <columns>
