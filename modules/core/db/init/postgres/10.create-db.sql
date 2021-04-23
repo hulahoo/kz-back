@@ -4703,7 +4703,7 @@ create table TSADV_DIC_ABSENCE_TYPE (
     ORDER_ integer,
     --
     USE_IN_SELF_SERVICE boolean not null,
-    ECOLOGICAL_ABSENCE double precision,
+    ECOLOGICAL_ABSENCE boolean,
     AVAILABLE_TO_MANAGER boolean,
     VACATION_DURATION_TYPE varchar(50),
     ELMA_TRANSFER boolean not null,
