@@ -1223,13 +1223,16 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                         finalAbsenceBalance = (double) datesService.getDayOfMonth(absenceDate)
                                 * (maxAbsenceBalance.getDaysLeft() - minAbsenceBalance.getDaysLeft()) /
                                 datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom());
+                        finalAbsenceBalance += (double) datesService.getDayOfMonth(absenceDate)
+                                * (maxAbsenceBalance.getExtraDaysLeft() - minAbsenceBalance.getExtraDaysLeft()) /
+                                datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom());
                         return finalAbsenceBalance + minAbsenceBalance.getDaysLeft();
                     }
                 }
             }
             return finalAbsenceBalance;
         } catch (Exception ignored) {
-            return finalAbsenceBalance;
+            return 0.0;
         }
     }
 }
