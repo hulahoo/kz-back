@@ -16,8 +16,9 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "USE_IN_SELF_SERVICE", nullable = false)
     protected Boolean useInSelfService = false;
 
-    @Column(name = "ECOLOGICAL_ABSENCE")
-    private Boolean isEcologicalAbsence;
+    @Column(name = "ECOLOGICAL_ABSENCE", nullable = false)
+    @NotNull
+    private Boolean isEcologicalAbsence = false;
 
     @Column(name = "AVAILABLE_TO_MANAGER")
     private Boolean availableToManager;
