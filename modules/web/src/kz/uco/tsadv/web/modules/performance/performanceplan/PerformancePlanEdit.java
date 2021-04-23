@@ -26,6 +26,7 @@ import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicCurrency;
 import kz.uco.base.service.NotificationService;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
@@ -104,14 +105,12 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     @Inject
     protected DatesService datesService;
     @Inject
-    protected GlobalConfig globalConfig;
-    @Inject
     protected Dialogs dialogs;
+    @Inject
+    protected FrontConfig frontConfig;
     private FileInputStream inputStream;
     @Inject
     protected NotificationService notificationService;
-    @Inject
-    private Dialogs dialogs;
 
     protected SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     protected SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
@@ -265,7 +264,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 .show();
     }
 
-    protected void doMassGoals(){
+    protected void doMassGoals() {
         Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
         CommitContext commitContext = new CommitContext();
         try {
@@ -677,7 +676,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 .show();
     }
 
-    protected void sendLetterHappiness(){
+    protected void sendLetterHappiness() {
         for (AssignedPerformancePlan assignedPerformancePlan : assignedPerformancePlanTable.getSelected()) {
             TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
                     .query("select e from tsadv$UserExt e " +
@@ -825,10 +824,10 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                                             && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName().isEmpty()
                                                             ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName()
                                                             : "");
-                                                    String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
-                                                            "tsadv$PerformancePlan.edit" +
-                                                            "&item=" + "tsadv$PerformancePlan" + "-" + assignedPerformancePlan.getPerformancePlan().getId() +
-                                                            "\" target=\"_blank\">%s " + "</a>";
+                                                    String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                                            + "/kpi/"
+                                                            + assignedPerformancePlan.getId().toString()
+                                                            + "\" target=\"_blank\">%s " + "</a>";
                                                     params.put("requestLink", requestLink);
                                                     notificationService.sendParametrizedNotification("kpi.start.letter", tsadvUser, params);
                                                 }
