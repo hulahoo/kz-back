@@ -5612,6 +5612,7 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
             </property>
+            <property name="sections" view="_minimal"/>
         </property>
         <property name="mandatory"/>
         <property name="sectionName"/>

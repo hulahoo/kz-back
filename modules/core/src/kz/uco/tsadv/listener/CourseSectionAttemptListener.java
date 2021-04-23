@@ -55,23 +55,27 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         CourseSection courseSection = entityManager.find(CourseSection.class, courseSectionAttempt.getCourseSection().getId(), "courseSection.edit");
         if (courseSection != null && courseSection.getCourse() != null
                 && courseSection.getCourse().getSections() != null) {
+            courseSection = dataManager.reload(courseSection, "courseSection.edit");
             UUID enrollmentId = courseSectionAttempt.getEnrollment().getId();
             Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.person");
-            if (enrollment != null && learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
-                    enrollment)) {
-                boolean homework = true;
-                boolean feedbackQuestion = true;
-                List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
-                if (!courseFeedbackTemplateList.isEmpty()) {
-                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
-                }
-                List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
-                if (!homeworkList.isEmpty()) {
-                    homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
-                }
-                if (homework && feedbackQuestion) {
-                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
-                    transactionalDataManager.save(enrollment);
+            if (enrollment != null) {
+                enrollment = dataManager.reload(enrollment, "enrollment.person");
+                if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
+                        enrollment)) {
+                    boolean homework = true;
+                    boolean feedbackQuestion = true;
+                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+                    if (!courseFeedbackTemplateList.isEmpty()) {
+                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+                    }
+                    List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
+                    if (!homeworkList.isEmpty()) {
+                        homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
+                    }
+                    if (homework && feedbackQuestion) {
+                        enrollment.setStatus(EnrollmentStatus.COMPLETED);
+                        transactionalDataManager.save(enrollment);
+                    }
                 }
             }
         }
@@ -98,23 +102,27 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         CourseSection courseSection = entityManager.find(CourseSection.class, courseSectionAttempt.getCourseSection().getId(), "courseSection.edit");
         if (courseSection != null && courseSection.getCourse() != null
                 && courseSection.getCourse().getSections() != null) {
+            courseSection = dataManager.reload(courseSection, "courseSection.edit");
             UUID enrollmentId = courseSectionAttempt.getEnrollment().getId();
             Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.person");
-            if (enrollment != null && learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
-                    enrollment)) {
-                boolean homework = true;
-                boolean feedbackQuestion = true;
-                List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
-                if (!courseFeedbackTemplateList.isEmpty()) {
-                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
-                }
-                List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
-                if (!homeworkList.isEmpty()) {
-                    homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
-                }
-                if (homework && feedbackQuestion) {
-                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
-                    transactionalDataManager.save(enrollment);
+            if (enrollment != null) {
+                enrollment = dataManager.reload(enrollment, "enrollment.person");
+                if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
+                        enrollment)) {
+                    boolean homework = true;
+                    boolean feedbackQuestion = true;
+                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+                    if (!courseFeedbackTemplateList.isEmpty()) {
+                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+                    }
+                    List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
+                    if (!homeworkList.isEmpty()) {
+                        homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
+                    }
+                    if (homework && feedbackQuestion) {
+                        enrollment.setStatus(EnrollmentStatus.COMPLETED);
+                        transactionalDataManager.save(enrollment);
+                    }
                 }
             }
         }
