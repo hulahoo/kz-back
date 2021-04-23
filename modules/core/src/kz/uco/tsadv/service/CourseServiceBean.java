@@ -919,6 +919,7 @@ public class CourseServiceBean implements CourseService {
 
     @Override
     public List<DicCategory> searchCourses(String courseName) {
+        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP);
         return dataManager.loadList(LoadContext.create(DicCategory.class)
                 .setQuery(LoadContext.createQuery("" +
                         "select distinct c " +
@@ -930,6 +931,7 @@ public class CourseServiceBean implements CourseService {
                 .setView("category-courses"))
                 .stream()
                 .peek(c -> c.setCourses(c.getCourses().stream()
+                        .peek(course -> course.setEnrollments(course.getEnrollments().stream().filter(e -> e.getPersonGroup().getId().equals(personGroupId)).collect(Collectors.toList())))
                         .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())
                                 && BooleanUtils.isTrue(course.getActiveFlag()))
                         .collect(Collectors.toList())))
