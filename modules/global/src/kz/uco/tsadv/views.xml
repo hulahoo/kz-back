@@ -5605,20 +5605,23 @@
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CourseSection"
           name="courseSection.edit">
+        <property name="course" view="_minimal">
+            <property name="feedbackTemplates" view="_minimal">
+                <property name="feedbackTemplate" view="_minimal"/>
+                <property name="course" view="_minimal"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
+        </property>
+        <property name="mandatory"/>
         <property name="sectionName"/>
         <property name="order"/>
-        <property name="format"
-                  view="_minimal">
+        <property name="sectionObject" view="courseSectionObject.edit"/>
+        <property name="format" view="_minimal">
             <property name="code"/>
         </property>
         <property name="description"/>
-        <property name="sectionObject"
-                  view="courseSectionObject.edit"/>
-        <property name="session"
-                  view="courseSectionSession.browse"/>
-        <property name="course"
-                  view="_minimal"/>
-        <property name="mandatory"/>
+        <property name="session" view="courseSectionSession.browse"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.Enrollment"
           name="enrollment.browse">

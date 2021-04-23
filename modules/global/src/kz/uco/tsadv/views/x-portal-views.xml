@@ -410,5 +410,7 @@
             </property>
             <property name="sections" view="_minimal"/>
         </property>
+        <property name="mandatory"/>
+        <property name="description"/>
     </view>
 </views>
