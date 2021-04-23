@@ -1,8 +1,11 @@
 package kz.uco.tsadv.web.modules.learning.enrollment;
 
+import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.EditAction;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.Course;
+import kz.uco.tsadv.modules.learning.model.CourseSectionScormResult;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
 
 import javax.inject.Inject;
@@ -29,8 +32,12 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
     @Named("fieldGroup.status")
     protected LookupField<EnrollmentStatus> statusField;
 
-    @Named("fieldGroup.reason")
+    @Named("fieldGroup1.reason")
     protected TextArea reasonField;
+    @Inject
+    protected GroupTable<CourseSectionScormResult> courseSectionScormResultTable;
+    @Named("courseSectionScormResultTable.edit")
+    protected EditAction courseSectionScormResultTableEdit;
 
     @Override
     protected void postInit() {
@@ -43,7 +50,8 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
     @Override
     public void ready() {
         super.ready();
-
+        courseSectionScormResultTable.expandAll();
+        courseSectionScormResultTableEdit.setOpenType(WindowManager.OpenType.DIALOG);
 //        courseField.addValueChangeListener(new ValueChangeListener() {
 //            @Override
 //            public void valueChanged(ValueChangeEvent e) {

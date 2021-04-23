@@ -854,7 +854,7 @@ public class CourseServiceBean implements CourseService {
         coursePojo.setPreRequisitions(course.getPreRequisition().stream().map(pr -> pr.getRequisitionCourse().getName()).collect(Collectors.joining(", ")));
         coursePojo.setTrainers(course.getCourseTrainers().stream().map(ct -> new PairPojo<>(ct.getTrainer().getId(), ct.getTrainer().getTrainerFullName())).collect(Collectors.toList()));
         if (course.getLogo() != null) {
-            coursePojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
+            coursePojo.setLogo(course.getLogo().getId());
         }
         coursePojo.setRateReviewCount(course.getReviews().size());
         coursePojo.setComments(course.getReviews().stream().map(r -> CommentPojo.CommentPojoBuilder.builder()

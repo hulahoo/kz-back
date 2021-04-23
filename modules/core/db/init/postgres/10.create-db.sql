@@ -8837,6 +8837,7 @@ create table TSADV_BOOK (
     KF8_ID uuid,
     PDF_ID uuid,
     DJVU_ID uuid,
+    NUMBER_OF_PAGE integer,
     --
     primary key (ID)
 )^
@@ -13973,7 +13974,7 @@ create table TSADV_COURSE (
     IS_ISSUED_CERTIFICATE boolean not null,
     PARTY_ID uuid,
     DESCRIPTION text,
-    LOGO bytea,
+    LOGO_ID uuid,
     CATEGORY_ID uuid not null,
     TARGET_AUDIENCE varchar(1000),
     ACTIVE_FLAG boolean,
