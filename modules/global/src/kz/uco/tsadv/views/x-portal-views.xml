@@ -433,4 +433,9 @@
             <property name="content" view="_local"/>
         </property>
     </view>
+    <view entity="tsadv$CourseSection" name="courseSection.with.learningObject" extends="_minimal">
+        <property name="sectionObject" view="_minimal">
+            <property name="content" view="_local"/>
+        </property>
+    </view>
 </views>

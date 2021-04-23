@@ -14389,6 +14389,7 @@ create table TSADV_LEARNING_OBJECT (
     FILE_ID uuid,
     HTML text,
     TEXT text,
+    PASSING_SCORE decimal(19, 2),
     --
     primary key (ID)
 )^

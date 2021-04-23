@@ -90,7 +90,6 @@
             <param name="score" type="java.math.BigDecimal"/>
             <param name="minScore" type="java.math.BigDecimal"/>
             <param name="maxScore" type="java.math.BigDecimal"/>
-            <param name="success" type="java.lang.Boolean"/>
         </method>
         <method name="createScormAttempt">
             <param name="courseSectionId" type="java.util.UUID"/>

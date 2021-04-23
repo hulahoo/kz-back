@@ -7,6 +7,7 @@ import kz.uco.tsadv.modules.learning.enums.ContentType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @NamePattern("%s|objectName")
 @Table(name = "TSADV_LEARNING_OBJECT")
@@ -38,6 +39,17 @@ public class LearningObject extends AbstractParentEntity {
     @Lob
     @Column(name = "TEXT")
     protected String text;
+
+    @Column(name = "PASSING_SCORE")
+    private BigDecimal passingScore;
+
+    public BigDecimal getPassingScore() {
+        return passingScore;
+    }
+
+    public void setPassingScore(BigDecimal passingScore) {
+        this.passingScore = passingScore;
+    }
 
     public void setContentType(ContentType contentType) {
         this.contentType = contentType == null ? null : contentType.getId();
