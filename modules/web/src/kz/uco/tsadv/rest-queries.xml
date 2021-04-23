@@ -251,6 +251,7 @@
                 select d
                 from tsadv$DicBookCategory d
                     join d.books b
+                where d.books is not empty
                 order by
                     d.order
             ]]>

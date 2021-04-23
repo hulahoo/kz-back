@@ -312,6 +312,7 @@
     <view name="portal-books-category-browse" entity="tsadv$DicBookCategory" extends="_minimal">
         <property name="order"/>
         <property name="books" view="_minimal">
+            <property name="active"/>
             <property name="category" view="_minimal"/>
             <property name="image" view="_minimal"/>
             <property name="fb2" view="_minimal"/>
