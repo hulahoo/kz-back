@@ -343,6 +343,9 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         notificationParams.put("requestLinkRu", "");
         notificationParams.put("requestLinkEn", "");
+
+        notificationParams.put("requestFrontLinkRu", "");
+        notificationParams.put("requestFrontLinkEn", "");
         Activity activity = activityService.createActivity(
                 user,
                 sessionUser,
