@@ -91,6 +91,17 @@ public class Book extends StandardEntity {
     @Column(name = "NUMBER_OF_PAGE")
     protected Integer numberOfPage;
 
+    @Column(name = "VIEWED")
+    private Integer viewed;
+
+    public Integer getViewed() {
+        return viewed;
+    }
+
+    public void setViewed(Integer viewed) {
+        this.viewed = viewed;
+    }
+
     public Integer getNumberOfPage() {
         return numberOfPage;
     }

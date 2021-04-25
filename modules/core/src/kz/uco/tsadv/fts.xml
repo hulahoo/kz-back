@@ -1951,5 +1951,8 @@
         <entity class="kz.uco.tsadv.modules.learning.model.ScormSuspendData">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.BookView">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
