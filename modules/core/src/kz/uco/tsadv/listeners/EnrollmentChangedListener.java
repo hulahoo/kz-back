@@ -261,7 +261,7 @@ public class EnrollmentChangedListener {
 
     protected EmailAttachment[] getEmailAttachments(FileDescriptor fileDescriptor, EmailAttachment[] emailAttachments) {
         try {
-            EmailAttachment emailAttachment = new EmailAttachment(fileStorageAPI.loadFile(fileDescriptor), "Сертификат");
+            EmailAttachment emailAttachment = new EmailAttachment(fileStorageAPI.loadFile(fileDescriptor), "Сертификат.pdf");
             emailAttachments = ArrayUtils.add(emailAttachments, emailAttachment);
         } catch (FileStorageException e) {
             e.printStackTrace();
