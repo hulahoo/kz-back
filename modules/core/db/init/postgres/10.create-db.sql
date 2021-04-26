@@ -7271,7 +7271,7 @@ create table TSADV_COURSE_REVIEW (
     COURSE_ID uuid not null,
     PERSON_GROUP_ID uuid not null,
     RATE double precision,
-    TEXT varchar(500) not null,
+    TEXT varchar(2000) not null,
     --
     primary key (ID)
 )^
@@ -8838,6 +8838,7 @@ create table TSADV_BOOK (
     PDF_ID uuid,
     DJVU_ID uuid,
     NUMBER_OF_PAGE integer,
+    VIEWED integer,
     --
     primary key (ID)
 )^
@@ -17891,3 +17892,20 @@ create table TSADV_SCORM_SUSPEND_DATA (
     primary key (ID)
 )^
 -- end TSADV_SCORM_SUSPEND_DATA
+-- begin TSADV_BOOK_VIEW
+create table TSADV_BOOK_VIEW (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PERSON_GROUP_ID uuid not null,
+    BOOK_ID uuid not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_BOOK_VIEW

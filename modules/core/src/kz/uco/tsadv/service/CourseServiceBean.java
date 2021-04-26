@@ -908,8 +908,7 @@ public class CourseServiceBean implements CourseService {
                                         course.getEnrollments()
                                                 .stream()
                                                 .filter(e ->
-                                                        e.getPersonGroup().equals(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP))
-                                                                && e.getStatus().equals(EnrollmentStatus.COMPLETED))
+                                                        e.getPersonGroup().equals(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP)))
                                                 .collect(Collectors.toList()))))
                 .peek(c -> c.setCourses(c.getCourses().stream()
                         .filter(course -> BooleanUtils.isTrue(course.getActiveFlag()))
