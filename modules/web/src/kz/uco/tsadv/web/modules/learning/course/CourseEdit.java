@@ -8,7 +8,10 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.DataGrid;
+import com.haulmont.cuba.gui.components.GroupTable;
+import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -16,18 +19,14 @@ import com.haulmont.cuba.gui.model.InstanceLoader;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.common.BaseCommonUtils;
-import kz.uco.base.common.IMAGE_SIZE;
 import kz.uco.base.cuba.actions.CreateActionExt;
-import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
-import kz.uco.tsadv.web.modules.personal.common.Utils;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,8 +94,6 @@ public class CourseEdit extends StandardEditor<Course> {
     protected Table<CoursePreRequisition> preRequisitionTable;
     @Inject
     protected CollectionLoader<CoursePreRequisition> preRequisitionDl;
-    @Inject
-    protected RichTextArea richTextArea;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -318,7 +315,7 @@ public class CourseEdit extends StandardEditor<Course> {
                                     isNew = false;
                                     if (courseScheduleDc.getItems().size() == 1) {
                                         enrollment.setCourseSchedule(courseScheduleDc.getItems().get(0));
-                                    }else if(courseScheduleDc.getItems().size() == 0){
+                                    } else if (courseScheduleDc.getItems().size() == 0) {
                                         enrollment.setCourseSchedule(null);
                                     }
                                     newCommitContext.addInstanceToCommit(enrollment);
