@@ -438,4 +438,8 @@
             <property name="content" view="_local"/>
         </property>
     </view>
+    <view entity="tsadv$BookView" name="bookView.personGroup.book" extends="_minimal">
+        <property name="personGroup" view="_minimal"/>
+        <property name="book" view="_local"/>
+    </view>
 </views>
