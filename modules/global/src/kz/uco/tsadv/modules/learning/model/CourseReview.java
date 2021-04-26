@@ -23,7 +23,7 @@ public class CourseReview extends StandardEntity {
     @Column(name = "RATE")
     protected Double rate;
 
-    @Column(name = "TEXT", nullable = false, length = 500)
+    @Column(name = "TEXT", nullable = false, length = 2000)
     protected String text;
 
     public void setCourse(kz.uco.tsadv.modules.learning.model.Course course) {
