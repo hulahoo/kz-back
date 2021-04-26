@@ -185,7 +185,8 @@ public class TsadvMainScreen extends BaseMainScreen {
             @Override
             public void actionPerform(Component component) {
                 screenBuilders.screen(mainMenuFrameOwner)
-                        .withScreenId("person-notification")
+                        .withScreenId("my-tasks")
+                        .withOptions(new MapScreenOptions(ParamsMap.of("notification", true)))
                         .build()
                         .show();
             }
