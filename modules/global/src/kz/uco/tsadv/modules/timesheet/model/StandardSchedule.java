@@ -2,16 +2,17 @@ package kz.uco.tsadv.modules.timesheet.model;
 
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.modules.timesheet.enums.ScheduleTypeEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
 
 @Listeners("tsadv_StandardScheduleListener")
 @NamePattern("%s|id,legacyId")
@@ -65,6 +66,19 @@ public class StandardSchedule extends AbstractParentEntity {
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "standardSchedule")
     protected List<StandardShift> standardShifts;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    protected DicCompany company;
+
+    public DicCompany getCompany() {
+        return company;
+    }
+
+    public void setCompany(DicCompany company) {
+        this.company = company;
+    }
+
     public StandardSchedule getBaseStandardSchedule() {
         return baseStandardSchedule;
     }
