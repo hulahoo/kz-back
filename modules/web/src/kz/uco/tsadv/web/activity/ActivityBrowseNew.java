@@ -64,6 +64,14 @@ public class ActivityBrowseNew extends AbstractLookup {
     protected GroupsComponent groupsComponent;
 
     @Override
+    public void init(Map<String, Object> params) {
+        super.init(params);
+        if (params != null && params.containsKey("notification")) {
+            defaultTabFromLink = "notificationsTab";
+        }
+    }
+
+    @Override
     public void ready() {
         super.ready();
 
@@ -253,7 +261,7 @@ public class ActivityBrowseNew extends AbstractLookup {
                     activity.getReferenceId(), activity.getType().getWindowProperty().getViewName());
 
             Map<String, Object> windowParam = new HashMap<>(getWindowParam(activity, entity));
-            windowParam.put("activityId", activityTask);
+            windowParam.put("activityId", activityTask.getActivity().getId().toString());
             if (isOpenWindow(activity.getType().getCode().toUpperCase())) {
                 abstractWindow = openWindow(activity.getType().getWindowProperty().getScreenName(),
                         WindowManager.OpenType.NEW_TAB,

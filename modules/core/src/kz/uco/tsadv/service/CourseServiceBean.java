@@ -28,6 +28,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -907,8 +908,7 @@ public class CourseServiceBean implements CourseService {
                                         course.getEnrollments()
                                                 .stream()
                                                 .filter(e ->
-                                                        e.getPersonGroup().equals(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP))
-                                                                && e.getStatus().equals(EnrollmentStatus.COMPLETED))
+                                                        e.getPersonGroup().equals(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP)))
                                                 .collect(Collectors.toList()))))
                 .peek(c -> c.setCourses(c.getCourses().stream()
                         .filter(course -> BooleanUtils.isTrue(course.getActiveFlag()))
@@ -919,6 +919,7 @@ public class CourseServiceBean implements CourseService {
 
     @Override
     public List<DicCategory> searchCourses(String courseName) {
+        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP);
         return dataManager.loadList(LoadContext.create(DicCategory.class)
                 .setQuery(LoadContext.createQuery("" +
                         "select distinct c " +
@@ -930,6 +931,7 @@ public class CourseServiceBean implements CourseService {
                 .setView("category-courses"))
                 .stream()
                 .peek(c -> c.setCourses(c.getCourses().stream()
+                        .peek(course -> course.setEnrollments(course.getEnrollments().stream().filter(e -> e.getPersonGroup().getId().equals(personGroupId)).collect(Collectors.toList())))
                         .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())
                                 && BooleanUtils.isTrue(course.getActiveFlag()))
                         .collect(Collectors.toList())))
@@ -999,17 +1001,22 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public void createTestScormAttempt(UUID courseSectionId, UUID enrollmentId, BigDecimal score, BigDecimal minScore, BigDecimal maxScore, Boolean success) {
+    public CourseSectionAttempt createTestScormAttempt(@NotNull UUID courseSectionId, @NotNull UUID enrollmentId, @NotNull BigDecimal score, @NotNull BigDecimal minScore, @NotNull BigDecimal maxScore) {
         CourseSectionAttempt newAttempt = metadata.create(CourseSectionAttempt.class);
-        newAttempt.setCourseSection(dataManager.load(LoadContext.create(CourseSection.class).setId(courseSectionId).setView(View.MINIMAL)));
+        CourseSection courseSection = dataManager.load(LoadContext.create(CourseSection.class).setId(courseSectionId).setView("courseSection.with.learningObject"));
+
+        newAttempt.setCourseSection(courseSection);
         newAttempt.setEnrollment(dataManager.load(LoadContext.create(Enrollment.class).setId(enrollmentId).setView(View.MINIMAL)));
         newAttempt.setActiveAttempt(false);
         newAttempt.setAttemptDate(new Date());
-        newAttempt.setSuccess(success);
-        newAttempt.setTestResult(score);
-        newAttempt.setTestResultPercent(score == null ? null : (score.subtract(minScore).multiply(BigDecimal.valueOf(100).divide(maxScore.subtract(minScore), 2, RoundingMode.DOWN))));
 
+        BigDecimal passingScore = courseSection.getSectionObject().getContent().getPassingScore();
+        newAttempt.setSuccess(passingScore == null || passingScore.compareTo(score) <= 0);
+        newAttempt.setTestResult(score);
+        newAttempt.setTestResultPercent(score.subtract(minScore).multiply(BigDecimal.valueOf(100).divide(maxScore.subtract(minScore), 2, RoundingMode.DOWN)));
         dataManager.commit(newAttempt);
+
+        return dataManager.reload(newAttempt, View.LOCAL);
     }
 
     @Override

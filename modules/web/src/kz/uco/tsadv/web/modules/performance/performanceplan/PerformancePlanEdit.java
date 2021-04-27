@@ -2,6 +2,7 @@ package kz.uco.tsadv.web.modules.performance.performanceplan;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
+import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
@@ -25,6 +26,7 @@ import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicCurrency;
 import kz.uco.base.service.NotificationService;
 import kz.uco.tsadv.config.ExtAppPropertiesConfig;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
@@ -102,9 +104,14 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected ExportDisplay exportDisplay;
     @Inject
     protected DatesService datesService;
+    @Inject
+    protected Dialogs dialogs;
+    @Inject
+    protected FrontConfig frontConfig;
     private FileInputStream inputStream;
     @Inject
     protected NotificationService notificationService;
+
     protected SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     protected SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
     protected SimpleDateFormat monthTextFormatRu = new SimpleDateFormat("dd MMMM yyyy", Locale.forLanguageTag("ru"));
@@ -245,6 +252,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
     @Subscribe("assignedPerformancePlanTable.massGoals")
     protected void onAssignedPerformancePlanTableMassGoals(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                .withCaption(messageBundle.getMessage("confirmAction"))
+                .withMessage(messageBundle.getMessage("addMassGoalsConfirmation"))
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
+                            doMassGoals();
+                        }),
+                        new DialogAction(DialogAction.Type.NO)
+                )
+                .show();
+    }
+
+    protected void doMassGoals() {
         Set<AssignedPerformancePlan> assignedPerformancePlans = assignedPerformancePlanTable.getSelected();
         CommitContext commitContext = new CommitContext();
         try {
@@ -644,6 +664,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
 
     @Subscribe("assignedPerformancePlanTable.sendLetterHappiness")
     protected void onAssignedPerformancePlanTableSendLetterHappiness(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog(Dialogs.MessageType.CONFIRMATION)
+                .withCaption(messageBundle.getMessage("confirmAction"))
+                .withMessage(messageBundle.getMessage("sendLetterHappinessConfirmation"))
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES, Action.Status.PRIMARY).withHandler(e -> {
+                            sendLetterHappiness();
+                        }),
+                        new DialogAction(DialogAction.Type.NO)
+                )
+                .show();
+    }
+
+    protected void sendLetterHappiness() {
         for (AssignedPerformancePlan assignedPerformancePlan : assignedPerformancePlanTable.getSelected()) {
             TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
                     .query("select e from tsadv$UserExt e " +
@@ -735,6 +768,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 notificationService.sendParametrizedNotification("kpi.letter.of.happiness", tsadvUser, params);
             }
         }
+        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                .withCaption(messageBundle.getMessage("sendLetterHappinessSuccess")).show();
+
     }
 
     protected DicCurrency getSalaryCurrency(AssignmentExt currentAssignment) {
@@ -761,5 +797,44 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     protected RuleBasedNumberFormat getAmountINText(String language) {
         return new RuleBasedNumberFormat(Locale.forLanguageTag(language),
                 RuleBasedNumberFormat.SPELLOUT);
+    }
+
+    @Subscribe("assignedPerformancePlanTable.startLetters")
+    protected void onAssignedPerformancePlanTableStartLetters(Action.ActionPerformedEvent event) {
+        dialogs.createOptionDialog()
+                .withCaption(messageBundle.getMessage("confirmation"))
+                .withMessage(messageBundle.getMessage("aUSure"))
+                .withType(Dialogs.MessageType.CONFIRMATION)
+                .withActions(
+                        new DialogAction(DialogAction.Type.YES)
+                                .withHandler(actionPerformedEvent -> {
+                                            for (AssignedPerformancePlan assignedPerformancePlan : assignedPerformancePlanTable.getSelected()) {
+                                                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                                                        .query("select e from tsadv$UserExt e " +
+                                                                " where e.personGroup = :personGroup")
+                                                        .parameter("personGroup", assignedPerformancePlan.getAssignedPerson())
+                                                        .view("userExt.edit")
+                                                        .list().stream().findFirst().orElse(null);
+                                                if (tsadvUser != null) {
+                                                    Map<String, Object> params = new HashMap<>();
+                                                    params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName()
+                                                            + " "
+                                                            + assignedPerformancePlan.getAssignedPerson().getPerson().getLastName());
+                                                    params.put("middleNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName() != null
+                                                            && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName().isEmpty()
+                                                            ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName()
+                                                            : "");
+                                                    String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                                            + "/kpi/"
+                                                            + assignedPerformancePlan.getId().toString()
+                                                            + "\" target=\"_blank\">%s " + "</a>";
+                                                    params.put("requestLink", requestLink);
+                                                    notificationService.sendParametrizedNotification("kpi.start.letter", tsadvUser, params);
+                                                }
+                                            }
+                                        }
+                                ),
+                        new DialogAction(DialogAction.Type.NO))
+                .show();
     }
 }

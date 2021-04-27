@@ -100,6 +100,7 @@
                         <action id="calculateGZP" caption="msg://calculateGZP" trackSelection="true"/>
                         <action id="exportExcel" caption="msg://exportExcel" trackSelection="true"/>
                         <action id="importExcel" caption="msg://importExcel"/>
+                        <action id="startLetters" caption="msg://startLetters" trackSelection="true"/>
                         <action id="sendLetterHappiness" caption="msg://sendLetterHappiness" trackSelection="true"/>
                     </actions>
                     <columns>
@@ -125,6 +126,7 @@
                         <button id="assignedCalculateGZP" action="assignedPerformancePlanTable.calculateGZP"/>
                         <button id="assignedExportBtn" action="assignedPerformancePlanTable.exportExcel"/>
                         <button id="assignedImportExcel" action="assignedPerformancePlanTable.importExcel"/>
+                        <button id="startLettersBtn" action="assignedPerformancePlanTable.startLetters"/>
                         <button id="assignedSendLetterHappinessBtn"
                                 action="assignedPerformancePlanTable.sendLetterHappiness"
                                 caption="msg://sendBonusLetterBtnCaption"/>
