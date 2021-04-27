@@ -68,4 +68,6 @@ public interface AbsenceBalanceService {
     void createMissingAbsenceBalances();
 
     double getAbsenceBalance(UUID personGroupId, Date absenceDate);
+
+    double getEnvironmentalDays(UUID personGroupId, Date absenceDate);
 }

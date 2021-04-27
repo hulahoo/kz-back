@@ -138,6 +138,10 @@
             <param name="personGroupId" type="java.util.UUID"/>
             <param name="absenceDate" type="java.util.Date"/>
         </method>
+        <method name="getEnvironmentalDays">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceDate" type="java.util.Date"/>
+        </method>
     </service>
     <service name="tsadv_DocumentService">
         <method name="getInsuredPerson">
