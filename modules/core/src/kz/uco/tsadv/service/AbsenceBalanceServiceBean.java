@@ -59,17 +59,9 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
     protected Persistence persistence;
 
     @Override
+    @Deprecated
     public List<AbsenceBalanceV> getAbsenceBalance(UUID personGroupId) {
-        return getAbsenceBalance(personGroupId, CommonUtils.getSystemDate());
-    }
-
-    @Override
-    public List<AbsenceBalanceV> getAbsenceBalance(UUID personGroupId, Date date) {
-        return persistence.callInTransaction(em ->
-                em.createNativeQuery("select * from bal.get_hr_absence_balance(#persongroupId, #date)", AbsenceBalanceV.class)
-                        .setParameter("persongroupId", personGroupId)
-                        .setParameter("date", date)
-                        .getResultList());
+        throw new RuntimeException("remove");
     }
 
     @Override
@@ -1178,56 +1170,53 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
     }
 
     @Override
-    public double getAbsenceBalance(UUID personGroupId, Date absenceDate, UUID dicAbsenceTypeId) {
+    public double getAbsenceBalance(UUID personGroupId, Date absenceDate) {
         double finalAbsenceBalance = 0.0;
         try {
-            if (personGroupId != null && absenceDate != null && dicAbsenceTypeId != null) {
-                DicAbsenceType dicAbsenceType = commonService.getEntity(DicAbsenceType.class, dicAbsenceTypeId);
-                if (dicAbsenceType != null && dicAbsenceType.getCode().equals("ANNUAL")) {
-                    List<AbsenceBalance> oneAbsenceBalanceList = dataManager.load(AbsenceBalance.class)
+            if (personGroupId != null && absenceDate != null) {
+                List<AbsenceBalance> oneAbsenceBalanceList = dataManager.load(AbsenceBalance.class)
+                        .query("select e from tsadv$AbsenceBalance e " +
+                                " where e.personGroup.id = :personGroupId " +
+                                " and e.dateFrom = :absenceDate " +
+                                " order by e.dateFrom desc")
+                        .parameter("personGroupId", personGroupId)
+                        .parameter("absenceDate", absenceDate)
+                        .view("absenceBalance.edit")
+                        .list();
+                if (!oneAbsenceBalanceList.isEmpty()) {
+                    return oneAbsenceBalanceList.get(0).getDaysLeft();
+                } else {
+                    List<AbsenceBalance> absenceBalanceMinList = dataManager.load(AbsenceBalance.class)
                             .query("select e from tsadv$AbsenceBalance e " +
                                     " where e.personGroup.id = :personGroupId " +
-                                    " and e.dateFrom = :absenceDate " +
+                                    " and :absenceDate >= e.dateFrom " +
                                     " order by e.dateFrom desc")
                             .parameter("personGroupId", personGroupId)
                             .parameter("absenceDate", absenceDate)
                             .view("absenceBalance.edit")
                             .list();
-                    if (!oneAbsenceBalanceList.isEmpty()) {
-                        return finalAbsenceBalance = oneAbsenceBalanceList.get(0).getDaysLeft();
-                    } else {
-                        List<AbsenceBalance> absenceBalanceMinList = dataManager.load(AbsenceBalance.class)
-                                .query("select e from tsadv$AbsenceBalance e " +
-                                        " where e.personGroup.id = :personGroupId " +
-                                        " and :absenceDate >= e.dateFrom " +
-                                        " order by e.dateFrom desc")
-                                .parameter("personGroupId", personGroupId)
-                                .parameter("absenceDate", absenceDate)
-                                .view("absenceBalance.edit")
-                                .list();
-                        List<AbsenceBalance> absenceBalanceMaxList = dataManager.load(AbsenceBalance.class)
-                                .query("select e from tsadv$AbsenceBalance e " +
-                                        " where e.personGroup.id = :personGroupId " +
-                                        " and :absenceDate <= e.dateFrom " +
-                                        " order by e.dateFrom desc")
-                                .parameter("personGroupId", personGroupId)
-                                .parameter("absenceDate", absenceDate)
-                                .view("absenceBalance.edit")
-                                .list();
+                    List<AbsenceBalance> absenceBalanceMaxList = dataManager.load(AbsenceBalance.class)
+                            .query("select e from tsadv$AbsenceBalance e " +
+                                    " where e.personGroup.id = :personGroupId " +
+                                    " and :absenceDate <= e.dateFrom " +
+                                    " order by e.dateFrom desc")
+                            .parameter("personGroupId", personGroupId)
+                            .parameter("absenceDate", absenceDate)
+                            .view("absenceBalance.edit")
+                            .list();
 
-                        AbsenceBalance minAbsenceBalance = !absenceBalanceMinList.isEmpty() ? absenceBalanceMinList.get(0) : null;
-                        AbsenceBalance maxAbsenceBalance = !absenceBalanceMaxList.isEmpty() ? absenceBalanceMaxList.get(0) : null;
-                        if (minAbsenceBalance == null || maxAbsenceBalance == null) {
-                            return finalAbsenceBalance;
-                        }
-                        finalAbsenceBalance = (double) datesService.getDayOfMonth(absenceDate)
-                                * (maxAbsenceBalance.getDaysLeft() - minAbsenceBalance.getDaysLeft()) /
-                                datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom());
-                        finalAbsenceBalance += (double) datesService.getDayOfMonth(absenceDate)
-                                * (maxAbsenceBalance.getExtraDaysLeft() - minAbsenceBalance.getExtraDaysLeft()) /
-                                datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom());
-                        return finalAbsenceBalance + minAbsenceBalance.getDaysLeft();
+                    AbsenceBalance minAbsenceBalance = !absenceBalanceMinList.isEmpty() ? absenceBalanceMinList.get(0) : null;
+                    AbsenceBalance maxAbsenceBalance = !absenceBalanceMaxList.isEmpty() ? absenceBalanceMaxList.get(0) : null;
+                    if (minAbsenceBalance == null || maxAbsenceBalance == null) {
+                        return finalAbsenceBalance;
                     }
+                    finalAbsenceBalance = (double) datesService.getDayOfMonth(absenceDate)
+                            * (maxAbsenceBalance.getDaysLeft() - minAbsenceBalance.getDaysLeft()) /
+                            datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom());
+                    finalAbsenceBalance += (double) datesService.getDayOfMonth(absenceDate)
+                            * (maxAbsenceBalance.getExtraDaysLeft() - minAbsenceBalance.getExtraDaysLeft()) /
+                            datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom());
+                    return finalAbsenceBalance + minAbsenceBalance.getDaysLeft();
                 }
             }
             return finalAbsenceBalance;

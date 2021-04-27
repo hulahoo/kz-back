@@ -16,9 +16,8 @@ import java.util.UUID;
 public interface AbsenceBalanceService {
     String NAME = "tsadv_AbsenceBalanceService";
 
+    @Deprecated
     List<AbsenceBalanceV> getAbsenceBalance(UUID personGroupId);
-
-    List<AbsenceBalanceV> getAbsenceBalance(UUID personGroupId, Date date);
 
     int getBalanceDays(PersonGroupExt personGroup, PositionGroupExt positionGroup);
 
@@ -68,5 +67,5 @@ public interface AbsenceBalanceService {
 
     void createMissingAbsenceBalances();
 
-    double getAbsenceBalance(UUID personGroupId, Date absenceDate, UUID dicAbsenceTypeId);
+    double getAbsenceBalance(UUID personGroupId, Date absenceDate);
 }

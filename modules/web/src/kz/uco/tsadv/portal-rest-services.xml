@@ -137,7 +137,6 @@
         <method name="getAbsenceBalance">
             <param name="personGroupId" type="java.util.UUID"/>
             <param name="absenceDate" type="java.util.Date"/>
-            <param name="dicAbsenceTypeId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_DocumentService">
