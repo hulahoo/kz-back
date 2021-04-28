@@ -38,4 +38,8 @@ public interface ExtAppPropertiesConfig extends Config {
     @Property("tsadv.kpi.includeAbsence")
     @DefaultBoolean(true)
     Boolean getIncludeAbsence();
+
+    @Property("tsadv.course.defaultLogo")
+    @DefaultString("")
+    String getDefaultLogo();
 }

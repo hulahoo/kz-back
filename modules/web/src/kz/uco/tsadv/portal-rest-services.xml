@@ -99,6 +99,7 @@
         </method>
         <method name="validateEnroll">
             <param name="courseId"/>
+            <param name="personGroupId"/>
             <param name="locale"/>
         </method>
     </service>
