@@ -61,7 +61,7 @@ public class LearningController {
 
         return completedEnrollments.stream()
                 .map(e -> {
-                    List<CourseSection> sortedCourseSections = e.getCourse().getSections().stream().sorted((cs1, cs2) -> cs2.getOrder().compareTo(cs1.getOrder())).collect(Collectors.toList());
+                    List<CourseSection> sortedCourseSections = e.getCourse().getSections().stream().sorted(Comparator.comparing(CourseSection::getOrder)).collect(Collectors.toList());
                     CourseSection courseSection = sortedCourseSections.stream().filter(cs -> CollectionUtils.isNotEmpty(cs.getCourseSectionAttempts()) && cs.getCourseSectionAttempts().get(0).getTestResult() != null).findFirst().orElse(null);
                     return new LearningHistoryPojo.Builder()
                             .trainer(e.getCourse().getCourseTrainers().stream().map(t -> t.getTrainer().getTrainerFullName()).collect(Collectors.joining(" ,")))

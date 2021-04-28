@@ -1020,7 +1020,7 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public PairPojo<Boolean, String> validateEnroll(UUID courseId, String locale) {
+    public PairPojo<Boolean, String> validateEnroll(UUID courseId, UUID personGroupId, String locale) {
         List<Object[]> result = persistence.callInTransaction(em -> em.createNativeQuery("" +
                 "SELECT c.id, " +
                 "       prc.name           AS course_name, " +
@@ -1039,7 +1039,7 @@ public class CourseServiceBean implements CourseService {
                 "WHERE c.id = ?1" +
                 "   AND ((NOT e.status = 5) OR (e.id IS NULL));")
                 .setParameter(1, courseId)
-                .setParameter(2, ((UUID) userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
+                .setParameter(2, personGroupId)
                 .getResultList());
         PairPojo<Boolean, String> response = new PairPojo<>(true, null);
         if (result.size() != 0) {

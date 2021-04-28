@@ -64,6 +64,14 @@ public class ActivityBrowseNew extends AbstractLookup {
     protected GroupsComponent groupsComponent;
 
     @Override
+    public void init(Map<String, Object> params) {
+        super.init(params);
+        if (params != null && params.containsKey("notification")) {
+            defaultTabFromLink = "notificationsTab";
+        }
+    }
+
+    @Override
     public void ready() {
         super.ready();
 
