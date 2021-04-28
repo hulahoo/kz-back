@@ -3,6 +3,7 @@ package kz.uco.tsadv.modules.learning.model;
 import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -55,8 +56,9 @@ public class Course extends AbstractParentEntity {
     @Column(name = "DESCRIPTION")
     protected String description;
 
-    @Column(name = "LOGO")
-    protected byte[] logo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LOGO_ID")
+    protected FileDescriptor logo;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "CATEGORY_ID")
@@ -132,6 +134,14 @@ public class Course extends AbstractParentEntity {
 
     @Column(name = "RATING")
     protected BigDecimal rating;
+
+    public void setLogo(FileDescriptor logo) {
+        this.logo = logo;
+    }
+
+    public FileDescriptor getLogo() {
+        return logo;
+    }
 
     public BigDecimal getRating() {
         return rating;
@@ -331,14 +341,6 @@ public class Course extends AbstractParentEntity {
 
     public String getDescription() {
         return description;
-    }
-
-    public void setLogo(byte[] logo) {
-        this.logo = logo;
-    }
-
-    public byte[] getLogo() {
-        return logo;
     }
 
     public void setTargetAudience(String targetAudience) {

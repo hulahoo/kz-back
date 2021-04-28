@@ -12,4 +12,8 @@ public interface IntegrationConfig extends Config {
     @Property("tsadv.integration.off")
     @DefaultBoolean(false)
     boolean getIsIntegrationOff();
+
+    @Property("tsadv.integration.activeDirectory.on")
+    @DefaultBoolean(true)
+    boolean getIsIntegrationActiveDirectory();
 }

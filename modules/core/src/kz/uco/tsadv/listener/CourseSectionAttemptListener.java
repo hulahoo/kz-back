@@ -52,25 +52,30 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         if (courseSectionAttempt.getTest() != null) {
             courseSectionAttempt.setTestResultPercent(testHelper.calculateTestResultPercent(courseSectionAttempt));
         }
-        CourseSection courseSection = entityManager.find(CourseSection.class, courseSectionAttempt.getCourseSection().getId(), "courseSection.course.sections");
+        CourseSection courseSection = entityManager.find(CourseSection.class, courseSectionAttempt.getCourseSection().getId(), "courseSection.edit");
         if (courseSection != null && courseSection.getCourse() != null
                 && courseSection.getCourse().getSections() != null) {
+            courseSection = dataManager.reload(courseSection, "courseSection.edit");
             UUID enrollmentId = courseSectionAttempt.getEnrollment().getId();
             Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.person");
-            if (enrollment != null && learningService.allCourseSectionPassed(courseSection.getCourse().getSections())) {
-                boolean homework = true;
-                boolean feedbackQuestion = true;
-                List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
-                if (!courseFeedbackTemplateList.isEmpty()) {
-                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
-                }
-                List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
-                if (!homeworkList.isEmpty()) {
-                    homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
-                }
-                if (homework && feedbackQuestion) {
-                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
-                    transactionalDataManager.save(enrollment);
+            if (enrollment != null) {
+                enrollment = dataManager.reload(enrollment, "enrollment.person");
+                if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
+                        enrollment)) {
+                    boolean homework = true;
+                    boolean feedbackQuestion = true;
+                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+                    if (!courseFeedbackTemplateList.isEmpty()) {
+                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+                    }
+                    List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
+                    if (!homeworkList.isEmpty()) {
+                        homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
+                    }
+                    if (homework && feedbackQuestion) {
+                        enrollment.setStatus(EnrollmentStatus.COMPLETED);
+                        transactionalDataManager.save(enrollment);
+                    }
                 }
             }
         }
@@ -94,17 +99,31 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         ) {
             courseSectionAttempt.setTestResultPercent(testHelper.calculateTestResultPercent(courseSectionAttempt));
         }
-        CourseSection courseSection = entityManager.find(CourseSection.class, courseSectionAttempt.getCourseSection().getId(), "courseSection.course.sections");
+        CourseSection courseSection = entityManager.find(CourseSection.class, courseSectionAttempt.getCourseSection().getId(), "courseSection.edit");
         if (courseSection != null && courseSection.getCourse() != null
                 && courseSection.getCourse().getSections() != null) {
-            Enrollment enrollment = entityManager.find(Enrollment.class, courseSectionAttempt.getEnrollment().getId(), "enrollment.person");
-            if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections())
-                    && learningService.allHomeworkPassed(getHomeworkForCourse(courseSection.getCourse()),
-                    enrollment != null
-                            ? enrollment.getPersonGroup()
-                            : null)) {
-                enrollment.setStatus(EnrollmentStatus.COMPLETED);
-                transactionalDataManager.save(enrollment);
+            courseSection = dataManager.reload(courseSection, "courseSection.edit");
+            UUID enrollmentId = courseSectionAttempt.getEnrollment().getId();
+            Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.person");
+            if (enrollment != null) {
+                enrollment = dataManager.reload(enrollment, "enrollment.person");
+                if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
+                        enrollment)) {
+                    boolean homework = true;
+                    boolean feedbackQuestion = true;
+                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+                    if (!courseFeedbackTemplateList.isEmpty()) {
+                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+                    }
+                    List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
+                    if (!homeworkList.isEmpty()) {
+                        homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
+                    }
+                    if (homework && feedbackQuestion) {
+                        enrollment.setStatus(EnrollmentStatus.COMPLETED);
+                        transactionalDataManager.save(enrollment);
+                    }
+                }
             }
         }
     }

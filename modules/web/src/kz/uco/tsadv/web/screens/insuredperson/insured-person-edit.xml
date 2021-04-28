@@ -66,19 +66,6 @@
                 <query><![CDATA[select e from tsadv$DicRelationshipType e]]></query>
             </loader>
         </collection>
-        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
-            <loader id="addressDl">
-                <query><![CDATA[select e from tsadv$Address e]]>
-                    <condition>
-                        <and>
-                            <c:jpql>
-                                <c:where>current_date between e.startDate and e.endDate</c:where>
-                            </c:jpql>
-                        </and>
-                    </condition>
-                </query>
-            </loader>
-        </collection>
         <collection id="addressTypeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType"
                     view="_local">
             <loader id="addressTypeDl">
@@ -139,7 +126,7 @@
                             <field property="documentNumber" id="documentNumberField"/>
                             <lookupField id="addressTypeTempField" optionsContainer="addressTypeDc" caption="Адрес"/>
                             <lookupField id="addressTypeField" property="addressType"
-                                         optionsContainer="addressDc" captionProperty="addressType.langValue" visible="false"/>
+                                         optionsContainer="addressTypeDc"  visible="false"/>
                             <textArea rows="3" id="addressField" caption=""  required="true" property="address"/>
                             <lookupField id="companyField" property="company"
                                          optionsContainer="companyDc" editable="false" />

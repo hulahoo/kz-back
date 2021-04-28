@@ -96,22 +96,18 @@
                 <scrollBox id="scrollBox"
                            height="100%"
                            spacing="true">
-                    <hbox margin="false,false,true,false">
-                        <label value="mainMsg://Logo"
-                               width="100px"/>
-                        <embedded id="courseImage"
-                                  align="MIDDLE_CENTER"
-                                  height="100px"
-                                  stylename="b-user-image-edit"
-                                  width="100px"/>
-                        <upload id="imageUpload"
-                                accept="*.jpg,*.png"
-                                align="MIDDLE_CENTER"
-                                clearButtonIcon="icons/item-remove.png"
-                                fileSizeLimit="1024000"
-                                showClearButton="true"
-                                uploadButtonIcon="icons/reports-template-upload.png"/>
-                    </hbox>
+                    <groupBox spacing="true" caption="msg://logo" height="270px" width="270px">
+                        <image id="photo"
+                               dataContainer="courseDc"
+                               width="100%"
+                               align="MIDDLE_CENTER"
+                               scaleMode="CONTAIN" property="logo"/>
+                        <hbox align="BOTTOM_CENTER"
+                              spacing="true">
+                            <upload id="photoField" fileStoragePutMode="IMMEDIATE" property="logo"
+                                    dataContainer="courseDc" showFileName="false" showClearButton="true"/>
+                        </hbox>
+                    </groupBox>
                     <form id="fieldGroup"
                           dataContainer="courseDc">
                         <column width="250px">
@@ -407,37 +403,37 @@
                  caption="msg://homework"
                  expand="vbox"
                  margin="true,false,false,false">
-                <vbox id="vbox" height="100%" width="100%" spacing="true" margin="true, false, false, false">
-                    <groupBox id="homeworkGroupBox" expand="homeworkTable" spacing="true" height="100%" width="100%">
-                        <table id="homeworkTable"
-                               dataContainer="homeworkDc"
-                               width="100%">
-                            <actions>
-                                <action id="create"
-                                        type="create"
-                                        caption="mainMsg://table.btn.empty"
-                                        icon="icons/plus-btn.png"/>
-                                <action id="edit"
-                                        type="edit"
-                                        caption="mainMsg://table.btn.empty"/>
-                                <action id="remove"
-                                        type="remove"
-                                        caption="mainMsg://table.btn.empty"/>
-                            </actions>
-                            <columns>
-                                <column id="instructions"/>
-                                <column id="instructionFile"/>
-                            </columns>
-                            <rows/>
-                            <rowsCount/>
-                            <buttonsPanel>
-                                <button action="homeworkTable.create"/>
-                                <button action="homeworkTable.edit"/>
-                                <button action="homeworkTable.remove"/>
-                            </buttonsPanel>
-                        </table>
-                    </groupBox>
-                    <groupBox id="groupBoxStudent" spacing="true" expand="studentHomeworkTable" height="100%">
+                <vbox id="vbox" width="100%" height="100%" expand="groupBoxStudent" spacing="true">
+                    <table id="homeworkTable"
+                           dataContainer="homeworkDc"
+                           width="100%"
+                           height="180px">
+                        <actions>
+                            <action id="create"
+                                    type="create"
+                                    caption="mainMsg://table.btn.empty"
+                                    icon="icons/plus-btn.png"/>
+                            <action id="edit"
+                                    type="edit"
+                                    caption="mainMsg://table.btn.empty"/>
+                            <action id="remove"
+                                    type="remove"
+                                    caption="mainMsg://table.btn.empty"/>
+                        </actions>
+                        <columns>
+                            <column id="instructions"/>
+                            <column id="instructionFile"/>
+                        </columns>
+                        <rows/>
+                        <rowsCount/>
+                        <buttonsPanel>
+                            <button action="homeworkTable.create"/>
+                            <button action="homeworkTable.edit"/>
+                            <button action="homeworkTable.remove"/>
+                        </buttonsPanel>
+                    </table>
+                    <groupBox id="groupBoxStudent" spacing="true" expand="studentHomeworkTable" height="100%"
+                              width="100%">
                         <filter id="filterStudent"
                                 applyTo="studentHomeworkTable"
                                 dataLoader="studentHomeworkDl">

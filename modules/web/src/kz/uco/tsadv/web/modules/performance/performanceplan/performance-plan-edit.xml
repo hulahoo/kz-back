@@ -100,6 +100,7 @@
                         <action id="calculateGZP" caption="msg://calculateGZP" trackSelection="true"/>
                         <action id="exportExcel" caption="msg://exportExcel" trackSelection="true"/>
                         <action id="importExcel" caption="msg://importExcel"/>
+                        <action id="startLetters" caption="msg://startLetters" trackSelection="true"/>
                         <action id="sendLetterHappiness" caption="msg://sendLetterHappiness" trackSelection="true"/>
                     </actions>
                     <columns>
@@ -120,12 +121,15 @@
                         <button id="assignedCreate" action="assignedPerformancePlanTable.create"/>
                         <button id="assignedEdit" action="assignedPerformancePlanTable.edit"/>
                         <button id="assignedRemove" action="assignedPerformancePlanTable.remove"/>
-                        <button id="assignedMass" action="assignedPerformancePlanTable.massGoals"/>
+                        <button id="assignedMass" action="assignedPerformancePlanTable.massGoals"
+                                caption="msg://generalKPIButtonCaption"/>
                         <button id="assignedCalculateGZP" action="assignedPerformancePlanTable.calculateGZP"/>
                         <button id="assignedExportBtn" action="assignedPerformancePlanTable.exportExcel"/>
                         <button id="assignedImportExcel" action="assignedPerformancePlanTable.importExcel"/>
+                        <button id="startLettersBtn" action="assignedPerformancePlanTable.startLetters"/>
                         <button id="assignedSendLetterHappinessBtn"
-                                action="assignedPerformancePlanTable.sendLetterHappiness"/>
+                                action="assignedPerformancePlanTable.sendLetterHappiness"
+                                caption="msg://sendBonusLetterBtnCaption"/>
                     </buttonsPanel>
                 </dataGrid>
             </tab>
@@ -179,7 +183,7 @@
                     </actions>
                     <columns>
                         <column id="company"/>
-                        <column id="groupEfficiencyPercent"/>
+                        <column id="groupEfficiencyPercent" caption="msg://groupPerfomancePercent"/>
                         <column id="companyResult"/>
                         <column id="fullName"/>
                         <column id="jobText"/>

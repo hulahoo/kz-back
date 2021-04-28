@@ -49,12 +49,12 @@
                 <textField id="adjustedBonus" property="adjustedBonus"/>
             </column>
             <column id="column2" width="300px">
-                <lookupField id="stepStageStatus" property="stepStageStatus"/>
+                <lookupField id="stepStageStatus" property="stepStageStatus" caption="msg://stepCaption"/>
                 <lookupField id="status" property="status" editable="false"/>
                 <dateField id="startDate" property="startDate"/>
                 <dateField id="endDate" property="endDate"/>
-                <textField id="result" property="result" enable="false"/>
-                <textField id="gzp" property="gzp"/>
+                <textField id="result" property="result" enable="false" caption="msg://resultPercentCaption"/>
+                <textField id="gzp" property="gzp" caption="msg://annualBaseSalaryCaption"/>
                 <textField id="maxBonus" property="maxBonus"/>
                 <textField id="personalBonus" property="personalBonus"/>
                 <textField id="companyBonus" property="companyBonus"/>
@@ -70,7 +70,7 @@
                 </actions>
                 <columns>
                     <column id="category"/>
-                    <column id="goalString" editable="true" required="true"/>
+                    <column id="goalString" editable="true" required="true" caption="msg://KPITitleCaption"/>
                     <column id="weight" editable="true" required="true">
                         <aggregation type="SUM"/>
                     </column>

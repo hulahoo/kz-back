@@ -4,7 +4,6 @@ import com.haulmont.chile.core.datatypes.impl.EnumClass;
 
 import javax.annotation.Nullable;
 
-
 public enum CardStatusEnum implements EnumClass<String> {
 
     DRAFT("DRAFT", 0),

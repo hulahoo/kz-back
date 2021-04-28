@@ -14,6 +14,7 @@ import kz.uco.tsadv.beans.validation.tdc.enrollment.EnrollmentValidation;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.CourseCertificate;
+import kz.uco.tsadv.modules.learning.model.CoursePersonNote;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
@@ -59,6 +60,20 @@ public class EnrollmentChangedListener {
                     enrollmentValidation.validate(enrollment);
                 }
             }
+        } else if (event.getType().equals(EntityChangedEvent.Type.DELETED)) {
+            Enrollment enrollment = transactionalDataManager
+                    .load(event.getEntityId())
+                    .softDeletion(false)
+                    .view(new View(Enrollment.class).addProperty("course").addProperty("personGroup"))
+                    .one();
+
+            transactionalDataManager.load(CoursePersonNote.class)
+                    .query("select e from tsadv_CoursePersonNote e " +
+                            " where e.course.id = :courseId and e.personGroup.id = :personGroupId  ")
+                    .parameter("courseId", enrollment.getCourse().getId())
+                    .parameter("personGroupId", enrollment.getPersonGroup().getId())
+                    .list()
+                    .forEach(transactionalDataManager::remove);
         }
     }
 
@@ -246,8 +261,8 @@ public class EnrollmentChangedListener {
 
     protected EmailAttachment[] getEmailAttachments(FileDescriptor fileDescriptor, EmailAttachment[] emailAttachments) {
         try {
-            EmailAttachment emailAttachment = new EmailAttachment(fileStorageAPI.loadFile(fileDescriptor), "Сертификат");
-            emailAttachments = (EmailAttachment[]) ArrayUtils.add(emailAttachments, emailAttachment);
+            EmailAttachment emailAttachment = new EmailAttachment(fileStorageAPI.loadFile(fileDescriptor), "Сертификат.pdf");
+            emailAttachments = ArrayUtils.add(emailAttachments, emailAttachment);
         } catch (FileStorageException e) {
             e.printStackTrace();
         }

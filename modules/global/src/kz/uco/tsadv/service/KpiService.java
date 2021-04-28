@@ -1,7 +1,9 @@
 package kz.uco.tsadv.service;
 
+import kz.uco.tsadv.modules.performance.model.Goal;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.model.OrganizationGroupGoalLink;
 import kz.uco.tsadv.pojo.kpi.AssignedPerformancePlanListPojo;
 
 import java.math.BigDecimal;
@@ -21,4 +23,6 @@ public interface KpiService {
     BigDecimal calculationOfGzpWithAbsences(PersonGroupExt personGroupExt, Date startDate, Date endDate);
 
     List kpiAssignedGoals(UUID appId);
+
+    List<OrganizationGroupGoalLink> getHierarchyGoals(UUID organizationGroupId);
 }

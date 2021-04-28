@@ -10,6 +10,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicRegion;
 import kz.uco.base.entity.dictionary.DicSex;
+import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicMICAttachmentStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicRelationshipType;
@@ -108,8 +109,8 @@ public class InsuredPerson extends StandardEntity {
     private DicRegion region;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ADDRESS_ID")
-    private Address addressType;
+    @JoinColumn(name = "ADDRESS_TYPE_ID")
+    private DicAddressType addressType;
 
     @Column(name = "ADDRESS")
     private String address;
@@ -147,6 +148,14 @@ public class InsuredPerson extends StandardEntity {
     @Column(name = "COMMENT", length = 500)
     private String comment;
 
+    public void setAddressType(DicAddressType addressType) {
+        this.addressType = addressType;
+    }
+
+    public DicAddressType getAddressType() {
+        return addressType;
+    }
+
     public FileDescriptor getStatementFile() {
         return statementFile;
     }
@@ -177,14 +186,6 @@ public class InsuredPerson extends StandardEntity {
 
     public RelativeType getType() {
         return type == null ? null : RelativeType.fromId(type);
-    }
-
-    public void setAddressType(Address addressType) {
-        this.addressType = addressType;
-    }
-
-    public Address getAddressType() {
-        return addressType;
     }
 
     public void setDocumentNumber(String documentNumber) {

@@ -441,12 +441,6 @@
             <item screen="tsadv$DicQuestionnaireQuestionSection.browse"/>
             <item screen="tsadv_DicJobGroup.browse"/>
         </menu>
-        <menu id="pmCompetences">
-            <item id="pmCompetenceGroups"
-                  screen="tsadv$CompetenceGroup.browse"/>
-            <item id="pmScales"
-                  screen="tsadv$Scale.browse"/>
-        </menu>
         <menu id="pmGoals3">
             <item id="pmGoalLibrary"
                   screen="tsadv$GoalLibrary.browse"/>
@@ -456,6 +450,12 @@
                   screen="tsadv$Goal.browse"/>
             <item id="pmAssignedPerformancePlan"
                   screen="tsadv$AssignedPerformancePlan.browse"/>
+        </menu>
+        <menu id="pmCompetences">
+            <item id="pmCompetenceGroups"
+                  screen="tsadv$CompetenceGroup.browse"/>
+            <item id="pmScales"
+                  screen="tsadv$Scale.browse"/>
         </menu>
         <menu id="pmAssessment">
             <item id="pmQuestionnaires"

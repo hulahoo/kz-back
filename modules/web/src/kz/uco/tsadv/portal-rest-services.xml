@@ -90,7 +90,6 @@
             <param name="score" type="java.math.BigDecimal"/>
             <param name="minScore" type="java.math.BigDecimal"/>
             <param name="maxScore" type="java.math.BigDecimal"/>
-            <param name="success" type="java.lang.Boolean"/>
         </method>
         <method name="createScormAttempt">
             <param name="courseSectionId" type="java.util.UUID"/>
@@ -100,6 +99,7 @@
         </method>
         <method name="validateEnroll">
             <param name="courseId"/>
+            <param name="personGroupId"/>
             <param name="locale"/>
         </method>
     </service>
@@ -160,6 +160,9 @@
         <method name="calcTotalAmount">
             <param name="insuredPersonId" type="java.util.UUID"/>
         </method>
+        <method name="commitFromPortal">
+            <param name="insuredPerson" type="kz.uco.tsadv.modules.personal.model.InsuredPerson"/>
+        </method>
     </service>
     <service name="tsadv_EmployeeService">
         <method name="personProfile">
@@ -177,6 +180,9 @@
             <param name="positionGroupId" type="java.util.UUID"/>
             <param name="showAll" type="boolean"/>
             <param name="viewName" type="java.lang.String"/>
+        </method>
+        <method name="personGroupInfo">
+            <param name="userId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">

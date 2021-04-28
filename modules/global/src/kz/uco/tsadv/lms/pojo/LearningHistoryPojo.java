@@ -3,16 +3,26 @@ package kz.uco.tsadv.lms.pojo;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 public class LearningHistoryPojo implements Serializable {
     private Date startDate;
     private Date endDate;
     private String course;
+    private UUID courseId;
     private String trainer;
     private BigDecimal result;
     private String certificate;
     private String enrollmentStatus;
+    private String note;
+
+    public UUID getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(UUID courseId) {
+        this.courseId = courseId;
+    }
 
     public Date getStartDate() {
         return startDate;
@@ -70,8 +80,16 @@ public class LearningHistoryPojo implements Serializable {
         this.enrollmentStatus = enrollmentStatus;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
     public static final class Builder {
-        private LearningHistoryPojo learningHistoryPojo;
+        private final LearningHistoryPojo learningHistoryPojo;
 
         public Builder() {
             learningHistoryPojo = new LearningHistoryPojo();
@@ -96,6 +114,11 @@ public class LearningHistoryPojo implements Serializable {
             return this;
         }
 
+        public Builder courseId(UUID courseId) {
+            learningHistoryPojo.setCourseId(courseId);
+            return this;
+        }
+
         public Builder trainer(String trainer) {
             learningHistoryPojo.setTrainer(trainer);
             return this;
@@ -113,6 +136,11 @@ public class LearningHistoryPojo implements Serializable {
 
         public Builder enrollmentStatus(String enrollmentStatus) {
             learningHistoryPojo.setEnrollmentStatus(enrollmentStatus);
+            return this;
+        }
+
+        public Builder note(String note) {
+            learningHistoryPojo.setNote(note);
             return this;
         }
 

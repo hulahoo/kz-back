@@ -64,6 +64,14 @@ public class ActivityBrowseNew extends AbstractLookup {
     protected GroupsComponent groupsComponent;
 
     @Override
+    public void init(Map<String, Object> params) {
+        super.init(params);
+        if (params != null && params.containsKey("notification")) {
+            defaultTabFromLink = "notificationsTab";
+        }
+    }
+
+    @Override
     public void ready() {
         super.ready();
 
@@ -99,7 +107,7 @@ public class ActivityBrowseNew extends AbstractLookup {
             checkBox.setValue(true);
         }
         checkBox.addValueChangeListener(e -> {
-            if (e.getValue() != null && (Boolean) e.getValue() && !notifications.contains(entity)) {
+            if (e.getValue() != null && e.getValue() && !notifications.contains(entity)) {
                 notifications.add(entity);
                 notifications.forEach(notification -> {
                     if (StatusEnum.active.equals(notification.getStatus())) {
@@ -252,18 +260,20 @@ public class ActivityBrowseNew extends AbstractLookup {
             Entity entity = commonService.getEntity(metadata.getClass(activity.getType().getWindowProperty().getEntityName()).getJavaClass(),
                     activity.getReferenceId(), activity.getType().getWindowProperty().getViewName());
 
+            Map<String, Object> windowParam = new HashMap<>(getWindowParam(activity, entity));
+            windowParam.put("activityId", activityTask.getActivity().getId().toString());
             if (isOpenWindow(activity.getType().getCode().toUpperCase())) {
                 abstractWindow = openWindow(activity.getType().getWindowProperty().getScreenName(),
                         WindowManager.OpenType.NEW_TAB,
-                        getWindowParam(activity, entity));
+                        windowParam);
             } else {
                 abstractWindow = openEditor(activity.getType().getWindowProperty().getScreenName(),
-                        entity, WindowManager.OpenType.NEW_TAB, getWindowParam(activity, entity));
+                        entity, WindowManager.OpenType.NEW_TAB, windowParam);
             }
 
-            if (activity.getNotificationHeader() != null || activity.getNotificationBody() != null) {
-                groupsComponent.addActivityBodyToWindow(abstractWindow, activity);
-            }
+//            if (activity.getNotificationHeader() != null || activity.getNotificationBody() != null) {
+//                groupsComponent.addActivityBodyToWindow(abstractWindow, activity);
+//            }
 
             abstractWindow.addCloseListener(closeId -> activityTasksDs.refresh());
         }

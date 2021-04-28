@@ -7152,7 +7152,7 @@ create table TSADV_INSURED_PERSON (
     DOCUMENT_TYPE_ID uuid not null,
     DOCUMENT_NUMBER varchar(255) not null,
     REGION_ID uuid not null,
-    ADDRESS_ID uuid,
+    ADDRESS_TYPE_ID uuid,
     ADDRESS varchar(255),
     INSURANCE_PROGRAM varchar(500) not null,
     STATEMENT_FILE_ID uuid,
@@ -7271,7 +7271,7 @@ create table TSADV_COURSE_REVIEW (
     COURSE_ID uuid not null,
     PERSON_GROUP_ID uuid not null,
     RATE double precision,
-    TEXT varchar(500) not null,
+    TEXT varchar(2000) not null,
     --
     primary key (ID)
 )^
@@ -8837,6 +8837,8 @@ create table TSADV_BOOK (
     KF8_ID uuid,
     PDF_ID uuid,
     DJVU_ID uuid,
+    NUMBER_OF_PAGE integer,
+    VIEWED integer,
     --
     primary key (ID)
 )^
@@ -13973,7 +13975,7 @@ create table TSADV_COURSE (
     IS_ISSUED_CERTIFICATE boolean not null,
     PARTY_ID uuid,
     DESCRIPTION text,
-    LOGO bytea,
+    LOGO_ID uuid,
     CATEGORY_ID uuid not null,
     TARGET_AUDIENCE varchar(1000),
     ACTIVE_FLAG boolean,
@@ -14388,6 +14390,7 @@ create table TSADV_LEARNING_OBJECT (
     FILE_ID uuid,
     HTML text,
     TEXT text,
+    PASSING_SCORE decimal(19, 2),
     --
     primary key (ID)
 )^
@@ -16280,6 +16283,9 @@ create table TSADV_ABSENCE (
     AGREE boolean,
     TRANSFER_PERIOD_START timestamp,
     TRANSFER_PERIOD_END timestamp,
+    TIME_START time,
+    TIME_END time,
+    ADDITIONAL_TIME integer,
     --
     primary key (ID)
 )^
@@ -16627,6 +16633,9 @@ create table TSADV_ABSENCE_REQUEST (
     ACQUAINTED boolean,
     AGREE boolean,
     VACATION_SCHEDULE_ID uuid,
+    START_TIME time,
+    END_TIME time,
+    ADDITIONAL_TIME integer,
     --
     primary key (ID)
 )^
@@ -17883,3 +17892,20 @@ create table TSADV_SCORM_SUSPEND_DATA (
     primary key (ID)
 )^
 -- end TSADV_SCORM_SUSPEND_DATA
+-- begin TSADV_BOOK_VIEW
+create table TSADV_BOOK_VIEW (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PERSON_GROUP_ID uuid not null,
+    BOOK_ID uuid not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_BOOK_VIEW

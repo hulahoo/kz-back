@@ -32,7 +32,7 @@ public class CourseFeedbackPersonAnswerBrowse extends AbstractLookup {
 
         if (personAnswer != null) {
             openWindow("tsadv$CourseFeedbackPersonAnswerDetailSimple.browse",
-                    WindowManager.OpenType.DIALOG,
+                    WindowManager.OpenType.THIS_TAB,
                     ParamsMap.of(CourseFeedbackPersonAnswerDetailSimple.COURSE_FEEDBACK_PERSON_ANSWER_ID, personAnswer.getId()));
         } else {
             showNotification("CourseFeedbackPersonAnswer not selected!", NotificationType.TRAY);

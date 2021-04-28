@@ -5,6 +5,7 @@ import com.haulmont.addon.bproc.data.OutcomesContainer;
 import com.haulmont.addon.bproc.entity.HistoricVariableInstanceData;
 import com.haulmont.addon.bproc.entity.ProcessDefinitionData;
 import com.haulmont.addon.bproc.entity.ProcessInstanceData;
+import com.haulmont.addon.bproc.entity.TaskData;
 import com.haulmont.addon.bproc.form.FormData;
 import com.haulmont.addon.bproc.service.BprocFormService;
 import com.haulmont.addon.bproc.service.BprocHistoricService;
@@ -330,6 +331,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         User sessionUser = userSessionSource.getUserSession().getUser();
 
+        notificationTemplateCode = changeNotificationTemplateCode(notificationTemplateCode, entity);
+
         Map<String, Object> notificationParams = getNotificationParams(notificationTemplateCode, entity);
 
         if (!PersistenceHelper.isLoadedWithView(user, "user-fioWithLogin"))
@@ -340,6 +343,9 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         notificationParams.put("requestLinkRu", "");
         notificationParams.put("requestLinkEn", "");
+
+        notificationParams.put("requestFrontLinkRu", "");
+        notificationParams.put("requestFrontLinkEn", "");
         Activity activity = activityService.createActivity(
                 user,
                 sessionUser,
@@ -364,6 +370,31 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         notificationParams.put("requestFrontLinkEn", String.format(requestFrontLink, "Open request " + entity.getRequestNumber()));
 
         notificationSenderAPIService.sendParametrizedNotification(notificationTemplateCode, (TsadvUser) user, notificationParams);
+    }
+
+    private <T extends AbstractBprocRequest> String changeNotificationTemplateCode(String notificationTemplateCode, T entity) {
+        if (entity instanceof AssignedPerformancePlan && notificationTemplateCode.equals("forChangeTemplateCode")) {
+            ProcessInstanceData processInstanceData = getProcessInstanceData(entity.getProcessInstanceBusinessKey(), entity.getProcessDefinitionKey());
+            List<ExtTaskData> processTasks = getProcessTasks(processInstanceData);
+            String outcome = processTasks.stream()
+                    .filter(taskData -> taskData.getEndTime() != null)
+                    .max(Comparator.comparing(TaskData::getEndTime))
+                    .map(ExtTaskData::getOutcome)
+                    .orElse(null);
+            ExtTaskData extTaskData = processTasks.stream()
+                    .filter(taskData -> taskData.getEndTime() == null)
+                    .findAny()
+                    .orElse(null);
+            String taskId = extTaskData != null ? extTaskData.getTaskDefinitionKey() : "";
+            if (AbstractBprocRequest.OUTCOME_REVISION.equals(outcome)) {
+                notificationTemplateCode = "bpm.kpi.initiator.revision2";
+            } else if (taskId.isEmpty() || taskId.equals("line_manager_task")) {
+                notificationTemplateCode = "bpm.kpi.approver";
+            } else {
+                notificationTemplateCode = "bpm.kpi.approver.super";
+            }
+        }
+        return notificationTemplateCode;
     }
 
     protected <T extends AbstractBprocRequest> String getRequestLink(String appUrl, T entity, Activity activity, boolean isWebUrl) {
@@ -841,7 +872,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         request = entityManager.find(AssignedPerformancePlan.class, request.getId(), new View(AssignedPerformancePlan.class).addProperty("status"));
         Assert.notNull(request, "bprocRequest not found!");
         request.setStatus(commonService.getEntity(DicRequestStatus.class, "APPROVED"));
-        request.setNextStep();
+//        request.setNextStep();
         entityManager.merge(request);
     }
 }

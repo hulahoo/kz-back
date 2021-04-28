@@ -6,6 +6,8 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.TransactionalDataManager;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.Group;
 import kz.uco.base.entity.dictionary.DicCompany;
@@ -14,6 +16,7 @@ import kz.uco.base.entity.dictionary.*;
 import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.BaseResult;
+import kz.uco.tsadv.config.IntegrationConfig;
 import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.entity.tb.PersonQualification;
 import kz.uco.tsadv.entity.tb.PositionHarmfulCondition;
@@ -52,6 +55,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     @Inject
     protected DataManager dataManager;
     @Inject
+    protected TransactionalDataManager transactionalDataManager;
+    @Inject
     protected RestIntegrationLogService restIntegrationLogService;
     @Inject
     protected Metadata metadata;
@@ -59,6 +64,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected PositionStructureConfig positionStructureConfig;
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    @Inject
+    protected IntegrationConfig integrationConfig;
 
 
     @Transactional
@@ -723,9 +730,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (personJson.getSexId() != null && !personJson.getSexId().isEmpty()) {
                     sex = dataManager.load(DicSex.class)
                             .query("select e from base$DicSex e " +
-                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("legacyId", personJson.getSexId(),
-                                    "companyCode", personJson.getCompanyCode()))
+                                    " where e.legacyId = :legacyId")
+                            .setParameters(ParamsMap.of("legacyId", personJson.getSexId()))
                             .view(View.BASE).list().stream().findFirst().orElse(null);
                 }
                 personExt.setSex(sex);
@@ -766,10 +772,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         if (personData.getPersons() != null) {
             personJsons = personData.getPersons();
         }
-        try (Transaction tx = persistence.getTransaction()) {
-            EntityManager entityManager = persistence.getEntityManager();
-            ArrayList<PersonGroupExt> personGroupExts = new ArrayList<>();
+        try (Transaction transaction = transactionalDataManager.transactions().create()) {
             for (PersonJson personJson : personJsons) {
+                List<Entity> removeList = new ArrayList<>();
+                List<Entity> removeGroupList = new ArrayList<>();
+
                 if (personJson.getLegacyId() == null || personJson.getLegacyId().isEmpty()) {
                     return prepareError(result, methodName, personData,
                             "no legacyId ");
@@ -784,30 +791,52 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .setParameters(ParamsMap.of("legacyId", personJson.getLegacyId(),
                                 "company", personJson.getCompanyCode()))
                         .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
-
                 if (personGroupExt == null) {
                     return prepareError(result, methodName, personData,
-                            "no position with legacyId and companyCode : "
-                                    + personJson.getLegacyId() + " , " + personJson.getCompanyCode());
-                }
-                if (!personGroupExts.stream().filter(personGroupExt1 ->
-                        personGroupExt1.getId().equals(personGroupExt.getId())).findAny().isPresent()) {
-                    personGroupExts.add(personGroupExt);
+                            "not found person");
                 }
 
-            }
-            for (PersonGroupExt personGroupExt : personGroupExts) {
                 for (PersonExt personExt : personGroupExt.getList()) {
-                    entityManager.remove(personExt);
+                    if (removeList.stream().noneMatch(entity ->
+                            entity.getId().equals(personExt.getId()))) {
+                        removeList.add(personExt);
+                    }
                 }
-                entityManager.remove(personGroupExt);
+                List<AssignmentExt> assignmentExtList = dataManager.load(AssignmentExt.class)
+                        .query("select e from base$AssignmentExt e where e.personGroup.id = :personGroupId")
+                        .setParameters(ParamsMap.of("personGroupId", personGroupExt.getId()))
+                        .view("assignmentExt-for-integration").list();
+                for (AssignmentExt assignment : assignmentExtList) {
+                    if (removeList.stream().noneMatch(entity ->
+                            entity.getId().equals(assignment.getId()))) {
+                        removeList.add(assignment);
+                        if (removeList.stream().noneMatch(entity ->
+                                entity.getId().equals(assignment.getGroup().getId()))) {
+                            removeGroupList.add(assignment.getGroup());
+                            for (AssignmentExt assignmentExt : assignment.getGroup().getList()) {
+                                if (removeList.stream().noneMatch(entity ->
+                                        entity.getId().equals(assignmentExt.getId()))) {
+                                    removeList.add(assignmentExt);
+                                }
+                            }
+                        }
+                    }
+                }
+                for (Entity removeInstance : removeList) {
+                    transactionalDataManager.remove(removeInstance);
+                }
+                for (Entity removeInstance : removeGroupList) {
+                    transactionalDataManager.remove(removeInstance);
+                }
+                transactionalDataManager.remove(personGroupExt);
             }
-            tx.commit();
+            transaction.commit();
         } catch (Exception e) {
             return prepareError(result, methodName, personData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
+
         return prepareSuccess(result, methodName, personData);
     }
 
@@ -879,7 +908,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 }
                 if (hierarchyElementExt == null) {
                     hierarchyElementExt = metadata.create(HierarchyElementExt.class);
+                    hierarchyElementExt.setGroup(organizationHierarchyElementGroup);
                     hierarchyElementExt.setLegacyId(organizationHierarchyElementJson.getLegacyId());
+                    organizationHierarchyElementGroup.getList().add(hierarchyElementExt);
                     commitContext.addInstanceToCommit(organizationHierarchyElementGroup);
                 }
                 OrganizationGroupExt subordinateOrganizationGroupExt = null;
@@ -938,6 +969,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 hierarchyElementExt.setHierarchy(hierarchy);
                 hierarchyElementExt.setWriteHistory(false);
                 hierarchyElementExt.setElementType(ElementType.ORGANIZATION);
+                if (organizationHierarchyElementGroup.getLegacyId() == null) {
+                    organizationHierarchyElementGroup.setLegacyId(organizationHierarchyElementJson.getLegacyId());
+                    commitContext.addInstanceToCommit(organizationHierarchyElementGroup);
+                }
                 commitContext.addInstanceToCommit(hierarchyElementExt);
             }
             for (HierarchyElementJson organizationHierarchyElementJson : organizationHierarchyElementJsons) {
@@ -1110,7 +1145,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 }
                 if (hierarchyElementExt == null) {
                     hierarchyElementExt = metadata.create(HierarchyElementExt.class);
+                    hierarchyElementExt.setGroup(positionHierarchyElementGroup);
                     hierarchyElementExt.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                    positionHierarchyElementGroup.getList().add(hierarchyElementExt);
                     commitContext.addInstanceToCommit(positionHierarchyElementGroup);
                 }
                 PositionGroupExt subordinatePositionGroupExt = null;
@@ -1169,6 +1206,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 hierarchyElementExt.setHierarchy(hierarchy);
                 hierarchyElementExt.setWriteHistory(false);
                 hierarchyElementExt.setElementType(ElementType.POSITION);
+                if (positionHierarchyElementGroup.getLegacyId() == null) {
+                    positionHierarchyElementGroup.setLegacyId(positionHierarchyElementJson.getLegacyId());
+                    commitContext.addInstanceToCommit(positionHierarchyElementGroup);
+                }
                 commitContext.addInstanceToCommit(hierarchyElementExt);
             }
             for (HierarchyElementJson positionHierarchyElementJson : positionHierarchyElementJsons) {
@@ -4735,7 +4776,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 if (tsadvUser != null) {
 
-                    if (!tsadvUser.getEmail().equals(userJson.getEmail())) {
+                    if (integrationConfig.getIsIntegrationActiveDirectory() && !tsadvUser.getEmail().equals(userJson.getEmail())) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
 
@@ -4743,89 +4784,95 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     List<String> codes = new ArrayList<>();
 
-                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
-                        codes.add("VCM");
-                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
-                        codes.add("KBL");
-                        codes.add("KAL");
-                    } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
-                        codes.add("KMM");
+                    if (userJson.getEmployeeNumber().length() > 5) {
+                        if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                            codes.add("VCM");
+                        } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                            codes.add("KBL");
+                            codes.add("KAL");
+                        } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
+                            codes.add("KMM");
+                        }
+
+                        List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " join e.list l " +
+                                        " where current_date between l.startDate and l.endDate " +
+                                        " and l.employeeNumber = :empNumber " +
+                                        " and e.company.code in :codes")
+                                .parameter("empNumber", empNumber)
+                                .parameter("codes", codes)
+                                .view("personGroupExt-for-integration-rest")
+                                .list();
+
+                        if (personGroupExtList.size() == 1) {
+                            tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                        } else {
+                            continue;
+                        }
+
+                        commitContext.addInstanceToCommit(tsadvUser);
+                        completedUsers.add(userJson);
                     }
-
-                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
-                            .query("select e from base$PersonGroupExt e " +
-                                    " join e.list l " +
-                                    " where current_date between l.startDate and l.endDate " +
-                                    " and l.employeeNumber = :empNumber " +
-                                    " and e.company.code in :codes")
-                            .parameter("empNumber", empNumber)
-                            .parameter("codes", codes)
-                            .view("personGroupExt-for-integration-rest")
-                            .list();
-
-                    if (personGroupExtList.size() == 1) {
-                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
-                    } else {
-                        continue;
-                    }
-
-                    commitContext.addInstanceToCommit(tsadvUser);
-                    completedUsers.add(userJson);
-
                 } else {
 
                     tsadvUser = dataManager.create(TsadvUser.class);
                     tsadvUser.setLogin(userJson.getLogin());
-                    tsadvUser.setEmail(userJson.getEmail());
+                    if (integrationConfig.getIsIntegrationActiveDirectory()) {
+                        tsadvUser.setEmail(userJson.getEmail());
+                    }
 
                     String empNumber = "";
 
                     List<String> codes = new ArrayList<>();
 
-                    if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
-                        codes.add("VCM");
-                    } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
-                        codes.add("KBL");
-                        codes.add("KAL");
-                    } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
-                        empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
-                        codes.add("KMM");
-                    }
-
-                    List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
-                            .query("select e from base$PersonGroupExt e " +
-                                    " join e.list l " +
-                                    " where current_date between l.startDate and l.endDate " +
-                                    " and l.employeeNumber = :empNumber " +
-                                    " and e.company.code in :codes")
-                            .parameter("empNumber", empNumber)
-                            .parameter("codes", codes)
-                            .view("personGroupExt-for-integration-rest")
-                            .list();
-
-                    if (personGroupExtList.size() == 1) {
-                        tsadvUser.setPersonGroup(personGroupExtList.get(0));
-                        Group group = dataManager.load(Group.class)
-                                .query("select e from sec$Group e " +
-                                        " where e.name = :name ")
-                                .parameter("name", tsadvUser.getPersonGroup().getCompany() != null
-                                        ? tsadvUser.getPersonGroup().getCompany().getCode()
-                                        : null)
-                                .list().stream().findFirst().orElse(null);
-                        if (group != null) {
-                            tsadvUser.setGroup(group);
+                    if (userJson.getEmployeeNumber().length() > 5) {
+                        if ("1".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                            codes.add("VCM");
+                        } else if ("2".equals(userJson.getEmployeeNumber().substring(0, 1))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(1));
+                            codes.add("KBL");
+                            codes.add("KAL");
+                        } else if ("KMM-".equals(userJson.getEmployeeNumber().substring(0, 4))) {
+                            empNumber = getEmpNumber(userJson.getEmployeeNumber().substring(4));
+                            codes.add("KMM");
                         }
-                    } else {
-                        continue;
-                    }
 
-                    commitContext.addInstanceToCommit(tsadvUser);
-                    completedUsers.add(userJson);
+                        List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " join e.list l " +
+                                        " where current_date between l.startDate and l.endDate " +
+                                        " and l.employeeNumber = :empNumber " +
+                                        " and e.company.code in :codes")
+                                .parameter("empNumber", empNumber)
+                                .parameter("codes", codes)
+                                .view("personGroupExt-for-integration-rest")
+                                .list();
+
+                        if (personGroupExtList.size() == 1) {
+                            tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                            Group group = dataManager.load(Group.class)
+                                    .query("select e from sec$Group e " +
+                                            " where e.name = :name ")
+                                    .parameter("name", tsadvUser.getPersonGroup().getCompany() != null
+                                            ? tsadvUser.getPersonGroup().getCompany().getCode()
+                                            : null)
+                                    .list().stream().findFirst().orElse(null);
+                            if (group != null) {
+                                tsadvUser.setGroup(group);
+                            }
+                        } else {
+                            continue;
+                        }
+
+                        commitContext.addInstanceToCommit(tsadvUser);
+                        completedUsers.add(userJson);
+
+                    }
                 }
             }
             completedUserData.setUsers(completedUsers);
