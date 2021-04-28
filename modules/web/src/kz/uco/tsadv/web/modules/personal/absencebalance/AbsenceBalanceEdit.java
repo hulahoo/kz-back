@@ -59,7 +59,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
         super.initNewItem(item);
         item.setBalanceDays(0);
         final PersonExt person = item.getPersonGroup().getPerson();
-        if (item.getAdditionalBalanceDays() == 0) {
+        if (item.getAdditionalBalanceDays() != null && item.getAdditionalBalanceDays() == 0) {
             item.setAdditionalBalanceDays(0);
         }
         if (person != null) {
