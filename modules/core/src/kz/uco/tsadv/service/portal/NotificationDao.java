@@ -5,7 +5,6 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.app.Authenticated;
-import kz.uco.base.entity.core.notification.SendingNotification;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.StatusEnum;
 import org.springframework.stereotype.Component;
@@ -23,8 +22,8 @@ public class NotificationDao {
 
     public static final String NOTIFICATION_CODE = "NOTIFICATION";
 
-    List<SendingNotification> loadNotifications(UUID userId, int firstResult, int limit) {
-        return getSendingNotificationLoadContext(userId, firstResult, limit);
+    List<Activity> loadNotifications(UUID userId, int firstResult, int limit) {
+        return getActiveActivityList(userId, firstResult, limit, true);
     }
 
     public List<Activity> loadTasks(UUID userId, int firstResult, int limit) {
@@ -42,22 +41,6 @@ public class NotificationDao {
                         "code", NOTIFICATION_CODE, "status",
                         StatusEnum.active.getId()))
                 .view("portal-activity")
-                .firstResult(firstResult)
-                .maxResults(limit)
-                .list();
-    }
-
-    protected List<SendingNotification> getSendingNotificationLoadContext(UUID personGroupId, int firstResult, int limit) {
-        return dataManager.load(SendingNotification.class).query(
-                " select e " +
-                        "  from base$SendingNotification e " +
-                        " where e.readed = :status " +
-                        "   and e.user.id = :uId " +
-                        "   and e.sendDate is null " +
-                        " order by e.createTs desc")
-                .parameter("status", Boolean.FALSE)
-                .parameter("uId", personGroupId)
-                .view("sendingNotification.view")
                 .firstResult(firstResult)
                 .maxResults(limit)
                 .list();
