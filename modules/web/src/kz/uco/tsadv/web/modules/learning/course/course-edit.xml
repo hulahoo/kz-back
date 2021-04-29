@@ -279,7 +279,7 @@
             <tab id="description"
                  caption="msg://Course.description"
                  margin="true,true,true,false">
-                <textArea id="richTextArea"
+                <richTextArea id="richTextArea"
                               dataContainer="courseDc"
                               height="100%"
                               property="description"
