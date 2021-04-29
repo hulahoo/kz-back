@@ -1210,10 +1210,11 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                     if (minAbsenceBalance == null || maxAbsenceBalance == null) {
                         return finalAbsenceBalance;
                     }
-                    finalAbsenceBalance = (double) datesService.getDayOfMonth(absenceDate)
+                    finalAbsenceBalance = ((double) datesService.getDayOfMonth(absenceDate)
                             * ((maxAbsenceBalance.getDaysLeft() + maxAbsenceBalance.getExtraDaysLeft() + maxAbsenceBalance.getEcologicalDaysLeft())
                             - (minAbsenceBalance.getDaysLeft() + minAbsenceBalance.getExtraDaysLeft() + minAbsenceBalance.getEcologicalDaysLeft()))
-                            / datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom());
+                            / datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom()))
+                            + minAbsenceBalance.getDaysLeft() + minAbsenceBalance.getExtraDaysLeft() + minAbsenceBalance.getEcologicalDaysLeft();
                 }
             }
             return finalAbsenceBalance;
@@ -1263,10 +1264,11 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                     if (minAbsenceBalance == null || maxAbsenceBalance == null) {
                         return finalEnvironmentalDays;
                     }
-                    finalEnvironmentalDays = (double) datesService.getDayOfMonth(absenceDate)
+                    finalEnvironmentalDays = ((double) datesService.getDayOfMonth(absenceDate)
                             * (maxAbsenceBalance.getEcologicalDaysLeft()
                             - minAbsenceBalance.getEcologicalDaysLeft())
-                            / datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom());
+                            / datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom()))
+                            + minAbsenceBalance.getEcologicalDaysLeft();
                 }
             }
             return finalEnvironmentalDays;
