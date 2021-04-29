@@ -23781,4 +23781,7 @@
     <view entity="tsadv$Course" name="course.with.logo" extends="_local">
         <property name="logo" view="_minimal"/>
     </view>
+    <view entity="tsadv_PersonException" name="personException.edit" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+    </view>
 </views>
