@@ -39,6 +39,16 @@ public class PersonProfileDto implements Serializable {
 
     private String phone;
 
+    private String firstLastName;
+
+    public String getFirstLastName() {
+        return firstLastName;
+    }
+
+    public void setFirstLastName(String firstLastName) {
+        this.firstLastName = firstLastName;
+    }
+
     public UUID getId() {
         return id;
     }

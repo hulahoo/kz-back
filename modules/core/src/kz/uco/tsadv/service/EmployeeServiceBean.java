@@ -153,6 +153,8 @@ public class EmployeeServiceBean implements EmployeeService {
 
         //set data from person
         dto.setId(person.getId());
+        dto.setFirstLastName(person.getFirstLastName());
+        dto.setId(person.getId());
         dto.setFullName(person.getFioWithEmployeeNumber());
         dto.setBirthDate(person.getDateOfBirth());
         dto.setHireDate(person.getHireDate());
