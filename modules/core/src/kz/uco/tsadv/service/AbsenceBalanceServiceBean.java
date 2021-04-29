@@ -1170,6 +1170,18 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
     }
 
     @Override
+    public double getAbsenceBalance(UUID absenceTypeId, UUID personGroupId, Date absenceDate) {
+        DicAbsenceType type = dataManager.load(DicAbsenceType.class)
+                .id(absenceTypeId)
+                .view(View.LOCAL)
+                .one();
+
+        return type.getIsEcologicalAbsence()
+                ? this.getEnvironmentalDays(personGroupId, absenceDate)
+                : this.getAbsenceBalance(personGroupId, absenceDate);
+    }
+
+    @Override
     public double getAbsenceBalance(UUID personGroupId, Date absenceDate) {
         double finalAbsenceBalance = 0.0;
         try {
