@@ -6,6 +6,7 @@ import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.GlobalConfig;
+import com.haulmont.cuba.core.global.View;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -18,6 +19,10 @@ import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.LearningService;
+import kz.uco.uactivity.entity.ActivityType;
+import kz.uco.uactivity.entity.StatusEnum;
+import kz.uco.uactivity.entity.WindowProperty;
+import kz.uco.uactivity.service.ActivityService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -39,6 +44,8 @@ public class StudentHomeworkChangedListener {
     protected LearningService learningService;
     @Inject
     protected TransactionalDataManager transactionalDataManager;
+    @Inject
+    protected ActivityService activityService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void onTsadv_StudentHomeworkBeforeCommit(EntityChangedEvent<StudentHomework, UUID> event) {
@@ -152,9 +159,26 @@ public class StudentHomeworkChangedListener {
                                 "tsadv_StudentHomework.edit" +
                                 "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
                                 "\" target=\"_blank\">%s " + "</a>";
+                        map.put("trainerFullName", courseTrainer.getTrainer().getEmployee().getFirstLastName());
                         map.put("courseName", studentHomework.getHomework().getCourse().getName());
-                        map.put("studentFullName", studentHomework.getPersonGroup().getFullName());
-                        map.put("requestLink", String.format(requestLink, "ссылке"));
+                        map.put("studentFullName", studentHomework.getPersonGroup().getFirstLastName());
+                        map.put("requestLinkRu", String.format(requestLink, "ссылке"));
+                        map.put("requestLinkEn", String.format(requestLink, "link"));
+                        map.put("requestLinkKz", String.format(requestLink, "сілтеме"));
+
+                        activityService.createActivity(
+                                tsadvUser,
+                                tsadvUser,
+                                getActivityType(),
+                                StatusEnum.active,
+                                "description",
+                                null,
+                                new Date(),
+                                null,
+                                null,
+                                courseTrainer.getId(),
+                                notificationCode,
+                                map);
                         notificationSenderAPIService.sendParametrizedNotification(notificationCode,
                                 tsadvUser, map);
                     }
@@ -167,16 +191,42 @@ public class StudentHomeworkChangedListener {
                 Map<String, Object> map = new HashMap<>();
                 map.put("courseName", studentHomework.getHomework().getCourse().getName());
                 map.put("studentFullName", studentHomework.getPersonGroup().getFullName());
-                map.put("trainerFullName", studentHomework.getTrainer() != null
-                        ? studentHomework.getTrainer().getFullName()
-                        : "");
-                map.put("isDone", studentHomework.getIsDone() ? "Сдан" : "Не сдан");
-                map.put("trainerComment", studentHomework.getTrainerComment());
+                String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
+                        "tsadv_StudentHomework.edit" +
+                        "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
+                        "\" target=\"_blank\">%s " + "</a>";
+                map.put("requestLinkRu", String.format(requestLink, "ссылке"));
+                map.put("requestLinkEn", String.format(requestLink, "link"));
+                map.put("requestLinkKz", String.format(requestLink, "сілтеме"));
+
+                activityService.createActivity(
+                        tsadvUser,
+                        tsadvUser,
+                        getActivityType(),
+                        StatusEnum.active,
+                        "description",
+                        null,
+                        new Date(),
+                        null,
+                        null,
+                        studentHomework.getId(),
+                        notificationCode,
+                        map);
 
                 notificationSenderAPIService.sendParametrizedNotification(notificationCode,
                         tsadvUser, map);
             }
         }
+    }
+
+    protected ActivityType getActivityType() {
+        return dataManager.load(ActivityType.class)
+                .query("select e from uactivity$ActivityType e where e.code = 'NOTIFICATION'")
+                .view(new View(ActivityType.class)
+                        .addProperty("code")
+                        .addProperty("windowProperty",
+                                new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
+                .one();
     }
 
     private TsadvUser getTsadvUser(PersonGroupExt personGroupExt) {

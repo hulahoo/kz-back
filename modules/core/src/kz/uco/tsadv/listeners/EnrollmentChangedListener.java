@@ -11,6 +11,7 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.beans.validation.tdc.enrollment.EnrollmentValidation;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.CourseCertificate;
@@ -19,16 +20,17 @@ import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LmsService;
+import kz.uco.uactivity.entity.ActivityType;
+import kz.uco.uactivity.entity.StatusEnum;
+import kz.uco.uactivity.entity.WindowProperty;
+import kz.uco.uactivity.service.ActivityService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Component("tsadv_EnrollmentChangedListener")
 public class EnrollmentChangedListener {
@@ -44,6 +46,12 @@ public class EnrollmentChangedListener {
     protected ReportService reportService;
     @Inject
     protected Metadata metadata;
+    @Inject
+    protected GlobalConfig globalConfig;
+    @Inject
+    protected ActivityService activityService;
+    @Inject
+    protected FrontConfig frontConfig;
     @Inject
     private TransactionalDataManager transactionalDataManager;
     @Inject
@@ -99,8 +107,33 @@ public class EnrollmentChangedListener {
                             .list().stream().findFirst().orElse(null);
                     if (tsadvUser != null) {
                         Map<String, Object> map = new HashMap<>();
+                        String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                + "/course/"
+                                + "\" target=\"_blank\">%s " + "</a>";
+                        String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                + "/my-course/"
+                                + "\" target=\"_blank\">%s " + "</a>";
+                        map.put("linkRu", String.format(courseLink, enrollment.getCourse().getName()));
+                        map.put("linkEn", String.format(courseLink, enrollment.getCourse().getName()));
+                        map.put("linkKz", String.format(courseLink, enrollment.getCourse().getName()));
+                        map.put("myLinkRu", String.format(myCourseLink, "Мои курсы"));
+                        map.put("myLinkEn", String.format(myCourseLink, "My training course"));
+                        map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
+                        map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
                         map.put("courseName", enrollment.getCourse().getName());
-                        map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                        activityService.createActivity(
+                                tsadvUser,
+                                tsadvUser,
+                                getActivityType(),
+                                StatusEnum.active,
+                                "description",
+                                null,
+                                new Date(),
+                                null,
+                                null,
+                                enrollment.getId(),
+                                "tdc.student.enrollmentApproved",
+                                map);
                         notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
                                 tsadvUser, map);
                     }
@@ -114,7 +147,14 @@ public class EnrollmentChangedListener {
                             .parameter("personGroup", enrollment.getPersonGroup())
                             .list().stream().findFirst().orElse(null);
                     Map<String, Object> map = new HashMap<>();
+                    String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                            + "/learning-history/"
+                            + "\" target=\"_blank\">%s " + "</a>";
+                    map.put("linkRu", String.format(requestLink, "ссылке"));
+                    map.put("linkEn", String.format(requestLink, "link"));
+                    map.put("linkKz", String.format(requestLink, "сілтеме"));
                     map.put("courseName", enrollment.getCourse().getName());
+                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
 
 //                    sendNotificationCompleted(enrollment);
                     CommitContext commitContext = new CommitContext();
@@ -146,13 +186,53 @@ public class EnrollmentChangedListener {
 
                             EmailAttachment[] emailAttachments = new EmailAttachment[0];
                             emailAttachments = getEmailAttachments(fd, emailAttachments);
+                            activityService.createActivity(
+                                    user,
+                                    user,
+                                    getActivityType(),
+                                    StatusEnum.active,
+                                    "description",
+                                    null,
+                                    new Date(),
+                                    null,
+                                    null,
+                                    enrollment.getId(),
+                                    "tdc.student.enrollmentClosed",
+                                    map);
+
                             notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                                     user, map, emailAttachments);
                         } else {
+                            activityService.createActivity(
+                                    user,
+                                    user,
+                                    getActivityType(),
+                                    StatusEnum.active,
+                                    "description",
+                                    null,
+                                    new Date(),
+                                    null,
+                                    null,
+                                    enrollment.getId(),
+                                    "tdc.student.enrollmentClosed",
+                                    map);
                             notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                                     user, map);
                         }
                     } else {
+                        activityService.createActivity(
+                                user,
+                                user,
+                                getActivityType(),
+                                StatusEnum.active,
+                                "description",
+                                null,
+                                new Date(),
+                                null,
+                                null,
+                                enrollment.getId(),
+                                "tdc.student.enrollmentClosed",
+                                map);
                         notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                                 user, map);
                     }
@@ -169,8 +249,33 @@ public class EnrollmentChangedListener {
                         .list().stream().findFirst().orElse(null);
                 if (tsadvUser != null) {
                     Map<String, Object> map = new HashMap<>();
+                    String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                            + "/course/"
+                            + "\" target=\"_blank\">%s " + "</a>";
+                    String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                            + "/my-course/"
+                            + "\" target=\"_blank\">%s " + "</a>";
+                    map.put("linkRu", String.format(courseLink, enrollment.getCourse().getName()));
+                    map.put("linkEn", String.format(courseLink, enrollment.getCourse().getName()));
+                    map.put("linkKz", String.format(courseLink, enrollment.getCourse().getName()));
+                    map.put("myLinkRu", String.format(myCourseLink, "Мои курсы"));
+                    map.put("myLinkEn", String.format(myCourseLink, "My training course"));
+                    map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
+                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
                     map.put("courseName", enrollment.getCourse().getName());
-                    map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            enrollment.getId(),
+                            "tdc.student.enrollmentApproved",
+                            map);
                     notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
                             tsadvUser, map);
                 }
@@ -219,13 +324,44 @@ public class EnrollmentChangedListener {
                         .list().stream().findFirst().orElse(null);
                 if (tsadvUser != null) {
                     Map<String, Object> map = new HashMap<>();
+                    String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
+                            "tsadv$Course.edit" +
+                            "&item=" + "tsadv$Course" + "-" + courseTrainer.getCourse().getId() +
+                            "\" target=\"_blank\">%s " + "</a>";
                     map.put("courseName", enrollment.getCourse().getName());
-                    map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                    map.put("trainerFullName", courseTrainer.getTrainer().getEmployee().getFirstLastName());
+                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+                    map.put("linkRu", String.format(requestLink, "курс"));
+                    map.put("linkKz", String.format(requestLink, "курсыңызға"));
+                    map.put("linkEn", String.format(requestLink, "course"));
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            courseTrainer.getId(),
+                            notificationCode,
+                            map);
                     notificationSenderAPIService.sendParametrizedNotification(notificationCode,
                             tsadvUser, map);
                 }
             });
         }
+    }
+
+    protected ActivityType getActivityType() {
+        return dataManager.load(ActivityType.class)
+                .query("select e from uactivity$ActivityType e where e.code = 'NOTIFICATION'")
+                .view(new View(ActivityType.class)
+                        .addProperty("code")
+                        .addProperty("windowProperty",
+                                new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
+                .one();
     }
 
 //    protected void sendNotificationCompleted(Enrollment enrollment) {
