@@ -82,7 +82,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
         }*/
         balanceDaysField.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                Integer overallBalanceDays = (Integer) e.getValue();
+                Integer overallBalanceDays = e.getValue();
                 Integer difference = 0;
                 if (getItem().getOverallBalanceDays() != null && getItem().getOverallBalanceDays() != 0) {
                     difference = getItem().getOverallBalanceDays() - getItem().getBalanceDays();
