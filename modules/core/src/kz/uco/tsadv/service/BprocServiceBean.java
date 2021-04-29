@@ -114,7 +114,15 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Transactional
     public <T extends AbstractBprocRequest> void reject(T entity) {
         changeRequestStatus(entity, "REJECT");
-        sendNotificationToInitiator(entity);
+        String rejectNotificationTemplateCode = this.getProcessVariable(entity, "rejectNotificationTemplateCode");
+        sendNotificationToInitiator(entity, rejectNotificationTemplateCode);
+    }
+
+    @Override
+    public <T extends AbstractBprocRequest> void approve(T entity) {
+        changeRequestStatus(entity, "APPROVED");
+        String rejectNotificationTemplateCode = this.getProcessVariable(entity, "approveNotificationTemplateCode");
+        sendNotificationToInitiator(entity, rejectNotificationTemplateCode);
     }
 
     @Override
@@ -171,6 +179,13 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         )
                 .map(HistoricVariableInstanceData::getValue)
                 .orElse(null);
+    }
+
+    @Override
+    public <T> T getProcessVariable(AbstractBprocRequest entity, String variableName) {
+        return this.getProcessVariable(
+                this.getProcessInstanceData(entity.getProcessInstanceBusinessKey(), entity.getProcessDefinitionKey()).getId(),
+                variableName);
     }
 
     @Override
@@ -381,10 +396,17 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                     .max(Comparator.comparing(TaskData::getEndTime))
                     .map(ExtTaskData::getOutcome)
                     .orElse(null);
+            ExtTaskData extTaskData = processTasks.stream()
+                    .filter(taskData -> taskData.getEndTime() == null)
+                    .findAny()
+                    .orElse(null);
+            String taskId = extTaskData != null ? extTaskData.getTaskDefinitionKey() : "";
             if (AbstractBprocRequest.OUTCOME_REVISION.equals(outcome)) {
                 notificationTemplateCode = "bpm.kpi.initiator.revision2";
-            } else {
+            } else if (taskId.isEmpty() || taskId.equals("line_manager_task")) {
                 notificationTemplateCode = "bpm.kpi.approver";
+            } else {
+                notificationTemplateCode = "bpm.kpi.approver.super";
             }
         }
         return notificationTemplateCode;

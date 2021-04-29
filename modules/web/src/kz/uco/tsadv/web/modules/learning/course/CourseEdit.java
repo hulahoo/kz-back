@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
@@ -20,6 +21,7 @@ import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.cuba.actions.CreateActionExt;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
@@ -29,6 +31,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @UiController("tsadv$Course.edit")
 @UiDescriptor("course-edit.xml")
@@ -94,6 +97,8 @@ public class CourseEdit extends StandardEditor<Course> {
     protected Table<CoursePreRequisition> preRequisitionTable;
     @Inject
     protected CollectionLoader<CoursePreRequisition> preRequisitionDl;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
@@ -145,6 +150,17 @@ public class CourseEdit extends StandardEditor<Course> {
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
         Course course = courseDc.getItem();
+        if (PersistenceHelper.isNew(course)) {
+            FileDescriptor fileDescriptor = dataManager.load(FileDescriptor.class)
+                    .query("select e from sys$FileDescriptor e " +
+                            " where e.id = :fileId")
+                    .parameter("fileId", extAppPropertiesConfig.getDefaultLogo() != null
+                            && !extAppPropertiesConfig.getDefaultLogo().isEmpty()
+                            ? UUID.fromString(extAppPropertiesConfig.getDefaultLogo())
+                            : null)
+                    .list().stream().findFirst().orElse(null);
+            course.setLogo(fileDescriptor);
+        }
 //        Utils.getCourseImageEmbedded(course, null, courseImage);
 
         homeworkTable.addSelectionListener(homeworkSelectionEvent -> {
