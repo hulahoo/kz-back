@@ -536,8 +536,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         HSSFSheet sheet = hssfWorkbook.getSheetAt(0);
 
         String assignedPerformancePlanId = String.valueOf(sheet.getRow(1).getCell(0).getColumnIndex());
-        int adjustedScore = sheet.getRow(1).getCell(12).getColumnIndex();
-        int adjustedBonus = sheet.getRow(1).getCell(13).getColumnIndex();
+        int adjustedScore = sheet.getRow(1).getCell(13).getColumnIndex();
+        int adjustedBonus = sheet.getRow(1).getCell(14).getColumnIndex();
         int rowCount = sheet.getLastRowNum();
 
         for (int i = 1; i <= rowCount; i++) {
@@ -575,9 +575,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     }
 
     private HSSFCell createStatusCell(HSSFRow row) {
-        return row.getCell(14) != null
-                ? row.getCell(14)
-                : row.createCell(14);
+        return row.getCell(15) != null
+                ? row.getCell(15)
+                : row.createCell(15);
     }
 
     private void xlsx(XSSFWorkbook xssfWorkbook) throws IOException {
@@ -592,8 +592,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
         XSSFSheet sheet = xssfWorkbook.getSheetAt(0);
 
         String assignedPerformancePlanId = String.valueOf(sheet.getRow(1).getCell(0).getColumnIndex());
-        int adjustedScore = sheet.getRow(1).getCell(12).getColumnIndex();
-        int adjustedBonus = sheet.getRow(1).getCell(13).getColumnIndex();
+        int adjustedScore = sheet.getRow(1).getCell(13).getColumnIndex();
+        int adjustedBonus = sheet.getRow(1).getCell(14).getColumnIndex();
         int rowCount = sheet.getLastRowNum();
 
         for (int i = 1; i <= rowCount; i++) {
@@ -631,9 +631,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     }
 
     private Cell createStatusCell(XSSFRow row) {
-        return row.getCell(14) != null
-                ? row.getCell(14)
-                : row.createCell(14);
+        return row.getCell(15) != null
+                ? row.getCell(15)
+                : row.createCell(15);
     }
 
     private Boolean addToBase(String assignedPerformancePlanId, double adjustedScore,
