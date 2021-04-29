@@ -55,21 +55,35 @@
     <view entity="tsadv$AssignedPerformancePlan" name="assignedPerformancePlan-myKpi-edit" extends="_minimal">
         <property name="performancePlan">
             <property name="performancePlanName"/>
-            <property name="performancePlanNameEn"/>
-            <property name="performancePlanNameKz"/>
             <property name="startDate"/>
             <property name="endDate"/>
+            <property name="performancePlanNameKz"/>
+            <property name="performancePlanNameEn"/>
         </property>
-        <property name="stepStageStatus"/>
+        <property name="assignedPerson" view="_local">
+            <property name="person" view="_local"/>
+            <property name="assignments" view="assignedPerformancePlan-assignment">
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                </property>
+                <property name="legacyId"/>
+                <property name="organizationBin"/>
+                <property name="integrationUserLogin"/>
+            </property>
+            <property name="currentAssignment" view="assignedPerformancePlan-assignment">
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                </property>
+                <property name="legacyId"/>
+                <property name="organizationBin"/>
+                <property name="integrationUserLogin"/>
+            </property>
+        </property>
         <property name="extraPoint"/>
         <property name="finalScore"/>
         <property name="purpose"/>
         <property name="file" view="_local"/>
-        <property name="assignedPerson" view="_local">
-            <property name="currentAssignment" view="assignedPerformancePlan-assignment"/>
-            <property name="person" view="_local"/>
-            <property name="assignments" view="assignedPerformancePlan-assignment"/>
-        </property>
+        <property name="updatedBy"/>
         <property name="status" view="_minimal">
             <property name="code"/>
         </property>
