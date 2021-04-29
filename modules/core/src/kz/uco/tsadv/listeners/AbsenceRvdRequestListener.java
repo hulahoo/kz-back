@@ -10,6 +10,7 @@ import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.api.BaseResult;
 import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.modules.integration.jsonobject.AbsenceRvdRequestDataJson;
+import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest;
 import kz.uco.tsadv.service.IntegrationRestService;
@@ -31,59 +32,119 @@ public class AbsenceRvdRequestListener implements BeforeUpdateEntityListener<Abs
 
     @Override
     public void onBeforeInsert(AbsenceRvdRequest entity, EntityManager entityManager) {
-        if(isApproved(entity,entityManager)){
-            AbsenceRvdRequestDataJson absenceRvdRequestJson = getAbsenceRvdRequestDataJson(entity,entityManager);
+        if (isApproved(entity, entityManager)) {
+            if (isRVD(entity, entityManager)) {
+                AbsenceRvdRequestDataJson absenceRvdRequestJson = getAbsenceRvdRequestDataJson(entity, entityManager, true);
 
-            setupUnirest();
-            HttpResponse<String> response = Unirest
-                    .post("http://10.2.200.101:8290/api/ahruco/work/holiday/request")
-                    .body(absenceRvdRequestJson)
-                    .asString();
+                setupUnirest();
+                HttpResponse<String> response = Unirest
+                        .post("http://10.2.200.101:8290/api/ahruco/work/holiday/request")
+                        .body(absenceRvdRequestJson)
+                        .asString();
 
-            BaseResult baseResult = new BaseResult();
-            String methodName = "tsadv_AbsenceRvdRequestListener.onBeforeInsert";
-            String responseBody = response.getBody();
-            if (responseBody.contains("\"success\":\"true\"")) {
-                integrationRestService.prepareSuccess(baseResult,
-                        methodName,
-                        absenceRvdRequestJson);
-            } else {
-                integrationRestService.prepareError(baseResult,
-                        methodName,
-                        absenceRvdRequestJson,
-                        responseBody);
+                BaseResult baseResult = new BaseResult();
+                String methodName = "tsadv_AbsenceRvdRequestListener.onBeforeInsert";
+                String responseBody = response.getBody();
+                if (responseBody.contains("\"success\":\"true\"")) {
+                    integrationRestService.prepareSuccess(baseResult,
+                            methodName,
+                            absenceRvdRequestJson);
+                } else {
+                    integrationRestService.prepareError(baseResult,
+                            methodName,
+                            absenceRvdRequestJson,
+                            responseBody);
+                }
+            } else if (isTemporaryTransfer(entity, entityManager)) {
+                AbsenceRvdRequestDataJson absenceRvdRequestJson = getAbsenceRvdRequestDataJson(entity, entityManager, false);
+
+                setupUnirest();
+                HttpResponse<String> response = Unirest
+                        .post("http://10.2.200.101:8290/api/ahruco/work/nigth/request")
+                        .body(absenceRvdRequestJson)
+                        .asString();
+
+                BaseResult baseResult = new BaseResult();
+                String methodName = "tsadv_AbsenceRvdRequestListener.onBeforeInsert";
+                String responseBody = response.getBody();
+                if (responseBody.contains("\"success\":\"true\"")) {
+                    integrationRestService.prepareSuccess(baseResult,
+                            methodName,
+                            absenceRvdRequestJson);
+                } else {
+                    integrationRestService.prepareError(baseResult,
+                            methodName,
+                            absenceRvdRequestJson,
+                            responseBody);
+                }
             }
         }
     }
 
     @Override
     public void onBeforeUpdate(AbsenceRvdRequest entity, EntityManager entityManager) {
-        if(isApproved(entity,entityManager)){
-            AbsenceRvdRequestDataJson absenceRvdRequestJson = getAbsenceRvdRequestDataJson(entity,entityManager);
+        if (isApproved(entity, entityManager)) {
+            if (isRVD(entity, entityManager)) {
+                AbsenceRvdRequestDataJson absenceRvdRequestJson = getAbsenceRvdRequestDataJson(entity, entityManager, true);
 
-            setupUnirest();
-            HttpResponse<String> response = Unirest
-                    .post("http://10.2.200.101:8290/api/ahruco/work/holiday/request")
-                    .body(absenceRvdRequestJson)
-                    .asString();
+                setupUnirest();
+                HttpResponse<String> response = Unirest
+                        .post("http://10.2.200.101:8290/api/ahruco/work/holiday/request")
+                        .body(absenceRvdRequestJson)
+                        .asString();
 
-            BaseResult baseResult = new BaseResult();
-            String methodName = "tsadv_AbsenceRvdRequestListener.onBeforeUpdate";
-            String responseBody = response.getBody();
-            if (responseBody.contains("\"success\":\"true\"")) {
-                integrationRestService.prepareSuccess(baseResult,
-                        methodName,
-                        absenceRvdRequestJson);
-            } else {
-                integrationRestService.prepareError(baseResult,
-                        methodName,
-                        absenceRvdRequestJson,
-                        responseBody);
+                BaseResult baseResult = new BaseResult();
+                String methodName = "tsadv_AbsenceRvdRequestListener.onBeforeUpdate";
+                String responseBody = response.getBody();
+                if (responseBody.contains("\"success\":\"true\"")) {
+                    integrationRestService.prepareSuccess(baseResult,
+                            methodName,
+                            absenceRvdRequestJson);
+                } else {
+                    integrationRestService.prepareError(baseResult,
+                            methodName,
+                            absenceRvdRequestJson,
+                            responseBody);
+                }
+            } else if (isTemporaryTransfer(entity, entityManager)) {
+                AbsenceRvdRequestDataJson absenceRvdRequestJson = getAbsenceRvdRequestDataJson(entity, entityManager, false);
+
+                setupUnirest();
+                HttpResponse<String> response = Unirest
+                        .post("http://10.2.200.101:8290/api/ahruco/work/nigth/request")
+                        .body(absenceRvdRequestJson)
+                        .asString();
+
+                BaseResult baseResult = new BaseResult();
+                String methodName = "tsadv_AbsenceRvdRequestListener.onBeforeUpdate";
+                String responseBody = response.getBody();
+                if (responseBody.contains("\"success\":\"true\"")) {
+                    integrationRestService.prepareSuccess(baseResult,
+                            methodName,
+                            absenceRvdRequestJson);
+                } else {
+                    integrationRestService.prepareError(baseResult,
+                            methodName,
+                            absenceRvdRequestJson,
+                            responseBody);
+                }
             }
         }
     }
 
-    protected void setupUnirest(){
+    private boolean isTemporaryTransfer(AbsenceRvdRequest entity, EntityManager entityManager) {
+        DicAbsenceType absenceType = entity.getType();
+        if (absenceType == null) return false;
+        return entityManager.reloadNN(absenceType, View.LOCAL).getTemporaryTransfer();
+    }
+
+    protected boolean isRVD(AbsenceRvdRequest entity, EntityManager entityManager) {
+        DicAbsenceType absenceType = entity.getType();
+        if (absenceType == null) return false;
+        return entityManager.reloadNN(absenceType, View.LOCAL).getWorkOnWeekend();
+    }
+
+    protected void setupUnirest() {
         Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
@@ -96,44 +157,46 @@ public class AbsenceRvdRequestListener implements BeforeUpdateEntityListener<Abs
         return APPROVED_STATUS.equals(entityManager.reloadNN(status, View.LOCAL).getCode());
     }
 
-    protected String getFormattedDateString(Date date,SimpleDateFormat formatter){
-        return date != null ? formatter.format(date) : "" ;
+    protected String getFormattedDateString(Date date, SimpleDateFormat formatter) {
+        return date != null ? formatter.format(date) : "";
     }
 
-    protected AbsenceRvdRequestDataJson getAbsenceRvdRequestDataJson(AbsenceRvdRequest entity, EntityManager entityManager){
+    protected AbsenceRvdRequestDataJson getAbsenceRvdRequestDataJson(AbsenceRvdRequest entity, EntityManager entityManager, Boolean isRvd) {
         AbsenceRvdRequestDataJson absenceRvdRequestDataJson = new AbsenceRvdRequestDataJson();
         String personId = (entity.getPersonGroup() != null && entity.getPersonGroup().getLegacyId() != null) ? entity.getPersonGroup().getLegacyId() : "";
         absenceRvdRequestDataJson.setPersonId(personId);
         String requestNumber = (entity.getRequestNumber() != null) ? entity.getRequestNumber().toString() : "";
         absenceRvdRequestDataJson.setRequestNumber(requestNumber);
-        String requestDate = getFormattedDateString(entity.getRequestDate(),dateFormatter);
+        String requestDate = getFormattedDateString(entity.getRequestDate(), dateFormatter);
         absenceRvdRequestDataJson.setRequestDate(requestDate);
         String purpose = (entity.getPurpose() != null && entity.getPurpose().getLangValue() != null) ? entity.getPurpose().getLangValue() : entity.getPurposeText();
-        purpose = Null.nullReplace(purpose,"");
+        purpose = Null.nullReplace(purpose, "");
         absenceRvdRequestDataJson.setPurpose(purpose);
-        String startDate = getFormattedDateString(entity.getTimeOfStarting(),dateFormatter);
+        String startDate = getFormattedDateString(entity.getTimeOfStarting(), dateFormatter);
         absenceRvdRequestDataJson.setStartDate(startDate);
-        String endDate = getFormattedDateString(entity.getTimeOfFinishing(),dateFormatter);
+        String endDate = getFormattedDateString(entity.getTimeOfFinishing(), dateFormatter);
         absenceRvdRequestDataJson.setEndDate(endDate);
         String hours = (entity.getTotalHours() != null) ? entity.getTotalHours().toString() : "";
         absenceRvdRequestDataJson.setHours(hours);
-        boolean compensation = Null.nullReplace(entity.getCompencation(),false);
-        String isVacationProvidedOrCompensationProvided = (compensation) ? "Compensation" : "Vacation";
-        absenceRvdRequestDataJson.setIsVacationProvidedOrCompensationProvided(isVacationProvidedOrCompensationProvided);
-        boolean isEmployeeAgree = Null.nullReplace(entity.getAgree(),false);
+        if (isRvd) {
+            boolean compensation = Null.nullReplace(entity.getCompencation(), false);
+            String isVacationProvidedOrCompensationProvided = (compensation) ? "Compensation" : "Vacation";
+            absenceRvdRequestDataJson.setIsVacationProvidedOrCompensationProvided(isVacationProvidedOrCompensationProvided);
+        }
+        boolean isEmployeeAgree = Null.nullReplace(entity.getAgree(), false);
         absenceRvdRequestDataJson.setEmployeeAgree(isEmployeeAgree);
-        boolean isEmployeeInformed = Null.nullReplace(entity.getAcquainted(),false);
+        boolean isEmployeeInformed = Null.nullReplace(entity.getAcquainted(), false);
         absenceRvdRequestDataJson.setEmployeeInformed(isEmployeeInformed);
         absenceRvdRequestDataJson.setShiftCode("");
-        String startTime = getFormattedDateString(entity.getTimeOfStarting(),timeFormatter);
+        String startTime = getFormattedDateString(entity.getTimeOfStarting(), timeFormatter);
         absenceRvdRequestDataJson.setStartTime(startTime);
-        String endTime = getFormattedDateString(entity.getTimeOfFinishing(),timeFormatter);
+        String endTime = getFormattedDateString(entity.getTimeOfFinishing(), timeFormatter);
         absenceRvdRequestDataJson.setEndTime(endTime);
         String companyCode = "";
-        if(entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null){
+        if (entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null) {
             DicCompany company = entity.getPersonGroup().getCompany();
-            companyCode = entityManager.reloadNN(company,View.LOCAL).getLegacyId();
-            companyCode = Null.nullReplace(companyCode,"");
+            companyCode = entityManager.reloadNN(company, View.LOCAL).getLegacyId();
+            companyCode = Null.nullReplace(companyCode, "");
         }
         absenceRvdRequestDataJson.setCompanyCode(companyCode);
 

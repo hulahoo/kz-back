@@ -1,5 +1,6 @@
 package kz.uco.tsadv.bproc.beans;
 
+import com.haulmont.addon.bproc.core.UserTaskResults;
 import com.haulmont.addon.bproc.data.OutcomesContainer;
 import com.haulmont.addon.bproc.entity.TaskData;
 import com.haulmont.addon.bproc.events.UserTaskCompletedEvent;
@@ -19,6 +20,7 @@ import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
 import kz.uco.tsadv.bproc.events.ExtProcessStartedEvent;
 import kz.uco.tsadv.bproc.events.ExtUserTaskCreatedEvent;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.modules.bpm.BprocActors;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.service.BprocService;
 import kz.uco.uactivity.entity.Activity;
@@ -59,6 +61,8 @@ public class BprocProcessStatesListener extends AbstractBprocHelper {
     protected BprocTaskService bprocTaskService;
     @Inject
     protected TransactionalDataManager transactionalDataManager;
+    @Inject
+    protected UserTaskResults userTaskResults;
 
     @EventListener
     @SuppressWarnings("unchecked")
@@ -142,9 +146,27 @@ public class BprocProcessStatesListener extends AbstractBprocHelper {
 
         OutcomesContainer outcomesContainer = bprocService.getProcessVariable(taskData.getProcessInstanceId(), taskData.getTaskDefinitionKey() + "_result");
 
-        boolean isOutcomeReject = outcomesContainer.getOutcomes().stream()
-                .anyMatch(outcome -> outcome.getOutcomeId().equals(AbstractBprocRequest.OUTCOME_REJECT));
-        if (isOutcomeReject) bprocService.reject(bprocRequest);
+        if (userTaskResults.containsOutcome(outcomesContainer, AbstractBprocRequest.OUTCOME_REJECT))
+            bprocService.reject(bprocRequest);
+        else if (userTaskResults.containsOutcome(outcomesContainer, AbstractBprocRequest.OUTCOME_APPROVE)) {
+
+            List<BprocActors> bprocActors = getBprocActors(bprocRequest);
+
+            boolean allTaskApproved = bprocActors.stream()
+                    .map(BprocActors::getBprocUserTaskCode)
+                    .map(s -> bprocService.getProcessVariable(taskData.getProcessInstanceId(), s + "_result"))
+                    .allMatch(o -> userTaskResults.containsOutcome(outcomesContainer, AbstractBprocRequest.OUTCOME_APPROVE));
+
+            if (allTaskApproved) bprocService.approve(bprocRequest);
+        }
+    }
+
+    protected <T extends AbstractBprocRequest> List<BprocActors> getBprocActors(T bprocRequest) {
+        return dataManager.load(BprocActors.class)
+                .query("select e from tsadv_BprocActors e where e.entityId = :entityId ")
+                .setParameters(ParamsMap.of("entityId", bprocRequest.getId()))
+                .view(View.LOCAL)
+                .list();
     }
 
     protected List<Activity> getActivityList(UUID referenceId, String taskCode) {
