@@ -10929,6 +10929,7 @@ create table TSADV_STANDARD_SCHEDULE (
     BASE_STANDARD_SCHEDULE_ID uuid,
     CALENDAR_ID uuid not null,
     IS_HOLIDAY_WORK_DAY boolean not null,
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^

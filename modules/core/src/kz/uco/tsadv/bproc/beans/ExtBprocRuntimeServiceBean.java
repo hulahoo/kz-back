@@ -34,6 +34,7 @@ public class ExtBprocRuntimeServiceBean extends BprocRuntimeServiceBean {
     @Inject
     protected DataManager dataManager;
 
+    @SuppressWarnings("rawtypes")
     @Override
     public ProcessInstanceData startProcessInstanceByKey(String processDefinitionKey, String businessKey, Map<String, Object> variables) {
         FormData startFormData = bprocFormService.getStartFormData(bprocService.getProcessDefinitionData(processDefinitionKey).getId());

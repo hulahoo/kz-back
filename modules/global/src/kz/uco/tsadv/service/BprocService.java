@@ -27,6 +27,8 @@ public interface BprocService {
 
     <T extends AbstractBprocRequest> void reject(T entity);
 
+    <T extends AbstractBprocRequest> void approve(T entity);
+
     <T extends AbstractBprocRequest> void sendNotificationAndActivityToInitiator(T bprocRequest, String notificationTemplateCode);
 
     <T extends AbstractBprocRequest> void sendNotificationToInitiator(T bprocRequest);
@@ -35,6 +37,9 @@ public interface BprocService {
 
     @Nullable
     <T> T getProcessVariable(String processInstanceDataId, String variableName);
+
+    @Nullable
+    <T> T getProcessVariable(AbstractBprocRequest entity, String variableName);
 
     <T extends AbstractBprocRequest> void changeRequestStatus(T entity, String code);
 

@@ -11392,34 +11392,30 @@
     <view class="kz.uco.tsadv.modules.timesheet.model.StandardSchedule"
           extends="_local"
           name="schedule.view">
-        <property name="calendar"
-                  view="_minimal">
+        <property name="baseStandardSchedule" view="_minimal">
+            <property name="scheduleName"/>
+        </property>
+        <property name="calendar" view="_minimal">
             <property name="calendar"/>
         </property>
-        <property name="standardShifts"
-                  view="_minimal">
-            <property name="numberInShift"/>
-            <property name="shift"
-                      view="_minimal">
-                <property name="name"/>
-            </property>
-            <property name="shiftDisplay"/>
-            <property name="shiftDisplayDay"/>
-            <property name="standardSchedule"
-                      view="_minimal"/>
-        </property>
-        <property name="standardOffsets"
-                  view="_minimal">
+        <property name="standardOffsets" view="_minimal">
+            <property name="standardSchedule" view="_minimal"/>
             <property name="offsetDisplay"/>
-            <property name="standardSchedule"
-                      view="_minimal"/>
             <property name="offsetDisplayDays"/>
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
-        <property name="baseStandardSchedule"
-                  view="_minimal">
-            <property name="scheduleName"/>
+        <property name="standardShifts" view="_minimal">
+            <property name="standardSchedule" view="_minimal"/>
+            <property name="numberInShift"/>
+            <property name="shift" view="_minimal">
+                <property name="name"/>
+            </property>
+            <property name="shiftDisplay"/>
+            <property name="shiftDisplayDay"/>
+        </property>
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.timesheet.model.StandardOffset"

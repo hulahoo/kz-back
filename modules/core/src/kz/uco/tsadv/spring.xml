@@ -39,5 +39,8 @@
 
     <bean id="bproc_BprocRuntimeService" class="kz.uco.tsadv.bproc.beans.ExtBprocRuntimeServiceBean"/>
 
-    <bean class="com.google.gson.Gson" />
+    <bean id="base_NotificationSenderAPIService"
+          class="kz.uco.tsadv.service.portal.NotificationSenderAPIServiceBeanExt"/>
+
+    <bean class="com.google.gson.Gson"/>
 </beans>

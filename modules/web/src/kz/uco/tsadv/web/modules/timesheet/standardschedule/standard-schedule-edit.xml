@@ -59,6 +59,8 @@
                                property="calendar"/>
                         <field id="isHolidayWorkDay"
                                property="isHolidayWorkDay"/>
+                        <field id="company"
+                                property="company"/>
                     </column>
                 </fieldGroup>
             </tab>
