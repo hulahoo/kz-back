@@ -1532,11 +1532,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         : null);
                 assignmentExt.setPrimaryFlag(Boolean.valueOf(assignmentJson.getPrimaryFlag()));
                 assignmentExt.setGroup(assignmentGroupExt);
-                assignmentGroupExt.setGradeGroup(gradeGroup);
-                assignmentGroupExt.setJobGroup(jobGroup);
-                assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
-                assignmentGroupExt.setPositionGroup(positionGroupExt);
-                assignmentGroupExt.setPersonGroup(personGroupExt);
+                if (assignmentGroupExt.getGradeGroup() == null || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
+                    assignmentGroupExt.setGradeGroup(gradeGroup);
+                }
+                if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
+                    assignmentGroupExt.setJobGroup(jobGroup);
+                }
+                if (assignmentGroupExt.getOrganizationGroup() == null
+                        || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
+                    assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
+                }
+                if (assignmentGroupExt.getPositionGroup() == null
+                        || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
+                    assignmentGroupExt.setPositionGroup(positionGroupExt);
+                }
+                if (assignmentGroupExt.getPersonGroup() == null || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
+                    assignmentGroupExt.setPersonGroup(personGroupExt);
+                }
                 assignmentGroupExt.getList().add(assignmentExt);
             }
             for (AssignmentGroupExt assignmentGroupExt : assignmentGroupExtList) {
@@ -3980,17 +3992,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentSchedule = dataManager.load(AssignmentSchedule.class)
                             .query(
                                     " select e from tsadv$AssignmentSchedule e " +
-                                            " where e.endPolicyCode = :epc" +
-                                            " and e.schedule.legacyId = :shLegacyId " +
+                                            " where e.startDate = :startDate" +
                                             " and e.assignmentGroup.legacyId = :agLegacyId " +
                                             " and e.assignmentGroup.legacyId in " +
                                             " (select p.group.legacyId from base$AssignmentExt p " +
                                             " where p.organizationGroup.company.legacyId = :companyCode) ")
-                            .setParameters(ParamsMap.of(
-                                    "epc", assignmentScheduleJson.getEndPolicyCode(),
-                                    "agLegacyId", assignmentScheduleJson.getAssignmentId(),
-                                    "shLegacyId", assignmentScheduleJson.getAssignmentId(),
-                                    "companyCode", assignmentScheduleJson.getCompanyCode()))
+                            .setParameters(
+                                    ParamsMap.of(
+                                            "startDate", CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getStartDate())),
+                                            "agLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                            "companyCode", assignmentScheduleJson.getCompanyCode()
+                                    )
+                            )
                             .view("assignmentSchedule.edit").list().stream().findFirst().orElse(null);
 
                     if (assignmentSchedule != null) {
@@ -4023,9 +4036,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         StandardSchedule schedule = dataManager.load(StandardSchedule.class)
                                 .query("select e from tsadv$StandardSchedule e " +
-                                        "where e.legacyId = :shLegacyId")
+                                        " where e.legacyId = :shLegacyId " +
+                                        " and e.company.legacyId = :companyCode")
                                 .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
-                                .view(View.BASE)
+                                .parameter("companyCode", assignmentScheduleJson.getCompanyCode())
+                                .view("schedule.view")
                                 .list().stream().findFirst().orElse(null);
 
                         if (schedule != null) {
@@ -4069,16 +4084,19 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         StandardSchedule schedule = dataManager.load(StandardSchedule.class)
                                 .query("select e from tsadv$StandardSchedule e " +
-                                        "where e.legacyId = :shLegacyId")
+                                        " where e.legacyId = :shLegacyId " +
+                                        " and e.company.legacyId = :companyCode")
                                 .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
-                                .view(View.MINIMAL)
+                                .parameter("companyCode", assignmentScheduleJson.getCompanyCode())
+                                .view("schedule.view")
                                 .list().stream().findFirst().orElse(null);
 
                         if (schedule != null) {
                             assignmentSchedule.setSchedule(schedule);
                         } else {
                             return prepareError(result, methodName, assignmentScheduleData,
-                                    "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                                    "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId()
+                                            + " and companyCode = " + assignmentScheduleJson.getCompanyCode());
                         }
 
                         assignmentSchedulesCommitList.add(assignmentSchedule);
@@ -4113,16 +4131,19 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     StandardSchedule schedule = dataManager.load(StandardSchedule.class)
                             .query("select e from tsadv$StandardSchedule e " +
-                                    "where e.legacyId = :shLegacyId")
+                                    " where e.legacyId = :shLegacyId " +
+                                    " and e.company.legacyId = :companyCode")
                             .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
-                            .view(View.MINIMAL)
+                            .parameter("companyCode", assignmentScheduleJson.getCompanyCode())
+                            .view("schedule.view")
                             .list().stream().findFirst().orElse(null);
 
                     if (schedule != null) {
                         assignmentSchedule.setSchedule(schedule);
                     } else {
                         return prepareError(result, methodName, assignmentScheduleData,
-                                "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                                "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId()
+                                        + " and companyCode = " + assignmentScheduleJson.getCompanyCode());
                     }
                 }
             }

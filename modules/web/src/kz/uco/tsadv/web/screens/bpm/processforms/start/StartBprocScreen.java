@@ -37,13 +37,24 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
+ * For initiator :
+ * <ul>
+ *     <li>rejectNotificationTemplateCode - send after reject</li>
+ *     <li>approveNotificationTemplateCode - send after approve</li>
+ *     <li>initiatorNotificationTemplateCode - send after complete task</li>
+ * </ul>
+ * <p>
+ * For approver : approverNotificationTemplateCode - send after create task
+ *
  * @author Alibek Berdaulet
  */
 @UiController("tsadv_StartBprocScreen")
 @UiDescriptor("start-bproc-screen.xml")
 @ProcessForm(params = {
         @Param(name = "approverNotificationTemplateCode"),
-        @Param(name = "initiatorNotificationTemplateCode")
+        @Param(name = "initiatorNotificationTemplateCode"),
+        @Param(name = "rejectNotificationTemplateCode"),
+        @Param(name = "approveNotificationTemplateCode"),
 })
 public class StartBprocScreen extends Screen {
 
@@ -82,6 +93,12 @@ public class StartBprocScreen extends Screen {
     @ProcessFormParam
     @SuppressWarnings("unused")
     private String initiatorNotificationTemplateCode;
+    @ProcessFormParam
+    @SuppressWarnings("unused")
+    private String rejectNotificationTemplateCode;
+    @ProcessFormParam
+    @SuppressWarnings("unused")
+    private String approveNotificationTemplateCode;
     @Inject
     protected MessageBundle messageBundle;
 
@@ -144,6 +161,8 @@ public class StartBprocScreen extends Screen {
                 .addProcessVariable("initiator", userSession.getUser())
                 .addProcessVariable("rolesLinks", linksDc.getItems())
                 .addProcessVariable("approverNotificationTemplateCode", approverNotificationTemplateCode)
+                .addProcessVariable("rejectNotificationTemplateCode", rejectNotificationTemplateCode)
+                .addProcessVariable("approveNotificationTemplateCode", approveNotificationTemplateCode)
                 .addProcessVariable("initiatorNotificationTemplateCode", initiatorNotificationTemplateCode);
 
         Map<String, Object> params = startBprocParams.getParams();
