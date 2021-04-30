@@ -416,12 +416,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                 assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
                         + assignedPerformancePlan.getPersonalBonus());
                 if (assignedPerformancePlan.getAdjustedScore() != null) {
-                    BigDecimal maxBonus = assignedPerformancePlan.getGzp().multiply(
-                            BigDecimal.valueOf(assignedPerformancePlan.getAdjustedScore()))
-                            .divide(BigDecimal.valueOf(100));
-                    double companyBonus = calculateCompanyBonus(maxBonus, currentAssignment).doubleValue();
-                    double personalBonus = BigDecimal.valueOf(calculatePersonalBonus(maxBonus, assignedPerformancePlan.getAdjustedScore())).doubleValue();
-                    assignedPerformancePlan.setAdjustedBonus(companyBonus + personalBonus);
+                    double personalBonus = BigDecimal.valueOf(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus(),
+                            assignedPerformancePlan.getAdjustedScore())).doubleValue();
+                    assignedPerformancePlan.setAdjustedBonus(assignedPerformancePlan.getCompanyBonus() + personalBonus);
                 }
                 commitContext.addInstanceToCommit(assignedPerformancePlan);
             });
