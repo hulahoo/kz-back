@@ -48,10 +48,13 @@ public class AuthController {
 
         String password = parameters.get("password");
 
-        if (ldapConfig.getLdapEnabled() && !webAuthConfig.getStandardAuthenticationUsers().contains(username)) {
-            return restUtilComponent.getApplicationToken("/rest/v2/ldap/token", username, password);
-        } else {
-            return restUtilComponent.getApplicationToken("/rest/v2/oauth/token", username, password);
-        }
+        String language = request.getHeader("accept-language");
+
+        String defaultUrl = "/rest/v2/oauth/token";
+
+        if (ldapConfig.getLdapEnabled() && !webAuthConfig.getStandardAuthenticationUsers().contains(username))
+            defaultUrl = "/rest/v2/ldap/token";
+
+        return restUtilComponent.getApplicationToken(defaultUrl, username, password, language);
     }
 }
