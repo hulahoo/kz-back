@@ -18,7 +18,7 @@
                 <textArea id="purposeField" property="purpose" editable="false"/>
                 <upload id="fileField" fileStoragePutMode="IMMEDIATE" property="file" showFileName="true"
                         editable="false"/>
-                <textField property="updatedBy" editable="false"/>
+                <pickerField property="lineManager" editable="false"/>
             </column>
         </form>
         <hbox id="editActions" spacing="true">

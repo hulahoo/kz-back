@@ -44,7 +44,7 @@
                 <hbox expand="extraPoint"
                       caption="msg://kz.uco.tsadv.modules.performance.model/AssignedPerformancePlan.extraPoint">
                     <textField id="extraPoint"
-                               dataContainer="assignedPerformancePlanDc" property="extraPoint"/>
+                               dataContainer="assignedPerformancePlanDc" property="extraPoint" editable="false"/>
                     <button id="extraPointBtn" icon="font-icon:FILE_O"/>
                 </hbox>
                 <textField id="finalScore" property="finalScore"/>

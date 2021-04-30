@@ -85,6 +85,18 @@ public class AssignedPerformancePlan extends AbstractBprocRequest {
     @JoinColumn(name = "FILE_ID")
     private FileDescriptor file;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LINE_MANAGER_ID")
+    protected PersonGroupExt lineManager;
+
+    public PersonGroupExt getLineManager() {
+        return lineManager;
+    }
+
+    public void setLineManager(PersonGroupExt lineManager) {
+        this.lineManager = lineManager;
+    }
+
     public FileDescriptor getFile() {
         return file;
     }

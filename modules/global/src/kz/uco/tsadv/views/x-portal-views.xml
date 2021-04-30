@@ -83,7 +83,7 @@
         <property name="finalScore"/>
         <property name="purpose"/>
         <property name="file" view="_local"/>
-        <property name="updatedBy"/>
+        <property name="lineManager" view="_minimal"/>
         <property name="status" view="_minimal">
             <property name="code"/>
         </property>
