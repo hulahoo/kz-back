@@ -8594,14 +8594,25 @@
     <view class="kz.uco.tsadv.modules.timesheet.model.AssignmentSchedule"
           extends="_local"
           name="assignmentSchedule.edit">
-        <property name="schedule" view="_minimal">
-            <property name="legacyId"/>
-        </property>
         <property name="assignmentGroup" view="_minimal">
             <property name="assignment" view="_minimal">
-                <property name="organizationGroup" view="_minimal"/>
+                <property name="jobGroup" view="_minimal">
+                    <property name="jobName"/>
+                </property>
+                <property name="organizationGroup" view="_minimal">
+                    <property name="organizationName"/>
+                </property>
             </property>
         </property>
+        <property name="schedule" view="_minimal"/>
+        <property name="offset" view="_minimal">
+            <property name="standardSchedule" view="_minimal"/>
+            <property name="offsetDisplay"/>
+            <property name="offsetDisplayDays"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+        </property>
+        <property name="name"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
           extends="_local"
