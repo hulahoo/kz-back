@@ -76,7 +76,9 @@ public class StudentHomeworkChangedListener {
                     transactionalDataManager.save(enrollment);
                 }
             }
+            sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            AttributeChanges changes = event.getChanges();
             studentHomework = transactionalDataManager.load(entityId).view("studentHomework.edit").one();
             Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
                     .query("select e from tsadv$Enrollment e " +
@@ -102,6 +104,14 @@ public class StudentHomeworkChangedListener {
                     transactionalDataManager.save(enrollment);
                 }
             }
+
+            for (String attribute : changes.getAttributes()) {
+                if (attribute.equals("answer") || attribute.equals("answerFile")) {
+                    sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
+                } else if (attribute.equals("isDone") || attribute.equals("trainerComment")) {
+                    sendNotification(studentHomework, "tdc.homework.student.trainerAnswer", false);
+                }
+            }
         }
 
     }
@@ -118,21 +128,21 @@ public class StudentHomeworkChangedListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<StudentHomework, UUID> event) {
-        AttributeChanges changes = event.getChanges();
-        Id<StudentHomework, UUID> entityId = event.getEntityId();
-        StudentHomework studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
-        if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
-        } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-
-            for (String attribute : changes.getAttributes()) {
-                if (attribute.equals("answer") || attribute.equals("answerFile")) {
-                    sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
-                } else if (attribute.equals("isDone") || attribute.equals("trainerComment")) {
-                    sendNotification(studentHomework, "tdc.homework.student.trainerAnswer", false);
-                }
-            }
-        }
+//        AttributeChanges changes = event.getChanges();
+//        Id<StudentHomework, UUID> entityId = event.getEntityId();
+//        StudentHomework studentHomework = dataManager.load(entityId).view("studentHomework.edit").one();
+//        if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+//            sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
+//        } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+//
+//            for (String attribute : changes.getAttributes()) {
+//                if (attribute.equals("answer") || attribute.equals("answerFile")) {
+//                    sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
+//                } else if (attribute.equals("isDone") || attribute.equals("trainerComment")) {
+//                    sendNotification(studentHomework, "tdc.homework.student.trainerAnswer", false);
+//                }
+//            }
+//        }
 
     }
 
