@@ -128,9 +128,9 @@ public class EnrollmentChangedListener {
                         String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                 + "/learning-history/"
                                 + "\" target=\"_blank\">%s " + "</a>";
-                        map.put("linkRu", String.format(requestLink, "ссылке"));
-                        map.put("linkEn", String.format(requestLink, "link"));
-                        map.put("linkKz", String.format(requestLink, "сілтеме"));
+                        map.put("linkRu", String.format(requestLink, "История обучения"));
+                        map.put("linkEn", String.format(requestLink, "Training History"));
+                        map.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
                         map.put("courseName", enrollment.getCourse().getName());
                         map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
 

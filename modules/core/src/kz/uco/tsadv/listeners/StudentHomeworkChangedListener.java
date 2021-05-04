@@ -172,9 +172,9 @@ public class StudentHomeworkChangedListener {
                         map.put("trainerFullName", courseTrainer.getTrainer().getEmployee().getFirstLastName());
                         map.put("courseName", studentHomework.getHomework().getCourse().getName());
                         map.put("studentFullName", studentHomework.getPersonGroup().getFirstLastName());
-                        map.put("requestLinkRu", String.format(requestLink, "ссылке"));
-                        map.put("requestLinkEn", String.format(requestLink, "link"));
-                        map.put("requestLinkKz", String.format(requestLink, "сілтеме"));
+                        map.put("requestLinkRu", String.format(requestLink, "ответом тренера"));
+                        map.put("requestLinkEn", String.format(requestLink, "personal account"));
+                        map.put("requestLinkKz", String.format(requestLink, "Тренердің жауабымен"));
 
                         activityService.createActivity(
                                 tsadvUser,
