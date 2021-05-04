@@ -341,4 +341,12 @@
             <param name="typeId" type="java.util.UUID" />
         </params>
     </query>
+    <query name="myTeamRvdAbsenceType" entity="tsadv$DicAbsenceType" view="_base">
+        <jpql>
+            <![CDATA[
+            select distinct s.absenceType from
+             tsadv_AbsPurposeSetting s
+            ]]>
+        </jpql>
+    </query>
 </queries>
