@@ -415,6 +415,11 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                         , assignedPerformancePlan.getFinalScore()));
                 assignedPerformancePlan.setFinalBonus(assignedPerformancePlan.getCompanyBonus()
                         + assignedPerformancePlan.getPersonalBonus());
+                if (assignedPerformancePlan.getAdjustedScore() != null) {
+                    double personalBonus = BigDecimal.valueOf(calculatePersonalBonus(assignedPerformancePlan.getMaxBonus(),
+                            assignedPerformancePlan.getAdjustedScore())).doubleValue();
+                    assignedPerformancePlan.setAdjustedBonus(assignedPerformancePlan.getCompanyBonus() + personalBonus);
+                }
                 commitContext.addInstanceToCommit(assignedPerformancePlan);
             });
             dataManager.commit(commitContext);
