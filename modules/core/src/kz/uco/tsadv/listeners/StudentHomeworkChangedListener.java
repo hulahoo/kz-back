@@ -205,9 +205,9 @@ public class StudentHomeworkChangedListener {
                         "tsadv_StudentHomework.edit" +
                         "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
                         "\" target=\"_blank\">%s " + "</a>";
-                map.put("requestLinkRu", String.format(requestLink, "ссылке"));
-                map.put("requestLinkEn", String.format(requestLink, "link"));
-                map.put("requestLinkKz", String.format(requestLink, "сілтеме"));
+                map.put("requestLinkRu", String.format(requestLink, "ответом тренера"));
+                map.put("requestLinkEn", String.format(requestLink, "reply"));
+                map.put("requestLinkKz", String.format(requestLink, "жауабымен"));
 
                 activityService.createActivity(
                         tsadvUser,
