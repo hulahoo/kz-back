@@ -1,0 +1,1 @@
+alter table TSADV_ASSIGNED_PERFORMANCE_PLAN add column LINE_MANAGER_ID uuid ;
