@@ -22,7 +22,7 @@ public class AbsenceBalance extends AbstractParentEntity {
     protected PersonGroupExt personGroup;
 
     @Column(name = "OVERALL_BALANCE_DAYS")
-    protected Integer overallBalanceDays;
+    protected Double overallBalanceDays;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE_FROM", nullable = false)
@@ -33,44 +33,116 @@ public class AbsenceBalance extends AbstractParentEntity {
     protected Date dateTo;
 
     @Column(name = "BALANCE_DAYS", nullable = false)
-    protected Integer balanceDays;
+    protected Double balanceDays;
 
     @Column(name = "ADDITIONAL_BALANCE_DAYS", nullable = false)
-    protected Integer additionalBalanceDays;
+    protected Double additionalBalanceDays;
 
     @Column(name = "DAYS_SPENT")
-    protected Integer daysSpent;
+    protected Double daysSpent;
 
     @Column(name = "DAYS_LEFT")
     protected Double daysLeft;
 
     @Column(name = "EXTRA_DAYS_SPENT")
-    protected Integer extraDaysSpent;
+    protected Double extraDaysSpent;
 
     @Column(name = "EXTRA_DAYS_LEFT")
     protected Double extraDaysLeft;
 
     @Column(name = "LONG_ABSENCE_DAYS")
-    protected Integer longAbsenceDays;
+    protected Double longAbsenceDays;
 
     @OrderBy("createTs desc")
     @OneToMany(mappedBy = "absenceBalance")
     protected List<AbsenceToAbsenceBalance> absenceToAbsenceBalances;
 
     @Column(name = "ADD_BALANCE_DAYS_AIMS")
-    protected Integer addBalanceDaysAims;
+    protected Double addBalanceDaysAims;
 
     @Column(name = "ECOLOGICAL_DUE_DAYS")
-    protected Integer ecologicalDueDays;
+    protected Double ecologicalDueDays;
 
     @Column(name = "DISABILITY_DUE_DAYS")
-    protected Integer disabilityDueDays;
+    protected Double disabilityDueDays;
 
     @Column(name = "ECOLOGICAL_DAYS_LEFT")
     protected Double ecologicalDaysLeft;
 
     @Column(name = "DISABILITY_DAYS_LEFT")
     protected Double disabilityDaysLeft;
+
+    public void setBalanceDays(Double balanceDays) {
+        this.balanceDays = balanceDays;
+    }
+
+    public Double getBalanceDays() {
+        return balanceDays;
+    }
+
+    public void setAdditionalBalanceDays(Double additionalBalanceDays) {
+        this.additionalBalanceDays = additionalBalanceDays;
+    }
+
+    public Double getAdditionalBalanceDays() {
+        return additionalBalanceDays;
+    }
+
+    public void setDaysSpent(Double daysSpent) {
+        this.daysSpent = daysSpent;
+    }
+
+    public Double getDaysSpent() {
+        return daysSpent;
+    }
+
+    public void setExtraDaysSpent(Double extraDaysSpent) {
+        this.extraDaysSpent = extraDaysSpent;
+    }
+
+    public Double getExtraDaysSpent() {
+        return extraDaysSpent;
+    }
+
+    public void setLongAbsenceDays(Double longAbsenceDays) {
+        this.longAbsenceDays = longAbsenceDays;
+    }
+
+    public Double getLongAbsenceDays() {
+        return longAbsenceDays;
+    }
+
+    public void setAddBalanceDaysAims(Double addBalanceDaysAims) {
+        this.addBalanceDaysAims = addBalanceDaysAims;
+    }
+
+    public Double getAddBalanceDaysAims() {
+        return addBalanceDaysAims;
+    }
+
+    public void setEcologicalDueDays(Double ecologicalDueDays) {
+        this.ecologicalDueDays = ecologicalDueDays;
+    }
+
+    public Double getEcologicalDueDays() {
+        return ecologicalDueDays;
+    }
+
+    public void setDisabilityDueDays(Double disabilityDueDays) {
+        this.disabilityDueDays = disabilityDueDays;
+    }
+
+    public Double getDisabilityDueDays() {
+        return disabilityDueDays;
+    }
+
+    public void setOverallBalanceDays(Double overallBalanceDays) {
+        this.overallBalanceDays = overallBalanceDays;
+    }
+
+    public Double getOverallBalanceDays() {
+        return overallBalanceDays;
+    }
 
     public void setDaysLeft(Double daysLeft) {
         this.daysLeft = daysLeft;
@@ -104,52 +176,12 @@ public class AbsenceBalance extends AbstractParentEntity {
         this.ecologicalDaysLeft = ecologicalDaysLeft;
     }
 
-    public Integer getDisabilityDueDays() {
-        return disabilityDueDays;
-    }
-
-    public void setDisabilityDueDays(Integer disabilityDueDays) {
-        this.disabilityDueDays = disabilityDueDays;
-    }
-
-    public Integer getEcologicalDueDays() {
-        return ecologicalDueDays;
-    }
-
-    public void setEcologicalDueDays(Integer ecologicalDueDays) {
-        this.ecologicalDueDays = ecologicalDueDays;
-    }
-
-    public void setAddBalanceDaysAims(Integer addBalanceDaysAims) {
-        this.addBalanceDaysAims = addBalanceDaysAims;
-    }
-
-    public Integer getAddBalanceDaysAims() {
-        return addBalanceDaysAims;
-    }
-
-    public void setOverallBalanceDays(Integer overallBalanceDays) {
-        this.overallBalanceDays = overallBalanceDays;
-    }
-
-    public Integer getOverallBalanceDays() {
-        return overallBalanceDays;
-    }
-
     public void setAbsenceToAbsenceBalances(List<AbsenceToAbsenceBalance> absenceToAbsenceBalances) {
         this.absenceToAbsenceBalances = absenceToAbsenceBalances;
     }
 
     public List<AbsenceToAbsenceBalance> getAbsenceToAbsenceBalances() {
         return absenceToAbsenceBalances;
-    }
-
-    public void setDaysSpent(Integer daysSpent) {
-        this.daysSpent = daysSpent;
-    }
-
-    public Integer getDaysSpent() {
-        return daysSpent != null ? daysSpent : 0;
     }
 
     public void setPersonGroup(PersonGroupExt personGroup) {
@@ -176,35 +208,4 @@ public class AbsenceBalance extends AbstractParentEntity {
         return dateTo;
     }
 
-    public void setBalanceDays(Integer balanceDays) {
-        this.balanceDays = balanceDays;
-    }
-
-    public Integer getBalanceDays() {
-        return balanceDays != null ? balanceDays : 0;
-    }
-
-    public void setAdditionalBalanceDays(Integer additionalBalanceDays) {
-        this.additionalBalanceDays = additionalBalanceDays;
-    }
-
-    public Integer getAdditionalBalanceDays() {
-        return additionalBalanceDays != null ? additionalBalanceDays : 0;
-    }
-
-    public Integer getExtraDaysSpent() {
-        return extraDaysSpent != null ? extraDaysSpent : 0;
-    }
-
-    public void setExtraDaysSpent(Integer extraDaysSpent) {
-        this.extraDaysSpent = extraDaysSpent;
-    }
-
-    public Integer getLongAbsenceDays() {
-        return longAbsenceDays != null ? longAbsenceDays : 0;
-    }
-
-    public void setLongAbsenceDays(Integer longAbsenceDays) {
-        this.longAbsenceDays = longAbsenceDays;
-    }
 }
