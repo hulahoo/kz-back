@@ -39,10 +39,14 @@
                            caption="mainMsg://organizationName"
                            editable="false"/>
                 <textField id="position" property="assignedPerson.currentAssignment.positionGroup"/>
-<!--                <textField id="job" property="assignedPerson.currentAssignment.jobGroup" visible="false"/>-->
                 <textField id="grade" property="assignedPerson.currentAssignment.gradeGroup"/>
                 <textField id="kpiScore" property="kpiScore"/>
-                <textField id="extraPoint" property="extraPoint"/>
+                <hbox expand="extraPoint"
+                      caption="msg://kz.uco.tsadv.modules.performance.model/AssignedPerformancePlan.extraPoint">
+                    <textField id="extraPoint"
+                               dataContainer="assignedPerformancePlanDc" property="extraPoint" editable="false"/>
+                    <button id="extraPointBtn" icon="font-icon:FILE_O"/>
+                </hbox>
                 <textField id="finalScore" property="finalScore"/>
                 <textField id="maxBonusPercent" property="maxBonusPercent"/>
                 <textField id="adjustedScore" property="adjustedScore"/>

@@ -8333,6 +8333,7 @@ create table TSADV_ASSIGNED_PERFORMANCE_PLAN (
     MAX_BONUS_PERCENT double precision,
     PURPOSE varchar(255),
     FILE_ID uuid,
+    LINE_MANAGER_ID uuid,
     --
     primary key (ID)
 )^

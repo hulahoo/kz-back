@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.Button;
 import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
@@ -12,6 +13,7 @@ import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.performance.enums.AssignedGoalTypeEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
+import kz.uco.tsadv.web.screens.assignedperformanceplan.ModalAssignedPerformancePlanEdit;
 
 import javax.inject.Inject;
 
@@ -202,5 +204,13 @@ public class AssignedPerformancePlanEdit extends StandardEditor<AssignedPerforma
                 }).build().show()
                 .addAfterCloseListener(afterCloseEvent ->
                         assignedGoalDl.load());
+    }
+
+    @Subscribe("extraPointBtn")
+    protected void onExtraPointBtnClick(Button.ClickEvent event) {
+        screenBuilders.editor(AssignedPerformancePlan.class, this)
+                .editEntity(assignedPerformancePlanDc.getItem())
+                .withScreenClass(ModalAssignedPerformancePlanEdit.class)
+                .build().show();
     }
 }
