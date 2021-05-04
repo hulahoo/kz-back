@@ -26,7 +26,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
     @Inject
     protected FieldGroup fieldGroup;
     @Named("fieldGroup.balanceDays")
-    protected TextField<Double> balanceDaysField;
+    protected TextField<Integer> balanceDaysField;
 
     protected boolean tooShortAbsenceBalance;
     @Inject
@@ -57,10 +57,10 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
     @Override
     protected void initNewItem(AbsenceBalance item) {
         super.initNewItem(item);
-        item.setBalanceDays((double) 0);
+        item.setBalanceDays(0);
         final PersonExt person = item.getPersonGroup().getPerson();
         if (item.getAdditionalBalanceDays() != null && item.getAdditionalBalanceDays() == 0) {
-            item.setAdditionalBalanceDays((double) 0);
+            item.setAdditionalBalanceDays(0);
         }
         if (person != null) {
             final List<AbsenceBalance> balances = commonService.getEntities(AbsenceBalance.class, "select e from tsadv$AbsenceBalance e\n" +
@@ -82,8 +82,8 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
         }*/
         balanceDaysField.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                double overallBalanceDays = e.getValue();
-                double difference = 0;
+                Integer overallBalanceDays = (Integer) e.getValue(); //todo: надо потом убрать
+                Integer difference = 0;
                 if (getItem().getOverallBalanceDays() != null && getItem().getOverallBalanceDays() != 0) {
                     difference = getItem().getOverallBalanceDays() - getItem().getBalanceDays();
                     if (difference < 0) {
