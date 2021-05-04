@@ -19,7 +19,7 @@ public class RestUtilComponent {
     @Inject
     private RestTemplate restTemplate;
 
-    public String getApplicationToken(String url, String username, String password) {
+    public String getApplicationToken(String url, String username, String password, String language) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -28,10 +28,11 @@ public class RestUtilComponent {
         map.add("username", username);
         map.add("password", password);
 
-        String restClientSecret = new String(Base64.encodeBase64(
+        @SuppressWarnings("ConstantConditions") String restClientSecret = new String(Base64.encodeBase64(
                 (AppContext.getProperty("cuba.rest.client.id") + ":" + (AppContext.getProperty("cuba.rest.client.secret")).substring(AppContext.getProperty("cuba.rest.client.secret").indexOf("}") + 1))
                         .getBytes(StandardCharsets.UTF_8)));
         headers.add("Authorization", "Basic " + restClientSecret);
+        headers.add("accept-language", language);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 

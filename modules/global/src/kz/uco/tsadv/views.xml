@@ -23668,6 +23668,9 @@
     <view entity="tsadv_StudentHomework" name="studentHomework.edit" extends="_local">
         <property name="homework" view="_minimal">
             <property name="course" view="_minimal">
+                <property name="feedbackTemplates" view="_minimal">
+                    <property name="feedbackTemplate" view="_minimal"/>
+                </property>
                 <property name="sections" view="_minimal"/>
             </property>
         </property>
