@@ -147,10 +147,10 @@ public class ActivityBrowseNew extends AbstractLookup {
 
     public Component generateTaskStatusColumn(ActivityTask entity) {
         Label label = componentsFactory.createComponent(Label.class);
-        if (entity.getStatus().equals("20")) {
+        if (entity.getStatus().equals(20)) {
             label.setValue(getMessage("closed"));
         }
-        if (entity.getStatus().equals("10")) {
+        if (entity.getStatus().equals(10)) {
             label.setValue(getMessage("inProgress"));
         }
         return label;
