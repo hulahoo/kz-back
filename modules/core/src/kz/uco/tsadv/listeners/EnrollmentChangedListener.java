@@ -256,6 +256,7 @@ public class EnrollmentChangedListener {
                             map);
                     notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
                             tsadvUser, map);
+                    sendNotification(enrollment, "tdc.trainer.newEnrollment");
                 }
             } else {
                 sendNotification(enrollment, "tdc.trainer.newEnrollment");
