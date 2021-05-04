@@ -203,7 +203,7 @@ public class EmployeeServiceBean implements EmployeeService {
         PositionGroupExt positionGroup = personGroup.getCurrentAssignment().getPositionGroup();
         dto.setPositionGroupId(positionGroup.getId());
         dto.setPositionId(positionGroup.getPosition().getId());
-        dto.setCompanyId(personGroup.getCompany().getId());
+        dto.setCompanyId(personGroup.getCompany() != null ? personGroup.getCompany().getId() : null);
         return dto;
     }
 
