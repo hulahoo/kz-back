@@ -134,6 +134,21 @@
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="tsadv_AbsenceBalanceService">
+        <method name="getAbsenceBalance">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceDate" type="java.util.Date"/>
+        </method>
+        <method name="getEnvironmentalDays">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceDate" type="java.util.Date"/>
+        </method>
+        <method name="getAbsenceBalance">
+            <param name="absenceTypeId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceDate" type="java.util.Date"/>
+        </method>
+    </service>
     <service name="tsadv_DocumentService">
         <method name="getInsuredPerson">
             <param name="type" type="java.lang.String"/>
