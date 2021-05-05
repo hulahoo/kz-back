@@ -25,7 +25,7 @@ import java.util.*;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 /**
- * @author daniil.ivantsov
+ * @author Kairat.Karipkul
  */
 
 public class ActivityBrowseNew extends AbstractLookup {

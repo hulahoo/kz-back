@@ -16,47 +16,47 @@
                 ]]>
             </query>
         </groupDatasource>
-<!--        <groupDatasource id="notificationsDs"-->
-<!--                         class="kz.uco.uactivity.entity.Activity"-->
-<!--                         view="_local">-->
-<!--            <query>-->
-<!--                <![CDATA[select e from uactivity$Activity e-->
-<!--                            where e.assignedUser = :session$user-->
-<!--                            and e.type.code = 'NOTIFICATION'-->
-<!--                            order by e.startDateTime desc]]>-->
-<!--            </query>-->
-<!--        </groupDatasource>-->
-<!--        <groupDatasource id="activityTypesDs"-->
-<!--                         class="kz.uco.uactivity.entity.ActivityType"-->
-<!--                         view="_minimal">-->
-<!--            <query>-->
-<!--                <![CDATA[select e from uactivity$ActivityType e]]>-->
-<!--            </query>-->
-<!--        </groupDatasource>-->
-<!--        <groupDatasource id="activitiesWithoutDateDs"-->
-<!--                         class="kz.uco.uactivity.entity.Activity">-->
-<!--            <query>-->
-<!--                <![CDATA[select e from uactivity$Activity e-->
-<!--where e.startDateTime is null-->
-<!--and e.endDateTime is null]]>-->
-<!--            </query>-->
-<!--        </groupDatasource>-->
-<!--        <groupDatasource id="activitiesOnlyWithDates"-->
-<!--                         class="kz.uco.uactivity.entity.Activity"-->
-<!--                         view="activity-view">-->
-<!--            <query>-->
-<!--                <![CDATA[select e from uactivity$Activity e-->
-<!--where e.startDateTime is not null-->
-<!--and e.endDateTime is not null]]>-->
-<!--            </query>-->
-<!--        </groupDatasource>-->
-<!--        <groupDatasource id="userExtsDs"-->
-<!--                         class="kz.uco.tsadv.modules.administration.TsadvUser"-->
-<!--                         view="user.browse">-->
-<!--            <query>-->
-<!--                <![CDATA[select e from tsadv$UserExt e]]>-->
-<!--            </query>-->
-<!--        </groupDatasource>-->
+        <groupDatasource id="notificationsDs"
+                         class="kz.uco.uactivity.entity.Activity"
+                         view="_local">
+            <query>
+                <![CDATA[select e from uactivity$Activity e
+                            where e.assignedUser = :session$user
+                            and e.type.code = 'NOTIFICATION'
+                            order by e.startDateTime desc]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="activityTypesDs"
+                         class="kz.uco.uactivity.entity.ActivityType"
+                         view="_minimal">
+            <query>
+                <![CDATA[select e from uactivity$ActivityType e]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="activitiesWithoutDateDs"
+                         class="kz.uco.uactivity.entity.Activity">
+            <query>
+                <![CDATA[select e from uactivity$Activity e
+where e.startDateTime is null
+and e.endDateTime is null]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="activitiesOnlyWithDates"
+                         class="kz.uco.uactivity.entity.Activity"
+                         view="activity-view">
+            <query>
+                <![CDATA[select e from uactivity$Activity e
+where e.startDateTime is not null
+and e.endDateTime is not null]]>
+            </query>
+        </groupDatasource>
+        <groupDatasource id="userExtsDs"
+                         class="kz.uco.tsadv.modules.administration.TsadvUser"
+                         view="user.browse">
+            <query>
+                <![CDATA[select e from tsadv$UserExt e]]>
+            </query>
+        </groupDatasource>
     </dsContext>
     <dialogMode height="600"
                 width="800"/>
@@ -100,42 +100,43 @@
                     </buttonsPanel>
                 </table>
             </tab>
-<!--            <tab id="notificationsTab"-->
-<!--                 caption="msg://notificationsTab"-->
-<!--                 expand="notificationsTable"-->
-<!--                 spacing="true">-->
-<!--                <filter id="notificationsFilter"-->
-<!--                        applyTo="notificationsTable"-->
-<!--                        datasource="notificationsDs"/>-->
-<!--                <table id="notificationsTable"-->
-<!--                       width="100%">-->
-<!--                    <columns>-->
-<!--                        <column id="checkboxColumn"-->
-<!--                                caption="msg://select.column.caption"-->
-<!--                                generator="generateCheckBoxColumn"/>-->
-<!--                        <column id="name"-->
-<!--                                caption="msg://notificationText"/>-->
-<!--                        <column id="startDateTime"-->
-<!--                                caption="msg://notificationDate"/>-->
-<!--                        <column id="status"-->
-<!--                                caption="msg://notificationStatus"-->
-<!--                                generator="generateReadStatusColumn"/>-->
-<!--                    </columns>-->
-<!--                    <rows datasource="notificationsDs"/>-->
-<!--                    <rowsCount/>-->
-<!--                    &lt;!&ndash;&ndash;&gt;-->
-<!--                </table>-->
-<!--                <buttonsPanel id="buttonsPanel">-->
-<!--                    <button id="markAsReadButton"-->
-<!--                            caption="msg://markAsRead"-->
-<!--                            enable="false"-->
-<!--                            invoke="markAsRead"/>-->
-<!--                    <button id="markAsUnreadButton"-->
-<!--                            caption="msg://markAsNotRead"-->
-<!--                            enable="false"-->
-<!--                            invoke="markAsUnread"/>-->
-<!--                </buttonsPanel>-->
-<!--            </tab>-->
+            <tab id="notificationsTab"
+                 caption="msg://notificationsTab"
+                 expand="notificationsTable"
+                 spacing="true">
+                <filter id="notificationsFilter"
+                        applyTo="notificationsTable"
+                        datasource="notificationsDs"/>
+                <table id="notificationsTable"
+                       width="100%">
+                    <columns>
+                        <column id="checkboxColumn"
+                                caption=" "
+                                generator="generateCheckBoxColumn"/>
+                        <column id="name"
+                                maxTextLength="50"
+                                caption="msg://notificationText"/>
+                        <column id="startDateTime"
+                                caption="msg://notificationDate"/>
+                        <column id="status"
+                                caption="msg://notificationStatus"
+                                generator="generateReadStatusColumn"/>
+                    </columns>
+                    <rows datasource="notificationsDs"/>
+                    <rowsCount/>
+                    <!---->
+                </table>
+                <buttonsPanel id="buttonsPanel">
+                    <button id="markAsReadButton"
+                            caption="msg://markAsRead"
+                            enable="false"
+                            invoke="markAsRead"/>
+                    <button id="markAsUnreadButton"
+                            caption="msg://markAsNotRead"
+                            enable="false"
+                            invoke="markAsUnread"/>
+                </buttonsPanel>
+            </tab>
         </tabSheet>
     </layout>
 </window>
