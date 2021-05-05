@@ -4735,6 +4735,7 @@ create table TSADV_DIC_ABSENCE_TYPE (
     TEMPORARY_TRANSFER boolean,
     OVERTIME_WORK boolean,
     NUM_DAYS_CALENDAR_YEAR integer,
+    IS_FILE_REQUIRED boolean not null,
     --
     primary key (ID)
 )^

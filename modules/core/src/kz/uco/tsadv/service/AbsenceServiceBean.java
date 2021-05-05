@@ -471,6 +471,89 @@ public class AbsenceServiceBean implements AbsenceService {
                 .orElse(VacationDurationType.CALENDAR);
     }
 
+    protected java.util.Calendar truncCalendar(java.util.Calendar calendar) {
+        calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        calendar.set(java.util.Calendar.MINUTE, 0);
+        calendar.set(java.util.Calendar.SECOND, 0);
+        calendar.set(java.util.Calendar.MILLISECOND, 0);
+        return calendar;
+    }
+
+    @Override
+    public Long getReceivedVacationDaysOfYear(UUID personGroupId, UUID absenceTypeId, Date date) {
+        try {
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+            calendar.setTime(date);
+
+            int year = calendar.get(java.util.Calendar.YEAR);
+
+            calendar.setTime(format.parse("2020-01-01"));
+            this.truncCalendar(calendar);
+
+            calendar.set(java.util.Calendar.YEAR, year);
+            Date startDate = calendar.getTime();
+
+            calendar.setTime(format.parse("2020-12-31"));
+            this.truncCalendar(calendar);
+
+            calendar.set(java.util.Calendar.YEAR, year);
+            Date endDate = calendar.getTime();
+
+            //noinspection ConstantConditions
+            return persistence.callInTransaction(em ->
+                    (Long) em.createNativeQuery("with absences as (select sum(e.ABSENCE_DAYS) as sum from TSADV_ABSENCE e " +
+                            " where e.person_group_id = #personGroupId " +
+                            "   and e.type_id = #typeId" +
+                            "   and e.date_from between (#starDate)::date and (#endDate)::date " +
+                            "   and e.delete_ts is null ) ," +
+                            "requests as (" +
+                            "   select sum(e.ABSENCE_DAYS) as sum from TSADV_ABSENCE_REQUEST e " +
+                            " join TSADV_DIC_REQUEST_STATUS s on s.id = e.status_id " +
+                            " where e.person_group_id = #personGroupId " +
+                            "   and e.type_id = #typeId " +
+                            "   and s.code = 'APPROVING' " +
+                            "   and e.date_from between (#starDate)::date and (#endDate)::date " +
+                            "   and e.delete_ts is null)" +
+                            "select (coalesce( (select sum from absences) , 0) + coalesce((select sum from requests),0) ) as sum")
+                            .setParameter("personGroupId", personGroupId)
+                            .setParameter("typeId", absenceTypeId)
+                            .setParameter("endDate", endDate)
+                            .setParameter("starDate", startDate)
+                            .getFirstResult()
+            );
+
+        } catch (Exception e) {
+            throw new RuntimeException("", e);
+        }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Override
+    public Long getRemainingDaysWeekendWork(UUID personGroupId) {
+        return persistence.callInTransaction(em ->
+                (Long) em.createNativeQuery("with absences_work_on_weekend as (select sum(e.ABSENCE_DAYS) as sum from TSADV_ABSENCE e \n" +
+                        "\tjoin tsadv_dic_absence_type t on t.id = e.type_id and t.delete_ts is null and t.work_on_weekend is true\n" +
+                        " where e.person_group_id = #personGroupId \n" +
+                        "   and e.delete_ts is null ) ,\n" +
+                        "absences_is_check_work as (select sum(e.ABSENCE_DAYS) as sum from TSADV_ABSENCE e \n" +
+                        "\tjoin tsadv_dic_absence_type t on t.id = e.type_id and t.delete_ts is null and t.is_check_work is true\n" +
+                        " where e.person_group_id = #personGroupId \n" +
+                        "   and e.delete_ts is null ) ,\n" +
+                        "requests as (\n" +
+                        "   select sum(e.ABSENCE_DAYS) as sum from TSADV_ABSENCE_REQUEST e \n" +
+                        " \tjoin TSADV_DIC_REQUEST_STATUS s on s.id = e.status_id and e.delete_ts is null\n" +
+                        "\tjoin tsadv_dic_absence_type t on t.id = e.type_id and t.delete_ts is null and t.is_check_work is true\n" +
+                        " where e.person_group_id = #personGroupId \n" +
+                        "   and s.code = 'APPROVING' \n" +
+                        "   and e.delete_ts is null)\n" +
+                        "select (coalesce( (select sum from absences_work_on_weekend) , 0) - coalesce((select sum from absences_is_check_work),0) - coalesce((select sum from requests),0) )  as sum")
+                        .setParameter("personGroupId", personGroupId)
+                        .getFirstResult()
+        );
+    }
+
     @Nullable
     protected VacationDurationType getVacationDurationType(@Nullable DicAbsenceType absenceType) {
         return absenceType != null ? absenceType.getVacationDurationType() : null;
