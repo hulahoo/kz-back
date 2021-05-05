@@ -39,6 +39,8 @@ public class PersonProfileDto implements Serializable {
 
     private String phone;
 
+    private UUID companyId;
+
     public UUID getId() {
         return id;
     }
@@ -157,5 +159,13 @@ public class PersonProfileDto implements Serializable {
 
     public void setPositionId(UUID positionId) {
         this.positionId = positionId;
+    }
+
+    public UUID getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(UUID companyId) {
+        this.companyId = companyId;
     }
 }

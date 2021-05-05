@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @Listeners("tsadv_StandardScheduleListener")
-@NamePattern("%s|id,legacyId")
+@NamePattern("%s|scheduleName,id,legacyId")
 @Table(name = "TSADV_STANDARD_SCHEDULE")
 @Entity(name = "tsadv$StandardSchedule")
 public class StandardSchedule extends AbstractParentEntity {
