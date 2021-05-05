@@ -15,9 +15,8 @@ import kz.uco.tsadv.modules.recruitment.enums.HS_Periods;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 
-@Listeners("tsadv_AssignmentExtListener")
+@PublishEntityChangedEvents
 @NamePattern("%s %s %s %s|id,organizationGroup,jobGroup,group,endDate,startDate")
 @Extends(Assignment.class)
 @Entity(name = "base$AssignmentExt")
@@ -96,11 +95,19 @@ public class AssignmentExt extends Assignment implements IGroupedEntity<Assignme
 
     @Transient
     @MetaProperty
-    protected List<AssignmentExt> children;
+    protected AssignmentExt children;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "TEMPORARY_END_DATE")
     protected Date temporaryEndDate;
+
+    public void setChildren(AssignmentExt children) {
+        this.children = children;
+    }
+
+    public AssignmentExt getChildren() {
+        return children;
+    }
 
     public void setTemporaryEndDate(Date temporaryEndDate) {
         this.temporaryEndDate = temporaryEndDate;
@@ -188,14 +195,6 @@ public class AssignmentExt extends Assignment implements IGroupedEntity<Assignme
 
     public DicAssignmentStatus getAssignmentStatus() {
         return assignmentStatus;
-    }
-
-    public List<AssignmentExt> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<AssignmentExt> children) {
-        this.children = children;
     }
 
     public void setPositionGroup(PositionGroupExt positionGroup) {
