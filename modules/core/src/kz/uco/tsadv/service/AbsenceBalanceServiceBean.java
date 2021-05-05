@@ -59,17 +59,9 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
     protected Persistence persistence;
 
     @Override
+    @Deprecated
     public List<AbsenceBalanceV> getAbsenceBalance(UUID personGroupId) {
-        return getAbsenceBalance(personGroupId, CommonUtils.getSystemDate());
-    }
-
-    @Override
-    public List<AbsenceBalanceV> getAbsenceBalance(UUID personGroupId, Date date) {
-        return persistence.callInTransaction(em ->
-                em.createNativeQuery("select * from bal.get_hr_absence_balance(#persongroupId, #date)", AbsenceBalanceV.class)
-                        .setParameter("persongroupId", personGroupId)
-                        .setParameter("date", date)
-                        .getResultList());
+        throw new RuntimeException("remove");
     }
 
     @Override
@@ -1174,6 +1166,126 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
             absenceList.set(absenceList.indexOf(a), editedAbsence);
         } else {
             absenceList.add(editedAbsence);
+        }
+    }
+
+    @Override
+    public double getAbsenceBalance(UUID absenceTypeId, UUID personGroupId, Date absenceDate) {
+        DicAbsenceType type = dataManager.load(DicAbsenceType.class)
+                .id(absenceTypeId)
+                .view(View.LOCAL)
+                .one();
+
+        return type.getIsEcologicalAbsence()
+                ? this.getEnvironmentalDays(personGroupId, absenceDate)
+                : this.getAbsenceBalance(personGroupId, absenceDate);
+    }
+
+    @Override
+    public double getAbsenceBalance(UUID personGroupId, Date absenceDate) {
+        double finalAbsenceBalance = 0.0;
+        try {
+            if (personGroupId != null && absenceDate != null) {
+                List<AbsenceBalance> oneAbsenceBalanceList = dataManager.load(AbsenceBalance.class)
+                        .query("select e from tsadv$AbsenceBalance e " +
+                                " where e.personGroup.id = :personGroupId " +
+                                " and e.dateFrom = :absenceDate " +
+                                " order by e.dateFrom desc")
+                        .parameter("personGroupId", personGroupId)
+                        .parameter("absenceDate", absenceDate)
+                        .view("absenceBalance.edit")
+                        .list();
+                if (!oneAbsenceBalanceList.isEmpty()) {
+                    return oneAbsenceBalanceList.get(0).getDaysLeft() + oneAbsenceBalanceList.get(0).getExtraDaysLeft();
+                } else {
+                    List<AbsenceBalance> absenceBalanceMinList = dataManager.load(AbsenceBalance.class)
+                            .query("select e from tsadv$AbsenceBalance e " +
+                                    " where e.personGroup.id = :personGroupId " +
+                                    " and :absenceDate >= e.dateFrom " +
+                                    " order by e.dateFrom desc")
+                            .parameter("personGroupId", personGroupId)
+                            .parameter("absenceDate", absenceDate)
+                            .view("absenceBalance.edit")
+                            .list();
+                    List<AbsenceBalance> absenceBalanceMaxList = dataManager.load(AbsenceBalance.class)
+                            .query("select e from tsadv$AbsenceBalance e " +
+                                    " where e.personGroup.id = :personGroupId " +
+                                    " and :absenceDate <= e.dateFrom " +
+                                    " order by e.dateFrom desc")
+                            .parameter("personGroupId", personGroupId)
+                            .parameter("absenceDate", absenceDate)
+                            .view("absenceBalance.edit")
+                            .list();
+
+                    AbsenceBalance minAbsenceBalance = !absenceBalanceMinList.isEmpty() ? absenceBalanceMinList.get(0) : null;
+                    AbsenceBalance maxAbsenceBalance = !absenceBalanceMaxList.isEmpty() ? absenceBalanceMaxList.get(0) : null;
+                    if (minAbsenceBalance == null || maxAbsenceBalance == null) {
+                        return finalAbsenceBalance;
+                    }
+                    finalAbsenceBalance = ((double) datesService.getDayOfMonth(absenceDate)
+                            * ((maxAbsenceBalance.getDaysLeft() + maxAbsenceBalance.getExtraDaysLeft() + maxAbsenceBalance.getEcologicalDaysLeft())
+                            - (minAbsenceBalance.getDaysLeft() + minAbsenceBalance.getExtraDaysLeft() + minAbsenceBalance.getEcologicalDaysLeft()))
+                            / datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom()))
+                            + minAbsenceBalance.getDaysLeft() + minAbsenceBalance.getExtraDaysLeft() + minAbsenceBalance.getEcologicalDaysLeft();
+                }
+            }
+            return finalAbsenceBalance;
+        } catch (Exception ignored) {
+            return 0.0;
+        }
+    }
+
+    @Override
+    public double getEnvironmentalDays(UUID personGroupId, Date absenceDate) {
+        double finalEnvironmentalDays = 0.0;
+        try {
+            if (personGroupId != null && absenceDate != null) {
+                List<AbsenceBalance> oneAbsenceBalanceList = dataManager.load(AbsenceBalance.class)
+                        .query("select e from tsadv$AbsenceBalance e " +
+                                " where e.personGroup.id = :personGroupId " +
+                                " and e.dateFrom = :absenceDate " +
+                                " order by e.dateFrom desc")
+                        .parameter("personGroupId", personGroupId)
+                        .parameter("absenceDate", absenceDate)
+                        .view("absenceBalance.edit")
+                        .list();
+                if (!oneAbsenceBalanceList.isEmpty()) {
+                    return oneAbsenceBalanceList.get(0).getEcologicalDaysLeft();
+                } else {
+                    List<AbsenceBalance> absenceBalanceMinList = dataManager.load(AbsenceBalance.class)
+                            .query("select e from tsadv$AbsenceBalance e " +
+                                    " where e.personGroup.id = :personGroupId " +
+                                    " and :absenceDate >= e.dateFrom " +
+                                    " order by e.dateFrom desc")
+                            .parameter("personGroupId", personGroupId)
+                            .parameter("absenceDate", absenceDate)
+                            .view("absenceBalance.edit")
+                            .list();
+                    List<AbsenceBalance> absenceBalanceMaxList = dataManager.load(AbsenceBalance.class)
+                            .query("select e from tsadv$AbsenceBalance e " +
+                                    " where e.personGroup.id = :personGroupId " +
+                                    " and :absenceDate <= e.dateFrom " +
+                                    " order by e.dateFrom desc")
+                            .parameter("personGroupId", personGroupId)
+                            .parameter("absenceDate", absenceDate)
+                            .view("absenceBalance.edit")
+                            .list();
+
+                    AbsenceBalance minAbsenceBalance = !absenceBalanceMinList.isEmpty() ? absenceBalanceMinList.get(0) : null;
+                    AbsenceBalance maxAbsenceBalance = !absenceBalanceMaxList.isEmpty() ? absenceBalanceMaxList.get(0) : null;
+                    if (minAbsenceBalance == null || maxAbsenceBalance == null) {
+                        return finalEnvironmentalDays;
+                    }
+                    finalEnvironmentalDays = ((double) datesService.getDayOfMonth(absenceDate)
+                            * (maxAbsenceBalance.getEcologicalDaysLeft()
+                            - minAbsenceBalance.getEcologicalDaysLeft())
+                            / datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom()))
+                            + minAbsenceBalance.getEcologicalDaysLeft();
+                }
+            }
+            return finalEnvironmentalDays;
+        } catch (Exception ignored) {
+            return 0.0;
         }
     }
 }
