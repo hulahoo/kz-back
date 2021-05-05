@@ -128,6 +128,18 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "NUM_DAYS_CALENDAR_YEAR")
     protected Integer numDaysCalendarYear;
 
+    @NotNull
+    @Column(name = "IS_FILE_REQUIRED", nullable = false)
+    private Boolean isFileRequired = false;
+
+    public Boolean getIsFileRequired() {
+        return isFileRequired;
+    }
+
+    public void setIsFileRequired(Boolean isFileRequired) {
+        this.isFileRequired = isFileRequired;
+    }
+
     public void setIsEcologicalAbsence(Boolean isEcologicalAbsence) {
         this.isEcologicalAbsence = isEcologicalAbsence;
     }
