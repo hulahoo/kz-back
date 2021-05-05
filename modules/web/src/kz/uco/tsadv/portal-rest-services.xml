@@ -245,4 +245,15 @@
             <param name="employeePersonGroupId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="cuba_UserSettingService">
+        <method name="saveSetting">
+            <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
+            <param name="name" type="java.lang.String"/>
+            <param name="value" type="java.lang.String"/>
+        </method>
+        <method name="loadSetting">
+            <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
+            <param name="name" type="java.lang.String"/>
+        </method>
+    </service>
 </services>
