@@ -154,8 +154,8 @@ public class BprocProcessStatesListener extends AbstractBprocHelper {
 
             boolean allTaskApproved = bprocActors.stream()
                     .map(BprocActors::getBprocUserTaskCode)
-                    .map(s -> bprocService.getProcessVariable(taskData.getProcessInstanceId(), s + "_result"))
-                    .allMatch(o -> userTaskResults.containsOutcome(outcomesContainer, AbstractBprocRequest.OUTCOME_APPROVE));
+                    .map(s -> (OutcomesContainer) bprocService.getProcessVariable(taskData.getProcessInstanceId(), s + "_result"))
+                    .allMatch(o -> userTaskResults.containsOutcome(o, AbstractBprocRequest.OUTCOME_APPROVE));
 
             if (allTaskApproved) bprocService.approve(bprocRequest);
         }
