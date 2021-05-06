@@ -17748,6 +17748,7 @@ create table TSADV_SCORM_QUESTION_MAPPING (
     LEARNING_OBJECT_ID uuid not null,
     CODE varchar(255) not null,
     QUESTION varchar(255) not null,
+    SERIAL_NUMBER integer,
     --
     primary key (ID)
 )^

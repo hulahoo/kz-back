@@ -23,6 +23,17 @@ public class ScormQuestionMapping extends AbstractParentEntity {
     @Column(name = "QUESTION", nullable = false)
     protected String question;
 
+    @Column(name = "SERIAL_NUMBER")
+    protected Integer serialNumber;
+
+    public Integer getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(Integer serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
     public String getQuestion() {
         return question;
     }
