@@ -59,8 +59,9 @@ public class EnrollmentChangedListener {
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<Enrollment, UUID> event) {
         AttributeChanges changes = event.getChanges();
-        Enrollment enrollment = transactionalDataManager.load(event.getEntityId()).view("enrollment.for.course").one();
+        Enrollment enrollment;
         if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            enrollment = transactionalDataManager.load(event.getEntityId()).view("enrollment.for.course").one();
             if (event.getChanges().isChanged("status")) {
                 Enrollment enrollmentFront = transactionalDataManager.load(event.getEntityId())
                         .view("enrollment.validation.status")
@@ -217,6 +218,8 @@ public class EnrollmentChangedListener {
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+
+            enrollment = transactionalDataManager.load(event.getEntityId()).view("enrollment.for.course").one();
 
             if (EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 

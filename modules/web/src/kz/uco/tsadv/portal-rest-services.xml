@@ -133,6 +133,14 @@
             <param name="dateTo" type="java.util.Date"/>
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
+        <method name="getReceivedVacationDaysOfYear">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="absenceTypeId" type="java.util.UUID"/>
+            <param name="date" type="java.util.Date"/>
+        </method>
+        <method name="getRemainingDaysWeekendWork">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="tsadv_AbsenceBalanceService">
         <method name="getAbsenceBalance">
@@ -235,6 +243,17 @@
         <method name="isManagerOrSupManager">
             <param name="userId" type="java.util.UUID"/>
             <param name="employeePersonGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="cuba_UserSettingService">
+        <method name="saveSetting">
+            <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
+            <param name="name" type="java.lang.String"/>
+            <param name="value" type="java.lang.String"/>
+        </method>
+        <method name="loadSetting">
+            <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
+            <param name="name" type="java.lang.String"/>
         </method>
     </service>
 </services>

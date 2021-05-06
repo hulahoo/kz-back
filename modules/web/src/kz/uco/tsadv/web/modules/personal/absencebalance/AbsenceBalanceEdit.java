@@ -26,7 +26,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
     @Inject
     protected FieldGroup fieldGroup;
     @Named("fieldGroup.balanceDays")
-    protected TextField<Double> balanceDaysField;
+    protected TextField<Integer> balanceDaysField;
 
     protected boolean tooShortAbsenceBalance;
     @Inject
@@ -82,7 +82,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
         }*/
         balanceDaysField.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                double overallBalanceDays = e.getValue();
+                Integer overallBalanceDays = (Integer) e.getValue(); //todo: надо потом убрать
                 double difference = 0;
                 if (getItem().getOverallBalanceDays() != null && getItem().getOverallBalanceDays() != 0) {
                     difference = getItem().getOverallBalanceDays() - getItem().getBalanceDays();

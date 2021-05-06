@@ -327,4 +327,63 @@
             <param name="personGroupId" type="java.util.UUID"/>
         </params>
     </query>
+    <query name="getAssignmentSchedule" entity="tsadv$AssignmentSchedule" view="assignmentSchedule-for-my-team">
+        <jpql>
+            <![CDATA[
+            select e from tsadv$AssignmentSchedule e
+            join base$AssignmentExt a on a.group.id = e.assignmentGroup.id
+            where current_date between a.startDate and a.endDate
+            and a.personGroup.id = :personGroupId
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="getScheduleOffsetRequest" entity="tsadv_ScheduleOffsetsRequest"
+           view="scheduleOffsetsRequest-for-my-team">
+        <jpql>
+            <![CDATA[
+            select e from tsadv_ScheduleOffsetsRequest e
+            where  e.personGroup.id = :personGroupId
+            order by e.requestDate desc
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="currentStandardSchedule" entity="tsadv$StandardSchedule" view="_minimal">
+        <jpql>
+            <![CDATA[
+            select cs
+            from tsadv$AssignmentSchedule s
+                join s.schedule cs
+                join s.assignmentGroup ag
+                join ag.list a
+            where a.personGroup.id = :personGroupId
+                and a.assignmentStatus.code = 'ACTIVE'
+                and a.startDate <= CURRENT_DATE
+                and a.endDate >= CURRENT_DATE
+                and a.primaryFlag = true
+            ]]>
+        </jpql>
+        <params>
+            <param name="personGroupId" type="java.util.UUID"/>
+        </params>
+    </query>
+    <query name="usersAccessibleDicSchedulePurpose" entity="tsadv_DicSchedulePurpose" view="_minimal">
+        <jpql>
+            <![CDATA[
+            select e
+            from tsadv_DicSchedulePurpose e
+                left join base_DicCompany c on c.id = e.company.id
+            where c.id = :companyId
+                or c is null
+            ]]>
+        </jpql>
+        <params>
+            <param name="companyId" type="java.util.UUID"/>
+        </params>
+    </query>
 </queries>

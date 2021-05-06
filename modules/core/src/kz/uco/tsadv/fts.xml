@@ -1954,5 +1954,8 @@
         <entity class="kz.uco.tsadv.modules.learning.model.BookView">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicEarningPolicy">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

@@ -39,6 +39,18 @@ public class PersonProfileDto implements Serializable {
 
     private String phone;
 
+    private UUID companyId;
+
+    private String firstLastName;
+
+    public String getFirstLastName() {
+        return firstLastName;
+    }
+
+    public void setFirstLastName(String firstLastName) {
+        this.firstLastName = firstLastName;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -157,5 +169,13 @@ public class PersonProfileDto implements Serializable {
 
     public void setPositionId(UUID positionId) {
         this.positionId = positionId;
+    }
+
+    public UUID getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(UUID companyId) {
+        this.companyId = companyId;
     }
 }

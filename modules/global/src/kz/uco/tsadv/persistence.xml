@@ -648,5 +648,6 @@
         <class>kz.uco.tsadv.modules.learning.model.CourseSectionScormResult</class>
         <class>kz.uco.tsadv.modules.learning.model.ScormSuspendData</class>
         <class>kz.uco.tsadv.modules.learning.model.BookView</class>
+        <class>kz.uco.tsadv.modules.personal.dictionary.DicEarningPolicy</class>
     </persistence-unit>
 </persistence>

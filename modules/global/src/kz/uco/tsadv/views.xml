@@ -23532,6 +23532,7 @@
             </property>
             <property name="assignmentStatus" view="_local"/>
         </property>
+        <property name="company" view="_minimal"/>
         <property name="person" view="_local"/>
     </view>
     <view entity="tsadv_ChangeAbsenceDaysRequest" name="changeAbsenceDaysRequest.edit" extends="_local">
@@ -23794,5 +23795,10 @@
     </view>
     <view entity="tsadv$Course" name="course.with.logo" extends="_local">
         <property name="logo" view="_minimal"/>
+    </view>
+    <view entity="tsadv_DicEarningPolicy" name="dicEarningPolicy.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
 </views>

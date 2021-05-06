@@ -153,6 +153,8 @@ public class EmployeeServiceBean implements EmployeeService {
 
         //set data from person
         dto.setId(person.getId());
+        dto.setFirstLastName(person.getFirstLastName());
+        dto.setId(person.getId());
         dto.setFullName(person.getFioWithEmployeeNumber());
         dto.setBirthDate(person.getDateOfBirth());
         dto.setHireDate(person.getHireDate());
@@ -203,6 +205,7 @@ public class EmployeeServiceBean implements EmployeeService {
         PositionGroupExt positionGroup = personGroup.getCurrentAssignment().getPositionGroup();
         dto.setPositionGroupId(positionGroup.getId());
         dto.setPositionId(positionGroup.getPosition().getId());
+        dto.setCompanyId(personGroup.getCompany() != null ? personGroup.getCompany().getId() : null);
         return dto;
     }
 

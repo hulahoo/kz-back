@@ -83,15 +83,15 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
             balanceDays = getBalanceDays(null, positionGroup);
         }
 
-        absenceBalance.setAdditionalBalanceDays(additionalBalanceDays);
-        absenceBalance.setBalanceDays(balanceDays);
+        absenceBalance.setAdditionalBalanceDays((double) additionalBalanceDays);
+        absenceBalance.setBalanceDays((double) balanceDays);
         absenceBalance.setDateFrom(dateFrom);
         absenceBalance.setDateTo(dateTo);
-        absenceBalance.setLongAbsenceDays(0);
+        absenceBalance.setLongAbsenceDays((double) 0);
         absenceBalance.setDaysLeft((double) (balanceDays - absenceBalance.getLongAbsenceDays()));
-        absenceBalance.setDaysSpent(0);
-        absenceBalance.setAdditionalBalanceDays(additionalBalanceDays);
-        absenceBalance.setExtraDaysSpent(0);
+        absenceBalance.setDaysSpent((double) 0);
+        absenceBalance.setAdditionalBalanceDays((double) additionalBalanceDays);
+        absenceBalance.setExtraDaysSpent((double) 0);
         absenceBalance.setPersonGroup(personGroup);
         absenceBalance.setExtraDaysLeft((double) additionalBalanceDays);
         return absenceBalance;
@@ -113,16 +113,16 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
             balanceDays = getBalanceDays(null, positionGroup);
         }
 
-        absenceBalance.setAdditionalBalanceDays(additionalBalanceDays);
-        absenceBalance.setBalanceDays(balanceDays);
+        absenceBalance.setAdditionalBalanceDays((double) additionalBalanceDays);
+        absenceBalance.setBalanceDays((double) balanceDays);
         absenceBalance.setDateFrom(dateFrom);
         absenceBalance.setDateTo(dateTo);
         absenceBalance.setPersonGroup(personGroup);
         absenceBalance.setLongAbsenceDays(calculateLongAbsenceDays(absenceBalance, absence, null));
         absenceBalance.setDaysLeft((double) (balanceDays - absenceBalance.getLongAbsenceDays()));
-        absenceBalance.setDaysSpent(0);
-        absenceBalance.setAdditionalBalanceDays(additionalBalanceDays);
-        absenceBalance.setExtraDaysSpent(0);
+        absenceBalance.setDaysSpent((double) 0);
+        absenceBalance.setAdditionalBalanceDays((double) additionalBalanceDays);
+        absenceBalance.setExtraDaysSpent((double) 0);
         absenceBalance.setExtraDaysLeft((double) additionalBalanceDays);
         return absenceBalance;
     }
@@ -168,10 +168,10 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
         newBalance.setPersonGroup(personGroup);
         newBalance.setDateFrom(dateFrom);
         newBalance.setDateTo(dateTo);
-        newBalance.setBalanceDays(balanceDays);
-        newBalance.setAdditionalBalanceDays(additionalBalanceDays);
-        newBalance.setDaysSpent(0);
-        newBalance.setExtraDaysSpent(extraDaysSpent);
+        newBalance.setBalanceDays((double) balanceDays);
+        newBalance.setAdditionalBalanceDays((double) additionalBalanceDays);
+        newBalance.setDaysSpent((double) 0);
+        newBalance.setExtraDaysSpent((double) extraDaysSpent);
         newBalance.setExtraDaysLeft((double) extraDaysLeft);
 
         newBalance.setDaysLeft((double) balanceDays);
@@ -194,10 +194,10 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
         newBalance.setPersonGroup(personGroup);
         newBalance.setDateFrom(dateFrom);
         newBalance.setDateTo(dateTo);
-        newBalance.setBalanceDays(balanceDays);
-        newBalance.setAdditionalBalanceDays(additionalBalanceDays);
-        newBalance.setDaysSpent(0);
-        newBalance.setExtraDaysSpent(extraDaysSpent);
+        newBalance.setBalanceDays((double) balanceDays);
+        newBalance.setAdditionalBalanceDays((double) additionalBalanceDays);
+        newBalance.setDaysSpent((double) 0);
+        newBalance.setExtraDaysSpent((double) extraDaysSpent);
         newBalance.setExtraDaysLeft((double) extraDaysLeft);
 
         newBalance.setDaysLeft((double) balanceDays);
@@ -1066,8 +1066,8 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                 "absence.view");
     }
 
-    protected Integer calculateLongAbsenceDays(AbsenceBalance absenceBalance, Absence editedAbsence, Absence excludedAbsence) {
-        Integer longAbsenceDays = 0;
+    protected Double calculateLongAbsenceDays(AbsenceBalance absenceBalance, Absence editedAbsence, Absence excludedAbsence) {
+        double longAbsenceDays = 0;
         List<Absence> longAbsenceList = getLongAbsenceList(absenceBalance.getPersonGroup(), editedAbsence, excludedAbsence, absenceBalance);
         for (Absence absence : longAbsenceList) {
             if (absence.getDateFrom().getTime() >= absenceBalance.getDateFrom().getTime() &&

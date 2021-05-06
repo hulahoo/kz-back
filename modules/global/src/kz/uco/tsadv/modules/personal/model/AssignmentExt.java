@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
-@Listeners("tsadv_AssignmentExtListener")
+@PublishEntityChangedEvents
 @NamePattern("%s %s %s %s|id,organizationGroup,jobGroup,group,endDate,startDate")
 @Extends(Assignment.class)
 @Entity(name = "base$AssignmentExt")
