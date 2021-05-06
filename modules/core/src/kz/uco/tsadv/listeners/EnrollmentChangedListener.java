@@ -6,7 +6,6 @@ import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.app.events.AttributeChanges;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.service.NotificationSenderAPIService;
@@ -87,6 +86,7 @@ public class EnrollmentChangedListener {
                             Map<String, Object> map = new HashMap<>();
                             String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                     + "/course/"
+                                    + enrollment.getCourse().getId()
                                     + "\" target=\"_blank\">%s " + "</a>";
                             String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                     + "/my-course/"
@@ -229,6 +229,7 @@ public class EnrollmentChangedListener {
                     Map<String, Object> map = new HashMap<>();
                     String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                             + "/course/"
+                            + enrollment.getCourse().getId()
                             + "\" target=\"_blank\">%s " + "</a>";
                     String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                             + "/my-course/"
