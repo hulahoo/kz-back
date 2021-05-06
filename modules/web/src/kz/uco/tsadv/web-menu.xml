@@ -121,6 +121,7 @@
             <item screen="tsadv$DicCompetenceType.browse"/>
             <item screen="tsadv$DicTradeUnion.browse"/>
             <item screen="tsadv$DicSalaryChangeReason.browse"/>
+            <item screen="tsadv_DicEarningPolicy.browse"/>
             <item screen="tsadv$DicLanguage.browse"/>
             <item screen="tsadv$DicRateType.browse"/>
             <item screen="tsadv$DicLearningHistoryStatus.browse"/>
