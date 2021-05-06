@@ -207,6 +207,7 @@
         <method name="personGroupInfo">
             <param name="userId" type="java.util.UUID"/>
         </method>
+        <method name="availableSalary"/>
     </service>
     <service name="tsadv_OrgStructureRequestService">
         <method name="initialCreate"/>

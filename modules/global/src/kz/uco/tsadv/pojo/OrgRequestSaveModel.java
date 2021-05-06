@@ -12,7 +12,7 @@ public class OrgRequestSaveModel implements Serializable {
     private UUID author;
     private Date modifyDate;
     private Date requestDate;
-    private UUID requestStatus;
+    private UUID status;
     private String comment;
 
     public String getComment() {
@@ -71,11 +71,11 @@ public class OrgRequestSaveModel implements Serializable {
         this.requestDate = requestDate;
     }
 
-    public UUID getRequestStatus() {
-        return requestStatus;
+    public UUID getStatus() {
+        return status;
     }
 
-    public void setRequestStatus(UUID requestStatus) {
-        this.requestStatus = requestStatus;
+    public void setStatus(UUID status) {
+        this.status = status;
     }
 }

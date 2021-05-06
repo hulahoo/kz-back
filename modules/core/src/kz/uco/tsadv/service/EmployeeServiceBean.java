@@ -45,6 +45,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -2670,5 +2671,19 @@ public class EmployeeServiceBean implements EmployeeService {
                 .stream()
                 .map(p -> dataManager.reload(p, viewName))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean availableSalary() {
+        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+        Objects.requireNonNull(personGroupId, "Person group id is empty!");
+
+        final PersonGroupExt currentPersonGroup = dataManager.load(LoadContext.create(PersonGroupExt.class)
+                .setId(personGroupId)
+                .setView("personGroup.currentAssignment"));
+        Objects.requireNonNull(currentPersonGroup, "Can not find person group by id: " + currentPersonGroup);
+
+        final AssignmentExt currentAssignment = dataManager.reload(currentPersonGroup.getCurrentAssignment(), "assignment.gradeGroup");
+        return currentAssignment.getPositionGroup().getGradeGroup() != null ? currentAssignment.getPositionGroup().getGradeGroup().getAvailableSalary() : false;
     }
 }

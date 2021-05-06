@@ -456,4 +456,12 @@
         <property name="personGroup" view="_minimal"/>
         <property name="book" view="_local"/>
     </view>
+    <view entity="base$AssignmentExt" name="assignment.gradeGroup" extends="_minimal">
+        <property name="positionGroup" view="_minimal">
+            <property name="gradeGroup" view="_local"/>
+        </property>
+    </view>
+    <view entity="base$PersonGroupExt" name="personGroup.currentAssignment" extends="_minimal">
+        <property name="currentAssignment" view="_minimal" />
+    </view>
 </views>

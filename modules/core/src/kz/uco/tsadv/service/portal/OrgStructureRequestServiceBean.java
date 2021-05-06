@@ -18,6 +18,7 @@ import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
+import kz.uco.tsadv.modules.personal.model.Grade;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequestDetail;
 import kz.uco.tsadv.pojo.OrgRequestSaveModel;
@@ -30,6 +31,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PGobject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -38,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service(OrgStructureRequestService.NAME)
 public class OrgStructureRequestServiceBean implements OrgStructureRequestService {
@@ -83,15 +86,29 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 return "[]";
             }
 
-            RequestTreeData root = treeDataList.stream()
+            List<RequestTreeData> filteredTreeDataList = hideColumnsByGrade(treeDataList);
+            RequestTreeData root = filteredTreeDataList.stream()
                     .filter(r -> r.isRoot())
                     .findFirst()
                     .orElseThrow(() -> new PortalException("Root element is not found!"));
-            collectChildren(root, treeDataList);
+            collectChildren(root, filteredTreeDataList);
 
             fillHeadCount(root);
             return String.format("[%s]", gson.toJson(root));
         });
+    }
+
+    private List<RequestTreeData> hideColumnsByGrade(List<RequestTreeData> treeDataList) {
+        if (!employeeService.availableSalary()) {
+            return treeDataList.stream()
+                    .map(e -> {
+                        RequestTreeData newElement = new RequestTreeData();
+                        BeanUtils.copyProperties(e, newElement, "baseSalary", "mtPayrollPer", "mtPayroll");
+                        return newElement;
+                    }).collect(Collectors.toList());
+        }
+
+        return new ArrayList<RequestTreeData>(treeDataList);
     }
 
     private void fillHeadCount(RequestTreeData requestTreeData) {
@@ -197,7 +214,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 orgStructureRequest = metadata.create(OrgStructureRequest.class);
                 orgStructureRequest.setCompany(em.getReference(DicCompany.class, orgRequestSaveModel.getCompany()));
                 orgStructureRequest.setDepartment(em.getReference(OrganizationGroupExt.class, orgRequestSaveModel.getDepartment()));
-                orgStructureRequest.setStatus(em.getReference(DicRequestStatus.class, orgRequestSaveModel.getRequestStatus()));
+                orgStructureRequest.setStatus(em.getReference(DicRequestStatus.class, orgRequestSaveModel.getStatus()));
                 orgStructureRequest.setAuthor(em.getReference(PersonGroupExt.class, orgRequestSaveModel.getAuthor()));
                 orgStructureRequest.setRequestDate(orgRequestSaveModel.getRequestDate());
                 orgStructureRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());

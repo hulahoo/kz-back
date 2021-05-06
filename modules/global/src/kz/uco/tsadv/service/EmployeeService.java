@@ -17,6 +17,7 @@ import kz.uco.tsadv.modules.personal.model.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -157,4 +158,6 @@ public interface EmployeeService {
     List<PersonGroupExt> findManagerListByPositionGroup(UUID positionGroupId, boolean showAll, String viewName);
 
     List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll, String viewName);
+
+    boolean availableSalary();
 }
