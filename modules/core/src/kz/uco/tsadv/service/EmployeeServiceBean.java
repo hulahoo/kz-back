@@ -169,6 +169,10 @@ public class EmployeeServiceBean implements EmployeeService {
                 .orElse(""));
         dto.setPositionName(Optional.ofNullable(assignment.getPositionGroup()).map(PositionGroupExt::getPositionName).orElse(""));
 
+        //set company
+        DicCompany company = this.getCompanyByPersonGroupId(personGroupId);
+        dto.setCompanyCode(company != null ? company.getCode() : null);
+
         //set contacts
         personContacts.forEach(personContact -> {
             //todo
@@ -198,15 +202,10 @@ public class EmployeeServiceBean implements EmployeeService {
                         "                and a.endDate >= CURRENT_DATE\n" +
                         "                and a.primaryFlag = true")
                 .parameter("userId", userId)
-                .view("personGroup-with-position")
+                .view(View.MINIMAL)
                 .one();
-        PersonProfileDto dto = new PersonProfileDto();
-        dto.setGroupId(personGroup.getId());
-        PositionGroupExt positionGroup = personGroup.getCurrentAssignment().getPositionGroup();
-        dto.setPositionGroupId(positionGroup.getId());
-        dto.setPositionId(positionGroup.getPosition().getId());
-        dto.setCompanyId(personGroup.getCompany() != null ? personGroup.getCompany().getId() : null);
-        return dto;
+
+        return this.personProfile(personGroup.getId());
     }
 
     @Override
@@ -2635,7 +2634,6 @@ public class EmployeeServiceBean implements EmployeeService {
                         "   where e.personGroup.id = :personGroupId" +
                         "   and :systemDate between e.startDate and e.endDate " +
                         "   and e.assignmentStatus.code <> 'TERMINATED' " +
-//                        "   and :systemDate between o.startDate and o.endDate  " +
                         "   and e.primaryFlag = 'TRUE' ", DicCompany.class)
                         .setParameter("systemDate", CommonUtils.getSystemDate())
                         .setParameter("personGroupId", personGroupId)
