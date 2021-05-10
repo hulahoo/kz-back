@@ -833,7 +833,8 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                                             + "/kpi/"
                                                             + assignedPerformancePlan.getId().toString()
                                                             + "\" target=\"_blank\">%s " + "</a>";
-                                                    params.put("requestLink", requestLink);
+                                                    params.put("requestLinkRu", String.format(requestLink, "ссылке"));
+                                                    params.put("requestLinkEn", String.format(requestLink, "link"));
                                                     notificationService.sendParametrizedNotification("kpi.start.letter", tsadvUser, params);
                                                 }
                                             }

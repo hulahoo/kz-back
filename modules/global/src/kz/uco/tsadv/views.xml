@@ -23796,4 +23796,9 @@
     <view entity="tsadv$Course" name="course.with.logo" extends="_local">
         <property name="logo" view="_minimal"/>
     </view>
+    <view entity="tsadv_DicEarningPolicy" name="dicEarningPolicy.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
 </views>
