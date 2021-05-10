@@ -91,6 +91,9 @@ public class EmployeeServiceBean implements EmployeeService {
     @Inject
     private IncludeExternalExperienceConfig includeExternalExperienceConfig;
 
+    @Inject
+    private ViewRepository viewRepository;
+
     protected int languageIndex = 0;
 
     @Override
@@ -161,6 +164,12 @@ public class EmployeeServiceBean implements EmployeeService {
         dto.setSex(person.getSex() != null ? person.getSex().getLangValue() : "");
         dto.setCitizenship(person.getCitizenship() != null ? person.getCitizenship().getLangValue() : "");
         dto.setImageId(person.getImage() != null ? person.getImage().getId() : null);
+
+        PositionGroupExt positionGroup = this.getPositionGroupByPersonGroupId(personGroupId, new View(PositionGroupExt.class)
+                .addProperty("list", new View(PositionExt.class).addProperty("startDate").addProperty("endDate")));
+
+        dto.setPositionGroupId(positionGroup.getId());
+        dto.setPositionId(positionGroup.getPosition().getId());
 
         //set data from assignment
         dto.setOrganizationName(Optional.ofNullable(assignment.getOrganizationGroup())
@@ -475,9 +484,6 @@ public class EmployeeServiceBean implements EmployeeService {
         }
     }
 
-    @Inject
-    private ViewRepository viewRepository;
-
     @Override
     public TsadvUser getUserByLogin(String login, @Nullable String view) {
         if (view != null && viewRepository.getView(TsadvUser.class, view) == null) {
@@ -629,6 +635,10 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, String view) {
+        return getPositionGroupByPersonGroupId(personGroupId, viewRepository.getView(PositionGroupExt.class, view != null ? view : "_minimal"));
+    }
+
+    public PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, View view) {
         LoadContext<PositionGroupExt> loadContext = LoadContext.create(PositionGroupExt.class);
         loadContext.setQuery(LoadContext.createQuery(
                 " select a.positionGroup from base$AssignmentExt a " +
@@ -638,7 +648,7 @@ public class EmployeeServiceBean implements EmployeeService {
                         "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
                 .setParameter("personGroupId", personGroupId)
                 .setParameter("currentDate", CommonUtils.getSystemDate()))
-                .setView(view != null ? view : "_minimal");
+                .setView(view);
         return dataManager.load(loadContext);
     }
 

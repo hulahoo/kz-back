@@ -20,6 +20,7 @@ import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
 import kz.uco.tsadv.bproc.events.ExtProcessStartedEvent;
 import kz.uco.tsadv.bproc.events.ExtUserTaskCreatedEvent;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.bpm.BprocActors;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.service.BprocService;
@@ -35,10 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component(BprocProcessStatesListener.NAME)
@@ -78,7 +76,7 @@ public class BprocProcessStatesListener extends AbstractBprocHelper {
 
     @EventListener
     protected void onTaskCreated(ExtUserTaskCreatedEvent event) {
-        if (!event.getTaskData().getTaskDefinitionKey().equals("initiator_task")) {
+        if (!event.getTaskData().getTaskDefinitionKey().equals(AbstractBprocRequest.INITIATOR_TASK_CODE)) {
             notifyApprovers(event);
             notifyInitiator(event);
         }
@@ -88,7 +86,18 @@ public class BprocProcessStatesListener extends AbstractBprocHelper {
         TaskData taskData = event.getTaskData();
         String executionId = taskData.getExecutionId();
         @SuppressWarnings("unchecked") T bprocRequest = (T) bprocRuntimeService.getVariable(executionId, "entity");
-        bprocService.sendNotificationToInitiator(bprocRequest);
+
+        List<ExtTaskData> processTasks = bprocService.getProcessTasks(
+                bprocService.getProcessInstanceData(
+                        bprocRequest.getProcessInstanceBusinessKey(),
+                        bprocRequest.getProcessDefinitionKey()));
+
+        if (!CollectionUtils.isEmpty(processTasks) && processTasks.stream()
+                .filter(task -> task.getEndTime() != null)
+                .max(Comparator.comparing(TaskData::getEndTime))
+                .filter(task -> !task.getTaskDefinitionKey().equals(AbstractBprocRequest.INITIATOR_TASK_CODE))
+                .isPresent())
+            bprocService.sendNotificationToInitiator(bprocRequest);
     }
 
     protected <T extends AbstractBprocRequest> void notifyApprovers(ExtUserTaskCreatedEvent event) {
