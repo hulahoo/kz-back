@@ -22820,24 +22820,7 @@
                 <property name="endDate"/>
             </property>
         </property>
-        <property name="type" view="_minimal">
-            <property name="availableForRecallAbsence"/>
-            <property name="availableForChangeDate"/>
-            <property name="availableForLeavingVacation"/>
-            <property name="isJustRequired"/>
-            <property name="isOriginalSheet"/>
-            <property name="isCheckWork"/>
-            <property name="isVacationDate"/>
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-            <property name="useInSelfService"/>
-        </property>
+        <property name="type" view="_local"/>
         <property name="absenceStatus" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>
