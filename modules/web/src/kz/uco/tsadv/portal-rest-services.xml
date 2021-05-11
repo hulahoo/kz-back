@@ -245,6 +245,9 @@
             <param name="userId" type="java.util.UUID"/>
             <param name="employeePersonGroupId" type="java.util.UUID"/>
         </method>
+        <method name="getDicHrRoles">
+            <param name="userId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="cuba_UserSettingService">
         <method name="saveSetting">
