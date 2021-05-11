@@ -91,6 +91,9 @@ public class EmployeeServiceBean implements EmployeeService {
     @Inject
     private IncludeExternalExperienceConfig includeExternalExperienceConfig;
 
+    @Inject
+    private ViewRepository viewRepository;
+
     protected int languageIndex = 0;
 
     @Override
@@ -162,12 +165,22 @@ public class EmployeeServiceBean implements EmployeeService {
         dto.setCitizenship(person.getCitizenship() != null ? person.getCitizenship().getLangValue() : "");
         dto.setImageId(person.getImage() != null ? person.getImage().getId() : null);
 
+        PositionGroupExt positionGroup = this.getPositionGroupByPersonGroupId(personGroupId, new View(PositionGroupExt.class)
+                .addProperty("list", new View(PositionExt.class).addProperty("startDate").addProperty("endDate")));
+
+        dto.setPositionGroupId(positionGroup.getId());
+        dto.setPositionId(positionGroup.getPosition().getId());
+
         //set data from assignment
         dto.setOrganizationName(Optional.ofNullable(assignment.getOrganizationGroup())
                 .map(OrganizationGroupExt::getOrganization)
                 .map(Organization::getOrganizationName)
                 .orElse(""));
         dto.setPositionName(Optional.ofNullable(assignment.getPositionGroup()).map(PositionGroupExt::getPositionName).orElse(""));
+
+        //set company
+        DicCompany company = this.getCompanyByPersonGroupId(personGroupId);
+        dto.setCompanyCode(company != null ? company.getCode() : null);
 
         //set contacts
         personContacts.forEach(personContact -> {
@@ -198,15 +211,10 @@ public class EmployeeServiceBean implements EmployeeService {
                         "                and a.endDate >= CURRENT_DATE\n" +
                         "                and a.primaryFlag = true")
                 .parameter("userId", userId)
-                .view("personGroup-with-position")
+                .view(View.MINIMAL)
                 .one();
-        PersonProfileDto dto = new PersonProfileDto();
-        dto.setGroupId(personGroup.getId());
-        PositionGroupExt positionGroup = personGroup.getCurrentAssignment().getPositionGroup();
-        dto.setPositionGroupId(positionGroup.getId());
-        dto.setPositionId(positionGroup.getPosition().getId());
-        dto.setCompanyId(personGroup.getCompany() != null ? personGroup.getCompany().getId() : null);
-        return dto;
+
+        return this.personProfile(personGroup.getId());
     }
 
     @Override
@@ -476,9 +484,6 @@ public class EmployeeServiceBean implements EmployeeService {
         }
     }
 
-    @Inject
-    private ViewRepository viewRepository;
-
     @Override
     public TsadvUser getUserByLogin(String login, @Nullable String view) {
         if (view != null && viewRepository.getView(TsadvUser.class, view) == null) {
@@ -630,6 +635,10 @@ public class EmployeeServiceBean implements EmployeeService {
 
     @Override
     public PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, String view) {
+        return getPositionGroupByPersonGroupId(personGroupId, viewRepository.getView(PositionGroupExt.class, view != null ? view : "_minimal"));
+    }
+
+    public PositionGroupExt getPositionGroupByPersonGroupId(UUID personGroupId, View view) {
         LoadContext<PositionGroupExt> loadContext = LoadContext.create(PositionGroupExt.class);
         loadContext.setQuery(LoadContext.createQuery(
                 " select a.positionGroup from base$AssignmentExt a " +
@@ -639,7 +648,7 @@ public class EmployeeServiceBean implements EmployeeService {
                         "       and a.assignmentStatus.code in ('ACTIVE', 'SUSPENDED') ")
                 .setParameter("personGroupId", personGroupId)
                 .setParameter("currentDate", CommonUtils.getSystemDate()))
-                .setView(view != null ? view : "_minimal");
+                .setView(view);
         return dataManager.load(loadContext);
     }
 
@@ -2635,7 +2644,6 @@ public class EmployeeServiceBean implements EmployeeService {
                         "   where e.personGroup.id = :personGroupId" +
                         "   and :systemDate between e.startDate and e.endDate " +
                         "   and e.assignmentStatus.code <> 'TERMINATED' " +
-//                        "   and :systemDate between o.startDate and o.endDate  " +
                         "   and e.primaryFlag = 'TRUE' ", DicCompany.class)
                         .setParameter("systemDate", CommonUtils.getSystemDate())
                         .setParameter("personGroupId", personGroupId)

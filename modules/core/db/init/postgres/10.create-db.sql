@@ -16738,6 +16738,7 @@ create table TSADV_CERTIFICATE_REQUEST (
     SHOW_SALARY boolean not null,
     NUMBER_OF_COPY integer not null,
     FILE_ID uuid,
+    PLACE_OF_DELIVERY varchar(255),
     --
     primary key (ID)
 )^
@@ -17185,7 +17186,7 @@ alter table BASE_POSITION add column POSITION_STATUS_ID uuid ^
 alter table BASE_POSITION add column GRADE_RULE_ID uuid ^
 alter table BASE_POSITION add column ORGANIZATION_GROUP_EXT_ID uuid ^
 alter table BASE_POSITION add column EMPLOYEE_CATEGORY_ID uuid ^
-alter table BASE_POSITION add column DTYPE varchar(100) ^
+alter table BASE_POSITION add column DTYPE varchar(31) ^
 update BASE_POSITION set DTYPE = 'base$PositionExt' where DTYPE is null ^
 -- end BASE_POSITION
 -- begin BASE_ORGANIZATION
@@ -17253,7 +17254,7 @@ alter table BASE_POSITION_GROUP add column GRADE_GROUP_ID uuid ^
 alter table BASE_POSITION_GROUP add column COMPANY_ID uuid ^
 alter table BASE_POSITION_GROUP add column ANALYTICS_ID uuid ^
 alter table BASE_POSITION_GROUP add column ADMIN_APPROVE_ID uuid ^
-alter table BASE_POSITION_GROUP add column DTYPE varchar(100) ^
+alter table BASE_POSITION_GROUP add column DTYPE varchar(31) ^
 update BASE_POSITION_GROUP set DTYPE = 'base$PositionGroupExt' where DTYPE is null ^
 -- end BASE_POSITION_GROUP
 

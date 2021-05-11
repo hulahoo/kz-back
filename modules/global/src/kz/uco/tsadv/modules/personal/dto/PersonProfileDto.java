@@ -39,7 +39,7 @@ public class PersonProfileDto implements Serializable {
 
     private String phone;
 
-    private UUID companyId;
+    private String companyCode;
 
     private String firstLastName;
 
@@ -171,11 +171,11 @@ public class PersonProfileDto implements Serializable {
         this.positionId = positionId;
     }
 
-    public UUID getCompanyId() {
-        return companyId;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setCompanyId(UUID companyId) {
-        this.companyId = companyId;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }
