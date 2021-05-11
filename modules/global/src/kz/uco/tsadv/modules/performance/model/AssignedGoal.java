@@ -109,6 +109,28 @@ public class AssignedGoal extends AbstractParentEntity {
     @Column(name = "MANAGER_ASSESSMENT")
     private Double managerAssessment;
 
+    @Column(name = "EMPLOYEE_COMMENT", length = 2000)
+    private String employeeComment;
+
+    @Column(name = "MANAGER_COMMENT", length = 2000)
+    private String managerComment;
+
+    public String getManagerComment() {
+        return managerComment;
+    }
+
+    public void setManagerComment(String managerComment) {
+        this.managerComment = managerComment;
+    }
+
+    public String getEmployeeComment() {
+        return employeeComment;
+    }
+
+    public void setEmployeeComment(String employeeComment) {
+        this.employeeComment = employeeComment;
+    }
+
     public Double getManagerAssessment() {
         return managerAssessment;
     }
