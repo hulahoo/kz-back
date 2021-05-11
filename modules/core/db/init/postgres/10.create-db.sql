@@ -17186,7 +17186,7 @@ alter table BASE_POSITION add column POSITION_STATUS_ID uuid ^
 alter table BASE_POSITION add column GRADE_RULE_ID uuid ^
 alter table BASE_POSITION add column ORGANIZATION_GROUP_EXT_ID uuid ^
 alter table BASE_POSITION add column EMPLOYEE_CATEGORY_ID uuid ^
-alter table BASE_POSITION add column DTYPE varchar(31) ^
+alter table BASE_POSITION add column DTYPE varchar(100) ^
 update BASE_POSITION set DTYPE = 'base$PositionExt' where DTYPE is null ^
 -- end BASE_POSITION
 -- begin BASE_ORGANIZATION
@@ -17254,7 +17254,7 @@ alter table BASE_POSITION_GROUP add column GRADE_GROUP_ID uuid ^
 alter table BASE_POSITION_GROUP add column COMPANY_ID uuid ^
 alter table BASE_POSITION_GROUP add column ANALYTICS_ID uuid ^
 alter table BASE_POSITION_GROUP add column ADMIN_APPROVE_ID uuid ^
-alter table BASE_POSITION_GROUP add column DTYPE varchar(31) ^
+alter table BASE_POSITION_GROUP add column DTYPE varchar(100) ^
 update BASE_POSITION_GROUP set DTYPE = 'base$PositionGroupExt' where DTYPE is null ^
 -- end BASE_POSITION_GROUP
 
@@ -17773,6 +17773,7 @@ create table TSADV_COURSE_SECTION_SCORM_RESULT (
     SCORE decimal(19, 2),
     MAX_SCORE decimal(19, 2),
     MIN_SCORE decimal(19, 2),
+    COMMENT text,
     --
     primary key (ID)
 )^
