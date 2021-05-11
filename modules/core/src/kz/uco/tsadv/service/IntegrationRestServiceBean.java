@@ -512,9 +512,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (positionJson.getPositionStatusId() != null && !positionJson.getPositionStatusId().isEmpty()) {
                     positionStatus = dataManager.load(DicPositionStatus.class)
                             .query("select e from tsadv$DicPositionStatus e " +
-                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
-                                    "legacyId", positionJson.getPositionStatusId()))
+                                    " where e.legacyId = :legacyId ")
+                            .setParameters(ParamsMap.of("legacyId", positionJson.getPositionStatusId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
                     positionExt.setPositionStatus(positionStatus);
                 }
@@ -4990,7 +4989,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     " and e.dateFrom = :date")
                             .setParameters(ParamsMap.of("legacyId", absenceBalanceJson.getLegacyId(),
                                     "pgLegacyId", absenceBalanceJson.getPersonId(),
-                                    "date",dateFromJson))
+                                    "date", dateFromJson))
                             .view("absenceBalance.edit").list().stream().findFirst().orElse(null);
 
                     if (absenceBalance != null) {
