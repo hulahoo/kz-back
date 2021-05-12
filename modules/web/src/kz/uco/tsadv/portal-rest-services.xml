@@ -230,6 +230,14 @@
         <method name="saveRequest">
             <param name="orgRequestSaveModel" type="kz.uco.tsadv.pojo.OrgRequestSaveModel"/>
         </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="changeTypeFilter" type="kz.uco.tsadv.api.OrgStructureRequestChangeType"/>
+        </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="displayFilter" type="kz.uco.tsadv.api.OrgStructureRequestDisplayType"/>
+        </method>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">

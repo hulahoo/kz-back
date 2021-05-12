@@ -11,6 +11,8 @@ import com.haulmont.cuba.core.global.View;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.ElementType;
+import kz.uco.tsadv.api.OrgStructureRequestChangeType;
+import kz.uco.tsadv.api.OrgStructureRequestDisplayType;
 import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.OrgRequestChangeType;
@@ -18,7 +20,6 @@ import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
-import kz.uco.tsadv.modules.personal.model.Grade;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequestDetail;
 import kz.uco.tsadv.pojo.OrgRequestSaveModel;
@@ -36,16 +37,12 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service(OrgStructureRequestService.NAME)
 public class OrgStructureRequestServiceBean implements OrgStructureRequestService {
-
-    private static final Gson gson = new Gson();
 
     @Inject
     private EmployeeService employeeService;
@@ -62,40 +59,74 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
     @Inject
     private EmployeeNumberService employeeNumberService;
 
+    @Inject
+    private Gson gson;
+
     @SuppressWarnings("all")
     @Override
     public String getMergedOrgStructure(UUID requestId) {
-        final UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
-        if (personGroupId == null) {
+        final Optional<RequestTreeData> mergedOrgStructureData = this.getMergedOrgStructureData(requestId);
+        if (mergedOrgStructureData.isPresent()) {
+            return String.format("[%s]", gson.toJson(mergedOrgStructureData.get()));
+        } else {
             return "[]";
         }
-        return persistence.callInTransaction(em -> {
-            Query query = em.createNativeQuery(
-                    "SELECT td.* FROM request_tree_data(?1,?2) td");
-            query.setParameter(1, personGroupId);
-            query.setParameter(2, requestId);
+    }
 
-            PGobject singleResult = (PGobject) query.getFirstResult();
-
-            String jsonData = singleResult != null ? singleResult.getValue() : "[]";
-
-            List<RequestTreeData> treeDataList = gson.fromJson(jsonData, new TypeToken<List<RequestTreeData>>() {
-            }.getType());
-
-            if (CollectionUtils.isEmpty(treeDataList)) {
-                return "[]";
+    @SuppressWarnings("all")
+    @Override
+    public String getMergedOrgStructure(UUID requestId, OrgStructureRequestDisplayType displayFilter) {
+        final Optional<RequestTreeData> mergedOrgStructureData = this.getMergedOrgStructureData(requestId);
+        if (mergedOrgStructureData.isPresent()) {
+            RequestTreeData requestTreeData = mergedOrgStructureData.get();
+            switch (displayFilter) {
+                case CHANGES: {
+                    Predicate<RequestTreeData> changeTypeFilter = c -> c.getChangeType() != null;
+                    requestTreeData.setChildren(filterTreeData(requestTreeData.getChildren(), changeTypeFilter));
+                    if (CollectionUtils.isNotEmpty(requestTreeData.getChildren())) {
+                        return String.format("[%s]", gson.toJson(requestTreeData));
+                    }
+                }
+                default: {
+                    return String.format("[%s]", gson.toJson(requestTreeData));
+                }
             }
+        }
+        return "[]";
+    }
 
-            List<RequestTreeData> filteredTreeDataList = hideColumnsByGrade(treeDataList);
-            RequestTreeData root = filteredTreeDataList.stream()
-                    .filter(r -> r.isRoot())
-                    .findFirst()
-                    .orElseThrow(() -> new PortalException("Root element is not found!"));
-            collectChildren(root, filteredTreeDataList);
+    @SuppressWarnings("all")
+    @Override
+    public String getMergedOrgStructure(UUID requestId, OrgStructureRequestChangeType changeTypeFilter) {
+        final Optional<RequestTreeData> mergedOrgStructureData = this.getMergedOrgStructureData(requestId);
+        if (mergedOrgStructureData.isPresent()) {
+            RequestTreeData requestTreeData = mergedOrgStructureData.get();
+            switch (changeTypeFilter) {
+                case NEW:
+                case EDIT:
+                case CLOSE: {
+                    Predicate<RequestTreeData> searchByChangeType = c -> c.getChangeType() != null && c.getChangeType().equalsIgnoreCase(changeTypeFilter.getId());
+                    requestTreeData.setChildren(filterTreeData(requestTreeData.getChildren(), searchByChangeType));
+                    break;
+                }
+            }
+            if (CollectionUtils.isNotEmpty(requestTreeData.getChildren())) {
+                return String.format("[%s]", gson.toJson(requestTreeData));
+            }
+        }
+        return "[]";
+    }
 
-            fillHeadCount(root);
-            return String.format("[%s]", gson.toJson(root));
-        });
+    protected List<RequestTreeData> filterTreeData(List<RequestTreeData> childes, Predicate<RequestTreeData> conditionToFilter) {
+        if (CollectionUtils.isEmpty(childes)) {
+            return childes;
+        }
+
+        return childes
+                .stream()
+                .peek(c -> c.setChildren(filterTreeData(c.getChildren(), conditionToFilter)))
+                .filter(c -> (c.getChildren() != null && c.getChildren().size() > 0) || conditionToFilter.test(c))
+                .collect(Collectors.toList());
     }
 
     private List<RequestTreeData> hideColumnsByGrade(List<RequestTreeData> treeDataList) {
@@ -164,6 +195,41 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 parent.setChildren(foundChildren);
             }
         }
+    }
+
+    protected Optional<RequestTreeData> getMergedOrgStructureData(UUID requestId) {
+        final UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+        if (personGroupId == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(persistence.callInTransaction(em -> {
+            Query query = em.createNativeQuery(
+                    "SELECT td.* FROM request_tree_data(?1,?2) td");
+            query.setParameter(1, personGroupId);
+            query.setParameter(2, requestId);
+
+            PGobject singleResult = (PGobject) query.getFirstResult();
+
+            String jsonData = singleResult != null ? singleResult.getValue() : "[]";
+
+            List<RequestTreeData> treeDataList = gson.fromJson(jsonData, new TypeToken<List<RequestTreeData>>() {
+            }.getType());
+
+            if (CollectionUtils.isEmpty(treeDataList)) {
+                return null;
+            }
+
+            List<RequestTreeData> filteredTreeDataList = hideColumnsByGrade(treeDataList);
+            RequestTreeData root = filteredTreeDataList.stream()
+                    .filter(r -> r.isRoot())
+                    .findFirst()
+                    .orElseThrow(() -> new PortalException("Root element is not found!"));
+            collectChildren(root, filteredTreeDataList);
+
+            fillHeadCount(root);
+            return root;
+        }));
     }
 
     @Override

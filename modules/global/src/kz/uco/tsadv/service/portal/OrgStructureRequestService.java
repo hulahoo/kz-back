@@ -1,5 +1,7 @@
 package kz.uco.tsadv.service.portal;
 
+import kz.uco.tsadv.api.OrgStructureRequestChangeType;
+import kz.uco.tsadv.api.OrgStructureRequestDisplayType;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
 import kz.uco.tsadv.pojo.OrgRequestSaveModel;
 import kz.uco.tsadv.pojo.OrganizationRequestSaveModel;
@@ -23,4 +25,9 @@ public interface OrgStructureRequestService {
     String getGrades();
 
     void exclude(UUID requestId, UUID requestDetailId, UUID elementGroupId, int elementType);
+
+    String getMergedOrgStructure(UUID requestId, OrgStructureRequestChangeType changeTypeFilter);
+
+    String getMergedOrgStructure(UUID requestId, OrgStructureRequestDisplayType displayFilter);
+
 }

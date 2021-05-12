@@ -261,7 +261,7 @@ WITH RECURSIVE rec AS (
       AND (CASE
                WHEN l_root_changed = TRUE
                    THEN h.r_id = p_request_id
-               ELSE h.r_id IS NULL
+               ELSE (h.r_id IS NULL OR h.r_id = p_request_id)
         END)
     UNION
     SELECT
@@ -294,7 +294,7 @@ WITH RECURSIVE rec AS (
                                (CASE
                                     WHEN h.change_type = 'NEW' THEN 0
                                     ELSE (COUNT(COALESCE(h.group_id, h.position_group_id))
-                                        OVER (PARTITION BY COALESCE(h.group_id, h.position_group_id))) END) duplicate
+                                          OVER (PARTITION BY COALESCE(h.group_id, h.position_group_id))) END) duplicate
                            FROM request_hierarchy_v h
                            WHERE (h.parent_group_id = r.group_id OR h.parent_rd_id = r.rd_id)
                              AND (h.r_id = p_request_id OR h.r_id IS NULL)
@@ -304,7 +304,7 @@ WITH RECURSIVE rec AS (
                               THEN h.r_id = p_request_id
                           WHEN h.duplicate = 1 AND h.change_type = 'CLOSE'
                               THEN h.r_id = p_request_id
-                          ELSE h.r_id IS NULL END)
+                          ELSE (h.r_id IS NULL OR h.r_id = p_request_id) END)
 )
 SELECT
     JSON_AGG(JSON_BUILD_OBJECT
