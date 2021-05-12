@@ -6,11 +6,11 @@ import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.app.events.AttributeChanges;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.beans.validation.tdc.enrollment.EnrollmentValidation;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.CourseCertificate;
@@ -19,16 +19,17 @@ import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LmsService;
+import kz.uco.uactivity.entity.ActivityType;
+import kz.uco.uactivity.entity.StatusEnum;
+import kz.uco.uactivity.entity.WindowProperty;
+import kz.uco.uactivity.service.ActivityService;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Component("tsadv_EnrollmentChangedListener")
 public class EnrollmentChangedListener {
@@ -45,120 +46,180 @@ public class EnrollmentChangedListener {
     @Inject
     protected Metadata metadata;
     @Inject
+    protected GlobalConfig globalConfig;
+    @Inject
+    protected ActivityService activityService;
+    @Inject
+    protected FrontConfig frontConfig;
+    @Inject
     private TransactionalDataManager transactionalDataManager;
     @Inject
     private List<EnrollmentValidation> enrollmentValidations;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<Enrollment, UUID> event) {
+        AttributeChanges changes = event.getChanges();
+        Enrollment enrollment;
         if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+            enrollment = transactionalDataManager.load(event.getEntityId()).view("enrollment.for.course").one();
             if (event.getChanges().isChanged("status")) {
-                Enrollment enrollment = transactionalDataManager.load(event.getEntityId())
+                Enrollment enrollmentFront = transactionalDataManager.load(event.getEntityId())
                         .view("enrollment.validation.status")
                         .one();
                 for (EnrollmentValidation enrollmentValidation : enrollmentValidations) {
-                    enrollmentValidation.validate(enrollment);
+                    enrollmentValidation.validate(enrollmentFront);
                 }
-            }
-        } else if (event.getType().equals(EntityChangedEvent.Type.DELETED)) {
-            Enrollment enrollment = transactionalDataManager
-                    .load(event.getEntityId())
-                    .softDeletion(false)
-                    .view(new View(Enrollment.class).addProperty("course").addProperty("personGroup"))
-                    .one();
 
-            transactionalDataManager.load(CoursePersonNote.class)
-                    .query("select e from tsadv_CoursePersonNote e " +
-                            " where e.course.id = :courseId and e.personGroup.id = :personGroupId  ")
-                    .parameter("courseId", enrollment.getCourse().getId())
-                    .parameter("personGroupId", enrollment.getPersonGroup().getId())
-                    .list()
-                    .forEach(transactionalDataManager::remove);
-        }
-    }
+                for (String attribute : changes.getAttributes()) {
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void afterCommit(EntityChangedEvent<Enrollment, UUID> event) {
-        AttributeChanges changes = event.getChanges();
-        Id<Enrollment, UUID> entityId = event.getEntityId();
-        Enrollment enrollment = dataManager.load(entityId).view("enrollment.for.course").one();
-        if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+                    if (!attribute.equals("status")) continue;
 
-            for (String attribute : changes.getAttributes()) {
+                    Integer oldValue = changes.getOldValue(attribute);
+                    if (!EnrollmentStatus.APPROVED.equals(EnrollmentStatus.fromId(oldValue))
+                            && EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 
-                if (!attribute.equals("status")) continue;
+                        TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                                .query("select e from tsadv$UserExt e " +
+                                        " where e.personGroup = :personGroup")
+                                .parameter("personGroup", enrollment.getPersonGroup())
+                                .list().stream().findFirst().orElse(null);
+                        if (tsadvUser != null) {
+                            Map<String, Object> map = new HashMap<>();
+                            String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                    + "/course/"
+                                    + enrollment.getCourse().getId()
+                                    + "\" target=\"_blank\">%s " + "</a>";
+                            String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                    + "/my-course/"
+                                    + "\" target=\"_blank\">%s " + "</a>";
+                            map.put("linkRu", String.format(courseLink, enrollment.getCourse().getName()));
+                            map.put("linkEn", String.format(courseLink, enrollment.getCourse().getName()));
+                            map.put("linkKz", String.format(courseLink, enrollment.getCourse().getName()));
+                            map.put("myLinkRu", String.format(myCourseLink, "Мои курсы"));
+                            map.put("myLinkEn", String.format(myCourseLink, "My training course"));
+                            map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
+                            map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+                            map.put("courseName", enrollment.getCourse().getName());
+                            activityService.createActivity(
+                                    tsadvUser,
+                                    tsadvUser,
+                                    getActivityType(),
+                                    StatusEnum.active,
+                                    "description",
+                                    null,
+                                    new Date(),
+                                    null,
+                                    null,
+                                    enrollment.getId(),
+                                    "tdc.student.enrollmentApproved",
+                                    map);
+                            notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
+                                    tsadvUser, map);
+                        }
 
-                Integer oldValue = changes.getOldValue(attribute);
-                if (!EnrollmentStatus.APPROVED.equals(EnrollmentStatus.fromId(oldValue))
-                        && EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
+                    } else if (!EnrollmentStatus.COMPLETED.equals(EnrollmentStatus.fromId(oldValue))
+                            && EnrollmentStatus.COMPLETED.equals(enrollment.getStatus())) {
 
-                    TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
-                            .query("select e from tsadv$UserExt e " +
-                                    " where e.personGroup = :personGroup")
-                            .parameter("personGroup", enrollment.getPersonGroup())
-                            .list().stream().findFirst().orElse(null);
-                    if (tsadvUser != null) {
+                        TsadvUser user = dataManager.load(TsadvUser.class)
+                                .query("select e from tsadv$UserExt e " +
+                                        " where e.personGroup = :personGroup")
+                                .parameter("personGroup", enrollment.getPersonGroup())
+                                .list().stream().findFirst().orElse(null);
                         Map<String, Object> map = new HashMap<>();
+                        String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                + "/learning-history/"
+                                + "\" target=\"_blank\">%s " + "</a>";
+                        map.put("linkRu", String.format(requestLink, "История обучения"));
+                        map.put("linkEn", String.format(requestLink, "Training History"));
+                        map.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
                         map.put("courseName", enrollment.getCourse().getName());
-                        map.put("personFullName", enrollment.getPersonGroup().getFullName());
-                        notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
-                                tsadvUser, map);
-                    }
-
-                } else if (!EnrollmentStatus.COMPLETED.equals(EnrollmentStatus.fromId(oldValue))
-                        && EnrollmentStatus.COMPLETED.equals(enrollment.getStatus())) {
-
-                    TsadvUser user = dataManager.load(TsadvUser.class)
-                            .query("select e from tsadv$UserExt e " +
-                                    " where e.personGroup = :personGroup")
-                            .parameter("personGroup", enrollment.getPersonGroup())
-                            .list().stream().findFirst().orElse(null);
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("courseName", enrollment.getCourse().getName());
+                        map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
 
 //                    sendNotificationCompleted(enrollment);
-                    CommitContext commitContext = new CommitContext();
-                    CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
-                            && !enrollment.getCourse().getCertificate().isEmpty()
-                            ? enrollment.getCourse().getCertificate().get(0)
-                            : null;
-                    if (courseCertificate != null) {
+                        CommitContext commitContext = new CommitContext();
+                        CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
+                                && !enrollment.getCourse().getCertificate().isEmpty()
+                                ? enrollment.getCourse().getCertificate().get(0)
+                                : null;
+                        if (courseCertificate != null) {
 
-                        FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
-                                ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
+                            FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
+                                    ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
 
 
-                        if (fd != null) {
-                            List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
-                                    .query("select e from tsadv$EnrollmentCertificateFile e " +
-                                            " where e.enrollment = :enrollment ")
-                                    .parameter("enrollment", enrollment)
-                                    .view("enrollmentCertificateFile.with.certificateFile")
-                                    .list();
-                            ecfList.forEach(commitContext::addInstanceToRemove);
+                            if (fd != null) {
+                                List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
+                                        .query("select e from tsadv$EnrollmentCertificateFile e " +
+                                                " where e.enrollment = :enrollment ")
+                                        .parameter("enrollment", enrollment)
+                                        .view("enrollmentCertificateFile.with.certificateFile")
+                                        .list();
+                                ecfList.forEach(transactionalDataManager::remove);
 
-                            EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
-                            ecf.setCertificateFile(fd);
-                            ecf.setEnrollment(enrollment);
-                            commitContext.addInstanceToCommit(ecf);
+                                EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
+                                ecf.setCertificateFile(fd);
+                                ecf.setEnrollment(enrollment);
 
-                            dataManager.commit(commitContext);
+                                transactionalDataManager.save(ecf);
 
-                            EmailAttachment[] emailAttachments = new EmailAttachment[0];
-                            emailAttachments = getEmailAttachments(fd, emailAttachments);
-                            notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
-                                    user, map, emailAttachments);
+                                EmailAttachment[] emailAttachments = new EmailAttachment[0];
+                                emailAttachments = getEmailAttachments(fd, emailAttachments);
+                                activityService.createActivity(
+                                        user,
+                                        user,
+                                        getActivityType(),
+                                        StatusEnum.active,
+                                        "description",
+                                        null,
+                                        new Date(),
+                                        null,
+                                        null,
+                                        enrollment.getId(),
+                                        "tdc.student.enrollmentClosed",
+                                        map);
+
+                                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                                        user, map, emailAttachments);
+                            } else {
+                                activityService.createActivity(
+                                        user,
+                                        user,
+                                        getActivityType(),
+                                        StatusEnum.active,
+                                        "description",
+                                        null,
+                                        new Date(),
+                                        null,
+                                        null,
+                                        enrollment.getId(),
+                                        "tdc.student.enrollmentClosed",
+                                        map);
+                                notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+                                        user, map);
+                            }
                         } else {
+                            activityService.createActivity(
+                                    user,
+                                    user,
+                                    getActivityType(),
+                                    StatusEnum.active,
+                                    "description",
+                                    null,
+                                    new Date(),
+                                    null,
+                                    null,
+                                    enrollment.getId(),
+                                    "tdc.student.enrollmentClosed",
+                                    map);
                             notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                                     user, map);
                         }
-                    } else {
-                        notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
-                                user, map);
                     }
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+
+            enrollment = transactionalDataManager.load(event.getEntityId()).view("enrollment.for.course").one();
 
             if (EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
 
@@ -169,15 +230,256 @@ public class EnrollmentChangedListener {
                         .list().stream().findFirst().orElse(null);
                 if (tsadvUser != null) {
                     Map<String, Object> map = new HashMap<>();
+                    String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                            + "/course/"
+                            + enrollment.getCourse().getId()
+                            + "\" target=\"_blank\">%s " + "</a>";
+                    String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                            + "/my-course/"
+                            + "\" target=\"_blank\">%s " + "</a>";
+                    map.put("linkRu", String.format(courseLink, enrollment.getCourse().getName()));
+                    map.put("linkEn", String.format(courseLink, enrollment.getCourse().getName()));
+                    map.put("linkKz", String.format(courseLink, enrollment.getCourse().getName()));
+                    map.put("myLinkRu", String.format(myCourseLink, "Мои курсы"));
+                    map.put("myLinkEn", String.format(myCourseLink, "My training course"));
+                    map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
+                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
                     map.put("courseName", enrollment.getCourse().getName());
-                    map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            enrollment.getId(),
+                            "tdc.student.enrollmentApproved",
+                            map);
                     notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
                             tsadvUser, map);
+                    sendNotification(enrollment, "tdc.trainer.newEnrollment");
                 }
             } else {
                 sendNotification(enrollment, "tdc.trainer.newEnrollment");
             }
+        } else if (event.getType().equals(EntityChangedEvent.Type.DELETED)) {
+            Enrollment enrollmentFront = transactionalDataManager
+                    .load(event.getEntityId())
+                    .softDeletion(false)
+                    .view(new View(Enrollment.class).addProperty("course").addProperty("personGroup"))
+                    .one();
+
+            transactionalDataManager.load(CoursePersonNote.class)
+                    .query("select e from tsadv_CoursePersonNote e " +
+                            " where e.course.id = :courseId and e.personGroup.id = :personGroupId  ")
+                    .parameter("courseId", enrollmentFront.getCourse().getId())
+                    .parameter("personGroupId", enrollmentFront.getPersonGroup().getId())
+                    .list()
+                    .forEach(transactionalDataManager::remove);
         }
+    }
+
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void afterCommit(EntityChangedEvent<Enrollment, UUID> event) {
+//        AttributeChanges changes = event.getChanges();
+//        Id<Enrollment, UUID> entityId = event.getEntityId();
+//        Enrollment enrollment = dataManager.load(entityId).view("enrollment.for.course").one();
+//        if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+//
+//            for (String attribute : changes.getAttributes()) {
+//
+//                if (!attribute.equals("status")) continue;
+//
+//                Integer oldValue = changes.getOldValue(attribute);
+//                if (!EnrollmentStatus.APPROVED.equals(EnrollmentStatus.fromId(oldValue))
+//                        && EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
+//
+//                    TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+//                            .query("select e from tsadv$UserExt e " +
+//                                    " where e.personGroup = :personGroup")
+//                            .parameter("personGroup", enrollment.getPersonGroup())
+//                            .list().stream().findFirst().orElse(null);
+//                    if (tsadvUser != null) {
+//                        Map<String, Object> map = new HashMap<>();
+//                        String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+//                                + "/course/"
+//                                + "\" target=\"_blank\">%s " + "</a>";
+//                        String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+//                                + "/my-course/"
+//                                + "\" target=\"_blank\">%s " + "</a>";
+//                        map.put("linkRu", String.format(courseLink, enrollment.getCourse().getName()));
+//                        map.put("linkEn", String.format(courseLink, enrollment.getCourse().getName()));
+//                        map.put("linkKz", String.format(courseLink, enrollment.getCourse().getName()));
+//                        map.put("myLinkRu", String.format(myCourseLink, "Мои курсы"));
+//                        map.put("myLinkEn", String.format(myCourseLink, "My training course"));
+//                        map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
+//                        map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+//                        map.put("courseName", enrollment.getCourse().getName());
+//                        activityService.createActivity(
+//                                tsadvUser,
+//                                tsadvUser,
+//                                getActivityType(),
+//                                StatusEnum.active,
+//                                "description",
+//                                null,
+//                                new Date(),
+//                                null,
+//                                null,
+//                                enrollment.getId(),
+//                                "tdc.student.enrollmentApproved",
+//                                map);
+//                        notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
+//                                tsadvUser, map);
+//                    }
+//
+//                } else if (!EnrollmentStatus.COMPLETED.equals(EnrollmentStatus.fromId(oldValue))
+//                        && EnrollmentStatus.COMPLETED.equals(enrollment.getStatus())) {
+//
+//                    TsadvUser user = dataManager.load(TsadvUser.class)
+//                            .query("select e from tsadv$UserExt e " +
+//                                    " where e.personGroup = :personGroup")
+//                            .parameter("personGroup", enrollment.getPersonGroup())
+//                            .list().stream().findFirst().orElse(null);
+//                    Map<String, Object> map = new HashMap<>();
+//                    String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+//                            + "/learning-history/"
+//                            + "\" target=\"_blank\">%s " + "</a>";
+//                    map.put("linkRu", String.format(requestLink, "ссылке"));
+//                    map.put("linkEn", String.format(requestLink, "link"));
+//                    map.put("linkKz", String.format(requestLink, "сілтеме"));
+//                    map.put("courseName", enrollment.getCourse().getName());
+//                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+//
+////                    sendNotificationCompleted(enrollment);
+//                    CommitContext commitContext = new CommitContext();
+//                    CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
+//                            && !enrollment.getCourse().getCertificate().isEmpty()
+//                            ? enrollment.getCourse().getCertificate().get(0)
+//                            : null;
+//                    if (courseCertificate != null) {
+//
+//                        FileDescriptor fd = reportService.createAndSaveReport(courseCertificate.getCertificate(),
+//                                ParamsMap.of("enrollment", enrollment), enrollment.getCourse().getName());
+//
+//
+//                        if (fd != null) {
+//                            List<EnrollmentCertificateFile> ecfList = dataManager.load(EnrollmentCertificateFile.class)
+//                                    .query("select e from tsadv$EnrollmentCertificateFile e " +
+//                                            " where e.enrollment = :enrollment ")
+//                                    .parameter("enrollment", enrollment)
+//                                    .view("enrollmentCertificateFile.with.certificateFile")
+//                                    .list();
+//                            ecfList.forEach(commitContext::addInstanceToRemove);
+//
+//                            EnrollmentCertificateFile ecf = metadata.create(EnrollmentCertificateFile.class);
+//                            ecf.setCertificateFile(fd);
+//                            ecf.setEnrollment(enrollment);
+//                            commitContext.addInstanceToCommit(ecf);
+//
+//                            dataManager.commit(commitContext);
+//
+//                            EmailAttachment[] emailAttachments = new EmailAttachment[0];
+//                            emailAttachments = getEmailAttachments(fd, emailAttachments);
+//                            activityService.createActivity(
+//                                    user,
+//                                    user,
+//                                    getActivityType(),
+//                                    StatusEnum.active,
+//                                    "description",
+//                                    null,
+//                                    new Date(),
+//                                    null,
+//                                    null,
+//                                    enrollment.getId(),
+//                                    "tdc.student.enrollmentClosed",
+//                                    map);
+//
+//                            notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+//                                    user, map, emailAttachments);
+//                        } else {
+//                            activityService.createActivity(
+//                                    user,
+//                                    user,
+//                                    getActivityType(),
+//                                    StatusEnum.active,
+//                                    "description",
+//                                    null,
+//                                    new Date(),
+//                                    null,
+//                                    null,
+//                                    enrollment.getId(),
+//                                    "tdc.student.enrollmentClosed",
+//                                    map);
+//                            notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+//                                    user, map);
+//                        }
+//                    } else {
+//                        activityService.createActivity(
+//                                user,
+//                                user,
+//                                getActivityType(),
+//                                StatusEnum.active,
+//                                "description",
+//                                null,
+//                                new Date(),
+//                                null,
+//                                null,
+//                                enrollment.getId(),
+//                                "tdc.student.enrollmentClosed",
+//                                map);
+//                        notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
+//                                user, map);
+//                    }
+//                }
+//            }
+//        } else if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
+//
+//            if (EnrollmentStatus.APPROVED.equals(enrollment.getStatus())) {
+//
+//                TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+//                        .query("select e from tsadv$UserExt e " +
+//                                " where e.personGroup = :personGroup")
+//                        .parameter("personGroup", enrollment.getPersonGroup())
+//                        .list().stream().findFirst().orElse(null);
+//                if (tsadvUser != null) {
+//                    Map<String, Object> map = new HashMap<>();
+//                    String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+//                            + "/course/"
+//                            + "\" target=\"_blank\">%s " + "</a>";
+//                    String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+//                            + "/my-course/"
+//                            + "\" target=\"_blank\">%s " + "</a>";
+//                    map.put("linkRu", String.format(courseLink, enrollment.getCourse().getName()));
+//                    map.put("linkEn", String.format(courseLink, enrollment.getCourse().getName()));
+//                    map.put("linkKz", String.format(courseLink, enrollment.getCourse().getName()));
+//                    map.put("myLinkRu", String.format(myCourseLink, "Мои курсы"));
+//                    map.put("myLinkEn", String.format(myCourseLink, "My training course"));
+//                    map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
+//                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+//                    map.put("courseName", enrollment.getCourse().getName());
+//                    activityService.createActivity(
+//                            tsadvUser,
+//                            tsadvUser,
+//                            getActivityType(),
+//                            StatusEnum.active,
+//                            "description",
+//                            null,
+//                            new Date(),
+//                            null,
+//                            null,
+//                            enrollment.getId(),
+//                            "tdc.student.enrollmentApproved",
+//                            map);
+//                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
+//                            tsadvUser, map);
+//                }
+//            } else {
+//                sendNotification(enrollment, "tdc.trainer.newEnrollment");
+//            }
+//        }
 
     }
 
@@ -219,13 +521,44 @@ public class EnrollmentChangedListener {
                         .list().stream().findFirst().orElse(null);
                 if (tsadvUser != null) {
                     Map<String, Object> map = new HashMap<>();
+                    String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
+                            "tsadv$Course.edit" +
+                            "&item=" + "tsadv$Course" + "-" + courseTrainer.getCourse().getId() +
+                            "\" target=\"_blank\">%s " + "</a>";
                     map.put("courseName", enrollment.getCourse().getName());
-                    map.put("personFullName", enrollment.getPersonGroup().getFullName());
+                    map.put("trainerFullName", courseTrainer.getTrainer().getEmployee().getFirstLastName());
+                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+                    map.put("linkRu", String.format(requestLink, "курс"));
+                    map.put("linkKz", String.format(requestLink, "курсыңызға"));
+                    map.put("linkEn", String.format(requestLink, "course"));
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            courseTrainer.getId(),
+                            notificationCode,
+                            map);
                     notificationSenderAPIService.sendParametrizedNotification(notificationCode,
                             tsadvUser, map);
                 }
             });
         }
+    }
+
+    protected ActivityType getActivityType() {
+        return dataManager.load(ActivityType.class)
+                .query("select e from uactivity$ActivityType e where e.code = 'NOTIFICATION'")
+                .view(new View(ActivityType.class)
+                        .addProperty("code")
+                        .addProperty("windowProperty",
+                                new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
+                .one();
     }
 
 //    protected void sendNotificationCompleted(Enrollment enrollment) {

@@ -3,7 +3,6 @@ package kz.uco.tsadv.service.portal;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
-import kz.uco.base.entity.core.notification.SendingNotification;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.pojo.BellNotificationResponsePojo;
 import kz.uco.uactivity.entity.Activity;
@@ -36,7 +35,7 @@ public class NotificationServiceBean implements NotificationService {
 
         return notificationDao.loadNotifications(userId, 0, limit)
                 .stream()
-                .map(this::parseNotificationRowToResponse)
+                .map(this::parseRowToResponse)
                 .collect(Collectors.toList());
     }
 
@@ -48,22 +47,11 @@ public class NotificationServiceBean implements NotificationService {
 
         return notificationDao.loadTasks(userId, 0, limit)
                 .stream()
-                .map(this::parseTaskRowToResponse)
+                .map(this::parseRowToResponse)
                 .collect(Collectors.toList());
     }
 
-    protected BellNotificationResponsePojo parseNotificationRowToResponse(SendingNotification row) {
-        return BellNotificationResponsePojo.BellNotificationResponsePojoBuilder.aBellNotificationResponsePojo()
-                .id(row.getId())
-                .name(row.getSendingMessage().getCaption())
-                .createTs(row.getCreateTs())
-//                .code(row.getType().getCode())
-//                .entityId(String.valueOf(row.getReferenceId()))
-//                .link(getLinkByCode(row.getType()))
-                .build();
-    }
-
-    protected BellNotificationResponsePojo parseTaskRowToResponse(Activity row) {
+    protected BellNotificationResponsePojo parseRowToResponse(Activity row) {
         return BellNotificationResponsePojo.BellNotificationResponsePojoBuilder.aBellNotificationResponsePojo()
                 .id(row.getId())
                 .name(row.getName())

@@ -813,6 +813,9 @@
         <method name="createOrUpdateUser">
             <param name="userData" type="kz.uco.tsadv.modules.integration.jsonobject.UserDataJson"/>
         </method>
+        <method name="createOrUpdatePersonAbsenceBalance">
+            <param name="absenceBalanceData" type="kz.uco.tsadv.modules.integration.jsonobject.AbsenceBalanceDataJson"/>
+        </method>
     </service>
     <service name="tsadv_AbsenceRvdService">
         <method name="countTotalHours">

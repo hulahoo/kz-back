@@ -31,7 +31,10 @@ public class StandardScheduleEdit extends AbstractEditor<StandardSchedule> {
     private Datasource<StandardSchedule> scheduleDs;
     @Inject
     private Metadata metadata;
-
+    @Named("fieldGroup.startDate")
+    private DateField<Date> startDateField;
+    @Named("fieldGroup.endDate")
+    private DateField<Date> endDateField;
     @Named("standardOffsetsTable.create")
     private CreateAction standardOffsetsTableCreate;
     @Named("standardOffsetsTable.edit")
@@ -63,17 +66,24 @@ public class StandardScheduleEdit extends AbstractEditor<StandardSchedule> {
         });
 
         FieldGroup.FieldConfig startDateConfig = fieldGroup.getField("startDate");
-        ((HasValue) startDateConfig.getComponent()).addValueChangeListener(e -> {
+        startDateField.addValueChangeListener(e ->{
             for (StandardOffset offset : standardOffsetsDs.getItems()) {
-                offset.setStartDate((Date) e);
+                Date date = (Date) ((HasValue.ValueChangeEvent) e).getValue();
+                offset.setStartDate(date);
                 standardOffsetsDs.modifyItem(offset);
             }
         });
+//        ((HasValue) startDateConfig.getComponent()).addValueChangeListener(e -> {
+//            for (StandardOffset offset : standardOffsetsDs.getItems()) {
+//                offset.setStartDate((Date) e);
+//                standardOffsetsDs.modifyItem(offset);
+//            }
+//        });
 
         FieldGroup.FieldConfig endDateConfig = fieldGroup.getField("endDate");
-        ((HasValue) endDateConfig.getComponent()).addValueChangeListener(e -> {
+        endDateField.addValueChangeListener(e -> {
             if (e != null) {
-                Date value = (Date) e;
+                Date value = (Date) ((HasValue.ValueChangeEvent) e).getValue();
                 for (StandardOffset offset : standardOffsetsDs.getItems()) {
                     if (offset.getEndDate() == null || offset.getEndDate().after(value)) {
                         offset.setEndDate(value);
@@ -83,6 +93,18 @@ public class StandardScheduleEdit extends AbstractEditor<StandardSchedule> {
             }
             initStandardOffsetParams();
         });
+//        ((HasValue) endDateConfig.getComponent()).addValueChangeListener(e -> {
+//            if (e != null) {
+//                Date value = (Date) e;
+//                for (StandardOffset offset : standardOffsetsDs.getItems()) {
+//                    if (offset.getEndDate() == null || offset.getEndDate().after(value)) {
+//                        offset.setEndDate(value);
+//                        standardOffsetsDs.modifyItem(offset);
+//                    }
+//                }
+//            }
+//            initStandardOffsetParams();
+//        });
 
         standardOffsetsTableCreate.setInitialValuesSupplier(() ->
                 ParamsMap.of("startDate", getItem().getStartDate(),

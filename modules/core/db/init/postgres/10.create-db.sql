@@ -4703,18 +4703,19 @@ create table TSADV_DIC_ABSENCE_TYPE (
     ORDER_ integer,
     --
     USE_IN_SELF_SERVICE boolean not null,
-    AVAILABLE_TO_MANAGER boolean,
+    ECOLOGICAL_ABSENCE boolean not null,
+    AVAILABLE_TO_MANAGER boolean not null,
     VACATION_DURATION_TYPE varchar(50),
     ELMA_TRANSFER boolean not null,
     USE_IN_BALANCE boolean not null,
     IGNORE_HOLIDAYS boolean not null,
-    IS_ONLY_WORKING_DAY boolean,
+    IS_ONLY_WORKING_DAY boolean not null,
     ABSENCE_CATEGORY_ID uuid,
     TIMESHEET_CODE varchar(255),
     IS_WORKING_DAY boolean not null,
-    USE_ONLY_ABSENCE_TYPE boolean,
-    DISPLAY_ABSENCE boolean,
-    CANCEL_PARENT_ABSENCE boolean,
+    USE_ONLY_ABSENCE_TYPE boolean not null,
+    DISPLAY_ABSENCE boolean not null,
+    CANCEL_PARENT_ABSENCE boolean not null,
     AVAILABLE_FOR_TIMECARD boolean not null,
     IS_REQUIRED_ORDER_NUMBER boolean not null,
     INCLUDE_CALC_GZP boolean not null,
@@ -4730,9 +4731,11 @@ create table TSADV_DIC_ABSENCE_TYPE (
     IS_ORIGINAL_SHEET boolean not null,
     IS_CHECK_WORK boolean not null,
     IS_VACATION_DATE boolean not null,
-    WORK_ON_WEEKEND boolean,
-    TEMPORARY_TRANSFER boolean,
-    OVERTIME_WORK boolean,
+    WORK_ON_WEEKEND boolean not null,
+    TEMPORARY_TRANSFER boolean not null,
+    OVERTIME_WORK boolean not null,
+    NUM_DAYS_CALENDAR_YEAR integer,
+    IS_FILE_REQUIRED boolean not null,
     --
     primary key (ID)
 )^
@@ -8333,6 +8336,7 @@ create table TSADV_ASSIGNED_PERFORMANCE_PLAN (
     MAX_BONUS_PERCENT double precision,
     PURPOSE varchar(255),
     FILE_ID uuid,
+    LINE_MANAGER_ID uuid,
     --
     primary key (ID)
 )^
@@ -10929,6 +10933,7 @@ create table TSADV_STANDARD_SCHEDULE (
     BASE_STANDARD_SCHEDULE_ID uuid,
     CALENDAR_ID uuid not null,
     IS_HOLIDAY_WORK_DAY boolean not null,
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^
@@ -14529,19 +14534,19 @@ create table TSADV_ABSENCE_BALANCE (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     PERSON_GROUP_ID uuid not null,
-    OVERALL_BALANCE_DAYS integer,
+    OVERALL_BALANCE_DAYS double precision,
     DATE_FROM date not null,
     DATE_TO date not null,
-    BALANCE_DAYS integer not null,
-    ADDITIONAL_BALANCE_DAYS integer not null,
-    DAYS_SPENT integer,
+    BALANCE_DAYS double precision not null,
+    ADDITIONAL_BALANCE_DAYS double precision not null,
+    DAYS_SPENT double precision,
     DAYS_LEFT double precision,
-    EXTRA_DAYS_SPENT integer,
+    EXTRA_DAYS_SPENT double precision,
     EXTRA_DAYS_LEFT double precision,
-    LONG_ABSENCE_DAYS integer,
-    ADD_BALANCE_DAYS_AIMS integer,
-    ECOLOGICAL_DUE_DAYS integer,
-    DISABILITY_DUE_DAYS integer,
+    LONG_ABSENCE_DAYS double precision,
+    ADD_BALANCE_DAYS_AIMS double precision,
+    ECOLOGICAL_DUE_DAYS double precision,
+    DISABILITY_DUE_DAYS double precision,
     ECOLOGICAL_DAYS_LEFT double precision,
     DISABILITY_DAYS_LEFT double precision,
     --
@@ -16666,8 +16671,9 @@ create table TSADV_SCHEDULE_OFFSETS_REQUEST (
     DATE_OF_NEW_SCHEDULE date,
     DATE_OF_START_NEW_SCHEDULE date,
     DETAILS_OF_ACTUAL_WORK varchar(2000),
-    AGREE boolean,
-    ACQUAINTED boolean,
+    AGREE boolean not null,
+    ACQUAINTED boolean not null,
+    EARNING_POLICY_ID uuid not null,
     --
     primary key (ID)
 )^
@@ -16732,6 +16738,7 @@ create table TSADV_CERTIFICATE_REQUEST (
     SHOW_SALARY boolean not null,
     NUMBER_OF_COPY integer not null,
     FILE_ID uuid,
+    PLACE_OF_DELIVERY varchar(255),
     --
     primary key (ID)
 )^
@@ -17742,6 +17749,7 @@ create table TSADV_SCORM_QUESTION_MAPPING (
     LEARNING_OBJECT_ID uuid not null,
     CODE varchar(255) not null,
     QUESTION varchar(255) not null,
+    SERIAL_NUMBER integer,
     --
     primary key (ID)
 )^
@@ -17765,10 +17773,62 @@ create table TSADV_COURSE_SECTION_SCORM_RESULT (
     SCORE decimal(19, 2),
     MAX_SCORE decimal(19, 2),
     MIN_SCORE decimal(19, 2),
+    COMMENT text,
     --
     primary key (ID)
 )^
 -- end TSADV_COURSE_SECTION_SCORM_RESULT
+-- begin TSADV_DIC_ASSESSMENT_E(VENTS
+alter table TSADV_DIC_ASSESSMENT_EVENTS add constraint FK_TSADV_DIC_ASSESSMENT_EVENTS_COMPANY foreign key (COMPANY_ID) references BASE_DIC_COMPANY(ID)^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_LANG_VALUE2 on TSADV_DIC_ASSESSMENT_EVENTS (LANG_VALUE2) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_DESCRIPTION5 on TSADV_DIC_ASSESSMENT_EVENTS (DESCRIPTION5) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_LANG_VALUE3 on TSADV_DIC_ASSESSMENT_EVENTS (LANG_VALUE3) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_DESCRIPTION4 on TSADV_DIC_ASSESSMENT_EVENTS (DESCRIPTION4) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_DESCRIPTION3 on TSADV_DIC_ASSESSMENT_EVENTS (DESCRIPTION3) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_LANG_VALUE4 on TSADV_DIC_ASSESSMENT_EVENTS (LANG_VALUE4) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_DESCRIPTION2 on TSADV_DIC_ASSESSMENT_EVENTS (DESCRIPTION2) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_LANG_VALUE5 on TSADV_DIC_ASSESSMENT_EVENTS (LANG_VALUE5) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_DESCRIPTION1 on TSADV_DIC_ASSESSMENT_EVENTS (DESCRIPTION1) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_CODE on TSADV_DIC_ASSESSMENT_EVENTS (CODE) where DELETE_TS is null ^
+create unique index IDX_TSADV_DIC_ASSESSMENT_EVENTS_UK_LANG_VALUE1 on TSADV_DIC_ASSESSMENT_EVENTS (LANG_VALUE1) where DELETE_TS is null ^
+create index IDX_TSADV_DIC_ASSESSMENT_EVENTS_COMPANY on TSADV_DIC_ASSESSMENT_EVENTS (COMPANY_ID)^
+-- end TSADV_DIC_ASSESSMENT_EVENTS
+
+-- begin TSADV_SCORM_SUSPEND_DATA
+create table TSADV_SCORM_SUSPEND_DATA (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    ENROLLMENT_ID uuid not null,
+    COURSE_SECTION_ID uuid not null,
+    SUSPEND_DATA text,
+    --
+    primary key (ID)
+)^
+-- end TSADV_SCORM_SUSPEND_DATA
+-- begin TSADV_BOOK_VIEW
+create table TSADV_BOOK_VIEW (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    PERSON_GROUP_ID uuid not null,
+    BOOK_ID uuid not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_BOOK_VIEW
 -- begin TSADV_DIC_ASSESSMENT_EVENTS
 create table TSADV_DIC_ASSESSMENT_EVENTS (
     ID uuid,
@@ -17874,8 +17934,8 @@ create table TSADV_DIC_ASSESSMENT_TYPE (
     primary key (ID)
 )^
 -- end TSADV_DIC_ASSESSMENT_TYPE
--- begin TSADV_SCORM_SUSPEND_DATA
-create table TSADV_SCORM_SUSPEND_DATA (
+-- begin TSADV_DIC_EARNING_POLICY
+create table TSADV_DIC_EARNING_POLICY (
     ID uuid,
     VERSION integer not null,
     CREATE_TS timestamp,
@@ -17884,28 +17944,28 @@ create table TSADV_SCORM_SUSPEND_DATA (
     UPDATED_BY varchar(50),
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
-    --
-    ENROLLMENT_ID uuid not null,
-    COURSE_SECTION_ID uuid not null,
-    SUSPEND_DATA text,
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
     --
     primary key (ID)
 )^
--- end TSADV_SCORM_SUSPEND_DATA
--- begin TSADV_BOOK_VIEW
-create table TSADV_BOOK_VIEW (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    --
-    PERSON_GROUP_ID uuid not null,
-    BOOK_ID uuid not null,
-    --
-    primary key (ID)
-)^
--- end TSADV_BOOK_VIEW
+-- end TSADV_DIC_EARNING_POLICY

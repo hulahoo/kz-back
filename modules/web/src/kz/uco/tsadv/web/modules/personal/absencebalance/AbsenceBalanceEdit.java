@@ -57,10 +57,10 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
     @Override
     protected void initNewItem(AbsenceBalance item) {
         super.initNewItem(item);
-        item.setBalanceDays(0);
+        item.setBalanceDays((double) 0);
         final PersonExt person = item.getPersonGroup().getPerson();
-        if (item.getAdditionalBalanceDays() == 0) {
-            item.setAdditionalBalanceDays(0);
+        if (item.getAdditionalBalanceDays() != null && item.getAdditionalBalanceDays() == 0) {
+            item.setAdditionalBalanceDays((double) 0);
         }
         if (person != null) {
             final List<AbsenceBalance> balances = commonService.getEntities(AbsenceBalance.class, "select e from tsadv$AbsenceBalance e\n" +
@@ -82,8 +82,8 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
         }*/
         balanceDaysField.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                Integer overallBalanceDays = (Integer) e.getValue();
-                Integer difference = 0;
+                Integer overallBalanceDays = (Integer) e.getValue(); //todo: надо потом убрать
+                double difference = 0;
                 if (getItem().getOverallBalanceDays() != null && getItem().getOverallBalanceDays() != 0) {
                     difference = getItem().getOverallBalanceDays() - getItem().getBalanceDays();
                     if (difference < 0) {

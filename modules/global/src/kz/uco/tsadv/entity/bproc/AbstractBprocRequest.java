@@ -31,6 +31,8 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
 
     public static final String OUTCOME_SEND_FOR_APPROVAL = "SEND_FOR_APPROVAL";
 
+    public static final String INITIATOR_TASK_CODE = "initiator_task";
+
     @Column(name = "REQUEST_NUMBER", nullable = false)
     @NotNull
     protected Long requestNumber;

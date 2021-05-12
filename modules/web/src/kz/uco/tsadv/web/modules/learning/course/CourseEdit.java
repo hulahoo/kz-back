@@ -9,7 +9,10 @@ import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Dialogs;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.Action;
+import com.haulmont.cuba.gui.components.DataGrid;
+import com.haulmont.cuba.gui.components.GroupTable;
+import com.haulmont.cuba.gui.components.Table;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -94,8 +97,6 @@ public class CourseEdit extends StandardEditor<Course> {
     protected Table<CoursePreRequisition> preRequisitionTable;
     @Inject
     protected CollectionLoader<CoursePreRequisition> preRequisitionDl;
-    @Inject
-    protected RichTextArea richTextArea;
     @Inject
     protected ExtAppPropertiesConfig extAppPropertiesConfig;
 

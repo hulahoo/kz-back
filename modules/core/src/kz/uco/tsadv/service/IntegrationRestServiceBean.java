@@ -43,6 +43,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -510,9 +512,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 if (positionJson.getPositionStatusId() != null && !positionJson.getPositionStatusId().isEmpty()) {
                     positionStatus = dataManager.load(DicPositionStatus.class)
                             .query("select e from tsadv$DicPositionStatus e " +
-                                    " where e.legacyId = :legacyId and e.company.legacyId = :companyCode")
-                            .setParameters(ParamsMap.of("companyCode", positionJson.getCompanyCode(),
-                                    "legacyId", positionJson.getPositionStatusId()))
+                                    " where e.legacyId = :legacyId ")
+                            .setParameters(ParamsMap.of("legacyId", positionJson.getPositionStatusId()))
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
                     positionExt.setPositionStatus(positionStatus);
                 }
@@ -1532,11 +1533,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         : null);
                 assignmentExt.setPrimaryFlag(Boolean.valueOf(assignmentJson.getPrimaryFlag()));
                 assignmentExt.setGroup(assignmentGroupExt);
-                assignmentGroupExt.setGradeGroup(gradeGroup);
-                assignmentGroupExt.setJobGroup(jobGroup);
-                assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
-                assignmentGroupExt.setPositionGroup(positionGroupExt);
-                assignmentGroupExt.setPersonGroup(personGroupExt);
+                if (assignmentGroupExt.getGradeGroup() == null || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
+                    assignmentGroupExt.setGradeGroup(gradeGroup);
+                }
+                if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
+                    assignmentGroupExt.setJobGroup(jobGroup);
+                }
+                if (assignmentGroupExt.getOrganizationGroup() == null
+                        || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
+                    assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
+                }
+                if (assignmentGroupExt.getPositionGroup() == null
+                        || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
+                    assignmentGroupExt.setPositionGroup(positionGroupExt);
+                }
+                if (assignmentGroupExt.getPersonGroup() == null || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
+                    assignmentGroupExt.setPersonGroup(personGroupExt);
+                }
                 assignmentGroupExt.getList().add(assignmentExt);
             }
             for (AssignmentGroupExt assignmentGroupExt : assignmentGroupExtList) {
@@ -1653,7 +1666,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         + " and company legacyId " + salaryJson.getCompanyCode());
                     }
                     salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
-                            ? Double.valueOf(salaryJson.getAmount())
+                            ? Double.valueOf(salaryJson.getAmount().replace(",", "."))
                             : null);
                     DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
@@ -1703,7 +1716,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         + " and company legacyId " + salaryJson.getCompanyCode());
                     }
                     salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
-                            ? Double.valueOf(salaryJson.getAmount())
+                            ? Double.valueOf(salaryJson.getAmount().replace(",", "."))
                             : null);
                     DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
@@ -3980,17 +3993,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     assignmentSchedule = dataManager.load(AssignmentSchedule.class)
                             .query(
                                     " select e from tsadv$AssignmentSchedule e " +
-                                            " where e.endPolicyCode = :epc" +
-                                            " and e.schedule.legacyId = :shLegacyId " +
+                                            " where e.startDate = :startDate" +
                                             " and e.assignmentGroup.legacyId = :agLegacyId " +
                                             " and e.assignmentGroup.legacyId in " +
                                             " (select p.group.legacyId from base$AssignmentExt p " +
                                             " where p.organizationGroup.company.legacyId = :companyCode) ")
-                            .setParameters(ParamsMap.of(
-                                    "epc", assignmentScheduleJson.getEndPolicyCode(),
-                                    "agLegacyId", assignmentScheduleJson.getAssignmentId(),
-                                    "shLegacyId", assignmentScheduleJson.getAssignmentId(),
-                                    "companyCode", assignmentScheduleJson.getCompanyCode()))
+                            .setParameters(
+                                    ParamsMap.of(
+                                            "startDate", CommonUtils.truncDate(formatter.parse(assignmentScheduleJson.getStartDate())),
+                                            "agLegacyId", assignmentScheduleJson.getAssignmentId(),
+                                            "companyCode", assignmentScheduleJson.getCompanyCode()
+                                    )
+                            )
                             .view("assignmentSchedule.edit").list().stream().findFirst().orElse(null);
 
                     if (assignmentSchedule != null) {
@@ -4023,9 +4037,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         StandardSchedule schedule = dataManager.load(StandardSchedule.class)
                                 .query("select e from tsadv$StandardSchedule e " +
-                                        "where e.legacyId = :shLegacyId")
+                                        " where e.legacyId = :shLegacyId " +
+                                        " and e.company.legacyId = :companyCode")
                                 .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
-                                .view(View.BASE)
+                                .parameter("companyCode", assignmentScheduleJson.getCompanyCode())
+                                .view("schedule.view")
                                 .list().stream().findFirst().orElse(null);
 
                         if (schedule != null) {
@@ -4069,16 +4085,19 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         StandardSchedule schedule = dataManager.load(StandardSchedule.class)
                                 .query("select e from tsadv$StandardSchedule e " +
-                                        "where e.legacyId = :shLegacyId")
+                                        " where e.legacyId = :shLegacyId " +
+                                        " and e.company.legacyId = :companyCode")
                                 .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
-                                .view(View.MINIMAL)
+                                .parameter("companyCode", assignmentScheduleJson.getCompanyCode())
+                                .view("schedule.view")
                                 .list().stream().findFirst().orElse(null);
 
                         if (schedule != null) {
                             assignmentSchedule.setSchedule(schedule);
                         } else {
                             return prepareError(result, methodName, assignmentScheduleData,
-                                    "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                                    "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId()
+                                            + " and companyCode = " + assignmentScheduleJson.getCompanyCode());
                         }
 
                         assignmentSchedulesCommitList.add(assignmentSchedule);
@@ -4113,16 +4132,19 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     StandardSchedule schedule = dataManager.load(StandardSchedule.class)
                             .query("select e from tsadv$StandardSchedule e " +
-                                    "where e.legacyId = :shLegacyId")
+                                    " where e.legacyId = :shLegacyId " +
+                                    " and e.company.legacyId = :companyCode")
                             .parameter("shLegacyId", assignmentScheduleJson.getScheduleId())
-                            .view(View.MINIMAL)
+                            .parameter("companyCode", assignmentScheduleJson.getCompanyCode())
+                            .view("schedule.view")
                             .list().stream().findFirst().orElse(null);
 
                     if (schedule != null) {
                         assignmentSchedule.setSchedule(schedule);
                     } else {
                         return prepareError(result, methodName, assignmentScheduleData,
-                                "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId());
+                                "no tsadv$StandardSchedule with legacyId " + assignmentScheduleJson.getScheduleId()
+                                        + " and companyCode = " + assignmentScheduleJson.getCompanyCode());
                     }
                 }
             }
@@ -4883,6 +4905,250 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .collect(Collectors.joining("\r")));
         }
         return prepareSuccess(result, methodName, completedUserData);
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonAbsenceBalance(AbsenceBalanceDataJson absenceBalanceData) {
+        String methodName = "createOrUpdatePersonAbsenceBalance";
+        ArrayList<AbsenceBalanceJson> absenceBalances = new ArrayList<>();
+        if (absenceBalanceData.getAbsenceBalances() != null) {
+            absenceBalances = absenceBalanceData.getAbsenceBalances();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        int scale = 2;
+        RoundingMode roundingMode = RoundingMode.HALF_UP;
+        try {
+            ArrayList<AbsenceBalance> absenceBalancesCommitList = new ArrayList<>();
+            for (AbsenceBalanceJson absenceBalanceJson : absenceBalances) {
+                if (absenceBalanceJson.getLegacyId() == null || absenceBalanceJson.getLegacyId().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no legacyId ");
+                }
+                if (absenceBalanceJson.getCompanyCode() == null || absenceBalanceJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no companyCode");
+                }
+                if (absenceBalanceJson.getPersonId() == null || absenceBalanceJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no personId");
+                }
+                if (absenceBalanceJson.getDate() == null || absenceBalanceJson.getDate().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no date");
+                }
+                if (absenceBalanceJson.getAnnualDueDays() == null || absenceBalanceJson.getAnnualDueDays().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no annualDueDays");
+                }
+                if (absenceBalanceJson.getAdditionalDueDays() == null || absenceBalanceJson.getAdditionalDueDays().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no additionalDueDays");
+                }
+                if (absenceBalanceJson.getEcologicalDueDays() == null || absenceBalanceJson.getEcologicalDueDays().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no ecologicalDueDays");
+                }
+                if (absenceBalanceJson.getDisabilityDueDays() == null || absenceBalanceJson.getDisabilityDueDays().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no disabilityDueDays");
+                }
+                if (absenceBalanceJson.getAnnualBalanceDays() == null || absenceBalanceJson.getAnnualBalanceDays().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no annualBalanceDays");
+                }
+                if (absenceBalanceJson.getAdditionalBalanceDays() == null || absenceBalanceJson.getAdditionalBalanceDays().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no additionalBalanceDays");
+                }
+                if (absenceBalanceJson.getEcologicalBalanceDays() == null || absenceBalanceJson.getEcologicalBalanceDays().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no ecologicalBalanceDays");
+                }
+                if (absenceBalanceJson.getDisabilityBalanceDays() == null || absenceBalanceJson.getDisabilityBalanceDays().isEmpty()) {
+                    return prepareError(result, methodName, absenceBalanceData,
+                            "no disabilityBalanceDays");
+                }
+
+                Date dateFromJson = formatter.parse(absenceBalanceJson.getDate());
+                AbsenceBalance absenceBalance = absenceBalancesCommitList.stream().filter(filterAbsenceBalance ->
+                        filterAbsenceBalance.getLegacyId() != null
+                                && filterAbsenceBalance.getLegacyId().equals(absenceBalanceJson.getLegacyId())
+                                && filterAbsenceBalance.getPersonGroup() != null
+                                && filterAbsenceBalance.getPersonGroup().getLegacyId().equals(absenceBalanceJson.getPersonId())
+                                && filterAbsenceBalance.getPersonGroup().getCompany() != null
+                                && filterAbsenceBalance.getPersonGroup().getCompany().getLegacyId() != null
+                                && filterAbsenceBalance.getPersonGroup().getCompany().getLegacyId().equals(absenceBalanceJson.getCompanyCode())
+                                && filterAbsenceBalance.getDateFrom().equals(dateFromJson)
+                ).findFirst().orElse(null);
+                if (absenceBalance == null) {
+                    absenceBalance = dataManager.load(AbsenceBalance.class)
+                            .query("select e from tsadv$AbsenceBalance e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.personGroup.legacyId = :pgLegacyId" +
+                                    " and e.dateFrom = :date")
+                            .setParameters(ParamsMap.of("legacyId", absenceBalanceJson.getLegacyId(),
+                                    "pgLegacyId", absenceBalanceJson.getPersonId(),
+                                    "date", dateFromJson))
+                            .view("absenceBalance.edit").list().stream().findFirst().orElse(null);
+
+                    if (absenceBalance != null) {
+
+                        absenceBalance.setLegacyId(absenceBalanceJson.getLegacyId());
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", absenceBalanceJson.getPersonId(),
+                                        "company", absenceBalanceJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            absenceBalance.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, absenceBalanceData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + absenceBalanceJson.getPersonId() + " , " + absenceBalanceJson.getCompanyCode());
+                        }
+
+                        absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
+                        absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
+
+                        Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setBalanceDays(annualDueDays);
+
+                        Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setAdditionalBalanceDays(additionalDueDays);
+
+                        Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setEcologicalDueDays(ecologicalDueDays);
+
+                        Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setDisabilityDueDays(disabilityDueDays);
+
+                        Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setDaysLeft(annualBalanceDays);
+
+                        Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setExtraDaysLeft(additionalBalanceDays);
+
+                        Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
+
+                        Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
+
+                        absenceBalancesCommitList.add(absenceBalance);
+                    } else {
+                        absenceBalance = metadata.create(AbsenceBalance.class);
+                        absenceBalance.setId(UUID.randomUUID());
+                        absenceBalance.setLegacyId(absenceBalanceJson.getLegacyId());
+
+                        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                                .query("select e from base$PersonGroupExt e " +
+                                        " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                                .setParameters(ParamsMap.of("legacyId", absenceBalanceJson.getPersonId(),
+                                        "company", absenceBalanceJson.getCompanyCode()))
+                                .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                        if (personGroupExt != null) {
+                            absenceBalance.setPersonGroup(personGroupExt);
+                        } else {
+                            return prepareError(result, methodName, absenceBalanceData,
+                                    "no personGroup with legacyId and companyCode : "
+                                            + absenceBalanceJson.getPersonId() + " , " + absenceBalanceJson.getCompanyCode());
+                        }
+
+
+                        absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
+                        absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
+
+                        Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setBalanceDays(annualDueDays);
+
+                        Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setAdditionalBalanceDays(additionalDueDays);
+
+                        Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setEcologicalDueDays(ecologicalDueDays);
+
+                        Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setDisabilityDueDays(disabilityDueDays);
+
+                        Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setDaysLeft(annualBalanceDays);
+
+                        Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setExtraDaysLeft(additionalBalanceDays);
+
+                        Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
+
+                        Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
+
+
+                        absenceBalancesCommitList.add(absenceBalance);
+                    }
+                } else {
+                    absenceBalance.setLegacyId(absenceBalanceJson.getLegacyId());
+
+                    PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                            .query("select e from base$PersonGroupExt e " +
+                                    " where e.legacyId = :legacyId and e.company.legacyId = :company")
+                            .setParameters(ParamsMap.of("legacyId", absenceBalanceJson.getPersonId(),
+                                    "company", absenceBalanceJson.getCompanyCode()))
+                            .view("personGroupExt-for-integration-rest").list().stream().findFirst().orElse(null);
+
+                    if (personGroupExt != null) {
+                        absenceBalance.setPersonGroup(personGroupExt);
+                    } else {
+                        return prepareError(result, methodName, absenceBalanceData,
+                                "no personGroup with legacyId and companyCode : "
+                                        + absenceBalanceJson.getPersonId() + " , " + absenceBalanceJson.getCompanyCode());
+                    }
+
+                    absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
+                    absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
+
+                    Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+                    absenceBalance.setBalanceDays(annualDueDays);
+
+                    Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                    absenceBalance.setAdditionalBalanceDays(additionalDueDays);
+
+                    Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                    absenceBalance.setEcologicalDueDays(ecologicalDueDays);
+
+                    Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                    absenceBalance.setDisabilityDueDays(disabilityDueDays);
+
+                    Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    absenceBalance.setDaysLeft(annualBalanceDays);
+
+                    Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    absenceBalance.setExtraDaysLeft(additionalBalanceDays);
+
+                    Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
+
+                    Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
+
+                }
+            }
+
+            for (AbsenceBalance absenceBalance : absenceBalancesCommitList) {
+                commitContext.addInstanceToCommit(absenceBalance);
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return prepareError(result, methodName, absenceBalanceData, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, absenceBalanceData);
     }
 
     protected String getEmpNumber(String jsonEmpNumber) {
