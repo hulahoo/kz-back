@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
@@ -29,6 +30,8 @@ public class KpiServiceBean implements KpiService {
     protected DatesService datesService;
     @Inject
     protected Metadata metadata;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
     @Inject
     private Persistence persistence;
 
@@ -158,7 +161,8 @@ public class KpiServiceBean implements KpiService {
                             "                s.end_date, " +
                             "                s.assignment_group_id, " +
                             "                s.type_, " +
-                            "                case when s.type_  = 'HOURLYRATE' then s.amount * 165.15 else s.amount end as amount " +
+                            "                case when s.type_  = 'HOURLYRATE' then s.amount * " + extAppPropertiesConfig.getChts() +
+                            "  else s.amount end as amount " +
                             "         from tsadv_salary s " +
                             "                  join base_assignment ss " +
                             "                       on ss.group_id = s.assignment_group_id " +
