@@ -151,6 +151,21 @@ public class KpiServiceBean implements KpiService {
                             "                                                                    left join absence a on dd between a.date_from and a.date_to " +
                             "         group by dd " +
                             "     ), " +
+                            " my_salary as ( " +
+                            "         select s.id, " +
+                            "                s.delete_ts, " +
+                            "                s.start_date, " +
+                            "                s.end_date, " +
+                            "                s.assignment_group_id, " +
+                            "                s.type_, " +
+                            "                case when s.type_  = 'HOURLYRATE' then s.amount * 165.15 else s.amount end as amount " +
+                            "         from tsadv_salary s " +
+                            "                  join base_assignment ss " +
+                            "                       on ss.group_id = s.assignment_group_id " +
+                            "                           and ss.delete_ts is null " +
+                            "                           and ss.person_group_id = ?3 " +
+                            "         where s.delete_ts is null " +
+                            "     )," +
                             "     salary as ( " +
                             "         select s.id, " +
                             "                greatest(min(days), s.start_date) as start_date, " +
@@ -161,7 +176,7 @@ public class KpiServiceBean implements KpiService {
                             "                s.assignment_group_id, " +
                             "                s.amount " +
                             "         from generate_series( ?1, ?2, '1 day'::interval) days " +
-                            "                  join tsadv_salary s on  days between s.start_date and s.end_date and s.delete_ts is null " +
+                            "                  join my_salary s on  days between s.start_date and s.end_date and s.delete_ts is null " +
                             "                  join base_assignment ss " +
                             "                       on ss.group_id = s.assignment_group_id " +
                             "                           and ss.delete_ts is null " +
