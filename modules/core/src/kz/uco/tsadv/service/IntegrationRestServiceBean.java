@@ -1666,7 +1666,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         + " and company legacyId " + salaryJson.getCompanyCode());
                     }
                     salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
-                            ? Double.valueOf(salaryJson.getAmount())
+                            ? Double.valueOf(salaryJson.getAmount().replace(",", "."))
                             : null);
                     DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
@@ -1716,7 +1716,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                         + " and company legacyId " + salaryJson.getCompanyCode());
                     }
                     salary.setAmount(salaryJson.getAmount() != null && !salaryJson.getAmount().isEmpty()
-                            ? Double.valueOf(salaryJson.getAmount())
+                            ? Double.valueOf(salaryJson.getAmount().replace(",", "."))
                             : null);
                     DicCurrency dicCurrency = dataManager.load(DicCurrency.class)
                             .query("select e from base$DicCurrency e " +
