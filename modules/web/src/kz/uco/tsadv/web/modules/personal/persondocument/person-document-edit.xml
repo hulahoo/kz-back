@@ -24,6 +24,7 @@
                     <field property="series"/>
                     <field property="issueDate"/>
                     <field property="expiredDate"/>
+                    <field property="issuingAuthority"/>
                     <field property="issuedBy"/>
                     <field property="description"/>
                     <field property="file"/>
