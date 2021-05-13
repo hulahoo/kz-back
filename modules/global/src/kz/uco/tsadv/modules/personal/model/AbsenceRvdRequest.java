@@ -2,6 +2,7 @@ package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
@@ -10,7 +11,7 @@ import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import javax.persistence.*;
 import java.util.Date;
 
-@Listeners("tsadv_AbsenceRvdRequestListener")
+@PublishEntityChangedEvents
 @Table(name = "TSADV_ABSENCE_RVD_REQUEST")
 @Entity(name = "tsadv_AbsenceRvdRequest")
 @NamePattern("%s (%s)|id,requestDate")
