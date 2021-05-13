@@ -322,7 +322,7 @@ public class SsStructurePerson extends AbstractWindow {
             absenceRvdRequest.setStatus(status);
             absenceRvdRequest.setRequestDate(CommonUtils.getSystemDate());
             absenceRvdRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            absenceRvdRequest.setCompencation(true);
+            absenceRvdRequest.setCompensation(true);
             absenceRvdRequest.setVacationDay(false);
             screenBuilders.editor(AbsenceRvdRequest.class, this)
                     .withScreenClass(AbsenceRvdRequestEdit.class).newEntity(absenceRvdRequest)

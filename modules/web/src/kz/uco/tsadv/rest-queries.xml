@@ -386,26 +386,4 @@
             <param name="companyId" type="java.util.UUID"/>
         </params>
     </query>
-    <query name="myTeamRvd" entity="tsadv_DicPurposeAbsence" view="_base">
-        <jpql>
-            <![CDATA[
-            select p from
-             tsadv_AbsPurposeSetting s
-                join s.absencePurpose p
-                join s.absenceType a
-            where a.id = :typeId
-            ]]>
-        </jpql>
-        <params>
-            <param name="typeId" type="java.util.UUID" />
-        </params>
-    </query>
-    <query name="myTeamRvdAbsenceType" entity="tsadv$DicAbsenceType" view="_base">
-        <jpql>
-            <![CDATA[
-            select distinct s.absenceType from
-             tsadv_AbsPurposeSetting s
-            ]]>
-        </jpql>
-    </query>
 </queries>

@@ -23784,4 +23784,8 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="tsadv_AbsPurposeSetting" name="absPurposeSetting-absence" extends="_minimal">
+        <property name="absenceType" view="_local"/>
+        <property name="absencePurpose" view="_local"/>
+    </view>
 </views>

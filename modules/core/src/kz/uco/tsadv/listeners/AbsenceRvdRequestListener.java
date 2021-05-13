@@ -179,7 +179,7 @@ public class AbsenceRvdRequestListener implements BeforeUpdateEntityListener<Abs
         String hours = (entity.getTotalHours() != null) ? entity.getTotalHours().toString() : "";
         absenceRvdRequestDataJson.setHours(hours);
         if (isRvd) {
-            boolean compensation = Null.nullReplace(entity.getCompencation(), false);
+            boolean compensation = Null.nullReplace(entity.getCompensation(), false);
             String isVacationProvidedOrCompensationProvided = (compensation) ? "Compensation" : "Vacation";
             absenceRvdRequestDataJson.setIsVacationProvidedOrCompensationProvided(isVacationProvidedOrCompensationProvided);
         }

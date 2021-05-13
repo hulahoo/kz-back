@@ -1,7 +1,5 @@
 package kz.uco.tsadv.service;
 
-import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
-import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import java.util.Date;
 import java.util.UUID;
 
