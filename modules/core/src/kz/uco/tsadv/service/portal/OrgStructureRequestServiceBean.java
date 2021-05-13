@@ -170,10 +170,33 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 requestTreeData.getNameRu()[1] = null;
                 requestTreeData.getNameEn()[1] = null;
                 requestTreeData.getGrade()[1] = null;
-                requestTreeData.getHeadCount()[1] = BigDecimal.ZERO;
-                requestTreeData.getBaseSalary()[1] = BigDecimal.ZERO;
-                requestTreeData.getMtPayrollPer()[1] = BigDecimal.ZERO;
-                requestTreeData.getMtPayroll()[1] = BigDecimal.ZERO;
+                requestTreeData.getNameRu()[2] = null;
+                requestTreeData.getNameEn()[2] = null;
+                requestTreeData.getGrade()[2] = null;
+
+                final BigDecimal[] headCount = requestTreeData.getHeadCount();
+                if (headCount != null) {
+                    headCount[1] = BigDecimal.ZERO;
+                    headCount[2] = BigDecimal.ZERO;
+                }
+
+                final BigDecimal[] baseSalary = requestTreeData.getBaseSalary();
+                if (baseSalary != null) {
+                    baseSalary[1] = BigDecimal.ZERO;
+                    baseSalary[2] = BigDecimal.ZERO;
+                }
+
+                final BigDecimal[] mtPayrollPer = requestTreeData.getMtPayrollPer();
+                if (mtPayrollPer != null) {
+                    mtPayrollPer[1] = BigDecimal.ZERO;
+                    mtPayrollPer[2] = BigDecimal.ZERO;
+                }
+
+                final BigDecimal[] mtPayroll = requestTreeData.getMtPayroll();
+                if (mtPayroll != null) {
+                    mtPayroll[1] = BigDecimal.ZERO;
+                    mtPayroll[2] = BigDecimal.ZERO;
+                }
             }
         }
     }
