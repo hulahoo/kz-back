@@ -1957,5 +1957,8 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicEarningPolicy">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.performance.model.PersonException">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

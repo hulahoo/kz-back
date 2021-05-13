@@ -396,9 +396,12 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                         ? currentAssignment.getGroup()
                                         : null,
                                 performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));
+                PersonException exception = getPersonException(assignedPerformancePlan.getAssignedPerson());
                 assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
                         BigDecimal.valueOf(assignedPerformancePlan.getMaxBonusPercent() != null
                                 ? assignedPerformancePlan.getMaxBonusPercent()
+                                : exception != null
+                                ? exception.getMaxBonus()
                                 : currentAssignment != null
                                 && currentAssignment.getGradeGroup() != null
                                 && currentAssignment.getGradeGroup().getGrade() != null
@@ -428,6 +431,15 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     .withCaption(messageBundle.getMessage("calculatedSuccessfully")).show();
         } catch (Exception ignored) {
         }
+    }
+
+    protected PersonException getPersonException(PersonGroupExt assignedPerson) {
+        return dataManager.load(PersonException.class)
+                .query("select e from tsadv_PersonException e " +
+                        " where e.personGroup = :personGroup ")
+                .parameter("personGroup", assignedPerson)
+                .view("personException.edit")
+                .list().stream().findFirst().orElse(null);
     }
 
     private Double calculatePersonalBonus(BigDecimal maxBonus, Double finalScore) {

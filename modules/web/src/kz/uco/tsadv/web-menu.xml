@@ -476,6 +476,7 @@
             </item>
         </menu>
         <item screen="tsadv$Trainer.browse"/>
+        <item screen="tsadv_PersonException.browse"/>
     </menu>
     <menu id="learning"
           icon="font-icon:GRADUATION_CAP"

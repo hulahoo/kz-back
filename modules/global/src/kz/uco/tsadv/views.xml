@@ -23794,4 +23794,7 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="tsadv_PersonException" name="personException.edit" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+    </view>
 </views>
