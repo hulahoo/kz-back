@@ -1,17 +1,26 @@
 package kz.uco.tsadv.modules.performance.model;
 
+import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
+import com.haulmont.cuba.core.global.AppBeans;
+import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.performance.dictionary.DicUOM;
 import kz.uco.tsadv.modules.personal.dictionary.DicMeasureType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
-@NamePattern("%s|goalName")
+import static kz.uco.base.common.Null.nullReplace;
+
+@NamePattern("%s|goalLang")
 @Table(name = "TSADV_GOAL")
 @Entity(name = "tsadv$Goal")
 public class Goal extends AbstractParentEntity {
@@ -115,8 +124,6 @@ public class Goal extends AbstractParentEntity {
     }
 
 
-
-
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
@@ -173,4 +180,40 @@ public class Goal extends AbstractParentEntity {
     }
 
 
+    @Transient
+    @MetaProperty(related = {"goalName", "goalNameLang2", "goalNameLang3"})
+    public String getGoalLang() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String langOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+
+        if (!isBaseLangsFullLoaded()) {
+            return null;
+        }
+
+        if (langOrder != null) {
+            List<String> langs = Arrays.asList(langOrder.split(";"));
+            switch (langs.indexOf(language)) {
+                case 0: {
+                    return goalName;
+                }
+                case 1: {
+                    return nullReplace(goalNameLang2, goalName);
+                }
+                case 2: {
+                    return nullReplace(goalNameLang3, goalName);
+                }
+                default:
+                    return goalName;
+            }
+        }
+
+        return goalName;
+    }
+
+    private boolean isBaseLangsFullLoaded() {
+        return PersistenceHelper.isLoaded(this, "goalName")
+                && PersistenceHelper.isLoaded(this, "goalNameLang2")
+                && PersistenceHelper.isLoaded(this, "goalNameLang3");
+    }
 }
