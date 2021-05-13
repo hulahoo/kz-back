@@ -8225,10 +8225,9 @@
         <property name="group" view="_minimal">
             <property name="list" view="_minimal">
                 <property name="bonusPercent"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="company" view="_minimal"/>
+            <property name="availableSalary"/>
         </property>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.GradeRuleValue"

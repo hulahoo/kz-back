@@ -16801,6 +16801,7 @@ create table TSADV_GRADE_GROUP (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     COMPANY_ID uuid,
+    AVAILABLE_SALARY boolean not null,
     --
     primary key (ID)
 )^
