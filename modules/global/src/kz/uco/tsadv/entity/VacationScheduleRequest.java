@@ -108,6 +108,6 @@ public class VacationScheduleRequest extends AbstractBprocRequest {
 
     @Override
     public String getProcessDefinitionKey() {
-        throw new IllegalStateException("VacationScheduleRequest does not have ProcessDefinitionKey ");
+        throw new UnsupportedOperationException("VacationScheduleRequest does not have ProcessDefinitionKey ");
     }
 }

@@ -10331,6 +10331,8 @@ create table TSADV_ASSIGNED_GOAL (
     GOAL_LIBRARY_ID uuid,
     ASSESSMENT double precision,
     MANAGER_ASSESSMENT double precision,
+    EMPLOYEE_COMMENT varchar(2000),
+    MANAGER_COMMENT varchar(2000),
     --
     primary key (ID)
 )^
