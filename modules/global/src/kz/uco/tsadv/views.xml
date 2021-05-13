@@ -4011,6 +4011,7 @@
           extends="_local"
           name="personDocument.edit">
         <property name="issuingAuthority" view="_minimal">
+            <property name="company" view="_minimal"/>
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -4032,8 +4033,6 @@
         <property name="personGroup" view="_minimal">
             <property name="list" view="_minimal">
                 <property name="legacyId"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
                 <property name="writeHistory"/>
             </property>
             <property name="company" view="_minimal"/>
