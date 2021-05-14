@@ -68,7 +68,7 @@
                 <form id="fieldGroup"
                       dataContainer="performancePlanDc">
                     <column width="250px">
-                        <textField id="performancePlanName" property="performancePlanName"/>
+                        <textField id="performancePlanName" property="performancePlanName" caption="msg://performancePlan"/>
                         <textField id="performancePlanNameKz" property="performancePlanNameKz"/>
                         <textField id="performancePlanNameEn" property="performancePlanNameEn"/>
                         <textField id="description" property="description"/>
