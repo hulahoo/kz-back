@@ -235,7 +235,9 @@ public class PersonData extends Screen implements SelfServiceMixin {
             if (componentInWindow instanceof WebFlowBoxLayout) {
                 WebFlowBoxLayout flowBoxLayout = (WebFlowBoxLayout) componentInWindow;
                 for (Component componentInFlowBox : flowBoxLayout.getComponents()) {
-                    componentInFlowBox.getId().contains("upload");
+                    if (componentInFlowBox != null && componentInFlowBox.getId() != null) {
+                        componentInFlowBox.getId().contains("upload");
+                    }
                 }
             }
         }
