@@ -16,7 +16,6 @@ import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.modules.personal.dictionary.DicApprovalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.model.PersonDocumentRequest;
 
@@ -59,12 +58,6 @@ public class PersonDocumentRequestEdit extends StandardEditor<PersonDocumentRequ
             dicDocumentTypesDl.setParameter("isForeigner", ((MapScreenOptions) event.getOptions())
                     .getParams().get("isForeigner"));
         }
-    }
-
-
-    @Subscribe
-    protected void onInitEntity(InitEntityEvent<PersonDocumentRequest> event) {
-        event.getEntity().setStatus(commonService.getEntity(DicApprovalStatus.class, "PROJECT"));
     }
 
     @Subscribe("upload")

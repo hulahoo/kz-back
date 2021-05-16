@@ -12727,6 +12727,10 @@ create table TSADV_PERSON_DOCUMENT_REQUEST (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
     --
     ISSUE_DATE date not null,
     EXPIRED_DATE date not null,
@@ -12737,9 +12741,7 @@ create table TSADV_PERSON_DOCUMENT_REQUEST (
     PERSON_GROUP_ID uuid,
     DOCUMENT_NUMBER varchar(255) not null,
     SERIES varchar(255),
-    STATUS_ID uuid not null,
     FILE_ID uuid,
-    REQUEST_STATUS_ID uuid not null,
     EDITED_PERSON_DOCUMENT_ID uuid,
     --
     primary key (ID)
