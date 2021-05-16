@@ -66,7 +66,7 @@
                     <dateField id="timeOfStartingField" property="timeOfStarting" required="true"/>
                     <dateField id="timeOfFinishingField" property="timeOfFinishing" required="true"/>
                     <textField id="totalHoursField" property="totalHours" required="true" editable="false"/>
-                    <checkBox id="compencationField" property="compencation" editable="false"
+                    <checkBox id="compencationField" property="compensation" editable="false"
                               stylename="check-to-radio"/>
                     <checkBox id="vacationDayField" property="vacationDay" editable="false"
                               stylename="check-to-radio"/>

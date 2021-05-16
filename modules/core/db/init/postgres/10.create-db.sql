@@ -17286,10 +17286,10 @@ create table TSADV_ABSENCE_RVD_REQUEST (
     TIME_OF_STARTING timestamp,
     TIME_OF_FINISHING timestamp,
     TOTAL_HOURS integer,
-    COMPENCATION boolean,
-    VACATION_DAY boolean,
-    ACQUAINTED boolean,
-    AGREE boolean,
+    COMPENSATION boolean not null,
+    VACATION_DAY boolean not null,
+    ACQUAINTED boolean not null,
+    AGREE boolean not null,
     --
     primary key (ID)
 )^

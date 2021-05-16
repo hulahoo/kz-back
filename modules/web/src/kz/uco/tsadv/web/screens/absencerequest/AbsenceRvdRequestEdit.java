@@ -52,10 +52,10 @@ public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest
     protected void onAbsenceRvdRequestDcItemPropertyChange(InstanceContainer.ItemPropertyChangeEvent<AbsenceRvdRequest> event) {
         if (!isBlocked) {
             isBlocked = true;
-            if (event.getProperty().equals("compencation")) {
-                absenceRvdRequestDc.getItem().setVacationDay(!event.getItem().getCompencation());
+            if (event.getProperty().equals("compensation")) {
+                absenceRvdRequestDc.getItem().setVacationDay(!event.getItem().getCompensation());
             } else if (event.getProperty().equals("vacationDay")) {
-                absenceRvdRequestDc.getItem().setCompencation(!event.getItem().getVacationDay());
+                absenceRvdRequestDc.getItem().setCompensation(!event.getItem().getVacationDay());
             }
             isBlocked = false;
         }
