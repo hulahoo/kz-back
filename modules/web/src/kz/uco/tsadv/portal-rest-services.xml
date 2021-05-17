@@ -183,8 +183,9 @@
         <method name="calcTotalAmount">
             <param name="insuredPersonId" type="java.util.UUID"/>
         </method>
-        <method name="commitFromPortal">
-            <param name="insuredPerson" type="kz.uco.tsadv.modules.personal.model.InsuredPerson"/>
+        <method name="getInsuredPersonMembersWithNewContract">
+            <param name="insuredPersonId" type="java.util.UUID"/>
+            <param name="contractId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_EmployeeService">
