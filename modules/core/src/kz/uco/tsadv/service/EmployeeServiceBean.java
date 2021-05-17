@@ -2684,6 +2684,10 @@ public class EmployeeServiceBean implements EmployeeService {
         Objects.requireNonNull(currentPersonGroup, "Can not find person group by id: " + currentPersonGroup);
 
         final AssignmentExt currentAssignment = dataManager.reload(currentPersonGroup.getCurrentAssignment(), "assignment.gradeGroup");
-        return currentAssignment.getPositionGroup().getGradeGroup() != null ? currentAssignment.getPositionGroup().getGradeGroup().getAvailableSalary() : false;
+        return currentAssignment.getGradeGroup() != null
+                ? currentAssignment.getGradeGroup().getAvailableSalary()
+                : currentAssignment.getPositionGroup().getGradeGroup() != null
+                ? currentAssignment.getPositionGroup().getGradeGroup().getAvailableSalary()
+                : false;
     }
 }
