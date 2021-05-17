@@ -23797,4 +23797,8 @@
     <view entity="tsadv_PersonException" name="personException.edit" extends="_local">
         <property name="personGroup" view="_minimal"/>
     </view>
+    <view entity="tsadv_AbsPurposeSetting" name="absPurposeSetting-absence" extends="_minimal">
+        <property name="absenceType" view="_local"/>
+        <property name="absencePurpose" view="_local"/>
+    </view>
 </views>

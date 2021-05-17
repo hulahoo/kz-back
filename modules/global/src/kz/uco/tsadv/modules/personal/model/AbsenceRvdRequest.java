@@ -8,7 +8,9 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @PublishEntityChangedEvents
@@ -46,17 +48,21 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
     @Column(name = "TOTAL_HOURS")
     protected Integer totalHours;
 
-    @Column(name = "COMPENCATION")
-    protected Boolean compencation;
+    @Column(name = "COMPENSATION", nullable = false)
+    @NotNull
+    protected Boolean compensation = false;
 
-    @Column(name = "VACATION_DAY")
-    protected Boolean vacationDay;
+    @Column(name = "VACATION_DAY", nullable = false)
+    @NotNull
+    protected Boolean vacationDay = false;
 
-    @Column(name = "ACQUAINTED")
-    protected Boolean acquainted;
+    @Column(name = "ACQUAINTED", nullable = false)
+    @NotNull
+    protected Boolean acquainted = false;
 
-    @Column(name = "AGREE")
-    protected Boolean agree;
+    @Column(name = "AGREE", nullable = false)
+    @NotNull
+    protected Boolean agree = false;
 
     public Boolean getAgree() {
         return agree;
@@ -82,12 +88,12 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
         this.vacationDay = vacationDay;
     }
 
-    public Boolean getCompencation() {
-        return compencation;
+    public Boolean getCompensation() {
+        return compensation;
     }
 
-    public void setCompencation(Boolean compencation) {
-        this.compencation = compencation;
+    public void setCompensation(Boolean compensation) {
+        this.compensation = compensation;
     }
 
     public Integer getTotalHours() {
@@ -138,7 +144,6 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
         this.type = type;
     }
 
-
     public PersonGroupExt getPersonGroup() {
         return personGroup;
     }
@@ -150,5 +155,11 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
     @Override
     public String getProcessDefinitionKey() {
         return PROCESS_DEFINITION_KEY;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        super.postConstruct();
+        this.compensation = true;
     }
 }
