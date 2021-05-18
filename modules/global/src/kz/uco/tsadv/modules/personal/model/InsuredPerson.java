@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.List;
 
 @PublishEntityChangedEvents
-@Listeners("tsadv_InsuredPersonChangedListener")
 @Table(name = "TSADV_INSURED_PERSON")
 @Entity(name = "tsadv$InsuredPerson")
 @NamePattern("%s|firstName")
