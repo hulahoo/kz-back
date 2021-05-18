@@ -35,7 +35,6 @@
         <custom-filter ref="cuba_RestLastSecurityFilter" position="LAST"/>
     </security:http>
 
-    <bean id="restapi_ServicesController" class="kz.uco.tsadv.controllers.ExtServicesController"/>
     <bean id="restapi_ServicesControllerManager" class="kz.uco.tsadv.controllers.ExtServicesControllerManager"/>
 
     <bean id="restapi_EntitiesController" class="kz.uco.tsadv.controllers.ExtEntitiesController"/>
