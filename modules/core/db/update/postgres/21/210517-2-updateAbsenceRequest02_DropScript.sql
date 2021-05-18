@@ -1,0 +1,1 @@
+alter table TSADV_ABSENCE_REQUEST drop column VACATION_SCHEDULE_ID__U83172 cascade ;

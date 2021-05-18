@@ -5286,7 +5286,7 @@
         </property>
         <property name="personGroup" view="_minimal"/>
         <property name="purpose" view="_minimal"/>
-        <property name="vacationSchedule" view="_minimal">
+        <property name="vacationScheduleRequest" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
@@ -5310,7 +5310,7 @@
         </property>
         <property name="purpose" view="_minimal"/>
         <property name="personGroup" view="_minimal"/>
-        <property name="vacationSchedule" view="_minimal">
+        <property name="vacationScheduleRequest" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
         </property>
@@ -21744,10 +21744,7 @@
         <property name="status" view="_local"/>
         <property name="personGroup" view="_local"/>
     </view>
-    <view entity="tsadv_VacationSchedule" name="vacation-view" extends="_local">
-        <property name="personGroup" view="personGroupExt-view"/>
-    </view>
-<!--    unused-->
+    <!--    unused-->
 <!--    <view entity="tsadv$PersonalDataRequest" name="personalDataRequest-edit" extends="_local">-->
 <!--        <property name="status" view="_minimal">-->
 <!--            <property name="langValue1"/>-->

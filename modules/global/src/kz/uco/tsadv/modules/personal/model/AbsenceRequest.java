@@ -8,7 +8,7 @@ import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import com.haulmont.cuba.core.global.UserSessionSource;
-import kz.uco.tsadv.entity.VacationSchedule;
+import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
@@ -79,8 +79,9 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @Column(name = "TIME_OF_STARTING")
     protected Date timeOfStarting;
 
-    @Column(name = "ORIGINAL_SHEET")
-    private Boolean originalSheet;
+    @Column(name = "ORIGINAL_SHEET", nullable = false)
+    @NotNull
+    private Boolean originalSheet = false;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "SCHEDULE_START_DATE")
@@ -90,8 +91,9 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @Column(name = "SCHEDULE_END_DATE")
     private Date scheduleEndDate;
 
-    @Column(name = "ADD_NEXT_YEAR")
-    private Boolean addNextYear;
+    @Column(name = "ADD_NEXT_YEAR", nullable = false)
+    @NotNull
+    private Boolean addNextYear = false;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "NEW_START_DATE")
@@ -116,21 +118,25 @@ public class AbsenceRequest extends AbstractBprocRequest {
     @Column(name = "TOTAL_HOURS")
     protected Integer totalHours;
 
-    @Column(name = "COMPENCATION")
-    protected Boolean compencation;
+    @Column(name = "COMPENSATION", nullable = false)
+    @NotNull
+    protected Boolean compensation = false;
 
-    @Column(name = "VACATION_DAY")
-    protected Boolean vacationDay;
+    @Column(name = "VACATION_DAY", nullable = false)
+    @NotNull
+    protected Boolean vacationDay = false;
 
-    @Column(name = "ACQUAINTED")
-    protected Boolean acquainted;
+    @Column(name = "ACQUAINTED", nullable = false)
+    @NotNull
+    protected Boolean acquainted = false;
 
-    @Column(name = "AGREE")
-    protected Boolean agree;
+    @Column(name = "AGREE", nullable = false)
+    @NotNull
+    protected Boolean agree = false;
 
-    @JoinColumn(name = "VACATION_SCHEDULE_ID")
+    @JoinColumn(name = "VACATION_SCHEDULE_REQUEST_ID")
     @ManyToOne(fetch = FetchType.LAZY)
-    private VacationSchedule vacationSchedule;
+    private VacationScheduleRequest vacationScheduleRequest;
 
     @MetaProperty
     @Transient
@@ -153,6 +159,14 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     @Column(name = "ADDITIONAL_TIME")
     protected Integer additionalTime;
+
+    public void setVacationScheduleRequest(VacationScheduleRequest vacationScheduleRequest) {
+        this.vacationScheduleRequest = vacationScheduleRequest;
+    }
+
+    public VacationScheduleRequest getVacationScheduleRequest() {
+        return vacationScheduleRequest;
+    }
 
     public Integer getAdditionalTime() {
         return additionalTime;
@@ -200,14 +214,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     public void setVacationDurationType(VacationDurationType vacationDurationType) {
         this.vacationDurationType = vacationDurationType == null ? null : vacationDurationType.getId();
-    }
-
-    public void setVacationSchedule(VacationSchedule vacationSchedule) {
-        this.vacationSchedule = vacationSchedule;
-    }
-
-    public VacationSchedule getVacationSchedule() {
-        return vacationSchedule;
     }
 
     public void setNewEndDate(Date newEndDate) {
@@ -306,12 +312,12 @@ public class AbsenceRequest extends AbstractBprocRequest {
         this.vacationDay = vacationDay;
     }
 
-    public Boolean getCompencation() {
-        return compencation;
+    public Boolean getCompensation() {
+        return compensation;
     }
 
-    public void setCompencation(Boolean compencation) {
-        this.compencation = compencation;
+    public void setCompensation(Boolean compensation) {
+        this.compensation = compensation;
     }
 
     public Integer getTotalHours() {
