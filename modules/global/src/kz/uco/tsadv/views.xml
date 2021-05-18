@@ -8640,43 +8640,29 @@
     <view class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
           extends="_local"
           name="hierarchyElement.edit">
-        <property name="positionGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_local">
-            </property>
+        <property name="positionGroup" view="_minimal">
+            <property name="list" view="_local"/>
         </property>
-        <property name="organizationGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
+        <property name="organizationGroup" view="_minimal">
+            <property name="list" view="_minimal">
                 <property name="legacyId"/>
             </property>
         </property>
-        <property name="parent"
-                  view="_minimal">
-            <property name="positionGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_local">
-                </property>
+        <property name="parent" view="_minimal">
+            <property name="positionGroup" view="_minimal">
+                <property name="list" view="_local"/>
+                <property name="positionName"/>
             </property>
-            <property name="organizationGroup"
-                      view="_minimal">
-                <property name="list"
-                          view="_minimal">
-                    <property name="startDate"/>
-                    <property name="endDate"/>
-                </property>
+            <property name="organizationGroup" view="_minimal">
+                <property name="organizationName"/>
             </property>
+            <property name="group" view="_minimal"/>
         </property>
-        <property name="hierarchy"
-                  view="_minimal">
+        <property name="parentGroup" view="_minimal"/>
+        <property name="group" view="_minimal"/>
+        <property name="hierarchy" view="_minimal">
             <property name="primaryFlag"/>
-            <property name="type"
-                      view="_minimal">
+            <property name="type" view="_minimal">
                 <property name="langValue1"/>
                 <property name="langValue2"/>
                 <property name="langValue3"/>
