@@ -391,7 +391,7 @@ public class PositionEdit<T extends PositionExt> extends AbstractHrEditor<T> {
         Label label = (Label) componentsFactory.createComponent(Label.NAME);
         if (element.getParent() != null) {
             HierarchyElementExt parentElement = commonService.getEntity(HierarchyElementExt.class, "select e from base$HierarchyElementExt e where e.id = :parentId", Collections.singletonMap("parentId", element.getParent().getId()), "hierarchyElement.parent");
-            label.setValue(parentElement.getName());
+            label.setValue(parentElement != null ? parentElement.getName() : "");
         }
         return label;
     }
