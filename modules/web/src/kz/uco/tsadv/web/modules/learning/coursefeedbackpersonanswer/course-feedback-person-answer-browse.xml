@@ -24,8 +24,10 @@
                 datasource="courseFeedbackPersonAnswersDs">
             <properties include=".*"/>
         </filter>
-        <groupTable id="courseFeedbackPersonAnswersTable"
-                    width="100%">
+        <dataGrid id="courseFeedbackPersonAnswersTable"
+                  selectionMode="MULTI_CHECK"
+                  datasource="courseFeedbackPersonAnswersDs"
+                  width="100%">
             <actions>
                 <action id="create"
                         caption="mainMsg://table.btn.empty"
@@ -38,15 +40,14 @@
                         caption="mainMsg://table.btn.empty"/>
             </actions>
             <columns>
-                <column id="course"/>
-                <column id="courseSectionSession.name"/>
-                <column id="responsibleRole"/>
-                <column id="personGroup.fullName"/>
-                <column id="completeDate"/>
-                <column id="sumScore"/>
-                <column id="avgScore"/>
+                <column id="course" property="course"/>
+                <column id="courseSectionSession.name" property="courseSectionSession.name"/>
+                <column id="responsibleRole" property="responsibleRole"/>
+                <column id="personGroup.fullName" property="personGroup.fullName"/>
+                <column id="completeDate" property="completeDate"/>
+                <column id="sumScore" property="sumScore"/>
+                <column id="avgScore" property="avgScore"/>
             </columns>
-            <rows datasource="courseFeedbackPersonAnswersDs"/>
             <rowsCount/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
@@ -59,6 +60,6 @@
                 <button action="courseFeedbackPersonAnswersTable.excel"/>
                 <button id="showAnswersBtn" caption="msg://table.btn.answers" invoke="showAnswers" enable="false"/>
             </buttonsPanel>
-        </groupTable>
+        </dataGrid>
     </layout>
 </window>

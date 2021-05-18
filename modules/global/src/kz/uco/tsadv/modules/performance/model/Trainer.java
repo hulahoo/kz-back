@@ -1,27 +1,18 @@
 package kz.uco.tsadv.modules.performance.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
-import com.haulmont.chile.core.annotations.MetaProperty;
-import kz.uco.tsadv.modules.learning.model.PartyExt;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import com.haulmont.chile.core.annotations.Composition;
+import com.haulmont.chile.core.annotations.MetaProperty;
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import kz.uco.base.entity.abstraction.AbstractParentEntity;
+import kz.uco.tsadv.modules.learning.model.PartyExt;
+import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.OneToMany;
-import javax.persistence.Transient;
-import com.haulmont.chile.core.annotations.NamePattern;
 
 @NamePattern("%s|trainerFullName")
 @Table(name = "TSADV_TRAINER")
@@ -61,6 +52,30 @@ public class Trainer extends AbstractParentEntity {
     @Transient
     @MetaProperty
     protected String trainerFullName;
+
+    @Lob
+    @Column(name = "INFORMATION_TRAINER")
+    protected String informationTrainer;
+
+    @Lob
+    @Column(name = "TRAINER_GREETING")
+    protected String trainerGreeting;
+
+    public String getTrainerGreeting() {
+        return trainerGreeting;
+    }
+
+    public void setTrainerGreeting(String trainerGreeting) {
+        this.trainerGreeting = trainerGreeting;
+    }
+
+    public String getInformationTrainer() {
+        return informationTrainer;
+    }
+
+    public void setInformationTrainer(String informationTrainer) {
+        this.informationTrainer = informationTrainer;
+    }
 
     public String getTrainerFullName() {
         return employee.getPerson().getFullName();
