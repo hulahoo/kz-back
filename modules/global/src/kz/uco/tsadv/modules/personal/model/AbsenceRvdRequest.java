@@ -1,8 +1,10 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
@@ -12,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @PublishEntityChangedEvents
 @Table(name = "TSADV_ABSENCE_RVD_REQUEST")
@@ -63,6 +66,21 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
     @Column(name = "AGREE", nullable = false)
     @NotNull
     protected Boolean agree = false;
+
+    @JoinTable(name = "TSADV_ABSENCE_RVD_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "ABSENCE_RVD_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @OnDelete(DeletePolicy.CASCADE)
+    @ManyToMany
+    private List<FileDescriptor> files;
+
+    public List<FileDescriptor> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<FileDescriptor> files) {
+        this.files = files;
+    }
 
     public Boolean getAgree() {
         return agree;
