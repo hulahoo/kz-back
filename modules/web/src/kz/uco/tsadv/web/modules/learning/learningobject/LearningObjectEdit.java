@@ -118,7 +118,7 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
         if (commonConfig.getScormEnabled() && e.getProperty().equals("file")
                 && ContentType.SCORM_ZIP.equals(e.getDs().getItem().getContentType())) {
             if (e.getPrevValue() != null) {
-                learningService.deletePackage(((FileDescriptor) e.getPrevValue()).getName());
+                learningService.deletePackage(e.getDs().getItem().getObjectName());
             }
             if (e.getValue() != null) {
                 String result = learningService.unzipPackage(e.getDs().getItem().getObjectName(),

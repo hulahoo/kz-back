@@ -10617,29 +10617,7 @@ create table TSADV_INTERVIEW (
     primary key (ID)
 )^
 -- end TSADV_INTERVIEW
--- begin TSADV_VACATION_SCHEDULE
-create table TSADV_VACATION_SCHEDULE (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    --
-    PERSON_GROUP_ID uuid,
-    START_DATE date,
-    END_DATE date,
-    ABSENCE_DAYS integer,
-    REQUEST_ID uuid,
-    --
-    primary key (ID)
-)^
--- end TSADV_VACATION_SCHEDULE
+
 -- begin TSADV_REQUISITION
 create table TSADV_REQUISITION (
     ID uuid,
@@ -15782,6 +15760,8 @@ create table TSADV_TRAINER (
     ORDER_NUMBER varchar(255),
     ORDER_DATE date,
     PARTY_ID uuid,
+    INFORMATION_TRAINER text,
+    TRAINER_GREETING text,
     --
     primary key (ID)
 )^
@@ -16625,21 +16605,21 @@ create table TSADV_ABSENCE_REQUEST (
     PURPOSE_ID uuid,
     PURPOSE_TEXT varchar(2000),
     TIME_OF_STARTING timestamp,
-    ORIGINAL_SHEET boolean,
+    ORIGINAL_SHEET boolean not null,
     SCHEDULE_START_DATE date,
     SCHEDULE_END_DATE date,
-    ADD_NEXT_YEAR boolean,
+    ADD_NEXT_YEAR boolean not null,
     NEW_START_DATE date,
     NEW_END_DATE date,
     PERIOD_DATE_FROM date,
     PERIOD_DATE_TO date,
     TIME_OF_FINISHING timestamp,
     TOTAL_HOURS integer,
-    COMPENCATION boolean,
-    VACATION_DAY boolean,
-    ACQUAINTED boolean,
-    AGREE boolean,
-    VACATION_SCHEDULE_ID uuid,
+    COMPENSATION boolean not null,
+    VACATION_DAY boolean not null,
+    ACQUAINTED boolean not null,
+    AGREE boolean not null,
+    VACATION_SCHEDULE_REQUEST_ID uuid,
     START_TIME time,
     END_TIME time,
     ADDITIONAL_TIME integer,
@@ -17074,18 +17054,18 @@ create table TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK (
 -- begin SEC_USER
 alter table SEC_USER add column PERSON_GROUP_ID uuid ^
 alter table SEC_USER add column FULLNAMEWITHLOGIN varchar(255) ^
-alter table SEC_USER add column if not exists IMAGE_ID uuid ^
-alter table SEC_USER add column if not exists ATS_CODE varchar(255) ^
-alter table SEC_USER add column if not exists INNER_NUMBER varchar(255) ^
-alter table SEC_USER add column if not exists AVAILABILITY boolean ^
+alter table SEC_USER add column IMAGE_ID uuid ^
+alter table SEC_USER add column ATS_CODE varchar(255) ^
+alter table SEC_USER add column INNER_NUMBER varchar(255) ^
+alter table SEC_USER add column AVAILABILITY boolean ^
 update SEC_USER set AVAILABILITY = false where AVAILABILITY is null ^
 alter table SEC_USER alter column AVAILABILITY set not null ^
-alter table SEC_USER add column if not exists MOBILE_PHONE varchar(255) ^
-alter table SEC_USER add column if not exists TELEGRAM_CODE varchar(255) ^
-alter table SEC_USER add column if not exists TELEGRAM_CHAT_ID varchar(255) ^
-alter table SEC_USER add column if not exists PASSWORD_CHANGE_DATE date ^
-alter table SEC_USER add column if not exists SHORT_NAME varchar(100) ^
-alter table SEC_USER add column if not exists FULL_NAME varchar(100) ^
+alter table SEC_USER add column MOBILE_PHONE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CODE varchar(255) ^
+alter table SEC_USER add column TELEGRAM_CHAT_ID varchar(255) ^
+alter table SEC_USER add column PASSWORD_CHANGE_DATE date ^
+alter table SEC_USER add column SHORT_NAME varchar(100) ^
+alter table SEC_USER add column FULL_NAME varchar(100) ^
 -- end SEC_USER
 -- begin BASE_ASSIGNMENT
 -- alter table BASE_ASSIGNMENT add column PERSON_GROUP_ID uuid ^
@@ -17286,10 +17266,10 @@ create table TSADV_ABSENCE_RVD_REQUEST (
     TIME_OF_STARTING timestamp,
     TIME_OF_FINISHING timestamp,
     TOTAL_HOURS integer,
-    COMPENCATION boolean,
-    VACATION_DAY boolean,
-    ACQUAINTED boolean,
-    AGREE boolean,
+    COMPENSATION boolean not null,
+    VACATION_DAY boolean not null,
+    ACQUAINTED boolean not null,
+    AGREE boolean not null,
     --
     primary key (ID)
 )^
@@ -17542,7 +17522,7 @@ create table TSADV_HOMEWORK (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     COURSE_ID uuid not null,
-    INSTRUCTIONS varchar(255) not null,
+    INSTRUCTIONS text not null,
     INSTRUCTION_FILE_ID uuid,
     --
     primary key (ID)
@@ -17832,6 +17812,62 @@ create table TSADV_BOOK_VIEW (
     primary key (ID)
 )^
 -- end TSADV_BOOK_VIEW
+
+-- begin TSADV_DIC_EARNING_POLICY
+create table TSADV_DIC_EARNING_POLICY (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_EARNING_POLICY
+-- begin TSADV_PERSON_EXCEPTION
+create table TSADV_PERSON_EXCEPTION (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    --
+    PERSON_GROUP_ID uuid not null,
+    MAX_BONUS double precision not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_PERSON_EXCEPTION
 -- begin TSADV_DIC_ASSESSMENT_EVENTS
 create table TSADV_DIC_ASSESSMENT_EVENTS (
     ID uuid,
@@ -17937,58 +17973,10 @@ create table TSADV_DIC_ASSESSMENT_TYPE (
     primary key (ID)
 )^
 -- end TSADV_DIC_ASSESSMENT_TYPE
--- begin TSADV_DIC_EARNING_POLICY
-create table TSADV_DIC_EARNING_POLICY (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    COMPANY_ID uuid not null,
-    LANG_VALUE1 varchar(255) not null,
-    DESCRIPTION1 varchar(2000),
-    LANG_VALUE2 varchar(255),
-    DESCRIPTION2 varchar(2000),
-    LANG_VALUE3 varchar(255),
-    DESCRIPTION3 varchar(2000),
-    LANG_VALUE4 varchar(255),
-    DESCRIPTION4 varchar(2000),
-    LANG_VALUE5 varchar(255),
-    DESCRIPTION5 varchar(2000),
-    START_DATE date,
-    END_DATE date,
-    CODE varchar(255),
-    IS_SYSTEM_RECORD boolean not null,
-    ACTIVE boolean not null,
-    IS_DEFAULT boolean not null,
-    ORDER_ integer,
-    --
-    primary key (ID)
+-- begin TSADV_ABSENCE_RVD_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_ABSENCE_RVD_REQUEST_FILE_DESCRIPTOR_LINK (
+    ABSENCE_RVD_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (ABSENCE_RVD_REQUEST_ID, FILE_DESCRIPTOR_ID)
 )^
--- end TSADV_DIC_EARNING_POLICY
--- begin TSADV_PERSON_EXCEPTION
-create table TSADV_PERSON_EXCEPTION (
-    ID uuid,
-    VERSION integer not null,
-    CREATE_TS timestamp,
-    CREATED_BY varchar(50),
-    UPDATE_TS timestamp,
-    UPDATED_BY varchar(50),
-    DELETE_TS timestamp,
-    DELETED_BY varchar(50),
-    LEGACY_ID varchar(255),
-    ORGANIZATION_BIN varchar(255),
-    INTEGRATION_USER_LOGIN varchar(255),
-    --
-    PERSON_GROUP_ID uuid not null,
-    MAX_BONUS double precision not null,
-    --
-    primary key (ID)
-)^
--- end TSADV_PERSON_EXCEPTION
+-- end TSADV_ABSENCE_RVD_REQUEST_FILE_DESCRIPTOR_LINK

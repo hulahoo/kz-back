@@ -30,6 +30,10 @@
                 <field captionProperty="name"
                        property="party"/>
             </column>
+            <column width="250px">
+                <field property="informationTrainer"/>
+                <field property="trainerGreeting"/>
+            </column>
         </fieldGroup>
         <tabSheet id="tabSheet">
             <tab id="personalInfoTab"

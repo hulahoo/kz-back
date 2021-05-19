@@ -1684,9 +1684,6 @@
         <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.entity.VacationSchedule">
-            <include re=".*"/>
-        </entity>
         <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <include re=".*"/>
         </entity>
@@ -1736,9 +1733,6 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
-            <include re=".*"/>
-        </entity>
-        <entity class="kz.uco.tsadv.entity.VacationSchedule">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">

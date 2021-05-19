@@ -13,6 +13,7 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.entity.dbview.AbsenceBalanceV;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -88,7 +89,7 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
         absenceBalance.setDateFrom(dateFrom);
         absenceBalance.setDateTo(dateTo);
         absenceBalance.setLongAbsenceDays((double) 0);
-        absenceBalance.setDaysLeft((double) (balanceDays - absenceBalance.getLongAbsenceDays()));
+        absenceBalance.setDaysLeft(balanceDays - absenceBalance.getLongAbsenceDays());
         absenceBalance.setDaysSpent((double) 0);
         absenceBalance.setAdditionalBalanceDays((double) additionalBalanceDays);
         absenceBalance.setExtraDaysSpent((double) 0);
@@ -119,7 +120,7 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
         absenceBalance.setDateTo(dateTo);
         absenceBalance.setPersonGroup(personGroup);
         absenceBalance.setLongAbsenceDays(calculateLongAbsenceDays(absenceBalance, absence, null));
-        absenceBalance.setDaysLeft((double) (balanceDays - absenceBalance.getLongAbsenceDays()));
+        absenceBalance.setDaysLeft(balanceDays - absenceBalance.getLongAbsenceDays());
         absenceBalance.setDaysSpent((double) 0);
         absenceBalance.setAdditionalBalanceDays((double) additionalBalanceDays);
         absenceBalance.setExtraDaysSpent((double) 0);
@@ -1196,7 +1197,7 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                         .view("absenceBalance.edit")
                         .list();
                 if (!oneAbsenceBalanceList.isEmpty()) {
-                    return oneAbsenceBalanceList.get(0).getDaysLeft() + oneAbsenceBalanceList.get(0).getExtraDaysLeft();
+                    return Null.nullReplace(oneAbsenceBalanceList.get(0).getDaysLeft(), 0d) + Null.nullReplace(oneAbsenceBalanceList.get(0).getExtraDaysLeft(), 0d);
                 } else {
                     List<AbsenceBalance> absenceBalanceMinList = dataManager.load(AbsenceBalance.class)
                             .query("select e from tsadv$AbsenceBalance e " +
@@ -1223,10 +1224,10 @@ public class AbsenceBalanceServiceBean implements AbsenceBalanceService {
                         return finalAbsenceBalance;
                     }
                     finalAbsenceBalance = ((double) datesService.getDayOfMonth(absenceDate)
-                            * ((maxAbsenceBalance.getDaysLeft() + maxAbsenceBalance.getExtraDaysLeft() + maxAbsenceBalance.getEcologicalDaysLeft())
-                            - (minAbsenceBalance.getDaysLeft() + minAbsenceBalance.getExtraDaysLeft() + minAbsenceBalance.getEcologicalDaysLeft()))
+                            * ((Null.nullReplace(maxAbsenceBalance.getDaysLeft(), 0d) + Null.nullReplace(maxAbsenceBalance.getExtraDaysLeft(), 0d) + Null.nullReplace(maxAbsenceBalance.getEcologicalDaysLeft(), 0d))
+                            - (Null.nullReplace(minAbsenceBalance.getDaysLeft(), 0d) + Null.nullReplace(minAbsenceBalance.getExtraDaysLeft(), 0d) + Null.nullReplace(minAbsenceBalance.getEcologicalDaysLeft(), 0d)))
                             / datesService.getFullDaysCount(minAbsenceBalance.getDateFrom(), maxAbsenceBalance.getDateFrom()))
-                            + minAbsenceBalance.getDaysLeft() + minAbsenceBalance.getExtraDaysLeft() + minAbsenceBalance.getEcologicalDaysLeft();
+                            + Null.nullReplace(minAbsenceBalance.getDaysLeft(), 0d) + Null.nullReplace(minAbsenceBalance.getExtraDaysLeft(), 0d) + Null.nullReplace(minAbsenceBalance.getEcologicalDaysLeft(), 0d);
                 }
             }
             return finalAbsenceBalance;

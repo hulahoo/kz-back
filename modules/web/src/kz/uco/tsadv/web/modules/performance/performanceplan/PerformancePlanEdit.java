@@ -841,6 +841,13 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                                             && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName().isEmpty()
                                                             ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName()
                                                             : "");
+                                                    params.put("fullNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstNameLatin()
+                                                            + " "
+                                                            + assignedPerformancePlan.getAssignedPerson().getPerson().getLastNameLatin());
+                                                    params.put("middleNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin() != null
+                                                            && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin().isEmpty()
+                                                            ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin()
+                                                            : "");
                                                     String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                                             + "/kpi/"
                                                             + assignedPerformancePlan.getId().toString()

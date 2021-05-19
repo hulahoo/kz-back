@@ -1,0 +1,1 @@
+drop table if exists TSADV_VACATION_SCHEDULE__U88371 cascade ;
