@@ -144,6 +144,8 @@
                 <entry key="tsadv_OrgStructureRequestService"
                        value="kz.uco.tsadv.service.portal.OrgStructureRequestService"/>
                 <entry key="tsadv_AbsenceRvdService" value="kz.uco.tsadv.service.AbsenceRvdService"/>
+                <entry key="tsadv_IntegrationScheduledService"
+                       value="kz.uco.tsadv.service.IntegrationScheduledService"/>
             </map>
         </property>
     </bean>
