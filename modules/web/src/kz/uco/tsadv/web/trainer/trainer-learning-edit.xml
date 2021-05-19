@@ -19,6 +19,7 @@
                 width="800"/>
     <layout expand="tabSheet"
             spacing="true">
+        <hbox id="hbox" spacing="true">
         <fieldGroup id="fieldGroup"
                     datasource="trainerDs">
             <column width="250px">
@@ -30,11 +31,14 @@
                 <field captionProperty="name"
                        property="party"/>
             </column>
-            <column width="250px">
-                <field property="informationTrainer"/>
-                <field property="trainerGreeting"/>
-            </column>
         </fieldGroup>
+            <fieldGroup id="fieldGroup2" datasource="trainerDs">
+                <column width="400px">
+                    <field property="informationTrainer" rows="4"/>
+                    <field property="trainerGreeting" rows="4"/>
+                </column>
+            </fieldGroup>
+        </hbox>
         <tabSheet id="tabSheet">
             <tab id="personalInfoTab"
                  caption="msg://tabSheet.personalInfoTab"
