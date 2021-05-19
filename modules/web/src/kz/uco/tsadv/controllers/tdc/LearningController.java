@@ -70,6 +70,7 @@ public class LearningController {
                             .startDate(getLearningHistoryStartDate(e, sortedCourseSections).orElse(null))
                             .endDate(getLearningHistoryEndDate(e, sortedCourseSections).orElse(null))
                             .course(e.getCourse().getName())
+                            .enrollmentId(e.getId())
                             .courseId(e.getCourse().getId())
                             .enrollmentStatus(messages.getMessage(e.getStatus(), userSessionSource.getLocale()))
                             .result(courseSection != null ? courseSection.getCourseSectionAttempts().get(0).getTestResultPercent() : null)
