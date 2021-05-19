@@ -834,12 +834,19 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                                         .list().stream().findFirst().orElse(null);
                                                 if (tsadvUser != null) {
                                                     Map<String, Object> params = new HashMap<>();
-                                                    params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName()
+                                                    params.put("fullNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getLastName()
                                                             + " "
-                                                            + assignedPerformancePlan.getAssignedPerson().getPerson().getLastName());
+                                                            + assignedPerformancePlan.getAssignedPerson().getPerson().getFirstName());
                                                     params.put("middleNameRu", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName() != null
                                                             && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName().isEmpty()
                                                             ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleName()
+                                                            : "");
+                                                    params.put("fullNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getLastNameLatin()
+                                                            + " "
+                                                            + assignedPerformancePlan.getAssignedPerson().getPerson().getFirstNameLatin());
+                                                    params.put("middleNameEn", assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin() != null
+                                                            && !assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin().isEmpty()
+                                                            ? assignedPerformancePlan.getAssignedPerson().getPerson().getMiddleNameLatin()
                                                             : "");
                                                     String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                                             + "/kpi/"

@@ -41,14 +41,16 @@ public class LearningController {
         List<Enrollment> completedEnrollments = enrollments.stream()
                 .peek(e -> e.getCourse().getSections()
                         .forEach(s -> {
-                            CourseSectionAttempt lastCourseSectionAttempt = s.getCourseSectionAttempts()
-                                    .stream()
-                                    .filter(csa -> csa.getEnrollment().getId().equals(e.getId()))
-                                    .max(Comparator.comparing(CourseSectionAttempt::getCreateTs))
-                                    .orElse(null);
-                            s.setCourseSectionAttempts(lastCourseSectionAttempt == null
-                                    ? null
-                                    : Collections.singletonList(dataManager.reload(lastCourseSectionAttempt, "course-section-attempt")));
+                            if (CollectionUtils.isNotEmpty(s.getCourseSectionAttempts())) {
+                                CourseSectionAttempt lastCourseSectionAttempt = s.getCourseSectionAttempts()
+                                        .stream()
+                                        .filter(csa -> csa.getEnrollment().getId().equals(e.getId()))
+                                        .max(Comparator.comparing(CourseSectionAttempt::getCreateTs))
+                                        .orElse(null);
+                                s.setCourseSectionAttempts(lastCourseSectionAttempt == null
+                                        ? null
+                                        : Collections.singletonList(dataManager.reload(lastCourseSectionAttempt, "course-section-attempt")));
+                            }
                         }))
                 .collect(Collectors.toList());
 

@@ -31,8 +31,6 @@
                         border="visible">
                 <column width="450px">
                     <field property="questionLangValue1" rows="3"/>
-                    <field property="questionLangValue2" rows="3"/>
-                    <field property="questionLangValue3" rows="3"/>
                 </column>
             </fieldGroup>
 
