@@ -17522,7 +17522,7 @@ create table TSADV_HOMEWORK (
     INTEGRATION_USER_LOGIN varchar(255),
     --
     COURSE_ID uuid not null,
-    INSTRUCTIONS varchar(255) not null,
+    INSTRUCTIONS text not null,
     INSTRUCTION_FILE_ID uuid,
     --
     primary key (ID)
