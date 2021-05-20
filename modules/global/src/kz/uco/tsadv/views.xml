@@ -23560,7 +23560,7 @@
             <property name="orderNum"/>
             <property name="personGroup" view="_minimal"/>
         </property>
-        <property name="file" view="_minimal"/>
+        <property name="files" view="_minimal"/>
         <property name="purpose" view="dicPurposeAbsence.edit"/>
         <property name="status" view="_minimal">
             <property name="startDate"/>
