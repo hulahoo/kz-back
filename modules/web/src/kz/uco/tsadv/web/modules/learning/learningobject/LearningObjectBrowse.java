@@ -65,7 +65,8 @@ public class LearningObjectBrowse extends AbstractLookup {
         } else {
             if (learningObjectsDs.getItem().getFile() != null
                     && ContentType.SCORM_ZIP.equals(learningObjectsDs.getItem().getContentType())) {
-                learningService.deletePackage(learningObjectsDs.getItem().getObjectName());
+                boolean a = learningService.deletePackage("/" + learningObjectsDs.getItem().getObjectName());
+                System.out.println(a);
             }
             learningObjectsDs.removeItem(learningObjectsDs.getItem());
             learningObjectsDs.commit();
