@@ -362,7 +362,6 @@ public class SsStructurePerson extends AbstractWindow {
         absenceForRecall.setEmployee(personExtDs.getItem().getGroup());
         absenceForRecall.setLeaveOtherTime(true);
         absenceForRecall.setVacation(absenceTable1.getSingleSelected());
-        absenceForRecall.setAbsenceType(absenceTable1.getSingleSelected().getType());
         screenBuilders.editor(AbsenceForRecall.class, this)
                 .withScreenClass(AbsenceForRecallEdit.class)
                 .newEntity(absenceForRecall)

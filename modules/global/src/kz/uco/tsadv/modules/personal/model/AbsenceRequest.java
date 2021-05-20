@@ -4,6 +4,7 @@ import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
@@ -40,10 +41,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     @Column(name = "REASON", length = 2000)
     protected String reason;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ATTACHMENT_ID")
-    protected FileDescriptor attachment;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "DATE_FROM")
@@ -147,6 +144,7 @@ public class AbsenceRequest extends AbstractBprocRequest {
             joinColumns = @JoinColumn(name = "ABSENCE_REQUEST_ID"),
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @ManyToMany
+    @OnDelete(DeletePolicy.CASCADE)
     protected List<FileDescriptor> files;
 
     @Temporal(TemporalType.TIME)
@@ -406,14 +404,6 @@ public class AbsenceRequest extends AbstractBprocRequest {
 
     public AssignmentGroupExt getAssignmentGroup() {
         return assignmentGroup;
-    }
-
-    public void setAttachment(FileDescriptor attachment) {
-        this.attachment = attachment;
-    }
-
-    public FileDescriptor getAttachment() {
-        return attachment;
     }
 
     @Override
