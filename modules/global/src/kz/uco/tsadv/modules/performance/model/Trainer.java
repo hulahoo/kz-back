@@ -61,6 +61,54 @@ public class Trainer extends AbstractParentEntity {
     @Column(name = "TRAINER_GREETING")
     protected String trainerGreeting;
 
+    @Lob
+    @Column(name = "INFORMATION_TRAINER_LANG2")
+    protected String informationTrainerLang2;
+
+    @Lob
+    @Column(name = "INFORMATION_TRAINER_LANG3")
+    protected String informationTrainerLang3;
+
+    @Lob
+    @Column(name = "TRAINER_GREETING_LANG2")
+    protected String trainerGreetingLang2;
+
+    @Lob
+    @Column(name = "TRAINER_GREETING_LANG3")
+    protected String trainerGreetingLang3;
+
+    public String getTrainerGreetingLang3() {
+        return trainerGreetingLang3;
+    }
+
+    public void setTrainerGreetingLang3(String trainerGreetingLang3) {
+        this.trainerGreetingLang3 = trainerGreetingLang3;
+    }
+
+    public String getTrainerGreetingLang2() {
+        return trainerGreetingLang2;
+    }
+
+    public void setTrainerGreetingLang2(String trainerGreetingLang2) {
+        this.trainerGreetingLang2 = trainerGreetingLang2;
+    }
+
+    public String getInformationTrainerLang3() {
+        return informationTrainerLang3;
+    }
+
+    public void setInformationTrainerLang3(String informationTrainerLang3) {
+        this.informationTrainerLang3 = informationTrainerLang3;
+    }
+
+    public String getInformationTrainerLang2() {
+        return informationTrainerLang2;
+    }
+
+    public void setInformationTrainerLang2(String informationTrainerLang2) {
+        this.informationTrainerLang2 = informationTrainerLang2;
+    }
+
     public String getTrainerGreeting() {
         return trainerGreeting;
     }

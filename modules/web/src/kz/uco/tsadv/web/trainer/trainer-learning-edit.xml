@@ -33,9 +33,15 @@
             </column>
         </fieldGroup>
             <fieldGroup id="fieldGroup2" datasource="trainerDs">
-                <column width="400px">
+                <column width="250px">
                     <field property="informationTrainer" rows="4"/>
+                    <field property="informationTrainerLang2" rows="4"/>
+                    <field property="informationTrainerLang3" rows="4"/>
+                </column>
+                <column width="250px">
                     <field property="trainerGreeting" rows="4"/>
+                    <field property="trainerGreetingLang2" rows="4"/>
+                    <field property="trainerGreetingLang3" rows="4"/>
                 </column>
             </fieldGroup>
         </hbox>
