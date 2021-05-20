@@ -5276,7 +5276,7 @@
             <property name="vacationDurationType"/>
             <property name="isRequiredOrderNumber"/>
         </property>
-        <property name="attachment"
+        <property name="files"
                   view="_minimal"/>
         <property name="status"
                   view="_minimal">
@@ -5299,8 +5299,6 @@
         </property>
         <property name="type"
                   view="_local"/>
-        <property name="attachment"
-                  view="_minimal"/>
         <property name="status"
                   view="_minimal">
             <property name="startDate"/>
@@ -22973,17 +22971,6 @@
     </view>
 
     <view entity="tsadv_AbsenceForRecall" name="absenceForRecall.edit" extends="_local">
-        <property name="absenceType" view="_minimal">
-            <property name="company" view="_minimal"/>
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
-            <property name="startDate"/>
-            <property name="endDate"/>
-            <property name="code"/>
-        </property>
         <property name="employee" view="_minimal">
             <property name="list" view="_minimal">
                 <property name="startDate"/>
@@ -22995,11 +22982,12 @@
         <property name="vacation" view="_minimal">
             <property name="orderNum"/>
             <property name="orderDate"/>
+            <property name="type"/>
         </property>
         <property name="purpose" view="_minimal">
             <property name="company" view="_minimal"/>
         </property>
-        <property name="file" view="_minimal"/>
+        <property name="files" view="_minimal"/>
         <property name="status" view="_minimal">
             <property name="company" view="_minimal"/>
             <property name="startDate"/>
@@ -23560,7 +23548,7 @@
             <property name="orderNum"/>
             <property name="personGroup" view="_minimal"/>
         </property>
-        <property name="file" view="_minimal"/>
+        <property name="files" view="_minimal"/>
         <property name="purpose" view="dicPurposeAbsence.edit"/>
         <property name="status" view="_minimal">
             <property name="startDate"/>

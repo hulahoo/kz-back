@@ -50,8 +50,10 @@
                             <textField id="statusField" property="status" editable="false"/>
                             <lookupPickerField id="typeField" required="true" property="type"
                                                optionsContainer="dicAbsenceTypesDc"/>
-                            <lookupField id="vacationScheduleField" property="vacationScheduleRequest"
-                                         optionsContainer="vacationSchedulesDc" visible="false"/>
+                            <lookupField id="vacationScheduleField"
+                                         property="vacationScheduleRequest"
+                                         optionsContainer="vacationSchedulesDc"
+                                         visible="false"/>
                             <textField id="reasonField" property="reason"/>
                             <checkBox id="originalSheetField" property="originalSheet" visible="false"/>
                             <dateField id="scheduleStartDateField" visible="false" required="true" editable="false"
