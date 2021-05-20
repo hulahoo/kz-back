@@ -1,0 +1,3 @@
+alter table TSADV_ABSENCE_FOR_RECALL rename column absence_type_id to absence_type_id__u88721 ;
+alter table TSADV_ABSENCE_FOR_RECALL drop constraint FK_TSADV_ABSENCE_FOR_RECALL_ABSENCE_TYPE ;
+drop index IDX_TSADV_ABSENCE_FOR_RECALL_ABSENCE_TYPE ;

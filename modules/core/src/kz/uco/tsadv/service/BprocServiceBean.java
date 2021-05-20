@@ -544,7 +544,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                         ParamsMap.of("groupId", absenceForRecall.getEmployee().getId()),
                         View.LOCAL);
 
-                DicAbsenceType type = absenceForRecall.getAbsenceType();
+                DicAbsenceType type = absenceForRecall.getVacation().getType();
                 params.put("fullNameRu", person.getFullNameLatin("ru"));
                 params.put("fullNameEn", person.getFullNameLatin("en"));
                 params.put("absenceTypeRu", type.getLangValue1());

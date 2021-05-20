@@ -71,7 +71,7 @@ public class ChangeAbsenceDaysRequest extends AbstractBprocRequest {
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @OnDelete(DeletePolicy.CASCADE)
     @ManyToMany
-    protected List<FileDescriptor> file;
+    protected List<FileDescriptor> files;
 
     @Lob
     @Column(name = "PURPOSE_TEXT")
@@ -97,12 +97,12 @@ public class ChangeAbsenceDaysRequest extends AbstractBprocRequest {
         this.purposeText = purposeText;
     }
 
-    public List<FileDescriptor> getFile() {
-        return file;
+    public List<FileDescriptor> getFiles() {
+        return files;
     }
 
-    public void setFile(List<FileDescriptor> file) {
-        this.file = file;
+    public void setFiles(List<FileDescriptor> files) {
+        this.files = files;
     }
 
     public Boolean getFamiliarization() {

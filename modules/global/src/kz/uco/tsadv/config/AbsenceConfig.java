@@ -23,4 +23,16 @@ public interface AbsenceConfig extends Config {
     @Property("tal.hr.absence.request.start.PopupNotificationEnable")
     @DefaultBoolean(value = true)
     Boolean getPopupNotificationEnable();
+
+    @Property("tal.hr.absenceType.absenceForRecall")
+    @Factory(factory = UuidTypeFactory.class)
+    UUID getAbsenceForRecallType();
+
+    @Property("tal.hr.absenceType.leavingVacationRequest")
+    @Factory(factory = UuidTypeFactory.class)
+    UUID getLeavingVacationRequest();
+
+    @Property("tal.hr.absenceType.changeAbsenceDaysRequest")
+    @Factory(factory = UuidTypeFactory.class)
+    UUID getChangeAbsenceDaysRequest();
 }

@@ -67,8 +67,8 @@ public class LearningController {
                     CourseSection courseSection = sortedCourseSections.stream().filter(cs -> CollectionUtils.isNotEmpty(cs.getCourseSectionAttempts()) && cs.getCourseSectionAttempts().get(0).getTestResult() != null).findFirst().orElse(null);
                     return new LearningHistoryPojo.Builder()
                             .trainer(e.getCourse().getCourseTrainers().stream().map(t -> t.getTrainer().getTrainerFullName()).collect(Collectors.joining(" ,")))
-                            .startDate(getLearningHistoryStartDate(e, sortedCourseSections).orElse(null))
-                            .endDate(getLearningHistoryEndDate(e, sortedCourseSections).orElse(null))
+                            .startDate(getLearningHistoryStartDate(e, sortedCourseSections))
+                            .endDate(getLearningHistoryEndDate(e, sortedCourseSections))
                             .course(e.getCourse().getName())
                             .courseId(e.getCourse().getId())
                             .enrollmentStatus(messages.getMessage(e.getStatus(), userSessionSource.getLocale()))
@@ -91,39 +91,31 @@ public class LearningController {
                 .collect(Collectors.toList());
     }
 
-    protected Optional<Date> getLearningHistoryStartDate(Enrollment enrollment, List<CourseSection> sortedCourseSections) {
-        try {
-            Date endDate = getLearningHistoryEndDate(enrollment, sortedCourseSections).orElse(null);
-            return Optional.ofNullable(enrollment.getCourseSchedule() != null
-                    ? enrollment.getCourseSchedule().getStartDate()
-                    : sortedCourseSections.size() > 0 && !CollectionUtils.isEmpty(sortedCourseSections.get(0).getCourseSectionAttempts())
-                    ? sortedCourseSections.get(0).getCourseSectionAttempts()
-                    .stream()
-                    .map(CourseSectionAttempt::getAttemptDate)
-                    .filter(Objects::nonNull)
-                    .filter(date -> !date.after(endDate) || endDate == null)
-                    .max(Date::compareTo)
-                    .orElse(null)
-                    : null);
-        } catch (NullPointerException e) {
-            return Optional.empty();
-        }
+    protected Date getLearningHistoryStartDate(Enrollment enrollment, List<CourseSection> sortedCourseSections) {
+        if (CollectionUtils.isEmpty(sortedCourseSections)) return null;
+
+        return sortedCourseSections.stream()
+                .map(CourseSection::getCourseSectionAttempts)
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .filter(Objects::nonNull)
+                .map(CourseSectionAttempt::getAttemptDate)
+                .filter(Objects::nonNull)
+                .min(Date::compareTo)
+                .orElse(null);
     }
 
-    protected Optional<Date> getLearningHistoryEndDate(Enrollment enrollment, List<CourseSection> sortedCourseSections) {
-        try {
-            return Optional.ofNullable(enrollment.getCourseSchedule() != null
-                    ? enrollment.getCourseSchedule().getStartDate()
-                    : sortedCourseSections.size() > 0 && !CollectionUtils.isEmpty(sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts())
-                    ? sortedCourseSections.get(enrollment.getCourse().getSections().size() - 1).getCourseSectionAttempts()
-                    .stream()
-                    .map(CourseSectionAttempt::getAttemptDate)
-                    .filter(Objects::nonNull)
-                    .max(Date::compareTo)
-                    .orElse(null)
-                    : null);
-        } catch (NullPointerException e) {
-            return Optional.empty();
-        }
+    protected Date getLearningHistoryEndDate(Enrollment enrollment, List<CourseSection> sortedCourseSections) {
+        if (CollectionUtils.isEmpty(sortedCourseSections)) return null;
+
+        return sortedCourseSections.stream()
+                .map(CourseSection::getCourseSectionAttempts)
+                .filter(Objects::nonNull)
+                .flatMap(Collection::stream)
+                .filter(Objects::nonNull)
+                .map(CourseSectionAttempt::getAttemptDate)
+                .filter(Objects::nonNull)
+                .max(Date::compareTo)
+                .orElse(null);
     }
 }
