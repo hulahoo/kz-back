@@ -1,4 +1,4 @@
-package kz.uco.tsadv.controllers.tdc;
+package kz.uco.tsadv.rest.controllers.tdc;
 
 
 import com.haulmont.cuba.core.entity.BaseUuidEntity;
