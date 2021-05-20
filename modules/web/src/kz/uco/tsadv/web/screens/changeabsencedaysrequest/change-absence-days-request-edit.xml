@@ -8,7 +8,7 @@
                   class="kz.uco.tsadv.modules.personal.model.ChangeAbsenceDaysRequest"
                   view="changeAbsenceDaysRequest.edit">
             <loader/>
-            <collection id="fileDc" property="file"/>
+            <collection id="fileDc" property="files"/>
         </instance>
         <collection id="tasksDc"
                     class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
