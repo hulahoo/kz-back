@@ -15762,6 +15762,10 @@ create table TSADV_TRAINER (
     PARTY_ID uuid,
     INFORMATION_TRAINER text,
     TRAINER_GREETING text,
+    INFORMATION_TRAINER_LANG2 text,
+    INFORMATION_TRAINER_LANG3 text,
+    TRAINER_GREETING_LANG2 text,
+    TRAINER_GREETING_LANG3 text,
     --
     primary key (ID)
 )^
