@@ -9194,6 +9194,8 @@ create table TSADV_BPM_ROLES_DEFINER (
     --
     PROCESS_DEFINITION_KEY varchar(255),
     COMPANY_ID uuid,
+    MANAGER_LAUNCHES boolean not null,
+    ACTIVE_SUP_MANAGER_EXCLUSION boolean not null,
     --
     primary key (ID)
 )^
@@ -17148,6 +17150,9 @@ update BASE_HIERARCHY_ELEMENT set DTYPE = 'base$HierarchyElementExt' where DTYPE
 -- end BASE_HIERARCHY_ELEMENT
 -- begin BASE_POSITION
 alter table BASE_POSITION add column COST_CENTER_ID uuid ^
+alter table BASE_POSITION add column SUP_MANAGER_EXCLUSION boolean ^
+update BASE_POSITION set SUP_MANAGER_EXCLUSION = false where SUP_MANAGER_EXCLUSION is null ^
+alter table BASE_POSITION alter column SUP_MANAGER_EXCLUSION set not null ^
 alter table BASE_POSITION add column CANDIDATE_REQUIREMENTS_LANG1 text ^
 alter table BASE_POSITION add column CANDIDATE_REQUIREMENTS_LANG2 text ^
 alter table BASE_POSITION add column CANDIDATE_REQUIREMENTS_LANG3 text ^

@@ -13,6 +13,9 @@ public interface OrganizationHrUserService {
 
     String NAME = "tsadv_OrganizationHrUserService";
 
+    String HR_ROLE_MANAGER = "MANAGER";
+    String HR_ROLE_SUP_MANAGER = "SUP_MANAGER";
+
     /**
      * @see EmployeeService#getHrUsers(UUID, String)
      */
