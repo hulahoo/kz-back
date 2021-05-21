@@ -890,6 +890,8 @@ public class CourseServiceBean implements CourseService {
         response.put("courseCount", trainer.getCourseTrainer().size());
         response.put("finished", trainer.getCourseTrainer().stream().flatMap(ct -> ct.getCourse().getEnrollments().stream()).filter(e -> e.getStatus().equals(EnrollmentStatus.COMPLETED)).count());
         response.put("image", trainer.getEmployee().getPerson().getImage());
+        response.put("information", trainer.getInformationTrainerLang());
+        response.put("greeting", trainer.getTrainerGreetingLang());
         return response;
     }
 

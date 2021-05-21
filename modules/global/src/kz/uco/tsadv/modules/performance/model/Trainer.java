@@ -4,15 +4,22 @@ import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.MetaProperty;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DeletePolicy;
+import com.haulmont.cuba.core.global.PersistenceHelper;
+import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.core.sys.AppContext;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.model.PartyExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import static kz.uco.base.common.Null.nullReplace;
 
 @NamePattern("%s|trainerFullName")
 @Table(name = "TSADV_TRAINER")
@@ -187,4 +194,77 @@ public class Trainer extends AbstractParentEntity {
         return party;
     }
 
+    @Transient
+    @MetaProperty(related = {"informationTrainer", "informationTrainerLang2", "informationTrainerLang3"})
+    public String getInformationTrainerLang() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String langOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+
+        if (!isBaseInformationTrainerLangsFullLoaded()) {
+            return null;
+        }
+
+        if (langOrder != null) {
+            List<String> langs = Arrays.asList(langOrder.split(";"));
+            switch (langs.indexOf(language)) {
+                case 0: {
+                    return informationTrainer;
+                }
+                case 1: {
+                    return nullReplace(informationTrainerLang2, informationTrainer);
+                }
+                case 2: {
+                    return nullReplace(informationTrainerLang3, informationTrainer);
+                }
+                default:
+                    return informationTrainer;
+            }
+        }
+
+        return informationTrainer;
     }
+
+    @Transient
+    @MetaProperty(related = {"trainerGreeting", "trainerGreetingLang2", "trainerGreetingLang3"})
+    public String getTrainerGreetingLang() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String langOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+
+        if (!isBaseTrainerGreetingLangsFullLoaded()) {
+            return null;
+        }
+
+        if (langOrder != null) {
+            List<String> langs = Arrays.asList(langOrder.split(";"));
+            switch (langs.indexOf(language)) {
+                case 0: {
+                    return trainerGreeting;
+                }
+                case 1: {
+                    return nullReplace(trainerGreetingLang2, trainerGreeting);
+                }
+                case 2: {
+                    return nullReplace(trainerGreetingLang3, trainerGreeting);
+                }
+                default:
+                    return trainerGreeting;
+            }
+        }
+
+        return trainerGreeting;
+    }
+
+    private boolean isBaseInformationTrainerLangsFullLoaded() {
+        return PersistenceHelper.isLoaded(this, "informationTrainer")
+                && PersistenceHelper.isLoaded(this, "informationTrainerLang2")
+                && PersistenceHelper.isLoaded(this, "informationTrainerLang3");
+    }
+
+    private boolean isBaseTrainerGreetingLangsFullLoaded() {
+        return PersistenceHelper.isLoaded(this, "trainerGreeting")
+                && PersistenceHelper.isLoaded(this, "trainerGreetingLang2")
+                && PersistenceHelper.isLoaded(this, "trainerGreetingLang3");
+    }
+}
