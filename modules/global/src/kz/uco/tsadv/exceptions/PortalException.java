@@ -2,6 +2,7 @@ package kz.uco.tsadv.exceptions;
 
 import com.haulmont.cuba.core.global.Logging;
 import com.haulmont.cuba.core.global.SupportedByClient;
+import com.haulmont.cuba.core.global.validation.CustomValidationException;
 
 /**
  * @author Alibek Berdaulet
