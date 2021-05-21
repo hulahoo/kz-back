@@ -22,6 +22,7 @@ import kz.uco.tsadv.service.VideoService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
 import java.util.UUID;
 
 public class LearningObjectEdit extends AbstractEditor<LearningObject> {
@@ -88,13 +89,16 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
 
         objectNameField.addValidator(value -> {
             if (ContentType.SCORM_ZIP.equals(learningObjectDs.getItem().getContentType())) {
-                Long count = commonService.getCount(LearningObject.class,
-                        "select e from tsadv$LearningObject e where e.objectName = :objectName " +
-                                " and e.contentType = :scormZip and e.id <> :id",
-                        ParamsMap.of("objectName", learningObjectDs.getItem().getObjectName(),
-                                "scormZip", ContentType.SCORM_ZIP,
-                                "id", learningObjectDs.getItem().getId()));
-                if (count > 0) {
+//                Long count = commonService.getCount(LearningObject.class,
+//                        "select e from tsadv$LearningObject e " +
+//                                " where e.objectName = :objectName " +
+//                                " and e.contentType = :scormZip " +
+//                                " and e.id <> :id ",
+//                        ParamsMap.of("objectName", learningObjectDs.getItem().getObjectName(),
+//                                "scormZip", ContentType.SCORM_ZIP,
+//                                "id", learningObjectDs.getItem().getId()));
+                boolean isExist = isExist(learningObjectDs.getItem());
+                if (isExist) {
                     throw new ValidationException(getMessage("scorm-is-exist"));
                 }
             }
@@ -108,6 +112,11 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
         });
         contentTypeField.addValueChangeListener(valueChangeEvent -> {
             setVisibleField();
+            boolean isExist = isExist(learningObjectDs.getItem());
+            if (isExist) {
+                notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                        .withCaption(messageBundle.getMessage("scorm-is-exist")).show();
+            }
         });
     }
 
@@ -267,7 +276,26 @@ public class LearningObjectEdit extends AbstractEditor<LearningObject> {
     @Override
     protected boolean preCommit() {
         fixYouTube();
+        if (isExist(learningObjectDs.getItem())) {
+            notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                    .withCaption(messageBundle.getMessage("scorm-is-exist")).show();
+            return false;
+        }
         return super.preCommit();
+    }
+
+    protected boolean isExist(LearningObject learningObject) {
+        List<Object[]> list = commonService.emNativeQueryResultList("select e from TSADV_LEARNING_OBJECT e" +
+                        " where e.OBJECT_NAME = ?1 " +
+                        " and e.content_type = ?2 " +
+                        " and e.id <> ?3 ",
+                ParamsMap.of("1", learningObjectDs.getItem().getObjectName(),
+                        "2", ContentType.SCORM_ZIP,
+                        "3", learningObjectDs.getItem().getId()));
+        if (list != null && !list.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     protected void fixYouTube() {
