@@ -30,4 +30,7 @@ public interface OrgStructureRequestService {
 
     String getMergedOrgStructure(UUID requestId, OrgStructureRequestDisplayType displayFilter);
 
+    boolean availableSalary();
+
+    boolean hasPermitToCreate();
 }

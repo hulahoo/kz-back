@@ -25,10 +25,7 @@ import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.enums.MatrixType;
 import kz.uco.tsadv.modules.performance.model.CalibrationMember;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
-import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
-import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
-import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
-import kz.uco.tsadv.modules.personal.dictionary.DicPhoneType;
+import kz.uco.tsadv.modules.personal.dictionary.*;
 import kz.uco.tsadv.modules.personal.dto.OrgChartNode;
 import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.*;
@@ -2673,21 +2670,22 @@ public class EmployeeServiceBean implements EmployeeService {
                 .collect(Collectors.toList());
     }
 
+
     @Override
-    public boolean availableSalary() {
-        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
-        Objects.requireNonNull(personGroupId, "Person group id is empty!");
+    public List<DicHrRole> userHrRoles() {
+        return this.userHrRoles(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
+    }
 
-        final PersonGroupExt currentPersonGroup = dataManager.load(LoadContext.create(PersonGroupExt.class)
-                .setId(personGroupId)
-                .setView("personGroup.currentAssignment"));
-        Objects.requireNonNull(currentPersonGroup, "Can not find person group by id: " + currentPersonGroup);
-
-        final AssignmentExt currentAssignment = dataManager.reload(currentPersonGroup.getCurrentAssignment(), "assignment.gradeGroup");
-        return currentAssignment.getGradeGroup() != null
-                ? currentAssignment.getGradeGroup().getAvailableSalary()
-                : currentAssignment.getPositionGroup().getGradeGroup() != null
-                ? currentAssignment.getPositionGroup().getGradeGroup().getAvailableSalary()
-                : false;
+    @Override
+    public List<DicHrRole> userHrRoles(UUID personGroupId) {
+        return dataManager.loadList(LoadContext.create(DicHrRole.class).setQuery(LoadContext.createQuery("" +
+                "select r " +
+                "from tsadv$HrUserRole hu " +
+                "   join hu.user u " +
+                "   join hu.role r " +
+                "   join u.personGroup p " +
+                "where p.id = :personGroupId " +
+                "   and current_date between hu.dateFrom and hu.dateTo ")
+                .setParameter("personGroupId", personGroupId)));
     }
 }

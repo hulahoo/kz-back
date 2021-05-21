@@ -4,10 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.PersistenceHelper;
-import com.haulmont.cuba.core.global.UserSessionSource;
-import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.global.*;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.ElementType;
@@ -20,6 +17,7 @@ import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequestDetail;
 import kz.uco.tsadv.pojo.OrgRequestSaveModel;
@@ -61,6 +59,9 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
     @Inject
     private Gson gson;
+
+    @Inject
+    private DataManager dataManager;
 
     @SuppressWarnings("all")
     @Override
@@ -130,7 +131,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
     }
 
     private List<RequestTreeData> hideColumnsByGrade(List<RequestTreeData> treeDataList) {
-        if (!employeeService.availableSalary()) {
+        if (!this.availableSalary()) {
             return treeDataList.stream()
                     .map(e -> {
                         RequestTreeData newElement = new RequestTreeData();
@@ -153,16 +154,34 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                     {
                             BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
                     };
+            BigDecimal[] totalBaseSalary = new BigDecimal[]
+                    {
+                            BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
+                    };
+            BigDecimal[] totalMtPayrollPer = new BigDecimal[]
+                    {
+                            BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
+                    };
 
             for (RequestTreeData child : children) {
+                BigDecimal[] baseSalary = child.getBaseSalary();
+                BigDecimal[] mtPayrollPer = child.getMtPayrollPer();
                 BigDecimal[] headCounts = child.getHeadCount();
-                if (headCounts != null && headCounts.length == 3) {
-                    for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 3; i++) {
+                    if (headCounts != null && headCounts.length == 3) {
                         totalHeadCounts[i] = totalHeadCounts[i].add(ObjectUtils.defaultIfNull(headCounts[i], BigDecimal.ZERO));
+                    }
+                    if (baseSalary != null && baseSalary.length == 3) {
+                        totalBaseSalary[i] = totalBaseSalary[i].add(ObjectUtils.defaultIfNull(baseSalary[i], BigDecimal.ZERO));
+                    }
+                    if (mtPayrollPer != null && mtPayrollPer.length == 3) {
+                        totalMtPayrollPer[i] = totalMtPayrollPer[i].add(ObjectUtils.defaultIfNull(mtPayrollPer[i], BigDecimal.ZERO));
                     }
                 }
             }
             requestTreeData.setHeadCount(totalHeadCounts);
+            requestTreeData.setMtPayrollPer(totalMtPayrollPer);
+            requestTreeData.setBaseSalary(totalBaseSalary);
         }
 
         if (StringUtils.isNotEmpty(requestTreeData.getChangeType())) {
@@ -430,7 +449,8 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
             detail.setPositionNameRu(positionRequestSaveModel.getNameRu());
             detail.setPositionNameEn(positionRequestSaveModel.getNameEn());
             detail.setHeadCount(ObjectUtils.defaultIfNull(positionRequestSaveModel.getHeadCount(), BigDecimal.ZERO));
-
+            detail.setMinSalary(positionRequestSaveModel.getMinSalary());
+            detail.setMaxSalary(positionRequestSaveModel.getMaxSalary());
             /**
              *
              * */
@@ -543,5 +563,41 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 em.persist(requestDetail);
             }
         });
+    }
+
+    @Override
+    public boolean availableSalary() {
+        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+        Objects.requireNonNull(personGroupId, "Person group id is empty!");
+
+        final PersonGroupExt currentPersonGroup = dataManager.load(LoadContext.create(PersonGroupExt.class)
+                .setId(personGroupId)
+                .setView("personGroup.currentAssignment"));
+        Objects.requireNonNull(currentPersonGroup, "Can not find person group by id: " + currentPersonGroup);
+
+        final AssignmentExt currentAssignment = dataManager.reload(currentPersonGroup.getCurrentAssignment(), "assignment.gradeGroup");
+        boolean isPermittedRole = this.employeeService.userHrRoles()
+                .stream()
+                .anyMatch(hrRole -> this.hrRoleCodeToAvailableSalary().contains(hrRole.getCode()));
+        return isPermittedRole || (currentAssignment.getGradeGroup() != null
+                ? currentAssignment.getGradeGroup().getAvailableSalary()
+                : currentAssignment.getPositionGroup().getGradeGroup() != null
+                ? currentAssignment.getPositionGroup().getGradeGroup().getAvailableSalary()
+                : false);
+    }
+
+    @Override
+    public boolean hasPermitToCreate() {
+        return this.employeeService.userHrRoles()
+                .stream()
+                .anyMatch(hrRole -> this.hrRolesToCreate().contains(hrRole.getCode()));
+    }
+
+    protected List<String> hrRoleCodeToAvailableSalary() {
+        return Arrays.asList("C&B_COMPANY", "C&B_GROUP");
+    }
+
+    protected List<String> hrRolesToCreate() {
+        return Arrays.asList("ORG_MANGER", "MANAGER_ASSISTANT");
     }
 }

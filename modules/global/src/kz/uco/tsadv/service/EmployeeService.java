@@ -8,6 +8,7 @@ import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
+import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -159,5 +160,7 @@ public interface EmployeeService {
 
     List<PositionGroupExt> findManagerListByPositionGroupReturnListPosition(UUID positionGroupId, boolean showAll, String viewName);
 
-    boolean availableSalary();
+    List<DicHrRole> userHrRoles();
+
+    List<DicHrRole> userHrRoles(UUID personGroupId);
 }

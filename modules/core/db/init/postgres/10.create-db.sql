@@ -7061,6 +7061,8 @@ create table TSADV_ORG_STRUCTURE_REQUEST_DETAIL (
     ELEMENT_TYPE integer not null,
     GRADE_GROUP_ID uuid,
     HEAD_COUNT decimal(19, 2),
+    MIN_SALARY decimal(19, 2),
+    MAX_SALARY decimal(19, 2),
     --
     primary key (ID)
 )^

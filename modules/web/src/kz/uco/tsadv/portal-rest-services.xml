@@ -207,7 +207,6 @@
         <method name="personGroupInfo">
             <param name="userId" type="java.util.UUID"/>
         </method>
-        <method name="availableSalary"/>
     </service>
     <service name="tsadv_OrgStructureRequestService">
         <method name="initialCreate"/>
@@ -238,6 +237,8 @@
             <param name="requestId" type="java.util.UUID"/>
             <param name="displayFilter" type="kz.uco.tsadv.api.OrgStructureRequestDisplayType"/>
         </method>
+        <method name="availableSalary"/>
+        <method name="hasPermitToCreate"/>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">
@@ -266,6 +267,17 @@
         <method name="loadSetting">
             <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
             <param name="name" type="java.lang.String"/>
+        </method>
+    </service>
+    <service name="tsadv_CommonReportsService">
+        <method name="downloadReportByCode">
+            <param name="reportCode" type="java.lang.String"/>
+            <param name="params" type="java.util.Map"/>
+        </method>
+        <method name="downloadReportByCode">
+            <param name="reportCode" type="java.lang.String"/>
+            <param name="entityParamName" type="java.lang.String"/>
+            <param name="entityId" type="java.util.UUID"/>
         </method>
     </service>
 </services>
