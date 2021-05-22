@@ -223,6 +223,8 @@
                 <property name="enrollments"/>
             </property>
         </property>
+        <property name="trainerGreetingLang"/>
+        <property name="informationTrainerLang"/>
     </view>
     <view name="assigned-goal-weight" entity="tsadv$AssignedGoal" extends="_minimal">
         <property name="weight"/>
