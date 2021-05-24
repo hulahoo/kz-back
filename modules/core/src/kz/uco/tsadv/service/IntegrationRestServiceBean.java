@@ -2366,14 +2366,24 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             return prepareError(result, methodName, personContactData, "" +
                                     "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                         }
+                        if (personContactJson.getStartDate() != null && !personContactJson.getStartDate().isEmpty()) {
+                            personContact.setStartDate(formatter.parse(personContactJson.getStartDate()));
+                        }
+                        if (personContactJson.getEndDate() != null && !personContactJson.getEndDate().isEmpty()) {
+                            personContact.setEndDate(formatter.parse(personContactJson.getEndDate()));
+                        }
                         personContact.setContactValue(personContactJson.getValue());
                         personContactsCommitList.add(personContact);
                     } else {
                         personContact = metadata.create(PersonContact.class);
                         personContact.setId(UUID.randomUUID());
                         personContact.setLegacyId(personContactJson.getLegacyId());
-                        personContact.setStartDate(new Date());
-                        personContact.setEndDate(CommonUtils.getMaxDate());
+                        if (personContactJson.getStartDate() != null && !personContactJson.getStartDate().isEmpty()) {
+                            personContact.setStartDate(formatter.parse(personContactJson.getStartDate()));
+                        }
+                        if (personContactJson.getEndDate() != null && !personContactJson.getEndDate().isEmpty()) {
+                            personContact.setEndDate(formatter.parse(personContactJson.getEndDate()));
+                        }
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
                                         " select e from base$PersonGroupExt e " +
