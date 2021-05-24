@@ -9,6 +9,7 @@ import com.haulmont.cuba.core.global.GlobalConfig;
 import com.haulmont.cuba.core.global.View;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.service.NotificationSenderAPIService;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.Course;
@@ -46,6 +47,8 @@ public class StudentHomeworkChangedListener {
     protected TransactionalDataManager transactionalDataManager;
     @Inject
     protected ActivityService activityService;
+    @Inject
+    protected FrontConfig frontConfig;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void onTsadv_StudentHomeworkBeforeCommit(EntityChangedEvent<StudentHomework, UUID> event) {
@@ -201,10 +204,13 @@ public class StudentHomeworkChangedListener {
                 Map<String, Object> map = new HashMap<>();
                 map.put("courseName", studentHomework.getHomework().getCourse().getName());
                 map.put("studentFullName", studentHomework.getPersonGroup().getFullName());
-                String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
-                        "tsadv_StudentHomework.edit" +
-                        "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
-                        "\" target=\"_blank\">%s " + "</a>";
+//                String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
+//                        "tsadv_StudentHomework.edit" +
+//                        "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
+//                        "\" target=\"_blank\">%s " + "</a>";
+                String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                        + "/learning-history/"
+                        + "\" target=\"_blank\">%s " + "</a>";
                 map.put("requestLinkRu", String.format(requestLink, "ответом тренера"));
                 map.put("requestLinkEn", String.format(requestLink, "reply"));
                 map.put("requestLinkKz", String.format(requestLink, "жауабымен"));
