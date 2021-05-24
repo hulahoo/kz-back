@@ -1,6 +1,7 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.global.dictionary.DicNationality;
 import kz.uco.tsadv.modules.personal.dictionary.DicCitizenship;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_PERSONAL_DATA_REQUEST")
 @Entity(name = "tsadv$PersonalDataRequest")
 public class PersonalDataRequest extends AbstractParentEntity {
