@@ -397,6 +397,28 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                                         : null,
                                 performancePlanDc.getItem().getStartDate(), performancePlanDc.getItem().getEndDate())));
                 PersonException exception = getPersonException(assignedPerformancePlan.getAssignedPerson());
+                if (assignedPerformancePlan.getMaxBonusPercent() != null || exception != null) {
+                    assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
+                            BigDecimal.valueOf(assignedPerformancePlan.getMaxBonusPercent() != null
+                                    ? assignedPerformancePlan.getMaxBonusPercent()
+                                    : exception != null
+                                    ? exception.getMaxBonus()
+                                    : 0)).divide(BigDecimal.valueOf(100)));
+                } else {
+                    assignedPerformancePlan.setMaxBonus(
+                            extAppPropertiesConfig.getIncludeAbsence()
+                                    ? kpiService.getMaxBonus(currentAssignment != null
+                                            ? currentAssignment.getPersonGroup()
+                                            : null,
+                                    performancePlanDc.getItem().getStartDate(),
+                                    performancePlanDc.getItem().getEndDate())
+                                    : assignedPerformancePlan.getGzp().multiply(
+                                    BigDecimal.valueOf(currentAssignment != null
+                                            && currentAssignment.getGradeGroup() != null
+                                            && currentAssignment.getGradeGroup().getGrade() != null
+                                            ? currentAssignment.getGradeGroup().getGrade().getBonusPercent()
+                                            : 0)).divide(BigDecimal.valueOf(100)));
+                }
                 assignedPerformancePlan.setMaxBonus(assignedPerformancePlan.getGzp().multiply(
                         BigDecimal.valueOf(assignedPerformancePlan.getMaxBonusPercent() != null
                                 ? assignedPerformancePlan.getMaxBonusPercent()

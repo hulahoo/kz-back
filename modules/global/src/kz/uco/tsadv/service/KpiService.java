@@ -22,6 +22,8 @@ public interface KpiService {
 
     BigDecimal calculationOfGzpWithAbsences(PersonGroupExt personGroupExt, Date startDate, Date endDate);
 
+    BigDecimal getMaxBonus(PersonGroupExt personGroupExt, Date startDate, Date endDate);
+
     List kpiAssignedGoals(UUID appId);
 
     List<OrganizationGroupGoalLink> getHierarchyGoals(UUID organizationGroupId);
