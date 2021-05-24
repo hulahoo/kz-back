@@ -1,10 +1,7 @@
 package kz.uco.tsadv.service.portal;
 
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.CommitContext;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.Messages;
-import com.haulmont.cuba.core.global.Metadata;
+import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.exceptions.PortalException;
@@ -14,16 +11,17 @@ import kz.uco.tsadv.modules.bpm.BpmRolesLink;
 import kz.uco.tsadv.modules.bpm.BprocActors;
 import kz.uco.tsadv.modules.bpm.NotPersisitBprocActors;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
+import kz.uco.tsadv.modules.personal.model.PositionExt;
 import kz.uco.tsadv.service.EmployeeService;
 import kz.uco.tsadv.service.OrganizationHrUserService;
+import kz.uco.tsadv.service.PositionService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service(StartBprocService.NAME)
@@ -39,30 +37,69 @@ public class StartBprocServiceBean implements StartBprocService {
     protected Messages messages;
     @Inject
     protected Metadata metadata;
+    @Inject
+    protected PositionService positionService;
 
     @Override
     public BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID initiatorPersonGroupId) {
         DicCompany dicCompany = employeeService.getCompanyByPersonGroupId(initiatorPersonGroupId);
         UUID company = dicCompany != null ? dicCompany.getId() : null;
-        List<BpmRolesDefiner> bpmRolesDefiners = dataManager.load(BpmRolesDefiner.class)
+
+        BpmRolesDefiner bpmRolesDefiner = null;
+
+        @SuppressWarnings("ConstantConditions") List<BpmRolesDefiner> bpmRolesDefiners = dataManager.load(BpmRolesDefiner.class)
                 .query("select e from tsadv$BpmRolesDefiner e where e.company.id = :companyId and e.processDefinitionKey = :processDefinitionKey ")
                 .parameter("companyId", company)
                 .parameter("processDefinitionKey", processDefinitionKey)
                 .view("bpmRolesDefiner-view")
                 .list();
-        if (!bpmRolesDefiners.isEmpty()) return bpmRolesDefiners.get(0);
+        if (!bpmRolesDefiners.isEmpty()) bpmRolesDefiner = bpmRolesDefiners.get(0);
 
-        bpmRolesDefiners = dataManager.load(BpmRolesDefiner.class)
-                .query("select e from tsadv$BpmRolesDefiner e where e.processDefinitionKey = :processDefinitionKey")
-                .parameter("processDefinitionKey", processDefinitionKey)
-                .view("bpmRolesDefiner-view")
-                .list()
-                .stream()
-                .filter(bpmRolesDefiner -> bpmRolesDefiner.getCompany() == null)
-                .collect(Collectors.toList());
+        if (bpmRolesDefiner == null)
+            bpmRolesDefiners = dataManager.load(BpmRolesDefiner.class)
+                    .query("select e from tsadv$BpmRolesDefiner e where e.processDefinitionKey = :processDefinitionKey")
+                    .parameter("processDefinitionKey", processDefinitionKey)
+                    .view("bpmRolesDefiner-view")
+                    .list()
+                    .stream()
+                    .filter(definer -> definer.getCompany() == null)
+                    .collect(Collectors.toList());
 
-        if (!bpmRolesDefiners.isEmpty()) return bpmRolesDefiners.get(0);
-        throw new PortalException("bpmRolesDefiner not found!");
+        if (!bpmRolesDefiners.isEmpty()) bpmRolesDefiner = bpmRolesDefiners.get(0);
+        if (bpmRolesDefiner == null) throw new PortalException("bpmRolesDefiner not found!");
+
+        bpmRolesDefiner = excludeSupManager(initiatorPersonGroupId, bpmRolesDefiner);
+
+        return bpmRolesDefiner;
+    }
+
+    protected BpmRolesDefiner excludeSupManager(UUID initiatorPersonGroupId, BpmRolesDefiner bpmRolesDefiner) {
+        if (bpmRolesDefiner.getActiveSupManagerExclusion() && !CollectionUtils.isEmpty(bpmRolesDefiner.getLinks())) {
+            boolean isSupManagerExclusion = false;
+            String supManagerCode = bpmRolesDefiner.getManagerLaunches() ? OrganizationHrUserService.HR_ROLE_MANAGER : OrganizationHrUserService.HR_ROLE_SUP_MANAGER;
+
+            PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(initiatorPersonGroupId, View.MINIMAL);
+            PositionGroupExt supManager = positionService.getManager(positionGroup.getId());
+            if (!bpmRolesDefiner.getManagerLaunches() && supManager != null) {
+                supManager = positionService.getManager(supManager.getId());
+            }
+
+            if (supManager != null) {
+                supManager = dataManager.reload(supManager, new View(PositionGroupExt.class)
+                        .addProperty("list", new View(PositionExt.class)
+                                .addProperty("startDate")
+                                .addProperty("endDate")
+                                .addProperty("supManagerExclusion")));
+                isSupManagerExclusion = Optional.ofNullable(supManager.getPosition()).map(PositionExt::getSupManagerExclusion).orElse(false);
+            }
+
+            if (isSupManagerExclusion) {
+                List<BpmRolesLink> links = bpmRolesDefiner.getLinks().stream()
+                        .filter(link -> !supManagerCode.equals(link.getHrRole().getCode())).collect(Collectors.toList());
+                bpmRolesDefiner.setLinks(links);
+            }
+        }
+        return bpmRolesDefiner;
     }
 
     @Override

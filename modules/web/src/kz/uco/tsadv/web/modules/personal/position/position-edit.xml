@@ -306,6 +306,7 @@
                             <fieldGroup datasource="positionDs" width="520px">
                                 <column fieldCaptionWidth="250px">
                                     <field property="managerFlag"/>
+                                    <field property="supManagerExclusion"/>
                                     <field id="group.adminApprove"
                                            property="group.adminApprove"
                                            optionsDatasource="dicHrRolesDs"/>
@@ -796,14 +797,11 @@
                     <rows datasource="allowableSchedulesDs"/>
                     <rowsCount/>
                     <buttonsPanel id="buttonsPanel">
-                        <button id="createBtn"
-                                action="schedulesTable.create"
+                        <button action="schedulesTable.create"
                                 caption="mainMsg://table.btn.empty"/>
-                        <button id="editBtn"
-                                action="schedulesTable.edit"
+                        <button action="schedulesTable.edit"
                                 caption="mainMsg://table.btn.empty"/>
-                        <button id="removeBtn"
-                                action="schedulesTable.remove"
+                        <button action="schedulesTable.remove"
                                 caption="mainMsg://table.btn.empty"/>
                     </buttonsPanel>
                 </groupTable>

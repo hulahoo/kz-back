@@ -23,6 +23,8 @@
                              captionProperty="key"
                              caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.procModel"
                              optionsContainer="processDefinitionsDc"/>
+                <checkBox property="managerLaunches"/>
+                <checkBox property="activeSupManagerExclusion"/>
             </column>
         </form>
         <groupBox id="linksBox" caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.links">
