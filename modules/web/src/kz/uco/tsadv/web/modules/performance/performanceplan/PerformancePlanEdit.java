@@ -614,9 +614,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     }
 
     private HSSFCell createStatusCell(HSSFRow row) {
-        return row.getCell(15) != null
-                ? row.getCell(15)
-                : row.createCell(15);
+        return row.getCell(17) != null
+                ? row.getCell(17)
+                : row.createCell(17);
     }
 
     private void xlsx(XSSFWorkbook xssfWorkbook) throws IOException {
@@ -670,9 +670,9 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
     }
 
     private Cell createStatusCell(XSSFRow row) {
-        return row.getCell(15) != null
-                ? row.getCell(15)
-                : row.createCell(15);
+        return row.getCell(17) != null
+                ? row.getCell(17)
+                : row.createCell(17);
     }
 
     private Boolean addToBase(String assignedPerformancePlanId, double adjustedScore,
