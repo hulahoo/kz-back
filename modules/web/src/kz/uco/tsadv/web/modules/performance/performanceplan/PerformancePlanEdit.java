@@ -296,6 +296,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                             ? positionGoal.getGoal().getLibrary().getCategory()
                             : null);
                     newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
+                    newAssignedGoal.setCantDelete(true);
                     newAssignedGoal.setGoalLibrary(positionGoal.getGoal().getLibrary());
                     commitContext.addInstanceToCommit(newAssignedGoal);
                     processedGoals.add(positionGoal.getGoal());
@@ -309,6 +310,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
                     newAssignedGoal.setWeight(Double.valueOf(jobGoal.getWeight()));
                     newAssignedGoal.setJobGroup(jobGoal.getJobGroup());
+                    newAssignedGoal.setCantDelete(true);
                     newAssignedGoal.setCategory(jobGoal.getGoal() != null
                             && jobGoal.getGoal().getLibrary() != null
                             ? jobGoal.getGoal().getLibrary().getCategory()
@@ -331,6 +333,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                             && organizationGoal.getGoal().getLibrary() != null
                             ? organizationGoal.getGoal().getLibrary().getCategory()
                             : null);
+                    newAssignedGoal.setCantDelete(true);
                     newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
                     newAssignedGoal.setGoalLibrary(organizationGoal.getGoal().getLibrary());
                     commitContext.addInstanceToCommit(newAssignedGoal);
@@ -351,6 +354,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                             && structureGoal.getGoal().getLibrary() != null
                             ? structureGoal.getGoal().getLibrary().getCategory()
                             : null);
+                    newAssignedGoal.setCantDelete(true);
                     newAssignedGoal.setGoalType(AssignedGoalTypeEnum.LIBRARY);
                     newAssignedGoal.setGoalLibrary(structureGoal.getGoal().getLibrary());
                     commitContext.addInstanceToCommit(newAssignedGoal);
