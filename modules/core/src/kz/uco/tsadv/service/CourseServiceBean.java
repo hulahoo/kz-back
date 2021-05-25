@@ -899,10 +899,7 @@ public class CourseServiceBean implements CourseService {
                 "select c " +
                 "from tsadv$Course c " +
                 "   join c.category ca " +
-                "   left join c.enrollments e " +
-                "           on e.personGroup.id = :personGroupId " +
-                "where c.activeFlag = true")
-                .setParameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID))))
+                "where c.activeFlag = true"))
                 .setView("course.list"))
                 .stream());
     }
@@ -913,11 +910,8 @@ public class CourseServiceBean implements CourseService {
                 "select c " +
                 "from tsadv$Course c " +
                 "   join c.category ca " +
-                "   left join c.enrollments e " +
-                "       on e.personGroup.id = :personGroupId " +
                 "where (lower (c.name) like lower (concat(concat('%', :courseName), '%'))) " +
                 "   and c.activeFlag = true")
-                .setParameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
                 .setParameter("courseName", courseName))
                 .setView("course.list"))
                 .stream()
@@ -1067,11 +1061,18 @@ public class CourseServiceBean implements CourseService {
         return courseStream.map(course -> {
             CoursePojo coursePojo = new CoursePojo();
             coursePojo.setId(course.getId());
-            if (course.getEnrollments().size() > 0) {
-                final Enrollment enrollment = course.getEnrollments().get(0);
-                coursePojo.setEnrollmentId(enrollment.getId().toString());
-                coursePojo.setEnrollmentStatus(enrollment.getStatus().toString());
-            }
+            dataManager.load(Enrollment.class).query("" +
+                    "select e " +
+                    "from tsadv$Enrollment e " +
+                    "where e.personGroup.id = :personGroupId " +
+                    "   and e.course.id = :courseId ")
+                    .parameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
+                    .parameter("courseId", course.getId())
+                    .optional()
+                    .ifPresent(e -> {
+                        coursePojo.setEnrollmentId(e.getId().toString());
+                        coursePojo.setEnrollmentStatus(e.getStatus().toString());
+                    });
             coursePojo.setName(course.getName());
             coursePojo.setOnline(course.getIsOnline());
 

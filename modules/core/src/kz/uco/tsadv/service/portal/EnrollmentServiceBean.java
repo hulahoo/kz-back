@@ -5,7 +5,6 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.UserSessionSource;
 import kz.uco.base.common.StaticVariable;
-import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.pojo.CategoryCoursePojo;
 import kz.uco.tsadv.service.CourseService;
@@ -14,14 +13,9 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service(EnrollmentService.NAME)
 public class EnrollmentServiceBean implements EnrollmentService {
-
-    @Inject
-    private Persistence persistence;
 
     @Inject
     private DataManager dataManager;

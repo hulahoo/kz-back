@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.security.app.Authenticated;
 import kz.uco.tsadv.entity.ImageSize;
 import kz.uco.tsadv.entity.ResizedImage;
 import kz.uco.tsadv.listener.BudgetRequestListener;
@@ -42,6 +43,7 @@ public class ImageResizeServiceBean implements ImageResizeService {
     @Inject
     private Persistence persistence;
 
+    @Authenticated
     @Override
     public FileDescriptor resizeImage(ImageSize size, FileDescriptor originalImage) {
         return findResizedImage(originalImage, size)
