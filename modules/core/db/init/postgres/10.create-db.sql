@@ -3995,7 +3995,6 @@ create table TSADV_DIC_SCHEDULE_ELEMENT_TYPE (
     TIME_FROM time,
     TIME_TO time,
     DISPLAY_ON_TIMECARD_EDIT_SCREEN boolean,
-    SHORTNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -6941,7 +6940,6 @@ create table TSADV_DIC_QUALITY (
     FULL_LANG_VALUE3 varchar(2000),
     FULL_LANG_VALUE4 varchar(2000),
     FULL_LANG_VALUE5 varchar(2000),
-    FULLLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -7122,7 +7120,6 @@ create table TSADV_TALENT_PROGRAM (
     QUESTION_OF_ESSAY_RU varchar(255) not null,
     QUESTION_OF_ESSAY_KZ varchar(255) not null,
     QUESTION_OF_ESSAY_EN varchar(255) not null,
-    QUESTIONOFESSAY varchar(255),
     --
     primary key (ID)
 )^
@@ -7299,7 +7296,6 @@ create table TSADV_RCG_QUESTION_ANSWER (
     CODE varchar(255),
     ICON_ID uuid,
     RCG_QUESTION_ID uuid not null,
-    TEXT varchar(255),
     --
     primary key (ID)
 )^
@@ -8433,8 +8429,6 @@ create table TSADV_RCG_QUESTION (
     ACTIVE boolean not null,
     ANSWER_TYPE varchar(50) not null,
     COINS bigint,
-    TEXT varchar(255),
-    DESCRIPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -8629,7 +8623,6 @@ create table TSADV_MEDAL (
     LANG_NAME3 varchar(255),
     LANG_NAME4 varchar(255),
     SORT integer,
-    LANGNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -9263,8 +9256,6 @@ create table TSADV_GOODS (
     PRICE double precision not null,
     ACTIVE boolean not null,
     RECOGNITION_PROVIDER_ID uuid,
-    NAME varchar(255),
-    DESCRIPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -9499,7 +9490,6 @@ create table TSADV_RC_QUESTION (
     IS_ACTIVE boolean not null,
     QUESTION_CATEGORY_ID uuid,
     QUESTION_ACCESSIBILITY_ID uuid,
-    QUESTIONTEXT varchar(255),
     --
     primary key (ID)
 )^
@@ -9906,7 +9896,6 @@ create table TSADV_ORDER_MASTER_ENTITY (
     ENTITY_NAME_LANG5 varchar(255),
     ORDER_ integer not null,
     ORDER_MASTER_ID uuid,
-    ENTITYLANGNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -10542,7 +10531,6 @@ create table TSADV_LEARNING_FEEDBACK_QUESTION (
     QUESTION_LANG_VALUE5 varchar(2000),
     QUESTION_TYPE varchar(50) not null,
     DIC_QUESTION_TYPE_ID uuid,
-    QUESTIONLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -10670,8 +10658,6 @@ create table TSADV_REQUISITION (
     MANAGER_DESCRIPTION_LANG4 text,
     MANAGER_DESCRIPTION_LANG5 text,
     VIEW_COUNT bigint not null,
-    DESCRIPTIONLANG varchar(255),
-    NAMEFORSITELANG varchar(255),
     --
     primary key (ID)
 )^
@@ -11304,7 +11290,6 @@ create table TSADV_ORDER_MASTER_ENTITY_PROPERTY (
     LANG_NAME4 varchar(255),
     LANG_NAME5 varchar(255),
     ORDER_MASTER_ENTITY_ID uuid,
-    LANGNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -11985,7 +11970,6 @@ create table TSADV_FAQ_CONTENT (
     LANG_VALUE3 text,
     LANG_VALUE4 text,
     LANG_VALUE5 text,
-    LANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -12029,7 +12013,6 @@ create table TSADV_PERSONAL_PROTECTION_INSPECTOR (
     ORGANIZATION_GROUP_ID uuid not null,
     ASSIGNMENT_DATE date not null,
     ASSIGNMENT_ORDER varchar(255),
-    EMPLOYEEFULLNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -12173,7 +12156,6 @@ create table TSADV_BUDGET_REQUEST (
     HOUR_ integer,
     BUSINESS_TRIP_EMPLOYEE integer,
     BUDGET_ITEM_ID uuid,
-    CALCCOURSENAME varchar(255),
     --
     primary key (ID)
 )^
@@ -12991,8 +12973,6 @@ create table TSADV_FAQ (
     CONTENT_LANG_VALUE3 text,
     CONTENT_LANG_VALUE4 text,
     CONTENT_LANG_VALUE5 text,
-    LANGVALUE varchar(255),
-    CONTENTLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -13778,7 +13758,6 @@ create table TSADV_SCHEDULE_SUMMARY (
     ELEMENT_TYPE_ID uuid not null,
     CORRECTION_FLAG boolean not null,
     DISPLAY_VALUE varchar(255),
-    SHIFTNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -14006,10 +13985,6 @@ create table TSADV_BUSINESS_TRIP (
     TYPE_ID uuid not null,
     ORD_ASSIGNMENT_ID uuid,
     PERSON_GROUP_ID uuid,
-    ROUTE varchar(255),
-    ABSENCEDAYS integer,
-    BUSINESSTRIPWITHDATE varchar(255),
-    PARENTBUSINESSTRIPCAPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -14100,7 +14075,6 @@ create table TSADV_WORKED_HOURS_SUMMARY (
     BUSSINESS_TRIP_ID uuid,
     ORDER_ID uuid,
     ABSENCE_ID uuid,
-    TIMECARDREPRESENTATION varchar(255),
     --
     primary key (ID)
 )^
@@ -14305,7 +14279,6 @@ create table TSADV_LEARNING_FEEDBACK_ANSWER (
     ANSWER_LANG_VALUE4 varchar(2000),
     ANSWER_LANG_VALUE5 varchar(2000),
     FEEDBACK_QUESTION_ID uuid not null,
-    ANSWERLANGVALUE varchar(255),
     --
     primary key (ID)
 )^
@@ -14722,7 +14695,6 @@ create table TSADV_SALARY_REQUEST (
     ORDER_GROUP_ID uuid,
     AGREEMENT_ID uuid,
     TYPE_ varchar(50) not null,
-    DIFFERENCE double precision,
     --
     primary key (ID)
 )^
@@ -15121,7 +15093,6 @@ create table TSADV_STANDARD_OFFSET (
     OFFSET_DISPLAY_DAYS integer not null,
     START_DATE date not null,
     END_DATE date,
-    OFFSETSCHEDULENAME varchar(255),
     --
     primary key (ID)
 )^
@@ -15439,7 +15410,6 @@ create table TSADV_RC_ANSWER (
     ANSWER_TEXT5 varchar(2000),
     ANSWER_RESULT varchar(50),
     POSITIVE_ boolean not null,
-    ANSWERTEXT varchar(255),
     --
     primary key (ID)
 )^
@@ -15851,7 +15821,6 @@ create table TSADV_JOB_REQUEST (
     IS_RESERVED boolean not null,
     SELECTED_BY_MANAGER boolean not null,
     SENT boolean not null,
-    NAME varchar(255),
     --
     primary key (ID)
 )^
@@ -16204,7 +16173,6 @@ create table TSADV_SUCCESSION_PLANNING (
     END_DATE date not null,
     DESCRIPTION text,
     PERSON_GROUP_ID uuid,
-    POSITIONNAME varchar(255),
     --
     primary key (ID)
 )^
@@ -16309,7 +16277,6 @@ create table TSADV_ORDER (
     CANCEL_ORDER_REASON_ID uuid,
     APPROVER_PERSON_GROUP_ID uuid,
     ORDER_REASON_ID uuid,
-    CAPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -16434,8 +16401,6 @@ create table TSADV_JOB (
     JOB_DESCRIPTION_LANG4 text,
     JOB_DESCRIPTION_LANG5 text,
     JOB_CATEGORY_ID uuid,
-    CANDIDATEREQUIREMENTS varchar(255),
-    JOBDESCRIPTION varchar(255),
     --
     primary key (ID)
 )^
@@ -17055,7 +17020,6 @@ create table TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK (
 -- end TSADV_PERSON_EXPERIENCE_FILE_DESCRIPTOR_LINK
 -- begin SEC_USER
 alter table SEC_USER add column PERSON_GROUP_ID uuid ^
-alter table SEC_USER add column FULLNAMEWITHLOGIN varchar(255) ^
 alter table SEC_USER add column IMAGE_ID uuid ^
 alter table SEC_USER add column ATS_CODE varchar(255) ^
 alter table SEC_USER add column INNER_NUMBER varchar(255) ^
@@ -17878,3 +17842,132 @@ create table TSADV_ABSENCE_RVD_REQUEST_FILE_DESCRIPTOR_LINK (
     primary key (ABSENCE_RVD_REQUEST_ID, FILE_DESCRIPTOR_ID)
 )^
 -- end TSADV_ABSENCE_RVD_REQUEST_FILE_DESCRIPTOR_LINK
+-- begin TSADV_DIC_ASSESSMENT_RESULT
+create table TSADV_DIC_ASSESSMENT_RESULT (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_RESULT
+-- begin TSADV_DIC_ASSESSMENT_TYPE
+create table TSADV_DIC_ASSESSMENT_TYPE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_DIC_ASSESSMENT_EVENTS
+create table TSADV_DIC_ASSESSMENT_EVENTS (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    COMPANY_ID uuid not null,
+    LANG_VALUE1 varchar(255) not null,
+    DESCRIPTION1 varchar(2000),
+    LANG_VALUE2 varchar(255),
+    DESCRIPTION2 varchar(2000),
+    LANG_VALUE3 varchar(255),
+    DESCRIPTION3 varchar(2000),
+    LANG_VALUE4 varchar(255),
+    DESCRIPTION4 varchar(2000),
+    LANG_VALUE5 varchar(255),
+    DESCRIPTION5 varchar(2000),
+    START_DATE date,
+    END_DATE date,
+    CODE varchar(255),
+    IS_SYSTEM_RECORD boolean not null,
+    ACTIVE boolean not null,
+    IS_DEFAULT boolean not null,
+    ORDER_ integer,
+    --
+    primary key (ID)
+)^
+-- end TSADV_DIC_ASSESSMENT_EVENTS
+-- begin TSADV_IMAGE_SIZE
+create table TSADV_IMAGE_SIZE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    WIDTH integer not null,
+    HEIGHT integer not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_IMAGE_SIZE
+-- begin TSADV_RESIZED_IMAGE
+create table TSADV_RESIZED_IMAGE (
+    ORIGINAL_IMAGE_ID uuid,
+    RESIZED_IMAGE_ID uuid,
+    primary key (ORIGINAL_IMAGE_ID, RESIZED_IMAGE_ID)
+)^
+-- end TSADV_RESIZED_IMAGE

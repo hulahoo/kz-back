@@ -460,4 +460,10 @@
         <property name="personGroup" view="_minimal"/>
         <property name="book" view="_local"/>
     </view>
+    <view entity="tsadv$Course" name="course.list" extends="_minimal">
+        <property name="enrollments" view="_local"/>
+        <property name="logo" view="_minimal"/>
+        <property name="category" view="_minimal"/>
+        <property name="isOnline"/>
+    </view>
 </views>

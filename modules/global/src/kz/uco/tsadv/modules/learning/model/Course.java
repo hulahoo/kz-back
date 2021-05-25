@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
@@ -20,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
+@PublishEntityChangedEvents
 @NamePattern("%s|name")
 @Table(name = "TSADV_COURSE")
 @Entity(name = "tsadv$Course")

@@ -649,5 +649,7 @@
         <class>kz.uco.tsadv.modules.learning.model.BookView</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicEarningPolicy</class>
         <class>kz.uco.tsadv.modules.performance.model.PersonException</class>
+        <class>kz.uco.tsadv.entity.ResizedImage</class>
+        <class>kz.uco.tsadv.entity.ImageSize</class>
     </persistence-unit>
 </persistence>

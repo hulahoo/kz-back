@@ -3,7 +3,12 @@ package kz.uco.tsadv.service.portal;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
+import com.haulmont.cuba.core.global.UserSessionSource;
+import kz.uco.base.common.StaticVariable;
 import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
+import kz.uco.tsadv.modules.learning.model.Course;
+import kz.uco.tsadv.pojo.CategoryCoursePojo;
+import kz.uco.tsadv.service.CourseService;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
@@ -21,61 +26,41 @@ public class EnrollmentServiceBean implements EnrollmentService {
     @Inject
     private DataManager dataManager;
 
+    @Inject
+    private CourseService courseService;
+
+    @Inject
+    private UserSessionSource userSessionSource;
+
     @Override
-    public List<DicCategory> searchEnrollment(UUID userId) {
-        return persistence.callInTransaction(em -> {
-            List<DicCategory> enrollmentCategory = dataManager.loadList(LoadContext.create(DicCategory.class).setQuery(LoadContext.createQuery("" +
-                    "select distinct c " +
-                    "            from tsadv$DicCategory c " +
-                    "            join c.courses cc " +
-                    "            join cc.enrollments e " +
-                    "where e.personGroup.id = :userId")
-                    .setParameter("userId", userId))
-                    .setView("category-enrollment"));
-            return searchEnrollmentFilter(enrollmentCategory, userId);
-        });
+    public List<CategoryCoursePojo> searchEnrollment() {
+        return courseService.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
+                "select c " +
+                "from tsadv$Course c " +
+                "   join c.category ca " +
+                "   join c.enrollments e " +
+                "           on e.personGroup.id = :personGroupId " +
+                "where c.activeFlag = true")
+                .setParameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID))))
+                .setView("course.list"))
+                .stream());
     }
 
     @Override
-    public List<DicCategory> searchEnrollment(String courseName, UUID userId) {
-        return persistence.callInTransaction(em -> {
-            List<DicCategory> enrollmentCategory = em.createQuery("" +
-                    "select distinct c " +
-                    "            from tsadv$DicCategory c " +
-                    "            join c.courses cc " +
-                    "            join cc.enrollments e " +
-                    "            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%'))) " +
-                    "                and e.personGroup.id = :userId", DicCategory.class)
-                    .setParameter("courseName", courseName)
-                    .setParameter("userId", userId)
-                    .setView(DicCategory.class, "category-enrollment")
-                    .getResultList()
-                    .stream()
-                    .peek(c -> c.setCourses(c.getCourses().stream().filter(course ->
-                            course.getName().toLowerCase().contains(courseName.toLowerCase())).collect(Collectors.toList())))
-                    .collect(Collectors.toList());
-            return searchEnrollmentFilter(enrollmentCategory, userId);
-        });
-    }
-
-    protected List<DicCategory> searchEnrollmentFilter(List<DicCategory> enrollmentCategory, UUID userId) {
-        return enrollmentCategory
+    public List<CategoryCoursePojo> searchEnrollment(String courseName) {
+        return courseService.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
+                "select c " +
+                "from tsadv$Course c " +
+                "   join c.category ca " +
+                "   join c.enrollments e " +
+                "       on e.personGroup.id = :personGroupId " +
+                "where (lower (c.name) like lower (concat(concat('%', :courseName), '%'))) " +
+                "   and c.activeFlag = true")
+                .setParameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
+                .setParameter("courseName", courseName))
+                .setView("course.list"))
                 .stream()
-                .filter(c -> c.getCourses()
-                        .stream()
-                        .anyMatch(course -> course.getEnrollments().stream().anyMatch(e -> e.getPersonGroup().getId().equals(userId))))
-                .peek(category -> {
-                    category.setCourses(category.getCourses()
-                            .stream()
-                            .filter(course -> course.getEnrollments()
-                                    .stream().anyMatch(enrollment -> enrollment.getPersonGroup().getId().equals(userId)))
-                            .collect(Collectors.toList()));
-                })
-                .peek(category -> category.getCourses()
-                        .forEach(course -> course.setEnrollments(course.getEnrollments()
-                                .stream()
-                                .filter(enrollment -> Objects.equals(enrollment.getPersonGroup().getId(), userId))
-                                .collect(Collectors.toList()))))
-                .collect(Collectors.toList());
+                .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())));
+
     }
 }
