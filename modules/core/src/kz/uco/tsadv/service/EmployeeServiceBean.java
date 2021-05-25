@@ -2688,4 +2688,9 @@ public class EmployeeServiceBean implements EmployeeService {
                 "   and current_date between hu.dateFrom and hu.dateTo ")
                 .setParameter("personGroupId", personGroupId)));
     }
+
+    @Override
+    public boolean hasHrRole(String dicHrCode) {
+        return this.userHrRoles().stream().anyMatch(r -> r.getCode().equalsIgnoreCase(dicHrCode));
+    }
 }

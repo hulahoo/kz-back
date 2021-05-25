@@ -163,4 +163,6 @@ public interface EmployeeService {
     List<DicHrRole> userHrRoles();
 
     List<DicHrRole> userHrRoles(UUID personGroupId);
+
+    boolean hasHrRole(String dicHrCode);
 }
