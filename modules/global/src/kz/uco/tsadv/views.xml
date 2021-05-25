@@ -9363,16 +9363,8 @@
     <view class="kz.uco.tsadv.modules.personal.model.Address"
           extends="_local"
           name="address.view">
-        <property name="personGroup"
-                  view="_minimal">
-            <property name="list"
-                      view="_minimal">
-                <property name="startDate"/>
-                <property name="endDate"/>
-            </property>
-        </property>
-        <property name="addressType"
-                  view="_minimal">
+        <property name="personGroup" view="_minimal"/>
+        <property name="addressType" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>
             <property name="langValue3"/>
@@ -9382,18 +9374,14 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
-        <property name="country"
-                  view="_minimal">
-            <property name="langValue1"/>
-            <property name="langValue2"/>
-            <property name="langValue3"/>
-            <property name="langValue4"/>
-            <property name="langValue5"/>
+        <property name="country" view="_minimal">
             <property name="startDate"/>
             <property name="endDate"/>
             <property name="code"/>
         </property>
         <property name="city" view="_local"/>
+        <property name="kato" view="dicKato.edit"/>
+        <property name="streetType" view="dicStreetType.edit"/>
     </view>
     <view class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
           extends="_local"
@@ -23778,5 +23766,15 @@
     <view entity="tsadv_AbsPurposeSetting" name="absPurposeSetting-absence" extends="_minimal">
         <property name="absenceType" view="_local"/>
         <property name="absencePurpose" view="_local"/>
+    </view>
+    <view entity="tsadv_DicStreetType" name="dicStreetType.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_DicKato" name="dicKato.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
     </view>
 </views>
