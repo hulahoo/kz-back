@@ -55,7 +55,7 @@ public class ImageResizeServiceBean implements ImageResizeService {
             try {
                 final InputStream fileIs = fileStorageAPI.openStream(originalImage);
                 BufferedImage sourceImage = ImageIO.read(fileIs);
-                Image thumbnail = sourceImage.getScaledInstance(size.getWidth(), size.getHeight(), Image.SCALE_DEFAULT);
+                Image thumbnail = sourceImage.getScaledInstance(size.getWidth(), size.getHeight(), Image.SCALE_SMOOTH);
                 BufferedImage bufferedThumbnail = new BufferedImage(thumbnail.getWidth(null),
                         thumbnail.getHeight(null),
                         BufferedImage.TYPE_INT_RGB);
