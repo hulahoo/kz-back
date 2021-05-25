@@ -59,7 +59,7 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
         goal.addValueChangeListener(goalValueChangeEvent -> {
             AssignedGoal item = assignedGoalDc.getItem();
             if (goalValueChangeEvent != null && goalValueChangeEvent.getValue() != null) {
-                item.setGoalString(goalValueChangeEvent.getValue().getGoalName());
+//                item.setGoalString(goalValueChangeEvent.getValue().getGoalName());
                 item.setCategory(goalValueChangeEvent.getValue().getLibrary() != null
                         ? goalValueChangeEvent.getValue().getLibrary().getCategory()
                         : null);
@@ -67,7 +67,7 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
                         , goalValueChangeEvent.getValue()));
                 item.setSuccessCriteria(goalValueChangeEvent.getValue().getSuccessCriteria());
             } else {
-                item.setGoalString(null);
+//                item.setGoalString(null);
                 item.setWeight(null);
                 item.setCategory(null);
                 item.setSuccessCriteria(null);

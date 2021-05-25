@@ -74,7 +74,8 @@
                 </actions>
                 <columns>
                     <column id="category"/>
-                    <column id="goalString" editable="true" required="true" caption="msg://KPITitleCaption"/>
+                    <column id="goalString1" generator="getGoalName" caption="msg://KPITitleCaption"/>
+<!--                    <column id="goalString" editable="true" required="true" caption="msg://KPITitleCaption"/>-->
                     <column id="weight" editable="true" required="true">
                         <aggregation type="SUM"/>
                     </column>
