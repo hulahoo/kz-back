@@ -64,7 +64,7 @@ public class PersonDocumentRequestEdit extends StandardEditor<PersonDocumentRequ
 
     @Subscribe
     protected void onInitEntity(InitEntityEvent<PersonDocumentRequest> event) {
-        event.getEntity().setStatus(commonService.getEntity(DicApprovalStatus.class, "PROJECT"));
+//        event.getEntity().setStatus(commonService.getEntity(DicApprovalStatus.class, "PROJECT"));
     }
 
     @Subscribe("upload")

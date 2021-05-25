@@ -23777,4 +23777,27 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="tsadv_PersonDocumentRequest" name="personDocumentRequest-for-integration" extends="_local">
+        <property name="issuingAuthority" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="documentType" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
+        <property name="file" view="_minimal"/>
+        <property name="editedPersonDocument" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+        <property name="attachments" view="_minimal"/>
+        <property name="status" view="_minimal">
+            <property name="legacyId"/>
+            <property name="code"/>
+        </property>
+    </view>
 </views>
