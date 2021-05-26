@@ -93,7 +93,7 @@
             <property name="order"/>
         </property>
         <property name="goal" view="_minimal">
-            <property name="successCriteria"/>
+            <property name="successCriteriaLang"/>
         </property>
         <property name="goalLibrary" view="_minimal"/>
         <property name="assignedByPersonGroup" view="_minimal">
