@@ -94,7 +94,7 @@
             <item id="hrDicOrderReason"
                   screen="tsadv$DicOrderReason.browse"/>
             <item screen="tsadv$GlobalValueGroup.browse"/>
-            <item screen="tsadv$CaseType.browse"/>
+<!--            <item screen="tsadv$CaseType.browse"/>-->
             <item screen="tsadv$DicEmployeeCategory.browse"/>
             <item screen="tsadv$SurChargeName.browse"/>
             <item screen="tsadv$DicAgreementStatus.browse"/>
@@ -139,6 +139,7 @@
                   caption="mainMsg://menu_config.tsadv_DicCriminalLiabilityType.browse"/>
             <item screen="tsadv$DicMICAttachmentStatus.browse"
                   caption="mainMsg://dms"/>
+            <item screen="tsadv_DicShift.browse"/>
         </menu>
         <menu id="hrPerson"
               icon="font-icon:USERS">

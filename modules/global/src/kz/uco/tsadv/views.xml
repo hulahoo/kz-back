@@ -23777,4 +23777,9 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="tsadv_DicShift" name="dicShift.edit" extends="_local">
+        <property name="company" view="_minimal">
+            <property name="legacyId"/>
+        </property>
+    </view>
 </views>
