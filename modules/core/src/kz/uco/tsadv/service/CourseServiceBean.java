@@ -11,6 +11,7 @@ import com.haulmont.cuba.core.global.*;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
@@ -58,6 +59,9 @@ public class CourseServiceBean implements CourseService {
 
     @Inject
     private UserSessionSource userSessionSource;
+
+    @Inject
+    private FrontConfig frontConfig;
 
     protected String selectForMethodLoadAssignedTest =
             "SELECT " +
@@ -1085,7 +1089,7 @@ public class CourseServiceBean implements CourseService {
                                 "where ri.originalImage.id = :originalImageId " +
                                 "   and ri.size.width = :width " +
                                 "   and ri.size.width = :height ")
-                        .setParameters(ParamsMap.of("originalImageId", course.getLogo().getId(), "width", 180, "height", 180))
+                        .setParameters(ParamsMap.of("originalImageId", course.getLogo().getId(), "width", frontConfig.getImageSizeWidth(), "height", frontConfig.getImageSizeHeight()))
                         .optional()
                         .ifPresent(f -> coursePojo.setLogo(f.getId()));
             }
