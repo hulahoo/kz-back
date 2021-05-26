@@ -4259,24 +4259,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no personId");
                 }
 
-                if (personAddressJson.getFactAddress() == null || personAddressJson.getFactAddress().isEmpty()) {
+                if (personAddressJson.getAddressType() == null || personAddressJson.getAddressType().isEmpty()) {
                     return prepareError(result, methodName, personAddressData,
-                            "no factAddress");
-                }
-
-                if (personAddressJson.getRegistrationAddress() == null || personAddressJson.getRegistrationAddress().isEmpty()) {
-                    return prepareError(result, methodName, personAddressData,
-                            "no registrationAddress");
-                }
-
-                if (personAddressJson.getFactAddressKATOCode() == null || personAddressJson.getFactAddressKATOCode().isEmpty()) {
-                    return prepareError(result, methodName, personAddressData,
-                            "no factAddressKATOCode");
-                }
-
-                if (personAddressJson.getRegistrationAddressKATOCode() == null || personAddressJson.getRegistrationAddressKATOCode().isEmpty()) {
-                    return prepareError(result, methodName, personAddressData,
-                            "no registrationAddressKATOCode");
+                            "no addressType");
                 }
 
                 if (personAddressJson.getCompanyCode() == null || personAddressJson.getCompanyCode().isEmpty()) {
@@ -4295,47 +4280,34 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 && filterAddress.getPersonGroup().getLegacyId().equals(personAddressJson.getPersonId())
                                 && filterAddress.getPersonGroup().getCompany() != null
                                 && filterAddress.getPersonGroup().getCompany().getLegacyId().equals(personAddressJson.getCompanyCode())
-                                && filterAddress.getFactAddress() != null
-                                && filterAddress.getFactAddress().equals(personAddressJson.getFactAddress())
-                                && filterAddress.getRegistrationAddress() != null
-                                && filterAddress.getRegistrationAddress().equals(personAddressJson.getRegistrationAddress())
-                                && filterAddress.getFactAddressKATOCode() != null
-                                && filterAddress.getFactAddressKATOCode().equals(personAddressJson.getFactAddressKATOCode())
-                                && filterAddress.getRegistrationAddressKATOCode() != null
-                                && filterAddress.getRegistrationAddressKATOCode().equals(personAddressJson.getRegistrationAddressKATOCode())
                 ).findFirst().orElse(null);
                 if (address == null) {
                     address = dataManager.load(Address.class)
-                            .query(
-                                    " select e from tsadv$Address e " +
-                                            " where e.legacyId = " + personAddressJson.getLegacyId() + " " +
-                                            " and e.personGroup.legacyId = :pgLegacyId " +
-                                            " and e.personGroup.company.legacyId = :companyCode " +
-                                            " and e.factAddress = :fd " +
-                                            " and e.registrationAddress = :rd" +
-                                            " and e.factAddressKATOCode = :fdkc" +
-                                            " and e.registrationAddressKATOCode = :rdkc ")
-                            .setParameters(
-                                    ParamsMap.of(
-                                            "pgLegacyId", personAddressJson.getPersonId(),
-                                            "companyCode", personAddressJson.getCompanyCode(),
-                                            "fd", personAddressJson.getFactAddress(),
-                                            "rd", personAddressJson.getRegistrationAddress(),
-                                            "fdkc", personAddressJson.getFactAddressKATOCode(),
-                                            "rdkc", personAddressJson.getRegistrationAddressKATOCode()
-                                    )
-                            )
+                            .query(" select e from tsadv$Address e " +
+                                    " where e.legacyId = :legacyId " +
+                                    " and e.personGroup.company.legacyId = :companyCode ")
+                            .parameter("legacyId", personAddressJson.getLegacyId())
+                            .parameter("companyCode", personAddressJson.getCompanyCode())
                             .view("address.view").list().stream().findFirst().orElse(null);
 
                     if (address != null) {
                         address.setStartDate(startDate);
                         address.setEndDate(endDate);
 
+                        DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
+                                .query("select e from tsadv$DicAddressType e " +
+                                        " where e.legacyId = :legacyId")
+                                .parameter("legacyId", personAddressJson.getAddressType())
+                                .view("").list().stream().findFirst().orElse(null);
+
+                        if (dicAddressType != null) {
+                            address.setAddressType(dicAddressType);
+                        } else {
+                            return prepareError(result, methodName, personAddressData,
+                                    "no addressType with legacyId : " + personAddressJson.getAddressType());
+                        }
+
                         address.setLegacyId(personAddressJson.getLegacyId());
-                        address.setFactAddress(personAddressJson.getFactAddress());
-                        address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
-                        address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
-                        address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query("select e from base$PersonGroupExt e " +
@@ -4351,19 +4323,69 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     "no personGroup with legacyId and companyCode : "
                                             + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
                         }
+
+                        address.setPostalCode(personAddressJson.getPostal());
+
+                        DicCountry dicCountry = dataManager.load(DicCountry.class)
+                                .query("select e from base$DicCountry e " +
+                                        " where e.code = :code ")
+                                .parameter("code", personAddressJson.getCountryId())
+                                .view("").list().stream().findFirst().orElse(null);
+                        if (dicCountry != null) {
+                            address.setCountry(dicCountry);
+                        }
+
+                        DicKato dicKato = dataManager.load(DicKato.class)
+                                .query("select e from tsadv_DicKato e " +
+                                        " where e.code = :code")
+                                .parameter("code", personAddressJson.getAddressKATOCode())
+                                .view("")
+                                .list().stream().findFirst().orElse(null);
+                        if (dicKato != null) {
+                            address.setKato(dicKato);
+                        }
+
+                        DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
+                                .query("select e from tsadv_DicStreetType e " +
+                                        " where e.code = :code")
+                                .parameter("code", personAddressJson.getStreetTypeId())
+                                .view("")
+                                .list().stream().findFirst().orElse(null);
+
+                        if (dicStreetType != null) {
+                            address.setStreetType(dicStreetType);
+                        }
+
+                        address.setStreetName(personAddressJson.getStreetName());
+                        address.setBuilding(personAddressJson.getBuilding());
+                        address.setBlock(personAddressJson.getBlock());
+                        address.setFlat(personAddressJson.getFlat());
+                        address.setAddressForExpats(personAddressJson.getAddressForExpats());
+                        address.setNotes(personAddressJson.getNotes());
+                        address.setAddressKazakh(personAddressJson.getAddressKazakh());
+                        address.setAddressEnglish(personAddressJson.getAddressEnglish());
 
                         personAddressesCommitList.add(address);
                     } else {
                         address = metadata.create(Address.class);
                         address.setId(UUID.randomUUID());
-                        address.setLegacyId(personAddressJson.getLegacyId());
-                        address.setFactAddress(personAddressJson.getFactAddress());
-                        address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
-                        address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
-                        address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
-
                         address.setStartDate(startDate);
                         address.setEndDate(endDate);
+
+                        DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
+                                .query("select e from tsadv$DicAddressType e " +
+                                        " where e.legacyId = :legacyId")
+                                .parameter("legacyId", personAddressJson.getAddressType())
+                                .view("").list().stream().findFirst().orElse(null);
+
+                        if (dicAddressType != null) {
+                            address.setAddressType(dicAddressType);
+                        } else {
+                            return prepareError(result, methodName, personAddressData,
+                                    "no addressType with legacyId : " + personAddressJson.getAddressType());
+                        }
+
+                        address.setLegacyId(personAddressJson.getLegacyId());
 
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query("select e from base$PersonGroupExt e " +
@@ -4379,6 +4401,47 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     "no personGroup with legacyId and companyCode : "
                                             + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
                         }
+
+                        address.setPostalCode(personAddressJson.getPostal());
+
+                        DicCountry dicCountry = dataManager.load(DicCountry.class)
+                                .query("select e from base$DicCountry e " +
+                                        " where e.code = :code ")
+                                .parameter("code", personAddressJson.getCountryId())
+                                .view("").list().stream().findFirst().orElse(null);
+                        if (dicCountry != null) {
+                            address.setCountry(dicCountry);
+                        }
+
+                        DicKato dicKato = dataManager.load(DicKato.class)
+                                .query("select e from tsadv_DicKato e " +
+                                        " where e.code = :code")
+                                .parameter("code", personAddressJson.getAddressKATOCode())
+                                .view("")
+                                .list().stream().findFirst().orElse(null);
+                        if (dicKato != null) {
+                            address.setKato(dicKato);
+                        }
+
+                        DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
+                                .query("select e from tsadv_DicStreetType e " +
+                                        " where e.code = :code")
+                                .parameter("code", personAddressJson.getStreetTypeId())
+                                .view("")
+                                .list().stream().findFirst().orElse(null);
+
+                        if (dicStreetType != null) {
+                            address.setStreetType(dicStreetType);
+                        }
+
+                        address.setStreetName(personAddressJson.getStreetName());
+                        address.setBuilding(personAddressJson.getBuilding());
+                        address.setBlock(personAddressJson.getBlock());
+                        address.setFlat(personAddressJson.getFlat());
+                        address.setAddressForExpats(personAddressJson.getAddressForExpats());
+                        address.setNotes(personAddressJson.getNotes());
+                        address.setAddressKazakh(personAddressJson.getAddressKazakh());
+                        address.setAddressEnglish(personAddressJson.getAddressEnglish());
 
                         personAddressesCommitList.add(address);
                     }
@@ -4387,11 +4450,20 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     address.setStartDate(startDate);
                     address.setEndDate(endDate);
 
+                    DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
+                            .query("select e from tsadv$DicAddressType e " +
+                                    " where e.legacyId = :legacyId")
+                            .parameter("legacyId", personAddressJson.getAddressType())
+                            .view("").list().stream().findFirst().orElse(null);
+
+                    if (dicAddressType != null) {
+                        address.setAddressType(dicAddressType);
+                    } else {
+                        return prepareError(result, methodName, personAddressData,
+                                "no addressType with legacyId : " + personAddressJson.getAddressType());
+                    }
+
                     address.setLegacyId(personAddressJson.getLegacyId());
-                    address.setFactAddress(personAddressJson.getFactAddress());
-                    address.setRegistrationAddress(personAddressJson.getRegistrationAddress());
-                    address.setFactAddressKATOCode(personAddressJson.getFactAddressKATOCode());
-                    address.setRegistrationAddressKATOCode(personAddressJson.getRegistrationAddressKATOCode());
 
                     PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                             .query("select e from base$PersonGroupExt e " +
@@ -4407,6 +4479,49 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "no personGroup with legacyId and companyCode : "
                                         + personAddressJson.getPersonId() + " , " + personAddressJson.getCompanyCode());
                     }
+
+                    address.setPostalCode(personAddressJson.getPostal());
+
+                    DicCountry dicCountry = dataManager.load(DicCountry.class)
+                            .query("select e from base$DicCountry e " +
+                                    " where e.code = :code ")
+                            .parameter("code", personAddressJson.getCountryId())
+                            .view("").list().stream().findFirst().orElse(null);
+                    if (dicCountry != null) {
+                        address.setCountry(dicCountry);
+                    }
+
+                    DicKato dicKato = dataManager.load(DicKato.class)
+                            .query("select e from tsadv_DicKato e " +
+                                    " where e.code = :code")
+                            .parameter("code", personAddressJson.getAddressKATOCode())
+                            .view("")
+                            .list().stream().findFirst().orElse(null);
+                    if (dicKato != null) {
+                        address.setKato(dicKato);
+                    }
+
+                    DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
+                            .query("select e from tsadv_DicStreetType e " +
+                                    " where e.code = :code")
+                            .parameter("code", personAddressJson.getStreetTypeId())
+                            .view("")
+                            .list().stream().findFirst().orElse(null);
+
+                    if (dicStreetType != null) {
+                        address.setStreetType(dicStreetType);
+                    }
+
+                    address.setStreetName(personAddressJson.getStreetName());
+                    address.setBuilding(personAddressJson.getBuilding());
+                    address.setBlock(personAddressJson.getBlock());
+                    address.setFlat(personAddressJson.getFlat());
+                    address.setAddressForExpats(personAddressJson.getAddressForExpats());
+                    address.setNotes(personAddressJson.getNotes());
+                    address.setAddressKazakh(personAddressJson.getAddressKazakh());
+                    address.setAddressEnglish(personAddressJson.getAddressEnglish());
+
+                    personAddressesCommitList.add(address);
                 }
             }
 
