@@ -9363,7 +9363,12 @@
     <view class="kz.uco.tsadv.modules.personal.model.Address"
           extends="_local"
           name="address.view">
-        <property name="personGroup" view="_minimal"/>
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
         <property name="addressType" view="_minimal">
             <property name="langValue1"/>
             <property name="langValue2"/>

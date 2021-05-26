@@ -4330,7 +4330,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .query("select e from base$DicCountry e " +
                                         " where e.code = :code ")
                                 .parameter("code", personAddressJson.getCountryId())
-                                .view("").list().stream().findFirst().orElse(null);
+                                .view(View.LOCAL).list().stream().findFirst().orElse(null);
                         if (dicCountry != null) {
                             address.setCountry(dicCountry);
                         }
@@ -4339,7 +4339,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .query("select e from tsadv_DicKato e " +
                                         " where e.code = :code")
                                 .parameter("code", personAddressJson.getAddressKATOCode())
-                                .view("")
+                                .view(View.LOCAL)
                                 .list().stream().findFirst().orElse(null);
                         if (dicKato != null) {
                             address.setKato(dicKato);
@@ -4349,7 +4349,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .query("select e from tsadv_DicStreetType e " +
                                         " where e.code = :code")
                                 .parameter("code", personAddressJson.getStreetTypeId())
-                                .view("")
+                                .view(View.LOCAL)
                                 .list().stream().findFirst().orElse(null);
 
                         if (dicStreetType != null) {
@@ -4408,7 +4408,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .query("select e from base$DicCountry e " +
                                         " where e.code = :code ")
                                 .parameter("code", personAddressJson.getCountryId())
-                                .view("").list().stream().findFirst().orElse(null);
+                                .view(View.LOCAL).list().stream().findFirst().orElse(null);
                         if (dicCountry != null) {
                             address.setCountry(dicCountry);
                         }
@@ -4417,7 +4417,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .query("select e from tsadv_DicKato e " +
                                         " where e.code = :code")
                                 .parameter("code", personAddressJson.getAddressKATOCode())
-                                .view("")
+                                .view(View.LOCAL)
                                 .list().stream().findFirst().orElse(null);
                         if (dicKato != null) {
                             address.setKato(dicKato);
@@ -4427,7 +4427,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .query("select e from tsadv_DicStreetType e " +
                                         " where e.code = :code")
                                 .parameter("code", personAddressJson.getStreetTypeId())
-                                .view("")
+                                .view(View.LOCAL)
                                 .list().stream().findFirst().orElse(null);
 
                         if (dicStreetType != null) {
@@ -4486,7 +4486,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .query("select e from base$DicCountry e " +
                                     " where e.code = :code ")
                             .parameter("code", personAddressJson.getCountryId())
-                            .view("").list().stream().findFirst().orElse(null);
+                            .view(View.LOCAL).list().stream().findFirst().orElse(null);
                     if (dicCountry != null) {
                         address.setCountry(dicCountry);
                     }
@@ -4495,7 +4495,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .query("select e from tsadv_DicKato e " +
                                     " where e.code = :code")
                             .parameter("code", personAddressJson.getAddressKATOCode())
-                            .view("")
+                            .view(View.LOCAL)
                             .list().stream().findFirst().orElse(null);
                     if (dicKato != null) {
                         address.setKato(dicKato);
@@ -4505,7 +4505,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .query("select e from tsadv_DicStreetType e " +
                                     " where e.code = :code")
                             .parameter("code", personAddressJson.getStreetTypeId())
-                            .view("")
+                            .view(View.LOCAL)
                             .list().stream().findFirst().orElse(null);
 
                     if (dicStreetType != null) {
