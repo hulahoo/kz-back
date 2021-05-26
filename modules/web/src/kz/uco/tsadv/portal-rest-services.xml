@@ -64,6 +64,10 @@
             <param name="courseName" type="java.lang.String"/>
             <param name="userId" type="java.util.UUID"/>
         </method>
+        <method name="searchEnrollment">
+            <param name="courseName" type="java.lang.String"/>
+        </method>
+        <method name="searchEnrollment"/>
     </service>
     <service name="tsadv_CourseService">
         <method name="courseInfo">

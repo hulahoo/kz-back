@@ -6,22 +6,20 @@ import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
-import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.performance.model.Trainer;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.pojo.CommentPojo;
-import kz.uco.tsadv.pojo.CoursePojo;
-import kz.uco.tsadv.pojo.PairPojo;
-import kz.uco.tsadv.pojo.ScormInputData;
+import kz.uco.tsadv.pojo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -33,6 +31,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service(CourseService.NAME)
 public class CourseServiceBean implements CourseService {
@@ -60,6 +59,9 @@ public class CourseServiceBean implements CourseService {
 
     @Inject
     private UserSessionSource userSessionSource;
+
+    @Inject
+    private FrontConfig frontConfig;
 
     protected String selectForMethodLoadAssignedTest =
             "SELECT " +
@@ -896,48 +898,28 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public List<DicCategory> allCourses() {
-        return dataManager.loadList(LoadContext.create(DicCategory.class)
-                .setQuery(LoadContext.createQuery("" +
-                        "select distinct c " +
-                        "   from tsadv$DicCategory c " +
-                        "   where c.courses is not empty"))
-                .setView("category-courses"))
-                .stream()
-                .peek(category ->
-                        category.getCourses()
-                                .forEach(course -> course.setEnrollments(
-                                        course.getEnrollments()
-                                                .stream()
-                                                .filter(e ->
-                                                        e.getPersonGroup().equals(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP)))
-                                                .collect(Collectors.toList()))))
-                .peek(c -> c.setCourses(c.getCourses().stream()
-                        .filter(course -> BooleanUtils.isTrue(course.getActiveFlag()))
-                        .collect(Collectors.toList())))
-                .collect(Collectors.toList());
+    public List<CategoryCoursePojo> allCourses() {
+        return this.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
+                "select c " +
+                "from tsadv$Course c " +
+                "   join c.category ca " +
+                "where c.activeFlag = true"))
+                .setView("course.list"))
+                .stream());
     }
 
-
     @Override
-    public List<DicCategory> searchCourses(String courseName) {
-        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP);
-        return dataManager.loadList(LoadContext.create(DicCategory.class)
-                .setQuery(LoadContext.createQuery("" +
-                        "select distinct c " +
-                        "            from tsadv$DicCategory c " +
-                        "            join c.courses cc " +
-                        "            where (lower (cc.name) like lower (concat(concat('%', :courseName), '%'))) " +
-                        "            and c.courses is not empty")
-                        .setParameter("courseName", courseName))
-                .setView("category-courses"))
+    public List<CategoryCoursePojo> searchCourses(String courseName) {
+        return this.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
+                "select c " +
+                "from tsadv$Course c " +
+                "   join c.category ca " +
+                "where (lower (c.name) like lower (concat(concat('%', :courseName), '%'))) " +
+                "   and c.activeFlag = true")
+                .setParameter("courseName", courseName))
+                .setView("course.list"))
                 .stream()
-                .peek(c -> c.setCourses(c.getCourses().stream()
-                        .peek(course -> course.setEnrollments(course.getEnrollments().stream().filter(e -> e.getPersonGroup().getId().equals(personGroupId)).collect(Collectors.toList())))
-                        .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())
-                                && BooleanUtils.isTrue(course.getActiveFlag()))
-                        .collect(Collectors.toList())))
-                .collect(Collectors.toList());
+                .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())));
     }
 
     @Override
@@ -1054,7 +1036,6 @@ public class CourseServiceBean implements CourseService {
         return response;
     }
 
-
     protected void completeEnrollment(UUID enrollmentId) {
         try (Transaction transaction = persistence.createTransaction()) {
             EntityManager em = persistence.getEntityManager();
@@ -1077,5 +1058,52 @@ public class CourseServiceBean implements CourseService {
         loadContext.setQuery(query);
         loadContext.setView("courseSection.for.status");
         return dataManager.loadList(loadContext);
+    }
+
+    @Override
+    public List<CategoryCoursePojo> mapCoursesToCategory(Stream<Course> courseStream) {
+        return courseStream.map(course -> {
+            CoursePojo coursePojo = new CoursePojo();
+            coursePojo.setId(course.getId());
+            dataManager.load(Enrollment.class).query("" +
+                    "select e " +
+                    "from tsadv$Enrollment e " +
+                    "where e.personGroup.id = :personGroupId " +
+                    "   and e.course.id = :courseId ")
+                    .parameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
+                    .parameter("courseId", course.getId())
+                    .optional()
+                    .ifPresent(e -> {
+                        coursePojo.setEnrollmentId(e.getId().toString());
+                        coursePojo.setEnrollmentStatus(e.getStatus().toString());
+                    });
+            coursePojo.setName(course.getName());
+            coursePojo.setOnline(course.getIsOnline());
+
+            if (course.getLogo() != null) {
+                dataManager.load(FileDescriptor.class)
+                        .view(View.MINIMAL)
+                        .query("" +
+                                "select ri.resizedImage " +
+                                "from tsadv_ResizedImage ri " +
+                                "where ri.originalImage.id = :originalImageId " +
+                                "   and ri.size.width = :width " +
+                                "   and ri.size.width = :height ")
+                        .setParameters(ParamsMap.of("originalImageId", course.getLogo().getId(), "width", frontConfig.getImageSizeWidth(), "height", frontConfig.getImageSizeHeight()))
+                        .optional()
+                        .ifPresent(f -> coursePojo.setLogo(f.getId()));
+            }
+            coursePojo.setCategory(new CategoryCoursePojo(course.getCategory().getId(), course.getCategory().getLangValue()));
+            return coursePojo;
+        })
+                .collect(Collectors.groupingBy(CoursePojo::getCategory))
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    final List<CoursePojo> value = entry.getValue();
+                    value.forEach(v -> v.setCategory(null));
+                    return new CategoryCoursePojo(entry.getKey().getId(), entry.getKey().getLangValue(), value);
+                })
+                .collect(Collectors.toList());
     }
 }

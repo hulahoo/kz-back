@@ -18103,3 +18103,27 @@ create table TSADV_DIC_ASSESSMENT_TYPE (
     primary key (ID)
 )^
 -- end TSADV_DIC_ASSESSMENT_TYPE
+-- begin TSADV_IMAGE_SIZE
+create table TSADV_IMAGE_SIZE (
+    ID uuid,
+    VERSION integer not null,
+    CREATE_TS timestamp,
+    CREATED_BY varchar(50),
+    UPDATE_TS timestamp,
+    UPDATED_BY varchar(50),
+    DELETE_TS timestamp,
+    DELETED_BY varchar(50),
+    --
+    WIDTH integer not null,
+    HEIGHT integer not null,
+    --
+    primary key (ID)
+)^
+-- end TSADV_IMAGE_SIZE
+-- begin TSADV_RESIZED_IMAGE
+create table TSADV_RESIZED_IMAGE (
+    ORIGINAL_IMAGE_ID uuid,
+    RESIZED_IMAGE_ID uuid,
+    primary key (ORIGINAL_IMAGE_ID, RESIZED_IMAGE_ID)
+)^
+-- end TSADV_RESIZED_IMAGE

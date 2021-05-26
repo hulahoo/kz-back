@@ -2,8 +2,8 @@ package kz.uco.tsadv.service;
 
 
 import kz.uco.tsadv.modules.administration.TsadvUser;
-import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
 import kz.uco.tsadv.modules.learning.model.*;
+import kz.uco.tsadv.pojo.CategoryCoursePojo;
 import kz.uco.tsadv.pojo.CoursePojo;
 import kz.uco.tsadv.pojo.PairPojo;
 import kz.uco.tsadv.pojo.ScormInputData;
@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 public interface CourseService {
     String NAME = "tsadv_CourseService";
@@ -59,9 +60,9 @@ public interface CourseService {
 
     Map<String, Object> courseTrainerInfo(UUID trainerId);
 
-    List<DicCategory> searchCourses(String courseName);
+    List<CategoryCoursePojo> searchCourses(String courseName);
 
-    List<DicCategory> allCourses();
+    List<CategoryCoursePojo> allCourses();
 
     Enrollment courseEnrollmentInfo(UUID enrollmentId);
 
@@ -72,4 +73,6 @@ public interface CourseService {
     CourseSectionAttempt createTestScormAttempt(@NotNull UUID courseSectionId, @NotNull UUID enrollmentId, @NotNull BigDecimal score, @NotNull BigDecimal minScore, @NotNull BigDecimal maxScore);
 
     PairPojo<Boolean, String> validateEnroll(UUID courseId, UUID personGroupId, String locale);
+
+    List<CategoryCoursePojo> mapCoursesToCategory(Stream<Course> courseStream);
 }
