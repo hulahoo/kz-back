@@ -3,14 +3,14 @@ package kz.uco.tsadv.service;
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
+import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.entity.Category;
 import com.haulmont.cuba.core.entity.CategoryAttribute;
 import com.haulmont.cuba.core.entity.CategoryAttributeValue;
 import com.haulmont.cuba.core.entity.contracts.Id;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.global.*;
+import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
 import javax.inject.Inject;
+import javax.persistence.NoResultException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -52,6 +53,9 @@ public class AbsenceServiceBean implements AbsenceService {
     private Persistence persistence;
     @Inject
     private Metadata metadata;
+
+    @Inject
+    private UserSessionSource userSessionSource;
 
     @Override
     public boolean isLongAbsence(Absence absence) {
@@ -552,6 +556,28 @@ public class AbsenceServiceBean implements AbsenceService {
                         .setParameter("personGroupId", personGroupId)
                         .getFirstResult()
         );
+    }
+
+    @Nullable
+    @Override
+    public Integer scheduleOffsetDaysBeforeAbsence() {
+        final DicCompany userCompany = employeeService.getCompanyByPersonGroupId(Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)));
+        try (final Transaction transaction = persistence.createTransaction()) {
+            EntityManager em = persistence.getEntityManager();
+            try {
+                return em.createQuery("" +
+                        "select a.daysBeforeAbsence " +
+                        "from tsadv$DicAbsenceType a " +
+                        "where a.company = :userCompany " +
+                        "   and a.isScheduleOffsetsRequest is not null" +
+                        "   and current_date between a.startDate and a.endDate " +
+                        "   and a.active = true", Integer.class)
+                        .setParameter("userCompany", Objects.requireNonNull(userCompany))
+                        .getSingleResult();
+            } catch (NoResultException e) {
+                return null;
+            }
+        }
     }
 
     @Nullable

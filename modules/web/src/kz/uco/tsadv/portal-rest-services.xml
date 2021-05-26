@@ -141,6 +141,7 @@
         <method name="getRemainingDaysWeekendWork">
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
+        <method name="scheduleOffsetDaysBeforeAbsence"/>
     </service>
     <service name="tsadv_AbsenceBalanceService">
         <method name="getAbsenceBalance">

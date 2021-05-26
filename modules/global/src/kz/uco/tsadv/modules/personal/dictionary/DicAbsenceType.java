@@ -416,11 +416,11 @@ public class DicAbsenceType extends AbstractDictionary {
         this.overtimeWork = overtimeWork;
     }
 
-    public Boolean getScheduleOffsetsRequest() {
+    public Boolean getIsScheduleOffsetsRequest() {
         return isScheduleOffsetsRequest;
     }
 
-    public void setScheduleOffsetsRequest(Boolean scheduleOffsetsRequest) {
+    public void setIsScheduleOffsetsRequest(Boolean scheduleOffsetsRequest) {
         isScheduleOffsetsRequest = scheduleOffsetsRequest;
     }
 }
