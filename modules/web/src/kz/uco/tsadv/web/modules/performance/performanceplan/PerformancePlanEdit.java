@@ -288,7 +288,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
                     newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
                     newAssignedGoal.setGoal(positionGoal.getGoal());
-                    newAssignedGoal.setGoalString(positionGoal.getGoal().getGoalName());
+//                    newAssignedGoal.setGoalString(positionGoal.getGoal().getGoalName());
                     newAssignedGoal.setWeight(Double.valueOf(positionGoal.getWeight()));
                     newAssignedGoal.setPositionGroup(positionGoal.getPositionGroup());
                     newAssignedGoal.setCategory(positionGoal.getGoal() != null
@@ -306,7 +306,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
                     newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
                     newAssignedGoal.setGoal(jobGoal.getGoal());
-                    newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
+//                    newAssignedGoal.setGoalString(jobGoal.getGoal().getGoalName());
                     newAssignedGoal.setWeight(Double.valueOf(jobGoal.getWeight()));
                     newAssignedGoal.setJobGroup(jobGoal.getJobGroup());
                     newAssignedGoal.setCategory(jobGoal.getGoal() != null
@@ -324,7 +324,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
                     newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
                     newAssignedGoal.setGoal(organizationGoal.getGoal());
-                    newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
+//                    newAssignedGoal.setGoalString(organizationGoal.getGoal().getGoalName());
                     newAssignedGoal.setWeight(Double.valueOf(organizationGoal.getWeight()));
                     newAssignedGoal.setOrganizationGroup(organizationGoal.getOrganizationGroup());
                     newAssignedGoal.setCategory(organizationGoal.getGoal() != null
@@ -344,7 +344,7 @@ public class PerformancePlanEdit extends StandardEditor<PerformancePlan> {
                     AssignedGoal newAssignedGoal = metadata.create(AssignedGoal.class);
                     newAssignedGoal.setAssignedPerformancePlan(assignedPerformancePlan);
                     newAssignedGoal.setGoal(structureGoal.getGoal());
-                    newAssignedGoal.setGoalString(structureGoal.getGoal().getGoalName());
+//                    newAssignedGoal.setGoalString(structureGoal.getGoal().getGoalName());
                     newAssignedGoal.setWeight(Double.valueOf(structureGoal.getWeight()));
                     newAssignedGoal.setOrganizationGroup(structureGoal.getOrganizationGroup());
                     newAssignedGoal.setCategory(structureGoal.getGoal() != null
