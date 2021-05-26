@@ -1,6 +1,6 @@
 package kz.uco.tsadv.service.portal;
 
-import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
+import kz.uco.tsadv.pojo.CategoryCoursePojo;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface EnrollmentService {
     String NAME = "tsadv_EnrollmentService";
 
-    List<DicCategory> searchEnrollment(UUID userId);
+    List<CategoryCoursePojo> searchEnrollment();
 
-    List<DicCategory> searchEnrollment(String courseName, UUID userId);
+    List<CategoryCoursePojo> searchEnrollment(String courseName);
 }

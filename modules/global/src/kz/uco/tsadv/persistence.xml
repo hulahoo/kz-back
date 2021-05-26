@@ -651,5 +651,7 @@
         <class>kz.uco.tsadv.modules.performance.model.PersonException</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicStreetType</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicKato</class>
+        <class>kz.uco.tsadv.entity.ResizedImage</class>
+        <class>kz.uco.tsadv.entity.ImageSize</class>
     </persistence-unit>
 </persistence>
