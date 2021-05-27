@@ -1,0 +1,21 @@
+alter table TSADV_ADDRESS_REQUEST add column LEGACY_ID varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column ADDRESS_KATO_CODE varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column NOTES varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column BLOCK varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column STREET_TYPE_ID uuid ;
+alter table TSADV_ADDRESS_REQUEST add column STREET_NAME varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column BUILDING varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column ADDRESS_ENGLISH varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column INTEGRATION_USER_LOGIN varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column FLAT varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column REQUEST_DATE date ^
+update TSADV_ADDRESS_REQUEST set REQUEST_DATE = current_date where REQUEST_DATE is null ;
+alter table TSADV_ADDRESS_REQUEST alter column REQUEST_DATE set not null ;
+alter table TSADV_ADDRESS_REQUEST add column ADDRESS_KAZAKH varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column COMMENT_ varchar(3000) ;
+alter table TSADV_ADDRESS_REQUEST add column ORGANIZATION_BIN varchar(255) ;
+alter table TSADV_ADDRESS_REQUEST add column ADDRESS_FOR_EXPATS varchar(255) ;
+update TSADV_ADDRESS_REQUEST set REQUEST_NUMBER = 0 where REQUEST_NUMBER is null ;
+alter table TSADV_ADDRESS_REQUEST alter column REQUEST_NUMBER set not null ;
+-- update TSADV_ADDRESS_REQUEST set STATUS_ID = <default_value> where STATUS_ID is null ;
+alter table TSADV_ADDRESS_REQUEST alter column STATUS_ID set not null ;
