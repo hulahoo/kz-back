@@ -8390,6 +8390,14 @@ create table TSADV_ADDRESS_REQUEST (
     BASE_ADDRESS_ID uuid,
     PERSON_GROUP_ID uuid,
     KATO_ID uuid,
+    STREET_TYPE_ID uuid,
+    STREET_NAME varchar(255),
+    BUILDING varchar(255),
+    BLOCK varchar(255),
+    FLAT varchar(255),
+    ADDRESS_FOR_EXPATS varchar(255),
+    ADDRESS_KAZAKH varchar(255),
+    ADDRESS_ENGLISH varchar(255),
     --
     primary key (ID)
 )^
