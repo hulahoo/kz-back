@@ -1,10 +1,8 @@
 package kz.uco.tsadv.service.portal;
 
-import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.UserSessionSource;
-import kz.uco.base.common.StaticVariable;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.pojo.CategoryCoursePojo;
 import kz.uco.tsadv.service.CourseService;
@@ -12,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.util.List;
-import java.util.Objects;
+import java.util.UUID;
 
 @Service(EnrollmentService.NAME)
 public class EnrollmentServiceBean implements EnrollmentService {
@@ -27,7 +25,7 @@ public class EnrollmentServiceBean implements EnrollmentService {
     private UserSessionSource userSessionSource;
 
     @Override
-    public List<CategoryCoursePojo> searchEnrollment() {
+    public List<CategoryCoursePojo> searchEnrollment(UUID personGroupId) {
         return courseService.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
                 "select c " +
                 "from tsadv$Course c " +
@@ -35,13 +33,13 @@ public class EnrollmentServiceBean implements EnrollmentService {
                 "   join c.enrollments e " +
                 "           on e.personGroup.id = :personGroupId " +
                 "where c.activeFlag = true")
-                .setParameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID))))
+                .setParameter("personGroupId", personGroupId))
                 .setView("course.list"))
-                .stream());
+                .stream(), personGroupId);
     }
 
     @Override
-    public List<CategoryCoursePojo> searchEnrollment(String courseName) {
+    public List<CategoryCoursePojo> searchEnrollment(UUID personGroupId, String courseName) {
         return courseService.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
                 "select c " +
                 "from tsadv$Course c " +
@@ -50,11 +48,11 @@ public class EnrollmentServiceBean implements EnrollmentService {
                 "       on e.personGroup.id = :personGroupId " +
                 "where (lower (c.name) like lower (concat(concat('%', :courseName), '%'))) " +
                 "   and c.activeFlag = true")
-                .setParameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
+                .setParameter("personGroupId", personGroupId)
                 .setParameter("courseName", courseName))
                 .setView("course.list"))
                 .stream()
-                .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())));
+                .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())), personGroupId);
 
     }
 }

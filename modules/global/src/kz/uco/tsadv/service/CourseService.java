@@ -60,9 +60,9 @@ public interface CourseService {
 
     Map<String, Object> courseTrainerInfo(UUID trainerId);
 
-    List<CategoryCoursePojo> searchCourses(String courseName);
+    List<CategoryCoursePojo> searchCourses(UUID personGroupId, String courseName);
 
-    List<CategoryCoursePojo> allCourses();
+    List<CategoryCoursePojo> allCourses(UUID personGroupId);
 
     Enrollment courseEnrollmentInfo(UUID enrollmentId);
 
@@ -74,5 +74,5 @@ public interface CourseService {
 
     PairPojo<Boolean, String> validateEnroll(UUID courseId, UUID personGroupId, String locale);
 
-    List<CategoryCoursePojo> mapCoursesToCategory(Stream<Course> courseStream);
+    List<CategoryCoursePojo> mapCoursesToCategory(Stream<Course> courseStream, UUID personGroupID);
 }
