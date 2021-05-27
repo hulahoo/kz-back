@@ -12,6 +12,7 @@ import kz.uco.tsadv.modules.integration.jsonobject.AddressRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AddressRequest;
 import kz.uco.tsadv.service.IntegrationRestService;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 @Component("tsadv_AddressRequestChangedListener")
 public class AddressRequestChangedListener {
 
+    protected static final Logger log = org.slf4j.LoggerFactory.getLogger(AddressRequestChangedListener.class);
     @Inject
     protected DataManager dataManager;
     @Inject
@@ -61,7 +63,7 @@ public class AddressRequestChangedListener {
                     addressRequestDataJson.setPostal(addressRequest.getPostalCode());
                     addressRequestDataJson.setCountryId(addressRequest.getCountry() != null
                             ? addressRequest.getCountry().getLegacyId() : "");
-                    addressRequestDataJson.setAddressKATOCode(addressRequest.getAddressKATOCode());
+                    addressRequestDataJson.setAddressKATOCode(addressRequest.getKato().getCode());
                     addressRequestDataJson.setStreetTypeId(addressRequest.getStreetType() != null
                             ? addressRequest.getStreetType().getLegacyId() : "");
                     addressRequestDataJson.setStreetName(addressRequest.getStreetName());
@@ -96,9 +98,8 @@ public class AddressRequestChangedListener {
                     }
                 }
             } catch (Exception e) {
-                String stackTrace = Arrays.stream(e.getStackTrace()).map(stackTraceElement ->
-                        stackTraceElement.toString()).collect(Collectors.joining());
-                e.printStackTrace();
+                String stackTrace = Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).collect(Collectors.joining());
+                log.error("Error", e);
                 integrationRestService.prepareError(baseResult,
                         methodName,
                         addressRequestDataJson,

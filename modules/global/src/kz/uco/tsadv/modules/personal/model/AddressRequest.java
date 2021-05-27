@@ -3,6 +3,7 @@ package kz.uco.tsadv.modules.personal.model;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.dictionary.DicCountry;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
@@ -15,6 +16,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_ADDRESS_REQUEST")
 @Entity(name = "tsadv$AddressRequest")
 @NamePattern("%s|address")
