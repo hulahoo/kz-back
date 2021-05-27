@@ -58,16 +58,12 @@
     </service>
     <service name="tsadv_EnrollmentService">
         <method name="searchEnrollment">
-            <param name="userId" type="java.util.UUID"/>
+            <param name="personGroupId" type="java.util.UUID"/>
         </method>
         <method name="searchEnrollment">
-            <param name="courseName" type="java.lang.String"/>
-            <param name="userId" type="java.util.UUID"/>
-        </method>
-        <method name="searchEnrollment">
+            <param name="personGroupId" type="java.util.UUID"/>
             <param name="courseName" type="java.lang.String"/>
         </method>
-        <method name="searchEnrollment"/>
     </service>
     <service name="tsadv_CourseService">
         <method name="courseInfo">
@@ -77,13 +73,9 @@
         <method name="courseTrainerInfo">
             <param name="trainerId" type="java.util.UUID"/>
         </method>
-        <method name="searchCourses">
-            <param name="courseName" type="java.lang.String"/>
-        </method>
         <method name="courseEnrollmentInfo">
             <param name="enrollmentId" type="java.util.UUID"/>
         </method>
-        <method name="allCourses"/>
         <method name="courseSectionWithEnrollmentAttempts">
             <param name="courseSectionId" type="java.util.UUID"/>
             <param name="enrollmentId" type="java.util.UUID"/>
@@ -105,6 +97,13 @@
             <param name="courseId"/>
             <param name="personGroupId"/>
             <param name="locale"/>
+        </method>
+        <method name="allCourses">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+        <method name="searchCourses">
+            <param name="personGroupId" type="java.util.UUID"/>
+            <param name="courseName" type="java.lang.String"/>
         </method>
     </service>
     <service name="bproc_BprocTaskService">
