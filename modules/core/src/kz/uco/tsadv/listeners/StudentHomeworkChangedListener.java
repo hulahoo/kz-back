@@ -108,11 +108,20 @@ public class StudentHomeworkChangedListener {
                 }
             }
 
+            boolean isSendStudent = false;
+            boolean isSendTrainer = false;
+
             for (String attribute : changes.getAttributes()) {
                 if (attribute.equals("answer") || attribute.equals("answerFile")) {
-                    sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
+                    if (!isSendStudent) {
+                        sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
+                    }
+                    isSendStudent = true;
                 } else if (attribute.equals("isDone") || attribute.equals("trainerComment")) {
-                    sendNotification(studentHomework, "tdc.homework.student.trainerAnswer", false);
+                    if (!isSendTrainer) {
+                        sendNotification(studentHomework, "tdc.homework.student.trainerAnswer", false);
+                    }
+                    isSendTrainer = true;
                 }
             }
         }

@@ -245,22 +245,22 @@ public class EnrollmentChangedListener {
                     map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
                     map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
                     map.put("courseName", enrollment.getCourse().getName());
-//                    activityService.createActivity(
-//                            tsadvUser,
-//                            tsadvUser,
-//                            getActivityType(),
-//                            StatusEnum.active,
-//                            "description",
-//                            null,
-//                            new Date(),
-//                            null,
-//                            null,
-//                            enrollment.getId(),
-//                            "tdc.student.enrollmentApproved",
-//                            map);
-//                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
-//                            tsadvUser, map);
-//                    sendNotification(enrollment, "tdc.trainer.newEnrollment");
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            enrollment.getId(),
+                            "tdc.student.enrollmentApproved",
+                            map);
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentApproved",
+                            tsadvUser, map);
+                    sendNotification(enrollment, "tdc.trainer.newEnrollment");
                 }
             } else {
                 sendNotification(enrollment, "tdc.trainer.newEnrollment");
