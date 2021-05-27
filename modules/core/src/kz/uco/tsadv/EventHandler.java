@@ -31,7 +31,7 @@ public class EventHandler {
     @Inject
     protected Persistence persistence;
 
-    @Authenticated
+    @SuppressWarnings("NullableProblems")
     @EventListener(ApplicationStartEvent.class)
     public void onApplicationStart() {
         persistence.callInTransaction(this::fillActivityType);
@@ -139,6 +139,19 @@ public class EventHandler {
             windowProperty.setEntityName("tsadv_ChangeAbsenceDaysRequest");
             windowProperty.setScreenName("tsadv_ChangeAbsenceDaysRequest.edit");
             windowProperty.setViewName("changeAbsenceDaysRequest.edit");
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
+        if (getCount(em, "PERSON_DOCUMENT_REQUEST_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("PERSON_DOCUMENT_REQUEST_APPROVE");
+            activityType.setScreen("tsadv_PersonDocumentRequest.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на документ");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv_PersonDocumentRequest");
+            windowProperty.setScreenName("tsadv_PersonDocumentRequest.edit");
+            windowProperty.setViewName("portal.my-profile");
             activityType.setWindowProperty(windowProperty);
             em.persist(windowProperty);
             em.persist(activityType);
@@ -310,11 +323,7 @@ public class EventHandler {
         return em;
     }
 
-    @EventListener(ApplicationStartEvent.class)
-    public void registerSystemProperties() {
-    }
-
-    private Long getCount(EntityManager em, String code) {
+    protected Long getCount(EntityManager em, String code) {
         TypedQuery<Long> query = em.createQuery("select count(e) from uactivity$ActivityType e" +
                 " where e.code = :code", Long.class);
         query.setParameter("code", code);
