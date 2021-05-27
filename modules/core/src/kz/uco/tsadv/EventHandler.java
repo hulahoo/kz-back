@@ -32,6 +32,7 @@ public class EventHandler {
     protected Persistence persistence;
 
     @SuppressWarnings("NullableProblems")
+    @Authenticated
     @EventListener(ApplicationStartEvent.class)
     public void onApplicationStart() {
         persistence.callInTransaction(this::fillActivityType);
