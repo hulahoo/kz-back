@@ -10335,6 +10335,7 @@ create table TSADV_ASSIGNED_GOAL (
     MANAGER_ASSESSMENT double precision,
     EMPLOYEE_COMMENT varchar(2000),
     MANAGER_COMMENT varchar(2000),
+    CANT_DELETE boolean not null,
     --
     primary key (ID)
 )^
