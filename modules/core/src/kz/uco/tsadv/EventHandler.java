@@ -216,6 +216,7 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        */
         if (getCount(em, "PERSONAL_DATA_REQUEST_APPROVE") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("PERSONAL_DATA_REQUEST_APPROVE");
@@ -242,6 +243,7 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        /*
         if (getCount(em, "POSITION_CHANGE_REQUEST_APPROVE") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("POSITION_CHANGE_REQUEST_APPROVE");
