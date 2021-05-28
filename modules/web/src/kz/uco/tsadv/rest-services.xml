@@ -825,4 +825,9 @@
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="tsadv_EnrollmentService">
+        <method name="searchEnrollment">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>

@@ -41,9 +41,9 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
     @Override
     public void onBeforeInsert(AbsenceForRecall entity, EntityManager entityManager) {
-        if(isApproved(entity,entityManager)){
-            boolean absenceTypeIsMaternityOrMaternityLeave = absenceTypeIsMaternityOrMaternityLeave(entity,entityManager);
-            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity,entityManager,absenceTypeIsMaternityOrMaternityLeave);
+        if (isApproved(entity, entityManager)) {
+            boolean absenceTypeIsMaternityOrMaternityLeave = absenceTypeIsMaternityOrMaternityLeave(entity, entityManager);
+            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity, entityManager, absenceTypeIsMaternityOrMaternityLeave);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -69,9 +69,9 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
 
     @Override
     public void onBeforeUpdate(AbsenceForRecall entity, EntityManager entityManager) {
-        if(isApproved(entity,entityManager)){
-            boolean absenceTypeIsMaternityOrMaternityLeave = absenceTypeIsMaternityOrMaternityLeave(entity,entityManager);
-            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity,entityManager,absenceTypeIsMaternityOrMaternityLeave);
+        if (isApproved(entity, entityManager)) {
+            boolean absenceTypeIsMaternityOrMaternityLeave = absenceTypeIsMaternityOrMaternityLeave(entity, entityManager);
+            AbsenceForRecallDataJson absenceForRecallJson = getAbsenceForRecallDataJson(entity, entityManager, absenceTypeIsMaternityOrMaternityLeave);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -101,70 +101,70 @@ public class AbsenceForRecallListener implements BeforeUpdateEntityListener<Abse
         return APPROVED_STATUS.equals(entityManager.reloadNN(status, View.LOCAL).getCode());
     }
 
-    protected boolean absenceTypeIsMaternityOrMaternityLeave(AbsenceForRecall entity, EntityManager entityManager){
-        DicAbsenceType absenceType = entity.getAbsenceType();
-        if(absenceType == null) return false;
-        String absenceTypeCode = entityManager.reloadNN(absenceType,View.LOCAL).getCode();
+    protected boolean absenceTypeIsMaternityOrMaternityLeave(AbsenceForRecall entity, EntityManager entityManager) {
+        DicAbsenceType absenceType = entity.getVacation().getType();
+        if (absenceType == null) return false;
+        String absenceTypeCode = entityManager.reloadNN(absenceType, View.LOCAL).getCode();
         return (ABSENCE_TYPE_MATERNITY.equals(absenceTypeCode) || ABSENCE_TYPE_MATERNITY_LEAVE.equals(absenceTypeCode));
     }
 
-    protected String getApiUrl(boolean absenceTypeIsMaternityOrMaternityLeave){
+    protected String getApiUrl(boolean absenceTypeIsMaternityOrMaternityLeave) {
         return absenceTypeIsMaternityOrMaternityLeave ? MATERNITY_RECALL_API_URL : ABSENCE_RECALL_API_URL;
     }
 
-    protected AbsenceForRecallDataJson getAbsenceForRecallDataJson(AbsenceForRecall entity,EntityManager entityManager,boolean absenceTypeIsMaternityOrMaternityLeave) {
-            AbsenceForRecallDataJson absenceForRecallJson = new AbsenceForRecallDataJson();
-            String personId = (entity.getEmployee() != null && entity.getEmployee().getLegacyId() != null) ? entity.getEmployee().getLegacyId() : "";
-            absenceForRecallJson.setPersonId(personId);
-            absenceForRecallJson.setRequestNumber(entity.getRequestNumber().toString());
-            absenceForRecallJson.setRequestDate(getFormattedDateString(entity.getRequestDate()));
-            String parentAbsenceLegacyId = (entity.getVacation() != null && entity.getVacation().getLegacyId() != null) ? entity.getVacation().getLegacyId() : "";
-            absenceForRecallJson.setParentAbsenceLegacyId(parentAbsenceLegacyId);
-            absenceForRecallJson.setStartDate(getFormattedDateString(entity.getRecallDateFrom()));
-            absenceForRecallJson.setEndDate(getFormattedDateString(entity.getRecallDateTo()));
-            absenceForRecallJson.setHasAbsenceAtAnotherPeriod(wrapBoolean(entity.getLeaveOtherTime()));
-            absenceForRecallJson.setHasCompensation(wrapBoolean(entity.getCompensationPayment()));
-            absenceForRecallJson.setNewStartDate(getFormattedDateString(entity.getDateFrom()));
-            absenceForRecallJson.setNewEndDate(getFormattedDateString(entity.getDateTo()));
-            String purpose = (entity.getPurpose() != null && entity.getPurpose().getLangValue() != null) ? entity.getPurpose().getLangValue() : entity.getPurposeText();
-            purpose = (purpose != null) ? purpose : "";
-            absenceForRecallJson.setPurpose(purpose);
-            absenceForRecallJson.setEmployeeAgree(wrapBoolean(entity.getIsAgree()));
-            absenceForRecallJson.setEmployeeInformed(wrapBoolean(entity.getIsFamiliarization()));
-            if(!absenceTypeIsMaternityOrMaternityLeave) {
-                String recallDaysMain = "";
-                if (entity.getRecallDateFrom() != null && entity.getRecallDateTo() != null) {
-                    recallDaysMain = String.valueOf(datesService.getFullDaysCount(entity.getRecallDateFrom(), entity.getRecallDateTo()));
-                }
-                absenceForRecallJson.setRecallDaysMain(recallDaysMain);
-                absenceForRecallJson.setRecallDaysEcological("");
-                absenceForRecallJson.setRecallDaysHarmful("");
-                absenceForRecallJson.setRecallDaysDisability("");
+    protected AbsenceForRecallDataJson getAbsenceForRecallDataJson(AbsenceForRecall entity, EntityManager entityManager, boolean absenceTypeIsMaternityOrMaternityLeave) {
+        AbsenceForRecallDataJson absenceForRecallJson = new AbsenceForRecallDataJson();
+        String personId = (entity.getEmployee() != null && entity.getEmployee().getLegacyId() != null) ? entity.getEmployee().getLegacyId() : "";
+        absenceForRecallJson.setPersonId(personId);
+        absenceForRecallJson.setRequestNumber(entity.getRequestNumber().toString());
+        absenceForRecallJson.setRequestDate(getFormattedDateString(entity.getRequestDate()));
+        String parentAbsenceLegacyId = (entity.getVacation() != null && entity.getVacation().getLegacyId() != null) ? entity.getVacation().getLegacyId() : "";
+        absenceForRecallJson.setParentAbsenceLegacyId(parentAbsenceLegacyId);
+        absenceForRecallJson.setStartDate(getFormattedDateString(entity.getRecallDateFrom()));
+        absenceForRecallJson.setEndDate(getFormattedDateString(entity.getRecallDateTo()));
+        absenceForRecallJson.setHasAbsenceAtAnotherPeriod(wrapBoolean(entity.getLeaveOtherTime()));
+        absenceForRecallJson.setHasCompensation(wrapBoolean(entity.getCompensationPayment()));
+        absenceForRecallJson.setNewStartDate(getFormattedDateString(entity.getDateFrom()));
+        absenceForRecallJson.setNewEndDate(getFormattedDateString(entity.getDateTo()));
+        String purpose = (entity.getPurpose() != null && entity.getPurpose().getLangValue() != null) ? entity.getPurpose().getLangValue() : entity.getPurposeText();
+        purpose = (purpose != null) ? purpose : "";
+        absenceForRecallJson.setPurpose(purpose);
+        absenceForRecallJson.setEmployeeAgree(wrapBoolean(entity.getIsAgree()));
+        absenceForRecallJson.setEmployeeInformed(wrapBoolean(entity.getIsFamiliarization()));
+        if (!absenceTypeIsMaternityOrMaternityLeave) {
+            String recallDaysMain = "";
+            if (entity.getRecallDateFrom() != null && entity.getRecallDateTo() != null) {
+                recallDaysMain = String.valueOf(datesService.getFullDaysCount(entity.getRecallDateFrom(), entity.getRecallDateTo()));
             }
-            String companyCode = "";
-            if(entity.getEmployee() != null && entity.getEmployee().getCompany() != null){
-                DicCompany company = entity.getEmployee().getCompany();
-                companyCode = entityManager.reloadNN(company,View.LOCAL).getLegacyId();
-                companyCode = Null.nullReplace(companyCode,"");
-            }
-            absenceForRecallJson.setCompanyCode(companyCode);
+            absenceForRecallJson.setRecallDaysMain(recallDaysMain);
+            absenceForRecallJson.setRecallDaysEcological("");
+            absenceForRecallJson.setRecallDaysHarmful("");
+            absenceForRecallJson.setRecallDaysDisability("");
+        }
+        String companyCode = "";
+        if (entity.getEmployee() != null && entity.getEmployee().getCompany() != null) {
+            DicCompany company = entity.getEmployee().getCompany();
+            companyCode = entityManager.reloadNN(company, View.LOCAL).getLegacyId();
+            companyCode = Null.nullReplace(companyCode, "");
+        }
+        absenceForRecallJson.setCompanyCode(companyCode);
 
-            return absenceForRecallJson;
+        return absenceForRecallJson;
     }
 
-    protected String getFormattedDateString(Date date){
-        return date != null ? formatter.format(date) : "" ;
+    protected String getFormattedDateString(Date date) {
+        return date != null ? formatter.format(date) : "";
     }
 
-    protected void setupUnirest(){
+    protected void setupUnirest() {
         Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
         Unirest.config().addDefaultHeader("Accept-Encoding", "gzip, deflate, br");
     }
 
-    protected boolean wrapBoolean(Boolean bool){
-        if(bool == null) return false;
+    protected boolean wrapBoolean(Boolean bool) {
+        if (bool == null) return false;
         return bool;
     }
 

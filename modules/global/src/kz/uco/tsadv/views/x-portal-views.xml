@@ -93,7 +93,7 @@
             <property name="order"/>
         </property>
         <property name="goal" view="_minimal">
-            <property name="successCriteria"/>
+            <property name="successCriteriaLang"/>
         </property>
         <property name="goalLibrary" view="_minimal"/>
         <property name="assignedByPersonGroup" view="_minimal">
@@ -223,6 +223,8 @@
                 <property name="enrollments"/>
             </property>
         </property>
+        <property name="trainerGreetingLang"/>
+        <property name="informationTrainerLang"/>
     </view>
     <view name="assigned-goal-weight" entity="tsadv$AssignedGoal" extends="_minimal">
         <property name="weight"/>
@@ -341,6 +343,8 @@
         <property name="fullNameWithLogin"/>
     </view>
     <view name="portal-activity" entity="uactivity$Activity" systemProperties="true" extends="_local">
+        <property name="notificationBody"/>
+        <property name="notificationHeader"/>
         <property name="type" view="_local">
             <property name="windowProperty" view="_local"/>
         </property>
@@ -455,5 +459,10 @@
     <view entity="tsadv$BookView" name="bookView.personGroup.book" extends="_minimal">
         <property name="personGroup" view="_minimal"/>
         <property name="book" view="_local"/>
+    </view>
+    <view entity="tsadv$Course" name="course.list" extends="_minimal">
+        <property name="logo" view="_minimal"/>
+        <property name="category" view="_minimal"/>
+        <property name="isOnline"/>
     </view>
 </views>

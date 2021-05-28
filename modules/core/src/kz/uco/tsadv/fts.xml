@@ -1684,9 +1684,6 @@
         <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
             <include re=".*"/>
         </entity>
-        <entity class="kz.uco.tsadv.entity.VacationSchedule">
-            <include re=".*"/>
-        </entity>
         <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <include re=".*"/>
         </entity>
@@ -1736,9 +1733,6 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.performance.model.InstructionsKpi">
-            <include re=".*"/>
-        </entity>
-        <entity class="kz.uco.tsadv.entity.VacationSchedule">
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.entity.VacationScheduleRequest">
@@ -1958,6 +1952,18 @@
             <include re=".*"/>
         </entity>
         <entity class="kz.uco.tsadv.modules.performance.model.PersonException">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicStreetType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicKato">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.ResizedImage">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.ImageSize">
             <include re=".*"/>
         </entity>
     </entities>

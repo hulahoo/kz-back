@@ -30,11 +30,10 @@ public class AssignedGoalLibraryEdit extends StandardEditor<AssignedGoal> {
     protected void onAfterShow(AfterShowEvent event) {
         parentGoalField.addValueChangeListener(goalValueChangeEvent -> {
             if (goalValueChangeEvent != null && goalValueChangeEvent.getValue() != null) {
-                assignedGoalDc.getItem().setGoalString(goalValueChangeEvent.getValue().getGoalName());
+//                assignedGoalDc.getItem().setGoalString(goalValueChangeEvent.getValue().getGoalName());
                 assignedGoalDc.getItem().setCategory(goalValueChangeEvent.getValue().getLibrary().getCategory());
-            } else {
-                assignedGoalDc.getItem().setGoalString(null);
-            }
+            }  //                assignedGoalDc.getItem().setGoalString(null);
+
         });
     }
 

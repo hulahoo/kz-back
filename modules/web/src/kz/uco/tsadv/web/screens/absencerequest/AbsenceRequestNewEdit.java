@@ -15,7 +15,7 @@ import com.haulmont.cuba.gui.model.*;
 import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.base.common.StaticVariable;
-import kz.uco.tsadv.entity.VacationSchedule;
+import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
@@ -51,7 +51,7 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
     @Inject
     protected InstanceContainer<AbsenceRequest> absenceRequestDc;
     @Inject
-    protected CollectionContainer<VacationSchedule> vacationSchedulesDc;
+    protected CollectionContainer<VacationScheduleRequest> vacationSchedulesDc;
     @Inject
     protected DataManager dataManager;
     @Inject
@@ -74,11 +74,11 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
     @Inject
     protected MessageBundle messageBundle;
     @Inject
-    protected CollectionLoader<VacationSchedule> vacationSchedulesDl;
+    protected CollectionLoader<VacationScheduleRequest> vacationSchedulesDl;
     @Inject
     protected InstanceLoader<AbsenceRequest> absenceRequestDl;
     @Inject
-    protected LookupField<VacationSchedule> vacationScheduleField;
+    protected LookupField<VacationScheduleRequest> vacationScheduleField;
     @Inject
     protected TextField<String> reasonField;
     @Inject
@@ -200,12 +200,12 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
                                 && personGroupExt.getCompany().getCode() != null
                                 && "VCM".equals(personGroupExt.getCompany().getCode())) {
                             vacationScheduleField.setVisible(false);
-                            absenceRequestDc.getItem().setVacationSchedule(null);
+                            absenceRequestDc.getItem().setVacationScheduleRequest(null);
                         } else {
                             vacationScheduleField.setVisible(true);
-                            VacationSchedule firstVacationSchedule = vacationSchedulesDc.getItems().stream().filter(
+                            VacationScheduleRequest firstVacationSchedule = vacationSchedulesDc.getItems().stream().filter(
                                     vacationSchedule -> vacationSchedule.getStartDate().after(CommonUtils.getSystemDate()))
-                                    .min((o1, o2) -> o1.getStartDate().before(o2.getStartDate()) ? 1 : -1).orElse(null);
+                                    .min(Comparator.comparing(VacationScheduleRequest::getStartDate)).orElse(null);
                             vacationScheduleField.setValue(firstVacationSchedule);
                             if (firstVacationSchedule != null) {
                                 absenceRequestDc.getItem().setDateFrom(firstVacationSchedule.getStartDate());
@@ -215,7 +215,7 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
                     }
                 } else {
                     vacationScheduleField.setVisible(false);
-                    absenceRequestDc.getItem().setVacationSchedule(null);
+                    absenceRequestDc.getItem().setVacationScheduleRequest(null);
                 }
                 if ("SICKNESS".equals(e.getItem().getType().getCode())
                         || "MATERNITY LEAVE".equals(e.getItem().getType().getCode())) {
