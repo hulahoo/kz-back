@@ -245,10 +245,13 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
             return Optional.empty();
         }
 
-        return Optional.of(persistence.callInTransaction(em -> {
+        return Optional.ofNullable(persistence.callInTransaction(em -> {
+            final OrgStructureRequest orgStructureRequest = em.find(OrgStructureRequest.class, requestId, ViewBuilder.of(OrgStructureRequest.class)
+                    .add("author", View.MINIMAL)
+                    .build());
             Query query = em.createNativeQuery(
                     "SELECT td.* FROM request_tree_data(?1,?2) td");
-            query.setParameter(1, personGroupId);
+            query.setParameter(1, orgStructureRequest.getAuthor().getId());
             query.setParameter(2, requestId);
 
             PGobject singleResult = (PGobject) query.getFirstResult();
