@@ -104,6 +104,8 @@ public class IntegrationScheduledServiceBean implements IntegrationScheduledServ
         String purpose = (vacationScheduleRequest.getComment() != null) ? vacationScheduleRequest.getComment() : "";
         absenceJson.setPurpose(purpose);
         absenceJson.setIsOnRotation(false);
+        absenceJson.setRequestDate(vacationScheduleRequest.getRequestDate() != null
+                ? getFormattedDateString(vacationScheduleRequest.getRequestDate()) : "");
         absenceJson.setCompanyCode(vacationScheduleRequest.getPersonGroup() != null
                 && vacationScheduleRequest.getPersonGroup().getCompany() != null
                 && vacationScheduleRequest.getPersonGroup().getCompany().getLegacyId() != null ?
