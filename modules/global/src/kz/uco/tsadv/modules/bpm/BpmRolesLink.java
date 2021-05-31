@@ -35,9 +35,20 @@ public class BpmRolesLink extends StandardEntity {
     @Column(name = "IS_ADDABLE_APPROVER", nullable = false)
     private Boolean isAddableApprover = false;
 
+    @Column(name = "PRIORITY")
+    private Integer priority;
+
     @NotNull
     @Column(name = "FIND_BY_COUNTER", nullable = false)
     protected Boolean findByCounter = false;
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
 
     public Integer getOrder() {
         return order;

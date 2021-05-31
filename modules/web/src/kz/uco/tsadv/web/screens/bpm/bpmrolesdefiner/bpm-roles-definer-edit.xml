@@ -40,6 +40,7 @@
                     <column id="required"/>
                     <column id="isAddableApprover"/>
                     <column id="order"/>
+                    <column id="priority"/>
                 </columns>
                 <buttonsPanel>
                     <button action="linksTable.create"/>

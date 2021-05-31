@@ -35,6 +35,17 @@ public class NotPersisitBprocActors extends BaseUuidEntity {
     @MetaProperty
     private Integer order;
 
+    @MetaProperty
+    private BpmRolesLink rolesLink;
+
+    public BpmRolesLink getRolesLink() {
+        return rolesLink;
+    }
+
+    public void setRolesLink(BpmRolesLink rolesLink) {
+        this.rolesLink = rolesLink;
+    }
+
     public void setOrder(Integer order) {
         this.order = order;
     }
