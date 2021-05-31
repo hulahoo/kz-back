@@ -240,13 +240,17 @@ public class StartBprocScreen extends Screen {
     protected void onAddHrRoleLookupValueChange(HasValue.ValueChangeEvent<DicHrRole> event) {
         DicHrRole role = event.getValue();
         if (role != null) {
-            Integer order = linksDc.getItems().stream()
+            BpmRolesLink rolesLink = linksDc.getItems().stream()
                     .filter(bpmRolesLink -> bpmRolesLink.getHrRole().equals(role))
-                    .findAny().get().getOrder();
+                    .findAny().get();
+            Integer order = rolesLink.getOrder();
+
             NotPersisitBprocActors bprocActors = metadata.create(NotPersisitBprocActors.class);
             bprocActors.setHrRole(role);
-            bprocActors.setBprocUserTaskCode(getBprocUserTaskCode(role));
-            bprocActors.setOrder(order);
+            bprocActors.setBprocUserTaskCode(rolesLink.getBprocUserTaskCode());
+            bprocActors.setOrder(rolesLink.getOrder());
+            bprocActors.setRolesLink(rolesLink);
+
             List<NotPersisitBprocActors> mutableItems = notPersisitBprocActorsDc.getMutableItems();
             boolean isAdded = false;
             for (int i = mutableItems.size() - 1; i >= 0; i--) {
@@ -261,12 +265,6 @@ public class StartBprocScreen extends Screen {
             if (!isAdded) mutableItems.add(bprocActors);
             addHrRoleLookup.setValue(null);
         }
-    }
-
-    protected String getBprocUserTaskCode(DicHrRole role) {
-        return linksDc.getItems().stream().filter(bpmRolesLink -> bpmRolesLink.getHrRole().equals(role))
-                .map(BpmRolesLink::getBprocUserTaskCode)
-                .findAny().orElseThrow(() -> new RuntimeException(role.getLangValue() + " : BprocUserTaskCode not found!"));
     }
 
     @Subscribe(id = "notPersisitBprocActorsDc", target = Target.DATA_CONTAINER)
