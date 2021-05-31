@@ -25,6 +25,7 @@
                 <checkBox id="requiredField" property="required"/>
                 <checkBox id="isAddableApproverField" property="isAddableApprover"/>
                 <textField id="orderField" property="order"/>
+                <textField id="priorityField" property="priority"/>
                 <checkBox id="findByCounterField" property="findByCounter" visible="false"/>
             </column>
         </form>

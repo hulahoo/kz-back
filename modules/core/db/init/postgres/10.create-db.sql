@@ -7365,6 +7365,7 @@ create table TSADV_BPM_ROLES_LINK (
     ORDER_ integer not null,
     REQUIRED boolean not null,
     IS_ADDABLE_APPROVER boolean not null,
+    PRIORITY integer,
     FIND_BY_COUNTER boolean not null,
     --
     primary key (ID)

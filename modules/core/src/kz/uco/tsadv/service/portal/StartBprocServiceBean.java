@@ -139,7 +139,45 @@ public class StartBprocServiceBean implements StartBprocService {
                 actors.add(bprocActors);
             }
         }
+
         return actors;
+    }
+
+    protected List<NotPersisitBprocActors> excludeDuplicate(List<NotPersisitBprocActors> actors) {
+        List<NotPersisitBprocActors> newActors = new ArrayList<>();
+
+        boolean hasDuplicate = false;
+        boolean removeNext = false;
+        for (int i = 0; i < actors.size() - 1; i++) {
+            boolean removeCurrentActor = removeNext;
+            removeNext = false;
+            NotPersisitBprocActors actor = actors.get(i);
+            NotPersisitBprocActors nextActor = actors.get(i + 1);
+
+            List<TsadvUser> users = actor.getUsers();
+            List<TsadvUser> nextUsers = nextActor.getUsers();
+
+            if (nextUsers.size() == 1
+                    && users.size() == 1
+                    && nextUsers.get(0).equals(users.get(0))
+                    && actor.getRolesLink() != null
+                    && nextActor.getRolesLink() != null
+            ) {
+                Integer left = actor.getRolesLink().getPriority();
+                Integer right = nextActor.getRolesLink().getPriority();
+
+                if (left == null || right != null && left < right) removeCurrentActor = true;
+                else if (right == null || left > right) removeNext = true;
+
+                hasDuplicate = hasDuplicate || removeCurrentActor || removeNext;
+            }
+
+            if (!removeCurrentActor) newActors.add(actor);
+        }
+
+        if (!removeNext) newActors.add(actors.get(actors.size() - 1));
+
+        return hasDuplicate ? excludeDuplicate(newActors) : newActors;
     }
 
     @Override
@@ -152,6 +190,8 @@ public class StartBprocServiceBean implements StartBprocService {
                 .setParameters(ParamsMap.of("entityId", entityId))
                 .list()
                 .forEach(commitContext::addInstanceToRemove);
+
+        notPersisitBprocActors = excludeDuplicate(notPersisitBprocActors);
 
         for (NotPersisitBprocActors notPersisitBprocActor : notPersisitBprocActors) {
             BprocActors bprocActors = metadata.create(BprocActors.class);
@@ -176,6 +216,7 @@ public class StartBprocServiceBean implements StartBprocService {
         bprocActors.setIsSystemRecord(true);
         bprocActors.setBprocUserTaskCode(link.getBprocUserTaskCode());
         bprocActors.setOrder(link.getOrder());
+        bprocActors.setRolesLink(link);
         return bprocActors;
     }
 }
