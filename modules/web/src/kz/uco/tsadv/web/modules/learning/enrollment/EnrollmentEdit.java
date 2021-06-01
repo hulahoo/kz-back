@@ -3,6 +3,9 @@ package kz.uco.tsadv.web.modules.learning.enrollment;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.EditAction;
+import kz.uco.base.service.NotificationService;
+import kz.uco.tsadv.config.FrontConfig;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.CourseSectionScormResult;
@@ -10,6 +13,8 @@ import kz.uco.tsadv.modules.learning.model.Enrollment;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("all")
 public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEditor<T> {
@@ -38,6 +43,10 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
     protected GroupTable<CourseSectionScormResult> courseSectionScormResultTable;
     @Named("courseSectionScormResultTable.edit")
     protected EditAction courseSectionScormResultTableEdit;
+    @Inject
+    private FrontConfig frontConfig;
+    @Inject
+    private NotificationService notificationService;
 
     @Override
     protected void postInit() {
@@ -83,5 +92,31 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
     @Override
     public void editable(boolean editable) {
         //fieldGroup.setEditable(editable);
+    }
+
+    public void sendNotify() {
+        TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
+                .query("select e from tsadv$UserExt e " +
+                        " where e.personGroup = :personGroup ")
+                .parameter("personGroup", getItem().getPersonGroup())
+                .view("")
+                .list().stream().findFirst().orElse(null);
+        if (tsadvUser != null) {
+            Map<String, Object> maps = new HashMap<>();
+
+            String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                    + "/learning-history/"
+                    + "\" target=\"_blank\">%s " + "</a>";
+            maps.put("linkRu", String.format(requestLink, "История обучения"));
+            maps.put("linkEn", String.format(requestLink, "Training History"));
+            maps.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
+
+            maps.put("studentFioRu", getItem().getPersonGroup() != null
+                    ? getItem().getPersonGroup().getFullName() : "");
+            maps.put("studentFioEn", getItem().getPersonGroup() != null
+                    ? getItem().getPersonGroup().getPersonFirstLastNameLatin() : "");
+
+            notificationService.sendParametrizedNotification("tdc.new.trainerComment", tsadvUser, maps);
+        }
     }
 }
