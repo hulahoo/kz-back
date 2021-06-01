@@ -99,7 +99,7 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
                 .query("select e from tsadv$UserExt e " +
                         " where e.personGroup = :personGroup ")
                 .parameter("personGroup", getItem().getPersonGroup())
-                .view("")
+                .view("userExt.edit")
                 .list().stream().findFirst().orElse(null);
         if (tsadvUser != null) {
             Map<String, Object> maps = new HashMap<>();

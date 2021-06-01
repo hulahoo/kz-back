@@ -9641,6 +9641,22 @@
             <property name="category" view="_local"/>
             <property name="activeFlag"/>
             <property name="selfEnrollment"/>
+            <property name="courseTrainers">
+                <property name="trainer"
+                          view="_minimal">
+                    <property name="employee"
+                              view="_minimal">
+                        <property name="list"
+                                  view="_minimal">
+                            <property name="startDate"/>
+                            <property name="endDate"/>
+                            <property name="firstNameLatin"/>
+                            <property name="middleNameLatin"/>
+                            <property name="lastNameLatin"/>
+                        </property>
+                    </property>
+                </property>
+            </property>
         </property>
         <property name="personGroup" view="_minimal">
             <property name="list" view="_minimal">
@@ -14424,6 +14440,7 @@
             </property>
             <property name="sections" view="_minimal"/>
             <property name="selfEnrollment"/>
+            <property name="feedbackTemplates" view="_minimal"/>
         </property>
         <property name="personGroup" view="_minimal">
             <property name="list" view="_minimal">

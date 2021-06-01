@@ -17,6 +17,7 @@ import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
+import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LearningService;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
@@ -97,6 +98,7 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                         transactionalDataManager.save(enrollment);
 
                         sendNotification(enrollment);
+                        sendNotifyToTrainers(enrollment);
                     }
                 }
             }
@@ -146,6 +148,7 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                         transactionalDataManager.save(enrollment);
 
                         sendNotification(enrollment);
+                        sendNotifyToTrainers(enrollment);
                     }
                 }
             }
@@ -265,6 +268,39 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                         .addProperty("windowProperty",
                                 new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
                 .one();
+    }
+
+    protected void sendNotifyToTrainers(Enrollment enrollment) {
+        List<CourseTrainer> courseTrainerList = enrollment.getCourse() != null
+                ? enrollment.getCourse().getCourseTrainers() : null;
+        if (courseTrainerList != null && !courseTrainerList.isEmpty()) {
+            courseTrainerList.forEach(courseTrainer -> {
+                TsadvUser tsadvUserTrainer = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.personGroup = :personGroup ")
+                        .parameter("personGroup", courseTrainer.getTrainer() != null
+                                ? courseTrainer.getTrainer().getEmployee() : null)
+                        .view("userExt.edit")
+                        .list().stream().findFirst().orElse(null);
+                if (tsadvUserTrainer != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getFullName() : "");
+                    params.put("trainerFioEn", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("studentFioRu", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getFullName() : "");
+                    params.put("studentFioEn", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("course", enrollment.getCourse().getName());
+
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.completed.study",
+                            tsadvUserTrainer, params);
+                }
+            });
+        }
     }
 
 

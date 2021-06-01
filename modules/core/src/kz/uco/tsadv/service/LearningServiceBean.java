@@ -8,9 +8,12 @@ import com.haulmont.cuba.core.global.FileLoader;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
 import kz.uco.base.importer.exception.ImportFileEofEvaluationException;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.global.common.CommonConfig;
 import kz.uco.tsadv.importer.utils.XlsHelper;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.dictionary.DicTestType;
 import kz.uco.tsadv.modules.learning.enums.QuestionType;
 import kz.uco.tsadv.modules.learning.enums.TestSectionOrder;
@@ -54,6 +57,12 @@ public class LearningServiceBean implements LearningService {
 
     @Inject
     protected FileLoader fileLoader;
+    @Inject
+    private DatesService datesService;
+    @Inject
+    private FrontConfig frontConfig;
+    @Inject
+    private NotificationSenderAPIService notificationSenderAPIService;
 
     @Override
     public void importQuestionBank(FileDescriptor fileDescriptor) throws Exception {
@@ -695,5 +704,79 @@ public class LearningServiceBean implements LearningService {
             }
         }
         return success;
+    }
+
+    @Override
+    public void noDataForFeedbackAnswerMore7Days() {
+        List<Enrollment> enrollmentList = dataManager.load(Enrollment.class)
+                .query("select distinct e from tsadv$Enrollment e " +
+                        " join tsadv$Course c on e.course.id = c.id " +
+                        " left join tsadv$CourseFeedbackPersonAnswer p " +
+                        " where e.status <> 5 " +
+                        " and :date >= e.date " +
+                        " and :date >= e.completeDate " +
+                        " and e.personGroup not in (" +
+                        " p.personGroup )")
+                .parameter("date", getDate())
+                .view("enrollment.for.course").list();
+        if (!enrollmentList.isEmpty()) {
+            enrollmentList.forEach(enrollment -> {
+                TsadvUser tsadvUser = getTsadvUser(enrollment.getPersonGroup());
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("studentFioRu", enrollment.getPersonGroup().getFullName());
+                    params.put("studentFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
+                    params.put("course", enrollment.getCourse().getName());
+                    String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                            + "/learning-history/"
+                            + "\" target=\"_blank\">%s " + "</a>";
+                    params.put("linkRu", String.format(requestLink, "ЗДЕСЬ"));
+                    params.put("linkEn", String.format(requestLink, "CLICK"));
+                    params.put("linkKz", String.format(requestLink, "осы жерде"));
+
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.course.completed", tsadvUser, params);
+                }
+            });
+        }
+
+    }
+
+    protected Calendar getDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -7);
+        return calendar;
+    }
+
+    protected TsadvUser getTsadvUser(PersonGroupExt personGroupExt) {
+        return dataManager.load(TsadvUser.class)
+                .query("select e from tsadv$UserExt e " +
+                        " where e.personGroup = :personGroup")
+                .parameter("personGroup", personGroupExt)
+                .view("userExt.edit")
+                .list().stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public void noAttemptLast7Days() {
+        List<Enrollment> enrollmentList = dataManager.load(Enrollment.class)
+                .query("select distinct e from tsadv$Enrollment e " +
+                        " where e.status <> 5 " +
+                        " and :date >= (select max(t.attemptDate) from tsadv$CourseSectionAttempt t" +
+                        " where t.enrollment = e)")
+                .parameter("date", getDate())
+                .view("enrollment.for.course").list();
+        if (!enrollmentList.isEmpty()) {
+            enrollmentList.forEach(enrollment -> {
+                TsadvUser tsadvUser = getTsadvUser(enrollment.getPersonGroup());
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("studentFioRu", enrollment.getPersonGroup().getFullName());
+                    params.put("studentFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
+                    params.put("course", enrollment.getCourse().getName());
+
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.module.is.not.completed", tsadvUser, params);
+                }
+            });
+        }
     }
 }

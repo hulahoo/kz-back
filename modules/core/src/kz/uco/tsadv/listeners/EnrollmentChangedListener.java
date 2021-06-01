@@ -214,6 +214,8 @@ public class EnrollmentChangedListener {
                             notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                                     user, map);
                         }
+
+                        sendNotifyToTrainers(enrollment);
                     }
                 }
             }
@@ -279,6 +281,39 @@ public class EnrollmentChangedListener {
                     .parameter("personGroupId", enrollmentFront.getPersonGroup().getId())
                     .list()
                     .forEach(transactionalDataManager::remove);
+        }
+    }
+
+    protected void sendNotifyToTrainers(Enrollment enrollment) {
+        List<CourseTrainer> courseTrainerList = enrollment.getCourse() != null
+                ? enrollment.getCourse().getCourseTrainers() : null;
+        if (courseTrainerList != null && !courseTrainerList.isEmpty()) {
+            courseTrainerList.forEach(courseTrainer -> {
+                TsadvUser tsadvUserTrainer = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.personGroup = :personGroup ")
+                        .parameter("personGroup", courseTrainer.getTrainer() != null
+                                ? courseTrainer.getTrainer().getEmployee() : null)
+                        .view("userExt.edit")
+                        .list().stream().findFirst().orElse(null);
+                if (tsadvUserTrainer != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getFullName() : "");
+                    params.put("trainerFioEn", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("studentFioRu", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getFullName() : "");
+                    params.put("studentFioEn", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("course", enrollment.getCourse().getName());
+
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.completed.study",
+                            tsadvUserTrainer, params);
+                }
+            });
         }
     }
 

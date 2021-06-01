@@ -4,18 +4,23 @@ import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.DataManager;
+import kz.uco.base.service.NotificationSenderAPIService;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.Homework;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
+import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LearningService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.inject.Inject;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Component("tsadv_CourseFeedbackPersonAnswerChangedListener")
@@ -27,6 +32,8 @@ public class CourseFeedbackPersonAnswerChangedListener {
     protected LearningService learningService;
     @Inject
     protected TransactionalDataManager transactionalDataManager;
+    @Inject
+    private NotificationSenderAPIService notificationSenderAPIService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<CourseFeedbackPersonAnswer, UUID> event) {
@@ -55,6 +62,7 @@ public class CourseFeedbackPersonAnswerChangedListener {
                 if (enrollment != null && homework) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
+                    sendNotifyToTrainers(enrollment);
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
@@ -80,6 +88,7 @@ public class CourseFeedbackPersonAnswerChangedListener {
                 if (enrollment != null && homework) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
+                    sendNotifyToTrainers(enrollment);
                 }
             }
         }
@@ -92,5 +101,38 @@ public class CourseFeedbackPersonAnswerChangedListener {
                 .parameter("course", course)
                 .view("homework.edit")
                 .list();
+    }
+
+    protected void sendNotifyToTrainers(Enrollment enrollment) {
+        List<CourseTrainer> courseTrainerList = enrollment.getCourse() != null
+                ? enrollment.getCourse().getCourseTrainers() : null;
+        if (courseTrainerList != null && !courseTrainerList.isEmpty()) {
+            courseTrainerList.forEach(courseTrainer -> {
+                TsadvUser tsadvUserTrainer = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.personGroup = :personGroup ")
+                        .parameter("personGroup", courseTrainer.getTrainer() != null
+                                ? courseTrainer.getTrainer().getEmployee() : null)
+                        .view("userExt.edit")
+                        .list().stream().findFirst().orElse(null);
+                if (tsadvUserTrainer != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getFullName() : "");
+                    params.put("trainerFioEn", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("studentFioRu", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getFullName() : "");
+                    params.put("studentFioEn", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("course", enrollment.getCourse().getName());
+
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.completed.study",
+                            tsadvUserTrainer, params);
+                }
+            });
+        }
     }
 }
