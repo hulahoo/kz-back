@@ -19,6 +19,7 @@ import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LmsService;
+import kz.uco.tsadv.service.OrganizationHrUserService;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.entity.WindowProperty;
@@ -55,6 +56,8 @@ public class EnrollmentChangedListener {
     private TransactionalDataManager transactionalDataManager;
     @Inject
     private List<EnrollmentValidation> enrollmentValidations;
+    @Inject
+    private OrganizationHrUserService organizationHrUserService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<Enrollment, UUID> event) {
@@ -216,6 +219,7 @@ public class EnrollmentChangedListener {
                         }
 
                         sendNotifyToTrainers(enrollment);
+                        sendNotifyForLineManager(enrollment);
                     }
                 }
             }
@@ -315,6 +319,23 @@ public class EnrollmentChangedListener {
                 }
             });
         }
+    }
+
+    protected void sendNotifyForLineManager(Enrollment enrollment) {
+        List<TsadvUser> lineManagerList = (List<TsadvUser>) organizationHrUserService.getHrUsersForPerson(enrollment.getPersonGroup().getId(), "HR_ROLE_MANAGER");
+        lineManagerList.forEach(tsadvUser -> {
+            tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
+            Map<String, Object> params = new HashMap<>();
+            params.put("personFioRu", tsadvUser.getPersonGroup() != null
+                    ? tsadvUser.getPersonGroup().getFullName() : "");
+            params.put("personFioEn", tsadvUser.getPersonGroup() != null
+                    ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
+            params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+            params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
+            params.put("course", enrollment.getCourse().getName());
+            notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
+                    tsadvUser, params);
+        });
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

@@ -13,6 +13,7 @@ import kz.uco.tsadv.modules.learning.model.Homework;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LearningService;
+import kz.uco.tsadv.service.OrganizationHrUserService;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -34,6 +35,8 @@ public class CourseFeedbackPersonAnswerChangedListener {
     protected TransactionalDataManager transactionalDataManager;
     @Inject
     private NotificationSenderAPIService notificationSenderAPIService;
+    @Inject
+    private OrganizationHrUserService organizationHrUserService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<CourseFeedbackPersonAnswer, UUID> event) {
@@ -63,6 +66,7 @@ public class CourseFeedbackPersonAnswerChangedListener {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                     sendNotifyToTrainers(enrollment);
+                    sendNotifyForLineManager(enrollment);
                 }
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
@@ -89,6 +93,7 @@ public class CourseFeedbackPersonAnswerChangedListener {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                     sendNotifyToTrainers(enrollment);
+                    sendNotifyForLineManager(enrollment);
                 }
             }
         }
@@ -134,5 +139,22 @@ public class CourseFeedbackPersonAnswerChangedListener {
                 }
             });
         }
+    }
+
+    protected void sendNotifyForLineManager(Enrollment enrollment) {
+        List<TsadvUser> lineManagerList = (List<TsadvUser>) organizationHrUserService.getHrUsersForPerson(enrollment.getPersonGroup().getId(), "HR_ROLE_MANAGER");
+        lineManagerList.forEach(tsadvUser -> {
+            tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
+            Map<String, Object> params = new HashMap<>();
+            params.put("personFioRu", tsadvUser.getPersonGroup() != null
+                    ? tsadvUser.getPersonGroup().getFullName() : "");
+            params.put("personFioEn", tsadvUser.getPersonGroup() != null
+                    ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
+            params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+            params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
+            params.put("course", enrollment.getCourse().getName());
+            notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
+                    tsadvUser, params);
+        });
     }
 }

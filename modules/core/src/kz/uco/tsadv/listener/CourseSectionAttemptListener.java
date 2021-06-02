@@ -19,6 +19,7 @@ import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LearningService;
+import kz.uco.tsadv.service.OrganizationHrUserService;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.entity.WindowProperty;
@@ -55,6 +56,8 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
     protected FileStorageAPI fileStorageAPI;
     @Inject
     protected NotificationSenderAPIService notificationSenderAPIService;
+    @Inject
+    private OrganizationHrUserService organizationHrUserService;
 
     @Override
     public void onBeforeDelete(CourseSectionAttempt courseSectionAttempt, EntityManager entityManager) {
@@ -99,6 +102,7 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
 
                         sendNotification(enrollment);
                         sendNotifyToTrainers(enrollment);
+                        sendNotifyForLineManager(enrollment);
                     }
                 }
             }
@@ -149,6 +153,7 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
 
                         sendNotification(enrollment);
                         sendNotifyToTrainers(enrollment);
+                        sendNotifyForLineManager(enrollment);
                     }
                 }
             }
@@ -301,6 +306,23 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 }
             });
         }
+    }
+
+    protected void sendNotifyForLineManager(Enrollment enrollment) {
+        List<TsadvUser> lineManagerList = (List<TsadvUser>) organizationHrUserService.getHrUsersForPerson(enrollment.getPersonGroup().getId(), "HR_ROLE_MANAGER");
+        lineManagerList.forEach(tsadvUser -> {
+            tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
+            Map<String, Object> params = new HashMap<>();
+            params.put("personFioRu", tsadvUser.getPersonGroup() != null
+                    ? tsadvUser.getPersonGroup().getFullName() : "");
+            params.put("personFioEn", tsadvUser.getPersonGroup() != null
+                    ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
+            params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+            params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
+            params.put("course", enrollment.getCourse().getName());
+            notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
+                    tsadvUser, params);
+        });
     }
 
 

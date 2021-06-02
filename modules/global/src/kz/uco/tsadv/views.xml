@@ -21153,6 +21153,12 @@
     <view entity="tsadv$UserExt" name="tsadvUserExt-view" extends="user.edit">
         <property name="personGroup" view="_minimal">
             <property name="company" view="_minimal"/>
+            <property name="list" view="_minimal">
+                <property name="firstNameLatin"/>
+                <property name="lastNameLatin"/>
+                <property name="startDate"/>
+                <property name="endDate"/>
+            </property>
         </property>
     </view>
     <view entity="base$OrganizationGroupExt"
