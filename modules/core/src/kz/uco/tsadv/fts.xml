@@ -1960,6 +1960,9 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicKato">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.DicShift">
+            <include re=".*"/>
+        </entity>
         <entity class="kz.uco.tsadv.entity.ResizedImage">
             <include re=".*"/>
         </entity>
