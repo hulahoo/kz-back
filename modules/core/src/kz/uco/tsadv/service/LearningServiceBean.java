@@ -711,10 +711,10 @@ public class LearningServiceBean implements LearningService {
         List<Enrollment> enrollmentList = dataManager.load(Enrollment.class)
                 .query("select distinct e from tsadv$Enrollment e " +
                         " join tsadv$Course c on e.course.id = c.id " +
-                        " left join tsadv$CourseFeedbackPersonAnswer p " +
+                        " join tsadv$CourseFeedbackPersonAnswer p on c.id = p.course.id " +
                         " where e.status <> 5 " +
                         " and :date >= e.date " +
-                        " and :date >= e.completeDate " +
+                        " and :date >= p.completeDate " +
                         " and e.personGroup not in (" +
                         " p.personGroup )")
                 .parameter("date", getDate())
@@ -741,10 +741,10 @@ public class LearningServiceBean implements LearningService {
 
     }
 
-    protected Calendar getDate() {
+    protected Date getDate() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -7);
-        return calendar;
+        return calendar.getTime();
     }
 
     protected TsadvUser getTsadvUser(PersonGroupExt personGroupExt) {
