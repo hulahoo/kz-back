@@ -91,9 +91,7 @@ public class StartBprocServiceBean implements StartBprocService {
 
             PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(employeePersonGroupId, View.MINIMAL);
             PositionGroupExt supManager = positionService.getManager(positionGroup.getId());
-            if (!bpmRolesDefiner.getManagerLaunches() && supManager != null) {
-                supManager = positionService.getManager(supManager.getId());
-            }
+            if (supManager != null) supManager = positionService.getManager(supManager.getId());
 
             if (supManager != null) {
                 supManager = dataManager.reload(supManager, new View(PositionGroupExt.class)
