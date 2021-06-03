@@ -11,8 +11,10 @@ import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.View;
+import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.VacationDurationType;
@@ -52,6 +54,8 @@ public class AbsenceServiceBean implements AbsenceService {
     private Persistence persistence;
     @Inject
     private Metadata metadata;
+    @Inject
+    private NotificationSenderAPIService notificationSenderAPIService;
 
     @Override
     public boolean isLongAbsence(Absence absence) {
@@ -557,5 +561,71 @@ public class AbsenceServiceBean implements AbsenceService {
     @Nullable
     protected VacationDurationType getVacationDurationType(@Nullable DicAbsenceType absenceType) {
         return absenceType != null ? absenceType.getVacationDurationType() : null;
+    }
+
+    @Override
+    public void sendNotifyForEmployee() {
+        List<PersonGroupExt> absencePersonGroupList = dataManager.load(PersonGroupExt.class)
+                .query("select e.personGroup from tsadv$Absence e " +
+                        " join tsadv$DicAbsenceType t on e.type = t " +
+                        " where :date = e.dateFrom " +
+                        " and t.useInSelfService = true " +
+                        " and t.availableForRecallAbsence = true " +
+                        " and t.isVacationDate = true " +
+                        " and t.availableForChangeDate = true ")
+                .parameter("date", getDate())
+                .view("")
+                .list();
+        if (!absencePersonGroupList.isEmpty()) {
+            absencePersonGroupList.forEach(personGroupExt -> {
+                TsadvUser tsadvUser = getTsadvUser(personGroupExt);
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("fullNameRu", personGroupExt.getFullName());
+                    params.put("fullNameEn", personGroupExt.getPersonFirstLastNameLatin());
+
+                    notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder.without.schedule", tsadvUser, params);
+                }
+            });
+        }
+
+        List<PersonGroupExt> vacationScheduleRequestPersonGroupList = dataManager.load(PersonGroupExt.class)
+                .query("select e.personGroup from tsadv$Absence e " +
+                        " join tsadv$DicAbsenceType t on e.type = t " +
+                        " where :date = e.dateFrom " +
+                        " and t.useInSelfService = true " +
+                        " and t.availableForRecallAbsence = true " +
+                        " and t.isVacationDate = true " +
+                        " and t.availableForChangeDate = true ")
+                .parameter("date", getDate())
+                .view("")
+                .list();
+        if (!vacationScheduleRequestPersonGroupList.isEmpty()) {
+            vacationScheduleRequestPersonGroupList.forEach(personGroupExt -> {
+                TsadvUser tsadvUser = getTsadvUser(personGroupExt);
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("fullNameRu", personGroupExt.getFullName());
+                    params.put("fullNameEn", personGroupExt.getPersonFirstLastNameLatin());
+
+                    notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder ", tsadvUser, params);
+                }
+            });
+        }
+    }
+
+    protected Date getDate() {
+        java.util.Calendar calendar = java.util.Calendar.getInstance();
+        calendar.add(java.util.Calendar.DATE, -7);
+        return calendar.getTime();
+    }
+
+    protected TsadvUser getTsadvUser(PersonGroupExt personGroupExt) {
+        return dataManager.load(TsadvUser.class)
+                .query("select e from tsadv$UserExt e " +
+                        " where e.personGroup = :personGroup")
+                .parameter("personGroup", personGroupExt)
+                .view("userExt.edit")
+                .list().stream().findFirst().orElse(null);
     }
 }

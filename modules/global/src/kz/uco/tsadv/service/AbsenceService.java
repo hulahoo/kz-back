@@ -51,4 +51,6 @@ public interface AbsenceService {
      * @return остаток дни по РВД
      */
     Long getRemainingDaysWeekendWork(UUID personGroupId);
+
+    void sendNotifyForEmployee();
 }
