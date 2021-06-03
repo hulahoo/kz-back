@@ -42,6 +42,18 @@ public class BpmRolesLink extends StandardEntity {
     @Column(name = "FIND_BY_COUNTER", nullable = false)
     protected Boolean findByCounter = false;
 
+    @NotNull
+    @Column(name = "FOR_ASSISTANT", nullable = false)
+    private Boolean forAssistant = false;
+
+    public Boolean getForAssistant() {
+        return forAssistant;
+    }
+
+    public void setForAssistant(Boolean forAssistant) {
+        this.forAssistant = forAssistant;
+    }
+
     public Integer getPriority() {
         return priority;
     }
@@ -104,6 +116,10 @@ public class BpmRolesLink extends StandardEntity {
 
     public DicHrRole getHrRole() {
         return hrRole;
+    }
+
+    public boolean isActive(boolean isAssistant) {
+        return isAssistant || !this.forAssistant;
     }
 
 }

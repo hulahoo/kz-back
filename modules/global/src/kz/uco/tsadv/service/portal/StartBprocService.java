@@ -11,9 +11,12 @@ import java.util.UUID;
 public interface StartBprocService {
     String NAME = "tsadv_StartBprocService";
 
-    BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID initiatorPersonGroupId);
+    BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID initiatorPersonGroupId, boolean isAssistant);
 
-    List<NotPersisitBprocActors> getNotPersisitBprocActors(@Nullable TsadvUser employee, UUID initiatorPersonGroupId, BpmRolesDefiner bpmRolesDefiner);
+    List<NotPersisitBprocActors> getNotPersisitBprocActors(@Nullable TsadvUser employee,
+                                                           UUID initiatorPersonGroupId,
+                                                           BpmRolesDefiner bpmRolesDefiner,
+                                                           boolean isAssistant);
 
     void saveBprocActors(UUID entityId, List<NotPersisitBprocActors> notPersisitBprocActors);
 }

@@ -115,6 +115,7 @@ public class StartBprocScreen extends Screen {
         this.startBprocParams = startBprocParams;
     }
 
+    //todo for assistant
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         Assert.notNull(startBprocParams, "startBprocParams is null");
@@ -124,7 +125,8 @@ public class StartBprocScreen extends Screen {
         try {
             bpmRolesDefinerDc.setItem(startBprocService.getBpmRolesDefiner(
                     startBprocParams.getRequest().getProcessDefinitionKey(),
-                    startBprocParams.getInitiatorPersonGroupId()));
+                    startBprocParams.getInitiatorPersonGroupId(),
+                    false));
             initNotPersisitBprocActors();
             initHrRolesDcItems();
         } catch (PortalException e) {
@@ -140,11 +142,13 @@ public class StartBprocScreen extends Screen {
         addHrRoleHbox.setVisible(!hrRolesDc.getItems().isEmpty());
     }
 
+    //todo for assistant
     protected void initNotPersisitBprocActors() {
         List<NotPersisitBprocActors> notPersisitBprocActors = startBprocService.getNotPersisitBprocActors(
                 startBprocParams.getEmployee(),
                 startBprocParams.getInitiatorPersonGroupId(),
-                bpmRolesDefinerDc.getItem());
+                bpmRolesDefinerDc.getItem(),
+                false);
         notPersisitBprocActorsDc.setItems(notPersisitBprocActors);
     }
 

@@ -41,7 +41,7 @@ public class StartBprocServiceBean implements StartBprocService {
     protected PositionService positionService;
 
     @Override
-    public BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID initiatorPersonGroupId) {
+    public BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID initiatorPersonGroupId, boolean isAssistant) {
         DicCompany dicCompany = employeeService.getCompanyByPersonGroupId(initiatorPersonGroupId);
         UUID company = dicCompany != null ? dicCompany.getId() : null;
 
@@ -69,14 +69,24 @@ public class StartBprocServiceBean implements StartBprocService {
         if (bpmRolesDefiner == null) throw new PortalException("bpmRolesDefiner not found!");
 
         bpmRolesDefiner = excludeSupManager(initiatorPersonGroupId, bpmRolesDefiner);
+        bpmRolesDefiner = filterAssistant(bpmRolesDefiner, isAssistant);
 
+        return bpmRolesDefiner;
+    }
+
+    protected BpmRolesDefiner filterAssistant(BpmRolesDefiner bpmRolesDefiner, boolean isAssistant) {
+        List<BpmRolesLink> links = bpmRolesDefiner.getLinks()
+                .stream()
+                .filter(bpmRolesLink -> bpmRolesLink.isActive(isAssistant))
+                .collect(Collectors.toList());
+        bpmRolesDefiner.setLinks(links);
         return bpmRolesDefiner;
     }
 
     protected BpmRolesDefiner excludeSupManager(UUID initiatorPersonGroupId, BpmRolesDefiner bpmRolesDefiner) {
         if (bpmRolesDefiner.getActiveSupManagerExclusion() && !CollectionUtils.isEmpty(bpmRolesDefiner.getLinks())) {
             boolean isSupManagerExclusion = false;
-            String supManagerCode = bpmRolesDefiner.getManagerLaunches() ? OrganizationHrUserService.HR_ROLE_MANAGER : OrganizationHrUserService.HR_ROLE_SUP_MANAGER;
+            String supManagerCode = OrganizationHrUserService.HR_ROLE_SUP_MANAGER;
 
             PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(initiatorPersonGroupId, View.MINIMAL);
             PositionGroupExt supManager = positionService.getManager(positionGroup.getId());
@@ -103,22 +113,31 @@ public class StartBprocServiceBean implements StartBprocService {
     }
 
     @Override
-    public List<NotPersisitBprocActors> getNotPersisitBprocActors(@Nullable TsadvUser employee, UUID initiatorPersonGroupId, BpmRolesDefiner bpmRolesDefiner) {
+    public List<NotPersisitBprocActors> getNotPersisitBprocActors(@Nullable TsadvUser employee,
+                                                                  UUID initiatorPersonGroupId,
+                                                                  BpmRolesDefiner bpmRolesDefiner,
+                                                                  boolean isAssistant) {
         List<NotPersisitBprocActors> actors = new ArrayList<>();
         List<BpmRolesLink> links = bpmRolesDefiner.getLinks();
 
+        if (employee != null) employee = dataManager.reload(employee, "user-fioWithLogin");
+
+        UUID employeePersonGroupId = employee != null ? employee.getPersonGroup().getId() : initiatorPersonGroupId;
+
         for (BpmRolesLink link : links) {
+            if (!link.isActive(isAssistant)) continue;
+
             DicHrRole hrRole = link.getHrRole();
             String roleCode = hrRole.getCode();
             List<? extends User> hrUsersForPerson = new ArrayList<>();
 
             if (roleCode.equals("EMPLOYEE")) {
                 if (employee != null)
-                    hrUsersForPerson = Collections.singletonList(dataManager.reload(employee, "user-fioWithLogin"));
+                    hrUsersForPerson = Collections.singletonList(employee);
             } else
                 hrUsersForPerson = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e where e in :users")
-                        .setParameters(ParamsMap.of("users", organizationHrUserService.getHrUsersForPerson(initiatorPersonGroupId, roleCode)))
+                        .setParameters(ParamsMap.of("users", organizationHrUserService.getHrUsersForPerson(employeePersonGroupId, roleCode)))
                         .view("user-fioWithLogin")
                         .list();
 

@@ -653,5 +653,6 @@
         <class>kz.uco.tsadv.modules.personal.dictionary.DicKato</class>
         <class>kz.uco.tsadv.entity.ResizedImage</class>
         <class>kz.uco.tsadv.entity.ImageSize</class>
+        <class>kz.uco.tsadv.entity.ExecutiveAssistants</class>
     </persistence-unit>
 </persistence>

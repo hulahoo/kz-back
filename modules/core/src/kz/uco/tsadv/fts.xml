@@ -1966,5 +1966,8 @@
         <entity class="kz.uco.tsadv.entity.ImageSize">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.entity.ExecutiveAssistants">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

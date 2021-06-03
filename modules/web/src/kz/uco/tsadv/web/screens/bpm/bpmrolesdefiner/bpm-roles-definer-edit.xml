@@ -41,6 +41,7 @@
                     <column id="isAddableApprover"/>
                     <column id="order"/>
                     <column id="priority"/>
+                    <column id="forAssistant"/>
                 </columns>
                 <buttonsPanel>
                     <button action="linksTable.create"/>
