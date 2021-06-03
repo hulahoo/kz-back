@@ -336,6 +336,7 @@
     </view>
     <view name="portal-bproc-users" entity="tsadv$UserExt" extends="_minimal">
         <property name="fullNameWithLogin"/>
+        <property name="personGroup"/>
     </view>
     <view name="portal-activity" entity="uactivity$Activity" systemProperties="true" extends="_local">
         <property name="notificationBody"/>

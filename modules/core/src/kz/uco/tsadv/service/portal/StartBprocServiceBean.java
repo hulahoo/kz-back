@@ -2,7 +2,6 @@ package kz.uco.tsadv.service.portal;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
-import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -19,9 +18,11 @@ import kz.uco.tsadv.service.PositionService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service(StartBprocService.NAME)
@@ -41,8 +42,8 @@ public class StartBprocServiceBean implements StartBprocService {
     protected PositionService positionService;
 
     @Override
-    public BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID initiatorPersonGroupId, boolean isAssistant) {
-        DicCompany dicCompany = employeeService.getCompanyByPersonGroupId(initiatorPersonGroupId);
+    public BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID employeePersonGroupId, boolean isAssistant) {
+        DicCompany dicCompany = employeeService.getCompanyByPersonGroupId(employeePersonGroupId);
         UUID company = dicCompany != null ? dicCompany.getId() : null;
 
         BpmRolesDefiner bpmRolesDefiner = null;
@@ -68,7 +69,7 @@ public class StartBprocServiceBean implements StartBprocService {
         if (!bpmRolesDefiners.isEmpty()) bpmRolesDefiner = bpmRolesDefiners.get(0);
         if (bpmRolesDefiner == null) throw new PortalException("bpmRolesDefiner not found!");
 
-        bpmRolesDefiner = excludeSupManager(initiatorPersonGroupId, bpmRolesDefiner);
+        bpmRolesDefiner = excludeSupManager(employeePersonGroupId, bpmRolesDefiner);
         bpmRolesDefiner = filterAssistant(bpmRolesDefiner, isAssistant);
 
         return bpmRolesDefiner;
@@ -83,12 +84,12 @@ public class StartBprocServiceBean implements StartBprocService {
         return bpmRolesDefiner;
     }
 
-    protected BpmRolesDefiner excludeSupManager(UUID initiatorPersonGroupId, BpmRolesDefiner bpmRolesDefiner) {
+    protected BpmRolesDefiner excludeSupManager(UUID employeePersonGroupId, BpmRolesDefiner bpmRolesDefiner) {
         if (bpmRolesDefiner.getActiveSupManagerExclusion() && !CollectionUtils.isEmpty(bpmRolesDefiner.getLinks())) {
             boolean isSupManagerExclusion = false;
             String supManagerCode = OrganizationHrUserService.HR_ROLE_SUP_MANAGER;
 
-            PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(initiatorPersonGroupId, View.MINIMAL);
+            PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(employeePersonGroupId, View.MINIMAL);
             PositionGroupExt supManager = positionService.getManager(positionGroup.getId());
             if (!bpmRolesDefiner.getManagerLaunches() && supManager != null) {
                 supManager = positionService.getManager(supManager.getId());
@@ -113,27 +114,25 @@ public class StartBprocServiceBean implements StartBprocService {
     }
 
     @Override
-    public List<NotPersisitBprocActors> getNotPersisitBprocActors(@Nullable TsadvUser employee,
-                                                                  UUID initiatorPersonGroupId,
+    public List<NotPersisitBprocActors> getNotPersisitBprocActors(UUID employeePersonGroupId,
                                                                   BpmRolesDefiner bpmRolesDefiner,
                                                                   boolean isAssistant) {
         List<NotPersisitBprocActors> actors = new ArrayList<>();
         List<BpmRolesLink> links = bpmRolesDefiner.getLinks();
-
-        if (employee != null) employee = dataManager.reload(employee, "user-fioWithLogin");
-
-        UUID employeePersonGroupId = employee != null ? employee.getPersonGroup().getId() : initiatorPersonGroupId;
 
         for (BpmRolesLink link : links) {
             if (!link.isActive(isAssistant)) continue;
 
             DicHrRole hrRole = link.getHrRole();
             String roleCode = hrRole.getCode();
-            List<? extends User> hrUsersForPerson = new ArrayList<>();
+            List<TsadvUser> hrUsersForPerson;
 
             if (roleCode.equals("EMPLOYEE")) {
-                if (employee != null)
-                    hrUsersForPerson = Collections.singletonList(employee);
+                hrUsersForPerson = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e where e.personGroup.id = :employeePersonGroupId and e.active = 'TRUE'")
+                        .parameter("employeePersonGroupId", employeePersonGroupId)
+                        .view("user-fioWithLogin")
+                        .list();
             } else
                 hrUsersForPerson = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e where e in :users")
@@ -153,8 +152,7 @@ public class StartBprocServiceBean implements StartBprocService {
             } else {
                 NotPersisitBprocActors bprocActors = createNotPersisitBprocActors(link, hrRole);
                 bprocActors.setIsEditable(false);
-                //noinspection unchecked
-                bprocActors.setUsers((List<TsadvUser>) hrUsersForPerson);
+                bprocActors.setUsers(hrUsersForPerson);
                 actors.add(bprocActors);
             }
         }

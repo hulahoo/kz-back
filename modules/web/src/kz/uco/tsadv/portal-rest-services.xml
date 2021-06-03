@@ -27,21 +27,20 @@
         </method>
     </service>
     <service name="tsadv_StartBprocService">
-        <method name="getBpmRolesDefiner">
-            <param name="processDefinitionKey" type="java.lang.String"/>
-            <param name="initiatorPersonGroupId" type="java.util.UUID"/>
-            <param name="isAssistant" type="boolean"/>
-        </method>
-        <method name="getNotPersisitBprocActors">
-            <param name="employee" type="kz.uco.tsadv.modules.administration.TsadvUser"/>
-            <param name="initiatorPersonGroupId" type="java.util.UUID"/>
-            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
-            <param name="isAssistant" type="boolean"/>
-        </method>
         <method name="saveBprocActors">
             <param name="entityId" type="java.util.UUID"/>
             <param name="notPersisitBprocActors"
                    type="java.util.List&lt;kz.uco.tsadv.modules.bpm.NotPersisitBprocActors&gt;"/>
+        </method>
+        <method name="getNotPersisitBprocActors">
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
+            <param name="isAssistant" type="boolean"/>
+        </method>
+        <method name="getBpmRolesDefiner">
+            <param name="processDefinitionKey" type="java.lang.String"/>
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+            <param name="isAssistant" type="boolean"/>
         </method>
     </service>
     <service name="bproc_BprocRuntimeService">
