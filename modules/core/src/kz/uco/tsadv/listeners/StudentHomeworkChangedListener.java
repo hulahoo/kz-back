@@ -20,6 +20,7 @@ import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.LearningService;
+import kz.uco.tsadv.service.OrganizationHrUserService;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.entity.WindowProperty;
@@ -49,6 +50,8 @@ public class StudentHomeworkChangedListener {
     protected ActivityService activityService;
     @Inject
     protected FrontConfig frontConfig;
+    @Inject
+    private OrganizationHrUserService organizationHrUserService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void onTsadv_StudentHomeworkBeforeCommit(EntityChangedEvent<StudentHomework, UUID> event) {
@@ -77,6 +80,8 @@ public class StudentHomeworkChangedListener {
                 if (enrollment != null && feedbackQuestion) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
+                    sendNotifyToTrainers(enrollment);
+                    sendNotifyForLineManager(enrollment);
                 }
             }
             sendNotification(studentHomework, "tdc.homework.trainer.newHomework", true);
@@ -105,6 +110,8 @@ public class StudentHomeworkChangedListener {
                 if (enrollment != null && feedbackQuestion) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
+                    sendNotifyToTrainers(enrollment);
+                    sendNotifyForLineManager(enrollment);
                 }
             }
 
@@ -259,6 +266,51 @@ public class StudentHomeworkChangedListener {
                 .query("select e from tsadv$UserExt e " +
                         " where e.personGroup = :personGroup")
                 .parameter("personGroup", personGroupExt)
+                .view("userExt.edit")
                 .list().stream().findFirst().orElse(null);
+    }
+
+    protected void sendNotifyToTrainers(Enrollment enrollment) {
+        List<CourseTrainer> courseTrainerList = enrollment.getCourse() != null
+                ? enrollment.getCourse().getCourseTrainers() : null;
+        if (courseTrainerList != null && !courseTrainerList.isEmpty()) {
+            courseTrainerList.forEach(courseTrainer -> {
+                TsadvUser tsadvUserTrainer = getTsadvUser(courseTrainer.getTrainer().getEmployee());
+                if (tsadvUserTrainer != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getFullName() : "");
+                    params.put("trainerFioEn", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("studentFioRu", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getFullName() : "");
+                    params.put("studentFioEn", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("course", enrollment.getCourse().getName());
+
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.completed.study",
+                            tsadvUserTrainer, params);
+                }
+            });
+        }
+    }
+
+    protected void sendNotifyForLineManager(Enrollment enrollment) {
+        List<TsadvUser> lineManagerList = (List<TsadvUser>) organizationHrUserService.getHrUsersForPerson(enrollment.getPersonGroup().getId(), "HR_ROLE_MANAGER");
+        lineManagerList.forEach(tsadvUser -> {
+            tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
+            Map<String, Object> params = new HashMap<>();
+            params.put("personFioRu", tsadvUser.getPersonGroup() != null
+                    ? tsadvUser.getPersonGroup().getFullName() : "");
+            params.put("personFioEn", tsadvUser.getPersonGroup() != null
+                    ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
+            params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+            params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
+            params.put("course", enrollment.getCourse().getName());
+            notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
+                    tsadvUser, params);
+        });
     }
 }
