@@ -298,19 +298,21 @@ public class StudentHomeworkChangedListener {
     }
 
     protected void sendNotifyForLineManager(Enrollment enrollment) {
-        List<TsadvUser> lineManagerList = (List<TsadvUser>) organizationHrUserService.getHrUsersForPerson(enrollment.getPersonGroup().getId(), "HR_ROLE_MANAGER");
-        lineManagerList.forEach(tsadvUser -> {
-            tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
-            Map<String, Object> params = new HashMap<>();
-            params.put("personFioRu", tsadvUser.getPersonGroup() != null
-                    ? tsadvUser.getPersonGroup().getFullName() : "");
-            params.put("personFioEn", tsadvUser.getPersonGroup() != null
-                    ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
-            params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
-            params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
-            params.put("course", enrollment.getCourse().getName());
-            notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
-                    tsadvUser, params);
-        });
+        organizationHrUserService.getHrUsersForPerson(enrollment.getPersonGroup().getId(), OrganizationHrUserService.HR_ROLE_MANAGER)
+                .stream()
+                .map(user -> (TsadvUser) user)
+                .forEach(tsadvUser -> {
+                    tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("personFioRu", tsadvUser.getPersonGroup() != null
+                            ? tsadvUser.getPersonGroup().getFullName() : "");
+                    params.put("personFioEn", tsadvUser.getPersonGroup() != null
+                            ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
+                    params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+                    params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
+                    params.put("course", enrollment.getCourse().getName());
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
+                            tsadvUser, params);
+                });
     }
 }
