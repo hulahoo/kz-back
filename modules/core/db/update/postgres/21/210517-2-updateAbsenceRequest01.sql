@@ -1,0 +1,1 @@
+alter table TSADV_ABSENCE_REQUEST rename column compencation to COMPENSATION ;

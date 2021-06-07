@@ -63,6 +63,17 @@ public class CertificateRequest extends AbstractBprocRequest {
     @JoinColumn(name = "FILE_ID")
     private FileDescriptor file;
 
+    @Column(name = "PLACE_OF_DELIVERY")
+    private String placeOfDelivery;
+
+    public String getPlaceOfDelivery() {
+        return placeOfDelivery;
+    }
+
+    public void setPlaceOfDelivery(String placeOfDelivery) {
+        this.placeOfDelivery = placeOfDelivery;
+    }
+
     public FileDescriptor getFile() {
         return file;
     }

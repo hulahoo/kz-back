@@ -181,6 +181,7 @@ public class HierarchyElementEdit extends AbstractEditor<HierarchyElementExt> {
 
                 parentElement = dataManager.load(hierarchyElementLoadContext);
                 getItem().setParentName(parentElement.getName());
+                getItem().setParentGroup(parentElement.getGroup());
 //                log.info(getItem().getParentName());
             } else {
                 getItem().setParentName(null);

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="dicStreetTypesTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicstreettype">
+    <data readOnly="true">
+        <collection id="dicStreetTypesDc"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicStreetType"
+                    view="dicStreetType.edit">
+            <loader id="dicStreetTypesDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicStreetType e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicStreetTypesTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicStreetTypesTable"
+                dataLoader="dicStreetTypesDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicStreetTypesTable"
+                    width="100%"
+                    dataContainer="dicStreetTypesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="company"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="isDefault"/>
+                <column id="order"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicStreetTypesTable.create"/>
+                <button id="editBtn" action="dicStreetTypesTable.edit"/>
+                <button id="removeBtn" action="dicStreetTypesTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

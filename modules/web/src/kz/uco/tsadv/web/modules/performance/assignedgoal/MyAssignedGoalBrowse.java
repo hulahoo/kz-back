@@ -65,7 +65,7 @@ public class MyAssignedGoalBrowse extends AbstractWindow {
         super.init(params);
         currentPerson = ((PersonGroupExt) params.get("selectedPersonGroup")).getPerson();
         performancePlan = (PerformancePlan) params.get("selectedPerformacePlan");
-        label.setValue("План управления деятельностью: " + performancePlan.getPerformancePlanName());
+        label.setValue("Оценка деятельности: " + performancePlan.getPerformancePlanName());
         label_1.setValue(currentPerson.getFullName());
         Utils.getPersonImageEmbedded(currentPerson, "70px", embedded);
         com.vaadin.v7.ui.Table table = assignedGoalsTable.unwrap(com.vaadin.v7.ui.Table.class);

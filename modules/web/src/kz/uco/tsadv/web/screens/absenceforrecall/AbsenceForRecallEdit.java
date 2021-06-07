@@ -71,11 +71,11 @@ public class AbsenceForRecallEdit extends AbstractBprocEditor<AbsenceForRecall> 
             throw new RuntimeException("Error saving file to FileStorage", e);
         }
         dataManager.commit(fd);
-        if (absenceForRecallDc.getItem().getFile() == null) {
-            absenceForRecallDc.getItem().setFile(new ArrayList<>());
+        if (absenceForRecallDc.getItem().getFiles() == null) {
+            absenceForRecallDc.getItem().setFiles(new ArrayList<>());
         }
         fileDc.getDisconnectedItems().add(fd);
-        absenceForRecallDc.getItem().getFile().add(fd);
+        absenceForRecallDc.getItem().getFiles().add(fd);
     }
 
     public Component generatorName(FileDescriptor fd) {

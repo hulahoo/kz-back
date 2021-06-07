@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
+import kz.uco.tsadv.config.ExtAppPropertiesConfig;
 import kz.uco.tsadv.modules.performance.enums.CardStatusEnum;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
@@ -29,6 +30,8 @@ public class KpiServiceBean implements KpiService {
     protected DatesService datesService;
     @Inject
     protected Metadata metadata;
+    @Inject
+    protected ExtAppPropertiesConfig extAppPropertiesConfig;
     @Inject
     private Persistence persistence;
 
@@ -151,6 +154,23 @@ public class KpiServiceBean implements KpiService {
                             "                                                                    left join absence a on dd between a.date_from and a.date_to " +
                             "         group by dd " +
                             "     ), " +
+                            " my_salary as ( " +
+                            "         select s.id, " +
+                            "                s.delete_ts, " +
+                            "                s.start_date, " +
+                            "                s.end_date, " +
+                            "                s.assignment_group_id, " +
+                            "                s.type_, " +
+                            "                case when s.type_  = 'HOURLYRATE' then s.amount * " + extAppPropertiesConfig.getChts() +
+                            "  else s.amount end as amount " +
+                            "         from tsadv_salary s " +
+                            "                  join base_assignment ss " +
+                            "                       on ss.group_id = s.assignment_group_id " +
+                            "                           and ss.delete_ts is null " +
+                            "                           and current_date between ss.start_date and ss.end_date " +
+                            "                           and ss.person_group_id = ?3 " +
+                            "         where s.delete_ts is null " +
+                            "     )," +
                             "     salary as ( " +
                             "         select s.id, " +
                             "                greatest(min(days), s.start_date) as start_date, " +
@@ -161,7 +181,7 @@ public class KpiServiceBean implements KpiService {
                             "                s.assignment_group_id, " +
                             "                s.amount " +
                             "         from generate_series( ?1, ?2, '1 day'::interval) days " +
-                            "                  join tsadv_salary s on  days between s.start_date and s.end_date and s.delete_ts is null " +
+                            "                  join my_salary s on  days between s.start_date and s.end_date and s.delete_ts is null " +
                             "                  join base_assignment ss " +
                             "                       on ss.group_id = s.assignment_group_id " +
                             "                           and ss.delete_ts is null " +
@@ -172,6 +192,88 @@ public class KpiServiceBean implements KpiService {
                             "         order by s.start_date " +
                             "     ) " +
                             "select sum(s.salary_days * 1.0 / ( (date_trunc('month', s.start_date)::date + '1 month'::interval)::date - date_trunc('month', s.start_date)::date ) * s.amount) " +
+                            "from salary s;");
+
+            query.setParameter(1, startDate);
+            query.setParameter(2, endDate);
+            query.setParameter(3, personGroupExt.getId());
+
+            List<Object[]> rows = query.getResultList();
+            if (!rows.isEmpty() && ((Vector) rows).firstElement() != null) {
+                return new BigDecimal(((Vector) rows).firstElement().toString());
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+    @Override
+    public BigDecimal getMaxBonus(PersonGroupExt personGroupExt, Date startDate, Date endDate) {
+        try (Transaction tx = persistence.createTransaction()) {
+            EntityManager em = persistence.getEntityManager();
+
+            Query query = em.createNativeQuery(
+                    "with params as (" +
+                            "    select ?1::date as start_date, ?2::date as end_date, ?3::uuid as person_group_id" +
+                            "), " +
+                            "     absence as ( " +
+                            "         select * " +
+                            "         from tsadv_absence a " +
+                            "                  join tsadv_dic_absence_type t on t.id = a.type_id and t.include_calc_gzp = true " +
+                            "                  join params on 1 = 1 " +
+                            "         where a.delete_ts is null " +
+                            "           and a.date_from <= params.end_date " +
+                            "           and params.start_date <= a.date_to " +
+                            "           and a.person_group_id = params.person_group_id " +
+                            "         order by a.date_from " +
+                            "     ), " +
+                            "     days as ( " +
+                            "         select dd as one_day, count(a.*) as absence_count from generate_series " +
+                            "                        ( (select greatest(min(a.date_from) , ?1 ) from absence a ), " +
+                            "                        (select least(max(a.date_to) , ?2) from absence a ), " +
+                            "                        '1 day'::interval) dd " +
+                            "                        left join absence a on dd between a.date_from and a.date_to " +
+                            "         group by dd " +
+                            "     ), " +
+                            "     my_salary as ( " +
+                            "         select s.id, " +
+                            "                s.delete_ts, " +
+                            "                days                               as days, " +
+                            "                s.assignment_group_id, " +
+                            "                s.type_, " +
+                            "                (case when s.type_ = 'HOURLYRATE' then s.amount * " + extAppPropertiesConfig.getChts() +
+                            "                             else s.amount end) * " +
+                            "                coalesce(g.bonus_percent, 0) / 100 as amount " +
+                            "         from generate_series(?1, ?2, '1 day'::interval) days " +
+                            "                  join tsadv_salary s on days between s.start_date and s.end_date and s.delete_ts is null " +
+                            "                  join base_assignment ss " +
+                            "                       on ss.group_id = s.assignment_group_id " +
+                            "                           and ss.delete_ts is null " +
+                            "                           and days between ss.start_date and ss.end_date " +
+                            "                           and ss.person_group_id = ?3 " +
+                            "                  join tsadv_grade g " +
+                            "                       on g.group_id = ss.grade_group_id " +
+                            "                           and days between g.start_date and g.end_date " +
+                            "                           and g.delete_ts is null " +
+                            "     ), " +
+                            "     salary as ( " +
+                            "         select s.id, " +
+                            "                s.days, " +
+                            "                ss.person_group_id, " +
+                            "                s.assignment_group_id, " +
+                            "                s.amount " +
+                            "         from my_salary s " +
+                            "                  join base_assignment ss " +
+                            "                       on ss.group_id = s.assignment_group_id " +
+                            "                           and ss.delete_ts is null " +
+                            "                           and days between ss.start_date and ss.end_date " +
+                            "                           and ss.person_group_id = ?3 " +
+                            "                  left join days dd on dd.one_day = days and dd.absence_count > 0 " +
+                            "         group by s.id, s.days, ss.person_group_id, s.assignment_group_id, s.amount, " +
+                            "                  to_char(days, 'yyyyMM') " +
+                            "         order by s.days " +
+                            "     ) " +
+                            "select sum(1.0 * s.amount / ((date_trunc('month', s.days)::date + '1 month'::interval)::date - " +
+                            "                             date_trunc('month', s.days)::date)) " +
                             "from salary s;");
 
             query.setParameter(1, startDate);

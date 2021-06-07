@@ -4,10 +4,7 @@ import com.haulmont.cuba.core.config.Config;
 import com.haulmont.cuba.core.config.Property;
 import com.haulmont.cuba.core.config.Source;
 import com.haulmont.cuba.core.config.SourceType;
-import com.haulmont.cuba.core.config.defaults.DefaultBoolean;
-import com.haulmont.cuba.core.config.defaults.DefaultInt;
-import com.haulmont.cuba.core.config.defaults.DefaultInteger;
-import com.haulmont.cuba.core.config.defaults.DefaultString;
+import com.haulmont.cuba.core.config.defaults.*;
 
 @Source(type = SourceType.DATABASE)
 public interface ExtAppPropertiesConfig extends Config {
@@ -38,6 +35,10 @@ public interface ExtAppPropertiesConfig extends Config {
     @Property("tsadv.kpi.includeAbsence")
     @DefaultBoolean(true)
     Boolean getIncludeAbsence();
+
+    @Property("tsadv.kpi.chts")
+    @DefaultDouble(165.15)
+    Double getChts();
 
     @Property("tsadv.course.defaultLogo")
     @DefaultString("")

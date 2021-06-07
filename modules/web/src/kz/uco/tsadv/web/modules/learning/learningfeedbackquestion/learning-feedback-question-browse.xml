@@ -40,8 +40,6 @@
             </actions>
             <columns>
                 <column id="questionLangValue1"/>
-                <column id="questionLangValue2"/>
-                <column id="questionLangValue3"/>
                 <column id="questionType"/>
             </columns>
             <rows datasource="learningFeedbackQuestionsDs"/>

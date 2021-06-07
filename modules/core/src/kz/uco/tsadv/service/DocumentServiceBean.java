@@ -1,6 +1,7 @@
 package kz.uco.tsadv.service;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.service.common.CommonService;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service(DocumentService.NAME)
 public class DocumentServiceBean implements DocumentService {
@@ -101,6 +103,35 @@ public class DocumentServiceBean implements DocumentService {
                 .list();
     }
 
+    public List<InsuredPerson> getInsuredPersonMembersWithNewContract(UUID insuredPersonId, UUID contractId) {
+        List<InsuredPerson> insuredPersonMembers = this.getInsuredPersonMembers(insuredPersonId);
+        if (insuredPersonMembers.isEmpty()) return insuredPersonMembers;
+
+        UUID oldContractId = insuredPersonMembers.get(0).getInsuranceContract().getId();
+        if (oldContractId.equals(contractId) || contractId == null) return insuredPersonMembers;
+
+        InsuranceContract insuranceContract = dataManager.load(InsuranceContract.class).id(contractId).view("insuranceContract-editView").one();
+
+        List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
+                "from tsadv$InsuredPerson e " +
+                " where e.insuranceContract.id = :insuranceContractId" +
+                " and e.employee.id = :employeeId " +
+                " and e.amount = :amount " +
+                " and e.relative.code <> 'PRIMARY'")
+                .parameter("insuranceContractId", oldContractId)
+                .parameter("employeeId", insuredPersonMembers.get(0).getEmployee().getId())
+                .parameter("amount", BigDecimal.valueOf(0))
+                .view("insuredPerson-editView")
+                .list();
+
+        insuredPersonMembers.stream()
+                .peek(insuredPerson -> insuredPerson.setInsuranceContract(insuranceContract))
+                .peek(insuredPerson -> insuredPerson.setInsuranceProgram(insuranceContract.getInsuranceProgram()))
+                .forEach(insuredPerson -> insuredPerson.setAmount(this.calcAmount(insuredPerson.getBirthdate(), insuredPerson.getRelative().getId(), insuranceContract, personList)));
+
+        return insuredPersonMembers;
+    }
+
     @Override
     public Boolean checkPersonInsure(UUID personGroupId, UUID contractId) {
         return this.checkPersonInsure(personGroupId, contractId, null);
@@ -127,11 +158,7 @@ public class DocumentServiceBean implements DocumentService {
                                  Date bith,
                                  UUID relativeTypeId) {
         InsuranceContract insuranceContract = dataManager.load(InsuranceContract.class).id(insuranceContractId).view("insuranceContract-editView").one();
-        PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class).id(personGroupExtId).view("personGroupExt-view").one();
-        DicRelationshipType relativeType = dataManager.load(DicRelationshipType.class).id(relativeTypeId).view(View.LOCAL).one();
-        List<ContractConditions> conditionsList = new ArrayList<>();
 
-        int age = employeeService.calculateAge(bith);
         List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
                 "from tsadv$InsuredPerson e " +
                 " where e.insuranceContract.id = :insuranceContractId" +
@@ -139,13 +166,20 @@ public class DocumentServiceBean implements DocumentService {
                 " and e.amount = :amount " +
                 " and e.relative.code <> 'PRIMARY'")
                 .parameter("insuranceContractId", insuranceContract.getId())
-                .parameter("employeeId", personGroupExt.getId())
+                .parameter("employeeId", personGroupExtId)
                 .parameter("amount", BigDecimal.valueOf(0))
                 .view("insuredPerson-editView")
                 .list();
 
+        return calcAmount(bith, relativeTypeId, insuranceContract, personList);
+    }
+
+    protected BigDecimal calcAmount(Date bith, UUID relativeTypeId, InsuranceContract insuranceContract, List<InsuredPerson> personList) {
+        int age = employeeService.calculateAge(bith);
+        List<ContractConditions> conditionsList = new ArrayList<>();
+
         for (ContractConditions condition : insuranceContract.getProgramConditions()) {
-            if (condition.getRelationshipType().getId().equals(relativeType.getId())) {
+            if (condition.getRelationshipType().getId().equals(relativeTypeId)) {
                 if (condition.getAgeMin() <= age && age < condition.getAgeMax()) {
                     conditionsList.add(condition);
                 }
@@ -203,7 +237,6 @@ public class DocumentServiceBean implements DocumentService {
         return request;
     }
 
-
     private InsuredPerson getInsuredPersonEmployee() {
         InsuredPerson insuredPerson = dataManager.create(InsuredPerson.class);
         DicRelationshipType relationshipType = commonService.getEntity(DicRelationshipType.class, "PRIMARY");
@@ -212,18 +245,23 @@ public class DocumentServiceBean implements DocumentService {
         insuredPerson.setType(RelativeType.EMPLOYEE);
         PersonGroupExt personGroupExt = getPersonGroupExt();
 
-
         DicCompany company = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
 
+        List<InsuredPerson> myInsuraces = this.getMyInsuraces();
+
         InsuranceContract contract = dataManager.load(InsuranceContract.class)
-                .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId ")
+                .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId and e.id not in :usedIds ")
                 .parameter("companyId", company.getId())
+                .parameter("usedIds", myInsuraces.stream().map(InsuredPerson::getInsuranceContract).map(BaseUuidEntity::getId).collect(Collectors.toList()))
                 .view("insuranceContract-editView")
                 .list().stream().findFirst().orElse(null);
 
         if (contract == null) {
-            throw new PortalException(String.format(messages.getMainMessage("hr.user.not.found"),
-                    messages.getTools().getEntityCaption(metadata.getClassNN(InsuranceContract.class))));
+            if (myInsuraces.isEmpty())
+                throw new PortalException(String.format(messages.getMainMessage("hr.user.not.found"),
+                        messages.getTools().getEntityCaption(metadata.getClassNN(InsuranceContract.class))));
+            else
+                throw new PortalException(messages.getMainMessage("already.tied.contract"));
         }
 
         PersonExt person = personGroupExt.getPerson();

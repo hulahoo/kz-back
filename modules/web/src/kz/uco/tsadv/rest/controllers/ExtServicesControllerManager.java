@@ -1,4 +1,4 @@
-package kz.uco.tsadv.controllers;
+package kz.uco.tsadv.rest.controllers;
 
 import com.haulmont.addon.restapi.api.config.RestServicesConfiguration;
 import com.haulmont.addon.restapi.api.exception.RestAPIException;

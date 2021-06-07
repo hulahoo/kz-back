@@ -10,7 +10,7 @@
     <context:annotation-config/>
 
     <!-- Define a base package for your controllers-->
-    <context:component-scan base-package="kz.uco.tsadv.controllers"/>
+    <!--    <context:component-scan base-package="kz.uco.tsadv.rest.controllers"/>-->
     <context:component-scan base-package="kz.uco.tsadv.web.modules.personal.controller"/>
     <context:component-scan base-package="kz.uco.tsadv.web.modules.recognition"/>
 

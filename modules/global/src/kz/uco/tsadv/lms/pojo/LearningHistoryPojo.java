@@ -14,6 +14,7 @@ public class LearningHistoryPojo implements Serializable {
     private BigDecimal result;
     private String certificate;
     private String enrollmentStatus;
+    private UUID enrollmentId;
     private String note;
 
     public UUID getCourseId() {
@@ -80,6 +81,14 @@ public class LearningHistoryPojo implements Serializable {
         this.enrollmentStatus = enrollmentStatus;
     }
 
+    public UUID getEnrollmentId() {
+        return enrollmentId;
+    }
+
+    public void setEnrollmentId(UUID enrollmentId) {
+        this.enrollmentId = enrollmentId;
+    }
+
     public String getNote() {
         return note;
     }
@@ -126,6 +135,11 @@ public class LearningHistoryPojo implements Serializable {
 
         public Builder result(BigDecimal result) {
             learningHistoryPojo.setResult(result);
+            return this;
+        }
+
+        public Builder enrollmentId(UUID enrollmentId) {
+            learningHistoryPojo.setEnrollmentId(enrollmentId);
             return this;
         }
 

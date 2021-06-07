@@ -1,4 +1,4 @@
-package kz.uco.tsadv.controllers;
+package kz.uco.tsadv.rest.controllers;
 
 import com.google.gson.Gson;
 import com.haulmont.addon.restapi.api.controllers.EntitiesController;

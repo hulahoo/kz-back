@@ -14,7 +14,7 @@ import java.util.Date;
 
 @Table(name = "TSADV_VACATION_SCHEDULE_REQUEST")
 @Entity(name = "tsadv_VacationScheduleRequest")
-@NamePattern("%s %s|personGroup,absenceDays")
+@NamePattern("%s - %s|startDate,endDate")
 public class VacationScheduleRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = 1975378160965313966L;
 
@@ -108,6 +108,6 @@ public class VacationScheduleRequest extends AbstractBprocRequest {
 
     @Override
     public String getProcessDefinitionKey() {
-        throw new IllegalStateException("VacationScheduleRequest does not have ProcessDefinitionKey ");
+        throw new UnsupportedOperationException("VacationScheduleRequest does not have ProcessDefinitionKey ");
     }
 }

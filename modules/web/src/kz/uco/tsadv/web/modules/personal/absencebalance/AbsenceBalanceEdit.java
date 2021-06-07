@@ -7,7 +7,6 @@ import com.haulmont.cuba.gui.components.*;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.model.AbsenceBalance;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
-import kz.uco.tsadv.service.AbsenceBalanceService;
 import kz.uco.tsadv.service.CallStoredFunctionService;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -26,7 +25,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
     @Inject
     protected FieldGroup fieldGroup;
     @Named("fieldGroup.balanceDays")
-    protected TextField<Integer> balanceDaysField;
+    protected TextField<Double> balanceDaysField;
 
     protected boolean tooShortAbsenceBalance;
     @Inject
@@ -82,7 +81,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
         }*/
         balanceDaysField.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                Integer overallBalanceDays = (Integer) e.getValue(); //todo: надо потом убрать
+                Double overallBalanceDays =  e.getValue();
                 double difference = 0;
                 if (getItem().getOverallBalanceDays() != null && getItem().getOverallBalanceDays() != 0) {
                     difference = getItem().getOverallBalanceDays() - getItem().getBalanceDays();

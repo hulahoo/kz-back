@@ -3,7 +3,7 @@
        xmlns:oauth2="http://www.springframework.org/schema/security/oauth2"
        xmlns:security="http://www.springframework.org/schema/security">
 
-    <context:component-scan base-package="kz.uco.tsadv.rest kz.uco.tsadv.controllers"/>
+    <context:component-scan base-package="kz.uco.tsadv.rest"/>
 <!--    <oauth2:authorization-server token-endpoint-url="/auth/token"-->
 <!--                                 authorization-request-manager-ref="oauthAuthorizationRequestManager"-->
 <!--                                 client-details-service-ref="clientDetailsService"-->
@@ -35,8 +35,7 @@
         <custom-filter ref="cuba_RestLastSecurityFilter" position="LAST"/>
     </security:http>
 
-    <bean id="restapi_ServicesController" class="kz.uco.tsadv.controllers.ExtServicesController"/>
-    <bean id="restapi_ServicesControllerManager" class="kz.uco.tsadv.controllers.ExtServicesControllerManager"/>
+    <bean id="restapi_ServicesControllerManager" class="kz.uco.tsadv.rest.controllers.ExtServicesControllerManager"/>
 
-    <bean id="restapi_EntitiesController" class="kz.uco.tsadv.controllers.ExtEntitiesController"/>
+    <bean id="restapi_EntitiesController" class="kz.uco.tsadv.rest.controllers.ExtEntitiesController"/>
 </beans>
