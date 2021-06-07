@@ -9657,6 +9657,10 @@
                     </property>
                 </property>
             </property>
+            <property name="certificate" view="_minimal">
+                <property name="certificate" view="_minimal"/>
+                <property name="course" view="_minimal"/>
+            </property>
         </property>
         <property name="personGroup" view="_minimal">
             <property name="list" view="_minimal">
