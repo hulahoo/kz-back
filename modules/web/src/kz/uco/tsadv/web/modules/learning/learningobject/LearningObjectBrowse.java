@@ -6,8 +6,10 @@ import com.haulmont.cuba.gui.data.GroupDatasource;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonConfig;
+import kz.uco.tsadv.modules.learning.enums.ContentType;
 import kz.uco.tsadv.modules.learning.model.CourseSectionObject;
 import kz.uco.tsadv.modules.learning.model.LearningObject;
+import kz.uco.tsadv.service.LearningService;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class LearningObjectBrowse extends AbstractLookup {
     protected CommonConfig commonConfig;
     @Inject
     protected ComponentsFactory componentsFactory;
+    @Inject
+    protected LearningService learningService;
 
     @Override
     public void ready() {
@@ -59,6 +63,11 @@ public class LearningObjectBrowse extends AbstractLookup {
         if (isInUse(learningObjectsDs.getItem())) {
             showNotification(getMessage("attention"), getMessage("section.has.this.object"), NotificationType.TRAY);
         } else {
+            if (learningObjectsDs.getItem().getFile() != null
+                    && ContentType.SCORM_ZIP.equals(learningObjectsDs.getItem().getContentType())) {
+                boolean a = learningService.deletePackage("/" + learningObjectsDs.getItem().getObjectName());
+                System.out.println(a);
+            }
             learningObjectsDs.removeItem(learningObjectsDs.getItem());
             learningObjectsDs.commit();
             learningObjectsDs.refresh();

@@ -94,7 +94,7 @@
             <item id="hrDicOrderReason"
                   screen="tsadv$DicOrderReason.browse"/>
             <item screen="tsadv$GlobalValueGroup.browse"/>
-            <item screen="tsadv$CaseType.browse"/>
+            <!--            <item screen="tsadv$CaseType.browse"/>-->
             <item screen="tsadv$DicEmployeeCategory.browse"/>
             <item screen="tsadv$SurChargeName.browse"/>
             <item screen="tsadv$DicAgreementStatus.browse"/>
@@ -107,8 +107,8 @@
             <item screen="tsadv$DicOrderType.browse"/>
             <item screen="tsadv$DicContractsType.browse"/>
             <item screen="tsadv$DicRelationshipType.browse"/>
-            <item screen="tsadv$DicTransportType.browse"/>
-            <item screen="tsadv$DicTransportClass.browse"/>
+            <!--            <item screen="tsadv$DicTransportType.browse"/>-->
+            <!--            <item screen="tsadv$DicTransportClass.browse"/>-->
             <item screen="tsadv$DicAccommodationType.browse"/>
             <item screen="tsadv$DicAccommodationClass.browse"/>
             <item screen="tsadv$DicAssignmentStatus.browse"/>
@@ -122,6 +122,9 @@
             <item screen="tsadv$DicTradeUnion.browse"/>
             <item screen="tsadv$DicSalaryChangeReason.browse"/>
             <item screen="tsadv_DicEarningPolicy.browse"/>
+            <item screen="tsadv_DicStreetType.browse"/>
+            <item screen="tsadv_DicKato.browse"/>
+            <item screen="tsadv_DicShift.browse"/>
             <item screen="tsadv$DicLanguage.browse"/>
             <item screen="tsadv$DicRateType.browse"/>
             <item screen="tsadv$DicLearningHistoryStatus.browse"/>
@@ -162,6 +165,8 @@
                   screen="base$OrganizationGroup.browse"/>
             <item id="hrPositionGroups"
                   screen="base$PositionGroup.browse"/>
+            <item screen="tsadv_ExecutiveAssistants.browse"
+                  caption="mainMsg://menu_config.tsadv_ExecutiveAssistants.browse"/>
 
         </menu>
         <menu id="hrGradesAndRules"
@@ -451,6 +456,7 @@
                   screen="tsadv$Goal.browse"/>
             <item id="pmAssignedPerformancePlan"
                   screen="tsadv$AssignedPerformancePlan.browse"/>
+            <item screen="tsadv_PersonException.browse"/>
         </menu>
         <menu id="pmCompetences">
             <item id="pmCompetenceGroups"
@@ -476,7 +482,6 @@
             </item>
         </menu>
         <item screen="tsadv$Trainer.browse"/>
-        <item screen="tsadv_PersonException.browse"/>
     </menu>
     <menu id="learning"
           icon="font-icon:GRADUATION_CAP"

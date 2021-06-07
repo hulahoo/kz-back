@@ -216,4 +216,41 @@ public class Goal extends AbstractParentEntity {
                 && PersistenceHelper.isLoaded(this, "goalNameLang2")
                 && PersistenceHelper.isLoaded(this, "goalNameLang3");
     }
+
+    @Transient
+    @MetaProperty(related = {"successCriteria", "successCriteriaLang2", "successCriteriaLang3"})
+    public String getSuccessCriteriaLang() {
+        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+        String language = userSessionSource.getLocale().getLanguage();
+        String langOrder = AppContext.getProperty("base.abstractDictionary.langOrder");
+
+        if (!isBaseSuccessCriteriaLangsFullLoaded()) {
+            return null;
+        }
+
+        if (langOrder != null) {
+            List<String> langs = Arrays.asList(langOrder.split(";"));
+            switch (langs.indexOf(language)) {
+                case 0: {
+                    return successCriteria;
+                }
+                case 1: {
+                    return nullReplace(successCriteriaLang2, successCriteria);
+                }
+                case 2: {
+                    return nullReplace(successCriteriaLang3, successCriteria);
+                }
+                default:
+                    return successCriteria;
+            }
+        }
+
+        return successCriteria;
+    }
+
+    private boolean isBaseSuccessCriteriaLangsFullLoaded() {
+        return PersistenceHelper.isLoaded(this, "successCriteria")
+                && PersistenceHelper.isLoaded(this, "successCriteriaLang2")
+                && PersistenceHelper.isLoaded(this, "successCriteriaLang3");
+    }
 }

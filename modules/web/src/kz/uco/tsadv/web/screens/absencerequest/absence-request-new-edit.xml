@@ -24,13 +24,13 @@
 
         <collection id="tasksDc"
                     class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
-        <collection id="vacationSchedulesDc" class="kz.uco.tsadv.entity.VacationSchedule">
+        <collection id="vacationSchedulesDc" class="kz.uco.tsadv.entity.VacationScheduleRequest">
             <view extends="_local">
                 <property name="personGroup" view="_minimal"/>
             </view>
             <loader id="vacationSchedulesDl">
                 <query>
-                    <![CDATA[select e from tsadv_VacationSchedule e]]>
+                    <![CDATA[select e from tsadv_VacationScheduleRequest e]]>
                 </query>
             </loader>
         </collection>
@@ -50,8 +50,10 @@
                             <textField id="statusField" property="status" editable="false"/>
                             <lookupPickerField id="typeField" required="true" property="type"
                                                optionsContainer="dicAbsenceTypesDc"/>
-                            <lookupField id="vacationScheduleField" property="vacationSchedule"
-                                         optionsContainer="vacationSchedulesDc" visible="false"/>
+                            <lookupField id="vacationScheduleField"
+                                         property="vacationScheduleRequest"
+                                         optionsContainer="vacationSchedulesDc"
+                                         visible="false"/>
                             <textField id="reasonField" property="reason"/>
                             <checkBox id="originalSheetField" property="originalSheet" visible="false"/>
                             <dateField id="scheduleStartDateField" visible="false" required="true" editable="false"

@@ -1,0 +1,1 @@
+alter table tsadv_vacation_schedule rename to TSADV_VACATION_SCHEDULE__U88371 ;

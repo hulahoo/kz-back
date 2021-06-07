@@ -1850,10 +1850,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, personDocumentData,
                             "no issueAuthority");
                 }
-                if (personDocumentJson.getStatus() == null || personDocumentJson.getStatus().isEmpty()) {
-                    return prepareError(result, methodName, personDocumentData,
-                            "no status");
-                }
+//                if (personDocumentJson.getStatus() == null || personDocumentJson.getStatus().isEmpty()) {
+//                    return prepareError(result, methodName, personDocumentData,
+//                            "no status");
+//                }
                 PersonDocument personDocument = dataManager.load(PersonDocument.class)
                         .query("select e from tsadv$PersonDocument e " +
                                 " where e.legacyId = :legacyId " +
@@ -1913,20 +1913,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
-                    DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
-                            .query("select e from tsadv$DicApprovalStatus e " +
-                                    " where e.legacyId = :legacyId " +
-                                    " and e.company.legacyId = :companyCode ")
-                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
-                                    "companyCode", personDocumentJson.getCompanyCode()))
-                            .view("dicApprovalStatus.for.integration")
-                            .list().stream().findFirst().orElse(null);
-                    if (status != null) {
-                        personDocument.setStatus(status);
-                    } else {
-                        return prepareError(result, methodName, personDocumentData,
-                                "no tsadv$DicApprovalStatus with legacyId " + personDocumentJson.getStatus()
-                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    if (personDocumentJson.getStatus() != null && !personDocumentJson.getStatus().isEmpty()) {
+                        DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
+                                .query("select e from tsadv$DicApprovalStatus e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode ")
+                                .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
+                                        "companyCode", personDocumentJson.getCompanyCode()))
+                                .view("dicApprovalStatus.for.integration")
+                                .list().stream().findFirst().orElse(null);
+                        if (status != null) {
+                            personDocument.setStatus(status);
+                        }
                     }
                     commitContext.addInstanceToCommit(personDocument);
                 }
@@ -1982,20 +1980,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
-                    DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
-                            .query("select e from tsadv$DicApprovalStatus e " +
-                                    " where e.legacyId = :legacyId " +
-                                    " and e.company.legacyId = :companyCode ")
-                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
-                                    "companyCode", personDocumentJson.getCompanyCode()))
-                            .view("dicApprovalStatus.for.integration")
-                            .list().stream().findFirst().orElse(null);
-                    if (status != null) {
-                        personDocument.setStatus(status);
-                    } else {
-                        return prepareError(result, methodName, personDocumentData,
-                                "no tsadv$DicApprovalStatus with legacyId " + personDocumentJson.getStatus()
-                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    if (personDocumentJson.getStatus() != null && !personDocumentJson.getStatus().isEmpty()) {
+                        DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
+                                .query("select e from tsadv$DicApprovalStatus e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode ")
+                                .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
+                                        "companyCode", personDocumentJson.getCompanyCode()))
+                                .view("dicApprovalStatus.for.integration")
+                                .list().stream().findFirst().orElse(null);
+                        if (status != null) {
+                            personDocument.setStatus(status);
+                        }
                     }
                     commitContext.addInstanceToCommit(personDocument);
                 }
@@ -2029,25 +2025,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, personDocumentData,
                             "no companyCode");
                 }
-                if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personDocumentData,
-                            "no personId");
-                }
+//                if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
+//                    return prepareError(result, methodName, personDocumentData,
+//                            "no personId");
+//                }
 
                 PersonDocument personDocument = dataManager.load(PersonDocument.class)
                         .query("select e from tsadv$PersonDocument e " +
                                 " where e.legacyId = :legacyId " +
-                                " and e.personGroup.legacyId = :pgLegacyId " +
                                 " and e.personGroup.company.legacyId = :companyCode")
                         .setParameters(ParamsMap.of("legacyId", personDocumentJson.getLegacyId(),
-                                "pgLegacyId", personDocumentJson.getPersonId(),
                                 "companyCode", personDocumentJson.getCompanyCode()))
                         .view("personDocument.edit").list().stream().findFirst().orElse(null);
 
                 if (personDocument == null) {
                     return prepareError(result, methodName, personDocumentData,
-                            "no personDocument with legacyId and personId : "
-                                    + personDocumentJson.getLegacyId() + " , " + personDocumentJson.getPersonId() +
+                            "no personDocument with legacyId and companyCode: "
+                                    + personDocumentJson.getLegacyId() +
                                     ", " + personDocumentJson.getCompanyCode());
                 }
                 if (!personDocumentArrayList.stream().filter(personDocument1 ->
@@ -2372,14 +2366,24 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             return prepareError(result, methodName, personContactData, "" +
                                     "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                         }
+                        if (personContactJson.getStartDate() != null && !personContactJson.getStartDate().isEmpty()) {
+                            personContact.setStartDate(formatter.parse(personContactJson.getStartDate()));
+                        }
+                        if (personContactJson.getEndDate() != null && !personContactJson.getEndDate().isEmpty()) {
+                            personContact.setEndDate(formatter.parse(personContactJson.getEndDate()));
+                        }
                         personContact.setContactValue(personContactJson.getValue());
                         personContactsCommitList.add(personContact);
                     } else {
                         personContact = metadata.create(PersonContact.class);
                         personContact.setId(UUID.randomUUID());
                         personContact.setLegacyId(personContactJson.getLegacyId());
-                        personContact.setStartDate(new Date());
-                        personContact.setEndDate(CommonUtils.getMaxDate());
+                        if (personContactJson.getStartDate() != null && !personContactJson.getStartDate().isEmpty()) {
+                            personContact.setStartDate(formatter.parse(personContactJson.getStartDate()));
+                        }
+                        if (personContactJson.getEndDate() != null && !personContactJson.getEndDate().isEmpty()) {
+                            personContact.setEndDate(formatter.parse(personContactJson.getEndDate()));
+                        }
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
                                         " select e from base$PersonGroupExt e " +

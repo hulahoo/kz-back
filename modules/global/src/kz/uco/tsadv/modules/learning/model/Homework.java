@@ -16,6 +16,7 @@ public class Homework extends AbstractParentEntity {
     @JoinColumn(name = "COURSE_ID")
     protected Course course;
 
+    @Lob
     @NotNull
     @Column(name = "INSTRUCTIONS", nullable = false)
     protected String instructions;

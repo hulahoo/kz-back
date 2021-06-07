@@ -1,15 +1,20 @@
 package kz.uco.tsadv.modules.personal.model;
 
 import com.haulmont.chile.core.annotations.NamePattern;
-import com.haulmont.cuba.core.entity.annotation.Listeners;
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @PublishEntityChangedEvents
 @Table(name = "TSADV_ABSENCE_RVD_REQUEST")
@@ -46,17 +51,36 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
     @Column(name = "TOTAL_HOURS")
     protected Integer totalHours;
 
-    @Column(name = "COMPENCATION")
-    protected Boolean compencation;
+    @Column(name = "COMPENSATION", nullable = false)
+    @NotNull
+    protected Boolean compensation = false;
 
-    @Column(name = "VACATION_DAY")
-    protected Boolean vacationDay;
+    @Column(name = "VACATION_DAY", nullable = false)
+    @NotNull
+    protected Boolean vacationDay = false;
 
-    @Column(name = "ACQUAINTED")
-    protected Boolean acquainted;
+    @Column(name = "ACQUAINTED", nullable = false)
+    @NotNull
+    protected Boolean acquainted = false;
 
-    @Column(name = "AGREE")
-    protected Boolean agree;
+    @Column(name = "AGREE", nullable = false)
+    @NotNull
+    protected Boolean agree = false;
+
+    @JoinTable(name = "TSADV_ABSENCE_RVD_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "ABSENCE_RVD_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @OnDelete(DeletePolicy.CASCADE)
+    @ManyToMany
+    private List<FileDescriptor> files;
+
+    public List<FileDescriptor> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<FileDescriptor> files) {
+        this.files = files;
+    }
 
     public Boolean getAgree() {
         return agree;
@@ -82,12 +106,12 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
         this.vacationDay = vacationDay;
     }
 
-    public Boolean getCompencation() {
-        return compencation;
+    public Boolean getCompensation() {
+        return compensation;
     }
 
-    public void setCompencation(Boolean compencation) {
-        this.compencation = compencation;
+    public void setCompensation(Boolean compensation) {
+        this.compensation = compensation;
     }
 
     public Integer getTotalHours() {
@@ -138,7 +162,6 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
         this.type = type;
     }
 
-
     public PersonGroupExt getPersonGroup() {
         return personGroup;
     }
@@ -150,5 +173,11 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
     @Override
     public String getProcessDefinitionKey() {
         return PROCESS_DEFINITION_KEY;
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        super.postConstruct();
+        this.compensation = true;
     }
 }
