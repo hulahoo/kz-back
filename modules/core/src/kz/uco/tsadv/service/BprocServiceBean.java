@@ -742,6 +742,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         params.put("approversTableRu", getApproversTable("Ru", processInstanceData));
         params.put("approversTableEn", getApproversTable("En", processInstanceData));
         params.put("comment", StringUtils.defaultString(getProcessVariable(processInstanceData.getId(), "comment"), ""));
+        params.putIfAbsent("requestStatusRu", entity.getStatus().getLangValue1());
+        params.putIfAbsent("requestStatusEn", entity.getStatus().getLangValue3());
 
         return params;
     }
