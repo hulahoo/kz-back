@@ -23808,4 +23808,10 @@
             <property name="legacyId"/>
         </property>
     </view>
+    <view entity="tsadv_ExecutiveAssistants" name="executiveAssistants-browseView">
+        <property name="managerPositionGroup" view="_minimal"/>
+        <property name="assistancePositionGroup" view="_minimal"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
+    </view>
 </views>

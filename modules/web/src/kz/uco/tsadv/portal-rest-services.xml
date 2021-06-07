@@ -27,18 +27,19 @@
         </method>
     </service>
     <service name="tsadv_StartBprocService">
-        <method name="getBpmRolesDefiner">
-            <param name="processDefinitionKey" type="java.lang.String"/>
-            <param name="initiatorPersonGroupId" type="java.util.UUID"/>
-        </method>
-        <method name="getNotPersisitBprocActors">
-            <param name="employee" type="kz.uco.tsadv.modules.administration.TsadvUser"/>
-            <param name="initiatorPersonGroupId" type="java.util.UUID"/>
-            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
-        </method>
         <method name="saveBprocActors">
             <param name="entityId" type="java.util.UUID"/>
             <param name="notPersisitBprocActors" type="java.util.List"/>
+        </method>
+        <method name="getNotPersisitBprocActors">
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+            <param name="bpmRolesDefiner" type="kz.uco.tsadv.modules.bpm.BpmRolesDefiner"/>
+            <param name="isAssistant" type="boolean"/>
+        </method>
+        <method name="getBpmRolesDefiner">
+            <param name="processDefinitionKey" type="java.lang.String"/>
+            <param name="employeePersonGroupId" type="java.util.UUID"/>
+            <param name="isAssistant" type="boolean"/>
         </method>
     </service>
     <service name="bproc_BprocRuntimeService">
@@ -248,6 +249,11 @@
         <method name="loadSetting">
             <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
             <param name="name" type="java.lang.String"/>
+        </method>
+    </service>
+    <service name="tsadv_ExecutiveAssistantService">
+        <method name="getManagerList">
+            <param name="positionGroupId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_PositionService">
