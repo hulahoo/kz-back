@@ -4347,8 +4347,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
                                 .query("select e from tsadv_DicStreetType e " +
-                                        " where e.code = :code")
-                                .parameter("code", personAddressJson.getStreetTypeId())
+                                        " where e.legacyId = :legacyId")
+                                .parameter("legacyId", personAddressJson.getStreetTypeId())
                                 .view(View.LOCAL)
                                 .list().stream().findFirst().orElse(null);
 
@@ -4364,6 +4364,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         address.setNotes(personAddressJson.getNotes());
                         address.setAddressKazakh(personAddressJson.getAddressKazakh());
                         address.setAddressEnglish(personAddressJson.getAddressEnglish());
+                        address.setAddress(dicCountry != null
+                                ? dicCountry.getLangValue() + "," : ""
+                                + dicKato != null
+                                ? dicKato.getLangValue() + "," : ""
+                                + dicStreetType != null
+                                ? dicStreetType.getLangValue() + "," : ""
+                                + personAddressJson != null && !personAddressJson.getStreetName().isEmpty()
+                                ? personAddressJson.getStreetName() + "," : ""
+                                + personAddressJson.getBuilding() + ","
+                                + personAddressJson.getBlock() + ","
+                                + personAddressJson.getFlat());
 
                         personAddressesCommitList.add(address);
                     } else {
@@ -4425,8 +4436,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
                                 .query("select e from tsadv_DicStreetType e " +
-                                        " where e.code = :code")
-                                .parameter("code", personAddressJson.getStreetTypeId())
+                                        " where e.legacyId = :legacyId")
+                                .parameter("legacyId", personAddressJson.getStreetTypeId())
                                 .view(View.LOCAL)
                                 .list().stream().findFirst().orElse(null);
 
@@ -4442,6 +4453,17 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         address.setNotes(personAddressJson.getNotes());
                         address.setAddressKazakh(personAddressJson.getAddressKazakh());
                         address.setAddressEnglish(personAddressJson.getAddressEnglish());
+                        address.setAddress(dicCountry != null
+                                ? dicCountry.getLangValue() + "," : ""
+                                + dicKato != null
+                                ? dicKato.getLangValue() + "," : ""
+                                + dicStreetType != null
+                                ? dicStreetType.getLangValue() + "," : ""
+                                + personAddressJson != null && !personAddressJson.getStreetName().isEmpty()
+                                ? personAddressJson.getStreetName() + "," : ""
+                                + personAddressJson.getBuilding() + ","
+                                + personAddressJson.getBlock() + ","
+                                + personAddressJson.getFlat());
 
                         personAddressesCommitList.add(address);
                     }
