@@ -896,7 +896,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         "select e from base$Hierarchy e " +
                                 " where e.primaryFlag = TRUE")
                         .view("hierarchy.view").list().stream().findFirst().orElse(null);
-                hierarchyElementExt.setHierarchy(hierarchy);
+                if (hierarchyElementExt != null) {
+                    hierarchyElementExt.setHierarchy(hierarchy);
+                }
                 if (hierarchy == null) {
                     return prepareError(result, methodName, hierarchyElementData,
                             "no organization hierarchy");
