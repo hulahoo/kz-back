@@ -25,4 +25,8 @@ public interface LearningService {
     boolean allHomeworkPassed(List<Homework> homeworkList, PersonGroupExt personGroup);
 
     boolean haveAFeedbackQuestion(List<CourseFeedbackTemplate> feedbackTemplateList, PersonGroupExt personGroup);
+
+    void noDataForFeedbackAnswerMore7Days();
+
+    void noAttemptLast7Days();
 }

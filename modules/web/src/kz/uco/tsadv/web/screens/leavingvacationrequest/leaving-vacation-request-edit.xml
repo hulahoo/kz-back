@@ -36,6 +36,7 @@
                     <dateField id="endDataField" property="endDate" editable="false"/>
                     <dateField id="plannedStartDateField" property="plannedStartDate"/>
                     <textArea id="commentField" property="comment" rowspan="3"/>
+                    <field property="attachment"/>
                 </column>
             </form>
             <vbox id="bpmActorsVBox"

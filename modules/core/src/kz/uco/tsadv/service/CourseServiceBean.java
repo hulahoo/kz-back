@@ -898,18 +898,18 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public List<CategoryCoursePojo> allCourses() {
+    public List<CategoryCoursePojo> allCourses(UUID personGroupId) {
         return this.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
                 "select c " +
                 "from tsadv$Course c " +
                 "   join c.category ca " +
                 "where c.activeFlag = true"))
                 .setView("course.list"))
-                .stream());
+                .stream(), personGroupId);
     }
 
     @Override
-    public List<CategoryCoursePojo> searchCourses(String courseName) {
+    public List<CategoryCoursePojo> searchCourses(UUID personGroupId, String courseName) {
         return this.mapCoursesToCategory(dataManager.loadList(LoadContext.create(Course.class).setQuery(LoadContext.createQuery("" +
                 "select c " +
                 "from tsadv$Course c " +
@@ -919,7 +919,7 @@ public class CourseServiceBean implements CourseService {
                 .setParameter("courseName", courseName))
                 .setView("course.list"))
                 .stream()
-                .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())));
+                .filter(course -> course.getName().toLowerCase().contains(courseName.toLowerCase())), personGroupId);
     }
 
     @Override
@@ -1061,7 +1061,7 @@ public class CourseServiceBean implements CourseService {
     }
 
     @Override
-    public List<CategoryCoursePojo> mapCoursesToCategory(Stream<Course> courseStream) {
+    public List<CategoryCoursePojo> mapCoursesToCategory(Stream<Course> courseStream, UUID personGroupId) {
         return courseStream.map(course -> {
             CoursePojo coursePojo = new CoursePojo();
             coursePojo.setId(course.getId());
@@ -1070,7 +1070,7 @@ public class CourseServiceBean implements CourseService {
                     "from tsadv$Enrollment e " +
                     "where e.personGroup.id = :personGroupId " +
                     "   and e.course.id = :courseId ")
-                    .parameter("personGroupId", Objects.requireNonNull(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID)))
+                    .parameter("personGroupId", personGroupId)
                     .parameter("courseId", course.getId())
                     .optional()
                     .ifPresent(e -> {
