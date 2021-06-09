@@ -2,9 +2,22 @@ package kz.uco.tsadv.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class OrgRequestSaveModel implements Serializable {
+
+    public static class FileModel implements Serializable {
+        private UUID id;
+
+        public UUID getId() {
+            return id;
+        }
+
+        public void setId(UUID id) {
+            this.id = id;
+        }
+    }
 
     private UUID id;
     private UUID company;
@@ -14,6 +27,16 @@ public class OrgRequestSaveModel implements Serializable {
     private Date requestDate;
     private UUID status;
     private String comment;
+
+    private List<FileModel> file;
+
+    public List<FileModel> getFile() {
+        return file;
+    }
+
+    public void setFile(List<FileModel> file) {
+        this.file = file;
+    }
 
     public String getComment() {
         return comment;

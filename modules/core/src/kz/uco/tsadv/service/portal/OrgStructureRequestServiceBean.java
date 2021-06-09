@@ -4,6 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCompany;
@@ -162,11 +163,16 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                     {
                             BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
                     };
+            BigDecimal[] totalMtPayroll = new BigDecimal[]
+                    {
+                            BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
+                    };
 
             for (RequestTreeData child : children) {
+                BigDecimal[] headCounts = child.getHeadCount();
                 BigDecimal[] baseSalary = child.getBaseSalary();
                 BigDecimal[] mtPayrollPer = child.getMtPayrollPer();
-                BigDecimal[] headCounts = child.getHeadCount();
+                BigDecimal[] mtPayroll = child.getMtPayroll();
                 for (int i = 0; i < 3; i++) {
                     if (headCounts != null && headCounts.length == 3) {
                         totalHeadCounts[i] = totalHeadCounts[i].add(ObjectUtils.defaultIfNull(headCounts[i], BigDecimal.ZERO));
@@ -177,11 +183,15 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                     if (mtPayrollPer != null && mtPayrollPer.length == 3) {
                         totalMtPayrollPer[i] = totalMtPayrollPer[i].add(ObjectUtils.defaultIfNull(mtPayrollPer[i], BigDecimal.ZERO));
                     }
+                    if (mtPayroll != null && mtPayroll.length == 3) {
+                        totalMtPayroll[i] = totalMtPayroll[i].add(ObjectUtils.defaultIfNull(mtPayroll[i], BigDecimal.ZERO));
+                    }
                 }
             }
             requestTreeData.setHeadCount(totalHeadCounts);
-            requestTreeData.setMtPayrollPer(totalMtPayrollPer);
             requestTreeData.setBaseSalary(totalBaseSalary);
+            requestTreeData.setMtPayrollPer(totalMtPayrollPer);
+            requestTreeData.setMtPayroll(totalMtPayroll);
         }
 
         if (StringUtils.isNotEmpty(requestTreeData.getChangeType())) {
@@ -239,6 +249,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
         }
     }
 
+    @SuppressWarnings("ConstantConditions")
     protected Optional<RequestTreeData> getMergedOrgStructureData(UUID requestId) {
         final UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
         if (personGroupId == null) {
@@ -267,7 +278,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
             List<RequestTreeData> filteredTreeDataList = hideColumnsByGrade(treeDataList);
             RequestTreeData root = filteredTreeDataList.stream()
-                    .filter(r -> r.isRoot())
+                    .filter(RequestTreeData::isRoot)
                     .findFirst()
                     .orElseThrow(() -> new PortalException("Root element is not found!"));
             collectChildren(root, filteredTreeDataList);
@@ -329,6 +340,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 orgStructureRequest.setAuthor(em.getReference(PersonGroupExt.class, orgRequestSaveModel.getAuthor()));
                 orgStructureRequest.setRequestDate(orgRequestSaveModel.getRequestDate());
                 orgStructureRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());
+
             } else {
                 orgStructureRequest = em.find(OrgStructureRequest.class, id);
                 if (orgStructureRequest == null) {
@@ -338,6 +350,15 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
             orgStructureRequest.setModifyDate(orgRequestSaveModel.getModifyDate());
             orgStructureRequest.setComment(orgRequestSaveModel.getComment());
+
+            ArrayList<FileDescriptor> files = new ArrayList<>();
+
+            if (orgRequestSaveModel.getFile() != null)
+                orgRequestSaveModel.getFile().stream()
+                        .map(fileModel -> em.getReference(FileDescriptor.class, fileModel.getId()))
+                        .forEach(files::add);
+
+            orgStructureRequest.setFile(files);
 
             if (PersistenceHelper.isNew(orgStructureRequest)) {
                 em.persist(orgStructureRequest);

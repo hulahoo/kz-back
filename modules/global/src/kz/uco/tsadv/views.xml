@@ -23721,6 +23721,7 @@
         <property name="company" view="_base"/>
         <property name="department" view="_base"/>
         <property name="author" view="_base"/>
+        <property name="file" view="_base"/>
     </view>
     <view entity="tsadv_DicLearningProof" name="dicLearningProof.edit" extends="_local">
         <property name="company" view="_minimal">
