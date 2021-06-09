@@ -117,6 +117,7 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
                     ? getItem().getPersonGroup().getPersonFirstLastNameLatin() : "");
 
             notificationService.sendParametrizedNotification("tdc.new.trainerComment", tsadvUser, maps);
+            showNotification(getMessage("sendSucces"), NotificationType.TRAY);
         }
     }
 }
