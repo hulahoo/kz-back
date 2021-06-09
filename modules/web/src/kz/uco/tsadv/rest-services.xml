@@ -817,4 +817,17 @@
             <param name="absenceBalanceData" type="kz.uco.tsadv.modules.integration.jsonobject.AbsenceBalanceDataJson"/>
         </method>
     </service>
+    <service name="tsadv_AbsenceRvdService">
+        <method name="countTotalHours">
+            <param name="dateFrom" type="java.util.Date"/>
+            <param name="dateTo" type="java.util.Date" />
+            <param name="absenceTypeId" type="java.util.UUID" />
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_EnrollmentService">
+        <method name="searchEnrollment">
+            <param name="personGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
 </services>

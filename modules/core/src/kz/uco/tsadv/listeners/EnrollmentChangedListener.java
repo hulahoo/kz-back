@@ -6,7 +6,6 @@ import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.app.events.AttributeChanges;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.service.NotificationSenderAPIService;
@@ -20,6 +19,7 @@ import kz.uco.tsadv.modules.learning.model.Enrollment;
 import kz.uco.tsadv.modules.learning.model.EnrollmentCertificateFile;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LmsService;
+import kz.uco.tsadv.service.OrganizationHrUserService;
 import kz.uco.uactivity.entity.ActivityType;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.entity.WindowProperty;
@@ -56,6 +56,8 @@ public class EnrollmentChangedListener {
     private TransactionalDataManager transactionalDataManager;
     @Inject
     private List<EnrollmentValidation> enrollmentValidations;
+    @Inject
+    private OrganizationHrUserService organizationHrUserService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<Enrollment, UUID> event) {
@@ -88,6 +90,7 @@ public class EnrollmentChangedListener {
                             Map<String, Object> map = new HashMap<>();
                             String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                     + "/course/"
+                                    + enrollment.getCourse().getId()
                                     + "\" target=\"_blank\">%s " + "</a>";
                             String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                     + "/my-course/"
@@ -214,6 +217,9 @@ public class EnrollmentChangedListener {
                             notificationSenderAPIService.sendParametrizedNotification("tdc.student.enrollmentClosed",
                                     user, map);
                         }
+
+                        sendNotifyToTrainers(enrollment);
+                        sendNotifyForLineManager(enrollment);
                     }
                 }
             }
@@ -232,6 +238,7 @@ public class EnrollmentChangedListener {
                     Map<String, Object> map = new HashMap<>();
                     String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                             + "/course/"
+                            + enrollment.getCourse().getId()
                             + "\" target=\"_blank\">%s " + "</a>";
                     String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                             + "/my-course/"
@@ -279,6 +286,58 @@ public class EnrollmentChangedListener {
                     .list()
                     .forEach(transactionalDataManager::remove);
         }
+    }
+
+    protected void sendNotifyToTrainers(Enrollment enrollment) {
+        List<CourseTrainer> courseTrainerList = enrollment.getCourse() != null
+                ? enrollment.getCourse().getCourseTrainers() : null;
+        if (courseTrainerList != null && !courseTrainerList.isEmpty()) {
+            courseTrainerList.forEach(courseTrainer -> {
+                TsadvUser tsadvUserTrainer = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " where e.personGroup = :personGroup ")
+                        .parameter("personGroup", courseTrainer.getTrainer() != null
+                                ? courseTrainer.getTrainer().getEmployee() : null)
+                        .view("userExt.edit")
+                        .list().stream().findFirst().orElse(null);
+                if (tsadvUserTrainer != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getFullName() : "");
+                    params.put("trainerFioEn", courseTrainer.getTrainer().getEmployee() != null
+                            ? courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("studentFioRu", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getFullName() : "");
+                    params.put("studentFioEn", enrollment.getPersonGroup() != null
+                            ? enrollment.getPersonGroup().getPersonFirstLastNameLatin()
+                            : "");
+                    params.put("course", enrollment.getCourse().getName());
+
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.student.completed.study",
+                            tsadvUserTrainer, params);
+                }
+            });
+        }
+    }
+
+    protected void sendNotifyForLineManager(Enrollment enrollment) {
+        organizationHrUserService.getHrUsersForPerson(enrollment.getPersonGroup().getId(), OrganizationHrUserService.HR_ROLE_MANAGER)
+                .stream()
+                .map(user -> (TsadvUser) user)
+                .forEach(tsadvUser -> {
+                    tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("personFioRu", tsadvUser.getPersonGroup() != null
+                            ? tsadvUser.getPersonGroup().getFullName() : "");
+                    params.put("personFioEn", tsadvUser.getPersonGroup() != null
+                            ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
+                    params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+                    params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
+                    params.put("course", enrollment.getCourse().getName());
+                    notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
+                            tsadvUser, params);
+                });
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)

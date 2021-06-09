@@ -1,9 +1,8 @@
-package kz.uco.tsadv.controllers;
+package kz.uco.tsadv.rest.handler;
 
 import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.pojo.ExceptionResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.core.PriorityOrdered;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,15 +13,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author Alibek Berdaulet
  */
 @ControllerAdvice
-public class PortalExceptionHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(PortalExceptionHandler.class);
+public class PortalExceptionHandler implements PriorityOrdered {
 
     @ExceptionHandler(PortalException.class)
     @ResponseBody
     public ResponseEntity<ExceptionResponse> handlePortalException(PortalException e) {
-        log.info("PortalException: {}", e.getMessage(), e);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_GATEWAY.value(), e.getMessage());
-        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_GATEWAY);
+        ExceptionResponse exceptionResponse = new ExceptionResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;
     }
 }

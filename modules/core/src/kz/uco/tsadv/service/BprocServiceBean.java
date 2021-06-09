@@ -318,8 +318,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
                 ExtTaskData initiatorTask = metadata.create(ExtTaskData.class);
                 initiatorTask.setId(UUID.randomUUID().toString());
-                initiatorTask.setName("Initiator");
-                initiatorTask.setTaskDefinitionKey("initiator");
+                initiatorTask.setName(AbstractBprocRequest.INITIATOR_TASK_CODE);
+                initiatorTask.setTaskDefinitionKey(AbstractBprocRequest.INITIATOR_TASK_CODE);
                 initiatorTask.setAssignee(initiator.getId().toString());
                 initiatorTask.setAssigneeOrCandidates(Collections.singletonList(initiator));
                 initiatorTask.setCreateTime(processInstanceData.getStartTime());
@@ -437,7 +437,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                     "&item=" + entityName + "-" + entity.getId() +
                     "\" target=\"_blank\">%s " + "</a>";
         else
-            return "<a href=\"" + appUrl + "/activity/" + entity.getId() + "\" target=\"_blank\">%s " + "</a>";
+            return "<a href=\"" + appUrl + "/activity/" + activity.getId() + "\" target=\"_blank\">%s " + "</a>";
     }
 
     @Override
@@ -544,7 +544,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                         ParamsMap.of("groupId", absenceForRecall.getEmployee().getId()),
                         View.LOCAL);
 
-                DicAbsenceType type = absenceForRecall.getAbsenceType();
+                DicAbsenceType type = absenceForRecall.getVacation().getType();
                 params.put("fullNameRu", person.getFullNameLatin("ru"));
                 params.put("fullNameEn", person.getFullNameLatin("en"));
                 params.put("absenceTypeRu", type.getLangValue1());

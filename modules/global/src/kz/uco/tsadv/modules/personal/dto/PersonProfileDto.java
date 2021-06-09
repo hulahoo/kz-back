@@ -7,17 +7,9 @@ import java.util.UUID;
 /**
  * @author Alibek Berdaulet
  */
-public class PersonProfileDto implements Serializable {
-
-    private UUID id;
-
-    private UUID groupId;
-
-    private UUID positionGroupId;
+public class PersonProfileDto extends PersonDto implements Serializable {
 
     private UUID positionId;
-
-    private String fullName;
 
     private Date hireDate;
 
@@ -33,13 +25,11 @@ public class PersonProfileDto implements Serializable {
 
     private String organizationName;
 
-    private String positionName;
-
     private String email;
 
     private String phone;
 
-    private UUID companyId;
+    private String companyCode;
 
     private String firstLastName;
 
@@ -49,30 +39,6 @@ public class PersonProfileDto implements Serializable {
 
     public void setFirstLastName(String firstLastName) {
         this.firstLastName = firstLastName;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(UUID groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public Date getHireDate() {
@@ -131,14 +97,6 @@ public class PersonProfileDto implements Serializable {
         this.organizationName = organizationName;
     }
 
-    public String getPositionName() {
-        return positionName;
-    }
-
-    public void setPositionName(String positionName) {
-        this.positionName = positionName;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -155,14 +113,6 @@ public class PersonProfileDto implements Serializable {
         this.phone = phone;
     }
 
-    public UUID getPositionGroupId() {
-        return positionGroupId;
-    }
-
-    public void setPositionGroupId(UUID positionGroupId) {
-        this.positionGroupId = positionGroupId;
-    }
-
     public UUID getPositionId() {
         return positionId;
     }
@@ -171,11 +121,11 @@ public class PersonProfileDto implements Serializable {
         this.positionId = positionId;
     }
 
-    public UUID getCompanyId() {
-        return companyId;
+    public String getCompanyCode() {
+        return companyCode;
     }
 
-    public void setCompanyId(UUID companyId) {
-        this.companyId = companyId;
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

@@ -31,6 +31,7 @@
                 <dateField id="answerTimeStampField" property="answerTimeStamp" editable="false"/>
                 <textArea id="answerField" property="answer" rows="5" editable="false"/>
                 <checkBox id="isCorrectField" property="isCorrect"/>
+                <textArea id="comment" property="comment"/>
             </column>
         </form>
         <hbox id="vbox" height="100%" width="100%"/>

@@ -13,6 +13,7 @@ import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.service.NotificationService;
+import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.InsuranceContract;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
@@ -29,6 +30,8 @@ import java.util.Map;
 public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
     @Inject
     protected GlobalConfig globalConfig;
+    @Inject
+    protected FrontConfig frontConfig;
     @Inject
     private ScreenBuilders screenBuilders;
     @Inject
@@ -107,7 +110,7 @@ public class InsuranceContractBrowse extends StandardLookup<InsuranceContract> {
             tsadvUsers.forEach(tsadvUser -> {
                 Map<String, Object> params = new HashMap<>();
                 params.put("fio", tsadvUser.getPersonGroup().getFullName());
-                params.put("linkRu", "<a href=\"" + globalConfig.getWebAppUrl() + "\">ссылке</a>");
+                params.put("linkRu", "<a href=\"" + frontConfig.getFrontAppUrl() + "\" target=\"_blank\">ссылке</a>");
                 notificationService.sendParametrizedNotification("insurance.contract.dms",
                         tsadvUser, params);
             });

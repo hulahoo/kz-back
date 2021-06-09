@@ -44,8 +44,6 @@ public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequ
     @Inject
     protected TextField<String> purposeTextField;
     @Inject
-    protected CheckBox compencationField;
-    @Inject
     protected MessageBundle messageBundle;
 
     @Subscribe(id = "absenceRequestDc", target = Target.DATA_CONTAINER)
@@ -53,9 +51,9 @@ public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequ
         if (!isBlocked) {
             isBlocked = true;
             if (event.getProperty().equals("compencation")) {
-                absenceRequestDc.getItem().setVacationDay(!event.getItem().getCompencation());
+                absenceRequestDc.getItem().setVacationDay(!event.getItem().getCompensation());
             } else if (event.getProperty().equals("vacationDay")) {
-                absenceRequestDc.getItem().setCompencation(!event.getItem().getVacationDay());
+                absenceRequestDc.getItem().setCompensation(!event.getItem().getVacationDay());
             }
             isBlocked = false;
         }
@@ -118,12 +116,10 @@ public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequ
 
     @Override
     protected TsadvUser getEmployee() {
-        TsadvUser user = dataManager.load(TsadvUser.class)
+        return dataManager.load(TsadvUser.class)
                 .query("select e from tsadv$UserExt e where e.personGroup.id = :personGroupId")
                 .setParameters(ParamsMap.of("personGroupId",
                         absenceRequestDc.getItem().getPersonGroup().getId()))
                 .view(View.MINIMAL).list().stream().findFirst().orElse(null);
-
-        return user;
     }
 }

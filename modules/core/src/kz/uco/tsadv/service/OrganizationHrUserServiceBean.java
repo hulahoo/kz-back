@@ -160,13 +160,13 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
     public List<? extends User> getHrUsersForPerson(@Nonnull UUID personGroupId, @Nonnull String roleCode) {
         Assert.isTrue(!roleCode.equals("EMPLOYEE"), roleCode + " Wrong argument code !");
         switch (roleCode) {
-            case "MANAGER": {
+            case HR_ROLE_MANAGER: {
                 PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
                 PositionGroupExt manager = positionService.getManager(positionGroup.getId());
                 if (manager == null) return new ArrayList<>();
                 return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(manager.getId(), null));
             }
-            case "SUP_MANAGER": {
+            case HR_ROLE_SUP_MANAGER: {
                 PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
                 PositionGroupExt manager = positionService.getManager(positionGroup.getId());
                 if (manager == null) return new ArrayList<>();

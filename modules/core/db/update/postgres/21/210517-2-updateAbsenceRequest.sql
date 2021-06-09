@@ -1,0 +1,12 @@
+update TSADV_ABSENCE_REQUEST set COMPENCATION = false where COMPENCATION is null ;
+alter table TSADV_ABSENCE_REQUEST alter column COMPENCATION set not null ;
+update TSADV_ABSENCE_REQUEST set VACATION_DAY = false where VACATION_DAY is null ;
+alter table TSADV_ABSENCE_REQUEST alter column VACATION_DAY set not null ;
+update TSADV_ABSENCE_REQUEST set AGREE = false where AGREE is null ;
+alter table TSADV_ABSENCE_REQUEST alter column AGREE set not null ;
+update TSADV_ABSENCE_REQUEST set ACQUAINTED = false where ACQUAINTED is null ;
+alter table TSADV_ABSENCE_REQUEST alter column ACQUAINTED set not null ;
+update TSADV_ABSENCE_REQUEST set ADD_NEXT_YEAR = false where ADD_NEXT_YEAR is null ;
+alter table TSADV_ABSENCE_REQUEST alter column ADD_NEXT_YEAR set not null ;
+update TSADV_ABSENCE_REQUEST set ORIGINAL_SHEET = false where ORIGINAL_SHEET is null ;
+alter table TSADV_ABSENCE_REQUEST alter column ORIGINAL_SHEET set not null ;

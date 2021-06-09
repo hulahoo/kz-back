@@ -54,12 +54,15 @@
         </fieldGroup>
         <tabSheet id="tabSheet" width="100%">
             <tab id="tab" caption="msg://result">
-                <groupTable id="courseSectionScormResultTable" height="100%" width="100%" >
+                <groupTable id="courseSectionScormResultTable" height="100%" width="100%">
                     <actions>
                         <action id="edit" type="edit"/>
+                        <action id="sendNotify" caption="msg://sendNotify" invoke="sendNotify"/>
                     </actions>
                     <buttonsPanel>
                         <button id="courseSectionScormResultTableEditBtn" action="courseSectionScormResultTable.edit"/>
+                        <button id="courseSectionScormResultTableSendNotifyBtn"
+                                action="courseSectionScormResultTable.sendNotify"/>
                     </buttonsPanel>
                     <columns>
                         <group>
@@ -70,6 +73,7 @@
                         <column id="answerTimeStamp"/>
                         <column id="isCorrect"/>
                         <column id="answer"/>
+                        <column id="comment"/>
                     </columns>
                     <rows datasource="courseSectionScormResultsDs"/>
                     <rowsCount/>

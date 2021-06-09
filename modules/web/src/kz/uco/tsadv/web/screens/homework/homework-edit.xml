@@ -14,8 +14,8 @@
                 width="800"/>
     <layout expand="editActions" spacing="true">
         <form id="form" dataContainer="homeworkDc">
-            <column width="250px">
-                <textArea id="instructionsField" property="instructions" rows="5"/>
+            <column width="400px">
+                <textArea id="instructionsField" property="instructions" rows="20"/>
                 <upload id="instructionFileField" fileStoragePutMode="IMMEDIATE" property="instructionFile"
                         showFileName="true"/>
             </column>
