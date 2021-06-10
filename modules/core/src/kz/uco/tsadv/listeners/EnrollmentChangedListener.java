@@ -139,7 +139,7 @@ public class EnrollmentChangedListener {
                         map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
 
 //                    sendNotificationCompleted(enrollment);
-                        CommitContext commitContext = new CommitContext();
+//                        CommitContext commitContext = new CommitContext();
                         CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
                                 && !enrollment.getCourse().getCertificate().isEmpty()
                                 ? enrollment.getCourse().getCertificate().get(0)

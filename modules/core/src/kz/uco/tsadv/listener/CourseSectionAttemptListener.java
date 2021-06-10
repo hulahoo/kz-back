@@ -16,7 +16,6 @@ import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
-import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LearningService;
 import kz.uco.tsadv.service.OrganizationHrUserService;
@@ -87,16 +86,16 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
                         enrollment)) {
                     boolean homework = true;
-                    boolean feedbackQuestion = true;
-                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
-                    if (!courseFeedbackTemplateList.isEmpty()) {
-                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
-                    }
+//                    boolean feedbackQuestion = true;
+//                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+//                    if (!courseFeedbackTemplateList.isEmpty()) {
+//                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+//                    }
                     List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
                     if (!homeworkList.isEmpty()) {
                         homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
                     }
-                    if (homework && feedbackQuestion) {
+                    if (homework) {
                         enrollment.setStatus(EnrollmentStatus.COMPLETED);
                         transactionalDataManager.save(enrollment);
 
@@ -138,16 +137,16 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
                         enrollment)) {
                     boolean homework = true;
-                    boolean feedbackQuestion = true;
-                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
-                    if (!courseFeedbackTemplateList.isEmpty()) {
-                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
-                    }
+//                    boolean feedbackQuestion = true;
+//                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+//                    if (!courseFeedbackTemplateList.isEmpty()) {
+//                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+//                    }
                     List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
                     if (!homeworkList.isEmpty()) {
                         homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
                     }
-                    if (homework && feedbackQuestion) {
+                    if (homework) {
                         enrollment.setStatus(EnrollmentStatus.COMPLETED);
                         transactionalDataManager.save(enrollment);
 

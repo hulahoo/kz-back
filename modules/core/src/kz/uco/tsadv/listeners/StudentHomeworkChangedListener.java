@@ -15,7 +15,6 @@ import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
-import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.LearningService;
@@ -78,12 +77,12 @@ public class StudentHomeworkChangedListener {
                     : null, enrollment)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
                     studentHomework.getPersonGroup())) {
-                boolean feedbackQuestion = true;
-                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
-                if (!courseFeedbackTemplateList.isEmpty()) {
-                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
-                }
-                if (enrollment != null && feedbackQuestion) {
+//                boolean feedbackQuestion = true;
+//                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
+//                if (!courseFeedbackTemplateList.isEmpty()) {
+//                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
+//                }
+                if (enrollment != null) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                     sendNotificationCertificate(enrollment);
@@ -108,13 +107,13 @@ public class StudentHomeworkChangedListener {
                     : null, enrollment)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
                     studentHomework.getPersonGroup())) {
-                boolean feedbackQuestion = true;
-                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
-                if (!courseFeedbackTemplateList.isEmpty()) {
-                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
-                }
+//                boolean feedbackQuestion = true;
+//                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
+//                if (!courseFeedbackTemplateList.isEmpty()) {
+//                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
+//                }
 
-                if (enrollment != null && feedbackQuestion) {
+                if (enrollment != null) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                     sendNotificationCertificate(enrollment);
