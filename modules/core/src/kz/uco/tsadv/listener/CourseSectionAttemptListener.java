@@ -169,6 +169,12 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                 + "/learning-history/"
                 + "\" target=\"_blank\">%s " + "</a>";
+        String feedbackLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                + "/my-course/" + enrollment.getCourse().getId().toString()
+                + "\" target=\"_blank\">%s " + "</a>";
+        map.put("feedbackLinkRu", String.format(feedbackLink, "ЗДЕСЬ"));
+        map.put("feedbackLinkEn", String.format(feedbackLink, "CLICK"));
+        map.put("feedbackLinkKz", String.format(feedbackLink, "осы жерде"));
         map.put("linkRu", String.format(requestLink, "История обучения"));
         map.put("linkEn", String.format(requestLink, "Training History"));
         map.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
