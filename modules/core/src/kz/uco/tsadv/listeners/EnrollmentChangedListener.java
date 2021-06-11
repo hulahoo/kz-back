@@ -564,7 +564,6 @@ public class EnrollmentChangedListener {
         List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                 .query("select e from tsadv$CourseTrainer e " +
                         " where e.course = :course " +
-                        " and current_date between e.dateFrom and e.dateTo " +
                         " and e.trainer.employee is not null")
                 .parameter("course", enrollment.getCourse())
                 .view("courseTrainer.edit")
