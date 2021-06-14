@@ -742,7 +742,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         //noinspection unchecked
         entity = transactionalDataManager.load((Class<T>) entity.getClass())
                 .id(entity.getId())
-                .viewProperties("status.langValue1", "status.langValue3")
+                .viewProperties("status.langValue1", "status.langValue3", "requestDate")
                 .one();
 
         params.putIfAbsent("requestStatusRu", entity.getStatus().getLangValue1());
