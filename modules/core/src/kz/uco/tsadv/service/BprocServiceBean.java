@@ -479,6 +479,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         params.put("initiatorRu", initiator.getFullNameWithLogin(Locale.forLanguageTag("ru")));
         params.put("initiatorEn", initiator.getFullNameWithLogin(Locale.forLanguageTag("en")));
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
         switch (templateCode) {
             case "bpm.absenceRequest.initiator.notification":
             case "bpm.absenceRequest.revision.notification":
@@ -488,7 +490,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             case "bpm.absenceRequest.toapprove.notification": {
                 AbsenceRequest absenceRequest = transactionalDataManager.load(AbsenceRequest.class)
                         .id(entity.getId()).view("absenceRequest.view").optional().orElse(null);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
                 PersonExt person = commonService.getEntity(PersonExt.class,
                         "select p from base$AssignmentExt e " +
@@ -535,7 +536,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             case "Application.for.withdrawal.from.labor.leave.approved": {
                 AbsenceForRecall absenceForRecall = transactionalDataManager.load(AbsenceForRecall.class)
                         .id(entity.getId()).view("absenceForRecall.edit").optional().orElse(null);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
                 PersonExt person = commonService.getEntity(PersonExt.class,
                         "select e from base$PersonExt e " +
@@ -582,7 +582,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             case "bpm.absenceRvdRequest.toapprove.notification": {
                 AbsenceRvdRequest absenceRvdRequest = transactionalDataManager.load(AbsenceRvdRequest.class)
                         .id(entity.getId()).view("absenceRvdRequest.edit").optional().orElse(null);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
                 PersonExt person = commonService.getEntity(PersonExt.class,
                         "select e from base$PersonExt e " +
@@ -627,7 +626,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             case "bpm.scheduleOffsetsRequest.toapprove.notification": {
                 ScheduleOffsetsRequest scheduleOffsetsRequest = transactionalDataManager.load(ScheduleOffsetsRequest.class)
                         .id(entity.getId()).view("scheduleOffsetsRequest-for-my-team").optional().orElse(null);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
                 PersonExt person = commonService.getEntity(PersonExt.class,
                         "select e from base$PersonExt e " +
@@ -679,7 +677,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             case "end.of.absence": {
                 LeavingVacationRequest leavingVacationRequest = transactionalDataManager.load(LeavingVacationRequest.class)
                         .id(entity.getId()).view("leavingVacationRequest-editView").optional().orElse(null);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 if (leavingVacationRequest != null) {
                     params.put("status", leavingVacationRequest.getStatus() != null
                             ? leavingVacationRequest.getStatus().getLangValue1()
@@ -698,7 +695,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
             case "changeAbsenceDaysRequest.revision": {
                 ChangeAbsenceDaysRequest changeAbsenceDaysRequest = transactionalDataManager.load(ChangeAbsenceDaysRequest.class)
                         .id(entity.getId()).view("changeAbsenceDaysRequest.edit").optional().orElse(null);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
                 if (changeAbsenceDaysRequest != null) {
 
                     PersonExt person = commonService.getEntity(PersonExt.class,
@@ -751,6 +747,9 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
 
         params.putIfAbsent("requestStatusRu", entity.getStatus().getLangValue1());
         params.putIfAbsent("requestStatusEn", entity.getStatus().getLangValue3());
+        params.put("requestDate", entity.getRequestDate() != null
+                ? dateFormat.format(entity.getRequestDate())
+                : "");
 
         return params;
     }
