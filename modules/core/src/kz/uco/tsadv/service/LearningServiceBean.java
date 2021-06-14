@@ -770,7 +770,7 @@ public class LearningServiceBean implements LearningService {
                 TsadvUser tsadvUser = getTsadvUser(enrollment.getPersonGroup());
                 if (tsadvUser != null) {
                     Map<String, Object> params = new HashMap<>();
-                    params.put("studentFioRu", enrollment.getPersonGroup().getFullName());
+                    params.put("studentFioRu", enrollment.getPersonGroup().getFirstLastName());
                     params.put("studentFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
                     params.put("course", enrollment.getCourse().getName());
 

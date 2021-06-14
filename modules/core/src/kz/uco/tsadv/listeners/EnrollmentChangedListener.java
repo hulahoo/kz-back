@@ -101,7 +101,8 @@ public class EnrollmentChangedListener {
                             map.put("myLinkRu", String.format(myCourseLink, "Мои курсы"));
                             map.put("myLinkEn", String.format(myCourseLink, "My training course"));
                             map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
-                            map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+                            map.put("personFullNameRu", enrollment.getPersonGroup().getFirstLastName());
+                            map.put("personFullNameEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
                             map.put("courseName", enrollment.getCourse().getName());
                             activityService.createActivity(
                                     tsadvUser,
@@ -132,14 +133,21 @@ public class EnrollmentChangedListener {
                         String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                 + "/learning-history/"
                                 + "\" target=\"_blank\">%s " + "</a>";
+                        String feedbackLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                + "/my-course/" + enrollment.getCourse().getId().toString()
+                                + "\" target=\"_blank\">%s " + "</a>";
+                        map.put("feedbackLinkRu", String.format(feedbackLink, "ЗДЕСЬ"));
+                        map.put("feedbackLinkEn", String.format(feedbackLink, "CLICK"));
+                        map.put("feedbackLinkKz", String.format(feedbackLink, "осы жерде"));
                         map.put("linkRu", String.format(requestLink, "История обучения"));
                         map.put("linkEn", String.format(requestLink, "Training History"));
                         map.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
                         map.put("courseName", enrollment.getCourse().getName());
-                        map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+                        map.put("personFullNameRu", enrollment.getPersonGroup().getFirstLastName());
+                        map.put("personFullNameEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
 
 //                    sendNotificationCompleted(enrollment);
-                        CommitContext commitContext = new CommitContext();
+//                        CommitContext commitContext = new CommitContext();
                         CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
                                 && !enrollment.getCourse().getCertificate().isEmpty()
                                 ? enrollment.getCourse().getCertificate().get(0)
@@ -249,7 +257,8 @@ public class EnrollmentChangedListener {
                     map.put("myLinkRu", String.format(myCourseLink, "Мои курсы"));
                     map.put("myLinkEn", String.format(myCourseLink, "My training course"));
                     map.put("myLinkKz", String.format(myCourseLink, "Менің курстарым"));
-                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+                    map.put("personFullNameRu", enrollment.getPersonGroup().getFirstLastName());
+                    map.put("personFullNameEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
                     map.put("courseName", enrollment.getCourse().getName());
                     activityService.createActivity(
                             tsadvUser,
@@ -303,12 +312,12 @@ public class EnrollmentChangedListener {
                 if (tsadvUserTrainer != null) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null
-                            ? courseTrainer.getTrainer().getEmployee().getFullName() : "");
+                            ? courseTrainer.getTrainer().getEmployee().getFirstLastName() : "");
                     params.put("trainerFioEn", courseTrainer.getTrainer().getEmployee() != null
                             ? courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin()
                             : "");
                     params.put("studentFioRu", enrollment.getPersonGroup() != null
-                            ? enrollment.getPersonGroup().getFullName() : "");
+                            ? enrollment.getPersonGroup().getFirstLastName() : "");
                     params.put("studentFioEn", enrollment.getPersonGroup() != null
                             ? enrollment.getPersonGroup().getPersonFirstLastNameLatin()
                             : "");
@@ -329,10 +338,10 @@ public class EnrollmentChangedListener {
                     tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
                     Map<String, Object> params = new HashMap<>();
                     params.put("personFioRu", tsadvUser.getPersonGroup() != null
-                            ? tsadvUser.getPersonGroup().getFullName() : "");
+                            ? tsadvUser.getPersonGroup().getFirstLastName() : "");
                     params.put("personFioEn", tsadvUser.getPersonGroup() != null
                             ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
-                    params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+                    params.put("employeeFioRu", enrollment.getPersonGroup().getFirstLastName());
                     params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
                     params.put("course", enrollment.getCourse().getName());
                     notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
@@ -564,7 +573,6 @@ public class EnrollmentChangedListener {
         List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                 .query("select e from tsadv$CourseTrainer e " +
                         " where e.course = :course " +
-                        " and current_date between e.dateFrom and e.dateTo " +
                         " and e.trainer.employee is not null")
                 .parameter("course", enrollment.getCourse())
                 .view("courseTrainer.edit")
@@ -584,8 +592,10 @@ public class EnrollmentChangedListener {
                             "&item=" + "tsadv$Course" + "-" + courseTrainer.getCourse().getId() +
                             "\" target=\"_blank\">%s " + "</a>";
                     map.put("courseName", enrollment.getCourse().getName());
-                    map.put("trainerFullName", courseTrainer.getTrainer().getEmployee().getFirstLastName());
-                    map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+                    map.put("trainerFullNameRu", courseTrainer.getTrainer().getEmployee().getFirstLastName());
+                    map.put("trainerFullNameEn", courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin());
+                    map.put("personFullNameRu", enrollment.getPersonGroup().getFirstLastName());
+                    map.put("personFullNameEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
                     map.put("linkRu", String.format(requestLink, "курс"));
                     map.put("linkKz", String.format(requestLink, "курсыңызға"));
                     map.put("linkEn", String.format(requestLink, "course"));

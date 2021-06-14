@@ -112,11 +112,12 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
             maps.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
 
             maps.put("studentFioRu", getItem().getPersonGroup() != null
-                    ? getItem().getPersonGroup().getFullName() : "");
+                    ? getItem().getPersonGroup().getFirstLastName() : "");
             maps.put("studentFioEn", getItem().getPersonGroup() != null
                     ? getItem().getPersonGroup().getPersonFirstLastNameLatin() : "");
 
             notificationService.sendParametrizedNotification("tdc.new.trainerComment", tsadvUser, maps);
+            showNotification(getMessage("sendSucces"), NotificationType.TRAY);
         }
     }
 }

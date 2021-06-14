@@ -15,7 +15,6 @@ import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
-import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.service.LearningService;
@@ -78,12 +77,12 @@ public class StudentHomeworkChangedListener {
                     : null, enrollment)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
                     studentHomework.getPersonGroup())) {
-                boolean feedbackQuestion = true;
-                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
-                if (!courseFeedbackTemplateList.isEmpty()) {
-                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
-                }
-                if (enrollment != null && feedbackQuestion) {
+//                boolean feedbackQuestion = true;
+//                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
+//                if (!courseFeedbackTemplateList.isEmpty()) {
+//                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
+//                }
+                if (enrollment != null) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                     sendNotificationCertificate(enrollment);
@@ -108,13 +107,13 @@ public class StudentHomeworkChangedListener {
                     : null, enrollment)
                     && learningService.allHomeworkPassed(getHomeworkForCourse(studentHomework.getHomework().getCourse()),
                     studentHomework.getPersonGroup())) {
-                boolean feedbackQuestion = true;
-                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
-                if (!courseFeedbackTemplateList.isEmpty()) {
-                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
-                }
+//                boolean feedbackQuestion = true;
+//                List<CourseFeedbackTemplate> courseFeedbackTemplateList = studentHomework.getHomework().getCourse().getFeedbackTemplates();
+//                if (!courseFeedbackTemplateList.isEmpty()) {
+//                    feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, studentHomework.getPersonGroup());
+//                }
 
-                if (enrollment != null && feedbackQuestion) {
+                if (enrollment != null) {
                     enrollment.setStatus(EnrollmentStatus.COMPLETED);
                     transactionalDataManager.save(enrollment);
                     sendNotificationCertificate(enrollment);
@@ -196,9 +195,11 @@ public class StudentHomeworkChangedListener {
                                 "tsadv_StudentHomework.edit" +
                                 "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
                                 "\" target=\"_blank\">%s " + "</a>";
-                        map.put("trainerFullName", courseTrainer.getTrainer().getEmployee().getFirstLastName());
+                        map.put("trainerFullNameRu", courseTrainer.getTrainer().getEmployee().getFirstLastName());
+                        map.put("trainerFullNameEn", courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin());
                         map.put("courseName", studentHomework.getHomework().getCourse().getName());
-                        map.put("studentFullName", studentHomework.getPersonGroup().getFirstLastName());
+//                        map.put("studentFullNameRu", studentHomework.getPersonGroup().getFirstLastName());
+//                        map.put("studentFullNameEn", studentHomework.getPersonGroup().getPersonFirstLastNameLatin());
                         map.put("requestLinkRu", String.format(requestLink, "ссылке"));
                         map.put("requestLinkEn", String.format(requestLink, "click here"));
                         map.put("requestLinkKz", String.format(requestLink, "сілтеме"));
@@ -227,7 +228,8 @@ public class StudentHomeworkChangedListener {
             if (tsadvUser != null) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("courseName", studentHomework.getHomework().getCourse().getName());
-                map.put("studentFullName", studentHomework.getPersonGroup().getFullName());
+                map.put("studentFullNameRu", studentHomework.getPersonGroup().getFirstLastName());
+                map.put("studentFullNameEn", studentHomework.getPersonGroup().getPersonFirstLastNameLatin());
 //                String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
 //                        "tsadv_StudentHomework.edit" +
 //                        "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
@@ -287,12 +289,12 @@ public class StudentHomeworkChangedListener {
                 if (tsadvUserTrainer != null) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null
-                            ? courseTrainer.getTrainer().getEmployee().getFullName() : "");
+                            ? courseTrainer.getTrainer().getEmployee().getFirstLastName() : "");
                     params.put("trainerFioEn", courseTrainer.getTrainer().getEmployee() != null
                             ? courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin()
                             : "");
                     params.put("studentFioRu", enrollment.getPersonGroup() != null
-                            ? enrollment.getPersonGroup().getFullName() : "");
+                            ? enrollment.getPersonGroup().getFirstLastName() : "");
                     params.put("studentFioEn", enrollment.getPersonGroup() != null
                             ? enrollment.getPersonGroup().getPersonFirstLastNameLatin()
                             : "");
@@ -313,10 +315,10 @@ public class StudentHomeworkChangedListener {
                     tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
                     Map<String, Object> params = new HashMap<>();
                     params.put("personFioRu", tsadvUser.getPersonGroup() != null
-                            ? tsadvUser.getPersonGroup().getFullName() : "");
+                            ? tsadvUser.getPersonGroup().getFirstLastName() : "");
                     params.put("personFioEn", tsadvUser.getPersonGroup() != null
                             ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
-                    params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+                    params.put("employeeFioRu", enrollment.getPersonGroup().getFirstLastName());
                     params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
                     params.put("course", enrollment.getCourse().getName());
                     notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
@@ -334,11 +336,18 @@ public class StudentHomeworkChangedListener {
         String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                 + "/learning-history/"
                 + "\" target=\"_blank\">%s " + "</a>";
+        String feedbackLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                + "/my-course/" + enrollment.getCourse().getId().toString()
+                + "\" target=\"_blank\">%s " + "</a>";
+        map.put("feedbackLinkRu", String.format(feedbackLink, "ЗДЕСЬ"));
+        map.put("feedbackLinkEn", String.format(feedbackLink, "CLICK"));
+        map.put("feedbackLinkKz", String.format(feedbackLink, "осы жерде"));
         map.put("linkRu", String.format(requestLink, "История обучения"));
         map.put("linkEn", String.format(requestLink, "Training History"));
         map.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
         map.put("courseName", enrollment.getCourse().getName());
-        map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+        map.put("personFullNameRu", enrollment.getPersonGroup().getFirstLastName());
+        map.put("personFullNameEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
 
         CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
                 && !enrollment.getCourse().getCertificate().isEmpty()

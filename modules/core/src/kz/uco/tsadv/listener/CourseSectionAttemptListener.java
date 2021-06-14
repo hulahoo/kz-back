@@ -16,7 +16,6 @@ import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
-import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 import kz.uco.tsadv.service.LearningService;
 import kz.uco.tsadv.service.OrganizationHrUserService;
@@ -87,16 +86,16 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
                         enrollment)) {
                     boolean homework = true;
-                    boolean feedbackQuestion = true;
-                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
-                    if (!courseFeedbackTemplateList.isEmpty()) {
-                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
-                    }
+//                    boolean feedbackQuestion = true;
+//                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+//                    if (!courseFeedbackTemplateList.isEmpty()) {
+//                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+//                    }
                     List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
                     if (!homeworkList.isEmpty()) {
                         homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
                     }
-                    if (homework && feedbackQuestion) {
+                    if (homework) {
                         enrollment.setStatus(EnrollmentStatus.COMPLETED);
                         transactionalDataManager.save(enrollment);
 
@@ -138,16 +137,16 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
                         enrollment)) {
                     boolean homework = true;
-                    boolean feedbackQuestion = true;
-                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
-                    if (!courseFeedbackTemplateList.isEmpty()) {
-                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
-                    }
+//                    boolean feedbackQuestion = true;
+//                    List<CourseFeedbackTemplate> courseFeedbackTemplateList = courseSection.getCourse().getFeedbackTemplates();
+//                    if (!courseFeedbackTemplateList.isEmpty()) {
+//                        feedbackQuestion = learningService.haveAFeedbackQuestion(courseFeedbackTemplateList, enrollment.getPersonGroup());
+//                    }
                     List<Homework> homeworkList = getHomeworkForCourse(courseSection.getCourse());
                     if (!homeworkList.isEmpty()) {
                         homework = learningService.allHomeworkPassed(homeworkList, enrollment.getPersonGroup());
                     }
-                    if (homework && feedbackQuestion) {
+                    if (homework) {
                         enrollment.setStatus(EnrollmentStatus.COMPLETED);
                         transactionalDataManager.save(enrollment);
 
@@ -170,11 +169,18 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
         String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                 + "/learning-history/"
                 + "\" target=\"_blank\">%s " + "</a>";
+        String feedbackLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                + "/my-course/" + enrollment.getCourse().getId().toString()
+                + "\" target=\"_blank\">%s " + "</a>";
+        map.put("feedbackLinkRu", String.format(feedbackLink, "ЗДЕСЬ"));
+        map.put("feedbackLinkEn", String.format(feedbackLink, "CLICK"));
+        map.put("feedbackLinkKz", String.format(feedbackLink, "осы жерде"));
         map.put("linkRu", String.format(requestLink, "История обучения"));
         map.put("linkEn", String.format(requestLink, "Training History"));
         map.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
         map.put("courseName", enrollment.getCourse().getName());
-        map.put("personFullName", enrollment.getPersonGroup().getFirstLastName());
+        map.put("personFullNameRu", enrollment.getPersonGroup().getFirstLastName());
+        map.put("personFullNameEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
 
         CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
                 && !enrollment.getCourse().getCertificate().isEmpty()
@@ -290,12 +296,12 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 if (tsadvUserTrainer != null) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null
-                            ? courseTrainer.getTrainer().getEmployee().getFullName() : "");
+                            ? courseTrainer.getTrainer().getEmployee().getFirstLastName() : "");
                     params.put("trainerFioEn", courseTrainer.getTrainer().getEmployee() != null
                             ? courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin()
                             : "");
                     params.put("studentFioRu", enrollment.getPersonGroup() != null
-                            ? enrollment.getPersonGroup().getFullName() : "");
+                            ? enrollment.getPersonGroup().getFirstLastName() : "");
                     params.put("studentFioEn", enrollment.getPersonGroup() != null
                             ? enrollment.getPersonGroup().getPersonFirstLastNameLatin()
                             : "");
@@ -316,10 +322,10 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                     tsadvUser = dataManager.reload(tsadvUser, "tsadvUserExt-view");
                     Map<String, Object> params = new HashMap<>();
                     params.put("personFioRu", tsadvUser.getPersonGroup() != null
-                            ? tsadvUser.getPersonGroup().getFullName() : "");
+                            ? tsadvUser.getPersonGroup().getFirstLastName() : "");
                     params.put("personFioEn", tsadvUser.getPersonGroup() != null
                             ? tsadvUser.getPersonGroup().getPersonFirstLastNameLatin() : "");
-                    params.put("employeeFioRu", enrollment.getPersonGroup().getFullName());
+                    params.put("employeeFioRu", enrollment.getPersonGroup().getFirstLastName());
                     params.put("employeeFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
                     params.put("course", enrollment.getCourse().getName());
                     notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
