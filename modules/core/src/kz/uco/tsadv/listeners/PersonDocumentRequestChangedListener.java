@@ -39,11 +39,16 @@ public class PersonDocumentRequestChangedListener {
             BaseResult baseResult = new BaseResult();
             PersonDocumentRequestDataJson personDocumentRequestDataJson = new PersonDocumentRequestDataJson();
             try {
-                DicRequestStatus oldStatus = dataManager.load(DicRequestStatus.class)
-                        .query("select e from tsadv$DicRequestStatus e where e.id = :id")
-                        .parameter("id", ((Id<DicRequestStatus, UUID>) event.getChanges()
-                                .getOldValue("status")).getValue())
-                        .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                DicRequestStatus oldStatus = null;
+                if (event.getChanges().getOldValue("status") != null
+                        && ((Id<DicRequestStatus, UUID>) event.getChanges()
+                        .getOldValue("status")).getValue() != null) {
+                    oldStatus = dataManager.load(DicRequestStatus.class)
+                            .query("select e from tsadv$DicRequestStatus e where e.id = :id")
+                            .parameter("id", ((Id<DicRequestStatus, UUID>) event.getChanges()
+                                    .getOldValue("status")).getValue())
+                            .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                }
                 PersonDocumentRequest personDocumentRequest = dataManager.load(event.getEntityId())
                         .view("personDocumentRequest-for-integration").one();
                 DicRequestStatus requestStatus = personDocumentRequest.getStatus();
