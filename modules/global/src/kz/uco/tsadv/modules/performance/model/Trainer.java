@@ -133,7 +133,7 @@ public class Trainer extends AbstractParentEntity {
     }
 
     public String getTrainerFullName() {
-        return employee.getPerson().getFullName();
+        return employee.getPerson() != null ? employee.getPerson().getFullName() : "";
     }
 
 
