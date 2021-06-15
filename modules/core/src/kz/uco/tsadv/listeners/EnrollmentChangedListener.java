@@ -134,7 +134,7 @@ public class EnrollmentChangedListener {
                                 + "/learning-history/"
                                 + "\" target=\"_blank\">%s " + "</a>";
                         String feedbackLink = "<a href=\"" + frontConfig.getFrontAppUrl()
-                                + "/my-course/" + enrollment.getCourse().getId().toString()
+                                + "/my-course/" + enrollment.getId().toString()
                                 + "\" target=\"_blank\">%s " + "</a>";
                         map.put("feedbackLinkRu", String.format(feedbackLink, "ЗДЕСЬ"));
                         map.put("feedbackLinkEn", String.format(feedbackLink, "CLICK"));
