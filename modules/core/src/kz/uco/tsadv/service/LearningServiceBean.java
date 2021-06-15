@@ -728,7 +728,7 @@ public class LearningServiceBean implements LearningService {
                     params.put("studentFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
                     params.put("course", enrollment.getCourse().getName());
                     String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
-                            + "/learning-history/"
+                            + "/my-course/" + enrollment.getId().toString()
                             + "\" target=\"_blank\">%s " + "</a>";
                     params.put("linkRu", String.format(requestLink, "ЗДЕСЬ"));
                     params.put("linkEn", String.format(requestLink, "CLICK"));
