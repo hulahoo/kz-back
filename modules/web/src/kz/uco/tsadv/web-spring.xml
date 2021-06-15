@@ -145,6 +145,7 @@
                        value="kz.uco.tsadv.service.portal.OrgStructureRequestService"/>
                 <entry key="tsadv_AbsenceRvdService" value="kz.uco.tsadv.service.AbsenceRvdService"/>
                 <entry key="tsadv_ImageResizeService" value="kz.uco.tsadv.service.ImageResizeService"/>
+                <entry key="tsadv_ExecutiveAssistantService" value="kz.uco.tsadv.service.ExecutiveAssistantService"/>
             </map>
         </property>
     </bean>

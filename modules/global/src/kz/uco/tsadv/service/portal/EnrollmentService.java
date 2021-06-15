@@ -8,7 +8,7 @@ import java.util.UUID;
 public interface EnrollmentService {
     String NAME = "tsadv_EnrollmentService";
 
-    List<CategoryCoursePojo> searchEnrollment();
+    List<CategoryCoursePojo> searchEnrollment(UUID personGroupId);
 
-    List<CategoryCoursePojo> searchEnrollment(String courseName);
+    List<CategoryCoursePojo> searchEnrollment(UUID personGroupId, String courseName);
 }
