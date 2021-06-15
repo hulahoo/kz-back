@@ -93,9 +93,9 @@ public class MyMICInsuredPersonBrowse extends StandardLookup<InsuredPerson> {
         insuredPersonsDl.setParameter("relativeType", RelativeType.EMPLOYEE);
         insuredPersonsDl.setParameter("employeeId", personGroupExt != null ? personGroupExt.getId() : null);
 
-        DicCompany dicCompany = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
 
-        if (dicCompany != null) {
+        if (personGroupExt != null && personGroupExt.getCurrentAssignment() != null) {
+            DicCompany dicCompany = personGroupExt.getCurrentAssignment().getOrganizationGroup().getCompany();
             InsuranceContract contract = dataManager.load(InsuranceContract.class)
                     .query("select e from tsadv$InsuranceContract e where e.company.id = :companyId" +
                             " and current_date between e.availabilityPeriodFrom and e.availabilityPeriodTo")
