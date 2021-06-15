@@ -176,11 +176,13 @@ public class StudentHomeworkChangedListener {
         if (isStudentAnswer) {
             List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                     .query("select e from tsadv$CourseTrainer e " +
-                            " where e.course = :course " +
-                            " and e.trainer.employee is not null " +
-                            " and current_date between coalesce(e.dateFrom, :startDate) and coalesce(e.dateTo, :endDate) "
-                    )
-                    .parameter("course", studentHomework.getHomework().getCourse())
+                            " where e.trainer.employee is not null " +
+                            " and current_date between coalesce(e.dateFrom, :startDate) and coalesce(e.dateTo, :endDate) " +
+                            " and ( e.trainer.company.code = 'empty' " +
+                            " or e.trainer.company.id in " +
+                            " ( select s.personGroup.company.id from tsadv_StudentHomework s " +
+                            " where s.id = :studentHomeworkId  and s.homework.course.id = e.course.id  )) ")
+                    .parameter("studentHomeworkId", studentHomework.getId())
                     .parameter("startDate", new Date(20000101))
                     .parameter("endDate", BaseCommonUtils.getEndOfTime())
                     .view("courseTrainer.edit")
@@ -285,7 +287,18 @@ public class StudentHomeworkChangedListener {
                 ? enrollment.getCourse().getCourseTrainers() : null;
         if (courseTrainerList != null && !courseTrainerList.isEmpty()) {
             courseTrainerList.forEach(courseTrainer -> {
-                TsadvUser tsadvUserTrainer = getTsadvUser(courseTrainer.getTrainer().getEmployee());
+                TsadvUser tsadvUserTrainer = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e " +
+                                " join tsadv$CourseTrainer ct on ct.trainer.employee.id = e.personGroup.id " +
+                                " where ct.id = :courseTrainerId " +
+                                " and ( ct.trainer.company.code = 'empty'  " +
+                                "  or ct.trainer.company.id in " +
+                                " (select en.personGroup.company.id from tsadv$Enrollment en " +
+                                " where en.id = :enrollmentId  ) )")
+                        .parameter("courseTrainerId", courseTrainer.getId())
+                        .parameter("enrollmentId", enrollment.getId())
+                        .view("userExt.edit")
+                        .list().stream().findFirst().orElse(null);
                 if (tsadvUserTrainer != null) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("trainerFioRu", courseTrainer.getTrainer().getEmployee() != null

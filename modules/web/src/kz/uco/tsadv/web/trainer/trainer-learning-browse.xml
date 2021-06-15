@@ -39,7 +39,6 @@
                 <column id="employee.person.type"/>
                 <column id="employee.currentAssignment.positionGroup.positionName"/>
                 <column id="employee.currentAssignment.organizationGroup.organizationName"/>
-                <column id="party.name"/>
             </columns>
             <rows datasource="trainersDs"/>
             <rowsCount/>
