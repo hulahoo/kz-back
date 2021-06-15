@@ -73,7 +73,7 @@ public class VacationScheduleRequestServiceBean implements VacationScheduleReque
 
         Assert.isTrue(langIndex != -1, userSessionSource.getLocale().getLanguage() + " not found in base.abstractDictionary.langOrder");
 
-        String queryStr = "SELECT td.* FROM gantt_chart_vacation_schedule(#organizationGroupId, #startdate, #endDate, #langIndex) td";
+        String queryStr = "SELECT td.* FROM gantt_chart_vacation_schedule(#organizationGroupId, #startDate::date, #endDate::date, #langIndex) td";
 
         String jsonData = persistence.callInTransaction(em ->
                 Optional.ofNullable(
@@ -81,7 +81,7 @@ public class VacationScheduleRequestServiceBean implements VacationScheduleReque
                                 .setParameter("organizationGroupId", organizationGroupId)
                                 .setParameter("startDate", startDate)
                                 .setParameter("endDate", endDate)
-                                .setParameter("langIndex", langIndex)
+                                .setParameter("langIndex", String.valueOf(langIndex))
                                 .getFirstResult()
                 ).map(o -> (PGobject) o)
                         .map(PGobject::getValue)
