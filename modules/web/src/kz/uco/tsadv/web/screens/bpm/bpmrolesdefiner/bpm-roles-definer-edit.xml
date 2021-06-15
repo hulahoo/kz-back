@@ -23,7 +23,7 @@
                              captionProperty="key"
                              caption="msg://kz.uco.tsadv.modules.bpm/BpmRolesDefiner.procModel"
                              optionsContainer="processDefinitionsDc"/>
-                <checkBox property="managerLaunches"/>
+                <checkBox property="managerLaunches" visible="false"/>
                 <checkBox property="activeSupManagerExclusion"/>
             </column>
         </form>
@@ -40,6 +40,8 @@
                     <column id="required"/>
                     <column id="isAddableApprover"/>
                     <column id="order"/>
+                    <column id="priority"/>
+                    <column id="forAssistant"/>
                 </columns>
                 <buttonsPanel>
                     <button action="linksTable.create"/>

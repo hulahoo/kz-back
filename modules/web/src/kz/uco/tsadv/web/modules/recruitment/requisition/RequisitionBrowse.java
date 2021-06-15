@@ -4,7 +4,6 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Configuration;
 import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.filter.Op;
 import com.haulmont.cuba.gui.WindowManager;
@@ -24,7 +23,6 @@ import kz.uco.base.web.components.CustomFilter;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.group.JobGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.recruitment.config.RecruitmentConfig;
@@ -108,25 +106,6 @@ public class RequisitionBrowse extends AbstractLookup {
         if (recruitmentConfig.getCandidateForm() != null && !recruitmentConfig.getCandidateForm().equals("")) {
             jobRequestWindowId = recruitmentConfig.getCandidateForm();
         }
-        LoadContext<PersonGroupExt> loadContext = LoadContext.create(PersonGroupExt.class);
-        loadContext.setQuery(LoadContext.createQuery("SELECT a.personGroupId " +
-                " FROM base$AssignmentExt a " +
-                " JOIN base$HierarchyElementExt he " +
-                " JOIN base$PositionExt p " +
-                "WHERE he.positionGroup.id = a.positionGroup.id " +
-                "  AND he.positionGroup IS NOT NULL " +
-                "  AND he.hierarchy.primaryFlag = TRUE " +
-                "  AND :systemDate BETWEEN he.startDate AND he.endDate " +
-                "  AND p.group.id = he.positionGroup.id " +
-                "  AND :systemDate BETWEEN p.startDate AND p.endDate " +
-                "  AND (he.id IN (SELECT he1.parent.id " +
-                "                   FROM base$HierarchyElementExt he1 " +
-                "                  WHERE he1.positionGroup.id IS NOT NULL " +
-                "                    AND :systemDate BETWEEN he1.startDate AND he1.endDate) " +
-                "   OR p.managerFlag = TRUE) " +
-                "  AND :systemDate BETWEEN a.startDate AND a.endDate")
-                .setParameter("systemDate", CommonUtils.getSystemDate()));
-        dataManager.loadList(loadContext);
 
         setQuery();
         requisitionsTableCopy.setEnabled(false);
