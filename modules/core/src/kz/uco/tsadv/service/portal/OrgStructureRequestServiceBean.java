@@ -68,7 +68,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
         }
         return persistence.callInTransaction(em -> {
             Query query = em.createNativeQuery(
-                    "SELECT td.* FROM request_tree_data(?1,?2) td");
+                    "SELECT td.* FROM 'request_tree_data'(?1,?2) td");
             query.setParameter(1, personGroupId);
             query.setParameter(2, requestId);
 
