@@ -8374,19 +8374,32 @@ create table TSADV_ADDRESS_REQUEST (
     UPDATED_BY varchar(50),
     DELETE_TS timestamp,
     DELETED_BY varchar(50),
+    LEGACY_ID varchar(255),
+    ORGANIZATION_BIN varchar(255),
+    INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
     --
     ADDRESS_TYPE_ID uuid,
-    REQUEST_NUMBER bigint,
     ADDRESS varchar(255),
     COUNTRY_ID uuid,
     POSTAL_CODE varchar(255),
     CITY varchar(255),
     START_DATE date,
     END_DATE date,
-    ATTACHMENT_ID uuid,
-    STATUS_ID uuid,
     BASE_ADDRESS_ID uuid,
     PERSON_GROUP_ID uuid,
+    KATO_ID uuid,
+    STREET_TYPE_ID uuid,
+    STREET_NAME varchar(255),
+    BUILDING varchar(255),
+    BLOCK varchar(255),
+    FLAT varchar(255),
+    ADDRESS_FOR_EXPATS varchar(255),
+    ADDRESS_KAZAKH varchar(255),
+    ADDRESS_ENGLISH varchar(255),
     --
     primary key (ID)
 )^
@@ -12710,6 +12723,11 @@ create table TSADV_PERSON_DOCUMENT_REQUEST (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint not null,
+    STATUS_ID uuid not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
+    STATUS_ID uuid not null,
     --
     ISSUE_DATE date not null,
     EXPIRED_DATE date not null,
@@ -12720,10 +12738,8 @@ create table TSADV_PERSON_DOCUMENT_REQUEST (
     PERSON_GROUP_ID uuid,
     DOCUMENT_NUMBER varchar(255) not null,
     SERIES varchar(255),
-    STATUS_ID uuid not null,
-    FILE_ID uuid,
-    REQUEST_STATUS_ID uuid not null,
     EDITED_PERSON_DOCUMENT_ID uuid,
+    APPROVAL_STATUS_ID uuid,
     --
     primary key (ID)
 )^
@@ -15495,9 +15511,12 @@ create table TSADV_PERSONAL_DATA_REQUEST (
     LEGACY_ID varchar(255),
     ORGANIZATION_BIN varchar(255),
     INTEGRATION_USER_LOGIN varchar(255),
+    REQUEST_NUMBER bigint not null,
+    REQUEST_DATE date not null,
+    COMMENT_ varchar(3000),
+    STATUS_ID uuid,
     --
     LAST_NAME varchar(255),
-    REQUEST_NUMBER bigint,
     FIRST_NAME varchar(255),
     MIDDLE_NAME varchar(255),
     LAST_NAME_LATIN varchar(255),
@@ -15505,8 +15524,6 @@ create table TSADV_PERSONAL_DATA_REQUEST (
     MIDDLE_NAME_LATIN varchar(255),
     MARITAL_STATUS_ID uuid,
     DATE_OF_BIRTH date,
-    ATTACHMENT_ID uuid,
-    STATUS_ID uuid,
     PERSON_GROUP_ID uuid,
     NATIONALITY_ID uuid,
     CITIZENSHIP_ID uuid,
@@ -18149,3 +18166,13 @@ create table TSADV_EXECUTIVE_ASSISTANTS (
     primary key (ID)
 )^
 -- end TSADV_EXECUTIVE_ASSISTANTS
+
+
+
+-- begin TSADV_ADDRESS_REQUEST_FILE_DESCRIPTOR_LINK
+create table TSADV_ADDRESS_REQUEST_FILE_DESCRIPTOR_LINK (
+    ADDRESS_REQUEST_ID uuid,
+    FILE_DESCRIPTOR_ID uuid,
+    primary key (ADDRESS_REQUEST_ID, FILE_DESCRIPTOR_ID)
+)^
+-- end TSADV_ADDRESS_REQUEST_FILE_DESCRIPTOR_LINK
