@@ -16004,8 +16004,6 @@
                     <property name="langValue4"/>
                     <property name="langValue5"/>
                 </property>
-                <property name="startDate"/>
-                <property name="endDate"/>
             </property>
             <property name="assignments"
                       view="_minimal">
@@ -16013,42 +16011,27 @@
                           view="_minimal">
                     <property name="list"
                               view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                        <property name="positionNameLang1"/>
-                        <property name="positionNameLang2"/>
-                        <property name="positionNameLang3"/>
-                        <property name="positionNameLang4"/>
-                        <property name="positionNameLang5"/>
                     </property>
+                    <property name="positionName"/>
                 </property>
                 <property name="organizationGroup"
                           view="_minimal">
-                    <property name="list"
-                              view="_minimal">
-                        <property name="startDate"/>
-                        <property name="endDate"/>
-                        <property name="organizationNameLang1"/>
-                        <property name="organizationNameLang2"/>
-                        <property name="organizationNameLang3"/>
-                        <property name="organizationNameLang4"/>
-                        <property name="organizationNameLang5"/>
-                    </property>
+                    <property name="organizationName"/>
                 </property>
                 <property name="assignmentStatus"
                           view="_minimal">
                     <property name="code"/>
                 </property>
-                <property name="deleteTs"/>
                 <property name="primaryFlag"/>
-                <property name="startDate"/>
-                <property name="endDate"/>
+                <property name="jobGroup" view="_minimal">
+                    <property name="jobName"/>
+                </property>
             </property>
         </property>
         <property name="party"
                   view="_minimal">
-            <property name="name"/>
         </property>
+        <property name="company" view="_minimal"/>
     </view>
     <view class="kz.uco.tsadv.modules.learning.model.CourseSectionSession"
           extends="_local"
