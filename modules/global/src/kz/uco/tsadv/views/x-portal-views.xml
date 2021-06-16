@@ -280,6 +280,14 @@
             </property>
         </property>
         <property name="format" view="_minimal"/>
+        <property name="sectionObject" view="_minimal">
+            <property name="objectType" view="_minimal">
+                <property name="code"/>
+            </property>
+            <property name="test" view="_minimal">
+                <property name="maxAttempt"/>
+            </property>
+        </property>
     </view>
     <view name="course-enrollment" entity="tsadv$Course" extends="_local">
         <property name="sections" view="enrollment-course-section"/>
