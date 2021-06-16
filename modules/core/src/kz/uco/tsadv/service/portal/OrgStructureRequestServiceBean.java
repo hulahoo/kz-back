@@ -1,7 +1,7 @@
 package kz.uco.tsadv.service.portal;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.entity.FileDescriptor;
@@ -141,7 +141,7 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                     }).collect(Collectors.toList());
         }
 
-        return new ArrayList<RequestTreeData>(treeDataList);
+        return new ArrayList<>(treeDataList);
     }
 
     private void fillHeadCount(RequestTreeData requestTreeData) {
