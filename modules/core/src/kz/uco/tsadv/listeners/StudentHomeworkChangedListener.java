@@ -191,35 +191,46 @@ public class StudentHomeworkChangedListener {
                 courseTrainers.forEach(courseTrainer -> {
                     TsadvUser tsadvUser = getTsadvUser(courseTrainer.getTrainer().getEmployee());
                     if (tsadvUser != null) {
-                        Map<String, Object> map = new HashMap<>();
-                        String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
-                                "tsadv_StudentHomework.edit" +
-                                "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
-                                "\" target=\"_blank\">%s " + "</a>";
-                        map.put("trainerFullNameRu", courseTrainer.getTrainer().getEmployee().getFirstLastName());
-                        map.put("trainerFullNameEn", courseTrainer.getTrainer().getEmployee().getPersonFirstLastNameLatin());
-                        map.put("courseName", studentHomework.getHomework().getCourse().getName());
+                        Person person = courseTrainer.getTrainer() != null
+                                && courseTrainer.getTrainer().getEmployee() != null
+                                ? courseTrainer.getTrainer().getEmployee().getPerson()
+                                : null;
+                        if (person != null) {
+                            Map<String, Object> map = new HashMap<>();
+                            String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
+                                    "tsadv_StudentHomework.edit" +
+                                    "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
+                                    "\" target=\"_blank\">%s " + "</a>";
+                            map.put("trainerFullNameRu", person.getFirstName() + " " + person.getLastName());
+                            map.put("trainerFullNameEn", person.getFirstNameLatin() != null
+                                    && !person.getFirstNameLatin().isEmpty()
+                                    && person.getLastNameLatin() != null
+                                    && !person.getLastNameLatin().isEmpty()
+                                    ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                                    : person.getFirstName() + " " + person.getLastName());
+                            map.put("courseName", studentHomework.getHomework().getCourse().getName());
 //                        map.put("studentFullNameRu", studentHomework.getPersonGroup().getFirstLastName());
 //                        map.put("studentFullNameEn", studentHomework.getPersonGroup().getPersonFirstLastNameLatin());
-                        map.put("requestLinkRu", String.format(requestLink, "ссылке"));
-                        map.put("requestLinkEn", String.format(requestLink, "click here"));
-                        map.put("requestLinkKz", String.format(requestLink, "сілтеме"));
+                            map.put("requestLinkRu", String.format(requestLink, "ссылке"));
+                            map.put("requestLinkEn", String.format(requestLink, "click here"));
+                            map.put("requestLinkKz", String.format(requestLink, "сілтеме"));
 
-                        activityService.createActivity(
-                                tsadvUser,
-                                tsadvUser,
-                                getActivityType(),
-                                StatusEnum.active,
-                                "description",
-                                null,
-                                new Date(),
-                                null,
-                                null,
-                                courseTrainer.getId(),
-                                notificationCode,
-                                map);
-                        notificationSenderAPIService.sendParametrizedNotification(notificationCode,
-                                tsadvUser, map);
+                            activityService.createActivity(
+                                    tsadvUser,
+                                    tsadvUser,
+                                    getActivityType(),
+                                    StatusEnum.active,
+                                    "description",
+                                    null,
+                                    new Date(),
+                                    null,
+                                    null,
+                                    courseTrainer.getId(),
+                                    notificationCode,
+                                    map);
+                            notificationSenderAPIService.sendParametrizedNotification(notificationCode,
+                                    tsadvUser, map);
+                        }
                     }
                 });
             }
@@ -227,37 +238,45 @@ public class StudentHomeworkChangedListener {
             TsadvUser tsadvUser = getTsadvUser(studentHomework.getPersonGroup());
 
             if (tsadvUser != null) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("courseName", studentHomework.getHomework().getCourse().getName());
-                map.put("studentFullNameRu", studentHomework.getPersonGroup().getFirstLastName());
-                map.put("studentFullNameEn", studentHomework.getPersonGroup().getPersonFirstLastNameLatin());
+                Person person = studentHomework.getPersonGroup() != null ? studentHomework.getPersonGroup().getPerson() : null;
+                if (person != null) {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("courseName", studentHomework.getHomework().getCourse().getName());
+                    map.put("studentFullNameRu", person.getFirstName() + " " + person.getLastName());
+                    map.put("studentFullNameEn", person.getFirstNameLatin() != null
+                            && !person.getFirstNameLatin().isEmpty()
+                            && person.getLastNameLatin() != null
+                            && !person.getLastNameLatin().isEmpty()
+                            ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                            : person.getFirstName() + " " + person.getLastName());
 //                String requestLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
 //                        "tsadv_StudentHomework.edit" +
 //                        "&item=" + "tsadv_StudentHomework" + "-" + studentHomework.getId() +
 //                        "\" target=\"_blank\">%s " + "</a>";
-                String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
-                        + "/learning-history/"
-                        + "\" target=\"_blank\">%s " + "</a>";
-                map.put("requestLinkRu", String.format(requestLink, "ответом тренера"));
-                map.put("requestLinkEn", String.format(requestLink, "reply"));
-                map.put("requestLinkKz", String.format(requestLink, "жауабымен"));
+                    String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                            + "/learning-history/"
+                            + "\" target=\"_blank\">%s " + "</a>";
+                    map.put("requestLinkRu", String.format(requestLink, "ответом тренера"));
+                    map.put("requestLinkEn", String.format(requestLink, "reply"));
+                    map.put("requestLinkKz", String.format(requestLink, "жауабымен"));
 
-                activityService.createActivity(
-                        tsadvUser,
-                        tsadvUser,
-                        getActivityType(),
-                        StatusEnum.active,
-                        "description",
-                        null,
-                        new Date(),
-                        null,
-                        null,
-                        studentHomework.getId(),
-                        notificationCode,
-                        map);
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            studentHomework.getId(),
+                            notificationCode,
+                            map);
 
-                notificationSenderAPIService.sendParametrizedNotification(notificationCode,
-                        tsadvUser, map);
+                    notificationSenderAPIService.sendParametrizedNotification(notificationCode,
+                            tsadvUser, map);
+                }
             }
         }
     }
@@ -295,20 +314,20 @@ public class StudentHomeworkChangedListener {
                     Person student = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
                     if (trainer != null && student != null) {
                         Map<String, Object> params = new HashMap<>();
-                        params.put("trainerFioRu", trainer.getFirstName() + trainer.getLastName());
+                        params.put("trainerFioRu", trainer.getFirstName() + " " + trainer.getLastName());
                         params.put("trainerFioEn", trainer.getFirstNameLatin() != null
                                 && !trainer.getFirstNameLatin().isEmpty()
                                 && trainer.getLastNameLatin() != null
                                 && !trainer.getLastNameLatin().isEmpty()
-                                ? trainer.getFirstNameLatin() + trainer.getLastNameLatin()
-                                : trainer.getFirstName() + trainer.getLastName());
-                        params.put("studentFioRu", student.getFirstName() + student.getLastName());
+                                ? trainer.getFirstNameLatin() + " " + trainer.getLastNameLatin()
+                                : trainer.getFirstName() + " " + trainer.getLastName());
+                        params.put("studentFioRu", student.getFirstName() + " " + student.getLastName());
                         params.put("studentFioEn", student.getFirstNameLatin() != null
                                 && !student.getFirstNameLatin().isEmpty()
                                 && student.getLastNameLatin() != null
                                 && !student.getLastNameLatin().isEmpty()
-                                ? student.getFirstNameLatin() + student.getLastNameLatin()
-                                : student.getFirstName() + student.getLastName());
+                                ? student.getFirstNameLatin() + " " + student.getLastNameLatin()
+                                : student.getFirstName() + " " + student.getLastName());
                         params.put("course", enrollment.getCourse().getName());
 
                         notificationSenderAPIService.sendParametrizedNotification("tdc.student.completed.study",
@@ -329,20 +348,20 @@ public class StudentHomeworkChangedListener {
                     Person user = tsadvUser.getPersonGroup() != null ? tsadvUser.getPersonGroup().getPerson() : null;
                     Person employee = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
                     if (user != null && employee != null) {
-                        params.put("personFioRu", user.getFirstName() + user.getLastName());
+                        params.put("personFioRu", user.getFirstName() + " " + user.getLastName());
                         params.put("personFioEn", user.getFirstNameLatin() != null
                                 && !user.getFirstNameLatin().isEmpty()
                                 && user.getLastNameLatin() != null
                                 && !user.getLastNameLatin().isEmpty()
-                                ? user.getFirstNameLatin() + user.getLastNameLatin()
-                                : user.getFirstName() + user.getLastName());
-                        params.put("employeeFioRu", employee.getFirstName() + employee.getLastName());
+                                ? user.getFirstNameLatin() + " " + user.getLastNameLatin()
+                                : user.getFirstName() + " " + user.getLastName());
+                        params.put("employeeFioRu", employee.getFirstName() + " " + employee.getLastName());
                         params.put("employeeFioEn", employee.getFirstNameLatin() != null
                                 && !employee.getFirstNameLatin().isEmpty()
                                 && employee.getLastNameLatin() != null
                                 && !employee.getLastNameLatin().isEmpty()
-                                ? employee.getFirstNameLatin() + employee.getLastNameLatin()
-                                : employee.getFirstName() + employee.getLastName());
+                                ? employee.getFirstNameLatin() + " " + employee.getLastNameLatin()
+                                : employee.getFirstName() + " " + employee.getLastName());
                         params.put("course", enrollment.getCourse().getName());
                         notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
                                 tsadvUser, params);
@@ -373,14 +392,14 @@ public class StudentHomeworkChangedListener {
             map.put("linkEn", String.format(requestLink, "Training History"));
             map.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
             map.put("courseName", enrollment.getCourse().getName());
-            map.put("personFullNameRu", person.getFirstName() + person.getLastName());
+            map.put("personFullNameRu", person.getFirstName() + " " + person.getLastName());
             map.put("personFullNameEn", person.getFirstNameLatin() != null
                     && !person.getFirstNameLatin().isEmpty()
                     && person.getLastNameLatin() != null
                     && !person.getLastNameLatin().isEmpty()
-                    ? person.getFirstNameLatin()
+                    ? person.getFirstNameLatin() + " "
                     + person.getLastNameLatin()
-                    : person.getFirstName()
+                    : person.getFirstName() + " "
                     + person.getLastName());
 
             CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null

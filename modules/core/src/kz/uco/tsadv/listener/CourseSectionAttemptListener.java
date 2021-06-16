@@ -182,15 +182,13 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
             map.put("linkEn", String.format(requestLink, "Training History"));
             map.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
             map.put("courseName", enrollment.getCourse().getName());
-            map.put("personFullNameRu", person.getFirstName() + person.getLastName());
+            map.put("personFullNameRu", person.getFirstName() + " " + person.getLastName());
             map.put("personFullNameEn", person.getFirstNameLatin() != null
                     && !person.getFirstNameLatin().isEmpty()
                     && person.getLastNameLatin() != null
                     && !person.getLastNameLatin().isEmpty()
-                    ? person.getFirstNameLatin()
-                    + person.getLastNameLatin()
-                    : person.getFirstName()
-                    + person.getLastName());
+                    ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                    : person.getFirstName() + " " + person.getLastName());
 
             CourseCertificate courseCertificate = enrollment.getCourse().getCertificate() != null
                     && !enrollment.getCourse().getCertificate().isEmpty()
@@ -312,20 +310,20 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                     Person student = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
                     if (trainer != null && student != null) {
                         Map<String, Object> params = new HashMap<>();
-                        params.put("trainerFioRu", trainer.getFirstName() + trainer.getLastName());
+                        params.put("trainerFioRu", trainer.getFirstName() + " " + trainer.getLastName());
                         params.put("trainerFioEn", trainer.getFirstNameLatin() != null
                                 && !trainer.getFirstNameLatin().isEmpty()
                                 && trainer.getLastNameLatin() != null
                                 && !trainer.getLastNameLatin().isEmpty()
-                                ? trainer.getFirstNameLatin() + trainer.getLastNameLatin()
-                                : trainer.getFirstName() + trainer.getLastName());
-                        params.put("studentFioRu", student.getFirstName() + student.getLastName());
+                                ? trainer.getFirstNameLatin() + " " + trainer.getLastNameLatin()
+                                : trainer.getFirstName() + " " + trainer.getLastName());
+                        params.put("studentFioRu", student.getFirstName() + " " + student.getLastName());
                         params.put("studentFioEn", student.getFirstNameLatin() != null
                                 && !student.getFirstNameLatin().isEmpty()
                                 && student.getLastNameLatin() != null
                                 && !student.getLastNameLatin().isEmpty()
-                                ? student.getFirstNameLatin() + student.getLastNameLatin()
-                                : student.getFirstName() + student.getLastName());
+                                ? student.getFirstNameLatin() + " " + student.getLastNameLatin()
+                                : student.getFirstName() + " " + student.getLastName());
                         params.put("course", enrollment.getCourse().getName());
 
                         notificationSenderAPIService.sendParametrizedNotification("tdc.student.completed.study",
@@ -346,20 +344,20 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                     Person user = tsadvUser.getPersonGroup() != null ? tsadvUser.getPersonGroup().getPerson() : null;
                     Person employee = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
                     if (user != null && employee != null) {
-                        params.put("personFioRu", user.getFirstName() + user.getLastName());
+                        params.put("personFioRu", user.getFirstName() + " " + user.getLastName());
                         params.put("personFioEn", user.getFirstNameLatin() != null
                                 && !user.getFirstNameLatin().isEmpty()
                                 && user.getLastNameLatin() != null
                                 && !user.getLastNameLatin().isEmpty()
-                                ? user.getFirstNameLatin() + user.getLastNameLatin()
-                                : user.getFirstName() + user.getLastName());
-                        params.put("employeeFioRu", employee.getFirstName() + employee.getLastName());
+                                ? user.getFirstNameLatin() + " " + user.getLastNameLatin()
+                                : user.getFirstName() + " " + user.getLastName());
+                        params.put("employeeFioRu", employee.getFirstName() + " " + employee.getLastName());
                         params.put("employeeFioEn", employee.getFirstNameLatin() != null
                                 && !employee.getFirstNameLatin().isEmpty()
                                 && employee.getLastNameLatin() != null
                                 && !employee.getLastNameLatin().isEmpty()
-                                ? employee.getFirstNameLatin() + employee.getLastNameLatin()
-                                : employee.getFirstName() + employee.getLastName());
+                                ? employee.getFirstNameLatin() + " " + employee.getLastNameLatin()
+                                : employee.getFirstName() + " " + employee.getLastName());
                         params.put("course", enrollment.getCourse().getName());
                         notificationSenderAPIService.sendParametrizedNotification("tdc.employee.completed.study",
                                 tsadvUser, params);

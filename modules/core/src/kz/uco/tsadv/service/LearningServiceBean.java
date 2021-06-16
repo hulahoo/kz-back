@@ -727,13 +727,13 @@ public class LearningServiceBean implements LearningService {
                     Map<String, Object> params = new HashMap<>();
                     Person person = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
                     if (person != null) {
-                        params.put("studentFioRu", person.getFirstName() + person.getLastName());
+                        params.put("studentFioRu", person.getFirstName() + " " + person.getLastName());
                         params.put("studentFioEn", person.getFirstNameLatin() != null
                                 && !person.getFirstNameLatin().isEmpty()
                                 && person.getLastNameLatin() != null
                                 && !person.getLastNameLatin().isEmpty()
-                                ? person.getFirstNameLatin() + person.getLastNameLatin()
-                                : person.getFirstName() + person.getLastName());
+                                ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                                : person.getFirstName() + " " + person.getLastName());
                         params.put("course", enrollment.getCourse().getName());
                         String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                 + "/my-course/" + enrollment.getId().toString()
@@ -781,13 +781,13 @@ public class LearningServiceBean implements LearningService {
                     Person person = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
                     if (person != null) {
                         Map<String, Object> params = new HashMap<>();
-                        params.put("studentFioRu", person.getFirstName() + person.getLastName());
+                        params.put("studentFioRu", person.getFirstName() + " " + person.getLastName());
                         params.put("studentFioEn", person.getFirstNameLatin() != null
                                 && !person.getFirstNameLatin().isEmpty()
                                 && person.getLastNameLatin() != null
                                 && !person.getLastNameLatin().isEmpty()
-                                ? person.getFirstNameLatin() + person.getLastNameLatin()
-                                : person.getFirstName() + person.getLastName());
+                                ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                                : person.getFirstName() + " " + person.getLastName());
                         params.put("course", enrollment.getCourse().getName());
 
                         notificationSenderAPIService.sendParametrizedNotification("tdc.module.is.not.completed", tsadvUser, params);
