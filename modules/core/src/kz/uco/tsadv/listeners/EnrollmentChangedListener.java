@@ -629,11 +629,15 @@ public class EnrollmentChangedListener {
         List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                 .query("select e from tsadv$CourseTrainer e " +
                         " where e.trainer.employee is not null " +
+                        " and e.course.id = :courseId " +
                         " and (e.trainer.company.code = 'empty' " +
                         " or e.trainer.company.id in " +
-                        " (select en.personGroup.company.id from tsadv$Enrollment en " +
-                        " where en.id = :enrollmentId and en.course.id = e.course.id ))")
-                .parameter("enrollmentId", enrollment.getId())
+                        " (select p.company.id from base$PersonGroupExt p " +
+                        " where p.id = :personGroupId  ) )")
+                .parameter("personGroupId", enrollment.getPersonGroup() != null
+                        ? enrollment.getPersonGroup().getId() : UuidProvider.createUuid())
+                .parameter("courseId", enrollment.getCourse() != null
+                        ? enrollment.getCourse().getId() : UuidProvider.createUuid())
                 .view("courseTrainer.edit")
                 .list();
 

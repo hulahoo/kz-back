@@ -131,11 +131,14 @@ public class CourseFeedbackPersonAnswerChangedListener {
                         .query("select e from tsadv$UserExt e " +
                                 " join tsadv$CourseTrainer ct on ct.trainer.employee.id = e.personGroup.id " +
                                 " where ct.id = :courseTrainerId " +
+                                " and ct.course.id = :courseId " +
                                 " and ( ct.trainer.company.code = 'empty'  " +
                                 "  or ct.trainer.company.id in " +
                                 " (select en.personGroup.company.id from tsadv$Enrollment en " +
                                 " where en.id = :enrollmentId  ) )")
                         .parameter("courseTrainerId", courseTrainer.getId())
+                        .parameter("courseId", enrollment.getCourse() != null
+                                ? enrollment.getCourse().getId() : UuidProvider.createUuid())
                         .parameter("enrollmentId", enrollment.getId())
                         .view("userExt.edit")
                         .list().stream().findFirst().orElse(null);

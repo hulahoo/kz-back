@@ -178,6 +178,7 @@ public class StudentHomeworkChangedListener {
             List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                     .query("select e from tsadv$CourseTrainer e " +
                             " where e.trainer.employee is not null " +
+                            " and e.course.id = :courseId " +
                             " and current_date between coalesce(e.dateFrom, :startDate) and coalesce(e.dateTo, :endDate) " +
                             " and ( e.trainer.company.code = 'empty' " +
                             " or e.trainer.company.id in " +
@@ -185,6 +186,7 @@ public class StudentHomeworkChangedListener {
                             " where p.id = :personGroupId  ) )")
                     .parameter("personGroupId", studentHomework.getPersonGroup() != null
                             ? studentHomework.getPersonGroup().getId() : UuidProvider.createUuid())
+                    .parameter("courseId", studentHomework.getHomework().getCourse().getId())
                     .parameter("startDate", new Date(20000101))
                     .parameter("endDate", BaseCommonUtils.getEndOfTime())
                     .view("courseTrainer.edit")
@@ -312,11 +314,14 @@ public class StudentHomeworkChangedListener {
                         .query("select e from tsadv$UserExt e " +
                                 " join tsadv$CourseTrainer ct on ct.trainer.employee.id = e.personGroup.id " +
                                 " where ct.id = :courseTrainerId " +
+                                " and ct.course.id = :courseId " +
                                 " and ( ct.trainer.company.code = 'empty'  " +
                                 "  or ct.trainer.company.id in " +
                                 " (select en.personGroup.company.id from tsadv$Enrollment en " +
                                 " where en.id = :enrollmentId  ) )")
                         .parameter("courseTrainerId", courseTrainer.getId())
+                        .parameter("courseId", enrollment.getCourse() != null
+                                ? enrollment.getCourse().getId() : UuidProvider.createUuid())
                         .parameter("enrollmentId", enrollment.getId())
                         .view("userExt.edit")
                         .list().stream().findFirst().orElse(null);

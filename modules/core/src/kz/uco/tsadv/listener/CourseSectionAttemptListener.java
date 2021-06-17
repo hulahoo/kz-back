@@ -299,11 +299,14 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                         .query("select e from tsadv$UserExt e " +
                                 " join tsadv$CourseTrainer ct on ct.trainer.employee.id = e.personGroup.id " +
                                 " where ct.id = :courseTrainerId " +
+                                " and ct.course.id = :courseId " +
                                 " and ( ct.trainer.company.code = 'empty'  " +
                                 "  or ct.trainer.company.id in " +
                                 " (select p.company.id from base$PersonGroupExt p " +
                                 " where p.id = :personGroupId  ) )")
                         .parameter("courseTrainerId", courseTrainer.getId())
+                        .parameter("courseId", enrollment.getCourse() != null ?
+                                enrollment.getCourse().getId() : UuidProvider.createUuid())
                         .parameter("personGroupId", enrollment.getPersonGroup() != null ?
                                 enrollment.getPersonGroup().getId() : UuidProvider.createUuid())
                         .view("userExt.edit")
