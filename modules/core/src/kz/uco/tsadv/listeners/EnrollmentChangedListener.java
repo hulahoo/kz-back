@@ -308,10 +308,11 @@ public class EnrollmentChangedListener {
                                 " where ct.id = :courseTrainerId " +
                                 " and ( ct.trainer.company.code = 'empty'  " +
                                 "  or ct.trainer.company.id in " +
-                                " (select en.personGroup.company.id from tsadv$Enrollment en " +
-                                " where en.id = :enrollmentId  ) )")
+                                " (select p.company.id from base$PersonGroupExt p " +
+                                " where p.id = :personGroupId  ) )")
                         .parameter("courseTrainerId", courseTrainer.getId())
-                        .parameter("enrollmentId", enrollment.getId())
+                        .parameter("personGroupId", enrollment.getPersonGroup() != null ?
+                                enrollment.getPersonGroup().getId() : UuidProvider.createUuid())
                         .view("userExt.edit")
                         .list().stream().findFirst().orElse(null);
                 if (tsadvUserTrainer != null) {

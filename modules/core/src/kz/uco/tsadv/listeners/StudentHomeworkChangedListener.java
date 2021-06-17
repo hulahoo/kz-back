@@ -180,9 +180,10 @@ public class StudentHomeworkChangedListener {
                             " and current_date between coalesce(e.dateFrom, :startDate) and coalesce(e.dateTo, :endDate) " +
                             " and ( e.trainer.company.code = 'empty' " +
                             " or e.trainer.company.id in " +
-                            " ( select s.personGroup.company.id from tsadv_StudentHomework s " +
-                            " where s.id = :studentHomeworkId  and s.homework.course.id = e.course.id  )) ")
-                    .parameter("studentHomeworkId", studentHomework.getId())
+                            " (select p.company.id from base$PersonGroupExt p " +
+                            " where p.id = :personGroupId  ) )")
+                    .parameter("personGroupId", studentHomework.getPersonGroup() != null
+                            ? studentHomework.getPersonGroup().getId() : UuidProvider.createUuid())
                     .parameter("startDate", new Date(20000101))
                     .parameter("endDate", BaseCommonUtils.getEndOfTime())
                     .view("courseTrainer.edit")
