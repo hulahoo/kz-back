@@ -529,48 +529,6 @@ public class InsuredPersonEdit extends StandardEditor<InsuredPerson> {
         return result;
     }
 
-
-    protected void calculatedAmount() {
-        List<ContractConditions> conditionsList = new ArrayList<>();
-        if (insuranceContractField.getValue() != null &&
-                employeeField.getValue() != null &&
-                relativeField.getValue() != null &&
-                birthdateField.getValue() != null) {
-            int age = employeeService.calculateAge(birthdateField.getValue());
-            List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
-                    "from tsadv$InsuredPerson e " +
-                    " where e.insuranceContract.id = :insuranceContractId" +
-                    " and e.employee.id = :employeeId " +
-                    " and e.amount = :amount " +
-                    " and e.relative.code <> 'PRIMARY'")
-                    .parameter("insuranceContractId", insuranceContractField.getValue().getId())
-                    .parameter("employeeId", employeeField.getValue().getId())
-                    .parameter("amount", BigDecimal.valueOf(0))
-                    .view("insuredPerson-editView")
-                    .list();
-
-            for (ContractConditions condition : insuranceContractField.getValue().getProgramConditions()) {
-                if (condition.getRelationshipType().getId() == relativeField.getValue().getId()) {
-                    if (condition.getAgeMin() <= age && condition.getAgeMax() >= age) {
-                        conditionsList.add(condition);
-                    }
-                }
-            }
-
-            if (insuranceContractField.getValue().getCountOfFreeMembers() > personList.size() && conditionsList.size() > 1) {
-                amountField.setValue(BigDecimal.valueOf(0));
-            } else if(insuranceContractField.getValue().getCountOfFreeMembers() <= personList.size()){
-                for (ContractConditions condition : conditionsList){
-                    if (!condition.getIsFree()){
-                        amountField.setValue(condition.getCostInKzt());
-                        break;
-                    }
-                }
-            }
-        }
-
-    }
-
     @Subscribe("birthdateField")
     public void onBirthdateFieldValueChange(HasValue.ValueChangeEvent<Date> event) {
         if (isNewOrChangedInsuredPerson() && event.getValue() != null && whichButton != null

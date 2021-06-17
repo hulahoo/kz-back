@@ -23,7 +23,6 @@
                 dataLoader="coursesDl">
             <properties include=".*"/>
         </filter>
-        0
         <groupTable id="coursesTable"
                     width="100%"
                     dataContainer="coursesDc">

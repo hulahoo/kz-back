@@ -4,7 +4,6 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.entity.contracts.Id;
-import com.haulmont.cuba.core.global.LoadContext;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.Action;
@@ -14,10 +13,10 @@ import com.haulmont.cuba.gui.components.Label;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.NotificationMessagePojo;
-import kz.uco.base.entity.core.notification.SendingNotification;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.base.web.root.BaseMainScreen;
 import kz.uco.tsadv.components.GroupsComponent;
+import kz.uco.tsadv.web.screens.activity.ActivityForHandbellBrowse;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.StatusEnum;
 
@@ -110,8 +109,8 @@ public class TsadvMainScreen extends BaseMainScreen {
         windowParams.put("notificationMessagePojo", notificationMessagePojo);
         windowParams.put("activity", activity);
         Screen screen = screenBuilders.screen(this)
-                .withScreenId("ext-user-notification-view")
-                .withOpenMode(OpenMode.DIALOG)
+                .withScreenClass(ActivityForHandbellBrowse.class)
+                .withOpenMode(OpenMode.THIS_TAB)
                 .withOptions(new MapScreenOptions(windowParams))
                 .build().show();
         screen.addAfterCloseListener(afterCloseEvent -> {

@@ -66,6 +66,19 @@
                 <query><![CDATA[select e from tsadv$DicRelationshipType e]]></query>
             </loader>
         </collection>
+        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
+            <loader id="addressDl">
+                <query><![CDATA[select e from tsadv$Address e]]>
+                    <condition>
+                        <and>
+                            <c:jpql>
+                                <c:where>current_date between e.startDate and e.endDate</c:where>
+                            </c:jpql>
+                        </and>
+                    </condition>
+                </query>
+            </loader>
+        </collection>
         <collection id="addressTypeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType"
                     view="_local">
             <loader id="addressTypeDl">
@@ -78,7 +91,7 @@
         <collection id="insuredPersonMemberDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson" view="insuredPerson-editView">
             <loader id="insuredPersonMemberDl">
                 <query><![CDATA[select e from tsadv$InsuredPerson e]]>
-                    <condition>
+                    <condition>z
                         <and>
                             <c:jpql>
                                 <c:where>e.insuranceContract.id =:employeeContractId and e.employee.id =:employeeId and e.type = :relativeType</c:where>

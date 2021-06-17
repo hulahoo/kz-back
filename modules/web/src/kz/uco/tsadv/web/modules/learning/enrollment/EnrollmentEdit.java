@@ -3,6 +3,7 @@ package kz.uco.tsadv.web.modules.learning.enrollment;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.EditAction;
+import kz.uco.base.entity.shared.Person;
 import kz.uco.base.service.NotificationService;
 import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -102,22 +103,28 @@ public class EnrollmentEdit<T extends Enrollment> extends AbstractEnrollmentEdit
                 .view("userExt.edit")
                 .list().stream().findFirst().orElse(null);
         if (tsadvUser != null) {
-            Map<String, Object> maps = new HashMap<>();
+            Person person = getItem().getPersonGroup() != null ? getItem().getPersonGroup().getPerson() : null;
+            if (person != null) {
+                Map<String, Object> maps = new HashMap<>();
 
-            String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
-                    + "/learning-history/"
-                    + "\" target=\"_blank\">%s " + "</a>";
-            maps.put("linkRu", String.format(requestLink, "История обучения"));
-            maps.put("linkEn", String.format(requestLink, "Training History"));
-            maps.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
+                String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                        + "/learning-history/"
+                        + "\" target=\"_blank\">%s " + "</a>";
+                maps.put("linkRu", String.format(requestLink, "История обучения"));
+                maps.put("linkEn", String.format(requestLink, "Training History"));
+                maps.put("linkKz", String.format(requestLink, "Оқу үлгерімі"));
 
-            maps.put("studentFioRu", getItem().getPersonGroup() != null
-                    ? getItem().getPersonGroup().getFirstLastName() : "");
-            maps.put("studentFioEn", getItem().getPersonGroup() != null
-                    ? getItem().getPersonGroup().getPersonFirstLastNameLatin() : "");
+                maps.put("studentFioRu", person.getFirstName() + " " + person.getLastName());
+                maps.put("studentFioEn", person.getFirstNameLatin() != null
+                        && !person.getFirstNameLatin().isEmpty()
+                        && person.getLastNameLatin() != null
+                        && !person.getLastNameLatin().isEmpty()
+                        ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                        : person.getFirstName() + " " + person.getLastName());
 
-            notificationService.sendParametrizedNotification("tdc.new.trainerComment", tsadvUser, maps);
-            showNotification(getMessage("sendSucces"), NotificationType.TRAY);
+                notificationService.sendParametrizedNotification("tdc.new.trainerComment", tsadvUser, maps);
+                showNotification(getMessage("sendSucces"), NotificationType.TRAY);
+            }
         }
     }
 }
