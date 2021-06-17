@@ -91,10 +91,10 @@ public class EnrollmentChangedListener {
                             Person person = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
                             if (person != null) {
                                 Map<String, Object> map = new HashMap<>();
-                                String courseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
-                                        + "/course/"
-                                        + enrollment.getCourse().getId()
-                                        + "\" target=\"_blank\">%s " + "</a>";
+                                String courseLink = "<a href=\"" + globalConfig.getWebAppUrl() + "/open?screen=" +
+                                        "tsadv$Course.edit" +
+                                        "&item=" + "tsadv$Course" + "-" + enrollment.getCourse().getId() +
+                                        "\" target=\"_blank\">%s " + "</a>";
                                 String myCourseLink = "<a href=\"" + frontConfig.getFrontAppUrl()
                                         + "/my-course/"
                                         + "\" target=\"_blank\">%s " + "</a>";
