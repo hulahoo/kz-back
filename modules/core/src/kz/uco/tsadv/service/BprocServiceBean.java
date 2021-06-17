@@ -901,7 +901,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         if (StringUtils.isBlank(notificationTemplateCode)) return;
         ExtTaskData taskDataWithRoleCode = getProcessTasks(processInstanceData).stream().filter(extTaskData ->
                 extTaskData.getHrRole() != null
-                        && extTaskData.getHrRole().getCode() != null && roleCode.equals(extTaskData.getHrRole() != null))
+                        && extTaskData.getHrRole().getCode() != null
+                        && roleCode.equalsIgnoreCase(extTaskData.getHrRole().getCode()))
                 .findFirst().orElse(null);
         if (taskDataWithRoleCode != null && taskDataWithRoleCode.getAssigneeOrCandidates() != null) {
             ActivityType activityType = dataManager.load(ActivityType.class)
