@@ -331,9 +331,14 @@ public class EnrollmentChangedListener {
             courseTrainerList.forEach(courseTrainer -> {
                 TsadvUser tsadvUserTrainer = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e " +
-                                " where e.personGroup = :personGroup ")
-                        .parameter("personGroup", courseTrainer.getTrainer() != null
-                                ? courseTrainer.getTrainer().getEmployee() : null)
+                                " join tsadv$CourseTrainer ct on ct.trainer.employee.id = e.personGroup.id " +
+                                " where ct.id = :courseTrainerId " +
+                                " and ( ct.trainer.company.code = 'empty'  " +
+                                "  or ct.trainer.company.id in " +
+                                " (select en.personGroup.company.id from tsadv$Enrollment en " +
+                                " where en.id = :enrollmentId  ) )")
+                        .parameter("courseTrainerId", courseTrainer.getId())
+                        .parameter("enrollmentId", enrollment.getId())
                         .view("userExt.edit")
                         .list().stream().findFirst().orElse(null);
                 if (tsadvUserTrainer != null) {
@@ -622,9 +627,12 @@ public class EnrollmentChangedListener {
     protected void sendNotification(Enrollment enrollment, String notificationCode) {
         List<CourseTrainer> courseTrainers = dataManager.load(CourseTrainer.class)
                 .query("select e from tsadv$CourseTrainer e " +
-                        " where e.course = :course " +
-                        " and e.trainer.employee is not null")
-                .parameter("course", enrollment.getCourse())
+                        " where e.trainer.employee is not null " +
+                        " and (e.trainer.company.code = 'empty' " +
+                        " or e.trainer.company.id in " +
+                        " (select en.personGroup.company.id from tsadv$Enrollment en " +
+                        " where en.id = :enrollmentId and en.course.id = e.course.id ))")
+                .parameter("enrollmentId", enrollment.getId())
                 .view("courseTrainer.edit")
                 .list();
 

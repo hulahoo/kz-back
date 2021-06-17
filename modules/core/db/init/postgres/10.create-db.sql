@@ -15798,6 +15798,7 @@ create table TSADV_TRAINER (
     INFORMATION_TRAINER_LANG3 text,
     TRAINER_GREETING_LANG2 text,
     TRAINER_GREETING_LANG3 text,
+    COMPANY_ID uuid,
     --
     primary key (ID)
 )^

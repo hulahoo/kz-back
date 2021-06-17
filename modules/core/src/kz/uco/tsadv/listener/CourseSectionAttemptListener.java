@@ -297,9 +297,14 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
             courseTrainerList.forEach(courseTrainer -> {
                 TsadvUser tsadvUserTrainer = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e " +
-                                " where e.personGroup = :personGroup ")
-                        .parameter("personGroup", courseTrainer.getTrainer() != null
-                                ? courseTrainer.getTrainer().getEmployee() : null)
+                                " join tsadv$CourseTrainer ct on ct.trainer.employee.id = e.personGroup.id " +
+                                " where ct.id = :courseTrainerId " +
+                                " and ( ct.trainer.company.code = 'empty'  " +
+                                "  or ct.trainer.company.id in " +
+                                " (select en.personGroup.company.id from tsadv$Enrollment en " +
+                                " where en.id = :enrollmentId  ) )")
+                        .parameter("courseTrainerId", courseTrainer.getId())
+                        .parameter("enrollmentId", enrollment.getId())
                         .view("userExt.edit")
                         .list().stream().findFirst().orElse(null);
                 if (tsadvUserTrainer != null) {
