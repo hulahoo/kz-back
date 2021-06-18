@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://insuranceContractEdit.caption"
         focusComponent="form"
         messagesPack="kz.uco.tsadv.web.screens.insurancecontract">
@@ -23,17 +22,19 @@
                 <query><![CDATA[select e from tsadv$DicAddressType e]]></query>
             </loader>
         </collection>
-        <collection id="insuredPersonsDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
-                    view="insuredPerson-browseView">
-            <loader id="insuredPersonsDl">
-                <query><![CDATA[select e from tsadv$InsuredPerson e]]>
-                    <condition>
-                        <and>
-                            <c:jpql>
-                                <c:where>e.insuranceContract.id = :insuranceContractId</c:where>
-                            </c:jpql>
-                        </and>
-                    </condition>
+        <collection id="insuredPersonsDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson">
+            <view extends="_local">
+                <property name="employee" view="_minimal"/>
+                <property name="file" view="_minimal"/>
+                <property name="sex" view="_minimal"/>
+                <property name="insuranceContract" view="_minimal"/>
+                <property name="region" view="_minimal"/>
+                <property name="relative" view="_minimal"/>
+                <property name="statusRequest" view="_minimal"/>
+            </view>
+            <loader id="insuredPersonsDl" maxResults="20">
+                <query>
+                    <![CDATA[select e from tsadv$InsuredPerson e where e.insuranceContract.id = :insuranceContractId]]>
                 </query>
             </loader>
         </collection>
@@ -59,7 +60,7 @@
                  expand="vbox"
                  caption="msg://insuranceContract">
                 <vbox id="vbox" spacing="true" margin="true, false, false, false" height="100%" expand="scroll">
-                    <scrollBox id="scroll" height="100%">
+                    <scrollBox id="scroll">
                         <vbox id="vbox1" spacing="true" margin="true, false, false, false">
                             <groupBox caption="msg://mainGroupBox" height="100%">
                                 <form id="form" dataContainer="insuranceContractDc">
@@ -201,7 +202,9 @@
                                 trackSelection="true"/>
                     </actions>
                     <columns>
-                        <column id="contractFieldPerson" property="insuranceContract.contract"/>
+                        <column id="contractFieldPerson" property="insuranceContract.contract">
+                            <componentRenderer/>
+                        </column>
                         <column id="relativeFieldPerson" property="relative"/>
                         <column id="attachDateFieldPerson" property="attachDate"/>
                         <column id="employeeFieldPerson" property="employee"/>
@@ -219,7 +222,9 @@
                         <column id="totalAmountFieldPerson" property="totalAmount"/>
                         <column id="exclusionDateFieldPerson" property="exclusionDate"/>
                         <column id="commentFieldPerson" property="comment"/>
-                        <column id="statementFileField" property="statementFile" caption="Файл"/>
+                        <column id="statementFileField" property="statementFile" caption="Файл">
+                            <componentRenderer/>
+                        </column>
                     </columns>
                     <rowsCount/>
                     <buttonsPanel id="buttonsPanel"
