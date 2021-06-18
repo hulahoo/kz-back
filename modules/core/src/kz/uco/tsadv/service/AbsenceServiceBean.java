@@ -31,7 +31,12 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.*;
+
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 @Service(AbsenceService.NAME)
 public class AbsenceServiceBean implements AbsenceService {
@@ -574,7 +579,7 @@ public class AbsenceServiceBean implements AbsenceService {
                         " and t.isVacationDate = true " +
                         " and t.availableForChangeDate = true ")
                 .parameter("date", getDate())
-                .view("")
+                .view("personGroup.browse")
                 .list();
         if (!absencePersonGroupList.isEmpty()) {
             absencePersonGroupList.forEach(personGroupExt -> {
@@ -598,7 +603,7 @@ public class AbsenceServiceBean implements AbsenceService {
                         " and t.isVacationDate = true " +
                         " and t.availableForChangeDate = true ")
                 .parameter("date", getDate())
-                .view("")
+                .view("personGroup.browse")
                 .list();
         if (!vacationScheduleRequestPersonGroupList.isEmpty()) {
             vacationScheduleRequestPersonGroupList.forEach(personGroupExt -> {
@@ -627,5 +632,38 @@ public class AbsenceServiceBean implements AbsenceService {
                 .parameter("personGroup", personGroupExt)
                 .view("userExt.edit")
                 .list().stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public void sendNotificationForEmployeeEveryYear() {
+        List<PersonGroupExt> personGroupExtList = dataManager.load(PersonGroupExt.class)
+                .query("select e from base$PersonGroupExt e " +
+                        " join base_DicCompany dc on e.company.id = dc.id " +
+                        " where dc.code <> 'VCM' " +
+                        " and e not in (select vsr.personGroup from tsadv_VacationScheduleRequest vsr " +
+                        " where vsr.startDate between :startDate and :endDate)")
+                .parameter("startDate", java.sql.Date.valueOf(getStartDateNextYear()))
+                .parameter("endDate", java.sql.Date.valueOf(getEndDateNextYear()))
+                .view("personGroup.browse")
+                .list();
+        if (!personGroupExtList.isEmpty()) {
+            personGroupExtList.forEach(personGroupExt -> {
+                TsadvUser tsadvUser = getTsadvUser(personGroupExt);
+                if (tsadvUser != null) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("fullNameRu", personGroupExt.getFullName());
+
+                    notificationSenderAPIService.sendParametrizedNotification("reminder.schedule.the.leave ", tsadvUser, params);
+                }
+            });
+        }
+    }
+
+    private LocalDate getEndDateNextYear() {
+        return LocalDate.now().plusYears(1).with(lastDayOfYear());
+    }
+
+    private LocalDate getStartDateNextYear() {
+        return LocalDate.now().plusYears(1).with(firstDayOfYear());
     }
 }

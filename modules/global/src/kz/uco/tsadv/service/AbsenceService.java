@@ -53,4 +53,6 @@ public interface AbsenceService {
     Long getRemainingDaysWeekendWork(UUID personGroupId);
 
     void sendNotifyForEmployee();
+
+    void sendNotificationForEmployeeEveryYear();
 }
