@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="dicAssessmentMethodsTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicassessmentmethod">
+    <data readOnly="true">
+        <collection id="dicAssessmentMethodsDc"
+                    class="kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod"
+                    view="_local">
+            <loader id="dicAssessmentMethodsDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicAssessmentMethod e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicAssessmentMethodsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicAssessmentMethodsTable"
+                dataLoader="dicAssessmentMethodsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicAssessmentMethodsTable"
+                    width="100%"
+                    dataContainer="dicAssessmentMethodsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="description1"/>
+                <column id="description2"/>
+                <column id="description3"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicAssessmentMethodsTable.create"/>
+                <button id="editBtn" action="dicAssessmentMethodsTable.edit"/>
+                <button id="removeBtn" action="dicAssessmentMethodsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
