@@ -1,0 +1,2 @@
+alter table TSADV_TRAINER add constraint FK_TSADV_TRAINER_COMPANY foreign key (COMPANY_ID) references BASE_DIC_COMPANY(ID);
+create index IDX_TSADV_TRAINER_COMPANY on TSADV_TRAINER (COMPANY_ID);

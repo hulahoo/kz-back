@@ -274,7 +274,7 @@ public class PersonData extends Screen implements SelfServiceMixin {
                 .withInitializer(personDocumentRequest -> {
                     personDocumentRequest.setPersonGroup(dataManager
                             .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
-                    personDocumentRequest.setRequestStatus(draftRequestStatus);
+                    personDocumentRequest.setStatus(draftRequestStatus);
                 }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true,
                 "isForeigner", isForeigner())))
                 .build().show();
@@ -293,7 +293,7 @@ public class PersonData extends Screen implements SelfServiceMixin {
                     personDocumentRequest.setPersonGroup(dataManager
                             .reload(personExtDc.getItem().getGroup(), "personGroupExt-for-person-data"));
                     personDocumentRequest.setAttachments(personDocument.getAttachments());
-                    personDocumentRequest.setRequestStatus(draftRequestStatus);
+                    personDocumentRequest.setStatus(draftRequestStatus);
                     personDocumentRequest.setEditedPersonDocument(personDocument);
                 }).withOptions(new MapScreenOptions(ParamsMap.of("fromPersonData", true,
                 "isForeigner", isForeigner())))

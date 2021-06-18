@@ -31,6 +31,7 @@ public class EventHandler {
     @Inject
     protected Persistence persistence;
 
+    @SuppressWarnings("NullableProblems")
     @Authenticated
     @EventListener(ApplicationStartEvent.class)
     public void onApplicationStart() {
@@ -143,6 +144,19 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        if (getCount(em, "PERSON_DOCUMENT_REQUEST_APPROVE") == 0) {
+            ActivityType activityType = metadata.create(ActivityType.class);
+            activityType.setCode("PERSON_DOCUMENT_REQUEST_APPROVE");
+            activityType.setScreen("tsadv_PersonDocumentRequest.edit");
+            activityType.setLangValue1("Утверждение / отклонение заявление на документ");
+            WindowProperty windowProperty = metadata.create(WindowProperty.class);
+            windowProperty.setEntityName("tsadv_PersonDocumentRequest");
+            windowProperty.setScreenName("tsadv_PersonDocumentRequest.edit");
+            windowProperty.setViewName("portal.my-profile");
+            activityType.setWindowProperty(windowProperty);
+            em.persist(windowProperty);
+            em.persist(activityType);
+        }
         if (getCount(em, "NOTIFICATION") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("NOTIFICATION");
@@ -202,6 +216,7 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        */
         if (getCount(em, "PERSONAL_DATA_REQUEST_APPROVE") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("PERSONAL_DATA_REQUEST_APPROVE");
@@ -228,6 +243,7 @@ public class EventHandler {
             em.persist(windowProperty);
             em.persist(activityType);
         }
+        /*
         if (getCount(em, "POSITION_CHANGE_REQUEST_APPROVE") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("POSITION_CHANGE_REQUEST_APPROVE");
@@ -310,11 +326,7 @@ public class EventHandler {
         return em;
     }
 
-    @EventListener(ApplicationStartEvent.class)
-    public void registerSystemProperties() {
-    }
-
-    private Long getCount(EntityManager em, String code) {
+    protected Long getCount(EntityManager em, String code) {
         TypedQuery<Long> query = em.createQuery("select count(e) from uactivity$ActivityType e" +
                 " where e.code = :code", Long.class);
         query.setParameter("code", code);

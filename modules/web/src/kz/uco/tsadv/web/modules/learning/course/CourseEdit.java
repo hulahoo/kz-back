@@ -473,4 +473,20 @@ public class CourseEdit extends StandardEditor<Course> {
                 }).build().show()
                 .addAfterCloseListener(afterCloseEvent -> preRequisitionDl.load());
     }
+
+    @Subscribe("enrollmentsTable.addAttempt")
+    public void onEnrollmentsTableAddAttempt(Action.ActionPerformedEvent event) {
+        CommitContext commitContext = new CommitContext();
+        for (CourseSection section : courseDc.getItem().getSections()) {
+            if (section.getSectionObject() != null && section.getSectionObject().getObjectType() != null
+                    && "TEST".equals(section.getSectionObject().getObjectType().getCode())) {
+                Test test = section.getSectionObject().getTest();
+                test.setMaxAttempt(test.getMaxAttempt() + 1);
+                commitContext.addInstanceToCommit(test);
+            }
+        }
+        dataManager.commit(commitContext);
+        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                .withCaption(messageBundle.getMessage("attemptAdded")).show();
+    }
 }
