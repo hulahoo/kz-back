@@ -1,79 +1,95 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<window xmlns="http://schemas.haulmont.com/cuba/window.xsd"
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
         caption="msg://editorCaption"
-        class="kz.uco.tsadv.web.personaldatarequest.PersonalDataRequestEdit"
-        datasource="personalDataRequestDs"
-        focusComponent="fieldGroup"
+        focusComponent="form"
         messagesPack="kz.uco.tsadv.web.personaldatarequest">
-    <dsContext>
-        <datasource id="personalDataRequestDs"
-                    class="kz.uco.tsadv.modules.personal.model.PersonalDataRequest"
-                    view="personalDataRequest-view">
-            <collectionDatasource id="attachmentsDs"
-                                  property="attachments"/>
-        </datasource>
-        <collectionDatasource id="dicMaritalStatusesDs"
-                              class="kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus"
-                              view="_local">
-            <query>
-                <![CDATA[select e from tsadv$DicMaritalStatus e]]>
-            </query>
-        </collectionDatasource>
-    </dsContext>
+    <data>
+        <instance id="personalDataRequestDs"
+                  class="kz.uco.tsadv.modules.personal.model.PersonalDataRequest"
+                  view="personalDataRequest-view">
+            <collection id="attachmentsDs"
+                        property="attachments"/>
+        </instance>
+        <collection id="dicMaritalStatusesDs"
+                    class="kz.uco.tsadv.modules.personal.dictionary.DicMaritalStatus"
+                    view="_local">
+            <loader id="dicMaritalStatusesDl">
+                <query>
+                    <![CDATA[select e from tsadv$DicMaritalStatus e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="tasksDc"
+                    class="kz.uco.tsadv.entity.bproc.ExtTaskData"/>
+    </data>
     <dialogMode height="AUTO"
                 width="600"/>
     <layout spacing="true"
             expand="scrollBox">
         <scrollBox id="scrollBox"
                    spacing="true">
-            <fieldGroup id="fieldGroup"
-                        datasource="personalDataRequestDs">
+            <form id="form"
+                  dataContainer="personalDataRequestDs">
                 <column width="250px">
-                    <field editable="false"
-                           property="requestNumber"/>
-                    <field property="lastName"/>
-                    <field property="firstName"/>
-                    <field property="middleName"/>
-                    <field property="lastNameLatin"/>
-                    <field property="firstNameLatin"/>
-                    <field property="middleNameLatin"/>
-                    <field optionsDatasource="dicMaritalStatusesDs"
-                           property="maritalStatus"/>
-                    <field property="dateOfBirth"/>
-                    <field editable="false"
-                           property="status"/>
+                    <textField editable="false"
+                               property="requestNumber"/>
+                    <textField property="lastName"/>
+                    <textField property="firstName"/>
+                    <textField property="middleName"/>
+                    <textField property="lastNameLatin"/>
+                    <textField property="firstNameLatin"/>
+                    <textField property="middleNameLatin"/>
+                    <lookupField optionsContainer="dicMaritalStatusesDs"
+                                 property="maritalStatus"/>
+                    <dateField property="dateOfBirth"/>
+                    <lookupField editable="false"
+                                 property="status"/>
                 </column>
-            </fieldGroup>
+            </form>
             <groupBox id="groupBox">
-                <table id="attachmentTable"
-                       multiselect="true"
-                       height="100%"
-                       width="100%">
+                <table id="fileDescriptorsTable" width="100%" dataContainer="attachmentsDs">
                     <actions>
-                        <action id="remove"
-                                invoke="removeFile"
-                                enable="false"
-                                caption="mainMsg://table.btn.remove"/>
+                        <action id="remove" type="remove"/>
                     </actions>
-                    <columns>
-                        <column id="name" caption="mainMsg://fileName" generator="generatorName"/>
-                    </columns>
-                    <rows datasource="attachmentsDs"/>
-                    <buttonsPanel>
-                        <upload id="addFile"/>
-                        <button action="attachmentTable.remove"/>
+                    <buttonsPanel alwaysVisible="true">
+                        <upload id="upload" uploadButtonCaption="mainMsg://download" uploadButtonIcon="PLUS_CIRCLE"
+                                stylename="primary"/>
+                        <button id="fileDescriptorsTableRemoveBtn" action="fileDescriptorsTable.remove"/>
                     </buttonsPanel>
+                    <columns>
+                        <column id="name" generator="generatorName" caption="mainMsg://fileName"/>
+                    </columns>
                 </table>
             </groupBox>
+            <vbox id="bpmActorsVBox"
+                  width="1300px"
+                  spacing="true">
+                <groupBox id="bpmActorsBox"
+                          caption="msg://kz.uco.tsadv.bproc/bproc.participants"
+                          spacing="true">
+                    <table id="procTasksTable"
+                           height="100%"
+                           showSelection="false"
+                           dataContainer="tasksDc"
+                           width="100%">
+                        <columns>
+                            <column id="hrRole"/>
+                            <column id="assignee" generator="generateAssignee"/>
+                            <column id="createTime"/>
+                            <column id="endTime"/>
+                            <column id="outcome" generator="generateOutcome"/>
+                            <column id="comment"/>
+                        </columns>
+                    </table>
+                </groupBox>
+            </vbox>
         </scrollBox>
-        <hbox id="hbox"
+        <hbox id="procActionsBox"
+              align="BOTTOM_LEFT"
               spacing="true">
-            <button id="next"
-                    caption="msg://next"
-                    invoke="nextClick"/>
-            <button id="cancel"
-                    caption="msg://cancel"
-                    invoke="cancelClick"/>
+            <hbox id="procActionButtonHBox"
+                  spacing="true"/>
+            <button action="windowClose"/>
         </hbox>
     </layout>
 </window>

@@ -1914,8 +1914,8 @@
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request.xml"/>
     <screen id="tsadv$PersonalDataRequest.bpm"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-bpm.xml"/>
-    <screen id="tsadv$AddressRequest.edit"
-            template="kz/uco/tsadv/web/addressrequest/address-request-edit.xml"/>
+<!--    <screen id="tsadv$AddressRequest.edit"-->
+    <!--            template="kz/uco/tsadv/web/addressrequest/address-request-edit.xml"/>-->
     <screen id="tsadv$PersonalDataRequest.browse"
             template="kz/uco/tsadv/web/personaldatarequest/personal-data-request-browse.xml"/>
     <!--    <screen id="tsadv$PersonalDataRequest.edit"-->
