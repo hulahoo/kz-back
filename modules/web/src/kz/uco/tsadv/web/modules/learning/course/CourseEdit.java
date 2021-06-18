@@ -486,7 +486,7 @@ public class CourseEdit extends StandardEditor<Course> {
             }
         }
         dataManager.commit(commitContext);
-//        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
-//                .withCaption(messageBundle.getMessage("attemptAdded")).show();
+        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                .withCaption(messageBundle.getMessage("attemptAdded")).show();
     }
 }
