@@ -23,13 +23,6 @@
                 <query><![CDATA[select e from base$DicRegion e]]></query>
             </loader>
         </collection>
-        <collection id="employeeDc"
-                    class="kz.uco.tsadv.modules.personal.group.PersonGroupExt"
-                    view="_local">
-            <loader id="employee">
-                <query><![CDATA[select e from base$PersonGroupExt e]]></query>
-            </loader>
-        </collection>
         <collection id="documentTypeDc"
                     class="kz.uco.tsadv.modules.personal.dictionary.DicDocumentType"
                     view="_local">
@@ -37,7 +30,8 @@
                 <query><![CDATA[select e from tsadv$DicDocumentType e]]></query>
             </loader>
         </collection>
-        <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup" view="jobGroup-for-integration-rest">
+        <collection id="jobDc" class="kz.uco.tsadv.modules.personal.group.JobGroup"
+                    view="jobGroup-for-integration-rest">
             <loader id="jobDl">
                 <query><![CDATA[select e from tsadv$JobGroup e]]></query>
             </loader>
@@ -48,13 +42,14 @@
             </loader>
         </collection>
         <collection id="insuranceContractDc" class="kz.uco.tsadv.modules.personal.model.InsuranceContract"
-                    view="insuranceContract-editView">
+                    view="_minimal">
             <loader id="insuranceContractDl">
-                <query><![CDATA[select e from tsadv$InsuranceContract e ]]>
+                <query>
+                    <![CDATA[select e from tsadv$InsuranceContract e where current_date between e.availabilityPeriodFrom and e.availabilityPeriodTo]]>
                     <condition>
                         <and>
                             <c:jpql>
-                                <c:where>e.company.id = :companyId and current_date between e.availabilityPeriodFrom and e.availabilityPeriodTo</c:where>
+                                <c:where>e.company.id = :companyId</c:where>
                             </c:jpql>
                         </and>
                     </condition>
@@ -66,19 +61,6 @@
                 <query><![CDATA[select e from tsadv$DicRelationshipType e]]></query>
             </loader>
         </collection>
-        <collection id="addressDc" class="kz.uco.tsadv.modules.personal.model.Address" view="_local">
-            <loader id="addressDl">
-                <query><![CDATA[select e from tsadv$Address e]]>
-                    <condition>
-                        <and>
-                            <c:jpql>
-                                <c:where>current_date between e.startDate and e.endDate</c:where>
-                            </c:jpql>
-                        </and>
-                    </condition>
-                </query>
-            </loader>
-        </collection>
         <collection id="addressTypeDc" class="kz.uco.tsadv.modules.personal.dictionary.DicAddressType"
                     view="_local">
             <loader id="addressTypeDl">
@@ -88,13 +70,15 @@
             </loader>
         </collection>
 
-        <collection id="insuredPersonMemberDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson" view="insuredPerson-editView">
+        <collection id="insuredPersonMemberDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
+                    view="insuredPerson-editView">
             <loader id="insuredPersonMemberDl">
-                <query><![CDATA[select e from tsadv$InsuredPerson e]]>
-                    <condition>z
+                <query><![CDATA[select e from tsadv$InsuredPerson e where e.insuranceContract.id =:employeeContractId and 1 <> 1 ]]>
+                    <condition>
                         <and>
                             <c:jpql>
-                                <c:where>e.insuranceContract.id =:employeeContractId and e.employee.id =:employeeId and e.type = :relativeType</c:where>
+                                <c:where>e.employee.id =:employeeId and e.type = :relativeType
+                                </c:where>
                             </c:jpql>
                         </and>
                     </condition>
@@ -139,15 +123,16 @@
                             <field property="documentNumber" id="documentNumberField"/>
                             <lookupField id="addressTypeTempField" optionsContainer="addressTypeDc" caption="Адрес"/>
                             <lookupField id="addressTypeField" property="addressType"
-                                         optionsContainer="addressTypeDc"  visible="false"/>
-                            <textArea rows="3" id="addressField" caption=""  required="true" property="address"/>
+                                         optionsContainer="addressTypeDc" visible="false"/>
+                            <textArea rows="3" id="addressField" caption="" required="true" property="address"/>
                             <lookupField id="companyField" property="company"
-                                         optionsContainer="companyDc" editable="false" />
+                                         optionsContainer="companyDc" editable="false"/>
                             <lookupField id="jobField"
                                          optionsContainer="jobDc"
                                          property="job"/>
                             <field id="jobMemberField" property="jobMember" visible="false"/>
-                            <dateField id="assignDateField" editable="false" resolution="DAY" caption="msg://assignDate"/>
+                            <dateField id="assignDateField" editable="false" resolution="DAY"
+                                       caption="msg://assignDate"/>
                             <upload id="statementFileField" fileStoragePutMode="IMMEDIATE" property="statementFile"
                                     showFileName="true"/>
                         </column>
@@ -171,11 +156,13 @@
                             <dateField id="attachDateField" property="attachDate" editable="false"/>
                             <lookupField id="statusRequestField" editable="false"
                                          optionsContainer="DicMICAttachmentStatusDc" property="statusRequest"/>
-                            <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram" editable="false"/>
+                            <textArea rowspan="3" id="insuranceProgramField" property="insuranceProgram"
+                                      editable="false"/>
                             <lookupField id="regionField" optionsContainer="regionDc" property="region"/>
                             <textField id="amountField" property="amount" visible="false" editable="false"/>
                             <textField id="totalAmountField" property="totalAmount" editable="false"/>
-                            <dateField id="exclusionDateField" resolution="DAY" visible="false" property="exclusionDate"/>
+                            <dateField id="exclusionDateField" resolution="DAY" visible="false"
+                                       property="exclusionDate"/>
                             <textField id="commentField" property="comment" visible="false"/>
                         </column>
                     </form>
