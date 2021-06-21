@@ -379,7 +379,16 @@
           extends="_local"
           name="portal-assignment-group">
         <property name="group"
-                  view="_minimal"/>
+                  view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="startDate"/>
+                <property name="endDate"/>
+                <property name="primaryFlag"/>
+                <property name="assignmentStatus" view="_minimal">
+                    <property name="code"/>
+                </property>
+            </property>
+        </property>
         <property name="personGroup"
                   view="_minimal"/>
     </view>
