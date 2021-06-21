@@ -23,9 +23,8 @@ import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 import javax.inject.Inject;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 
-@UiController("PersonalDataRequestEdit.java")
+@UiController("tsadv$PersonalDataRequestBpm.edit")
 @UiDescriptor("personal-data-request-edit.xml")
 @EditedEntityContainer("personalDataRequestDs")
 @LoadDataBeforeShow
@@ -53,21 +52,11 @@ public class PersonalDataRequestEdit extends AbstractBprocEditor<PersonalDataReq
     @Inject
     private Form form;
 
-    @Subscribe
-    public void onBeforeShow(BeforeShowEvent event) {
-        if (!hasStatus("DRAFT")) {
-            form.setEditable(false);
-        }
-
-        if (hasStatus("DRAFT")) {
-            personalDataRequestDs.getItem().setRequestDate(new Date());
-        }
-        if (personalDataRequestDs.getItem().getRequestNumber() == null) {
-            personalDataRequestDs.getItem().setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            getScreenData().getDataContext().commit();
-        }
+    @Override
+    protected void initEditableFields() {
+        super.initEditableFields();
+        form.setEditable(isDraft());
     }
-
 
     @Subscribe("upload")
     protected void onUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {

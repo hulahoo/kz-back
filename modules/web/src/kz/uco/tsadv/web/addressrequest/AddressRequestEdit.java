@@ -23,9 +23,8 @@ import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 import javax.inject.Inject;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 
-@UiController("AddressRequestEdit.java")
+@UiController("tsadv$AddressRequest.edit")
 @UiDescriptor("address-request-edit.xml")
 @EditedEntityContainer("addressRequestDs")
 @LoadDataBeforeShow
@@ -53,19 +52,10 @@ public class AddressRequestEdit extends AbstractBprocEditor<AddressRequest> {
     @Inject
     private CollectionPropertyContainer<FileDescriptor> attachmentsDc;
 
-    @Subscribe
-    public void onBeforeShow(BeforeShowEvent event) {
-        if (!hasStatus("DRAFT")) {
-            form.setEditable(false);
-        }
-
-        if (hasStatus("DRAFT")) {
-            addressRequestDs.getItem().setRequestDate(new Date());
-        }
-        if (addressRequestDs.getItem().getRequestNumber() == null) {
-            addressRequestDs.getItem().setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            getScreenData().getDataContext().commit();
-        }
+    @Override
+    protected void initEditableFields() {
+        super.initEditableFields();
+        form.setEditable(isDraft());
     }
 
     @Subscribe("upload")

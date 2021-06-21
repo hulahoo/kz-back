@@ -17474,10 +17474,7 @@
         </property>
         <property name="attachments"
                   view="_minimal"/>
-        <property name="status"
-                  view="_minimal">
-            <property name="code"/>
-        </property>
+        <property name="status" view="_local"/>
         <property name="baseAddress"
                   view="_minimal">
             <property name="personGroup"

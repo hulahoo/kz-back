@@ -28,7 +28,6 @@ import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 import javax.inject.Inject;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 
 @UiController("tsadv_PersonDocumentRequest.edit")
 @UiDescriptor("person-document-request-edit.xml")
@@ -66,21 +65,11 @@ public class PersonDocumentRequestEdit extends AbstractBprocEditor<PersonDocumen
     @Inject
     private Form form;
 
-    @Subscribe
-    public void onBeforeShow(BeforeShowEvent event) {
-        if (!hasStatus("DRAFT")) {
-            form.setEditable(false);
-        }
-
-        if (hasStatus("DRAFT")) {
-            personDocumentRequestDc.getItem().setRequestDate(new Date());
-        }
-        if (personDocumentRequestDc.getItem().getRequestNumber() == null) {
-            personDocumentRequestDc.getItem().setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            getScreenData().getDataContext().commit();
-        }
+    @Override
+    protected void initEditableFields() {
+        super.initEditableFields();
+        form.setEditable(isDraft());
     }
-
 
     @Subscribe
     protected void onInit(InitEvent event) {
