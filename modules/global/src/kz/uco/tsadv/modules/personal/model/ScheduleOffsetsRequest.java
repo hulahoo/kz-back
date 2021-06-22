@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Listeners;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.global.DeletePolicy;
@@ -13,6 +14,7 @@ import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Listeners("tsadv_ScheduleOffsetsRequestChangedListener")
 @Table(name = "TSADV_SCHEDULE_OFFSETS_REQUEST")
@@ -65,6 +67,21 @@ public class ScheduleOffsetsRequest extends AbstractBprocRequest {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "EARNING_POLICY_ID")
     protected DicEarningPolicy earningPolicy;
+
+    @JoinTable(name = "TSADV_SCHEDULE_OFFSETS_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "SCHEDULE_OFFSETS_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @OnDelete(DeletePolicy.CASCADE)
+    @ManyToMany
+    private List<FileDescriptor> files;
+
+    public List<FileDescriptor> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<FileDescriptor> files) {
+        this.files = files;
+    }
 
     public DicEarningPolicy getEarningPolicy() {
         return earningPolicy;

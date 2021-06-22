@@ -140,6 +140,10 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "IS_FILE_REQUIRED", nullable = false)
     private Boolean isFileRequired = false;
 
+    @NotNull
+    @Column(name = "IS_SCHEDULE_OFFSETS_REQUEST", nullable = false)
+    private Boolean isScheduleOffsetsRequest = false;
+
     public Boolean getIsFileRequired() {
         return isFileRequired;
     }
@@ -410,5 +414,13 @@ public class DicAbsenceType extends AbstractDictionary {
 
     public void setOvertimeWork(Boolean overtimeWork) {
         this.overtimeWork = overtimeWork;
+    }
+
+    public Boolean getIsScheduleOffsetsRequest() {
+        return isScheduleOffsetsRequest;
+    }
+
+    public void setIsScheduleOffsetsRequest(Boolean scheduleOffsetsRequest) {
+        isScheduleOffsetsRequest = scheduleOffsetsRequest;
     }
 }

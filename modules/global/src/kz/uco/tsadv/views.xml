@@ -22969,8 +22969,9 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="earningPolicy" view="_minimal"/>
+        <property name="files" view="_minimal"/>
     </view>
-
     <view entity="tsadv_AbsenceForRecall" name="absenceForRecall.edit" extends="_local">
         <property name="employee" view="_minimal">
             <property name="list" view="_minimal">
