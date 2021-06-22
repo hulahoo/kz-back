@@ -1972,5 +1972,8 @@
         <entity class="kz.uco.tsadv.entity.ExecutiveAssistants">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.PersonPayslip">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

@@ -23789,4 +23789,18 @@
         <property name="startDate"/>
         <property name="endDate"/>
     </view>
+    <view entity="tsadv_PersonPayslip" name="personPayslip.edit" extends="_local">
+        <property name="personGroup" view="_minimal">
+            <property name="assignments" view="_minimal">
+                <property name="positionGroup" view="_minimal"/>
+            </property>
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="currentAssignment" view="_minimal">
+                <property name="positionGroup" view="_minimal"/>
+            </property>
+        </property>
+        <property name="file" view="_minimal"/>
+    </view>
 </views>
