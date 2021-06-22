@@ -7,9 +7,12 @@ import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.TransactionalDataManager;
+import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.Group;
+import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.base.entity.dictionary.*;
@@ -68,6 +71,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
     @Inject
     protected IntegrationConfig integrationConfig;
+    @Inject
+    private FileStorageAPI fileStorageAPI;
 
 
     @Transactional
@@ -5162,5 +5167,162 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             }
         }
         return "";
+    }
+
+    @Override
+    public BaseResult createOrUpdatePersonPaySlip(PersonPayslipDataJson personPayslipDataJson) {
+        String methodName = "createOrUpdatePersonPaySlip";
+        ArrayList<PersonPayslipJson> personPayslipJsons = new ArrayList<>();
+        if (personPayslipDataJson.getPersonPayslipJsons() != null) {
+            personPayslipJsons = personPayslipDataJson.getPersonPayslipJsons();
+        }
+        BaseResult result = new BaseResult();
+        CommitContext commitContext = new CommitContext();
+        try {
+            for (PersonPayslipJson personPayslipJson : personPayslipJsons) {
+                if (personPayslipJson.getPersonId() == null || personPayslipJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no personId");
+                }
+                if (personPayslipJson.getCompanyCode() == null || personPayslipJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no companyCode");
+                }
+                if (personPayslipJson.getPeriod() == null || personPayslipJson.getPeriod().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no period");
+                }
+                if (personPayslipJson.getFile() == null || personPayslipJson.getFile().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no file");
+                }
+
+                PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
+                        .query("select e from base$PersonGroupExt e " +
+                                " where e.legacyId = :legacyId " +
+                                " and e.company.legacyId = :company")
+                        .setParameters(ParamsMap.of("legacyId", personPayslipJson.getPersonId(),
+                                "company", personPayslipJson.getCompanyCode()))
+                        .view("personGroupExt-for-integration-rest")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personGroupExt == null) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no personGroup with personId = " + personPayslipJson.getPersonId()
+                                    + " and companyCode = " + personPayslipJson.getCompanyCode());
+                }
+                PersonPayslip personPayslip = dataManager.load(PersonPayslip.class)
+                        .query("select e from tsadv_PersonPayslip e " +
+                                " where e.personGroup.legacyId = :personGroup " +
+                                " and e.period = :period " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("personGroup", personPayslipJson.getPersonId(),
+                                "period", formatter.parse(personPayslipJson.getPeriod()),
+                                "companyCode", personPayslipJson.getCompanyCode()))
+                        .view("personPayslip.edit")
+                        .list().stream().findFirst().orElse(null);
+                if (personPayslip != null) {
+                    byte[] decoder = Base64.getDecoder().decode(personPayslipJson.getFile());
+                    FileDescriptor file = metadata.create(FileDescriptor.class);
+                    file.setCreateDate(BaseCommonUtils.getSystemDate());
+                    file.setName("Расчетный лист" + "." + "pdf");
+                    file.setExtension("pdf");
+                    file.setSize((long) decoder.length);
+                    fileStorageAPI.saveFile(file, decoder);
+                    personPayslip.setFile(file);
+
+                    commitContext.addInstanceToCommit(file);
+                    commitContext.addInstanceToCommit(personPayslip);
+                } else {
+                    personPayslip = metadata.create(PersonPayslip.class);
+                    byte[] decoder = Base64.getDecoder().decode(personPayslipJson.getFile());
+                    FileDescriptor file = metadata.create(FileDescriptor.class);
+                    file.setCreateDate(BaseCommonUtils.getSystemDate());
+                    file.setName("Расчетный лист" + "." + "pdf");
+                    file.setExtension("pdf");
+                    file.setSize((long) decoder.length);
+                    fileStorageAPI.saveFile(file, decoder);
+                    personPayslip.setUuid(UUID.randomUUID());
+                    personPayslip.setPersonGroup(personGroupExt);
+                    personPayslip.setPeriod(formatter.parse(personPayslipJson.getPeriod()));
+                    personPayslip.setFile(file);
+
+                    commitContext.addInstanceToCommit(file);
+                    commitContext.addInstanceToCommit(personPayslip);
+                }
+            }
+            dataManager.commit(commitContext);
+        } catch (Exception e) {
+            return prepareError(result, methodName, personPayslipDataJson, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+        return prepareSuccess(result, methodName, personPayslipDataJson);
+    }
+
+    @Override
+    public BaseResult deletePersonPaySlip(PersonPayslipDataJson personPayslipDataJson) {
+        String methodName = "deletePersonPaySlip";
+        BaseResult result = new BaseResult();
+        ArrayList<PersonPayslipJson> personPayslipJsons = new ArrayList<>();
+        if (personPayslipDataJson.getPersonPayslipJsons() != null) {
+            personPayslipJsons = personPayslipDataJson.getPersonPayslipJsons();
+        }
+
+        try (Transaction tx = persistence.getTransaction()) {
+            EntityManager entityManager = persistence.getEntityManager();
+            ArrayList<PersonPayslip> personPayslips = new ArrayList<>();
+            for (PersonPayslipJson personPayslipJson : personPayslipJsons) {
+
+                if (personPayslipJson.getPersonId() == null || personPayslipJson.getPersonId().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no personId");
+                }
+
+                if (personPayslipJson.getCompanyCode() == null || personPayslipJson.getCompanyCode().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no companyCode");
+                }
+
+                if (personPayslipJson.getPeriod() == null || personPayslipJson.getPeriod().isEmpty()) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no period");
+                }
+
+                PersonPayslip personPayslip = dataManager.load(PersonPayslip.class)
+                        .query("select e from tsadv_PersonPayslip e " +
+                                " where e.personGroup.legacyId = :personGroup " +
+                                " and e.period = :period " +
+                                " and e.personGroup.company.legacyId = :companyCode")
+                        .setParameters(ParamsMap.of("personGroup", personPayslipJson.getPersonId(),
+                                "period", formatter.parse(personPayslipJson.getPeriod()),
+                                "companyCode", personPayslipJson.getCompanyCode()))
+                        .view("personPayslip.edit")
+                        .list().stream().findFirst().orElse(null);
+
+                if (personPayslip == null) {
+                    return prepareError(result, methodName, personPayslipDataJson,
+                            "no tsadv_PersonPayslip with personId " + personPayslipJson.getPersonId()
+                                    + " and company legacyId " + personPayslipJson.getCompanyCode()
+                                    + " and period " + personPayslipJson.getPeriod());
+                }
+
+                if (!personPayslips.stream().filter(payslip ->
+                        payslip.getId().equals(personPayslip.getId())).findAny().isPresent()) {
+                    personPayslips.add(personPayslip);
+                }
+            }
+
+            for (PersonPayslip personPayslip : personPayslips) {
+                entityManager.remove(personPayslip);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            return prepareError(result, methodName, personPayslipDataJson, e.getMessage() + "\r" +
+                    Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
+                            .collect(Collectors.joining("\r")));
+        }
+
+        return prepareSuccess(result, methodName, personPayslipDataJson);
     }
 }

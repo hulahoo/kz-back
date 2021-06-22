@@ -26,24 +26,13 @@
         <groupTable id="personPayslipsTable"
                     width="100%"
                     dataContainer="personPayslipsDc">
-            <actions>
-                <action id="create" type="create"/>
-                <action id="edit" type="edit"/>
-                <action id="remove" type="remove"/>
-            </actions>
             <columns>
                 <column id="personGroup.company"/>
                 <column id="period"/>
                 <column id="personGroup.personFioWithEmployeeNumber"/>
-                <column id="file"/>
+                <column id="file" link="true" linkInvoke="generatorName"/>
             </columns>
             <rowsCount/>
-            <buttonsPanel id="buttonsPanel"
-                          alwaysVisible="true">
-                <button id="createBtn" action="personPayslipsTable.create"/>
-                <button id="editBtn" action="personPayslipsTable.edit"/>
-                <button id="removeBtn" action="personPayslipsTable.remove"/>
-            </buttonsPanel>
         </groupTable>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
