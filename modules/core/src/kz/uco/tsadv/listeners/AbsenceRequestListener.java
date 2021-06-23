@@ -31,7 +31,7 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
     @Override
     public void onBeforeUpdate(AbsenceRequest entity, EntityManager entityManager) {
         if (isApproved(entity, entityManager)) {
-            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity,entityManager);
+            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity, entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -58,7 +58,7 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
     @Override
     public void onBeforeInsert(AbsenceRequest entity, EntityManager entityManager) {
         if (isApproved(entity, entityManager)) {
-            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity,entityManager);
+            AbsenceRequestDataJson absenceJson = getAbsenceRequestDataJson(entity, entityManager);
 
             setupUnirest();
             HttpResponse<String> response = Unirest
@@ -88,12 +88,14 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
         return APPROVED_STATUS.equals(entityManager.reloadNN(status, View.LOCAL).getCode());
     }
 
-    protected AbsenceRequestDataJson getAbsenceRequestDataJson(AbsenceRequest entity,EntityManager entityManager) {
+    protected AbsenceRequestDataJson getAbsenceRequestDataJson(AbsenceRequest entity, EntityManager entityManager) {
         AbsenceRequestDataJson absenceJson = new AbsenceRequestDataJson();
         String personId = (entity.getPersonGroup() != null && entity.getPersonGroup().getLegacyId() != null) ? entity.getPersonGroup().getLegacyId() : "";
         absenceJson.setPersonId(personId);
         String requestNumber = (entity.getRequestNumber() != null) ? entity.getRequestNumber().toString() : "";
         absenceJson.setRequestNumber(requestNumber);
+        String requestDate = getFormattedDateString(entity.getRequestDate());
+        absenceJson.setRequestDate(requestDate);
         String absenceTypeId = (entity.getType() != null && entity.getType().getLegacyId() != null) ? entity.getType().getLegacyId() : "";
         absenceJson.setAbsenceTypeId(absenceTypeId);
         String startDate = getFormattedDateString(entity.getDateFrom());
@@ -104,24 +106,24 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
         absenceJson.setAbsenceDuration(absenceDuration);
         String purpose = (entity.getReason() != null) ? entity.getReason() : "";
         absenceJson.setPurpose(purpose);
-        boolean isProvideSheetOfTemporary = Null.nullReplace(entity.getOriginalSheet(),false);
+        boolean isProvideSheetOfTemporary = Null.nullReplace(entity.getOriginalSheet(), false);
         absenceJson.setIsProvideSheetOfTemporary(isProvideSheetOfTemporary);
         absenceJson.setIsOnRotation(false);
         String companyCode = "";
-        if(entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null){
+        if (entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null) {
             DicCompany company = entity.getPersonGroup().getCompany();
-            companyCode = entityManager.reloadNN(company,View.LOCAL).getLegacyId();
-            companyCode = Null.nullReplace(companyCode,"");
+            companyCode = entityManager.reloadNN(company, View.LOCAL).getLegacyId();
+            companyCode = Null.nullReplace(companyCode, "");
         }
         absenceJson.setCompanyCode(companyCode);
         return absenceJson;
     }
 
-    protected String getFormattedDateString(Date date){
-        return date != null ? formatter.format(date) : "" ;
+    protected String getFormattedDateString(Date date) {
+        return date != null ? formatter.format(date) : "";
     }
 
-    protected void setupUnirest(){
+    protected void setupUnirest() {
         Unirest.config().setDefaultBasicAuth("ahruco", "ahruco");
         Unirest.config().addDefaultHeader("Content-Type", "application/json");
         Unirest.config().addDefaultHeader("Accept", "*/*");
