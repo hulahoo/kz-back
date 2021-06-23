@@ -12,7 +12,9 @@ import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.tsadv.modules.performance.model.AssignedGoal;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
+import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.service.EmployeeService;
+import kz.uco.tsadv.service.PositionService;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -43,6 +45,8 @@ public class AssignedGoalCascadeEdit extends StandardEditor<AssignedGoal> {
     protected Notifications notifications;
     @Inject
     protected MessageBundle messageBundle;
+    @Inject
+    protected PositionService positionService;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -51,10 +55,11 @@ public class AssignedGoalCascadeEdit extends StandardEditor<AssignedGoal> {
                 MapScreenOptions options = (MapScreenOptions) event.getOptions();
                 if (options.getParams().containsKey("positionGroupId")) {
                     UUID positionGroupId = (UUID) options.getParams().get("positionGroupId");
-                    List<PersonGroupExt> managerListByPositionGroup =
-                            employeeService.findManagerListByPositionGroup(positionGroupId, false);
-                    if (managerListByPositionGroup != null && !managerListByPositionGroup.isEmpty()) {
-                        personGroupDl.setParameter("personGroupList", managerListByPositionGroup);
+
+                    PositionGroupExt managerPositionGroup = positionService.getManager(positionGroupId);
+
+                    if (managerPositionGroup != null) {
+                        personGroupDl.setParameter("personGroupList", employeeService.getPersonGroupByPositionGroupId(managerPositionGroup.getId(), null));
                         personGroupDl.load();
                     }
                 }

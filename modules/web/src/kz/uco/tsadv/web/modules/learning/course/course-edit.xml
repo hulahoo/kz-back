@@ -347,6 +347,8 @@
                         <action id="generateCertificate"
                                 trackSelection="true"
                                 caption="msg://generateCertificate"/>
+                        <action id="addAttempt" trackSelection="true"
+                                caption="msg://addAttempt"/>
                     </actions>
                     <columns>
                         <column property="personGroup"/>
@@ -363,6 +365,7 @@
                         <button action="enrollmentsTable.edit"/>
                         <button action="enrollmentsTable.remove"/>
                         <button action="enrollmentsTable.generateCertificate"/>
+                        <button action="enrollmentsTable.addAttempt"/>
                     </buttonsPanel>
                 </dataGrid>
             </tab>

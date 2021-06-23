@@ -288,11 +288,19 @@ public abstract class AbstractBprocEditor<T extends AbstractBprocRequest> extend
 
     protected StartBprocParams initStartBprocParams() {
         StartBprocParams startBprocParams = metadata.create(StartBprocParams.class);
-        startBprocParams.setEmployee(getEmployee());
+        TsadvUser employee = getEmployee();
         startBprocParams.setRequest(getEditedEntity());
-        startBprocParams.setInitiatorPersonGroupId(userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
+        startBprocParams.setEmployeePersonGroupId(
+                employee != null
+                        ? employee.getPersonGroup().getId()
+                        : userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
         startBprocParams.setParams(getProcessVariables());
+        startBprocParams.setIsAssistant(getIsAssistant());
         return startBprocParams;
+    }
+
+    protected boolean getIsAssistant() {
+        return false;
     }
 
     @Nullable

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://insuranceContractEdit.caption"
         focusComponent="form"
         messagesPack="kz.uco.tsadv.web.screens.insurancecontract">
@@ -23,17 +22,20 @@
                 <query><![CDATA[select e from tsadv$DicAddressType e]]></query>
             </loader>
         </collection>
-        <collection id="insuredPersonsDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson"
-                    view="insuredPerson-browseView">
-            <loader id="insuredPersonsDl">
-                <query><![CDATA[select e from tsadv$InsuredPerson e]]>
-                    <condition>
-                        <and>
-                            <c:jpql>
-                                <c:where>e.insuranceContract.id = :insuranceContractId</c:where>
-                            </c:jpql>
-                        </and>
-                    </condition>
+        <collection id="insuredPersonsDc" class="kz.uco.tsadv.modules.personal.model.InsuredPerson">
+            <view extends="_local">
+                <property name="employee" view="_minimal"/>
+                <property name="file" view="_minimal"/>
+                <property name="sex" view="_minimal"/>
+                <property name="insuranceContract" view="_minimal"/>
+                <property name="region" view="_minimal"/>
+                <property name="relative" view="_minimal"/>
+                <property name="statusRequest" view="_minimal"/>
+                <property name="statementFile" view="_minimal"/>
+            </view>
+            <loader id="insuredPersonsDl" maxResults="20">
+                <query>
+                    <![CDATA[select e from tsadv$InsuredPerson e where e.insuranceContract.id = :insuranceContractId]]>
                 </query>
             </loader>
         </collection>
@@ -51,182 +53,195 @@
     </data>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="scrollBox" spacing="true">
-        <scrollBox id="scrollBox" spacing="true">
-            <tabSheet>
-                <tab id="contractTab"
-                     margin="true, false, false, false"
-                     spacing="true"
-                     caption="msg://insuranceContract">
-                    <groupBox caption="msg://mainGroupBox">
-                        <form id="form" dataContainer="insuranceContractDc">
-                            <column width="350px">
-                                <textField id="policyNameField" property="policyName"/>
-                                <textField id="contractField" property="contract"/>
-                                <dateField id="signDateField" property="signDate"/>
-                                <lookupField property="company"
-                                             id="companyLookupField"
-                                             optionsContainer="companyDc"
-                                             editable="true"/>
-                                <textField id="yearField" property="year"/>
-                                <dateField id="startDateField" property="startDate"/>
-                                <dateField id="expirationDateField" property="expirationDate"/>
-                                <textField id="insurerField" property="insurer"/>
-                                <dateField id="notificationDateField" property="notificationDate"
-                                           contextHelpText="msg://DateOfSendingOfFamilyMembers"/>
-                            </column>
-                            <column width="350px">
-                                <dateField id="availabilityPeriodFromField" property="availabilityPeriodFrom"/>
-                                <dateField id="availabilityPeriodToField" property="availabilityPeriodTo"/>
-                                <textField id="insuranceProgramField" property="insuranceProgram"/>
-                                <textField id="insurerContactsField" property="insurerContacts"/>
-                                <textField id="attachingAnEmployeeField" property="attachingAnEmployee"
-                                           contextHelpText="msg://attachingAnEmployeeField.helpText"/>
-                                <textField id="attachingFamilyField" property="attachingFamily"
-                                           contextHelpText="msg://attachingFamilyField.helpText"/>
-                                <textField id="countOfFreeMembersField" property="countOfFreeMembers"
-                                           contextHelpText="msg://countOfFreeMembers"/>
-                                <lookupField id="documentTypeField" property="defaultDocumentType"
-                                             optionsContainer="documentTypeDc"/>
-                                <lookupField id="defaultAddress" property="defaultAddress"
-                                             optionsContainer="addressDc"/>
-                            </column>
-                        </form>
-                    </groupBox>
-                    <groupBox
-                            caption="msg://programConditions"
-                            outerMargin="true, false, true, false"
-                            height="350px"
-                            expand="programConditionsDataGrid">
-                        <dataGrid id="programConditionsDataGrid"
-                                  editorEnabled="true"
-                                  width="100%"
-                                  dataContainer="conditionDc">
-                            <actions>
-                                <action id="create" type="create"/>
-                                <action id="edit" type="edit"/>
-                                <action id="remove" type="remove"/>
-                            </actions>
-                            <columns>
-                                <column property="relationshipType"/>
-                                <column property="ageMin"/>
-                                <column property="ageMax"/>
-                                <column property="isFree"/>
-                                <column property="costInKzt"/>
-                            </columns>
-                            <buttonsPanel>
-                                <button id="createBtn" action="programConditionsDataGrid.create"/>
-                                <button id="editBtn" action="programConditionsDataGrid.edit"/>
-                                <button id="removeBtn" action="programConditionsDataGrid.remove"/>
-                            </buttonsPanel>
-                            <rowsCount/>
-                        </dataGrid>
-                    </groupBox>
-                    <groupBox caption="msg://ContractAdministrator"
-                              outerMargin="true, false, true, false"
-                              height="350px"
-                              expand="contractAdministratorDataGrid">
-                        <dataGrid id="contractAdministratorDataGrid"
-                                  editorEnabled="true"
-                                  width="100%"
-                                  dataContainer="contractAdministratorDc">
-                            <actions>
-                                <action id="create" type="create"/>
-                                <action id="edit" type="edit"/>
-                                <action id="remove" type="remove"/>
-                            </actions>
-                            <columns>
-                                <column property="notifyAboutNewAttachments"/>
-                                <column property="employee">
-                                </column>
-                            </columns>
-                            <buttonsPanel>
-                                <button id="btnCreate" action="contractAdministratorDataGrid.create"/>
-                                <button id="btnEdit" action="contractAdministratorDataGrid.edit"/>
-                                <button id="btnRemove" action="contractAdministratorDataGrid.remove"/>
-                            </buttonsPanel>
-                        </dataGrid>
-                    </groupBox>
-                    <groupBox caption="msg://attachments"
-                              spacing="true"
-                              height="350px"
-                              expand="attachmentsDataGrid">
-                        <dataGrid id="attachmentsDataGrid"
-                                  width="100%"
-                                  dataContainer="attachmentsDc">
-                            <actions>
-                                <action id="create" type="create"/>
-                                <action id="remove" type="remove"/>
-                            </actions>
-                            <columns>
-                                <column property="attachmentType"/>
-                                <column property="attachment"/>
-                            </columns>
-                            <buttonsPanel>
-                                <button id="createAttachmentBtn" action="attachmentsDataGrid.create"/>
-                                <button id="removeAttachmentBtn" action="attachmentsDataGrid.remove"/>
-                            </buttonsPanel>
-                        </dataGrid>
-                    </groupBox>
-                </tab>
-                <tab id="insuredPersonsTab"
-                     caption="msg://insuredPersons">
-                    <hbox width="100%"/>
-                    <filter id="filter"
-                            applyTo="insuredPersonsTable"
-                            dataLoader="insuredPersonsDl">
-                        <properties include=".*"/>
-                    </filter>
-                    <hbox width="100%"/>
-                    <dataGrid id="insuredPersonsTable"
-                              selectionMode="MULTI_CHECK"
-                              width="100%"
-                              dataContainer="insuredPersonsDc">
-                        <actions>
-                            <action id="create" type="create"/>
-                            <action id="edit" type="edit"/>
-                            <action id="remove" type="remove"/>
-                            <action id="excel" type="excel"/>
-                            <action id="bulk" icon="font-icon:TABLE" trackSelection="true"/>
-                            <action id="sendNotification" caption="msg://sendNotification" trackSelection="true"/>
-                        </actions>
-                        <columns>
-                            <column id="contractFieldPerson" property="insuranceContract.contract"/>
-                            <column id="relativeFieldPerson" property="relative"/>
-                            <column id="attachDateFieldPerson" property="attachDate"/>
-                            <column id="employeeFieldPerson" property="employee"/>
-                            <column id="statusRequestFieldPerson" property="statusRequest"/>
-                            <column id="firstNameFieldPerson" property="firstName"/>
-                            <column id="secondNameFieldPerson" property="secondName"/>
-                            <column id="middleNameFieldPerson" property="middleName"/>
-                            <column id="sexFieldPerson" property="sex"/>
-                            <column id="birthdateFieldPerson" property="birthdate"/>
-                            <column id="iinFieldPerson" property="iin"/>
-                            <column id="documentNumberFieldPerson" property="documentNumber"/>
-                            <column id="regionFieldPerson" property="region"/>
-                            <column id="insuranceProgramFieldPerson" property="insuranceProgram"/>
-                            <column id="addressFieldPerson" property="address"/>
-                            <column id="totalAmountFieldPerson" property="totalAmount"/>
-                            <column id="exclusionDateFieldPerson" property="exclusionDate"/>
-                            <column id="commentFieldPerson" property="comment"/>
-                            <column id="statementFileField" property="statementFile" caption="Файл"/>
-                        </columns>
-                        <rowsCount/>
-                        <buttonsPanel id="buttonsPanel"
-                                      alwaysVisible="true">
-                            <button id="createBtnPerson" action="insuredPersonsTable.create"/>
-                            <button id="editBtnPerson" action="insuredPersonsTable.edit"/>
-                            <button id="removeBtnPerson" action="insuredPersonsTable.remove"/>
-                            <button id="excelBtn" action="insuredPersonsTable.excel"/>
-                            <button id="bulkButton"
-                                    caption="msg://bulkButton"
-                                    action="insuredPersonsTable.bulk"/>
-                            <button id="sendNotificationBtn" action="insuredPersonsTable.sendNotification"/>
-                        </buttonsPanel>
-                    </dataGrid>
-                </tab>
-            </tabSheet>
-        </scrollBox>
+    <layout spacing="true" expand="tabSheet">
+        <tabSheet id="tabSheet">
+            <tab id="contractTab"
+                 margin="true, false, false, false"
+                 spacing="true"
+                 expand="vbox"
+                 caption="msg://insuranceContract">
+                <vbox id="vbox" spacing="true" margin="true, false, false, false" height="100%" expand="scroll">
+                    <scrollBox id="scroll">
+                        <vbox id="vbox1" spacing="true" margin="true, false, false, false">
+                            <groupBox caption="msg://mainGroupBox" height="100%">
+                                <form id="form" dataContainer="insuranceContractDc">
+                                    <column width="350px">
+                                        <textField id="policyNameField" property="policyName"/>
+                                        <textField id="contractField" property="contract"/>
+                                        <dateField id="signDateField" property="signDate"/>
+                                        <lookupField property="company"
+                                                     id="companyLookupField"
+                                                     optionsContainer="companyDc"
+                                                     editable="true"/>
+                                        <textField id="yearField" property="year"/>
+                                        <dateField id="startDateField" property="startDate"/>
+                                        <dateField id="expirationDateField" property="expirationDate"/>
+                                        <textField id="insurerField" property="insurer"/>
+                                        <dateField id="notificationDateField" property="notificationDate"
+                                                   contextHelpText="msg://DateOfSendingOfFamilyMembers"/>
+                                    </column>
+                                    <column width="350px">
+                                        <dateField id="availabilityPeriodFromField" property="availabilityPeriodFrom"/>
+                                        <dateField id="availabilityPeriodToField" property="availabilityPeriodTo"/>
+                                        <textField id="insuranceProgramField" property="insuranceProgram"/>
+                                        <textField id="insurerContactsField" property="insurerContacts"/>
+                                        <textField id="attachingAnEmployeeField" property="attachingAnEmployee"
+                                                   contextHelpText="msg://attachingAnEmployeeField.helpText"/>
+                                        <textField id="attachingFamilyField" property="attachingFamily"
+                                                   contextHelpText="msg://attachingFamilyField.helpText"/>
+                                        <textField id="countOfFreeMembersField" property="countOfFreeMembers"
+                                                   contextHelpText="msg://countOfFreeMembers"/>
+                                        <lookupField id="documentTypeField" property="defaultDocumentType"
+                                                     optionsContainer="documentTypeDc"/>
+                                        <lookupField id="defaultAddress" property="defaultAddress"
+                                                     optionsContainer="addressDc"/>
+                                    </column>
+                                </form>
+                            </groupBox>
+                            <groupBox caption="msg://programConditions"
+                                      outerMargin="true, false, true, false"
+                                      height="350px"
+                                      expand="programConditionsDataGrid">
+                                <dataGrid id="programConditionsDataGrid"
+                                          editorEnabled="true"
+                                          width="100%"
+                                          dataContainer="conditionDc">
+                                    <actions>
+                                        <action id="create" type="create"/>
+                                        <action id="edit" type="edit"/>
+                                        <action id="remove" type="remove"/>
+                                    </actions>
+                                    <columns>
+                                        <column property="relationshipType"/>
+                                        <column property="ageMin"/>
+                                        <column property="ageMax"/>
+                                        <column property="isFree"/>
+                                        <column property="costInKzt"/>
+                                    </columns>
+                                    <buttonsPanel>
+                                        <button id="createBtn" action="programConditionsDataGrid.create"/>
+                                        <button id="editBtn" action="programConditionsDataGrid.edit"/>
+                                        <button id="removeBtn" action="programConditionsDataGrid.remove"/>
+                                    </buttonsPanel>
+                                    <rowsCount/>
+                                </dataGrid>
+                            </groupBox>
+                        </vbox>
+                        <vbox id="vbox2" margin="true, false, false, false">
+                            <groupBox caption="msg://ContractAdministrator"
+                                      outerMargin="true, false, true, false"
+                                      height="350px"
+                                      expand="contractAdministratorDataGrid">
+                                <dataGrid id="contractAdministratorDataGrid"
+                                          editorEnabled="true"
+                                          width="100%"
+                                          dataContainer="contractAdministratorDc">
+                                    <actions>
+                                        <action id="create" type="create"/>
+                                        <action id="edit" type="edit"/>
+                                        <action id="remove" type="remove"/>
+                                    </actions>
+                                    <columns>
+                                        <column property="notifyAboutNewAttachments"/>
+                                        <column property="employee">
+                                        </column>
+                                    </columns>
+                                    <buttonsPanel>
+                                        <button id="btnCreate" action="contractAdministratorDataGrid.create"/>
+                                        <button id="btnEdit" action="contractAdministratorDataGrid.edit"/>
+                                        <button id="btnRemove" action="contractAdministratorDataGrid.remove"/>
+                                    </buttonsPanel>
+                                </dataGrid>
+                            </groupBox>
+                            <groupBox caption="msg://attachments"
+                                      spacing="true"
+                                      height="350px"
+                                      expand="attachmentsDataGrid">
+                                <dataGrid id="attachmentsDataGrid"
+                                          width="100%"
+                                          dataContainer="attachmentsDc">
+                                    <actions>
+                                        <action id="create" type="create"/>
+                                        <action id="remove" type="remove"/>
+                                    </actions>
+                                    <columns>
+                                        <column property="attachmentType"/>
+                                        <column property="attachment"/>
+                                    </columns>
+                                    <buttonsPanel>
+                                        <button id="createAttachmentBtn" action="attachmentsDataGrid.create"/>
+                                        <button id="removeAttachmentBtn" action="attachmentsDataGrid.remove"/>
+                                    </buttonsPanel>
+                                </dataGrid>
+                            </groupBox>
+                        </vbox>
+                    </scrollBox>
+                </vbox>
+            </tab>
+            <tab id="insuredPersonsTab"
+                 spacing="true"
+                 margin="true, false, false, false"
+                 caption="msg://insuredPersons"
+                 expand="insuredPersonsTable">
+                <filter id="filter"
+                        applyTo="insuredPersonsTable"
+                        dataLoader="insuredPersonsDl">
+                    <properties include=".*"/>
+                </filter>
+                <dataGrid id="insuredPersonsTable"
+                          height="100%"
+                          selectionMode="MULTI_CHECK"
+                          width="100%"
+                          dataContainer="insuredPersonsDc">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                        <action id="excel" type="excel"/>
+                        <action id="bulk" icon="font-icon:TABLE" trackSelection="true"/>
+                        <action id="sendNotification" caption="msg://sendNotification"
+                                trackSelection="true"/>
+                    </actions>
+                    <columns>
+                        <column id="contractFieldPerson" property="insuranceContract.contract">
+                            <componentRenderer/>
+                        </column>
+                        <column id="relativeFieldPerson" property="relative"/>
+                        <column id="attachDateFieldPerson" property="attachDate"/>
+                        <column id="employeeFieldPerson" property="employee"/>
+                        <column id="statusRequestFieldPerson" property="statusRequest"/>
+                        <column id="firstNameFieldPerson" property="firstName"/>
+                        <column id="secondNameFieldPerson" property="secondName"/>
+                        <column id="middleNameFieldPerson" property="middleName"/>
+                        <column id="sexFieldPerson" property="sex"/>
+                        <column id="birthdateFieldPerson" property="birthdate"/>
+                        <column id="iinFieldPerson" property="iin"/>
+                        <column id="documentNumberFieldPerson" property="documentNumber"/>
+                        <column id="regionFieldPerson" property="region"/>
+                        <column id="insuranceProgramFieldPerson" property="insuranceProgram"/>
+                        <column id="addressFieldPerson" property="address"/>
+                        <column id="totalAmountFieldPerson" property="totalAmount"/>
+                        <column id="exclusionDateFieldPerson" property="exclusionDate"/>
+                        <column id="commentFieldPerson" property="comment"/>
+                        <column id="statementFileField" property="statementFile" caption="Файл">
+                            <componentRenderer/>
+                        </column>
+                    </columns>
+                    <rowsCount/>
+                    <buttonsPanel id="buttonsPanel"
+                                  alwaysVisible="true">
+                        <button id="createBtnPerson" action="insuredPersonsTable.create"/>
+                        <button id="editBtnPerson" action="insuredPersonsTable.edit"/>
+                        <button id="removeBtnPerson" action="insuredPersonsTable.remove"/>
+                        <button id="excelBtn" action="insuredPersonsTable.excel"/>
+                        <button id="bulkButton"
+                                caption="msg://bulkButton"
+                                action="insuredPersonsTable.bulk"/>
+                        <button id="sendNotificationBtn" action="insuredPersonsTable.sendNotification"/>
+                    </buttonsPanel>
+                </dataGrid>
+            </tab>
+        </tabSheet>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="commitBtn" action="windowCommit" caption="msg://save"/>

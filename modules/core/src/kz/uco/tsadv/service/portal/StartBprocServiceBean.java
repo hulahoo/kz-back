@@ -2,7 +2,6 @@ package kz.uco.tsadv.service.portal;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.*;
-import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.administration.TsadvUser;
@@ -19,9 +18,11 @@ import kz.uco.tsadv.service.PositionService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service(StartBprocService.NAME)
@@ -41,8 +42,8 @@ public class StartBprocServiceBean implements StartBprocService {
     protected PositionService positionService;
 
     @Override
-    public BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID initiatorPersonGroupId) {
-        DicCompany dicCompany = employeeService.getCompanyByPersonGroupId(initiatorPersonGroupId);
+    public BpmRolesDefiner getBpmRolesDefiner(String processDefinitionKey, UUID employeePersonGroupId, boolean isAssistant) {
+        DicCompany dicCompany = employeeService.getCompanyByPersonGroupId(employeePersonGroupId);
         UUID company = dicCompany != null ? dicCompany.getId() : null;
 
         BpmRolesDefiner bpmRolesDefiner = null;
@@ -68,21 +69,29 @@ public class StartBprocServiceBean implements StartBprocService {
         if (!bpmRolesDefiners.isEmpty()) bpmRolesDefiner = bpmRolesDefiners.get(0);
         if (bpmRolesDefiner == null) throw new PortalException("bpmRolesDefiner not found!");
 
-        bpmRolesDefiner = excludeSupManager(initiatorPersonGroupId, bpmRolesDefiner);
+        bpmRolesDefiner = excludeSupManager(employeePersonGroupId, bpmRolesDefiner);
+        bpmRolesDefiner = filterAssistant(bpmRolesDefiner, isAssistant);
 
         return bpmRolesDefiner;
     }
 
-    protected BpmRolesDefiner excludeSupManager(UUID initiatorPersonGroupId, BpmRolesDefiner bpmRolesDefiner) {
+    protected BpmRolesDefiner filterAssistant(BpmRolesDefiner bpmRolesDefiner, boolean isAssistant) {
+        List<BpmRolesLink> links = bpmRolesDefiner.getLinks()
+                .stream()
+                .filter(bpmRolesLink -> bpmRolesLink.isActive(isAssistant))
+                .collect(Collectors.toList());
+        bpmRolesDefiner.setLinks(links);
+        return bpmRolesDefiner;
+    }
+
+    protected BpmRolesDefiner excludeSupManager(UUID employeePersonGroupId, BpmRolesDefiner bpmRolesDefiner) {
         if (bpmRolesDefiner.getActiveSupManagerExclusion() && !CollectionUtils.isEmpty(bpmRolesDefiner.getLinks())) {
             boolean isSupManagerExclusion = false;
-            String supManagerCode = bpmRolesDefiner.getManagerLaunches() ? OrganizationHrUserService.HR_ROLE_MANAGER : OrganizationHrUserService.HR_ROLE_SUP_MANAGER;
+            String supManagerCode = OrganizationHrUserService.HR_ROLE_SUP_MANAGER;
 
-            PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(initiatorPersonGroupId, View.MINIMAL);
+            PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(employeePersonGroupId, View.MINIMAL);
             PositionGroupExt supManager = positionService.getManager(positionGroup.getId());
-            if (!bpmRolesDefiner.getManagerLaunches() && supManager != null) {
-                supManager = positionService.getManager(supManager.getId());
-            }
+            if (supManager != null) supManager = positionService.getManager(supManager.getId());
 
             if (supManager != null) {
                 supManager = dataManager.reload(supManager, new View(PositionGroupExt.class)
@@ -103,22 +112,29 @@ public class StartBprocServiceBean implements StartBprocService {
     }
 
     @Override
-    public List<NotPersisitBprocActors> getNotPersisitBprocActors(@Nullable TsadvUser employee, UUID initiatorPersonGroupId, BpmRolesDefiner bpmRolesDefiner) {
+    public List<NotPersisitBprocActors> getNotPersisitBprocActors(UUID employeePersonGroupId,
+                                                                  BpmRolesDefiner bpmRolesDefiner,
+                                                                  boolean isAssistant) {
         List<NotPersisitBprocActors> actors = new ArrayList<>();
         List<BpmRolesLink> links = bpmRolesDefiner.getLinks();
 
         for (BpmRolesLink link : links) {
+            if (!link.isActive(isAssistant)) continue;
+
             DicHrRole hrRole = link.getHrRole();
             String roleCode = hrRole.getCode();
-            List<? extends User> hrUsersForPerson = new ArrayList<>();
+            List<TsadvUser> hrUsersForPerson;
 
             if (roleCode.equals("EMPLOYEE")) {
-                if (employee != null)
-                    hrUsersForPerson = Collections.singletonList(dataManager.reload(employee, "user-fioWithLogin"));
+                hrUsersForPerson = dataManager.load(TsadvUser.class)
+                        .query("select e from tsadv$UserExt e where e.personGroup.id = :employeePersonGroupId and e.active = 'TRUE'")
+                        .parameter("employeePersonGroupId", employeePersonGroupId)
+                        .view("user-fioWithLogin")
+                        .list();
             } else
                 hrUsersForPerson = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e where e in :users")
-                        .setParameters(ParamsMap.of("users", organizationHrUserService.getHrUsersForPerson(initiatorPersonGroupId, roleCode)))
+                        .setParameters(ParamsMap.of("users", organizationHrUserService.getHrUsersForPerson(employeePersonGroupId, roleCode)))
                         .view("user-fioWithLogin")
                         .list();
 
@@ -134,12 +150,49 @@ public class StartBprocServiceBean implements StartBprocService {
             } else {
                 NotPersisitBprocActors bprocActors = createNotPersisitBprocActors(link, hrRole);
                 bprocActors.setIsEditable(false);
-                //noinspection unchecked
-                bprocActors.setUsers((List<TsadvUser>) hrUsersForPerson);
+                bprocActors.setUsers(hrUsersForPerson);
                 actors.add(bprocActors);
             }
         }
+
         return actors;
+    }
+
+    protected List<NotPersisitBprocActors> excludeDuplicate(List<NotPersisitBprocActors> actors) {
+        List<NotPersisitBprocActors> newActors = new ArrayList<>();
+
+        boolean hasDuplicate = false;
+        boolean removeNext = false;
+        for (int i = 0; i < actors.size() - 1; i++) {
+            boolean removeCurrentActor = removeNext;
+            removeNext = false;
+            NotPersisitBprocActors actor = actors.get(i);
+            NotPersisitBprocActors nextActor = actors.get(i + 1);
+
+            List<TsadvUser> users = actor.getUsers();
+            List<TsadvUser> nextUsers = nextActor.getUsers();
+
+            if (nextUsers.size() == 1
+                    && users.size() == 1
+                    && nextUsers.get(0).equals(users.get(0))
+                    && actor.getRolesLink() != null
+                    && nextActor.getRolesLink() != null
+            ) {
+                Integer left = actor.getRolesLink().getPriority();
+                Integer right = nextActor.getRolesLink().getPriority();
+
+                if (left == null || right != null && left < right) removeCurrentActor = true;
+                else if (right == null || left > right) removeNext = true;
+
+                hasDuplicate = hasDuplicate || removeCurrentActor || removeNext;
+            }
+
+            if (!removeCurrentActor) newActors.add(actor);
+        }
+
+        if (!removeNext) newActors.add(actors.get(actors.size() - 1));
+
+        return hasDuplicate ? excludeDuplicate(newActors) : newActors;
     }
 
     @Override
@@ -152,6 +205,8 @@ public class StartBprocServiceBean implements StartBprocService {
                 .setParameters(ParamsMap.of("entityId", entityId))
                 .list()
                 .forEach(commitContext::addInstanceToRemove);
+
+        notPersisitBprocActors = excludeDuplicate(notPersisitBprocActors);
 
         for (NotPersisitBprocActors notPersisitBprocActor : notPersisitBprocActors) {
             BprocActors bprocActors = metadata.create(BprocActors.class);
@@ -176,6 +231,7 @@ public class StartBprocServiceBean implements StartBprocService {
         bprocActors.setIsSystemRecord(true);
         bprocActors.setBprocUserTaskCode(link.getBprocUserTaskCode());
         bprocActors.setOrder(link.getOrder());
+        bprocActors.setRolesLink(link);
         return bprocActors;
     }
 }

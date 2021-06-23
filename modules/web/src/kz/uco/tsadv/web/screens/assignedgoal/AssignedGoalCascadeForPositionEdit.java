@@ -11,8 +11,10 @@ import kz.uco.tsadv.modules.performance.model.Goal;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
 import kz.uco.tsadv.modules.personal.model.PositionGroupGoalLink;
 import kz.uco.tsadv.service.EmployeeService;
+import kz.uco.tsadv.service.PositionService;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +36,8 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
     protected CollectionLoader<Goal> goalDl;
     @Inject
     protected CollectionLoader<PositionGroupExt> positionGroupDl;
+    @Inject
+    protected PositionService positionService;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -42,10 +46,9 @@ public class AssignedGoalCascadeForPositionEdit extends StandardEditor<AssignedG
                 MapScreenOptions options = (MapScreenOptions) event.getOptions();
                 if (options.getParams().containsKey("positionGroupId")) {
                     UUID positionGroupId = (UUID) options.getParams().get("positionGroupId");
-                    List<PositionGroupExt> managerListByPositionGroup =
-                            employeeService.findManagerListByPositionGroupReturnListPosition(positionGroupId, false);
-                    if (managerListByPositionGroup != null && !managerListByPositionGroup.isEmpty()) {
-                        positionGroupDl.setParameter("positionGroupList", managerListByPositionGroup);
+                    PositionGroupExt managerPositionGroup = positionService.getManager(positionGroupId);
+                    if (managerPositionGroup != null) {
+                        positionGroupDl.setParameter("positionGroupList", Collections.singletonList(managerPositionGroup));
                         positionGroupDl.load();
                     }
                 }

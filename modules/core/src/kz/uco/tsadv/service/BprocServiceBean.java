@@ -437,7 +437,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                     "&item=" + entityName + "-" + entity.getId() +
                     "\" target=\"_blank\">%s " + "</a>";
         else
-            return "<a href=\"" + appUrl + "/activity/" + entity.getId() + "\" target=\"_blank\">%s " + "</a>";
+            return "<a href=\"" + appUrl + "/activity/" + activity.getId() + "\" target=\"_blank\">%s " + "</a>";
     }
 
     @Override
