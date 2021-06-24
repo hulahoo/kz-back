@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://caption"
+        messagesPack="kz.uco.tsadv.web.modules.learning">
+    <data>
+        <instance id="positionGroupExtDc" class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                  view="positionGroupExt-for-cousre-matrix-browse">
+            <loader id="positionGroupExtDl"/>
+        </instance>
+        <collection id="positionCoursesDc" class="kz.uco.tsadv.modules.learning.model.PositionCourse"
+                    view="positionCourse-matrix-browse">
+            <loader id="positionCoursesDl">
+                <query>
+                    <![CDATA[select e from tsadv_PositionCourse e where e.positionGroup.id = :positionGroupId]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <layout expand="positionCoursesTable" spacing="true">
+        <form id="positionGroupExtForm" dataContainer="positionGroupExtDc" width="100%">
+            <column>
+                <pickerField id="positionField" property="position" editable="false"/>
+                <pickerField id="organizationGroupField" property="organizationGroup" editable="false"/>
+            </column>
+            <column>
+                <pickerField id="companyField" property="company" editable="false"/>
+                <pickerField id="gradeGroupField" property="gradeGroup" editable="false"/>
+            </column>
+        </form>
+        <groupTable id="positionCoursesTable" height="100%" width="100%" dataContainer="positionCoursesDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="remove" type="remove"/>
+                <action id="excel" type="excel"/>
+            </actions>
+            <buttonsPanel alwaysVisible="true">
+                <button id="positionCoursesTableCreateBtn" action="positionCoursesTable.create" caption="msg://empty"
+                        icon="PLUS"/>
+                <button id="positionCoursesTableRemoveBtn" action="positionCoursesTable.remove" caption="msg://empty"
+                        icon="TRASH" css="background-color: red"/>
+                <button id="positionCoursesTableExcelBtn" action="positionCoursesTable.excel" caption="msg://empty"
+                        css="background-color: green" icon="EXCEL_ACTION"/>
+            </buttonsPanel>
+            <columns>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="course" link="true" linkInvoke="openCourseEditor"/>
+                <column id="course.programmCode"/>
+                <column id="course.educationPeriod"/>
+            </columns>
+        </groupTable>
+    </layout>
+</window>

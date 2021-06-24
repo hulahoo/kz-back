@@ -141,6 +141,9 @@
                             <textField property="educationPeriod"/>
                             <textArea id="shortDescription" property="shortDescription"
                                       rows="5"/>
+                            <pickerField id="programmCodeField" property="programmCode"/>
+                            <pickerField id="typeOfTrainingField" property="typeOfTraining"/>
+                            <pickerField id="assessmentMethodField" property="assessmentMethod"/>
                         </column>
                     </form>
                 </scrollBox>
