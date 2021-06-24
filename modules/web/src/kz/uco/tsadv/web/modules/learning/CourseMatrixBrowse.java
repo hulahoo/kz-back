@@ -8,6 +8,7 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.cuba.actions.CreateActionExt;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.learning.model.Course;
 import kz.uco.tsadv.modules.learning.model.PositionCourse;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
@@ -45,8 +46,12 @@ public class CourseMatrixBrowse extends Screen {
 
     @Subscribe
     protected void onAfterShow(AfterShowEvent event) {
-        positionCoursesTableCreate.setInitializer(o ->
-                ((PositionCourse) o).setPositionGroup(positionGroupExtDc.getItem()));
+        positionCoursesTableCreate.setInitializer(o -> {
+            PositionCourse positionCourse = (PositionCourse) o;
+            positionCourse.setPositionGroup(positionGroupExtDc.getItem());
+            positionCourse.setStartDate(CommonUtils.getSystemDate());
+            positionCourse.setEndDate(CommonUtils.getEndOfTime());
+        });
         positionCoursesTableCreate.setAfterCloseHandler(afterCloseEvent -> positionCoursesDl.load());
         positionCoursesTableRemove.setConfirmation(true);
     }
