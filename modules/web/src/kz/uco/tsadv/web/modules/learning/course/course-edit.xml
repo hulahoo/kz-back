@@ -112,6 +112,8 @@
                           dataContainer="courseDc">
                         <column width="250px">
                             <textField id="name" property="name"/>
+                            <textField id="nameLang2" property="nameLang2"/>
+                            <textField id="nameLang3" property="nameLang3"/>
                             <pickerField property="party">
                                 <actions>
                                     <action id="lookup" type="picker_lookup"/>
