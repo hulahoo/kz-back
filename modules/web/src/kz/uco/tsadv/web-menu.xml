@@ -528,6 +528,9 @@
             <item screen="tsadv$DicEducationalEstablishmentType.browse"/>
             <item screen="tsadv$DicEducationalEstablishment.browse"/>
             <item screen="tsadv_DicLearningProof.browse"/>
+            <item screen="tsadv_DicProgrammCode.browse"/>
+            <item screen="tsadv_DicAssessmentMethod.browse"/>
+            <item screen="tsadv_DicTypeOfTraining.browse"/>
         </menu>
         <menu id="lrnContent">
             <item id="lrnLearningObjects"
@@ -614,6 +617,7 @@
         <item screen="tsadv$LearnerGroup.browse"/>
         <item screen="tsadv$Learner.browse"/>
         <item screen="tsadv$LmsSlider.browse"/>
+        <item screen="base$PositionGroupExtCourseMatrix.browse"/>
     </menu>
     <menu id="recruitment"
           icon="font-icon:SEARCH"

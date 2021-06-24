@@ -655,6 +655,10 @@
         <class>kz.uco.tsadv.entity.ResizedImage</class>
         <class>kz.uco.tsadv.entity.ImageSize</class>
         <class>kz.uco.tsadv.entity.ExecutiveAssistants</class>
+        <class>kz.uco.tsadv.modules.learning.dictionary.DicTypeOfTraining</class>
+        <class>kz.uco.tsadv.modules.learning.dictionary.DicProgrammCode</class>
+        <class>kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod</class>
+        <class>kz.uco.tsadv.modules.learning.model.PositionCourse</class>
         <class>kz.uco.tsadv.modules.personal.model.PersonPayslip</class>
     </persistence-unit>
 </persistence>
