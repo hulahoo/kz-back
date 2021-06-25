@@ -7,9 +7,12 @@ import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.TransactionalDataManager;
+import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.Group;
+import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.base.entity.dictionary.*;
@@ -68,6 +71,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
     @Inject
     protected IntegrationConfig integrationConfig;
+    @Inject
+    private FileStorageAPI fileStorageAPI;
 
 
     @Transactional
@@ -4836,6 +4841,21 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (personGroupExtList.size() == 1) {
                             tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                            PersonExt personExt = personGroupExtList.get(0).getPerson();
+                            if (personExt != null && userJson.getThumbnailPhoto() != null
+                                    && !userJson.getThumbnailPhoto().isEmpty()
+                                    && userJson.getPhotoExtension() != null
+                                    && !userJson.getPhotoExtension().isEmpty()) {
+                                byte[] decoder = Base64.getDecoder().decode(userJson.getThumbnailPhoto());
+                                FileDescriptor file = metadata.create(FileDescriptor.class);
+                                file.setCreateDate(BaseCommonUtils.getSystemDate());
+                                file.setName("userPhoto" + "." + userJson.getPhotoExtension());
+                                file.setExtension(userJson.getPhotoExtension());
+                                file.setSize((long) decoder.length);
+                                fileStorageAPI.saveFile(file, decoder);
+                                personExt.setImage(file);
+                                commitContext.addInstanceToCommit(personExt);
+                            }
                         } else {
                             continue;
                         }
@@ -4890,6 +4910,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                     .list().stream().findFirst().orElse(null);
                             if (group != null) {
                                 tsadvUser.setGroup(group);
+                            }
+                            PersonExt personExt = personGroupExtList.get(0) != null
+                                    ? personGroupExtList.get(0).getPerson()
+                                    : null;
+                            if (personExt != null && userJson.getThumbnailPhoto() != null
+                                    && !userJson.getThumbnailPhoto().isEmpty()
+                                    && userJson.getPhotoExtension() != null
+                                    && !userJson.getPhotoExtension().isEmpty()) {
+                                byte[] decoder = Base64.getDecoder().decode(userJson.getThumbnailPhoto());
+                                FileDescriptor file = metadata.create(FileDescriptor.class);
+                                file.setCreateDate(BaseCommonUtils.getSystemDate());
+                                file.setName("userPhoto" + "." + userJson.getPhotoExtension());
+                                file.setExtension(userJson.getPhotoExtension());
+                                file.setSize((long) decoder.length);
+                                fileStorageAPI.saveFile(file, decoder);
+                                personExt.setImage(file);
+                                commitContext.addInstanceToCommit(personExt);
                             }
                         } else {
                             continue;
