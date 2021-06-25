@@ -60,6 +60,7 @@ public class PersonDocumentRequestChangedListener {
                             ? personDocumentRequest.getEditedPersonDocument().getLegacyId() : "");
                     personDocumentRequestDataJson.setDocumentTypeId(personDocumentRequest.getDocumentType() != null
                             ? personDocumentRequest.getDocumentType().getLegacyId() : "");
+                    personDocumentRequestDataJson.setIssuedBy(personDocumentRequest.getIssuedBy());
                     personDocumentRequestDataJson.setDocumentNumber(personDocumentRequest.getDocumentNumber());
                     personDocumentRequestDataJson.setIssueDate(getFormattedDateString(personDocumentRequest.getIssueDate()));
                     personDocumentRequestDataJson.setExpiredDate(getFormattedDateString(personDocumentRequest.getExpiredDate()));

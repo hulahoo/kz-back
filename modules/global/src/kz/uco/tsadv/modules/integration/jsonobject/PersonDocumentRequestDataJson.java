@@ -9,6 +9,7 @@ public class PersonDocumentRequestDataJson implements Serializable {
     protected String documentTypeId;
     protected String documentNumber;
     protected String issueDate;
+    protected String issuedBy;
     protected String expiredDate;
     protected String issueAuthorityId;
     protected String companyCode;
@@ -83,5 +84,13 @@ public class PersonDocumentRequestDataJson implements Serializable {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getIssuedBy() {
+        return issuedBy;
+    }
+
+    public void setIssuedBy(String issuedBy) {
+        this.issuedBy = issuedBy;
     }
 }
