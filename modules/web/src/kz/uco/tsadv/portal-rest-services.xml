@@ -203,6 +203,9 @@
         <method name="personGroupInfo">
             <param name="userId" type="java.util.UUID"/>
         </method>
+        <method name="hasHrRole">
+            <param name="dicHrCode" type="java.lang.String"/>
+        </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">
         <method name="initialCreate"/>
@@ -225,6 +228,16 @@
         <method name="saveRequest">
             <param name="orgRequestSaveModel" type="kz.uco.tsadv.pojo.OrgRequestSaveModel"/>
         </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="changeTypeFilter" type="kz.uco.tsadv.api.OrgStructureRequestChangeType"/>
+        </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="displayFilter" type="kz.uco.tsadv.api.OrgStructureRequestDisplayType"/>
+        </method>
+        <method name="availableSalary"/>
+        <method name="hasPermitToCreate"/>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">
@@ -240,6 +253,9 @@
             <param name="userId" type="java.util.UUID"/>
             <param name="employeePersonGroupId" type="java.util.UUID"/>
         </method>
+        <method name="getDicHrRoles">
+            <param name="userId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="cuba_UserSettingService">
         <method name="saveSetting">
@@ -250,6 +266,17 @@
         <method name="loadSetting">
             <param name="clientType" type="com.haulmont.cuba.core.global.ClientType"/>
             <param name="name" type="java.lang.String"/>
+        </method>
+    </service>
+    <service name="tsadv_CommonReportsService">
+        <method name="downloadReportByCode">
+            <param name="reportCode" type="java.lang.String"/>
+            <param name="params" type="java.util.Map"/>
+        </method>
+        <method name="downloadReportByCode">
+            <param name="reportCode" type="java.lang.String"/>
+            <param name="entityParamName" type="java.lang.String"/>
+            <param name="entityId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_ExecutiveAssistantService">
