@@ -539,4 +539,8 @@
         <property name="personGroup"
                   view="_minimal"/>
     </view>
+    <view entity="tsadv_PersonPayslip" name="portal.personPayslip-list" extends="_local">
+        <property name="personGroup" view="_minimal"/>
+        <property name="file" view="_minimal"/>
+    </view>
 </views>
