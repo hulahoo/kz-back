@@ -715,6 +715,19 @@ public class AbsenceServiceBean implements AbsenceService {
                     Map<String, Object> params = new HashMap<>();
                     params.put("fullNameRu", personGroupExt.getFullName());
 
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            tsadvUser.getId(),
+                            "reminder.schedule.the.leave",
+                            params);
                     notificationSenderAPIService.sendParametrizedNotification("reminder.schedule.the.leave", tsadvUser, params);
                 }
             });
