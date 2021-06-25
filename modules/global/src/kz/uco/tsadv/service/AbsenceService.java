@@ -55,4 +55,7 @@ public interface AbsenceService {
     void sendNotifyForEmployee();
 
     void sendNotificationForEmployeeEveryYear();
+
+    @Nullable
+    Integer scheduleOffsetDaysBeforeAbsence();
 }

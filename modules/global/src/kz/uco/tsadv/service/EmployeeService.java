@@ -8,6 +8,7 @@ import kz.uco.tsadv.modules.performance.dto.BoardChangedItem;
 import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
 import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
+import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.AssignmentGroupExt;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
@@ -17,6 +18,7 @@ import kz.uco.tsadv.modules.personal.model.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -149,4 +151,10 @@ public interface EmployeeService {
     DicCompany getCompanyByPersonGroupId(@Nonnull UUID personGroupId);
 
     List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);
+
+    List<DicHrRole> userHrRoles();
+
+    List<DicHrRole> userHrRoles(UUID personGroupId);
+
+    boolean hasHrRole(String dicHrCode);
 }

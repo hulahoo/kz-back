@@ -7,6 +7,9 @@ import com.haulmont.cuba.core.entity.Category;
 import com.haulmont.cuba.core.entity.CategoryAttribute;
 import com.haulmont.cuba.core.entity.CategoryAttributeValue;
 import com.haulmont.cuba.core.entity.contracts.Id;
+import com.haulmont.cuba.core.global.*;
+import kz.uco.base.common.StaticVariable;
+import kz.uco.base.entity.dictionary.DicCompany;
 import com.haulmont.cuba.core.global.AppBeans;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
@@ -61,6 +64,9 @@ public class AbsenceServiceBean implements AbsenceService {
     private Metadata metadata;
     @Inject
     private NotificationSenderAPIService notificationSenderAPIService;
+
+    @Inject
+    private UserSessionSource userSessionSource;
 
     @Override
     public boolean isLongAbsence(Absence absence) {
@@ -561,6 +567,22 @@ public class AbsenceServiceBean implements AbsenceService {
                         .setParameter("personGroupId", personGroupId)
                         .getFirstResult()
         );
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    @Nullable
+    @Override
+    public Integer scheduleOffsetDaysBeforeAbsence() {
+        final DicCompany userCompany = employeeService.getCompanyByPersonGroupId(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
+
+        return persistence.callInTransaction(em ->
+                em.createQuery("select a.daysBeforeAbsence " +
+                        "from tsadv$DicAbsenceType a " +
+                        "where a.company = :userCompany " +
+                        "   and a.isScheduleOffsetsRequest = 'TRUE' " +
+                        "   and a.active = true", Integer.class)
+                        .setParameter("userCompany", userCompany)
+                        .getFirstResult());
     }
 
     @Nullable

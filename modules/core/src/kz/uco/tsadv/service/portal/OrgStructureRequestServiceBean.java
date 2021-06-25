@@ -1,16 +1,16 @@
 package kz.uco.tsadv.service.portal;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.PersistenceHelper;
-import com.haulmont.cuba.core.global.UserSessionSource;
-import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.*;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.shared.ElementType;
+import kz.uco.tsadv.api.OrgStructureRequestChangeType;
+import kz.uco.tsadv.api.OrgStructureRequestDisplayType;
 import kz.uco.tsadv.exceptions.PortalException;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.enums.OrgRequestChangeType;
@@ -18,6 +18,7 @@ import kz.uco.tsadv.modules.personal.group.GradeGroup;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.group.PositionGroupExt;
+import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
 import kz.uco.tsadv.modules.personal.requests.OrgStructureRequestDetail;
 import kz.uco.tsadv.pojo.OrgRequestSaveModel;
@@ -30,19 +31,17 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.postgresql.util.PGobject;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service(OrgStructureRequestService.NAME)
 public class OrgStructureRequestServiceBean implements OrgStructureRequestService {
-
-    private static final Gson gson = new Gson();
 
     @Inject
     private EmployeeService employeeService;
@@ -59,39 +58,90 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
     @Inject
     private EmployeeNumberService employeeNumberService;
 
+    @Inject
+    private Gson gson;
+
+    @Inject
+    private DataManager dataManager;
+
     @SuppressWarnings("all")
     @Override
     public String getMergedOrgStructure(UUID requestId) {
-        final UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
-        if (personGroupId == null) {
+        final Optional<RequestTreeData> mergedOrgStructureData = this.getMergedOrgStructureData(requestId);
+        if (mergedOrgStructureData.isPresent()) {
+            return String.format("[%s]", gson.toJson(mergedOrgStructureData.get()));
+        } else {
             return "[]";
         }
-        return persistence.callInTransaction(em -> {
-            Query query = em.createNativeQuery(
-                    "SELECT td.* FROM request_tree_data(?1,?2) td");
-            query.setParameter(1, personGroupId);
-            query.setParameter(2, requestId);
+    }
 
-            PGobject singleResult = (PGobject) query.getFirstResult();
-
-            String jsonData = singleResult != null ? singleResult.getValue() : "[]";
-
-            List<RequestTreeData> treeDataList = gson.fromJson(jsonData, new TypeToken<List<RequestTreeData>>() {
-            }.getType());
-
-            if (CollectionUtils.isEmpty(treeDataList)) {
-                return "[]";
+    @SuppressWarnings("all")
+    @Override
+    public String getMergedOrgStructure(UUID requestId, OrgStructureRequestDisplayType displayFilter) {
+        final Optional<RequestTreeData> mergedOrgStructureData = this.getMergedOrgStructureData(requestId);
+        if (mergedOrgStructureData.isPresent()) {
+            RequestTreeData requestTreeData = mergedOrgStructureData.get();
+            switch (displayFilter) {
+                case CHANGES: {
+                    Predicate<RequestTreeData> changeTypeFilter = c -> c.getChangeType() != null;
+                    requestTreeData.setChildren(filterTreeData(requestTreeData.getChildren(), changeTypeFilter));
+                    if (CollectionUtils.isNotEmpty(requestTreeData.getChildren())) {
+                        return String.format("[%s]", gson.toJson(requestTreeData));
+                    }
+                }
+                default: {
+                    return String.format("[%s]", gson.toJson(requestTreeData));
+                }
             }
+        }
+        return "[]";
+    }
 
-            RequestTreeData root = treeDataList.stream()
-                    .filter(r -> r.isRoot())
-                    .findFirst()
-                    .orElseThrow(() -> new PortalException("Root element is not found!"));
-            collectChildren(root, treeDataList);
+    @SuppressWarnings("all")
+    @Override
+    public String getMergedOrgStructure(UUID requestId, OrgStructureRequestChangeType changeTypeFilter) {
+        final Optional<RequestTreeData> mergedOrgStructureData = this.getMergedOrgStructureData(requestId);
+        if (mergedOrgStructureData.isPresent()) {
+            RequestTreeData requestTreeData = mergedOrgStructureData.get();
+            switch (changeTypeFilter) {
+                case NEW:
+                case EDIT:
+                case CLOSE: {
+                    Predicate<RequestTreeData> searchByChangeType = c -> c.getChangeType() != null && c.getChangeType().equalsIgnoreCase(changeTypeFilter.getId());
+                    requestTreeData.setChildren(filterTreeData(requestTreeData.getChildren(), searchByChangeType));
+                    break;
+                }
+            }
+            if (CollectionUtils.isNotEmpty(requestTreeData.getChildren())) {
+                return String.format("[%s]", gson.toJson(requestTreeData));
+            }
+        }
+        return "[]";
+    }
 
-            fillHeadCount(root);
-            return String.format("[%s]", gson.toJson(root));
-        });
+    protected List<RequestTreeData> filterTreeData(List<RequestTreeData> childes, Predicate<RequestTreeData> conditionToFilter) {
+        if (CollectionUtils.isEmpty(childes)) {
+            return childes;
+        }
+
+        return childes
+                .stream()
+                .peek(c -> c.setChildren(filterTreeData(c.getChildren(), conditionToFilter)))
+                .filter(c -> (c.getChildren() != null && c.getChildren().size() > 0) || conditionToFilter.test(c))
+                .collect(Collectors.toList());
+    }
+
+    private List<RequestTreeData> hideColumnsByGrade(List<RequestTreeData> treeDataList) {
+        if (!this.availableSalary()) {
+            return treeDataList.stream()
+                    .map(e -> {
+                        RequestTreeData newElement = new RequestTreeData();
+                        BeanUtils.copyProperties(e, newElement, "baseSalary", "mtPayrollPer", "mtPayroll");
+                        return newElement;
+                    }).collect(Collectors.toList());
+        }
+
+        return new ArrayList<>(treeDataList);
     }
 
     private void fillHeadCount(RequestTreeData requestTreeData) {
@@ -105,16 +155,43 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                     {
                             BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
                     };
+            BigDecimal[] totalBaseSalary = new BigDecimal[]
+                    {
+                            BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
+                    };
+            BigDecimal[] totalMtPayrollPer = new BigDecimal[]
+                    {
+                            BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
+                    };
+            BigDecimal[] totalMtPayroll = new BigDecimal[]
+                    {
+                            BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO
+                    };
 
             for (RequestTreeData child : children) {
                 BigDecimal[] headCounts = child.getHeadCount();
-                if (headCounts != null && headCounts.length == 3) {
-                    for (int i = 0; i < 3; i++) {
+                BigDecimal[] baseSalary = child.getBaseSalary();
+                BigDecimal[] mtPayrollPer = child.getMtPayrollPer();
+                BigDecimal[] mtPayroll = child.getMtPayroll();
+                for (int i = 0; i < 3; i++) {
+                    if (headCounts != null && headCounts.length == 3) {
                         totalHeadCounts[i] = totalHeadCounts[i].add(ObjectUtils.defaultIfNull(headCounts[i], BigDecimal.ZERO));
+                    }
+                    if (baseSalary != null && baseSalary.length == 3) {
+                        totalBaseSalary[i] = totalBaseSalary[i].add(ObjectUtils.defaultIfNull(baseSalary[i], BigDecimal.ZERO));
+                    }
+                    if (mtPayrollPer != null && mtPayrollPer.length == 3) {
+                        totalMtPayrollPer[i] = totalMtPayrollPer[i].add(ObjectUtils.defaultIfNull(mtPayrollPer[i], BigDecimal.ZERO));
+                    }
+                    if (mtPayroll != null && mtPayroll.length == 3) {
+                        totalMtPayroll[i] = totalMtPayroll[i].add(ObjectUtils.defaultIfNull(mtPayroll[i], BigDecimal.ZERO));
                     }
                 }
             }
             requestTreeData.setHeadCount(totalHeadCounts);
+            requestTreeData.setBaseSalary(totalBaseSalary);
+            requestTreeData.setMtPayrollPer(totalMtPayrollPer);
+            requestTreeData.setMtPayroll(totalMtPayroll);
         }
 
         if (StringUtils.isNotEmpty(requestTreeData.getChangeType())) {
@@ -122,10 +199,33 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 requestTreeData.getNameRu()[1] = null;
                 requestTreeData.getNameEn()[1] = null;
                 requestTreeData.getGrade()[1] = null;
-                requestTreeData.getHeadCount()[1] = BigDecimal.ZERO;
-                requestTreeData.getBaseSalary()[1] = BigDecimal.ZERO;
-                requestTreeData.getMtPayrollPer()[1] = BigDecimal.ZERO;
-                requestTreeData.getMtPayroll()[1] = BigDecimal.ZERO;
+                requestTreeData.getNameRu()[2] = null;
+                requestTreeData.getNameEn()[2] = null;
+                requestTreeData.getGrade()[2] = null;
+
+                final BigDecimal[] headCount = requestTreeData.getHeadCount();
+                if (headCount != null) {
+                    headCount[1] = BigDecimal.ZERO;
+                    headCount[2] = BigDecimal.ZERO;
+                }
+
+                final BigDecimal[] baseSalary = requestTreeData.getBaseSalary();
+                if (baseSalary != null) {
+                    baseSalary[1] = BigDecimal.ZERO;
+                    baseSalary[2] = BigDecimal.ZERO;
+                }
+
+                final BigDecimal[] mtPayrollPer = requestTreeData.getMtPayrollPer();
+                if (mtPayrollPer != null) {
+                    mtPayrollPer[1] = BigDecimal.ZERO;
+                    mtPayrollPer[2] = BigDecimal.ZERO;
+                }
+
+                final BigDecimal[] mtPayroll = requestTreeData.getMtPayroll();
+                if (mtPayroll != null) {
+                    mtPayroll[1] = BigDecimal.ZERO;
+                    mtPayroll[2] = BigDecimal.ZERO;
+                }
             }
         }
     }
@@ -147,6 +247,45 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 parent.setChildren(foundChildren);
             }
         }
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    protected Optional<RequestTreeData> getMergedOrgStructureData(UUID requestId) {
+        final UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+        if (personGroupId == null) {
+            return Optional.empty();
+        }
+
+        return Optional.ofNullable(persistence.callInTransaction(em -> {
+            final OrgStructureRequest orgStructureRequest = em.find(OrgStructureRequest.class, requestId, ViewBuilder.of(OrgStructureRequest.class)
+                    .add("author", View.MINIMAL)
+                    .build());
+            Query query = em.createNativeQuery(
+                    "SELECT td.* FROM request_tree_data(?1,?2) td");
+            query.setParameter(1, orgStructureRequest.getAuthor().getId());
+            query.setParameter(2, requestId);
+
+            PGobject singleResult = (PGobject) query.getFirstResult();
+
+            String jsonData = singleResult != null ? singleResult.getValue() : "[]";
+
+            List<RequestTreeData> treeDataList = gson.fromJson(jsonData, new TypeToken<List<RequestTreeData>>() {
+            }.getType());
+
+            if (CollectionUtils.isEmpty(treeDataList)) {
+                return null;
+            }
+
+            List<RequestTreeData> filteredTreeDataList = hideColumnsByGrade(treeDataList);
+            RequestTreeData root = filteredTreeDataList.stream()
+                    .filter(RequestTreeData::isRoot)
+                    .findFirst()
+                    .orElseThrow(() -> new PortalException("Root element is not found!"));
+            collectChildren(root, filteredTreeDataList);
+
+            fillHeadCount(root);
+            return root;
+        }));
     }
 
     @Override
@@ -197,10 +336,11 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 orgStructureRequest = metadata.create(OrgStructureRequest.class);
                 orgStructureRequest.setCompany(em.getReference(DicCompany.class, orgRequestSaveModel.getCompany()));
                 orgStructureRequest.setDepartment(em.getReference(OrganizationGroupExt.class, orgRequestSaveModel.getDepartment()));
-                orgStructureRequest.setStatus(em.getReference(DicRequestStatus.class, orgRequestSaveModel.getRequestStatus()));
+                orgStructureRequest.setStatus(em.getReference(DicRequestStatus.class, orgRequestSaveModel.getStatus()));
                 orgStructureRequest.setAuthor(em.getReference(PersonGroupExt.class, orgRequestSaveModel.getAuthor()));
                 orgStructureRequest.setRequestDate(orgRequestSaveModel.getRequestDate());
                 orgStructureRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());
+
             } else {
                 orgStructureRequest = em.find(OrgStructureRequest.class, id);
                 if (orgStructureRequest == null) {
@@ -210,6 +350,15 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
             orgStructureRequest.setModifyDate(orgRequestSaveModel.getModifyDate());
             orgStructureRequest.setComment(orgRequestSaveModel.getComment());
+
+            ArrayList<FileDescriptor> files = new ArrayList<>();
+
+            if (orgRequestSaveModel.getFile() != null)
+                orgRequestSaveModel.getFile().stream()
+                        .map(fileModel -> em.getReference(FileDescriptor.class, fileModel.getId()))
+                        .forEach(files::add);
+
+            orgStructureRequest.setFile(files);
 
             if (PersistenceHelper.isNew(orgStructureRequest)) {
                 em.persist(orgStructureRequest);
@@ -324,7 +473,8 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
             detail.setPositionNameRu(positionRequestSaveModel.getNameRu());
             detail.setPositionNameEn(positionRequestSaveModel.getNameEn());
             detail.setHeadCount(ObjectUtils.defaultIfNull(positionRequestSaveModel.getHeadCount(), BigDecimal.ZERO));
-
+            detail.setMinSalary(positionRequestSaveModel.getMinSalary());
+            detail.setMaxSalary(positionRequestSaveModel.getMaxSalary());
             /**
              *
              * */
@@ -437,5 +587,41 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
                 em.persist(requestDetail);
             }
         });
+    }
+
+    @Override
+    public boolean availableSalary() {
+        UUID personGroupId = userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+        Objects.requireNonNull(personGroupId, "Person group id is empty!");
+
+        final PersonGroupExt currentPersonGroup = dataManager.load(LoadContext.create(PersonGroupExt.class)
+                .setId(personGroupId)
+                .setView("personGroup.currentAssignment"));
+        Objects.requireNonNull(currentPersonGroup, "Can not find person group by id: " + currentPersonGroup);
+
+        final AssignmentExt currentAssignment = dataManager.reload(currentPersonGroup.getCurrentAssignment(), "assignment.gradeGroup");
+        boolean isPermittedRole = this.employeeService.userHrRoles()
+                .stream()
+                .anyMatch(hrRole -> this.hrRoleCodeToAvailableSalary().contains(hrRole.getCode()));
+        return isPermittedRole || (currentAssignment.getGradeGroup() != null
+                ? currentAssignment.getGradeGroup().getAvailableSalary()
+                : currentAssignment.getPositionGroup().getGradeGroup() != null
+                ? currentAssignment.getPositionGroup().getGradeGroup().getAvailableSalary()
+                : false);
+    }
+
+    @Override
+    public boolean hasPermitToCreate() {
+        return this.employeeService.userHrRoles()
+                .stream()
+                .anyMatch(hrRole -> this.hrRolesToCreate().contains(hrRole.getCode()));
+    }
+
+    protected List<String> hrRoleCodeToAvailableSalary() {
+        return Arrays.asList("C&B_COMPANY", "C&B_GROUP");
+    }
+
+    protected List<String> hrRolesToCreate() {
+        return Arrays.asList("ORG_MANGER", "MANAGER_ASSISTANT");
     }
 }

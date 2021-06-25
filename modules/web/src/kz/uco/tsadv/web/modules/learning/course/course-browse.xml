@@ -37,8 +37,8 @@
                         caption="mainMsg://table.btn.empty"/>
             </actions>
             <columns>
-                <column id="logo"
-                        caption="msg://Logo"/>
+<!--                <column id="logo"-->
+<!--                        caption="msg://Logo"/>-->
                 <column id="name"/>
                 <column id="shortDescription"/>
                 <column id="party"/>
