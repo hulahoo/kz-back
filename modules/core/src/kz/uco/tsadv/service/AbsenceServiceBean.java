@@ -24,6 +24,10 @@ import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.modules.personal.model.VacationConditions;
 import kz.uco.tsadv.modules.timesheet.model.Calendar;
+import kz.uco.uactivity.entity.ActivityType;
+import kz.uco.uactivity.entity.StatusEnum;
+import kz.uco.uactivity.entity.WindowProperty;
+import kz.uco.uactivity.service.ActivityService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nullable;
@@ -62,6 +66,8 @@ public class AbsenceServiceBean implements AbsenceService {
 
     @Inject
     private UserSessionSource userSessionSource;
+    @Inject
+    private ActivityService activityService;
 
     @Override
     public boolean isLongAbsence(Absence absence) {
@@ -608,6 +614,19 @@ public class AbsenceServiceBean implements AbsenceService {
                     params.put("fullNameEn", personGroupExt.getPersonFirstLastNameLatin());
                     params.put("dateFrom", formatter.format(getDate()));
 
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            tsadvUser.getId(),
+                            "Vacation.reminder.without.schedule",
+                            params);
                     notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder.without.schedule", tsadvUser, params);
                 }
             });
@@ -633,10 +652,33 @@ public class AbsenceServiceBean implements AbsenceService {
                     params.put("fullNameEn", personGroupExt.getPersonFirstLastNameLatin());
                     params.put("dateFrom", formatter.format(getDate()));
 
+                    activityService.createActivity(
+                            tsadvUser,
+                            tsadvUser,
+                            getActivityType(),
+                            StatusEnum.active,
+                            "description",
+                            null,
+                            new Date(),
+                            null,
+                            null,
+                            tsadvUser.getId(),
+                            "Vacation.reminder",
+                            params);
                     notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder", tsadvUser, params);
                 }
             });
         }
+    }
+
+    protected ActivityType getActivityType() {
+        return dataManager.load(ActivityType.class)
+                .query("select e from uactivity$ActivityType e where e.code = 'NOTIFICATION'")
+                .view(new View(ActivityType.class)
+                        .addProperty("code")
+                        .addProperty("windowProperty",
+                                new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
+                .one();
     }
 
     protected Date getDate() {
