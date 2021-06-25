@@ -10,10 +10,6 @@ import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.common.StaticVariable;
 import kz.uco.base.entity.dictionary.DicCompany;
-import com.haulmont.cuba.core.global.AppBeans;
-import com.haulmont.cuba.core.global.DataManager;
-import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.View;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.global.common.CommonUtils;
@@ -34,7 +30,6 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -592,6 +587,7 @@ public class AbsenceServiceBean implements AbsenceService {
 
     @Override
     public void sendNotifyForEmployee() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         List<PersonGroupExt> absencePersonGroupList = dataManager.load(PersonGroupExt.class)
                 .query("select e.personGroup from tsadv$Absence e " +
                         " join tsadv$DicAbsenceType t on e.type = t " +
@@ -610,6 +606,7 @@ public class AbsenceServiceBean implements AbsenceService {
                     Map<String, Object> params = new HashMap<>();
                     params.put("fullNameRu", personGroupExt.getFullName());
                     params.put("fullNameEn", personGroupExt.getPersonFirstLastNameLatin());
+                    params.put("dateFrom", formatter.format(getDate()));
 
                     notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder.without.schedule", tsadvUser, params);
                 }
@@ -634,8 +631,9 @@ public class AbsenceServiceBean implements AbsenceService {
                     Map<String, Object> params = new HashMap<>();
                     params.put("fullNameRu", personGroupExt.getFullName());
                     params.put("fullNameEn", personGroupExt.getPersonFirstLastNameLatin());
+                    params.put("dateFrom", formatter.format(getDate()));
 
-                    notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder ", tsadvUser, params);
+                    notificationSenderAPIService.sendParametrizedNotification("Vacation.reminder", tsadvUser, params);
                 }
             });
         }
@@ -643,7 +641,7 @@ public class AbsenceServiceBean implements AbsenceService {
 
     protected Date getDate() {
         java.util.Calendar calendar = java.util.Calendar.getInstance();
-        calendar.add(java.util.Calendar.DATE, -7);
+        calendar.add(java.util.Calendar.DATE, +7);
         return calendar.getTime();
     }
 
@@ -675,7 +673,7 @@ public class AbsenceServiceBean implements AbsenceService {
                     Map<String, Object> params = new HashMap<>();
                     params.put("fullNameRu", personGroupExt.getFullName());
 
-                    notificationSenderAPIService.sendParametrizedNotification("reminder.schedule.the.leave ", tsadvUser, params);
+                    notificationSenderAPIService.sendParametrizedNotification("reminder.schedule.the.leave", tsadvUser, params);
                 }
             });
         }
