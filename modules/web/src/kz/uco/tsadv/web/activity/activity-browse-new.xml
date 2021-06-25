@@ -135,6 +135,10 @@ and e.endDateTime is not null]]>
                             caption="msg://markAsNotRead"
                             enable="false"
                             invoke="markAsUnread"/>
+                    <button id="openNotification"
+                            caption="msg://openNotification"
+                            enable="false"
+                            invoke="openNotification"/>
                 </buttonsPanel>
             </tab>
         </tabSheet>

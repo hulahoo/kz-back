@@ -67,12 +67,6 @@ public class PersonalDataRequestEdit extends AbstractEditor<PersonalDataRequest>
             getItem().setRequestNumber(employeeNumberService.generateNextRequestNumber());
         }
         addFile.addFileUploadSucceedListener(this::fileUploadSucceedListener);
-
-        if (getItem().getAttachment() != null) {
-            attachmentsDs.addItem(getItem().getAttachment());
-            getItem().setAttachment(null);
-            commit();
-        }
     }
 
     protected void fileUploadSucceedListener(FileUploadField.FileUploadSucceedEvent event) {

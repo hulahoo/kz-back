@@ -1,11 +1,12 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.entity.annotation.OnDelete;
 import com.haulmont.cuba.core.entity.annotation.OnDeleteInverse;
 import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.modules.personal.dictionary.DicApprovalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicIssuingAuthority;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -18,6 +19,7 @@ import java.util.List;
 @PublishEntityChangedEvents
 @Table(name = "TSADV_PERSON_DOCUMENT_REQUEST")
 @Entity(name = "tsadv_PersonDocumentRequest")
+@NamePattern("%s %s|personGroup,documentType")
 public class PersonDocumentRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = -4050457943892676964L;
 
@@ -42,7 +44,6 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
     @Column(name = "DESCRIPTION", length = 2000)
     protected String description;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "DOCUMENT_TYPE_ID")
     protected DicDocumentType documentType;
@@ -59,15 +60,14 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
     @Column(name = "SERIES")
     protected String series;
 
-    @OnDeleteInverse(DeletePolicy.UNLINK)
-    @OnDelete(DeletePolicy.CASCADE)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FILE_ID")
-    protected FileDescriptor file;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "EDITED_PERSON_DOCUMENT_ID")
     private PersonDocument editedPersonDocument;
+
+    @OnDeleteInverse(DeletePolicy.DENY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "APPROVAL_STATUS_ID")
+    protected DicApprovalStatus approvalStatus;
 
     @OrderBy("name")
     @JoinTable(name = "TSADV_PERSON_DOCUMENT_REQUEST_FILE_DESCRIPTOR_LINK",
@@ -75,6 +75,14 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @ManyToMany
     private List<FileDescriptor> attachments;
+
+    public DicApprovalStatus getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public void setApprovalStatus(DicApprovalStatus approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
 
     public List<FileDescriptor> getAttachments() {
         return attachments;
@@ -100,7 +108,6 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
         this.issuingAuthority = issuingAuthority;
     }
 
-
     public void setSeries(String series) {
         this.series = series;
     }
@@ -108,22 +115,6 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
     public String getSeries() {
         return series;
     }
-
-
-    public void setFile(FileDescriptor file) {
-        this.file = file;
-    }
-
-    public FileDescriptor getFile() {
-        return file;
-    }
-
-
-    @Override
-    public String getProcessDefinitionKey() {
-        return PROCESS_DEFINITION_KEY;
-    }
-
 
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
@@ -133,7 +124,6 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
         return documentNumber;
     }
 
-
     public void setPersonGroup(PersonGroupExt personGroup) {
         this.personGroup = personGroup;
     }
@@ -142,7 +132,6 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
         return personGroup;
     }
 
-
     public void setDocumentType(DicDocumentType documentType) {
         this.documentType = documentType;
     }
@@ -150,7 +139,6 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
     public DicDocumentType getDocumentType() {
         return documentType;
     }
-
 
     public void setIssueDate(Date issueDate) {
         this.issueDate = issueDate;
@@ -176,7 +164,6 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
         return issuedBy;
     }
 
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -185,4 +172,8 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
         return description;
     }
 
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
+    }
 }

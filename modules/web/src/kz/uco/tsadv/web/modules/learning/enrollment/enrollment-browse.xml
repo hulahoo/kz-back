@@ -64,9 +64,7 @@
                                 <column id="course.name"/>
                                 <column id="course.category.langValue"/>
                                 <column id="course.activeFlag"/>
-                                <column id="personGroup.person.fioWithEmployeeNumber"
-                                        link="true"
-                                        linkInvoke="redirectCard"/>
+                                <column id="personGroup.person.fioWithEmployeeNumber"/>
                                 <column id="date"/>
                                 <column id="status"/>
                                 <column id="isCertification"

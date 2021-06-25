@@ -33,10 +33,10 @@ public class CourseBrowse extends StandardLookup<Course> {
 
     @Subscribe
     protected void onInit(InitEvent event) {
-        coursesTable.addGeneratedColumn(
-                "logo",
-                this::renderAvatarImageComponent
-        );
+//        coursesTable.addGeneratedColumn(
+//                "logo",
+//                this::renderAvatarImageComponent
+//        );
 //        String query = "select e from tsadv$Course e where 1 = 1";
 //
 //        MapScreenOptions options = (MapScreenOptions) event.getOptions();
