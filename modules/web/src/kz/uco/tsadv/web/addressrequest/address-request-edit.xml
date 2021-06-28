@@ -53,6 +53,7 @@
                     <property name="company" view="_local"/>
                 </property>
                 <property name="streetType" view="_local"/>
+                <property name="kato" view="dicKato.edit"/>
             </view>
             <loader/>
             <collection id="attachmentsDc" property="attachments"/>
@@ -90,7 +91,8 @@
                   dataContainer="addressRequestDs">
                 <column width="250px">
                     <textField editable="false"
-                               property="requestNumber"/>
+                               property="requestNumber"
+                               caption="msg://kz.uco.tsadv.entity.bproc/AbstractBprocRequest.requestNumber"/>
                     <lookupField optionsContainer="dicAddressTypesDs"
                                  property="addressType"
                                  required="true"/>
@@ -102,6 +104,14 @@
                     <textField property="city"/>
                     <lookupField editable="false"
                                  property="status"/>
+                    <lookupField property="kato"/>
+                    <lookupField property="streetType"/>
+                    <textField property="streetName"/>
+                    <textField property="addressForExpats"/>
+                    <textField property="block"/>
+                    <textField property="building"/>
+                    <textField property="addressEnglish"/>
+                    <textField property="addressKazakh"/>
                 </column>
             </form>
             <groupBox id="groupBox">

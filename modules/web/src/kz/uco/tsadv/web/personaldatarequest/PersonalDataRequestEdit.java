@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import java.io.File;
 import java.util.ArrayList;
 
-@UiController("tsadv$PersonalDataRequestBpm.edit")
+@UiController("tsadv$PersonalDataRequestForBPM.edit")
 @UiDescriptor("personal-data-request-edit.xml")
 @EditedEntityContainer("personalDataRequestDs")
 @LoadDataBeforeShow
