@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        focusComponent="positionGroupExtsTable"
+        messagesPack="kz.uco.tsadv.web.modules.learning.positiongroupextcoursematrix">
+    <data readOnly="true">
+        <collection id="positionGroupExtsDc"
+                    class="kz.uco.tsadv.modules.personal.group.PositionGroupExt"
+                    view="positionGroupExt-course-matrix">
+            <loader id="positionGroupExtsDl">
+                <query>
+                    <![CDATA[select e from base$PositionGroupExt e
+                     join base$PositionExt p on p.group.id = e.id
+                     and current_date between p.startDate and p.endDate]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="positionGroupExtsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="positionGroupExtsTable"
+                dataLoader="positionGroupExtsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="positionGroupExtsTable"
+                    width="100%"
+                    dataContainer="positionGroupExtsDc">
+            <columns>
+                <column id="positionName" link="true" linkInvoke="openCourseMatrixScreen"/>
+                <column id="organizationGroup"/>
+                <column id="company"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+            </buttonsPanel>
+        </groupTable>
+    </layout>
+</window>

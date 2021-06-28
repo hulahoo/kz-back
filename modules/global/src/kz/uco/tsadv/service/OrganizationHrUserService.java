@@ -2,6 +2,7 @@ package kz.uco.tsadv.service;
 
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
+import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
 
 import javax.annotation.Nonnull;
@@ -15,6 +16,7 @@ public interface OrganizationHrUserService {
 
     String HR_ROLE_MANAGER = "MANAGER";
     String HR_ROLE_SUP_MANAGER = "SUP_MANAGER";
+    String HR_SPECIALIST = "HR";
 
     /**
      * @see EmployeeService#getHrUsers(UUID, String)
@@ -33,4 +35,6 @@ public interface OrganizationHrUserService {
      * @return true is user is manager or sup_manager of employee else false
      */
     boolean isManagerOrSupManager(@Nonnull UUID userId, @Nonnull UUID employeePersonGroupId);
+
+    List<OrganizationGroupExt> getOrganizationList(@Nonnull UUID userId, @Nonnull String roleCode);
 }

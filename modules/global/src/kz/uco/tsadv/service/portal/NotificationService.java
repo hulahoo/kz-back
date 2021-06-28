@@ -13,4 +13,6 @@ public interface NotificationService {
     List<BellNotificationResponsePojo> tasks();
 
     String getLinkByCode(ActivityType activityType);
+
+    String getLinkByEntityName(String entityName);
 }

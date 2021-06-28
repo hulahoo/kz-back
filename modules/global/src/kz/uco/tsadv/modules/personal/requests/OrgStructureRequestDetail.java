@@ -65,6 +65,12 @@ public class OrgStructureRequestDetail extends StandardEntity {
     @Column(name = "HEAD_COUNT")
     private BigDecimal headCount;
 
+    @Column(name = "MIN_SALARY")
+    private BigDecimal minSalary;
+
+    @Column(name = "MAX_SALARY")
+    private BigDecimal maxSalary;
+
     public PositionGroupExt getPositionGroup() {
         return positionGroup;
     }
@@ -169,4 +175,19 @@ public class OrgStructureRequestDetail extends StandardEntity {
         this.orgStructureRequest = orgStructureRequest;
     }
 
+    public BigDecimal getMinSalary() {
+        return minSalary;
+    }
+
+    public void setMinSalary(BigDecimal minSalary) {
+        this.minSalary = minSalary;
+    }
+
+    public BigDecimal getMaxSalary() {
+        return maxSalary;
+    }
+
+    public void setMaxSalary(BigDecimal maxSalary) {
+        this.maxSalary = maxSalary;
+    }
 }

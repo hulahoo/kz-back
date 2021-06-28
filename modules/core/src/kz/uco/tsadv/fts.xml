@@ -1972,5 +1972,17 @@
         <entity class="kz.uco.tsadv.entity.ExecutiveAssistants">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicTypeOfTraining">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicProgrammCode">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.PositionCourse">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

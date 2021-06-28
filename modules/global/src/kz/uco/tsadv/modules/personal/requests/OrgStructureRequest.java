@@ -21,7 +21,6 @@ public class OrgStructureRequest extends AbstractBprocRequest {
 
     public static final String PROCESS_DEFINITION_KEY = "orgStructureRequest";
 
-
     @Composition
     @OnDelete(DeletePolicy.CASCADE)
     @OneToMany(mappedBy = "orgStructureRequest")
