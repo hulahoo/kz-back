@@ -4,7 +4,9 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
+import com.haulmont.cuba.core.entity.BaseUuidEntity;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.UserSessionSource;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.common.CommonService;
@@ -38,6 +40,8 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
     private EmployeeService employeeService;
     @Inject
     private PositionService positionService;
+    @Inject
+    protected UserSessionSource userSessionSource;
 
     @Override
     public List<OrganizationHrUser> getHrUsers(@Nonnull UUID organizationGroupId, @Nonnull String roleCode, @Nullable Integer counter) {
@@ -193,6 +197,19 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
 
         List<? extends User> supManagers = getHrUsersForPerson(employeePersonGroupId, "SUP_MANAGER");
         return supManagers.stream().anyMatch(user -> user.getId().equals(userId));
+    }
+
+    @Override
+    public List<OrganizationGroupExt> getOrganizationList(@Nonnull UUID userId, @Nonnull String roleCode) {
+        return dataManager.load(OrganizationGroupExt.class)
+                .query("select e.organizationGroup from tsadv$OrganizationHrUser e " +
+                        "   where e.user.id = :userId " +
+                        "   and current_date between e.dateFrom and e.dateTo" +
+                        "   and e.hrRole.code = :roleCode")
+                .parameter("userId", userId)
+                .parameter("roleCode", roleCode)
+                .view(View.MINIMAL)
+                .list();
     }
 
     protected List<? extends User> getUsersByPersonGroups(List<? extends PersonGroupExt> personGroups) {
