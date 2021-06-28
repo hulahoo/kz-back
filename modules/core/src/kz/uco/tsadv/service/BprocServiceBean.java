@@ -33,6 +33,7 @@ import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.*;
+import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
 import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import kz.uco.tsadv.service.portal.NotificationService;
 import kz.uco.uactivity.entity.Activity;
@@ -123,6 +124,9 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         changeRequestStatus(entity, "APPROVED");
         String rejectNotificationTemplateCode = this.getProcessVariable(entity, "approveNotificationTemplateCode");
         sendNotificationToInitiator(entity, rejectNotificationTemplateCode);
+        if (OrgStructureRequest.PROCESS_DEFINITION_KEY.equalsIgnoreCase(entity.getProcessDefinitionKey())) {
+            sendNotificationToOther(entity, "C&B_COMPANY");
+        }
     }
 
     @Override
@@ -897,7 +901,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                 .processInstanceBusinessKey(bprocRequest.getProcessInstanceBusinessKey())
                 .processDefinitionKey(bprocRequest.getProcessDefinitionKey())
                 .singleResult();
-        String notificationTemplateCode = getProcessVariable(processInstanceData.getId(), "initiatorNotificationTemplateCode");
+        String notificationTemplateCode = getProcessVariable(processInstanceData.getId(), "approveNotificationTemplateCode");
         if (StringUtils.isBlank(notificationTemplateCode)) return;
         ExtTaskData taskDataWithRoleCode = getProcessTasks(processInstanceData).stream().filter(extTaskData ->
                 extTaskData.getHrRole() != null
