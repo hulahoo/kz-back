@@ -593,7 +593,7 @@ public class AbsenceServiceBean implements AbsenceService {
 
     @Override
     public void sendNotifyForEmployee() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         List<PersonGroupExt> absencePersonGroupList = dataManager.load(PersonGroupExt.class)
                 .query("select e.personGroup from tsadv$Absence e " +
                         " join tsadv$DicAbsenceType t on e.type = t " +
