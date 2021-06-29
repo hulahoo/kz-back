@@ -10,6 +10,7 @@ public class PersonDocumentJson implements Serializable {
     protected String issueDate;
     protected String expiredDate;
     protected String issueAuthorityId;
+    protected String issueByForExpat;
     protected String nationalIdentifier;
     protected String companyCode;
     protected String status;
@@ -92,5 +93,13 @@ public class PersonDocumentJson implements Serializable {
 
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    public String getIssueByForExpat() {
+        return issueByForExpat;
+    }
+
+    public void setIssueByForExpat(String issueByForExpat) {
+        this.issueByForExpat = issueByForExpat;
     }
 }

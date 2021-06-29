@@ -1897,6 +1897,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setDocumentNumber(personDocumentJson.getDocumentNumber());
                     personDocument.setIssueDate(formatter.parse(personDocumentJson.getIssueDate()));
                     personDocument.setExpiredDate(formatter.parse(personDocumentJson.getExpiredDate()));
+                    personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
                     DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
                             .query("select e from tsadv_DicIssuingAuthority e " +
@@ -1964,6 +1965,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     personDocument.setDocumentNumber(personDocumentJson.getDocumentNumber());
                     personDocument.setIssueDate(formatter.parse(personDocumentJson.getIssueDate()));
                     personDocument.setExpiredDate(formatter.parse(personDocumentJson.getExpiredDate()));
+                    personDocument.setIssuedBy(personDocumentJson.getIssueByForExpat());
 
                     DicIssuingAuthority dicIssuingAuthority = dataManager.load(DicIssuingAuthority.class)
                             .query("select e from tsadv_DicIssuingAuthority e " +
