@@ -19,7 +19,7 @@ public class AbsenceRvdRequestDataJson implements Serializable {
     protected String endTime;
     protected String companyCode;
     protected String shift;
-    protected boolean overridebyallhours;
+    protected String overridebyallhours;
 
     public String getPersonId() {
         return personId;
@@ -141,11 +141,11 @@ public class AbsenceRvdRequestDataJson implements Serializable {
         this.shift = shift;
     }
 
-    public boolean isOverridebyallhours() {
+    public String getOverridebyallhours() {
         return overridebyallhours;
     }
 
-    public void setOverridebyallhours(boolean overridebyallhours) {
+    public void setOverridebyallhours(String overridebyallhours) {
         this.overridebyallhours = overridebyallhours;
     }
 }
