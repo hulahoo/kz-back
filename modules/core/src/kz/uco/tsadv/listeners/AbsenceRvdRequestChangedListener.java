@@ -171,7 +171,7 @@ public class AbsenceRvdRequestChangedListener {
         absenceRvdRequestDataJson.setEmployeeAgree(isEmployeeAgree);
         boolean isEmployeeInformed = Null.nullReplace(entity.getAcquainted(), false);
         absenceRvdRequestDataJson.setEmployeeInformed(isEmployeeInformed);
-        absenceRvdRequestDataJson.setShiftCode("");
+        absenceRvdRequestDataJson.setShiftCode(entity.getShiftCode());
         String startTime = getFormattedDateString(entity.getTimeOfStarting(), timeFormatter);
         absenceRvdRequestDataJson.setStartTime(startTime);
         String endTime = getFormattedDateString(entity.getTimeOfFinishing(), timeFormatter);
