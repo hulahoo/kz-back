@@ -5,6 +5,7 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.global.enums.SendingToOracleStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.persistence.*;
@@ -14,7 +15,7 @@ import java.util.Date;
 
 @Table(name = "TSADV_VACATION_SCHEDULE_REQUEST")
 @Entity(name = "tsadv_VacationScheduleRequest")
-@NamePattern("%s - %s|startDate,endDate")
+@NamePattern("%s - %s|startDate,endDate,personGroup")
 public class VacationScheduleRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = 1975378160965313966L;
 
@@ -42,13 +43,20 @@ public class VacationScheduleRequest extends AbstractBprocRequest {
     @Column(name = "BALANCE")
     private Integer balance;
 
-    @NotNull
-    @Column(name = "SENT_TO_ORACLE", nullable = false)
-    private Boolean sentToOracle = false;
+    @Column(name = "SENT_TO_ORACLE")
+    private String sentToOracle;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ATTACHMENT_ID")
     private FileDescriptor attachment;
+
+    public void setSentToOracle(SendingToOracleStatus sentToOracle) {
+        this.sentToOracle = sentToOracle == null ? null : sentToOracle.getId();
+    }
+
+    public SendingToOracleStatus getSentToOracle() {
+        return sentToOracle == null ? null : SendingToOracleStatus.fromId(sentToOracle);
+    }
 
     public FileDescriptor getAttachment() {
         return attachment;
@@ -56,14 +64,6 @@ public class VacationScheduleRequest extends AbstractBprocRequest {
 
     public void setAttachment(FileDescriptor attachment) {
         this.attachment = attachment;
-    }
-
-    public Boolean getSentToOracle() {
-        return sentToOracle;
-    }
-
-    public void setSentToOracle(Boolean sentToOracle) {
-        this.sentToOracle = sentToOracle;
     }
 
     public Integer getBalance() {

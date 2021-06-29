@@ -6152,6 +6152,7 @@
           name="assignedPerformancePlan.browse">
         <property name="performancePlan" view="_minimal"/>
         <property name="assignedPerson" view="_minimal">
+            <property name="list" view="_local"/>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="langValue1"/>
@@ -23782,6 +23783,20 @@
     <view entity="tsadv_DicKato" name="dicKato.edit" extends="_local">
         <property name="company" view="_minimal">
             <property name="legacyId"/>
+        </property>
+    </view>
+    <view entity="tsadv_VacationScheduleRequest" name="vacationScheduleRequest-for-integration" extends="_local">
+        <property name="personGroup" view="_minimal">
+            <property name="company" view="_minimal">
+                <property name="legacyId"/>
+            </property>
+            <property name="legacyId"/>
+        </property>
+        <property name="status" view="_minimal">
+            <property name="legacyId"/>
+            <property name="startDate"/>
+            <property name="endDate"/>
+            <property name="code"/>
         </property>
     </view>
     <view entity="tsadv_DicShift" name="dicShift.edit" extends="_local">
