@@ -176,6 +176,8 @@ public class AbsenceRvdRequestChangedListener {
         absenceRvdRequestDataJson.setStartTime(startTime);
         String endTime = getFormattedDateString(entity.getTimeOfFinishing(), timeFormatter);
         absenceRvdRequestDataJson.setEndTime(endTime);
+        absenceRvdRequestDataJson.setShift(entity.getShift() != null ? entity.getShift().getCode() : "");
+        absenceRvdRequestDataJson.setShift(entity.getOverrideAllHoursByDay());
         String companyCode = "";
         if (entity.getPersonGroup() != null && entity.getPersonGroup().getCompany() != null) {
             DicCompany company = entity.getPersonGroup().getCompany();
