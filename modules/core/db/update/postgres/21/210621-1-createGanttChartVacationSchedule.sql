@@ -1,4 +1,4 @@
-drop function gantt_chart_vacation_schedule(uuid, date, date, varchar);
+-- drop function gantt_chart_vacation_schedule(uuid, date, date, varchar);
 
 create or replace function gantt_chart_vacation_schedule(p_person_group_id uuid,
                                                          p_start_date date,
