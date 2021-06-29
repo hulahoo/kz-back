@@ -13,6 +13,7 @@ import com.haulmont.cuba.gui.screen.LookupComponent;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
+import kz.uco.tsadv.global.enums.SendingToOracleStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.service.AssignmentService;
@@ -53,6 +54,8 @@ public class VacationScheduleRequestBrowse extends StandardLookup<VacationSchedu
     protected TabSheet tabSheet;
 
     protected Set<VacationScheduleRequest> selectedVacationScheduleRequests = new HashSet<>();
+    @Inject
+    protected Button sendToOracleBtn;
 
     public Component checkListGenerator(VacationScheduleRequest vacationScheduleRequest) {
         CheckBox checkBox = uiComponents.create(CheckBox.NAME);
@@ -64,36 +67,32 @@ public class VacationScheduleRequestBrowse extends StandardLookup<VacationSchedu
     protected void checkListChangedListener(HasValue.ValueChangeEvent<Boolean> event, VacationScheduleRequest vacationScheduleRequest) {
         if (Boolean.TRUE.equals(event.getValue())) {
             selectedVacationScheduleRequests.add(vacationScheduleRequest);
+
         } else selectedVacationScheduleRequests.remove(vacationScheduleRequest);
+        if (selectedVacationScheduleRequests.isEmpty()) {
+            sendToOracleBtn.setEnabled(false);
+        } else {
+            if (selectedVacationScheduleRequests.stream().anyMatch(vacationScheduleRequest1 ->
+                    vacationScheduleRequest1.getSentToOracle() != null)) {
+                sendToOracleBtn.setEnabled(false);
+            } else {
+                sendToOracleBtn.setEnabled(true);
+            }
+        }
     }
 
     @Subscribe("sendToOracleBtn")
     protected void onSendToOracleBtnClick(Button.ClickEvent event) {
         CommitContext commitContext = new CommitContext();
-
         selectedVacationScheduleRequests.stream()
-                .peek(vacationScheduleRequest -> vacationScheduleRequest.setSentToOracle(true))
-//                .peek(commitContext::addInstanceToCommit)
-//                .map(this::createVacationSchedule)
+                .peek(vacationScheduleRequest -> vacationScheduleRequest.setSentToOracle(SendingToOracleStatus.SENDING_TO_ORACLE))
                 .forEach(commitContext::addInstanceToCommit);
-
         dataManager.commit(commitContext);
-
         selectedVacationScheduleRequests.clear();
         vacationScheduleRequestsDl.load();
         vacationSchedulesDl.load();
         tabSheet.setSelectedTab("vacationScheduleTab");
     }
-
-   /* protected VacationSchedule createVacationSchedule(VacationScheduleRequest scheduleRequest) {
-        VacationSchedule vacationSchedule = metadata.create(VacationSchedule.class);
-        vacationSchedule.setAbsenceDays(scheduleRequest.getAbsenceDays());
-        vacationSchedule.setStartDate(scheduleRequest.getStartDate());
-        vacationSchedule.setEndDate(scheduleRequest.getEndDate());
-        vacationSchedule.setPersonGroup(scheduleRequest.getPersonGroup());
-        vacationSchedule.setRequest(scheduleRequest);
-        return vacationSchedule;
-    }*/
 
     public void openPersonCard(VacationScheduleRequest request, String columnId) {
         PersonGroupExt personGroup = request.getPersonGroup();

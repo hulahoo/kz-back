@@ -1,0 +1,1 @@
+alter table TSADV_VACATION_SCHEDULE_REQUEST drop column SENT_TO_ORACLE__U21426 cascade ;

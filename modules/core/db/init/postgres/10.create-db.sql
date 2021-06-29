@@ -13152,7 +13152,7 @@ create table TSADV_VACATION_SCHEDULE_REQUEST (
     END_DATE date,
     ABSENCE_DAYS integer,
     BALANCE integer,
-    SENT_TO_ORACLE boolean not null,
+    SENT_TO_ORACLE varchar(50),
     ATTACHMENT_ID uuid,
     --
     primary key (ID)

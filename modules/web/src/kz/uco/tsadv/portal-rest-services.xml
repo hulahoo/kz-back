@@ -289,4 +289,13 @@
             <param name="positionGroupId" type="java.util.UUID"/>
         </method>
     </service>
+    <service name="tsadv_VacationScheduleRequestService">
+        <method name="ganttChart">
+            <param name="startDate" type="java.util.Date"/>
+            <param name="endDate" type="java.util.Date"/>
+        </method>
+        <method name="getChildVacationSchedule">
+            <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
+        </method>
+    </service>
 </services>
