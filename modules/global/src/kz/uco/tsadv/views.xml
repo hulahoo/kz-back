@@ -23804,8 +23804,24 @@
         </property>
     </view>
     <view entity="tsadv_ExecutiveAssistants" name="executiveAssistants-browseView">
-        <property name="managerPositionGroup" view="_minimal"/>
-        <property name="assistancePositionGroup" view="_minimal"/>
+        <property name="managerPositionGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="organizationGroupExt" view="_minimal"/>
+            </property>
+            <property name="position" view="_minimal">
+                <property name="organizationGroupExt" view="_minimal"/>
+            </property>
+            <property name="company" view="_minimal"/>
+        </property>
+        <property name="assistancePositionGroup" view="_minimal">
+            <property name="list" view="_minimal">
+                <property name="organizationGroupExt" view="_minimal"/>
+            </property>
+            <property name="position" view="_minimal">
+                <property name="organizationGroupExt" view="_minimal"/>
+            </property>
+            <property name="company" view="_minimal"/>
+        </property>
         <property name="startDate"/>
         <property name="endDate"/>
     </view>
