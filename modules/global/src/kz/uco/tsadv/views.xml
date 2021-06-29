@@ -6152,6 +6152,7 @@
           name="assignedPerformancePlan.browse">
         <property name="performancePlan" view="_minimal"/>
         <property name="assignedPerson" view="_minimal">
+            <property name="list" view="_local"/>
             <property name="assignments" view="_minimal">
                 <property name="assignmentStatus" view="_minimal">
                     <property name="langValue1"/>
