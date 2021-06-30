@@ -17316,6 +17316,9 @@ create table TSADV_ABSENCE_RVD_REQUEST (
     VACATION_DAY boolean not null,
     ACQUAINTED boolean not null,
     AGREE boolean not null,
+    SHIFT_CODE varchar(255),
+    SHIFT_ID uuid,
+    OVERRIDE_ALL_HOURS_BY_DAY varchar(50),
     --
     primary key (ID)
 )^
