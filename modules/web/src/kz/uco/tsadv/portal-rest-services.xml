@@ -281,7 +281,7 @@
     </service>
     <service name="tsadv_ExecutiveAssistantService">
         <method name="getManagerList">
-            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="assistantPositionGroupId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_PositionService">

@@ -3,6 +3,7 @@ package kz.uco.tsadv.service;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.core.global.ViewRepository;
+import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicAssignmentStatus;
 import kz.uco.tsadv.modules.personal.dto.PersonDto;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
@@ -24,7 +25,7 @@ public class ExecutiveAssistantServiceBean implements ExecutiveAssistantService 
     protected ViewRepository viewRepository;
 
     @Override
-    public List<PersonDto> getManagerList(UUID positionGroupId) {
+    public List<PersonDto> getManagerList(UUID assistantPositionGroupId) {
         return dataManager.load(PersonGroupExt.class)
                 .query("select e.personGroup from base$AssignmentExt e " +
                         "   join e.assignmentStatus s " +
@@ -35,7 +36,7 @@ public class ExecutiveAssistantServiceBean implements ExecutiveAssistantService 
                         "       select e.managerPositionGroup.id from tsadv_ExecutiveAssistants e " +
                         "           where e.assistancePositionGroup.id = :assistancePositionGroupId" +
                         "               and current_date between e.startDate and e.endDate" + ")")
-                .parameter("assistancePositionGroupId", positionGroupId)
+                .parameter("assistancePositionGroupId", assistantPositionGroupId)
                 .view(new View(PersonGroupExt.class)
                         .addProperty("list", viewRepository.getView(PersonExt.class, View.LOCAL))
                         .addProperty("assignments", viewRepository.getView(AssignmentExt.class, View.LOCAL)
@@ -46,6 +47,24 @@ public class ExecutiveAssistantServiceBean implements ExecutiveAssistantService 
                 .stream()
                 .map(this::parseToPersonProfileDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TsadvUser> getAssistantList(UUID managerPositionGroupId) {
+        return dataManager.load(TsadvUser.class)
+                .query("select u from tsadv$UserExt u" +
+                        "   join u.personGroup.assignments e " +
+                        "   join e.assignmentStatus s " +
+                        "where u.active = 'TRUE' " +
+                        "   and s.code in ('ACTIVE','SUSPENDED')" +
+                        "   and e.primaryFlag = true" +
+                        "   and current_date between e.startDate and e.endDate" +
+                        "   and e.positionGroup.id in (" +
+                        "       select e.assistancePositionGroup.id from tsadv_ExecutiveAssistants e " +
+                        "           where e.managerPositionGroup.id = :managerPositionGroupId" +
+                        "               and current_date between e.startDate and e.endDate" + ")")
+                .parameter("managerPositionGroupId", managerPositionGroupId)
+                .list();
     }
 
     protected PersonDto parseToPersonProfileDto(PersonGroupExt personGroupExt) {

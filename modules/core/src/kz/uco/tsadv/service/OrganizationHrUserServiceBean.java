@@ -42,6 +42,8 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
     private PositionService positionService;
     @Inject
     protected UserSessionSource userSessionSource;
+    @Inject
+    private ExecutiveAssistantService assistantService;
 
     @Override
     public List<OrganizationHrUser> getHrUsers(@Nonnull UUID organizationGroupId, @Nonnull String roleCode, @Nullable Integer counter) {
@@ -177,6 +179,12 @@ public class OrganizationHrUserServiceBean implements OrganizationHrUserService 
                 PositionGroupExt supManager = positionService.getManager(manager.getId());
                 if (supManager == null) return new ArrayList<>();
                 return getUsersByPersonGroups(employeeService.getPersonGroupByPositionGroupId(supManager.getId(), null));
+            }
+            case HR_ROLE_MANAGER_ASSISTANT: {
+                PositionGroupExt positionGroup = employeeService.getPositionGroupByPersonGroupId(personGroupId, View.MINIMAL);
+                PositionGroupExt manager = positionService.getManager(positionGroup.getId());
+                if (manager == null) return new ArrayList<>();
+                return assistantService.getAssistantList(manager.getId());
             }
             default: {
                 OrganizationGroupExt organizationGroup = employeeService.getOrganizationGroupByPersonGroupId(personGroupId, View.MINIMAL);

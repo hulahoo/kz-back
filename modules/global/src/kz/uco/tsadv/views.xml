@@ -23621,6 +23621,7 @@
             <property name="endDate"/>
             <property name="code"/>
         </property>
+        <property name="shift" view="_local"/>
         <property name="files" view="_minimal"/>
     </view>
     <view entity="tsadv_VacationScheduleRequest" name="vacationScheduleRequest-edit" extends="_local">
