@@ -111,6 +111,11 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     }
 
     @Override
+    public <T extends AbstractBprocRequest> void cancel(T entity) {
+        changeRequestStatus(entity, "CANCELED_BY_INITIATOR");
+    }
+
+    @Override
     @Transactional
     public <T extends AbstractBprocRequest> void reject(T entity) {
         changeRequestStatus(entity, "REJECT");
