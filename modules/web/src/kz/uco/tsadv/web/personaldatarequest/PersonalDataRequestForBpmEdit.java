@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 @UiController("tsadv$PersonalDataRequestForBPM.edit")
-@UiDescriptor("personal-data-request-edit.xml")
+@UiDescriptor("personal-data-request-for-bpm-edit.xml")
 @EditedEntityContainer("personalDataRequestDs")
 @LoadDataBeforeShow
 @ProcessForm(
@@ -35,7 +35,7 @@ import java.util.ArrayList;
                 @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
         }
 )
-public class PersonalDataRequestEdit extends AbstractBprocEditor<PersonalDataRequest> {
+public class PersonalDataRequestForBpmEdit extends AbstractBprocEditor<PersonalDataRequest> {
 
     @Inject
     private FileUploadingAPI fileUploadingAPI;
