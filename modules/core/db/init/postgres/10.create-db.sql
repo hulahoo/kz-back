@@ -13152,7 +13152,7 @@ create table TSADV_VACATION_SCHEDULE_REQUEST (
     END_DATE date,
     ABSENCE_DAYS integer,
     BALANCE integer,
-    SENT_TO_ORACLE boolean not null,
+    SENT_TO_ORACLE varchar(50),
     ATTACHMENT_ID uuid,
     --
     primary key (ID)
@@ -17316,6 +17316,9 @@ create table TSADV_ABSENCE_RVD_REQUEST (
     VACATION_DAY boolean not null,
     ACQUAINTED boolean not null,
     AGREE boolean not null,
+    SHIFT_CODE varchar(255),
+    SHIFT_ID uuid,
+    OVERRIDE_ALL_HOURS_BY_DAY varchar(50),
     --
     primary key (ID)
 )^

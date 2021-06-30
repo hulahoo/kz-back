@@ -144,8 +144,12 @@
                 <entry key="tsadv_OrgStructureRequestService"
                        value="kz.uco.tsadv.service.portal.OrgStructureRequestService"/>
                 <entry key="tsadv_AbsenceRvdService" value="kz.uco.tsadv.service.AbsenceRvdService"/>
+                <entry key="tsadv_IntegrationScheduledService"
+                       value="kz.uco.tsadv.service.IntegrationScheduledService"/>
                 <entry key="tsadv_ImageResizeService" value="kz.uco.tsadv.service.ImageResizeService"/>
                 <entry key="tsadv_ExecutiveAssistantService" value="kz.uco.tsadv.service.ExecutiveAssistantService"/>
+                <entry key="tsadv_VacationScheduleRequestService"
+                       value="kz.uco.tsadv.service.portal.VacationScheduleRequestService"/>
             </map>
         </property>
     </bean>

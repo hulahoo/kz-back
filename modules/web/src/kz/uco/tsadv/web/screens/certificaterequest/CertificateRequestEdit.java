@@ -34,7 +34,8 @@ import javax.inject.Inject;
         outcomes = {
                 @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
                 @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
-                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_CANCEL)
         }
 )
 public class CertificateRequestEdit extends AbstractBprocEditor<CertificateRequest> {
