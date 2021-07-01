@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://portalMenuCustomizationBrowse.caption"
+        focusComponent="portalMenuCustomizationsTable"
+        messagesPack="kz.uco.tsadv.web.screens.portalmenucustomization">
+    <data>
+        <collection id="portalMenuCustomizationsDc"
+                    class="kz.uco.tsadv.modules.administration.PortalMenuCustomization">
+            <view extends="_local">
+                <property name="parent" view="_minimal"/>
+            </view>
+            <loader id="portalMenuCustomizationsDl">
+                <query>
+                    <![CDATA[select e from tsadv_PortalMenuCustomization e where e.menuType = 'P' ]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="split"
+            spacing="true">
+        <split id="split" width="100%" pos="80" orientation="horizontal">
+            <treeTable id="portalMenuCustomizationsTable"
+                       dataContainer="portalMenuCustomizationsDc"
+                       hierarchyProperty="parent"
+                       width="100%"
+                       height="100%"
+                       multiselect="false">
+                <columns>
+                    <column captionProperty="name" id="name"/>
+                    <column captionProperty="active" id="active"/>
+                    <column captionProperty="portalAvailability" id="portalAvailability"/>
+                </columns>
+            </treeTable>
+
+            <vbox margin="false;false;false;true" height="100%">
+                <groupBox id="screensEditPane" height="100%"
+                          caption="msg://com.haulmont.cuba.gui.app.security.role.edit/permissions">
+                    <vbox id="selectedScreenPanel" width="100%" visible="false" spacing="true">
+                        <label id="menuName"
+                               stylename="h2"
+                               property="name"
+                               dataContainer="portalMenuCustomizationsDc"
+                               align="MIDDLE_CENTER"/>
+
+                        <checkBox id="activeCheckBox"
+                                  dataContainer="portalMenuCustomizationsDc"
+                                  property="active"
+                                  caption="msg://kz.uco.tsadv.modules.administration/PortalMenuCustomization.active"/>
+                        <lookupField id="portalAvailabilityLookup"
+                                     dataContainer="portalMenuCustomizationsDc"
+                                     property="portalAvailability"
+                                     caption="msg://kz.uco.tsadv.modules.administration/PortalMenuCustomization.portalAvailability"/>
+                    </vbox>
+                </groupBox>
+            </vbox>
+        </split>
+
+        <hbox id="actions" spacing="true">
+            <button caption="mainMsg://actions.OkClose" id="saveAndClose"/>
+            <button caption="mainMsg://table.btn.close" id="close"/>
+        </hbox>
+    </layout>
+</window>
