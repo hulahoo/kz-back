@@ -6,6 +6,9 @@ import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Query;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.global.*;
+import kz.uco.base.entity.extend.UserExt;
+import kz.uco.base.service.NotificationSenderAPIService;
+import kz.uco.base.service.NotificationService;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.config.OrganizationStructureConfig;
 import kz.uco.tsadv.global.common.CommonUtils;
@@ -39,6 +42,11 @@ public class OrganizationServiceBean extends kz.uco.base.service.OrganizationSer
     protected PositionService positionService;
     @Inject
     protected DataManager dataManager;
+    @Inject
+    private NotificationService notificationService;
+    @Inject
+    private NotificationSenderAPIService notificationSenderAPIService;
+
 
     @Override
     public OrganizationGroupExt getOrganizationGroup(@Nullable View view) {
@@ -470,4 +478,20 @@ public class OrganizationServiceBean extends kz.uco.base.service.OrganizationSer
         }
         return languageIndex;
     }
+
+    @Override
+    public void sendToResponsibleForIndicators() {
+        Map<String, Object> userParams = new HashMap<>();
+        Calendar today = new GregorianCalendar();
+        if (today.get(Calendar.DAY_OF_MONTH) == 1) {
+            for (TsadvUser tsadvUser : commonService.getEntities(TsadvUser.class,
+                    "select bp from tsadv$UserExt bp inner join tsadv_OrganizationIncentiveIndicators toii on toii.responsiblePerson=bp.personGroup",
+                    null,
+                    "myTsadv_view")) {
+                userParams.put("userFullName", tsadvUser.getFullName());
+                notificationService.sendParametrizedNotification("incentive.fill.request", tsadvUser, userParams);
+            }
+        }
+    }
+
 }

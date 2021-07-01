@@ -23858,4 +23858,7 @@
             <property name="programmCode" view="_minimal"/>
         </property>
     </view>
+    <view entity="tsadv$UserExt" name="myTsadv_view" extends="_local">
+        <property name="personGroup" view="_local"/>
+    </view>
 </views>
