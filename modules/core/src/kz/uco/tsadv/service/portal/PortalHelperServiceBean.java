@@ -116,7 +116,7 @@ public class PortalHelperServiceBean implements PortalHelperService {
         availabilities.add(PortalAvailability.FOR_ALL);
 
         if (isManager) availabilities.add(PortalAvailability.FOR_MANAGER);
-        if (isAssistant) availabilities.add(PortalAvailability.FOR_MANAGER);
+        if (isAssistant) availabilities.add(PortalAvailability.FOR_ASSISTANT);
 
         return dataManager.load(PortalMenuCustomization.class)
                 .query("select e from tsadv_PortalMenuCustomization e " +
