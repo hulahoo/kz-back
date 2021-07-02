@@ -1984,5 +1984,8 @@
         <entity class="kz.uco.tsadv.modules.learning.model.PositionCourse">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
