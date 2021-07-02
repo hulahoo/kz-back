@@ -3,6 +3,7 @@ package kz.uco.tsadv.service.portal;
 import com.haulmont.cuba.core.entity.BaseGenericIdEntity;
 import com.haulmont.cuba.core.global.*;
 import kz.uco.base.entity.dictionary.DicCompany;
+import kz.uco.tsadv.config.PositionStructureConfig;
 import kz.uco.tsadv.config.TsadvGlobalConfig;
 import kz.uco.tsadv.modules.administration.PortalMenuCustomization;
 import kz.uco.tsadv.modules.administration.enums.PortalAvailability;
@@ -39,6 +40,8 @@ public class PortalHelperServiceBean implements PortalHelperService {
     protected PositionService positionService;
     @Inject
     protected ExecutiveAssistantService assistantService;
+    @Inject
+    private PositionStructureConfig positionStructureConfig;
 
     @Override
     public <T extends BaseGenericIdEntity<K>, K> T newEntity(String entityName) {
@@ -86,9 +89,14 @@ public class PortalHelperServiceBean implements PortalHelperService {
 
         CommitContext context = new CommitContext();
         for (PortalMenuCustomization portalMenuCustomization : menu) {
-            if (fullMenuPojoList.stream().noneMatch(menuPojo -> menuPojo.getId().equals(portalMenuCustomization.getMenuItem())))
+            PortalMenuPojo portalMenuPojo = fullMenuPojoList.stream().filter(menuPojo -> menuPojo.getId().equals(portalMenuCustomization.getMenuItem())).findAny().orElse(null);
+            if (portalMenuPojo == null)
                 context.addInstanceToRemove(portalMenuCustomization);
-            else context.addInstanceToCommit(portalMenuCustomization);
+            else {
+                portalMenuCustomization.setName1(portalMenuPojo.getRu());
+                portalMenuCustomization.setName3(portalMenuPojo.getEn());
+                context.addInstanceToCommit(portalMenuCustomization);
+            }
         }
 
         dataManager.commit(context);
@@ -100,9 +108,9 @@ public class PortalHelperServiceBean implements PortalHelperService {
 
         if (position == null) return new ArrayList<>();
 
-        boolean isManager = hierarchyService.isParent(position.getGroup().getId(), null);
+        boolean isManager = hierarchyService.isParent(position.getGroup().getId(), positionStructureConfig.getPositionStructureId());
 
-        boolean isAssistant = assistantService.getManagerList(position.getGroup().getId()).isEmpty();
+        boolean isAssistant = !assistantService.getManagerList(position.getGroup().getId()).isEmpty();
 
         List<PortalAvailability> availabilities = new ArrayList<>();
         availabilities.add(PortalAvailability.FOR_ALL);

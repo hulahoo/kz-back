@@ -59,6 +59,7 @@
 
         <hbox id="actions" spacing="true">
             <button caption="mainMsg://actions.OkClose" id="saveAndClose"/>
+            <button caption="mainMsg://actions.Save" id="saveBtn"/>
             <button caption="mainMsg://table.btn.close" id="close"/>
         </hbox>
     </layout>

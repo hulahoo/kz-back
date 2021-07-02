@@ -1,6 +1,8 @@
 package kz.uco.tsadv.web.screens.portalmenucustomization;
 
 import com.haulmont.cuba.core.global.Messages;
+import com.haulmont.cuba.core.global.MetadataTools;
+import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.app.security.entity.PermissionVariant;
 import com.haulmont.cuba.gui.components.*;
@@ -31,6 +33,10 @@ public class PortalMenuCustomizationBrowse extends StandardLookup<PortalMenuCust
     protected Messages messages;
     @Inject
     protected UiComponents uiComponents;
+    @Inject
+    protected Notifications notifications;
+    @Inject
+    protected MetadataTools metadataTools;
 
     @Subscribe("portalMenuCustomizationsTable")
     protected void onPortalMenuCustomizationsTableSelection(Table.SelectionEvent<PortalMenuCustomization> event) {
@@ -64,5 +70,16 @@ public class PortalMenuCustomizationBrowse extends StandardLookup<PortalMenuCust
         label.setHtmlEnabled(true);
         label.setValue(labelValue);
         return label;
+    }
+
+    @Subscribe("saveBtn")
+    protected void onSaveClick(Button.ClickEvent event) {
+        portalMenuCustomizationsDc.getItems().forEach(getScreenData().getDataContext()::merge);
+        getScreenData().getDataContext().commit();
+        notifications.create(Notifications.NotificationType.TRAY)
+                .withCaption(messages.formatMainMessage("info.EntitySave",
+                        messages.getTools().getEntityCaption(portalMenuCustomizationsDc.getEntityMetaClass()),
+                        ""))
+                .show();
     }
 }
