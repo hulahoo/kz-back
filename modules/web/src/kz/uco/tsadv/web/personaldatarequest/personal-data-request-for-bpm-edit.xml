@@ -7,6 +7,7 @@
         <instance id="personalDataRequestDs"
                   class="kz.uco.tsadv.modules.personal.model.PersonalDataRequest"
                   view="personalDataRequest-view">
+            <loader/>
             <collection id="attachmentsDs"
                         property="attachments"/>
         </instance>
