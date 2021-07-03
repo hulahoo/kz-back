@@ -661,5 +661,6 @@
         <class>kz.uco.tsadv.modules.learning.model.PositionCourse</class>
         <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag</class>
         <class>kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators</class>
+        <class>kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators</class>
     </persistence-unit>
 </persistence>

@@ -1990,5 +1990,8 @@
         <entity class="kz.uco.tsadv.modules.personal.dictionary.DicIncentiveIndicators">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
