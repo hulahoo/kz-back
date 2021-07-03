@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="dicTypeOfTrainingsTable"
+        messagesPack="kz.uco.tsadv.web.screens.dictypeoftraining">
+    <data readOnly="true">
+        <collection id="dicTypeOfTrainingsDc"
+                    class="kz.uco.tsadv.modules.learning.dictionary.DicTypeOfTraining"
+                    view="_local">
+            <loader id="dicTypeOfTrainingsDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicTypeOfTraining e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicTypeOfTrainingsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicTypeOfTrainingsTable"
+                dataLoader="dicTypeOfTrainingsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicTypeOfTrainingsTable"
+                    width="100%"
+                    dataContainer="dicTypeOfTrainingsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="langValue1"/>
+                <column id="langValue2"/>
+                <column id="langValue3"/>
+                <column id="description1"/>
+                <column id="description2"/>
+                <column id="description3"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicTypeOfTrainingsTable.create"/>
+                <button id="editBtn" action="dicTypeOfTrainingsTable.edit"/>
+                <button id="removeBtn" action="dicTypeOfTrainingsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

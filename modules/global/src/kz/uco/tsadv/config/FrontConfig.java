@@ -18,7 +18,7 @@ public interface FrontConfig extends Config {
      */
     @Property("cuba.frontAppUrl")
     @Source(type = SourceType.DATABASE)
-    @DefaultString("http://localhost:8080/app-front")
+    @DefaultString("http://localhost:8080/app-front/#")
     String getFrontAppUrl();
 
     @Property("tal.front.imageSize.width")

@@ -19,8 +19,6 @@ import kz.uco.tsadv.modules.personal.dictionary.DicNonresidentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -639,7 +637,6 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     }
 
     @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin", "employeeNumber"})
-    @Transient
     public String getFioWithEmployeeNumberWithSortSupported() {
         StringBuilder builder = new StringBuilder(getFullName());
         if (employeeNumber != null) builder.append("(").append(employeeNumber).append(")");

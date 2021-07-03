@@ -29,7 +29,7 @@
             </view>
             <loader id="vacationScheduleRequestsDl">
                 <query>
-                    <![CDATA[select e from tsadv_VacationScheduleRequest e where e.sentToOracle = 'FALSE' order by e.requestNumber desc]]>
+                    <![CDATA[select e from tsadv_VacationScheduleRequest e order by e.requestNumber desc]]>
                 </query>
             </loader>
         </collection>
@@ -91,6 +91,7 @@
                                 captionProperty="personGroup.currentAssignment.organizationGroup.organization.organizationName"/>
                         <column id="personGroup.currentAssignment.jobGroup"
                                 captionProperty="personGroup.currentAssignment.jobGroup.job.jobName"/>
+                        <column id="sentToOracle"/>
                         <column id="startDate"/>
                         <column id="endDate"/>
                         <column id="absenceDays"/>

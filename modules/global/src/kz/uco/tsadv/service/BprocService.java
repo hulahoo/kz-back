@@ -25,6 +25,8 @@ public interface BprocService {
 
     <T extends AbstractBprocRequest> void start(T entity);
 
+    <T extends AbstractBprocRequest> void cancel(T entity);
+
     <T extends AbstractBprocRequest> void reject(T entity);
 
     <T extends AbstractBprocRequest> void approve(T entity);
