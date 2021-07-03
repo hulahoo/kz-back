@@ -1993,5 +1993,8 @@
         <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>
