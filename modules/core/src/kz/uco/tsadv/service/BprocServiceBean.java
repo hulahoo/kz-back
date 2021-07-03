@@ -31,8 +31,6 @@ import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
 import kz.uco.tsadv.modules.personal.model.*;
-import kz.uco.tsadv.modules.personal.requests.OrgStructureRequest;
-import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
 import kz.uco.tsadv.service.portal.NotificationService;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
@@ -120,9 +118,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Override
     public <T extends AbstractBprocRequest> void approve(T entity) {
         bprocEntityBeanAdapter.approve(entity);
-        if (OrgStructureRequest.PROCESS_DEFINITION_KEY.equalsIgnoreCase(entity.getProcessDefinitionKey())) {
-            sendNotificationToOther(entity, "C&B_COMPANY");
-        }
     }
 
     @Override
@@ -597,35 +592,6 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     @Override
     public void approveAssignedPerformancePlan(AssignedPerformancePlan request) {
         this.approve(request);
-    }
-
-    @Override
-    public <T extends AbstractBprocRequest> void sendNotificationToOther(T bprocRequest, String roleCode) {
-        ProcessInstanceData processInstanceData = bprocHistoricService.createHistoricProcessInstanceDataQuery()
-                .processInstanceBusinessKey(bprocRequest.getProcessInstanceBusinessKey())
-                .processDefinitionKey(bprocRequest.getProcessDefinitionKey())
-                .singleResult();
-        String notificationTemplateCode = getProcessVariable(processInstanceData.getId(), "approveNotificationTemplateCode");
-        if (StringUtils.isBlank(notificationTemplateCode)) return;
-        ExtTaskData taskDataWithRoleCode = getProcessTasks(processInstanceData).stream().filter(extTaskData ->
-                extTaskData.getHrRole() != null
-                        && extTaskData.getHrRole().getCode() != null
-                        && roleCode.equalsIgnoreCase(extTaskData.getHrRole().getCode()))
-                .findFirst().orElse(null);
-        if (taskDataWithRoleCode != null && taskDataWithRoleCode.getAssigneeOrCandidates() != null) {
-            ActivityType activityType = dataManager.load(ActivityType.class)
-                    .query("select e from uactivity$ActivityType e where e.code = :code")
-                    .parameter("code", "NOTIFICATION")
-                    .view(new View(ActivityType.class)
-                            .addProperty("code")
-                            .addProperty("windowProperty",
-                                    new View(WindowProperty.class).addProperty("entityName").addProperty("screenName")))
-                    .one();
-            for (TsadvUser assigneeOrCandidate : taskDataWithRoleCode.getAssigneeOrCandidates()) {
-                sendNotificationAndActivity(bprocRequest, dataManager.reload(assigneeOrCandidate,
-                        "user-fioWithLogin"), activityType, notificationTemplateCode);
-            }
-        }
     }
 
 }

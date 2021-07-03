@@ -75,6 +75,4 @@ public interface BprocService {
 
     void approveAssignedPerformancePlan(AssignedPerformancePlan request);
 
-    <T extends AbstractBprocRequest> void sendNotificationToOther(T bprocRequest, String roleCode);
-
 }
