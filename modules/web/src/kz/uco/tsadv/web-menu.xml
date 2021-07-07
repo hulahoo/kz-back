@@ -176,6 +176,18 @@
             <item id="hrGradeRuleGroups"
                   screen="tsadv$GradeRule.browse"/>
         </menu>
+        <menu id="incentive">
+            <item id="organizationIncentives"
+                  screen="tsadv_IncentiveBrowse"
+                  caption="mainMsg://org.structure"
+                  openType="NEW_TAB">
+                <param name="ELEMENT_TYPE" value="ORGANIZATION"/>
+            </item>
+            <item id="positionIncentives"
+                  screen="tsadv_IncentiveBrowse"
+                  caption="mainMsg://positions"
+                  openType="NEW_TAB"/>
+        </menu>
         <menu id="hrCompetences"
               icon="font-icon:BRIEFCASE">
             <item id="hrCompetenceGroups"

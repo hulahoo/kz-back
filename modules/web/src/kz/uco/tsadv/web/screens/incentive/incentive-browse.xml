@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://caption"
+        messagesPack="kz.uco.tsadv.web.screens.incentive">
+    <data readOnly="true">
+        <collection id="hierarchyElementDc"
+                    class="kz.uco.tsadv.modules.personal.model.HierarchyElementExt"
+                    view="new.hierarchyElement.browse"/>
+        <collection id="hierarchiesDc"
+                    class="kz.uco.base.entity.shared.Hierarchy"
+                    view="hierarchy.view">
+            <loader id="hierarchiesDl">
+                <query>
+                    <![CDATA[select e from base$Hierarchy e order by e.primaryFlag desc]]>
+                </query>
+            </loader>
+        </collection>
+
+        <instance id="positionDc"
+                  view="position-view"
+                  class="kz.uco.tsadv.modules.personal.model.PositionExt"/>
+        <instance id="organizationDc"
+                  class="kz.uco.tsadv.modules.personal.model.OrganizationExt"
+                  view="organizations.browse"/>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="splitter"
+            spacing="true">
+        <split id="splitter"
+               orientation="horizontal"
+               pos="30"
+               width="100%">
+            <vbox expand="tree"
+                  spacing="true"
+                  height="100%"
+                  margin="false,true,false,false">
+                <lookupField id="hierarchyLookup"
+                             align="MIDDLE_CENTER"
+                             nullOptionVisible="false"
+                             captionProperty="hierarchyName"
+                             width="100%"
+                             optionsContainer="hierarchiesDc"/>
+                <hbox id="searchHbox"
+                      spacing="true"
+                      width="100%"
+                      expand="searchField">
+                    <textField id="searchField"
+                               align="MIDDLE_CENTER"/>
+                    <button id="searchButton"
+                            caption="msg://kz.uco.tsadv.web/table.btn.search"
+                            invoke="search"
+                            width="100px"/>
+                </hbox>
+                <tree id="tree"
+                      stylename="b-tree"
+                      dataContainer="hierarchyElementDc"
+                      captionProperty="name"
+                      hierarchyProperty="parentFromGroup"
+                      width="100%">
+                    <actions>
+                        <action id="edit"/>
+                        <action id="close"
+                                caption="msg://table.btn.close"
+                                icon="icons/remove.png"/>
+                    </actions>
+                </tree>
+            </vbox>
+            <vbox expand="cssLayout"
+                  height="100%"
+                  margin="false,true,false,true"
+                  spacing="true">
+                <hbox id="organizationButtons"
+                      margin="false,false,true,false"
+                      spacing="true">
+                </hbox>
+                <vbox id="cssLayout"
+                      margin="false,false,false,true">
+                    <fragment id="organizationFragment"
+                              height="100%"
+                              visible="false"
+                              screen="tsadv_OrganizationFragment"/>
+                    <fragment id="positionFragment"
+                              height="100%"
+                              visible="false"
+                              screen="tsadv_PositionFragment"/>
+                </vbox>
+            </vbox>
+        </split>
+    </layout>
+</window>
