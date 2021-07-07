@@ -4281,6 +4281,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 && filterAddress.getPersonGroup().getCompany() != null
                                 && filterAddress.getPersonGroup().getCompany().getLegacyId().equals(personAddressJson.getCompanyCode())
                 ).findFirst().orElse(null);
+                String addressText = "";
                 if (address == null) {
                     address = dataManager.load(Address.class)
                             .query(" select e from tsadv$Address e " +
@@ -4298,7 +4299,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .query("select e from tsadv$DicAddressType e " +
                                         " where e.legacyId = :legacyId")
                                 .parameter("legacyId", personAddressJson.getAddressType())
-                                .view("").list().stream().findFirst().orElse(null);
+                                .view(View.LOCAL).list().stream().findFirst().orElse(null);
 
                         if (dicAddressType != null) {
                             address.setAddressType(dicAddressType);
@@ -4328,11 +4329,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         DicCountry dicCountry = dataManager.load(DicCountry.class)
                                 .query("select e from base$DicCountry e " +
-                                        " where e.code = :code ")
+                                        " where e.legacyId = :code ")
                                 .parameter("code", personAddressJson.getCountryId())
                                 .view(View.LOCAL).list().stream().findFirst().orElse(null);
                         if (dicCountry != null) {
                             address.setCountry(dicCountry);
+                            addressText = dicCountry.getLangValue();
                         }
 
                         DicKato dicKato = dataManager.load(DicKato.class)
@@ -4343,6 +4345,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .list().stream().findFirst().orElse(null);
                         if (dicKato != null) {
                             address.setKato(dicKato);
+                            addressText = addressText + ", " + dicKato.getLangValue();
                         }
 
                         DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
@@ -4354,6 +4357,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (dicStreetType != null) {
                             address.setStreetType(dicStreetType);
+                            addressText = addressText + ", " + dicAddressType.getLangValue();
                         }
 
                         address.setStreetName(personAddressJson.getStreetName());
@@ -4364,16 +4368,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         address.setNotes(personAddressJson.getNotes());
                         address.setAddressKazakh(personAddressJson.getAddressKazakh());
                         address.setAddressEnglish(personAddressJson.getAddressEnglish());
-                        address.setAddress(dicCountry != null
-                                ? dicCountry.getLangValue() + "," : ""
-                                + dicKato != null
-                                ? dicKato.getLangValue() + "," : ""
-                                + dicStreetType != null
-                                ? dicStreetType.getLangValue() + "," : ""
-                                + personAddressJson != null && !personAddressJson.getStreetName().isEmpty()
-                                ? personAddressJson.getStreetName() + "," : ""
-                                + personAddressJson.getBuilding() + ","
-                                + personAddressJson.getBlock() + ","
+                        address.setAddress(addressText + ", "
+                                + personAddressJson.getStreetName() + ", "
+                                + personAddressJson.getBuilding() + ", "
+                                + personAddressJson.getBlock() + ", "
                                 + personAddressJson.getFlat());
 
                         personAddressesCommitList.add(address);
@@ -4417,11 +4415,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         DicCountry dicCountry = dataManager.load(DicCountry.class)
                                 .query("select e from base$DicCountry e " +
-                                        " where e.code = :code ")
+                                        " where e.legacyId = :code ")
                                 .parameter("code", personAddressJson.getCountryId())
                                 .view(View.LOCAL).list().stream().findFirst().orElse(null);
                         if (dicCountry != null) {
                             address.setCountry(dicCountry);
+                            addressText = dicCountry.getLangValue();
                         }
 
                         DicKato dicKato = dataManager.load(DicKato.class)
@@ -4432,6 +4431,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 .list().stream().findFirst().orElse(null);
                         if (dicKato != null) {
                             address.setKato(dicKato);
+                            addressText = addressText + ", " + dicKato.getLangValue();
                         }
 
                         DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
@@ -4443,6 +4443,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (dicStreetType != null) {
                             address.setStreetType(dicStreetType);
+                            addressText = addressText + ", " + dicAddressType.getLangValue();
                         }
 
                         address.setStreetName(personAddressJson.getStreetName());
@@ -4453,16 +4454,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         address.setNotes(personAddressJson.getNotes());
                         address.setAddressKazakh(personAddressJson.getAddressKazakh());
                         address.setAddressEnglish(personAddressJson.getAddressEnglish());
-                        address.setAddress(dicCountry != null
-                                ? dicCountry.getLangValue() + "," : ""
-                                + dicKato != null
-                                ? dicKato.getLangValue() + "," : ""
-                                + dicStreetType != null
-                                ? dicStreetType.getLangValue() + "," : ""
-                                + personAddressJson != null && !personAddressJson.getStreetName().isEmpty()
-                                ? personAddressJson.getStreetName() + "," : ""
-                                + personAddressJson.getBuilding() + ","
-                                + personAddressJson.getBlock() + ","
+                        address.setAddress(addressText + ", "
+                                + personAddressJson.getStreetName() + ", "
+                                + personAddressJson.getBuilding() + ", "
+                                + personAddressJson.getBlock() + ", "
                                 + personAddressJson.getFlat());
 
                         personAddressesCommitList.add(address);
@@ -4506,11 +4501,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     DicCountry dicCountry = dataManager.load(DicCountry.class)
                             .query("select e from base$DicCountry e " +
-                                    " where e.code = :code ")
+                                    " where e.legacyId = :code ")
                             .parameter("code", personAddressJson.getCountryId())
                             .view(View.LOCAL).list().stream().findFirst().orElse(null);
                     if (dicCountry != null) {
                         address.setCountry(dicCountry);
+                        addressText = dicCountry.getLangValue();
                     }
 
                     DicKato dicKato = dataManager.load(DicKato.class)
@@ -4521,6 +4517,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .list().stream().findFirst().orElse(null);
                     if (dicKato != null) {
                         address.setKato(dicKato);
+                        addressText = addressText + ", " + dicKato.getLangValue();
                     }
 
                     DicStreetType dicStreetType = dataManager.load(DicStreetType.class)
@@ -4532,6 +4529,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                     if (dicStreetType != null) {
                         address.setStreetType(dicStreetType);
+                        addressText = addressText + ", " + dicAddressType.getLangValue();
                     }
 
                     address.setStreetName(personAddressJson.getStreetName());
@@ -4542,6 +4540,11 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     address.setNotes(personAddressJson.getNotes());
                     address.setAddressKazakh(personAddressJson.getAddressKazakh());
                     address.setAddressEnglish(personAddressJson.getAddressEnglish());
+                    address.setAddress(addressText + ", "
+                            + personAddressJson.getStreetName() + ", "
+                            + personAddressJson.getBuilding() + ", "
+                            + personAddressJson.getBlock() + ", "
+                            + personAddressJson.getFlat());
 
                     personAddressesCommitList.add(address);
                 }
