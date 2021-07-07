@@ -11,7 +11,6 @@ import com.haulmont.reports.app.service.ReportService;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.config.FrontConfig;
 import kz.uco.tsadv.modules.administration.TsadvUser;
-import kz.uco.tsadv.modules.learning.enums.EnrollmentStatus;
 import kz.uco.tsadv.modules.learning.model.*;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackPersonAnswer;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
@@ -58,59 +57,59 @@ public class CourseFeedbackPersonAnswerChangedListener {
         Id<CourseFeedbackPersonAnswer, UUID> entityId = event.getEntityId();
         CourseFeedbackPersonAnswer courseFeedbackPersonAnswer;
         if (event.getType().equals(EntityChangedEvent.Type.CREATED)) {
-            courseFeedbackPersonAnswer = transactionalDataManager.load(entityId).view("courseFeedbackPersonAnswer.edit").one();
-            Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
-                    .query("select e from tsadv$Enrollment e " +
-                            " where e.personGroup = :personGroup " +
-                            " and e.course = :course")
-                    .parameter("personGroup", courseFeedbackPersonAnswer.getPersonGroup())
-                    .parameter("course", courseFeedbackPersonAnswer.getCourse())
-                    .view("enrollment-view")
-                    .list().stream().findFirst().orElse(null);
-            if (learningService.allCourseSectionPassed(courseFeedbackPersonAnswer.getCourse() != null
-                    ? courseFeedbackPersonAnswer.getCourse().getSections()
-                    : null, enrollment)
-                    && learningService.haveAFeedbackQuestion(courseFeedbackPersonAnswer.getCourse().getFeedbackTemplates(),
-                    courseFeedbackPersonAnswer.getPersonGroup())) {
-                boolean homework = true;
-                List<Homework> homeworkList = getHomeworkForCourse(courseFeedbackPersonAnswer.getCourse());
-                if (!homeworkList.isEmpty()) {
-                    homework = learningService.allHomeworkPassed(homeworkList, courseFeedbackPersonAnswer.getPersonGroup());
-                }
-                if (enrollment != null && homework) {
-                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
-                    transactionalDataManager.save(enrollment);
-                    sendNotifyToTrainers(enrollment);
-                    sendNotifyForLineManager(enrollment);
-                }
-            }
+//            courseFeedbackPersonAnswer = transactionalDataManager.load(entityId).view("courseFeedbackPersonAnswer.edit").one();
+//            Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
+//                    .query("select e from tsadv$Enrollment e " +
+//                            " where e.personGroup = :personGroup " +
+//                            " and e.course = :course")
+//                    .parameter("personGroup", courseFeedbackPersonAnswer.getPersonGroup())
+//                    .parameter("course", courseFeedbackPersonAnswer.getCourse())
+//                    .view("enrollment-view")
+//                    .list().stream().findFirst().orElse(null);
+//            if (learningService.allCourseSectionPassed(courseFeedbackPersonAnswer.getCourse() != null
+//                    ? courseFeedbackPersonAnswer.getCourse().getSections()
+//                    : null, enrollment)
+//                    && learningService.haveAFeedbackQuestion(courseFeedbackPersonAnswer.getCourse().getFeedbackTemplates(),
+//                    courseFeedbackPersonAnswer.getPersonGroup())) {
+//                boolean homework = true;
+//                List<Homework> homeworkList = getHomeworkForCourse(courseFeedbackPersonAnswer.getCourse());
+//                if (!homeworkList.isEmpty()) {
+//                    homework = learningService.allHomeworkPassed(homeworkList, courseFeedbackPersonAnswer.getPersonGroup());
+//                }
+//                if (enrollment != null && homework) {
+//                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
+//                    transactionalDataManager.save(enrollment);
+//                    sendNotifyToTrainers(enrollment);
+//                    sendNotifyForLineManager(enrollment);
+//                }
+//            }
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
-            courseFeedbackPersonAnswer = dataManager.load(entityId).view("courseFeedbackPersonAnswer.edit").one();
-            Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
-                    .query("select e from tsadv$Enrollment e " +
-                            " where e.personGroup = :personGroup " +
-                            " and e.course = :course")
-                    .parameter("personGroup", courseFeedbackPersonAnswer.getPersonGroup())
-                    .parameter("course", courseFeedbackPersonAnswer.getCourse())
-                    .view("enrollment-view")
-                    .list().stream().findFirst().orElse(null);
-            if (learningService.allCourseSectionPassed(courseFeedbackPersonAnswer.getCourse() != null
-                    ? courseFeedbackPersonAnswer.getCourse().getSections()
-                    : null, enrollment)
-                    && learningService.haveAFeedbackQuestion(courseFeedbackPersonAnswer.getCourse().getFeedbackTemplates(),
-                    courseFeedbackPersonAnswer.getPersonGroup())) {
-                boolean homework = true;
-                List<Homework> homeworkList = getHomeworkForCourse(courseFeedbackPersonAnswer.getCourse());
-                if (!homeworkList.isEmpty()) {
-                    homework = learningService.allHomeworkPassed(homeworkList, courseFeedbackPersonAnswer.getPersonGroup());
-                }
-                if (enrollment != null && homework) {
-                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
-                    transactionalDataManager.save(enrollment);
-                    sendNotifyToTrainers(enrollment);
-                    sendNotifyForLineManager(enrollment);
-                }
-            }
+//            courseFeedbackPersonAnswer = dataManager.load(entityId).view("courseFeedbackPersonAnswer.edit").one();
+//            Enrollment enrollment = transactionalDataManager.load(Enrollment.class)
+//                    .query("select e from tsadv$Enrollment e " +
+//                            " where e.personGroup = :personGroup " +
+//                            " and e.course = :course")
+//                    .parameter("personGroup", courseFeedbackPersonAnswer.getPersonGroup())
+//                    .parameter("course", courseFeedbackPersonAnswer.getCourse())
+//                    .view("enrollment-view")
+//                    .list().stream().findFirst().orElse(null);
+//            if (learningService.allCourseSectionPassed(courseFeedbackPersonAnswer.getCourse() != null
+//                    ? courseFeedbackPersonAnswer.getCourse().getSections()
+//                    : null, enrollment)
+//                    && learningService.haveAFeedbackQuestion(courseFeedbackPersonAnswer.getCourse().getFeedbackTemplates(),
+//                    courseFeedbackPersonAnswer.getPersonGroup())) {
+//                boolean homework = true;
+//                List<Homework> homeworkList = getHomeworkForCourse(courseFeedbackPersonAnswer.getCourse());
+//                if (!homeworkList.isEmpty()) {
+//                    homework = learningService.allHomeworkPassed(homeworkList, courseFeedbackPersonAnswer.getPersonGroup());
+//                }
+//                if (enrollment != null && homework) {
+//                    enrollment.setStatus(EnrollmentStatus.COMPLETED);
+//                    transactionalDataManager.save(enrollment);
+//                    sendNotifyToTrainers(enrollment);
+//                    sendNotifyForLineManager(enrollment);
+//                }
+//            }
         }
     }
 
@@ -130,9 +129,17 @@ public class CourseFeedbackPersonAnswerChangedListener {
             courseTrainerList.forEach(courseTrainer -> {
                 TsadvUser tsadvUserTrainer = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e " +
-                                " where e.personGroup = :personGroup ")
-                        .parameter("personGroup", courseTrainer.getTrainer() != null
-                                ? courseTrainer.getTrainer().getEmployee() : null)
+                                " join tsadv$CourseTrainer ct on ct.trainer.employee.id = e.personGroup.id " +
+                                " where ct.id = :courseTrainerId " +
+                                " and ct.course.id = :courseId " +
+                                " and ( ct.trainer.company.code = 'empty'  " +
+                                "  or ct.trainer.company.id in " +
+                                " (select en.personGroup.company.id from tsadv$Enrollment en " +
+                                " where en.id = :enrollmentId  ) )")
+                        .parameter("courseTrainerId", courseTrainer.getId())
+                        .parameter("courseId", enrollment.getCourse() != null
+                                ? enrollment.getCourse().getId() : UuidProvider.createUuid())
+                        .parameter("enrollmentId", enrollment.getId())
                         .view("userExt.edit")
                         .list().stream().findFirst().orElse(null);
                 if (tsadvUserTrainer != null) {

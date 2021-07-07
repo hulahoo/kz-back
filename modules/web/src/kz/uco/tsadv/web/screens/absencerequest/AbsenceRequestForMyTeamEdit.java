@@ -28,7 +28,8 @@ import java.util.Date;
         outcomes = {
                 @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
                 @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
-                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_CANCEL)
         }
 )
 public class AbsenceRequestForMyTeamEdit extends AbstractBprocEditor<AbsenceRequest> {

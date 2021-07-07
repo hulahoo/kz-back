@@ -7,6 +7,7 @@ import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileLoader;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.core.global.Metadata;
+import kz.uco.base.entity.shared.Person;
 import kz.uco.base.importer.exception.ImportFileEofEvaluationException;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
@@ -724,17 +725,25 @@ public class LearningServiceBean implements LearningService {
                 TsadvUser tsadvUser = getTsadvUser(enrollment.getPersonGroup());
                 if (tsadvUser != null) {
                     Map<String, Object> params = new HashMap<>();
-                    params.put("studentFioRu", enrollment.getPersonGroup().getFullName());
-                    params.put("studentFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
-                    params.put("course", enrollment.getCourse().getName());
-                    String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
-                            + "/learning-history/"
-                            + "\" target=\"_blank\">%s " + "</a>";
-                    params.put("linkRu", String.format(requestLink, "ЗДЕСЬ"));
-                    params.put("linkEn", String.format(requestLink, "CLICK"));
-                    params.put("linkKz", String.format(requestLink, "осы жерде"));
+                    Person person = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
+                    if (person != null) {
+                        params.put("studentFioRu", person.getFirstName() + " " + person.getLastName());
+                        params.put("studentFioEn", person.getFirstNameLatin() != null
+                                && !person.getFirstNameLatin().isEmpty()
+                                && person.getLastNameLatin() != null
+                                && !person.getLastNameLatin().isEmpty()
+                                ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                                : person.getFirstName() + " " + person.getLastName());
+                        params.put("course", enrollment.getCourse().getName());
+                        String requestLink = "<a href=\"" + frontConfig.getFrontAppUrl()
+                                + "/my-course/" + enrollment.getId().toString()
+                                + "\" target=\"_blank\">%s " + "</a>";
+                        params.put("linkRu", String.format(requestLink, "ЗДЕСЬ"));
+                        params.put("linkEn", String.format(requestLink, "CLICK"));
+                        params.put("linkKz", String.format(requestLink, "осы жерде"));
 
-                    notificationSenderAPIService.sendParametrizedNotification("tdc.course.completed", tsadvUser, params);
+                        notificationSenderAPIService.sendParametrizedNotification("tdc.course.completed", tsadvUser, params);
+                    }
                 }
             });
         }
@@ -769,12 +778,20 @@ public class LearningServiceBean implements LearningService {
             enrollmentList.forEach(enrollment -> {
                 TsadvUser tsadvUser = getTsadvUser(enrollment.getPersonGroup());
                 if (tsadvUser != null) {
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("studentFioRu", enrollment.getPersonGroup().getFullName());
-                    params.put("studentFioEn", enrollment.getPersonGroup().getPersonFirstLastNameLatin());
-                    params.put("course", enrollment.getCourse().getName());
+                    Person person = enrollment.getPersonGroup() != null ? enrollment.getPersonGroup().getPerson() : null;
+                    if (person != null) {
+                        Map<String, Object> params = new HashMap<>();
+                        params.put("studentFioRu", person.getFirstName() + " " + person.getLastName());
+                        params.put("studentFioEn", person.getFirstNameLatin() != null
+                                && !person.getFirstNameLatin().isEmpty()
+                                && person.getLastNameLatin() != null
+                                && !person.getLastNameLatin().isEmpty()
+                                ? person.getFirstNameLatin() + " " + person.getLastNameLatin()
+                                : person.getFirstName() + " " + person.getLastName());
+                        params.put("course", enrollment.getCourse().getName());
 
-                    notificationSenderAPIService.sendParametrizedNotification("tdc.module.is.not.completed", tsadvUser, params);
+                        notificationSenderAPIService.sendParametrizedNotification("tdc.module.is.not.completed", tsadvUser, params);
+                    }
                 }
             });
         }

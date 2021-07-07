@@ -19,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service(HierarchyService.NAME)
 public class HierarchyServiceBean implements HierarchyService {
@@ -116,49 +117,55 @@ public class HierarchyServiceBean implements HierarchyService {
 
     @Override
     public List<UUID> getOrganizationGroupIdChild(UUID organizationGroupId) {
+        return getOrganizationGroupIdChild(Collections.singletonList(organizationGroupId));
+    }
+
+    @Override
+    public List<UUID> getOrganizationGroupIdChild(List<UUID> organizationGroupIdList) {
         return persistence.callInTransaction(em -> {
-            Query query = em.createNativeQuery(" WITH RECURSIVE HierarchyPath AS ( " +
-                    "    SELECT  " +
-                    "     e.id, " +
-                    "        e.organization_group_id, " +
-                    "        e.organization_group_id::text as pathOrg, " +
-                    "        e.parent_id, " +
-                    "        '1'::int as lvl " +
-                    "    from base_hierarchy_element e " +
-                    "    join base_hierarchy h " +
-                    "     on h.id = e.hierarchy_id " +
-                    "     and h.delete_ts is null  " +
-                    "     and h.primary_flag is true " +
-                    "    where e.parent_id is null  " +
-                    "     and ?1 between e.start_date and e.end_date " +
-                    "     and e.delete_ts is null  " +
-                    "    UNION  " +
-                    "    SELECT  " +
-                    "     e.id, " +
-                    "        e.organization_group_id, " +
-                    "        p.pathOrg::text || '*' || e.organization_group_id::text as pathOrg, " +
-                    "        e.parent_id, " +
-                    "        p.lvl + '1'::int as lvl " +
-                    "    from HierarchyPath p " +
-                    "    join base_hierarchy_element e " +
-                    "     on e.parent_id = p.id " +
-                    "     and ?1 between e.start_date and e.end_date " +
-                    "     and e.delete_ts is null  " +
-                    "    join base_hierarchy h " +
-                    "     on h.id = e.hierarchy_id " +
-                    "     and h.delete_ts is null  " +
-                    "     and h.primary_flag is true " +
-                    ") " +
-                    "SELECT distinct o.group_id FROM HierarchyPath h " +
-                    "join base_organization o  " +
-                    " on o.group_id = h.organization_group_id " +
-                    " and o.delete_ts is null  " +
-                    " and ?1 between o.start_date and o.end_date " +
-                    "where h.pathOrg like ?2 " +
-                    " and h.organization_group_id != ?3 ")
-                    .setParameter(1, CommonUtils.getSystemDate())
-                    .setParameter(2, '%' + organizationGroupId.toString() + '%')
-                    .setParameter(3, organizationGroupId);
+            Query query = em.createNativeQuery("WITH RECURSIVE HierarchyPath AS (\n" +
+                    "    SELECT child.id,\n" +
+                    "           child.organization_group_id,\n" +
+                    "           child.group_id,\n" +
+                    "           '1'::int as lvl\n" +
+                    "    from base_hierarchy_element e\n" +
+                    "             join base_hierarchy h\n" +
+                    "                  on h.id = e.hierarchy_id\n" +
+                    "                      and h.delete_ts is null\n" +
+                    "                      and h.primary_flag is true\n" +
+                    "             join base_hierarchy_element child\n" +
+                    "                  on child.parent_group_id = e.group_id\n" +
+                    "                      and child.delete_ts is null\n" +
+                    "                      and #systemDate between child.start_date and child.end_date\n" +
+                    "                      and child.hierarchy_id = h.id\n" +
+                    "    where #organizationGroupIdList ~ e.organization_group_id::text \n" +
+                    "      and #systemDate between e.start_date and e.end_date\n" +
+                    "      and e.delete_ts is null\n" +
+                    "    UNION\n" +
+                    "    SELECT e.id,\n" +
+                    "           e.organization_group_id,\n" +
+                    "           e.group_id,\n" +
+                    "           p.lvl + '1' as lvl\n" +
+                    "    from base_hierarchy_element e\n" +
+                    "             join base_hierarchy h\n" +
+                    "                  on h.id = e.hierarchy_id\n" +
+                    "                      and h.delete_ts is null\n" +
+                    "                      and h.primary_flag is true\n" +
+                    "             join HierarchyPath as p\n" +
+                    "                  on e.parent_group_id = p.group_id\n" +
+                    "    where #systemDate between e.start_date and e.end_date\n" +
+                    "      and e.delete_ts is null\n" +
+                    ")\n" +
+                    "SELECT distinct o.group_id\n" +
+                    "FROM HierarchyPath h\n" +
+                    "         join base_organization o\n" +
+                    "              on o.group_id = h.organization_group_id\n" +
+                    "                  and o.delete_ts is null\n" +
+                    "                  and #systemDate between o.start_date and o.end_date")
+                    .setParameter("systemDate", CommonUtils.getSystemDate())
+                    .setParameter("organizationGroupIdList", organizationGroupIdList.stream()
+                            .map(UUID::toString)
+                            .collect(Collectors.joining("/")));
             @SuppressWarnings("unchecked") List<UUID> list = query.getResultList();
             return list;
         });

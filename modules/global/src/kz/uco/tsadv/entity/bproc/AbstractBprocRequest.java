@@ -21,6 +21,8 @@ public abstract class AbstractBprocRequest extends AbstractParentEntity {
 
     public static final String OUTCOME_START = "START";
 
+    public static final String OUTCOME_CANCEL = "CANCEL";
+
     public static final String OUTCOME_APPROVE = "APPROVE";
 
     public static final String OUTCOME_REJECT = "REJECT";

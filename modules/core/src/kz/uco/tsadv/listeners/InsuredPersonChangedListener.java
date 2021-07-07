@@ -202,25 +202,33 @@ public class InsuredPersonChangedListener {
                         .view("insuredPerson-editView")
                         .list().stream().findFirst().orElse(null);
 
-                if (oldVal != null && oldVal.signum() == 0) {
+                if (oldVal != null && oldVal.signum() == 0 && employee != null) {
                     boolean changed = true;
                     for (InsuredPerson insuredPerson : personList) {
-                        int age = employeeService.calculateAge(insuredPerson.getBirthdate());
-                        if (changed && !insuredPerson.getId().equals(person.getId()) && insuredPerson.getAmount().signum() > 0) {
+                        if (changed && !insuredPerson.getId().equals(person.getId()) && insuredPerson.getAmount().signum() == 1) {
+                            int age = employeeService.calculateAge(insuredPerson.getBirthdate());
                             for (ContractConditions conditions : employee.getInsuranceContract().getProgramConditions()) {
                                 if (conditions.getIsFree() && conditions.getAgeMin() <= age && conditions.getAgeMax() >= age) {
-                                    BigDecimal minusAmount = insuredPerson.getAmount();
+                                    BigDecimal oldAmount = insuredPerson.getAmount();
 
-                                    insuredPerson.setAmount(BigDecimal.valueOf(0));
+                                    insuredPerson.setAmount(BigDecimal.ZERO);
                                     txDataManager.save(insuredPerson);
-                                    employee.setTotalAmount((employee.getTotalAmount().subtract(minusAmount)).add(person.getAmount()));
-                                    txDataManager.save(employee);
+                                    employee.setTotalAmount((employee.getTotalAmount().subtract(oldAmount)).add(person.getAmount()));
                                     changed = false;
                                     break;
                                 }
                             }
                         }
                     }
+
+                    if (changed){
+                        employee.setTotalAmount(employee.getTotalAmount().add(person.getAmount()));
+                    }
+                    txDataManager.save(employee);
+
+                } else if (oldVal != null && oldVal.signum() == 1 && employee != null) {
+                     employee.setTotalAmount(employee.getTotalAmount().subtract(oldVal).add(person.getAmount()));
+                     txDataManager.save(employee);
                 }
             }
         }

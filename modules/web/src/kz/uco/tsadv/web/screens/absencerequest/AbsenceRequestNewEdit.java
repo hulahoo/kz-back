@@ -43,7 +43,8 @@ import java.util.*;
         outcomes = {
                 @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
                 @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
-                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_CANCEL)
         }
 )
 public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
@@ -128,6 +129,8 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
     public void onInitEntity(InitEntityEvent<AbsenceRequest> event) {
         AbsenceRequest absenceRequest = event.getEntity();
         absenceRequest.setAssignmentGroup(assignmentService.getAssignmentGroup(userSession.getUser().getLogin()));
+        UUID personGroupId = userSession.getAttribute(StaticVariable.USER_PERSON_GROUP_ID);
+        absenceRequest.setPersonGroup(dataManager.getReference(PersonGroupExt.class, personGroupId));
     }
 
     @Subscribe
@@ -144,10 +147,7 @@ public class AbsenceRequestNewEdit extends AbstractBprocEditor<AbsenceRequest> {
             getScreenData().getDataContext().commit();
         }
 
-        absenceRequestDc.addItemPropertyChangeListener(e -> {
-            itemPropertyChangeListner(e);
-
-        });
+        absenceRequestDc.addItemPropertyChangeListener(this::itemPropertyChangeListner);
         vacationSchedulesDl.setQuery(vacationSchedulesDl.getQuery() + " where e.personGroup.id = :personGroupId");
         vacationSchedulesDl.setParameter("personGroupId", absenceRequestDc.getItem().getPersonGroup().getId());
         vacationSchedulesDl.load();
