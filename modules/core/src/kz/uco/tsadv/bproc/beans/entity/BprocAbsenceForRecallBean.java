@@ -2,7 +2,6 @@ package kz.uco.tsadv.bproc.beans.entity;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.View;
-import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
@@ -12,11 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 
 @Component(BprocAbsenceForRecallBean.NAME)
-public class BprocAbsenceForRecallBean extends AbstractBprocEntityBean<AbsenceForRecall> {
+public class BprocAbsenceForRecallBean<T extends AbsenceForRecall> extends AbstractBprocEntityBean<T> {
     public static final String NAME = "tsadv_BprocAbsenceForRecallBean";
 
     @Override
-    public Map<String, Object> getNotificationParams(String templateCode, AbsenceForRecall entity) {
+    public Map<String, Object> getNotificationParams(String templateCode, T entity) {
 
         /*case "Application.for.withdrawal.from.labor.leave.requires":
         case "Application.for.withdrawal.from.labor.leave.rejected":
@@ -62,10 +61,5 @@ public class BprocAbsenceForRecallBean extends AbstractBprocEntityBean<AbsenceFo
             params.putIfAbsent("purposeEn", " ");
         }
         return params;
-    }
-
-    @Override
-    public boolean instanceOf(Class<? extends AbstractBprocRequest> tClass) {
-        return AbsenceForRecall.class.isAssignableFrom(tClass);
     }
 }

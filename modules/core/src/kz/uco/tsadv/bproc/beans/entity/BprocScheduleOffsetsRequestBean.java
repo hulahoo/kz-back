@@ -2,7 +2,6 @@ package kz.uco.tsadv.bproc.beans.entity;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.View;
-import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import kz.uco.tsadv.modules.personal.model.ScheduleOffsetsRequest;
 import kz.uco.tsadv.modules.timesheet.model.StandardSchedule;
@@ -12,11 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 
 @Component(BprocScheduleOffsetsRequestBean.NAME)
-public class BprocScheduleOffsetsRequestBean extends AbstractBprocEntityBean<ScheduleOffsetsRequest> {
+public class BprocScheduleOffsetsRequestBean<T extends ScheduleOffsetsRequest> extends AbstractBprocEntityBean<T> {
     public static final String NAME = "tsadv_BprocScheduleOffsetsRequestBean";
 
     @Override
-    public Map<String, Object> getNotificationParams(String templateCode, ScheduleOffsetsRequest entity) {
+    public Map<String, Object> getNotificationParams(String templateCode, T entity) {
         Map<String, Object> params = super.getNotificationParams(templateCode, entity);
 
         /*case "bpm.scheduleOffsetsRequest.approved.notification":
@@ -62,10 +61,5 @@ public class BprocScheduleOffsetsRequestBean extends AbstractBprocEntityBean<Sch
             params.putIfAbsent("purposeEn", " ");
         }
         return params;
-    }
-
-    @Override
-    public boolean instanceOf(Class<? extends AbstractBprocRequest> tClass) {
-        return ScheduleOffsetsRequest.class.isAssignableFrom(tClass);
     }
 }

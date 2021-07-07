@@ -2,7 +2,6 @@ package kz.uco.tsadv.bproc.beans.entity;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.View;
-import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
@@ -12,11 +11,11 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 
 @Component(BprocAbsenceRvdRequestBean.NAME)
-public class BprocAbsenceRvdRequestBean extends AbstractBprocEntityBean<AbsenceRvdRequest> {
+public class BprocAbsenceRvdRequestBean<T extends AbsenceRvdRequest> extends AbstractBprocEntityBean<T> {
     public static final String NAME = "tsadv_BprocAbsenceRvdRequestBean";
 
     @Override
-    public Map<String, Object> getNotificationParams(String templateCode, AbsenceRvdRequest entity) {
+    public Map<String, Object> getNotificationParams(String templateCode, T entity) {
 
         /*case "Application.for.withdrawal.from.labor.leave.requires":
         case "Application.for.withdrawal.from.labor.leave.rejected":
@@ -61,10 +60,5 @@ public class BprocAbsenceRvdRequestBean extends AbstractBprocEntityBean<AbsenceR
         }
 
         return params;
-    }
-
-    @Override
-    public boolean instanceOf(Class<? extends AbstractBprocRequest> tClass) {
-        return AbsenceRvdRequest.class.isAssignableFrom(tClass);
     }
 }

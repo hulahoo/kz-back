@@ -2,7 +2,6 @@ package kz.uco.tsadv.bproc.beans.entity;
 
 import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.View;
-import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.model.ChangeAbsenceDaysRequest;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
 import org.springframework.stereotype.Component;
@@ -11,11 +10,11 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 
 @Component(BprocChangeAbsenceDaysRequestBean.NAME)
-public class BprocChangeAbsenceDaysRequestBean extends AbstractBprocEntityBean<ChangeAbsenceDaysRequest> {
+public class BprocChangeAbsenceDaysRequestBean<T extends ChangeAbsenceDaysRequest> extends AbstractBprocEntityBean<T> {
     public static final String NAME = "tsadv_BprocChangeAbsenceDaysRequestBean";
 
     @Override
-    public Map<String, Object> getNotificationParams(String templateCode, ChangeAbsenceDaysRequest entity) {
+    public Map<String, Object> getNotificationParams(String templateCode, T entity) {
         Map<String, Object> params = super.getNotificationParams(templateCode, entity);
 
         /*case "changeAbsenceDaysRequest.start":
@@ -52,10 +51,5 @@ public class BprocChangeAbsenceDaysRequestBean extends AbstractBprocEntityBean<C
         }
 
         return params;
-    }
-
-    @Override
-    public boolean instanceOf(Class<? extends AbstractBprocRequest> tClass) {
-        return ChangeAbsenceDaysRequest.class.isAssignableFrom(tClass);
     }
 }

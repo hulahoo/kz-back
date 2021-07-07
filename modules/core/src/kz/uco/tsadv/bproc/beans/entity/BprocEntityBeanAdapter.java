@@ -1,6 +1,7 @@
 package kz.uco.tsadv.bproc.beans.entity;
 
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;

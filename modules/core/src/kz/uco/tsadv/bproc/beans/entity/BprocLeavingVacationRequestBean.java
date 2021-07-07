@@ -1,6 +1,5 @@
 package kz.uco.tsadv.bproc.beans.entity;
 
-import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.model.LeavingVacationRequest;
 import org.springframework.stereotype.Component;
 
@@ -8,11 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 
 @Component(BprocLeavingVacationRequestBean.NAME)
-public class BprocLeavingVacationRequestBean extends AbstractBprocEntityBean<LeavingVacationRequest> {
+public class BprocLeavingVacationRequestBean<T extends LeavingVacationRequest> extends AbstractBprocEntityBean<T> {
     public static final String NAME = "tsadv_BprocLeavingVacationRequestBean";
 
     @Override
-    public Map<String, Object> getNotificationParams(String templateCode, LeavingVacationRequest entity) {
+    public Map<String, Object> getNotificationParams(String templateCode, T entity) {
         Map<String, Object> params = super.getNotificationParams(templateCode, entity);
 
         /*case "application.for.absence.requires.approval":
@@ -36,10 +35,5 @@ public class BprocLeavingVacationRequestBean extends AbstractBprocEntityBean<Lea
         }
 
         return params;
-    }
-
-    @Override
-    public boolean instanceOf(Class<? extends AbstractBprocRequest> tClass) {
-        return LeavingVacationRequest.class.isAssignableFrom(tClass);
     }
 }
