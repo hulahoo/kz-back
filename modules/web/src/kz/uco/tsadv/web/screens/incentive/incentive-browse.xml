@@ -28,7 +28,8 @@
         </collection>
 
         <collection id="organizationIncentiveResultsDc"
-                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult">
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult"
+                    view="organizationIncentiveResults-edit-view">
             <loader id="organizationIncentiveResultsDl"/>
         </collection>
 
@@ -141,7 +142,43 @@
                                </columns>
                            </table>
                        </tab>
-                       <tab id="organizationIncentiveResultsTab"></tab>
+                       <tab id="organizationIncentiveResultsTab">
+                           <groupTable id="organizationIncentiveResultsTable" width="100%"
+                                       dataContainer="organizationIncentiveResultsDc">
+                               <actions>
+                                   <action id="add" type="add"/>
+                                   <action id="edit" type="edit"/>
+                                   <action id="remove" type="remove"/>
+                                   <action id="excel" type="excel"/>
+                               </actions>
+                               <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
+                                   <button id="organizationIncentiveResultsTableAddBtn"
+                                           caption="msg://add"
+                                           enable="false"
+                                           invoke="addOrganizationIncentiveResult"/>
+                                   <button id="organizationIncentiveResultsTableEditBtn"
+                                           caption="msg://editBtn"
+                                           enable="false"
+                                           invoke="editOrganizationIncentiveResult"/>
+                                   <button id="organizationIncentiveResultsTableExcelBtn"
+                                           action="organizationIncentiveResultsTable.excel"/>
+                                   <button id="organizationIncentiveResultsTableRemoveBtn"
+                                           action="organizationIncentiveResultsTable.remove"/>
+                               </buttonsPanel>
+                               <columns>
+                                   <group>
+                                       <column id="periodDate">
+                                           <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="MMM yyyy"/>
+                                       </column>
+                                   </group>
+                                   <column id="indicator"/>
+                                   <column id="plan"/>
+                                   <column id="fact"/>
+                                   <column id="weight"/>
+                                   <column id="result"/>
+                               </columns>
+                           </groupTable>
+                       </tab>
                    </tabSheet>
                 </vbox>
             </vbox>

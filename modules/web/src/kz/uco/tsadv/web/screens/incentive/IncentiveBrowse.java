@@ -1,13 +1,11 @@
 package kz.uco.tsadv.web.screens.incentive;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.gui.Notifications;
-import com.haulmont.cuba.gui.ScreenBuilders;
-import com.haulmont.cuba.gui.Screens;
-import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.*;
 import com.haulmont.cuba.gui.actions.list.AddAction;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
@@ -22,10 +20,9 @@ import kz.uco.tsadv.web.screens.organizationincentiveindicators.OrganizationInce
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @UiController("tsadv_IncentiveBrowse")
@@ -86,6 +83,36 @@ public class IncentiveBrowse extends Screen {
     private Table<OrganizationIncentiveIndicators> organizationIncentiveIndicatorsTable;
     @Inject
     private CollectionContainer<OrganizationIncentiveIndicators> organizationIncentiveIndicatorsDc;
+    @Inject
+    private CollectionContainer<OrganizationIncentiveResult> organizationIncentiveResultsDc;
+    @Inject
+    private GroupTable<OrganizationIncentiveResult> organizationIncentiveResultsTable;
+    @Inject
+    private CollectionLoader<OrganizationIncentiveResult> organizationIncentiveResultsDl;
+    @Inject
+    private Button organizationIncentiveResultsTableAddBtn;
+    @Inject
+    private Button organizationIncentiveResultsTableEditBtn;
+    @Inject
+    private UiComponents uiComponents;
+
+    public class DateFormatter implements Function<Date, String> {
+
+        @Override
+        public String apply(Date date) {
+            return "sdf";
+        }
+
+        @Override
+        public <V> Function<V, String> compose(Function<? super V, ? extends Date> before) {
+            return null;
+        }
+
+        @Override
+        public <V> Function<Date, V> andThen(Function<? super String, ? extends V> after) {
+            return null;
+        }
+    }
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -119,6 +146,24 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         initHierarchiesDc();
+//        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(
+//                new Function<Object, String>() {
+//                    @Override
+//                    public <V> Function<V, String> compose(Function<? super V, ?> before) {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public <V> Function<Object, V> andThen(Function<? super String, ? extends V> after) {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public String apply(Object o) {
+//                        return "SDFSDf";
+//                    }
+//                }
+//        );
     }
 
     @Subscribe(id = "hierarchiesDc", target = Target.DATA_CONTAINER)
@@ -235,6 +280,9 @@ public class IncentiveBrowse extends Screen {
     protected void enableAddActions(boolean enable){
         organizationIncentiveFlagsTableAddBtn.setEnabled(enable);
         organizationIncentiveIndicatorsTableAddBtn.setEnabled(enable);
+        organizationIncentiveResultsTableAddBtn.setEnabled(enable);
+        organizationIncentiveResultsTableEditBtn.setEnabled(enable);
+
     }
 
     protected void initTableDoubleClickActions(){
@@ -242,16 +290,20 @@ public class IncentiveBrowse extends Screen {
                 .withHandler(e -> editOrganizationIncentiveFlag()));
         organizationIncentiveIndicatorsTable.setItemClickAction(new BaseAction("doubleClickAction")
                 .withHandler(e -> editOrganizationIncentiveIndicator()));
+        organizationIncentiveResultsTable.setItemClickAction(new BaseAction("doubleClickAction")
+                .withHandler(e -> editOrganizationIncentiveResult()));
     }
 
     protected void loadIncentives(){
         loadOrganizationIncentiveFlags();
         loadOrganizationIncentiveIndicators();
+        loadOrganizationIncentiveResults();
     }
 
     protected void loadEmptyIncentives(){
         loadEmptyOrganizationIncentiveFlags();
         loadEmptyOrganizationIncentiveIndicators();
+        loadEmptyOrganizationIncentiveResults();
     }
 
     public void addOrganizationIncentiveFlag() {
@@ -311,4 +363,37 @@ public class IncentiveBrowse extends Screen {
         organizationIncentiveIndicatorsDl.load();
     }
 
+    public void addOrganizationIncentiveResult() {
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class,this)
+                .withInitializer(i -> i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup()))
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveResults());
+        editScreen.show();
+    }
+
+    public void editOrganizationIncentiveResult() {
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveResult.class,this)
+                .editEntity(organizationIncentiveResultsDc.getItem())
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveResults());
+        editScreen.show();
+    }
+
+    protected void loadOrganizationIncentiveResults(){
+        organizationIncentiveResultsDl.setQuery("select e from tsadv_OrganizationIncentiveResult e where e.organizationGroup = :organizationGroup");
+        organizationIncentiveResultsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveResultsDl.load();
+    }
+
+    protected void loadEmptyOrganizationIncentiveResults(){
+        organizationIncentiveResultsDl.setQuery("select e from tsadv_OrganizationIncentiveResult e where 1<>1");
+        organizationIncentiveResultsDl.setParameters(new HashMap<>());
+        organizationIncentiveResultsDl.load();
+    }
+
+//    public Component periodDateColumnGenerator(Entity entity) {
+//        Label<String> formattedPeriodDateLabel = uiComponents.create(Label.TYPE_STRING);
+//        formattedPeriodDateLabel.setValue("February 07");
+//        return formattedPeriodDateLabel;
+//    }
 }

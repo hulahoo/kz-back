@@ -23864,4 +23864,7 @@
             <property name="list" view="_local"/>
         </property>
     </view>
+    <view entity="tsadv_OrganizationIncentiveResult" name="organizationIncentiveResults-edit-view" extends="_local">
+        <property name="indicator" view="_local"/>
+    </view>
 </views>
