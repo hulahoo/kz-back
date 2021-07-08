@@ -186,7 +186,9 @@
             <item id="positionIncentives"
                   screen="tsadv_IncentiveBrowse"
                   caption="mainMsg://positions"
-                  openType="NEW_TAB"/>
+                  openType="NEW_TAB">
+                <param name="ELEMENT_TYPE" value="POSITION"/>
+            </item>
         </menu>
         <menu id="hrCompetences"
               icon="font-icon:BRIEFCASE">

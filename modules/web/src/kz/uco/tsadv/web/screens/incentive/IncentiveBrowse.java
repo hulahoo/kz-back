@@ -62,8 +62,21 @@ public class IncentiveBrowse extends Screen {
 
     protected boolean isSearch;
 
+    protected String ELEMENT_TYPE_SCREEN_PARAM = "ELEMENT_TYPE";
+    protected String ELEMENT_TYPE_SCREEN_VALUE = "";
+
     @Subscribe
     protected void onInit(InitEvent event) {
+        MapScreenOptions screenOptions = (MapScreenOptions) event.getOptions();
+
+        if(screenOptions == null || !screenOptions.getParams().containsKey(ELEMENT_TYPE_SCREEN_PARAM)){
+            notifications.create().withCaption("No screen params").show();
+            closeWithDefaultAction();
+            return;
+        }
+
+        ELEMENT_TYPE_SCREEN_VALUE = (String) screenOptions.getParams().get(ELEMENT_TYPE_SCREEN_PARAM);
+
         tree.setIconProvider(hierarchyElement -> {
             if (hierarchyElement.getElementType() == null) return null;
             switch (hierarchyElement.getElementType()) {
@@ -81,13 +94,11 @@ public class IncentiveBrowse extends Screen {
 
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
-        hierarchiesDl.load();
-
-        hierarchyLookup.setValue(hierarchiesDc.getItems().get(0));
+        initHierarchiesDc();
     }
 
-    @Subscribe("hierarchyLookup")
-    protected void onHierarchyLookupValueChange(HasValue.ValueChangeEvent<Hierarchy> event) {
+    @Subscribe(id = "hierarchiesDc", target = Target.DATA_CONTAINER)
+    public void onHierarchiesDcItemChange(InstanceContainer.ItemChangeEvent<Hierarchy> event) {
         refresh();
     }
 
@@ -116,6 +127,22 @@ public class IncentiveBrowse extends Screen {
         fakeChild.setParentFromGroup(HierarchyElementExt);
         fakeChild.setParentName("fake");
         return fakeChild;
+    }
+
+    protected void initHierarchiesDc(){
+        Hierarchy hierarchy = loadHierarchy();
+        hierarchiesDc.getMutableItems().add(hierarchy);
+        hierarchiesDc.setItem(hierarchy);
+    }
+
+    protected Hierarchy loadHierarchy(){
+        String hierarchyCode = ELEMENT_TYPE_SCREEN_VALUE.equals("ORGANIZATION") ? "1" : "2";
+        Hierarchy hierarchy = dataManager.load(Hierarchy.class)
+                .query("select e from base$Hierarchy e where e.type.code = :code")
+                .parameter("code",hierarchyCode)
+                .one();
+
+        return hierarchy;
     }
 
 
