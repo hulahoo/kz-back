@@ -1,7 +1,6 @@
 package kz.uco.tsadv.bproc.beans.entity;
 
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;
@@ -13,7 +12,7 @@ public class BprocEntityBeanAdapter<T extends AbstractBprocRequest> implements I
     public static final String NAME = "tsadv_BprocEntityBeanAdapter";
 
     @Inject
-    protected List<AbstractBprocEntityBean<AbstractBprocRequest>> bprocEntityBeans;
+    protected List<AbstractBprocEntityBean<? extends AbstractBprocRequest>> bprocEntityBeans;
     @Inject
     protected DefaultBprocEntityBean defaultBprocEntityBean;
 
@@ -57,8 +56,9 @@ public class BprocEntityBeanAdapter<T extends AbstractBprocRequest> implements I
     }
 
     protected AbstractBprocEntityBean<AbstractBprocRequest> getEntityBean(Class<? extends AbstractBprocRequest> aClass) {
-        for (AbstractBprocEntityBean<AbstractBprocRequest> bprocEntityBean : bprocEntityBeans) {
-            if (bprocEntityBean.instanceOf(aClass)) return bprocEntityBean;
+        for (AbstractBprocEntityBean<? extends AbstractBprocRequest> bprocEntityBean : bprocEntityBeans) {
+            if (bprocEntityBean.instanceOf(aClass))
+                return (AbstractBprocEntityBean<AbstractBprocRequest>) bprocEntityBean;
         }
         return defaultBprocEntityBean;
     }
