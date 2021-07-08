@@ -142,7 +142,7 @@
                                </columns>
                            </table>
                        </tab>
-                       <tab id="organizationIncentiveResultsTab">
+                       <tab id="organizationIncentiveResultsTab" caption="msg://result">
                            <groupTable id="organizationIncentiveResultsTable" width="100%"
                                        dataContainer="organizationIncentiveResultsDc">
                                <actions>
