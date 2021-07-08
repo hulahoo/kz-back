@@ -35,7 +35,7 @@ public class PersonDocumentRequestChangedListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void afterCommit(EntityChangedEvent<PersonDocumentRequest, UUID> event) {
         if (event.getChanges().getAttributes().stream().anyMatch("status"::equals)) {
-            String methodName = "PersonalDataRequestChangedListener.afterCommit";
+            String methodName = "PersonDocumentRequestChangedListener.afterCommit";
             BaseResult baseResult = new BaseResult();
             PersonDocumentRequestDataJson personDocumentRequestDataJson = new PersonDocumentRequestDataJson();
             try {
