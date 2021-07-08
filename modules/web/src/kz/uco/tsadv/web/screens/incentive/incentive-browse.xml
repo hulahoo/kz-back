@@ -16,6 +16,21 @@
             </loader>
         </collection>
 
+        <collection id="organizationIncentiveFlagsDc"
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag">
+            <loader id="organizationIncentiveFlagsDl"/>
+        </collection>
+
+        <collection id="organizationIncentiveIndicatorsDc"
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators">
+            <loader id="organizationIncentiveIndicatorsDl"/>
+        </collection>
+
+        <collection id="organizationIncentiveResultsDc"
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult">
+            <loader id="organizationIncentiveResultsDl"/>
+        </collection>
+
         <instance id="positionDc"
                   view="position-view"
                   class="kz.uco.tsadv.modules.personal.model.PositionExt"/>
@@ -70,14 +85,33 @@
                 </hbox>
                 <vbox id="cssLayout"
                       margin="false,false,false,true">
-                    <fragment id="organizationFragment"
-                              height="100%"
-                              visible="false"
-                              screen="tsadv_OrganizationFragment"/>
-                    <fragment id="positionFragment"
-                              height="100%"
-                              visible="false"
-                              screen="tsadv_PositionFragment"/>
+                   <tabSheet>
+                       <tab id="organizationIncentiveFlagsTab"
+                            expand="organizationIncentiveFlagsTable"
+                            spacing="true">
+                           <table id="organizationIncentiveFlagsTable"
+                                  dataContainer="organizationIncentiveFlagsDc"
+                                  width="100%">
+                               <actions>
+                                   <action id="add" type="add" enable="false"/>
+                                   <action id="remove" type="remove"/>
+                               </actions>
+                               <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
+                                   <button id="organizationIncentiveFlagsTableAddBtn"
+                                           action="organizationIncentiveFlagsTable.add"/>
+                                   <button id="organizationIncentiveFlagsTableRemoveBtn"
+                                           action="organizationIncentiveFlagsTable.remove"/>
+                               </buttonsPanel>
+                               <columns>
+                                   <column id="isIncentive"/>
+                                   <column id="dateFrom"/>
+                                   <column id="dateTo"/>
+                               </columns>
+                           </table>
+                       </tab>
+                       <tab id="organizationIncentiveIndicatorsTab"></tab>
+                       <tab id="organizationIncentiveResultsTab"></tab>
+                   </tabSheet>
                 </vbox>
             </vbox>
         </split>

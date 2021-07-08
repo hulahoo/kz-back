@@ -7,7 +7,9 @@ import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Notifications;
 import com.haulmont.cuba.gui.WindowManager;
+import com.haulmont.cuba.gui.actions.list.AddAction;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
@@ -16,10 +18,12 @@ import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationExt;
+import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag;
 import kz.uco.tsadv.modules.personal.model.PositionExt;
 import kz.uco.tsadv.service.HierarchyService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -61,6 +65,10 @@ public class IncentiveBrowse extends Screen {
 
     protected String ELEMENT_TYPE_SCREEN_PARAM = "ELEMENT_TYPE";
     protected String ELEMENT_TYPE_SCREEN_VALUE = "";
+    @Inject
+    private Button organizationIncentiveFlagsTableAddBtn;
+    @Named("organizationIncentiveFlagsTable.add")
+    private AddAction<OrganizationIncentiveFlag> organizationIncentiveFlagsTableAdd;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -195,24 +203,22 @@ public class IncentiveBrowse extends Screen {
 
     @Subscribe(id = "hierarchyElementDc", target = Target.DATA_CONTAINER)
     protected void onHierarchyElementDcItemChange(InstanceContainer.ItemChangeEvent<HierarchyElementExt> event) {
-        cssLayout.getComponentNN("organizationFragment").setVisible(false);
-        cssLayout.getComponentNN("positionFragment").setVisible(false);
-
         HierarchyElementExt hierarchyElement = event.getItem();
+        organizationIncentiveFlagsTableAdd.setEnabled(event.getItem() != null);
         if (hierarchyElement == null) return;
 
-        if (ElementType.POSITION.equals(hierarchyElement.getElementType())) {
-            PositionExt position = hierarchyElement.getPositionGroup().getPosition();
-            if (positionDc.getView() != null && !PersistenceHelper.isLoadedWithView(position, positionDc.getView().getName()))
-                position = dataManager.reload(position, positionDc.getView());
-            positionDc.setItem(position);
-            cssLayout.getComponentNN("positionFragment").setVisible(true);
-        } else if (ElementType.ORGANIZATION.equals(hierarchyElement.getElementType())) {
-            OrganizationExt organization = hierarchyElement.getOrganizationGroup().getOrganization();
-            if (organizationDc.getView() != null && !PersistenceHelper.isLoadedWithView(organization, organizationDc.getView().getName()))
-                organization = dataManager.reload(organization, organizationDc.getView());
-            organizationDc.setItem(organization);
-            cssLayout.getComponentNN("organizationFragment").setVisible(true);
-        }
+//        if (ElementType.POSITION.equals(hierarchyElement.getElementType())) {
+//            PositionExt position = hierarchyElement.getPositionGroup().getPosition();
+//            if (positionDc.getView() != null && !PersistenceHelper.isLoadedWithView(position, positionDc.getView().getName()))
+//                position = dataManager.reload(position, positionDc.getView());
+//            positionDc.setItem(position);
+//            cssLayout.getComponentNN("positionFragment").setVisible(true);
+//        } else if (ElementType.ORGANIZATION.equals(hierarchyElement.getElementType())) {
+//            OrganizationExt organization = hierarchyElement.getOrganizationGroup().getOrganization();
+//            if (organizationDc.getView() != null && !PersistenceHelper.isLoadedWithView(organization, organizationDc.getView().getName()))
+//                organization = dataManager.reload(organization, organizationDc.getView());
+//            organizationDc.setItem(organization);
+//            cssLayout.getComponentNN("organizationFragment").setVisible(true);
+//        }
     }
 }
