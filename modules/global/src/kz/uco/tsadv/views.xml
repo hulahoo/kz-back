@@ -23858,4 +23858,10 @@
             <property name="programmCode" view="_minimal"/>
         </property>
     </view>
+    <view entity="tsadv_OrganizationIncentiveIndicators" name="organizationIncentiveIndicators-edit-view" extends="_local">
+        <property name="indicator" view="_local"/>
+        <property name="responsiblePerson" view="_local">
+            <property name="list" view="_local"/>
+        </property>
+    </view>
 </views>

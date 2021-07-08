@@ -16,11 +16,9 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.entity.shared.Hierarchy;
-import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
-import kz.uco.tsadv.modules.personal.model.OrganizationExt;
-import kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag;
-import kz.uco.tsadv.modules.personal.model.PositionExt;
+import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.HierarchyService;
+import kz.uco.tsadv.web.screens.organizationincentiveindicators.OrganizationIncentiveIndicatorsEdit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -76,6 +74,18 @@ public class IncentiveBrowse extends Screen {
 
     protected String ELEMENT_TYPE_SCREEN_PARAM = "ELEMENT_TYPE";
     protected String ELEMENT_TYPE_SCREEN_VALUE = "";
+    @Named("organizationIncentiveIndicatorsTable.add")
+    private AddAction<OrganizationIncentiveIndicators> organizationIncentiveIndicatorsTableAdd;
+    @Inject
+    private Button organizationIncentiveFlagsTableAddBtn;
+    @Inject
+    private Button organizationIncentiveIndicatorsTableAddBtn;
+    @Inject
+    private CollectionLoader<OrganizationIncentiveIndicators> organizationIncentiveIndicatorsDl;
+    @Inject
+    private Table<OrganizationIncentiveIndicators> organizationIncentiveIndicatorsTable;
+    @Inject
+    private CollectionContainer<OrganizationIncentiveIndicators> organizationIncentiveIndicatorsDc;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -212,18 +222,36 @@ public class IncentiveBrowse extends Screen {
     @Subscribe(id = "hierarchyElementDc", target = Target.DATA_CONTAINER)
     protected void onHierarchyElementDcItemChange(InstanceContainer.ItemChangeEvent<HierarchyElementExt> event) {
         HierarchyElementExt hierarchyElement = event.getItem();
-        organizationIncentiveFlagsTableAdd.setEnabled(event.getItem() != null);
+        enableAddActions(event.getItem() != null);
         if (hierarchyElement == null){
-            loadEmptyOrganizationIncentiveFlags();
+            loadEmptyIncentives();
             return;
         }
 
-        loadOrganizationIncentiveFlags();
+        loadIncentives();
+    }
+
+
+    protected void enableAddActions(boolean enable){
+        organizationIncentiveFlagsTableAddBtn.setEnabled(enable);
+        organizationIncentiveIndicatorsTableAddBtn.setEnabled(enable);
     }
 
     protected void initTableDoubleClickActions(){
         organizationIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
                 .withHandler(e -> editOrganizationIncentiveFlag()));
+        organizationIncentiveIndicatorsTable.setItemClickAction(new BaseAction("doubleClickAction")
+                .withHandler(e -> editOrganizationIncentiveIndicator()));
+    }
+
+    protected void loadIncentives(){
+        loadOrganizationIncentiveFlags();
+        loadOrganizationIncentiveIndicators();
+    }
+
+    protected void loadEmptyIncentives(){
+        loadEmptyOrganizationIncentiveFlags();
+        loadEmptyOrganizationIncentiveIndicators();
     }
 
     public void addOrganizationIncentiveFlag() {
@@ -254,4 +282,33 @@ public class IncentiveBrowse extends Screen {
         organizationIncentiveFlagsDl.setParameters(new HashMap<>());
         organizationIncentiveFlagsDl.load();
     }
+
+    public void addOrganizationIncentiveIndicator() {
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class,this)
+                .withInitializer(i -> i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup()))
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveIndicators());
+        editScreen.show();
+    }
+
+    protected void editOrganizationIncentiveIndicator(){
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class,this)
+                .editEntity(organizationIncentiveIndicatorsDc.getItem())
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveIndicators());
+        editScreen.show();
+    }
+
+    protected void loadOrganizationIncentiveIndicators(){
+        organizationIncentiveIndicatorsDl.setQuery("select e from tsadv_OrganizationIncentiveIndicators e where e.organizationGroup = :organizationGroup");
+        organizationIncentiveIndicatorsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveIndicatorsDl.load();
+    }
+
+    protected void loadEmptyOrganizationIncentiveIndicators(){
+        organizationIncentiveIndicatorsDl.setQuery("select e from tsadv_OrganizationIncentiveIndicators e where 1<>1");
+        organizationIncentiveIndicatorsDl.setParameters(new HashMap<>());
+        organizationIncentiveIndicatorsDl.load();
+    }
+
 }

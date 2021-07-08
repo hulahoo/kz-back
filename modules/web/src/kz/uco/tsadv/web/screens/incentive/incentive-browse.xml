@@ -22,7 +22,8 @@
         </collection>
 
         <collection id="organizationIncentiveIndicatorsDc"
-                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators">
+                    class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveIndicators"
+                    view="organizationIncentiveIndicators-edit-view">
             <loader id="organizationIncentiveIndicatorsDl"/>
         </collection>
 
@@ -100,6 +101,7 @@
                                <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
                                    <button id="organizationIncentiveFlagsTableAddBtn"
                                            caption="msg://add"
+                                           enable="false"
                                            invoke="addOrganizationIncentiveFlag" />
                                    <button id="organizationIncentiveFlagsTableRemoveBtn"
                                            action="organizationIncentiveFlagsTable.remove"/>
@@ -111,7 +113,33 @@
                                </columns>
                            </table>
                        </tab>
-                       <tab id="organizationIncentiveIndicatorsTab"></tab>
+                       <tab id="organizationIncentiveIndicatorsTab"
+                            expand="organizationIncentiveIndicatorsTable"
+                            spacing="true">
+                           <table id="organizationIncentiveIndicatorsTable"
+                                  dataContainer="organizationIncentiveIndicatorsDc">
+                               <actions>
+                                   <action id="add" type="add"/>
+                                   <action id="remove" type="remove"/>
+                               </actions>
+                               <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
+                                   <button id="organizationIncentiveIndicatorsTableAddBtn"
+                                           caption="msg://add"
+                                           enable="false"
+                                           invoke="addOrganizationIncentiveIndicator"/>
+                                   <button id="organizationIncentiveIndicatorsTableRemoveBtn"
+                                           action="organizationIncentiveIndicatorsTable.remove"/>
+                               </buttonsPanel>
+                               <columns>
+                                   <column id="dateFrom"/>
+                                   <column id="dateTo"/>
+                                   <column id="indicatorType"/>
+                                   <column id="indicator"/>
+                                   <column id="weight"/>
+                                   <column id="responsiblePerson"/>
+                               </columns>
+                           </table>
+                       </tab>
                        <tab id="organizationIncentiveResultsTab"></tab>
                    </tabSheet>
                 </vbox>
