@@ -114,6 +114,7 @@
                            </table>
                        </tab>
                        <tab id="organizationIncentiveIndicatorsTab"
+                            caption="msg://indicators"
                             expand="organizationIncentiveIndicatorsTable"
                             spacing="true">
                            <table id="organizationIncentiveIndicatorsTable"
