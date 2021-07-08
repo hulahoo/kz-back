@@ -35,12 +35,6 @@
                   spacing="true"
                   height="100%"
                   margin="false,true,false,false">
-                <lookupField id="hierarchyLookup"
-                             align="MIDDLE_CENTER"
-                             nullOptionVisible="false"
-                             captionProperty="hierarchyName"
-                             width="100%"
-                             optionsContainer="hierarchiesDc"/>
                 <hbox id="searchHbox"
                       spacing="true"
                       width="100%"

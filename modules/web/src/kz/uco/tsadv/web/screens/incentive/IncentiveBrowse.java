@@ -50,9 +50,6 @@ public class IncentiveBrowse extends Screen {
     protected Notifications notifications;
     @Inject
     protected Messages messages;
-
-    @Inject
-    protected LookupField<Hierarchy> hierarchyLookup;
     @Inject
     protected Tree<HierarchyElementExt> tree;
     @Inject
