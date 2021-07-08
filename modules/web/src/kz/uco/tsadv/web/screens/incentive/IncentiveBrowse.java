@@ -1,8 +1,10 @@
 package kz.uco.tsadv.web.screens.incentive;
 
 import com.haulmont.bali.util.ParamsMap;
+import com.haulmont.chile.core.model.MetaClass;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.DataManager;
+import com.haulmont.cuba.core.global.MessageTools;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.gui.*;
@@ -14,6 +16,7 @@ import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.entity.shared.Hierarchy;
+import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.HierarchyService;
 import kz.uco.tsadv.web.screens.organizationincentiveindicators.OrganizationIncentiveIndicatorsEdit;
@@ -95,24 +98,9 @@ public class IncentiveBrowse extends Screen {
     private Button organizationIncentiveResultsTableEditBtn;
     @Inject
     private UiComponents uiComponents;
+    @Inject
+    private MessageTools messageTools;
 
-    public class DateFormatter implements Function<Date, String> {
-
-        @Override
-        public String apply(Date date) {
-            return "sdf";
-        }
-
-        @Override
-        public <V> Function<V, String> compose(Function<? super V, ? extends Date> before) {
-            return null;
-        }
-
-        @Override
-        public <V> Function<Date, V> andThen(Function<? super String, ? extends V> after) {
-            return null;
-        }
-    }
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -146,24 +134,6 @@ public class IncentiveBrowse extends Screen {
     @Subscribe
     protected void onBeforeShow(BeforeShowEvent event) {
         initHierarchiesDc();
-//        organizationIncentiveResultsTable.getColumn("periodDate").setFormatter(
-//                new Function<Object, String>() {
-//                    @Override
-//                    public <V> Function<V, String> compose(Function<? super V, ?> before) {
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    public <V> Function<Object, V> andThen(Function<? super String, ? extends V> after) {
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    public String apply(Object o) {
-//                        return "SDFSDf";
-//                    }
-//                }
-//        );
     }
 
     @Subscribe(id = "hierarchiesDc", target = Target.DATA_CONTAINER)
@@ -391,9 +361,20 @@ public class IncentiveBrowse extends Screen {
         organizationIncentiveResultsDl.load();
     }
 
-//    public Component periodDateColumnGenerator(Entity entity) {
-//        Label<String> formattedPeriodDateLabel = uiComponents.create(Label.TYPE_STRING);
-//        formattedPeriodDateLabel.setValue("February 07");
-//        return formattedPeriodDateLabel;
-//    }
+    public Component totalColumnGenerator(Entity entity) {
+        OrganizationIncentiveResult incentiveResult = (OrganizationIncentiveResult) entity;
+        MetaClass incentiveResultMetaClass = metadata.getClass(OrganizationIncentiveResult.class);
+
+        String indicatorLangValue = incentiveResult.getIndicator() == null ? "" : Null.nullReplace(incentiveResult.getIndicator().getLangValue(),"");
+        String localizedPlanField = messageTools.getPropertyCaption(incentiveResultMetaClass,"plan");
+        String localizedFactField = messageTools.getPropertyCaption(incentiveResultMetaClass,"fact");
+
+        String totalPlanString = String.format("%s-%s",localizedPlanField,Null.nullReplace(incentiveResult.getPlan(),BigDecimal.ZERO));
+        String totalFactString = String.format("%s-%s",localizedFactField,Null.nullReplace(incentiveResult.getFact(),BigDecimal.ZERO));
+
+        Label totalLabel = uiComponents.create(Label.TYPE_STRING);
+        totalLabel.setValue(indicatorLangValue + "\n" + totalPlanString + ";" + totalFactString);
+
+        return totalLabel;
+    }
 }

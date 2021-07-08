@@ -171,9 +171,7 @@
                                            <formatter class="com.haulmont.cuba.gui.components.formatters.DateFormatter" format="MMM yyyy"/>
                                        </column>
                                    </group>
-                                   <column id="indicator"/>
-                                   <column id="plan"/>
-                                   <column id="fact"/>
+                                   <column id="total" generator="totalColumnGenerator" caption="msg://incentive.total"/>
                                    <column id="weight"/>
                                    <column id="result"/>
                                </columns>
