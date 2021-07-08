@@ -88,6 +88,7 @@
                    <tabSheet>
                        <tab id="organizationIncentiveFlagsTab"
                             expand="organizationIncentiveFlagsTable"
+                            caption="msg://main"
                             spacing="true">
                            <table id="organizationIncentiveFlagsTable"
                                   dataContainer="organizationIncentiveFlagsDc"

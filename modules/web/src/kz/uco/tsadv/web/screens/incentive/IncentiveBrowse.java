@@ -63,13 +63,6 @@ public class IncentiveBrowse extends Screen {
     protected VBoxLayout cssLayout;
     @Named("organizationIncentiveFlagsTable.add")
     private AddAction<OrganizationIncentiveFlag> organizationIncentiveFlagsTableAdd;
-
-    protected boolean isSearch;
-
-    protected String ELEMENT_TYPE_SCREEN_PARAM = "ELEMENT_TYPE";
-    protected String ELEMENT_TYPE_SCREEN_VALUE = "";
-    @Inject
-    private Screens screens;
     @Inject
     private ScreenBuilders screenBuilders;
     @Inject
@@ -78,6 +71,11 @@ public class IncentiveBrowse extends Screen {
     private CollectionContainer<OrganizationIncentiveFlag> organizationIncentiveFlagsDc;
     @Inject
     private Table<OrganizationIncentiveFlag> organizationIncentiveFlagsTable;
+
+    protected boolean isSearch;
+
+    protected String ELEMENT_TYPE_SCREEN_PARAM = "ELEMENT_TYPE";
+    protected String ELEMENT_TYPE_SCREEN_VALUE = "";
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -91,8 +89,7 @@ public class IncentiveBrowse extends Screen {
 
         ELEMENT_TYPE_SCREEN_VALUE = (String) screenOptions.getParams().get(ELEMENT_TYPE_SCREEN_PARAM);
 
-        organizationIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
-                .withHandler(e -> editOrganizationIncentiveFlag()));
+        initTableDoubleClickActions();
 
         tree.setIconProvider(hierarchyElement -> {
             if (hierarchyElement.getElementType() == null) return null;
@@ -117,6 +114,22 @@ public class IncentiveBrowse extends Screen {
     @Subscribe(id = "hierarchiesDc", target = Target.DATA_CONTAINER)
     public void onHierarchiesDcItemChange(InstanceContainer.ItemChangeEvent<Hierarchy> event) {
         refresh();
+    }
+
+    protected void initHierarchiesDc(){
+        Hierarchy hierarchy = loadHierarchy();
+        hierarchiesDc.getMutableItems().add(hierarchy);
+        hierarchiesDc.setItem(hierarchy);
+    }
+
+    protected Hierarchy loadHierarchy(){
+        String hierarchyCode = ELEMENT_TYPE_SCREEN_VALUE.equals("ORGANIZATION") ? "1" : "2";
+        Hierarchy hierarchy = dataManager.load(Hierarchy.class)
+                .query("select e from base$Hierarchy e where e.type.code = :code")
+                .parameter("code",hierarchyCode)
+                .one();
+
+        return hierarchy;
     }
 
     protected void refresh() {
@@ -145,23 +158,6 @@ public class IncentiveBrowse extends Screen {
         fakeChild.setParentName("fake");
         return fakeChild;
     }
-
-    protected void initHierarchiesDc(){
-        Hierarchy hierarchy = loadHierarchy();
-        hierarchiesDc.getMutableItems().add(hierarchy);
-        hierarchiesDc.setItem(hierarchy);
-    }
-
-    protected Hierarchy loadHierarchy(){
-        String hierarchyCode = ELEMENT_TYPE_SCREEN_VALUE.equals("ORGANIZATION") ? "1" : "2";
-        Hierarchy hierarchy = dataManager.load(Hierarchy.class)
-                .query("select e from base$Hierarchy e where e.type.code = :code")
-                .parameter("code",hierarchyCode)
-                .one();
-
-        return hierarchy;
-    }
-
 
     public void close() {
         getWindow().openEditor(hierarchyElementDc.getItem(), WindowManager.OpenType.DIALOG, ParamsMap.of("close", Boolean.TRUE))
@@ -223,20 +219,11 @@ public class IncentiveBrowse extends Screen {
         }
 
         loadOrganizationIncentiveFlags();
+    }
 
-//        if (ElementType.POSITION.equals(hierarchyElement.getElementType())) {
-//            PositionExt position = hierarchyElement.getPositionGroup().getPosition();
-//            if (positionDc.getView() != null && !PersistenceHelper.isLoadedWithView(position, positionDc.getView().getName()))
-//                position = dataManager.reload(position, positionDc.getView());
-//            positionDc.setItem(position);
-//            cssLayout.getComponentNN("positionFragment").setVisible(true);
-//        } else if (ElementType.ORGANIZATION.equals(hierarchyElement.getElementType())) {
-//            OrganizationExt organization = hierarchyElement.getOrganizationGroup().getOrganization();
-//            if (organizationDc.getView() != null && !PersistenceHelper.isLoadedWithView(organization, organizationDc.getView().getName()))
-//                organization = dataManager.reload(organization, organizationDc.getView());
-//            organizationDc.setItem(organization);
-//            cssLayout.getComponentNN("organizationFragment").setVisible(true);
-//        }
+    protected void initTableDoubleClickActions(){
+        organizationIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
+                .withHandler(e -> editOrganizationIncentiveFlag()));
     }
 
     public void addOrganizationIncentiveFlag() {
