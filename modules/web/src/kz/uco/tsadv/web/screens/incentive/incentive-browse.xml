@@ -98,7 +98,8 @@
                                </actions>
                                <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
                                    <button id="organizationIncentiveFlagsTableAddBtn"
-                                           action="organizationIncentiveFlagsTable.add"/>
+                                           caption="msg://add"
+                                           invoke="addOrganizationIncentiveFlag" />
                                    <button id="organizationIncentiveFlagsTableRemoveBtn"
                                            action="organizationIncentiveFlagsTable.remove"/>
                                </buttonsPanel>

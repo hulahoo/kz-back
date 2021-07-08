@@ -4,8 +4,9 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Messages;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.PersistenceHelper;
 import com.haulmont.cuba.gui.Notifications;
+import com.haulmont.cuba.gui.ScreenBuilders;
+import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.actions.list.AddAction;
 import com.haulmont.cuba.gui.components.*;
@@ -14,7 +15,6 @@ import com.haulmont.cuba.gui.model.CollectionContainer;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
-import kz.uco.base.entity.shared.ElementType;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.modules.personal.model.HierarchyElementExt;
 import kz.uco.tsadv.modules.personal.model.OrganizationExt;
@@ -25,6 +25,7 @@ import kz.uco.tsadv.service.HierarchyService;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -60,15 +61,23 @@ public class IncentiveBrowse extends Screen {
     protected TextField<String> searchField;
     @Inject
     protected VBoxLayout cssLayout;
+    @Named("organizationIncentiveFlagsTable.add")
+    private AddAction<OrganizationIncentiveFlag> organizationIncentiveFlagsTableAdd;
 
     protected boolean isSearch;
 
     protected String ELEMENT_TYPE_SCREEN_PARAM = "ELEMENT_TYPE";
     protected String ELEMENT_TYPE_SCREEN_VALUE = "";
     @Inject
-    private Button organizationIncentiveFlagsTableAddBtn;
-    @Named("organizationIncentiveFlagsTable.add")
-    private AddAction<OrganizationIncentiveFlag> organizationIncentiveFlagsTableAdd;
+    private Screens screens;
+    @Inject
+    private ScreenBuilders screenBuilders;
+    @Inject
+    private CollectionLoader<OrganizationIncentiveFlag> organizationIncentiveFlagsDl;
+    @Inject
+    private CollectionContainer<OrganizationIncentiveFlag> organizationIncentiveFlagsDc;
+    @Inject
+    private Table<OrganizationIncentiveFlag> organizationIncentiveFlagsTable;
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -81,6 +90,9 @@ public class IncentiveBrowse extends Screen {
         }
 
         ELEMENT_TYPE_SCREEN_VALUE = (String) screenOptions.getParams().get(ELEMENT_TYPE_SCREEN_PARAM);
+
+        organizationIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
+                .withHandler(e -> editOrganizationIncentiveFlag()));
 
         tree.setIconProvider(hierarchyElement -> {
             if (hierarchyElement.getElementType() == null) return null;
@@ -205,7 +217,12 @@ public class IncentiveBrowse extends Screen {
     protected void onHierarchyElementDcItemChange(InstanceContainer.ItemChangeEvent<HierarchyElementExt> event) {
         HierarchyElementExt hierarchyElement = event.getItem();
         organizationIncentiveFlagsTableAdd.setEnabled(event.getItem() != null);
-        if (hierarchyElement == null) return;
+        if (hierarchyElement == null){
+            loadEmptyOrganizationIncentiveFlags();
+            return;
+        }
+
+        loadOrganizationIncentiveFlags();
 
 //        if (ElementType.POSITION.equals(hierarchyElement.getElementType())) {
 //            PositionExt position = hierarchyElement.getPositionGroup().getPosition();
@@ -220,5 +237,34 @@ public class IncentiveBrowse extends Screen {
 //            organizationDc.setItem(organization);
 //            cssLayout.getComponentNN("organizationFragment").setVisible(true);
 //        }
+    }
+
+    public void addOrganizationIncentiveFlag() {
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class,this)
+                        .withInitializer(i -> {i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());})
+                        .build();
+        editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveFlags());
+        editScreen.show();
+
+    }
+
+    protected void editOrganizationIncentiveFlag(){
+        Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class,this)
+                .editEntity(organizationIncentiveFlagsDc.getItem())
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveFlags());
+        editScreen.show();
+    }
+
+    protected void loadOrganizationIncentiveFlags(){
+        organizationIncentiveFlagsDl.setQuery("select e from tsadv_OrganizationIncentiveFlag e where e.organizationGroup = :organizationGroup");
+        organizationIncentiveFlagsDl.setParameter("organizationGroup",hierarchyElementDc.getItem().getOrganizationGroup());
+        organizationIncentiveFlagsDl.load();
+    }
+
+    protected void loadEmptyOrganizationIncentiveFlags(){
+        organizationIncentiveFlagsDl.setQuery("select e from tsadv_OrganizationIncentiveFlag e where 1<>1");
+        organizationIncentiveFlagsDl.setParameters(new HashMap<>());
+        organizationIncentiveFlagsDl.load();
     }
 }
