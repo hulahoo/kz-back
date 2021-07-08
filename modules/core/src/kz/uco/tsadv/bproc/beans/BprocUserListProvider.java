@@ -21,10 +21,7 @@ public class BprocUserListProvider implements UserListProvider {
     protected DataManager dataManager;
 
     @Inject
-    private BprocRuntimeService bprocRuntimeService;
-
-    @Inject
-    protected Metadata metadata;
+    protected BprocRuntimeService bprocRuntimeService;
 
     @Inject
     protected BprocService bprocService;

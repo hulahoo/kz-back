@@ -27,6 +27,7 @@ import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.bpm.BpmRolesLink;
+import kz.uco.tsadv.modules.bpm.BprocReassignment;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
 import kz.uco.tsadv.modules.personal.dictionary.DicHrRole;
@@ -41,6 +42,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.UserTask;
 import org.flowable.engine.ProcessEngines;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -71,7 +74,9 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     protected Messages messages;
     @Inject
     protected Resources resources;
-    @Inject
+
+    @Autowired
+    @Qualifier("tsadv_BprocUserListProvider")
     protected BprocUserListProvider bprocUserListProvider;
 
     protected String templateFolder = "classpath:kz/uco/tsadv/templates/";
@@ -89,6 +94,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     protected NotificationService notificationService;
     @Inject
     protected BprocEntityBeanAdapter<AbstractBprocRequest> bprocEntityBeanAdapter;
+    @Inject
+    protected ViewRepository viewRepository;
 
     @Override
     public List<? extends User> getTaskCandidates(String executionId, String viewName) {
@@ -264,7 +271,7 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                     }
                 })
                 .peek(taskData -> {
-                    if (taskData.getTaskDefinitionKey().equals("initiator_task"))
+                    if (taskData.getTaskDefinitionKey().equals(AbstractBprocRequest.INITIATOR_TASK_CODE))
                         taskData.setHrRole(getInitiatorHrRole());
                     if (links != null)
                         links.stream()
@@ -273,9 +280,48 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
                                 .map(BpmRolesLink::getHrRole)
                                 .ifPresent(taskData::setHrRole);
                 })
+                .peek(taskData -> {
+                    String executionId = taskData.getExecutionId();
+                    if (executionId != null) {
+                        List<BprocReassignment> reassignments = getBprocReassignments(executionId);
+                        reassignments.stream()
+                                .map(reassignment -> parseToTaskData(taskData, reassignment))
+                                .forEach(tasks::add);
+                        if (!reassignments.isEmpty())
+                            taskData.setCreateTime(reassignments.stream().map(BprocReassignment::getEndTime).max(Date::compareTo).orElse(null));
+                    }
+                })
                 .forEach(tasks::add);
 
         return tasks;
+    }
+
+    public List<BprocReassignment> getBprocReassignments(String executionId) {
+        return transactionalDataManager.load(BprocReassignment.class)
+                .query("select e from tsadv_BprocReassignment e " +
+                        " where e.executionId = :executionId " +
+//                        "   and e.processInstanceId = :processInstanceId" +
+                        "   order by e.order ")
+                .parameter("executionId", executionId)
+//                                .parameter("processInstanceId", taskData.getProcessInstanceId())
+                .view(viewRepository.getView(BprocReassignment.class, View.LOCAL).addProperty("assignee", viewRepository.getView(TsadvUser.class, "user-fioWithLogin")))
+                .list();
+    }
+
+    protected ExtTaskData parseToTaskData(ExtTaskData taskData, BprocReassignment reassignment) {
+        ExtTaskData parsedTask = metadata.create(ExtTaskData.class);
+        parsedTask.setId(UUID.randomUUID().toString());
+        parsedTask.setName(taskData.getName());
+        parsedTask.setTaskDefinitionKey(taskData.getTaskDefinitionKey());
+        parsedTask.setHrRole(taskData.getHrRole());
+        parsedTask.setExecutionId(taskData.getExecutionId());
+        parsedTask.setOutcome(reassignment.getOutcome());
+        parsedTask.setAssignee(reassignment.getAssignee().getId().toString());
+        parsedTask.setAssigneeOrCandidates(Collections.singletonList(reassignment.getAssignee()));
+        parsedTask.setCreateTime(reassignment.getStartTime());
+        parsedTask.setEndTime(reassignment.getStartTime());
+        parsedTask.setComment(reassignment.getComment());
+        return parsedTask;
     }
 
     @Override

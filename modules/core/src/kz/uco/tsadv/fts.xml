@@ -1987,5 +1987,8 @@
         <entity class="kz.uco.tsadv.modules.administration.PortalMenuCustomization">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.bpm.BprocReassignment">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

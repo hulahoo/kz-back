@@ -6,6 +6,7 @@ import com.haulmont.addon.bproc.form.FormData;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.entity.bproc.ExtTaskData;
+import kz.uco.tsadv.modules.bpm.BprocReassignment;
 import kz.uco.tsadv.modules.performance.model.AssignedPerformancePlan;
 import kz.uco.tsadv.modules.personal.model.AbsenceForRecall;
 import kz.uco.tsadv.modules.personal.model.AbsenceRequest;
@@ -52,6 +53,8 @@ public interface BprocService {
     ExtTaskData getActiveTask(ProcessInstanceData processInstanceData);
 
     List<ExtTaskData> getProcessTasks(ProcessInstanceData processInstanceData);
+
+    List<BprocReassignment> getBprocReassignments(String executionId);
 
     ProcessDefinitionData getProcessDefinitionData(String processDefinitionKey);
 

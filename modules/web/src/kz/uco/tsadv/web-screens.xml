@@ -2194,8 +2194,6 @@
             template="kz/uco/tsadv/web/recognitionprovider/recognition-provider-edit.xml"/>
     <screen id="report$Report.run"
             template="kz/uco/tsadv/web/report/ext-report-run.xml"/>
-    <screen id="tsadv$ProcInstanceV.browse"
-            template="kz/uco/tsadv/web/procinstancev/proc-instance-v-browse.xml"/>
     <screen id="tsadv$Book.browse"
             template="kz/uco/tsadv/web/book/book-browse.xml"/>
     <screen id="tsadv$Book.edit"

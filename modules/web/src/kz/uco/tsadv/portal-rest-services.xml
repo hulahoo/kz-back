@@ -304,4 +304,9 @@
             <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
         </method>
     </service>
+    <service name="tsadv_BpmUserSubstitutionService">
+        <method name="save">
+            <param name="bpmUserSubstitution" type="kz.uco.tsadv.entity.tb.BpmUserSubstitution"/>
+        </method>
+    </service>
 </services>
