@@ -53,7 +53,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service(EmployeeService.NAME)
 public class EmployeeServiceBean implements EmployeeService {
@@ -2512,5 +2511,10 @@ public class EmployeeServiceBean implements EmployeeService {
                 .setParameters(ParamsMap.of("positionGroupId", positionGroupId, "systemDate", CommonUtils.getSystemDate()))
                 .view(viewName != null ? viewName : View.MINIMAL)
                 .list();
+    }
+
+    @Override
+    public boolean hasHrRole(String dicHrCode) {
+        return !AppBeans.get(OrganizationHrUserService.class).getOrganizationList(userSessionSource.getUserSession().getUser().getId(), dicHrCode).isEmpty();
     }
 }

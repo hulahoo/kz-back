@@ -132,9 +132,9 @@ public class CourseSectionAttemptListener implements BeforeDeleteEntityListener<
                 && courseSection.getCourse().getSections() != null) {
             courseSection = dataManager.reload(courseSection, "courseSection.edit");
             UUID enrollmentId = courseSectionAttempt.getEnrollment().getId();
-            Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.person");
+            Enrollment enrollment = entityManager.find(Enrollment.class, enrollmentId, "enrollment.for.course");
             if (enrollment != null) {
-                enrollment = dataManager.reload(enrollment, "enrollment.person");
+                enrollment = dataManager.reload(enrollment, "enrollment.for.course");
                 if (learningService.allCourseSectionPassed(courseSection.getCourse().getSections(),
                         enrollment)) {
                     boolean homework = true;
