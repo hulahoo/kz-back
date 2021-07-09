@@ -17,6 +17,7 @@ import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
 import kz.uco.base.entity.shared.Hierarchy;
 import kz.uco.tsadv.api.Null;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.HierarchyService;
 import kz.uco.tsadv.web.screens.organizationincentiveindicators.OrganizationIncentiveIndicatorsEdit;
@@ -278,7 +279,10 @@ public class IncentiveBrowse extends Screen {
 
     public void addOrganizationIncentiveFlag() {
         Screen editScreen = screenBuilders.editor(OrganizationIncentiveFlag.class,this)
-                        .withInitializer(i -> {i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());})
+                        .withInitializer(i -> {
+                            i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());
+                            i.setDateTo(CommonUtils.getMaxDate());
+                        })
                         .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveFlags());
         editScreen.show();
@@ -307,7 +311,9 @@ public class IncentiveBrowse extends Screen {
 
     public void addOrganizationIncentiveIndicator() {
         Screen editScreen = screenBuilders.editor(OrganizationIncentiveIndicators.class,this)
-                .withInitializer(i -> i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup()))
+                .withInitializer(i -> {
+                    i.setOrganizationGroup(hierarchyElementDc.getItem().getOrganizationGroup());
+                    i.setDateTo(CommonUtils.getMaxDate());})
                 .build();
         editScreen.addAfterCloseListener((l) -> loadOrganizationIncentiveIndicators());
         editScreen.show();
