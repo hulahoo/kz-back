@@ -34,6 +34,7 @@
                             <column width="100%">
                                 <field id="objectName" width="500px"/>
                                 <field id="contentType" width="200px"/>
+                                <field id="passingScore" width="200px"/>
                                 <field id="file"
                                        width="500px"
                                        visible="false"/>
@@ -70,6 +71,7 @@
                                 <action id="remove"/>
                             </actions>
                             <columns>
+                                <column id="serialNumber"/>
                                 <column id="code"/>
                                 <column id="question"/>
                             </columns>
@@ -95,6 +97,6 @@
         </tabSheet>
 
         <frame id="windowActions"
-               screen="editWindowActions"/>
+               screen="extendedEditWindowActions"/>
     </layout>
 </window>

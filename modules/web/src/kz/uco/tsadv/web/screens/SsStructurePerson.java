@@ -322,7 +322,7 @@ public class SsStructurePerson extends AbstractWindow {
             absenceRvdRequest.setStatus(status);
             absenceRvdRequest.setRequestDate(CommonUtils.getSystemDate());
             absenceRvdRequest.setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            absenceRvdRequest.setCompencation(true);
+            absenceRvdRequest.setCompensation(true);
             absenceRvdRequest.setVacationDay(false);
             screenBuilders.editor(AbsenceRvdRequest.class, this)
                     .withScreenClass(AbsenceRvdRequestEdit.class).newEntity(absenceRvdRequest)
@@ -362,7 +362,6 @@ public class SsStructurePerson extends AbstractWindow {
         absenceForRecall.setEmployee(personExtDs.getItem().getGroup());
         absenceForRecall.setLeaveOtherTime(true);
         absenceForRecall.setVacation(absenceTable1.getSingleSelected());
-        absenceForRecall.setAbsenceType(absenceTable1.getSingleSelected().getType());
         screenBuilders.editor(AbsenceForRecall.class, this)
                 .withScreenClass(AbsenceForRecallEdit.class)
                 .newEntity(absenceForRecall)

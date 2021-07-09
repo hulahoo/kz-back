@@ -7,7 +7,6 @@ import com.haulmont.cuba.gui.components.*;
 import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.modules.personal.model.AbsenceBalance;
 import kz.uco.tsadv.modules.personal.model.PersonExt;
-import kz.uco.tsadv.service.AbsenceBalanceService;
 import kz.uco.tsadv.service.CallStoredFunctionService;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -26,7 +25,7 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
     @Inject
     protected FieldGroup fieldGroup;
     @Named("fieldGroup.balanceDays")
-    protected TextField<Integer> balanceDaysField;
+    protected TextField<Double> balanceDaysField;
 
     protected boolean tooShortAbsenceBalance;
     @Inject
@@ -57,10 +56,10 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
     @Override
     protected void initNewItem(AbsenceBalance item) {
         super.initNewItem(item);
-        item.setBalanceDays(0);
+        item.setBalanceDays((double) 0);
         final PersonExt person = item.getPersonGroup().getPerson();
-        if (item.getAdditionalBalanceDays() == 0) {
-            item.setAdditionalBalanceDays(0);
+        if (item.getAdditionalBalanceDays() != null && item.getAdditionalBalanceDays() == 0) {
+            item.setAdditionalBalanceDays((double) 0);
         }
         if (person != null) {
             final List<AbsenceBalance> balances = commonService.getEntities(AbsenceBalance.class, "select e from tsadv$AbsenceBalance e\n" +
@@ -82,8 +81,8 @@ public class AbsenceBalanceEdit extends AbstractEditor<AbsenceBalance> {
         }*/
         balanceDaysField.addValueChangeListener(e -> {
             if (e.getValue() != null) {
-                Integer overallBalanceDays = (Integer) e.getValue();
-                Integer difference = 0;
+                Double overallBalanceDays =  e.getValue();
+                double difference = 0;
                 if (getItem().getOverallBalanceDays() != null && getItem().getOverallBalanceDays() != 0) {
                     difference = getItem().getOverallBalanceDays() - getItem().getBalanceDays();
                     if (difference < 0) {

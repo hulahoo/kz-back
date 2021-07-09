@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class CoursePojo implements Serializable {
+    private UUID id;
     private String name;
     private Double avgRate;
     private String preRequisitions;
@@ -17,7 +18,7 @@ public class CoursePojo implements Serializable {
     private Boolean isIssuedCertificate;
     private String learningProof;
     private List<PairPojo<UUID, String>> sections;
-    private String logo;
+    private UUID logo;
     private List<CommentPojo> comments;
     private List<PairPojo<Double, Long>> rating;
     private Integer rateReviewCount;
@@ -26,6 +27,9 @@ public class CoursePojo implements Serializable {
     private Long educationPeriod;
     private String enrollmentId;
     private Boolean selfEnrollment;
+    private String enrollmentStatus;
+    private CategoryCoursePojo category;
+    private Boolean isOnline;
 
     public String getLearningProof() {
         return learningProof;
@@ -107,11 +111,11 @@ public class CoursePojo implements Serializable {
         this.sections = sections;
     }
 
-    public String getLogo() {
+    public UUID getLogo() {
         return logo;
     }
 
-    public void setLogo(String logo) {
+    public void setLogo(UUID logo) {
         this.logo = logo;
     }
 
@@ -177,5 +181,37 @@ public class CoursePojo implements Serializable {
 
     public void setEnrollmentId(String enrollmentId) {
         this.enrollmentId = enrollmentId;
+    }
+
+    public String getEnrollmentStatus() {
+        return enrollmentStatus;
+    }
+
+    public void setEnrollmentStatus(String enrollmentStatus) {
+        this.enrollmentStatus = enrollmentStatus;
+    }
+
+    public CategoryCoursePojo getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryCoursePojo category) {
+        this.category = category;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Boolean getOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(Boolean online) {
+        isOnline = online;
     }
 }

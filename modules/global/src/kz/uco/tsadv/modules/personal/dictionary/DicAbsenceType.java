@@ -16,8 +16,13 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "USE_IN_SELF_SERVICE", nullable = false)
     protected Boolean useInSelfService = false;
 
-    @Column(name = "AVAILABLE_TO_MANAGER")
-    private Boolean availableToManager;
+    @Column(name = "ECOLOGICAL_ABSENCE", nullable = false)
+    @NotNull
+    private Boolean isEcologicalAbsence = false;
+
+    @NotNull
+    @Column(name = "AVAILABLE_TO_MANAGER", nullable = false)
+    private Boolean availableToManager = false;
 
     @Column(name = "VACATION_DURATION_TYPE")
     protected String vacationDurationType;
@@ -34,7 +39,8 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "IGNORE_HOLIDAYS", nullable = false)
     protected Boolean ignoreHolidays = false;
 
-    @Column(name = "IS_ONLY_WORKING_DAY")
+    @NotNull
+    @Column(name = "IS_ONLY_WORKING_DAY", nullable = false)
     protected Boolean isOnlyWorkingDay = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -48,14 +54,17 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "IS_WORKING_DAY", nullable = false)
     protected Boolean isWorkingDay = false;
 
-    @Column(name = "USE_ONLY_ABSENCE_TYPE")
-    protected Boolean useOnlyAbsenceType;
+    @NotNull
+    @Column(name = "USE_ONLY_ABSENCE_TYPE", nullable = false)
+    protected Boolean useOnlyAbsenceType = false;
 
-    @Column(name = "DISPLAY_ABSENCE")
-    protected Boolean displayAbsence;
+    @NotNull
+    @Column(name = "DISPLAY_ABSENCE", nullable = false)
+    protected Boolean displayAbsence = false;
 
-    @Column(name = "CANCEL_PARENT_ABSENCE")
-    protected Boolean cancelParentAbsence;
+    @NotNull
+    @Column(name = "CANCEL_PARENT_ABSENCE", nullable = false)
+    protected Boolean cancelParentAbsence = false;
 
     @NotNull
     @Column(name = "AVAILABLE_FOR_TIMECARD", nullable = false)
@@ -112,14 +121,52 @@ public class DicAbsenceType extends AbstractDictionary {
     @Column(name = "IS_VACATION_DATE", nullable = false)
     protected Boolean isVacationDate = false;
 
-    @Column(name = "WORK_ON_WEEKEND")
-    protected Boolean workOnWeekend;
+    @NotNull
+    @Column(name = "WORK_ON_WEEKEND", nullable = false)
+    protected Boolean workOnWeekend = false;
 
-    @Column(name = "TEMPORARY_TRANSFER")
-    protected Boolean temporaryTransfer;
+    @NotNull
+    @Column(name = "TEMPORARY_TRANSFER", nullable = false)
+    protected Boolean temporaryTransfer = false;
 
-    @Column(name = "OVERTIME_WORK")
-    protected Boolean overtimeWork;
+    @NotNull
+    @Column(name = "OVERTIME_WORK", nullable = false)
+    protected Boolean overtimeWork = false;
+
+    @Column(name = "NUM_DAYS_CALENDAR_YEAR")
+    protected Integer numDaysCalendarYear;
+
+    @NotNull
+    @Column(name = "IS_FILE_REQUIRED", nullable = false)
+    private Boolean isFileRequired = false;
+
+    @NotNull
+    @Column(name = "IS_SCHEDULE_OFFSETS_REQUEST", nullable = false)
+    private Boolean isScheduleOffsetsRequest = false;
+
+    public Boolean getIsFileRequired() {
+        return isFileRequired;
+    }
+
+    public void setIsFileRequired(Boolean isFileRequired) {
+        this.isFileRequired = isFileRequired;
+    }
+
+    public void setIsEcologicalAbsence(Boolean isEcologicalAbsence) {
+        this.isEcologicalAbsence = isEcologicalAbsence;
+    }
+
+    public Boolean getIsEcologicalAbsence() {
+        return isEcologicalAbsence;
+    }
+
+    public Integer getNumDaysCalendarYear() {
+        return numDaysCalendarYear;
+    }
+
+    public void setNumDaysCalendarYear(Integer numDaysCalendarYear) {
+        this.numDaysCalendarYear = numDaysCalendarYear;
+    }
 
     public Boolean getIsVacationDate() {
         return isVacationDate;
@@ -367,5 +414,13 @@ public class DicAbsenceType extends AbstractDictionary {
 
     public void setOvertimeWork(Boolean overtimeWork) {
         this.overtimeWork = overtimeWork;
+    }
+
+    public Boolean getIsScheduleOffsetsRequest() {
+        return isScheduleOffsetsRequest;
+    }
+
+    public void setIsScheduleOffsetsRequest(Boolean scheduleOffsetsRequest) {
+        isScheduleOffsetsRequest = scheduleOffsetsRequest;
     }
 }

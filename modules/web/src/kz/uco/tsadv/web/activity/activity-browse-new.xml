@@ -111,9 +111,10 @@ and e.endDateTime is not null]]>
                        width="100%">
                     <columns>
                         <column id="checkboxColumn"
-                                caption="msg://select.column.caption"
+                                caption=" "
                                 generator="generateCheckBoxColumn"/>
                         <column id="name"
+                                maxTextLength="50"
                                 caption="msg://notificationText"/>
                         <column id="startDateTime"
                                 caption="msg://notificationDate"/>
@@ -134,6 +135,10 @@ and e.endDateTime is not null]]>
                             caption="msg://markAsNotRead"
                             enable="false"
                             invoke="markAsUnread"/>
+                    <button id="openNotification"
+                            caption="msg://openNotification"
+                            enable="false"
+                            invoke="openNotification"/>
                 </buttonsPanel>
             </tab>
         </tabSheet>

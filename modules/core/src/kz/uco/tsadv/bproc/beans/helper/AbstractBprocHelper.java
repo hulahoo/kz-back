@@ -1,5 +1,6 @@
 package kz.uco.tsadv.bproc.beans.helper;
 
+import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.MetadataTools;
 import com.haulmont.cuba.core.global.View;
@@ -17,6 +18,8 @@ public abstract class AbstractBprocHelper {
 
     @Inject
     protected DataManager dataManager;
+    @Inject
+    protected TransactionalDataManager transactionalDataManager;
     @Inject
     protected MetadataTools metadataTools;
 

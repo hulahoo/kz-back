@@ -1,6 +1,5 @@
 package kz.uco.tsadv.modules.personal.dictionary;
 
-import com.haulmont.cuba.core.entity.StandardEntity;
 import kz.uco.base.entity.abstraction.AbstractDictionary;
 
 import javax.persistence.Entity;

@@ -136,7 +136,7 @@ public class LmsServiceBean implements LmsService {
             pojo.setId(enrollment.getCourse().getId().toString());
             pojo.setName(enrollment.getCourse().getName());
             if (enrollment.getCourse().getLogo() != null) {
-                pojo.setLogo(Base64.getEncoder().encodeToString(enrollment.getCourse().getLogo()));
+                pojo.setLogo(enrollment.getCourse().getLogo().getId());
             }
             enrollmentsPojo.add(pojo);
         }
@@ -354,7 +354,7 @@ public class LmsServiceBean implements LmsService {
                     "   join cs.sectionObject cso " +
                     "where cso.id = :csoId")
                     .setParameter("csoId", courseSectionObject.getId()))
-                    .setView(View.LOCAL));
+                    .setView("course.with.logo"));
             if (course == null) {
                 throw new NullPointerException("Can not find course by course section object id " + courseSectionObject.getId());
             }
@@ -363,7 +363,7 @@ public class LmsServiceBean implements LmsService {
             pojo.setId(courseSectionObject.getId().toString());
             pojo.setName(course.getName() + ": " + courseSectionObject.getTest().getName());
             if (course.getLogo() != null) {
-                pojo.setLogo(Base64.getEncoder().encodeToString(course.getLogo()));
+                pojo.setLogo(course.getLogo().getId());
             }
             enrollmentsPojo.add(pojo);
         }

@@ -39,6 +39,18 @@ public class CourseSectionScormResult extends StandardEntity {
     @Column(name = "MIN_SCORE")
     protected BigDecimal minScore;
 
+    @Lob
+    @Column(name = "COMMENT")
+    protected String comment;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public void setScore(BigDecimal score) {
         this.score = score;
     }

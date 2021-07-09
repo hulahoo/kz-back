@@ -7,13 +7,9 @@ import java.util.UUID;
 /**
  * @author Alibek Berdaulet
  */
-public class PersonProfileDto implements Serializable {
+public class PersonProfileDto extends PersonDto implements Serializable {
 
-    private UUID id;
-
-    private UUID groupId;
-
-    private String fullName;
+    private UUID positionId;
 
     private Date hireDate;
 
@@ -29,34 +25,30 @@ public class PersonProfileDto implements Serializable {
 
     private String organizationName;
 
-    private String positionName;
-
     private String email;
 
     private String phone;
 
-    public UUID getId() {
-        return id;
+    private String companyCode;
+
+    private String firstLastName;
+
+    private String nationality;
+
+    public String getNationality() {
+        return nationality;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
     }
 
-    public UUID getGroupId() {
-        return groupId;
+    public String getFirstLastName() {
+        return firstLastName;
     }
 
-    public void setGroupId(UUID groupId) {
-        this.groupId = groupId;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstLastName(String firstLastName) {
+        this.firstLastName = firstLastName;
     }
 
     public Date getHireDate() {
@@ -115,14 +107,6 @@ public class PersonProfileDto implements Serializable {
         this.organizationName = organizationName;
     }
 
-    public String getPositionName() {
-        return positionName;
-    }
-
-    public void setPositionName(String positionName) {
-        this.positionName = positionName;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -137,5 +121,21 @@ public class PersonProfileDto implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public UUID getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(UUID positionId) {
+        this.positionId = positionId;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
     }
 }

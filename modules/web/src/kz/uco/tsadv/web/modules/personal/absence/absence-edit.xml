@@ -51,37 +51,50 @@
                   spacing="true">
                 <hbox id="hbox"
                       spacing="true">
-                    <fieldGroup id="fieldGroup"
-                                datasource="absenceDs">
-                        <column id="column1"
-                                fieldCaptionWidth="150px"
-                                width="270px">
-                            <field id="type"
-                                   optionsDatasource="typesDs"
-                                   property="type"/>
-                            <field property="dateFrom"/>
-                            <field property="dateTo"/>
-                            <field id="absenceDays"
-                                   property="absenceDays"/>
-                            <field property="additionalDays"/>
-                            <field captionProperty="numberAndTypeAndDate"
-                                   optionsDatasource="vacation_linkDs"
-                                   property="parentAbsence"/>
-                            <field id="vacationDurationType"
-                                   caption="msg://vacationDurationType">
-                                <textField id="vacationDurationTypeLbl"
-                                           editable="false"/>
-                            </field>
-                        </column>
-                    </fieldGroup>
+                    <hbox id="hbox2">
+                        <vbox spacing="true">
+                            <fieldGroup id="fieldGroup"
+                                        datasource="absenceDs" fieldCaptionWidth="200px">
+                                <field id="type"
+                                       optionsDatasource="typesDs"
+                                       property="type"/>
+                                <!--                                <field property="dateFrom" width="AUTO"/>-->
+                                <!--                                <field property="dateTo" width="AUTO"/>-->
+                                <!--                                    <field id="absenceDays"-->
+                                <!--                                           property="absenceDays" width="120px"/>-->
+                                <field property="additionalDays"/>
+                                <field captionProperty="numberAndTypeAndDate"
+                                       optionsDatasource="vacation_linkDs"
+                                       property="parentAbsence"/>
+                                <field id="vacationDurationType"
+                                       caption="msg://vacationDurationType">
+                                    <textField id="vacationDurationTypeLbl"
+                                               editable="false"/>
+                                </field>
+                            </fieldGroup>
+                            <fieldGroup id="fieldGroup2" datasource="absenceDs">
+                                <column fieldCaptionWidth="200px">
+                                    <field property="dateFrom" width="AUTO"/>
+                                    <field property="dateTo" width="AUTO"/>
+                                    <field id="absenceDays"
+                                           property="absenceDays" width="120px"/>
+                                </column>
+                                <column>
+                                    <field caption=" " id="timeStart" property="timeStart" width="AUTO"/>
+                                    <field caption=" " id="timeEnd" property="timeEnd" width="AUTO"/>
+                                    <field caption=" " id="additionalTime" property="additionalTime" width="AUTO"/>
+                                </column>
+                            </fieldGroup>
+                        </vbox>
+                    </hbox>
                     <fieldGroup id="fieldGroup1"
                                 datasource="absenceDs">
                         <column id="column2"
                                 width="270px">
                             <field property="notificationDate"/>
                             <field
-                                   optionsDatasource="absenceRequestsDs"
-                                   property="absenceRequest"/>
+                                    optionsDatasource="absenceRequestsDs"
+                                    property="absenceRequest"/>
                             <field property="file"/>
                         </column>
                     </fieldGroup>

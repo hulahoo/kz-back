@@ -39,22 +39,26 @@
                            caption="mainMsg://organizationName"
                            editable="false"/>
                 <textField id="position" property="assignedPerson.currentAssignment.positionGroup"/>
-<!--                <textField id="job" property="assignedPerson.currentAssignment.jobGroup" visible="false"/>-->
                 <textField id="grade" property="assignedPerson.currentAssignment.gradeGroup"/>
                 <textField id="kpiScore" property="kpiScore"/>
-                <textField id="extraPoint" property="extraPoint"/>
+                <hbox expand="extraPoint"
+                      caption="msg://kz.uco.tsadv.modules.performance.model/AssignedPerformancePlan.extraPoint">
+                    <textField id="extraPoint"
+                               dataContainer="assignedPerformancePlanDc" property="extraPoint" editable="false"/>
+                    <button id="extraPointBtn" icon="font-icon:FILE_O"/>
+                </hbox>
                 <textField id="finalScore" property="finalScore"/>
                 <textField id="maxBonusPercent" property="maxBonusPercent"/>
                 <textField id="adjustedScore" property="adjustedScore"/>
                 <textField id="adjustedBonus" property="adjustedBonus"/>
             </column>
             <column id="column2" width="300px">
-                <lookupField id="stepStageStatus" property="stepStageStatus"/>
+                <lookupField id="stepStageStatus" property="stepStageStatus" caption="msg://stepCaption"/>
                 <lookupField id="status" property="status" editable="false"/>
                 <dateField id="startDate" property="startDate"/>
                 <dateField id="endDate" property="endDate"/>
-                <textField id="result" property="result" enable="false"/>
-                <textField id="gzp" property="gzp"/>
+                <textField id="result" property="result" enable="false" caption="msg://resultPercentCaption"/>
+                <textField id="gzp" property="gzp" caption="msg://annualBaseSalaryCaption"/>
                 <textField id="maxBonus" property="maxBonus"/>
                 <textField id="personalBonus" property="personalBonus"/>
                 <textField id="companyBonus" property="companyBonus"/>
@@ -70,7 +74,8 @@
                 </actions>
                 <columns>
                     <column id="category"/>
-                    <column id="goalString" editable="true" required="true"/>
+                    <column id="goalString1" generator="getGoalName" caption="msg://KPITitleCaption"/>
+<!--                    <column id="goalString" editable="true" required="true" caption="msg://KPITitleCaption"/>-->
                     <column id="weight" editable="true" required="true">
                         <aggregation type="SUM"/>
                     </column>

@@ -41,4 +41,17 @@ public interface AbsenceService {
     void createAbsenceFromRequest(String entityId);
 
     VacationDurationType getVacationDurationType(UUID personGroupId, UUID absenceTypeId, Date date);
+
+    /**
+     * @return отпускных дней, полученных за год по типу absenceTypeId
+     */
+    Long getReceivedVacationDaysOfYear(UUID personGroupId, UUID absenceTypeId, Date date);
+
+    /**
+     * @return остаток дни по РВД
+     */
+    Long getRemainingDaysWeekendWork(UUID personGroupId);
+
+    @Nullable
+    Integer scheduleOffsetDaysBeforeAbsence();
 }

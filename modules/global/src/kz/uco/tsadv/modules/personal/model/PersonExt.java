@@ -19,8 +19,6 @@ import kz.uco.tsadv.modules.personal.dictionary.DicNonresidentType;
 import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
 import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -239,9 +237,9 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin", "middleNameLatin"})
     protected String personName;
 
-    @Transient
-    @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin"})
-    protected String fullName;
+//    @Transient
+//    @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin"})
+//    protected String fullName;
 
 
     public String getCriminalAdministrativeLiabilityPerioidReason() {
@@ -639,7 +637,6 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
     }
 
     @MetaProperty(related = {"lastName", "firstName", "middleName", "firstNameLatin", "lastNameLatin", "employeeNumber"})
-    @Transient
     public String getFioWithEmployeeNumberWithSortSupported() {
         StringBuilder builder = new StringBuilder(getFullName());
         if (employeeNumber != null) builder.append("(").append(employeeNumber).append(")");
@@ -686,26 +683,26 @@ public class PersonExt extends Person implements Categorized, IGroupedEntity<Per
         return Arrays.stream(initials).filter(Objects::nonNull).collect(Collectors.joining(" "));
     }
 
-    public String getFullName() {
-        StringBuilder builder = new StringBuilder("");
-        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
-        String langOrder = com.haulmont.cuba.core.sys.AppContext.getProperty("base.abstractDictionary.langOrder");
-        String language = userSessionSource.getLocale().getLanguage();
-
-        builder.append(lastName).append(" ");
-        builder.append(firstName).append(" ");
-        if (middleName != null) builder.append(middleName).append(" ");
-
-        if (langOrder != null) {
-            List<String> langs = Arrays.asList(langOrder.split(";")); //ru, kz, en
-            if (langs.indexOf(language) == 2 && StringUtils.isNotBlank(firstNameLatin) && StringUtils.isNotBlank(lastNameLatin)) {
-                builder = new StringBuilder("");
-                builder.append(firstNameLatin).append(" ");
-                builder.append(lastNameLatin).append(" ");
-            }
-        }
-        return builder.toString();
-    }
+//    public String getFullName() {
+//        StringBuilder builder = new StringBuilder("");
+//        UserSessionSource userSessionSource = AppBeans.get("cuba_UserSessionSource");
+//        String langOrder = com.haulmont.cuba.core.sys.AppContext.getProperty("base.abstractDictionary.langOrder");
+//        String language = userSessionSource.getLocale().getLanguage();
+//
+//        builder.append(lastName).append(" ");
+//        builder.append(firstName).append(" ");
+//        if (middleName != null) builder.append(middleName).append(" ");
+//
+//        if (langOrder != null) {
+//            List<String> langs = Arrays.asList(langOrder.split(";")); //ru, kz, en
+//            if (langs.indexOf(language) == 2 && StringUtils.isNotBlank(firstNameLatin) && StringUtils.isNotBlank(lastNameLatin)) {
+//                builder = new StringBuilder("");
+//                builder.append(firstNameLatin).append(" ");
+//                builder.append(lastNameLatin).append(" ");
+//            }
+//        }
+//        return builder.toString();
+//    }
 
     @Override
     public String getShortName() {

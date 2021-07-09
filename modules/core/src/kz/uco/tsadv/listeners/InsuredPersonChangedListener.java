@@ -4,17 +4,14 @@ import com.haulmont.cuba.core.TransactionalDataManager;
 import com.haulmont.cuba.core.app.events.EntityChangedEvent;
 import com.haulmont.cuba.core.entity.contracts.Id;
 import com.haulmont.cuba.core.global.*;
-import com.haulmont.cuba.security.entity.User;
-import kz.uco.base.entity.core.notification.NotificationTemplate;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 import kz.uco.tsadv.modules.personal.model.ContractConditions;
 import kz.uco.tsadv.modules.personal.model.InsuredPerson;
+import kz.uco.tsadv.service.DocumentService;
 import kz.uco.tsadv.service.EmployeeService;
-import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.ActivityType;
-import kz.uco.uactivity.entity.Priority;
 import kz.uco.uactivity.entity.StatusEnum;
 import kz.uco.uactivity.service.ActivityService;
 import org.springframework.stereotype.Component;
@@ -46,10 +43,11 @@ public class InsuredPersonChangedListener {
     protected SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
     @Inject
     protected NotificationSenderAPIService notificationSenderAPIService;
+    @Inject
+    protected DocumentService documentService;
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void beforeCommit(EntityChangedEvent<InsuredPerson, UUID> event) {
-
 
         if (event.getType().equals(EntityChangedEvent.Type.DELETED)) {
             Id<InsuredPerson, UUID> entityId = event.getEntityId();
@@ -171,9 +169,16 @@ public class InsuredPersonChangedListener {
                 });
             }
         } else if (event.getType().equals(EntityChangedEvent.Type.UPDATED)) {
+
+            Id<InsuredPerson, UUID> entityId = event.getEntityId();
+            InsuredPerson person = txDataManager.load(entityId).view("insuredPerson-editView").one();
+
+            if (event.getChanges().isChanged("insuranceContract")) {
+                documentService.getInsuredPersonMembersWithNewContract(entityId.getValue(), person.getInsuranceContract().getId())
+                        .forEach(txDataManager::save);
+            }
+
             if (event.getChanges().isChanged("amount") && (event.getChanges().isChanged("birthdate") || event.getChanges().isChanged("relative"))) {
-                Id<InsuredPerson, UUID> entityId = event.getEntityId();
-                InsuredPerson person = txDataManager.load(entityId).view("insuredPerson-editView").one();
                 BigDecimal oldVal = event.getChanges().getOldValue("amount");
 
                 List<InsuredPerson> personList = dataManager.load(InsuredPerson.class).query("select e " +
@@ -197,35 +202,40 @@ public class InsuredPersonChangedListener {
                         .view("insuredPerson-editView")
                         .list().stream().findFirst().orElse(null);
 
-                if (oldVal != null && oldVal.signum() == 0) {
+                if (oldVal != null && oldVal.signum() == 0 && employee != null) {
                     boolean changed = true;
                     for (InsuredPerson insuredPerson : personList) {
-                        int age = employeeService.calculateAge(insuredPerson.getBirthdate());
-                        if (changed && !insuredPerson.getId().equals(person.getId()) && insuredPerson.getAmount().signum() > 0) {
+                        if (changed && !insuredPerson.getId().equals(person.getId()) && insuredPerson.getAmount().signum() == 1) {
+                            int age = employeeService.calculateAge(insuredPerson.getBirthdate());
                             for (ContractConditions conditions : employee.getInsuranceContract().getProgramConditions()) {
-                                if (changed && conditions.getIsFree() && conditions.getAgeMin() <= age && conditions.getAgeMax() >= age) {
-                                    BigDecimal minusAmount = insuredPerson.getAmount();
+                                if (conditions.getIsFree() && conditions.getAgeMin() <= age && conditions.getAgeMax() >= age) {
+                                    BigDecimal oldAmount = insuredPerson.getAmount();
 
-                                    insuredPerson.setAmount(BigDecimal.valueOf(0));
+                                    insuredPerson.setAmount(BigDecimal.ZERO);
                                     txDataManager.save(insuredPerson);
-                                    employee.setTotalAmount((employee.getTotalAmount().subtract(minusAmount)).add(person.getAmount()));
-                                    txDataManager.save(employee);
+                                    employee.setTotalAmount((employee.getTotalAmount().subtract(oldAmount)).add(person.getAmount()));
                                     changed = false;
                                     break;
                                 }
                             }
                         }
                     }
+
+                    if (changed){
+                        employee.setTotalAmount(employee.getTotalAmount().add(person.getAmount()));
+                    }
+                    txDataManager.save(employee);
+
+                } else if (oldVal != null && oldVal.signum() == 1 && employee != null) {
+                     employee.setTotalAmount(employee.getTotalAmount().subtract(oldVal).add(person.getAmount()));
+                     txDataManager.save(employee);
                 }
             }
-
         }
     }
 
     protected String getTable(InsuredPerson insuredPerson) {
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\n" +
+        return "<table border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\n" +
                 "    <tbody>\n" +
                 "    <tr>\n" +
                 "        <td>Родственник</td>\n" +
@@ -249,8 +259,7 @@ public class InsuredPersonChangedListener {
                 "        </td>\n" +
                 "    </tr>\n" +
                 "    </tbody>\n" +
-                "</table>");
-        return builder.toString();
+                "</table>";
     }
 
 }

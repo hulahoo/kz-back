@@ -1,26 +1,35 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
-import com.haulmont.cuba.core.entity.StandardEntity;
+import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
+import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.dictionary.DicCountry;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
+import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
-import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
+import kz.uco.tsadv.modules.personal.dictionary.DicKato;
+import kz.uco.tsadv.modules.personal.dictionary.DicStreetType;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
+@PublishEntityChangedEvents
 @Table(name = "TSADV_ADDRESS_REQUEST")
 @Entity(name = "tsadv$AddressRequest")
-public class AddressRequest extends StandardEntity {
+@NamePattern("%s|address")
+public class AddressRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = 6738699252089383994L;
+
+    public static final String PROCESS_DEFINITION_KEY = "addressRequest";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ADDRESS_TYPE_ID")
     protected DicAddressType addressType;
-
-    @Column(name = "REQUEST_NUMBER")
-    protected Long requestNumber;
 
     @Column(name = "ADDRESS")
     protected String address;
@@ -44,14 +53,6 @@ public class AddressRequest extends StandardEntity {
     protected Date endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ATTACHMENT_ID")
-    protected FileDescriptor attachment;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "STATUS_ID")
-    protected DicRequestStatus status;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BASE_ADDRESS_ID")
     protected Address baseAddress;
 
@@ -59,12 +60,120 @@ public class AddressRequest extends StandardEntity {
     @JoinColumn(name = "PERSON_GROUP_ID")
     protected PersonGroupExt personGroup;
 
-    public void setRequestNumber(Long requestNumber) {
-        this.requestNumber = requestNumber;
+    @JoinTable(name = "TSADV_ADDRESS_REQUEST_FILE_DESCRIPTOR_LINK",
+            joinColumns = @JoinColumn(name = "ADDRESS_REQUEST_ID"),
+            inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
+    @OnDelete(DeletePolicy.CASCADE)
+    @ManyToMany
+    private List<FileDescriptor> attachments;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "KATO_ID")
+    protected DicKato kato;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "STREET_TYPE_ID")
+    protected DicStreetType streetType;
+
+    @Column(name = "STREET_NAME")
+    protected String streetName;
+
+    @Column(name = "BUILDING")
+    protected String building;
+
+    @Column(name = "BLOCK")
+    protected String block;
+
+    @Column(name = "FLAT")
+    protected String flat;
+
+    @Column(name = "ADDRESS_FOR_EXPATS")
+    protected String addressForExpats;
+
+    @Column(name = "ADDRESS_KAZAKH")
+    protected String addressKazakh;
+
+    @Column(name = "ADDRESS_ENGLISH")
+    protected String addressEnglish;
+
+    public String getStreetName() {
+        return streetName;
     }
 
-    public Long getRequestNumber() {
-        return requestNumber;
+    public void setStreetName(String streetName) {
+        this.streetName = streetName;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
+    public String getFlat() {
+        return flat;
+    }
+
+    public void setFlat(String flat) {
+        this.flat = flat;
+    }
+
+    public String getAddressForExpats() {
+        return addressForExpats;
+    }
+
+    public void setAddressForExpats(String addressForExpats) {
+        this.addressForExpats = addressForExpats;
+    }
+
+    public String getAddressKazakh() {
+        return addressKazakh;
+    }
+
+    public void setAddressKazakh(String addressKazakh) {
+        this.addressKazakh = addressKazakh;
+    }
+
+    public String getAddressEnglish() {
+        return addressEnglish;
+    }
+
+    public void setAddressEnglish(String addressEnglish) {
+        this.addressEnglish = addressEnglish;
+    }
+
+    public DicKato getKato() {
+        return kato;
+    }
+
+    public void setKato(DicKato kato) {
+        this.kato = kato;
+    }
+
+    public DicStreetType getStreetType() {
+        return streetType;
+    }
+
+    public void setStreetType(DicStreetType streetType) {
+        this.streetType = streetType;
+    }
+
+    public List<FileDescriptor> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(List<FileDescriptor> attachments) {
+        this.attachments = attachments;
     }
 
     public void setPersonGroup(PersonGroupExt personGroup) {
@@ -139,20 +248,14 @@ public class AddressRequest extends StandardEntity {
         return endDate;
     }
 
-    public void setAttachment(FileDescriptor attachment) {
-        this.attachment = attachment;
+    @Override
+    public String getProcessDefinitionKey() {
+        return PROCESS_DEFINITION_KEY;
     }
 
-    public FileDescriptor getAttachment() {
-        return attachment;
+    @PostConstruct
+    public void postConstruct() {
+        this.startDate = CommonUtils.getSystemDate();
+        this.endDate = CommonUtils.getEndOfTime();
     }
-
-    public void setStatus(DicRequestStatus status) {
-        this.status = status;
-    }
-
-    public DicRequestStatus getStatus() {
-        return status;
-    }
-
 }

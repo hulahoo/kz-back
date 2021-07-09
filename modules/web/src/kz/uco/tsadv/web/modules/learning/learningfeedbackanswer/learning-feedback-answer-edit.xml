@@ -28,8 +28,6 @@
                         fieldCaptionWidth="110px">
                 <column width="450px">
                     <field property="answerLangValue1" rows="3"/>
-                    <field property="answerLangValue2" rows="3"/>
-                    <field property="answerLangValue3" rows="3"/>
                 </column>
             </fieldGroup>
         </scrollBox>

@@ -19,18 +19,33 @@
                 width="800"/>
     <layout expand="tabSheet"
             spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="trainerDs">
-            <column width="250px">
-                <field captionProperty="fullName"
-                       property="employee"/>
-                <field property="addPaymentAmount"/>
-                <field property="orderNumber"/>
-                <field property="orderDate"/>
-                <field captionProperty="name"
-                       property="party"/>
-            </column>
-        </fieldGroup>
+        <hbox id="hbox" spacing="true">
+            <fieldGroup id="fieldGroup"
+                        datasource="trainerDs">
+                <column width="250px">
+                    <field captionProperty="fullName"
+                           property="employee"/>
+                    <field property="addPaymentAmount"/>
+                    <field property="orderNumber"/>
+                    <field property="orderDate"/>
+                    <field captionProperty="name"
+                           property="party"/>
+                    <field property="company"/>
+                </column>
+            </fieldGroup>
+            <fieldGroup id="fieldGroup2" datasource="trainerDs">
+                <column width="250px">
+                    <field property="informationTrainer" rows="4"/>
+                    <field property="informationTrainerLang2" rows="4"/>
+                    <field property="informationTrainerLang3" rows="4"/>
+                </column>
+                <column width="250px">
+                    <field property="trainerGreeting" rows="4"/>
+                    <field property="trainerGreetingLang2" rows="4"/>
+                    <field property="trainerGreetingLang3" rows="4"/>
+                </column>
+            </fieldGroup>
+        </hbox>
         <tabSheet id="tabSheet">
             <tab id="personalInfoTab"
                  caption="msg://tabSheet.personalInfoTab"

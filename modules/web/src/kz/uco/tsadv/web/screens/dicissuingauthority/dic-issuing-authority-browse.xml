@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
-        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
         caption="msg://dicIssuingAuthorityBrowse.caption"
         focusComponent="dicIssuingAuthoritiesTable"
         messagesPack="kz.uco.tsadv.web.screens.dicissuingauthority">
@@ -16,6 +15,7 @@
                 <property name="startDate"/>
                 <property name="endDate"/>
                 <property name="code"/>
+                <property name="company" view="_minimal"/>
             </view>
             <loader id="dicIssuingAuthoritiesDl">
                 <query>
