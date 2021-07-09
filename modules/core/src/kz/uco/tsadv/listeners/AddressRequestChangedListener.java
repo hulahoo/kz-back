@@ -7,7 +7,6 @@ import com.haulmont.cuba.core.global.View;
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import kz.uco.tsadv.api.BaseResult;
-import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.integration.jsonobject.AddressRequestDataJson;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.modules.personal.model.AddressRequest;
@@ -78,7 +77,8 @@ public class AddressRequestChangedListener {
                     addressRequestDataJson.setAddressForExpats(addressRequest.getAddressForExpats());
                     addressRequestDataJson.setAddressKazakh(addressRequest.getAddressKazakh());
                     addressRequestDataJson.setAddressEnglish(addressRequest.getAddressEnglish());
-                    addressRequestDataJson.setEffectiveDate(getFormattedDateString(CommonUtils.getSystemDate()));
+                    addressRequestDataJson.setStartDate(getFormattedDateString(addressRequest.getStartDate()));
+                    addressRequestDataJson.setEndDate(getFormattedDateString(addressRequest.getEndDate()));
                     addressRequestDataJson.setCompanyCode(addressRequest.getPersonGroup() != null
                             && addressRequest.getPersonGroup().getCompany() != null
                             ? addressRequest.getPersonGroup().getCompany().getLegacyId()
