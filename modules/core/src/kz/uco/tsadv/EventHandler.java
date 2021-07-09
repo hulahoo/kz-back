@@ -233,11 +233,11 @@ public class EventHandler {
         if (getCount(em, "PERSONAL_DATA_REQUEST_APPROVE") == 0) {
             ActivityType activityType = metadata.create(ActivityType.class);
             activityType.setCode("PERSONAL_DATA_REQUEST_APPROVE");
-            activityType.setScreen("tsadv$PersonalDataRequest.bpm");
+            activityType.setScreen("tsadv$PersonalDataRequestForBPM.edit");
             activityType.setLangValue1("Утверждение / отклонение измененных данных");
             WindowProperty windowProperty = metadata.create(WindowProperty.class);
             windowProperty.setEntityName("tsadv$PersonalDataRequest");
-            windowProperty.setScreenName("tsadv$PersonalDataRequest.bpm");
+            windowProperty.setScreenName("tsadv$PersonalDataRequestForBPM.edit");
             windowProperty.setViewName("personalDataRequest-view");
             activityType.setWindowProperty(windowProperty);
             em.persist(windowProperty);

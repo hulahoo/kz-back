@@ -801,6 +801,8 @@
         </menu>
         <item screen="tsadv_News.browse"/>
         <item screen="base$AppNameAndLogo.browse"/>
+        <item screen="tsadv_PortalMenuCustomization.browse"
+              caption="mainMsg://menu_config.tsadv_PortalMenuCustomization.browse"/>
     </menu>
     <menu id="help" icon="font-icon:QUESTION_CIRCLE">
         <item id="aboutWindow" openType="DIALOG"/>
