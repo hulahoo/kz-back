@@ -1,5 +1,5 @@
 create or replace function request_tree_data(p_person_group_id uuid, p_request_id uuid) returns json
-	language plpgsql
+    language plpgsql
 as $$
 DECLARE
     l_hierarchy_element_group_id uuid;
@@ -126,11 +126,11 @@ BEGIN
                 'nameEn', ARRAY [r.p_name_en,r.name_en,coalesce(r.p_name_en, r.name_en)],
                 'gradeGroupId', r.grade_group_id,
                 'grade', ARRAY [r.p_grade,r.grade,r.grade],
-                'headCount', ARRAY [r.p_head_count,r.head_count,ABS(r.p_head_count - r.head_count)],
-                'baseSalary', ARRAY [r.p_min_salary,r.min_salary,ABS(r.p_min_salary - r.min_salary)],
-                'mtPayrollPer', ARRAY [r.p_max_salary,r.max_salary,ABS(r.p_max_salary - r.max_salary)],
+                'headCount', ARRAY [r.p_head_count,r.head_count,(r.head_count - r.p_head_count)],
+                'baseSalary', ARRAY [r.p_min_salary,r.min_salary,(r.min_salary - r.p_min_salary)],
+                'mtPayrollPer', ARRAY [r.p_max_salary,r.max_salary,(r.max_salary - r.p_max_salary)],
                 'mtPayroll',
-                ARRAY [r.p_max_salary * r.p_head_count,r.max_salary * r.head_count, ABS(r.p_max_salary * r.p_head_count - r.max_salary * r.head_count)],
+                ARRAY [r.p_max_salary * r.p_head_count,r.max_salary * r.head_count, (r.max_salary * r.head_count - r.p_max_salary * r.p_head_count)],
                 'pOrgGroupId', r.parent_organization_group_id,
                 'orgGroupId', r.organization_group_id,
                 'posGroupId', r.position_group_id,
