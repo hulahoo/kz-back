@@ -24,6 +24,7 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
 
     protected String APPROVED_STATUS = "APPROVED";
     protected SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    protected SimpleDateFormat formatterNoTime = new SimpleDateFormat("yyyy-MM-dd");
 
     @Inject
     protected IntegrationRestService integrationRestService;
@@ -94,7 +95,7 @@ public class AbsenceRequestListener implements BeforeUpdateEntityListener<Absenc
         absenceJson.setPersonId(personId);
         String requestNumber = (entity.getRequestNumber() != null) ? entity.getRequestNumber().toString() : "";
         absenceJson.setRequestNumber(requestNumber);
-        String requestDate = getFormattedDateString(entity.getRequestDate());
+        String requestDate = entity.getRequestDate() != null ? formatterNoTime.format(entity.getRequestDate()) : "";
         absenceJson.setRequestDate(requestDate);
         String absenceTypeId = (entity.getType() != null && entity.getType().getLegacyId() != null) ? entity.getType().getLegacyId() : "";
         absenceJson.setAbsenceTypeId(absenceTypeId);
