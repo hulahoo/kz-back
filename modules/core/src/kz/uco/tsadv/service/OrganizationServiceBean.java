@@ -482,16 +482,12 @@ public class OrganizationServiceBean extends kz.uco.base.service.OrganizationSer
     @Override
     public void sendToResponsibleForIndicators() {
         Map<String, Object> userParams = new HashMap<>();
-        Calendar today = new GregorianCalendar();
-        if (today.get(Calendar.DAY_OF_MONTH) == 1) {
-            for (TsadvUser tsadvUser : commonService.getEntities(TsadvUser.class,
-                    "select bp from tsadv$UserExt bp inner join tsadv_OrganizationIncentiveIndicators toii on toii.responsiblePerson=bp.personGroup",
-                    null,
-                    "myTsadv_view")) {
-                userParams.put("userFullName", tsadvUser.getFullName());
-                notificationService.sendParametrizedNotification("incentive.fill.request", tsadvUser, userParams);
-            }
+        for (TsadvUser tsadvUser : commonService.getEntities(TsadvUser.class,
+                "select bp from tsadv$UserExt bp inner join tsadv_OrganizationIncentiveIndicators toii on toii.responsiblePerson=bp.personGroup",
+                null,
+                "myTsadv_view")) {
+            userParams.put("userFullName", tsadvUser.getFullName());
+            notificationService.sendParametrizedNotification("incentive.fill.request", tsadvUser, userParams);
         }
     }
-
 }
