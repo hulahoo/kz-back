@@ -3,11 +3,11 @@ package kz.uco.tsadv.web.screens.vacationschedulerequest;
 import com.haulmont.cuba.core.global.CommitContext;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.Metadata;
-import com.haulmont.cuba.core.global.View;
 import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.Screens;
 import com.haulmont.cuba.gui.UiComponents;
 import com.haulmont.cuba.gui.components.*;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.model.CollectionLoader;
 import com.haulmont.cuba.gui.screen.LookupComponent;
 import com.haulmont.cuba.gui.screen.*;
@@ -15,12 +15,9 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.VacationScheduleRequest;
 import kz.uco.tsadv.global.enums.SendingToOracleStatus;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
-import kz.uco.tsadv.modules.personal.model.AssignmentExt;
 import kz.uco.tsadv.service.AssignmentService;
 
 import javax.inject.Inject;
-import java.util.HashSet;
-import java.util.Set;
 
 
 /**
@@ -53,42 +50,21 @@ public class VacationScheduleRequestBrowse extends StandardLookup<VacationSchedu
     @Inject
     protected TabSheet tabSheet;
 
-    protected Set<VacationScheduleRequest> selectedVacationScheduleRequests = new HashSet<>();
     @Inject
     protected Button sendToOracleBtn;
-
-    public Component checkListGenerator(VacationScheduleRequest vacationScheduleRequest) {
-        CheckBox checkBox = uiComponents.create(CheckBox.NAME);
-        checkBox.setValue(selectedVacationScheduleRequests.contains(vacationScheduleRequest));
-        checkBox.addValueChangeListener(e -> this.checkListChangedListener(e, vacationScheduleRequest));
-        return checkBox;
-    }
-
-    protected void checkListChangedListener(HasValue.ValueChangeEvent<Boolean> event, VacationScheduleRequest vacationScheduleRequest) {
-        if (Boolean.TRUE.equals(event.getValue())) {
-            selectedVacationScheduleRequests.add(vacationScheduleRequest);
-
-        } else selectedVacationScheduleRequests.remove(vacationScheduleRequest);
-        if (selectedVacationScheduleRequests.isEmpty()) {
-            sendToOracleBtn.setEnabled(false);
-        } else {
-            if (selectedVacationScheduleRequests.stream().anyMatch(vacationScheduleRequest1 ->
-                    vacationScheduleRequest1.getSentToOracle() != null)) {
-                sendToOracleBtn.setEnabled(false);
-            } else {
-                sendToOracleBtn.setEnabled(true);
-            }
-        }
-    }
+    @Inject
+    private DataGrid<VacationScheduleRequest> vacationScheduleRequestsTable;
 
     @Subscribe("sendToOracleBtn")
     protected void onSendToOracleBtnClick(Button.ClickEvent event) {
         CommitContext commitContext = new CommitContext();
-        selectedVacationScheduleRequests.stream()
-                .peek(vacationScheduleRequest -> vacationScheduleRequest.setSentToOracle(SendingToOracleStatus.SENDING_TO_ORACLE))
-                .forEach(commitContext::addInstanceToCommit);
+        vacationScheduleRequestsTable.getSelected().forEach(vacationScheduleRequest -> {
+            if (!SendingToOracleStatus.SENDING_TO_ORACLE.equals(vacationScheduleRequest.getSentToOracle())) {
+                vacationScheduleRequest.setSentToOracle(SendingToOracleStatus.SENDING_TO_ORACLE);
+                commitContext.addInstanceToCommit(vacationScheduleRequest);
+            }
+        });
         dataManager.commit(commitContext);
-        selectedVacationScheduleRequests.clear();
         vacationScheduleRequestsDl.load();
         vacationSchedulesDl.load();
         tabSheet.setSelectedTab("vacationScheduleTab");
@@ -97,7 +73,7 @@ public class VacationScheduleRequestBrowse extends StandardLookup<VacationSchedu
     public void openPersonCard(VacationScheduleRequest request, String columnId) {
         PersonGroupExt personGroup = request.getPersonGroup();
 
-        AssignmentExt assignment = assignmentService.getAssignment(personGroup.getId(), View.MINIMAL);
+//        AssignmentExt assignment = assignmentService.getAssignment(personGroup.getId(), View.MINIMAL);
 
         screenBuilders.editor(PersonGroupExt.class, this)
                 .editEntity(personGroup)
@@ -112,5 +88,32 @@ public class VacationScheduleRequestBrowse extends StandardLookup<VacationSchedu
                 .build()
                 .show()
                 .addAfterCloseListener(afterCloseEvent -> vacationScheduleRequestsDl.load());
+    }
+
+    @Install(to = "vacationScheduleRequestsTable.requestNumber", subject = "columnGenerator")
+    private Component vacationScheduleRequestsTableRequestNumberColumnGenerator(DataGrid.ColumnGeneratorEvent<VacationScheduleRequest> event) {
+        LinkButton linkButton = uiComponents.create(LinkButton.class);
+        linkButton.setCaption(event.getItem().getRequestNumber().toString());
+        linkButton.setAction(new BaseAction("requestNumber").withHandler(e -> {
+            screenBuilders.editor(vacationScheduleRequestsTable)
+                    .editEntity(event.getItem())
+                    .build().show();
+        }));
+        return linkButton;
+    }
+
+    @Install(to = "vacationScheduleRequestsTable.personGroup", subject = "columnGenerator")
+    private Component vacationScheduleRequestsTablePersonGroupFioWithEmployeeNumberColumnGenerator(DataGrid.ColumnGeneratorEvent<VacationScheduleRequest> event) {
+        PersonGroupExt personGroup = event.getItem().getPersonGroup();
+
+        LinkButton linkButton = uiComponents.create(LinkButton.class);
+        linkButton.setCaption(event.getItem().getPersonGroup().getFioWithEmployeeNumber());
+        linkButton.setAction(new BaseAction("personGroup").withHandler(e ->
+                screenBuilders.editor(PersonGroupExt.class, this)
+                        .editEntity(personGroup)
+                        .withScreenId("person-card")
+                        .build()
+                        .show()));
+        return linkButton;
     }
 }
