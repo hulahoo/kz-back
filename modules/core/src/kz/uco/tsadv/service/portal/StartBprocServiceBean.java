@@ -125,7 +125,7 @@ public class StartBprocServiceBean implements StartBprocService {
             String roleCode = hrRole.getCode();
             List<TsadvUser> hrUsersForPerson;
 
-            if (roleCode.equals("EMPLOYEE")) {
+            if (roleCode.equals(OrganizationHrUserService.HR_ROLE_EMPLOYEE)) {
                 hrUsersForPerson = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e where e.personGroup.id = :employeePersonGroupId and e.active = 'TRUE'")
                         .parameter("employeePersonGroupId", employeePersonGroupId)

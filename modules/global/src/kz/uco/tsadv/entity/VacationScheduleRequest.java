@@ -15,7 +15,7 @@ import java.util.Date;
 
 @Table(name = "TSADV_VACATION_SCHEDULE_REQUEST")
 @Entity(name = "tsadv_VacationScheduleRequest")
-@NamePattern("%s - %s|startDate,endDate")
+@NamePattern("%s - %s|startDate,endDate,personGroup")
 public class VacationScheduleRequest extends AbstractBprocRequest {
     private static final long serialVersionUID = 1975378160965313966L;
 

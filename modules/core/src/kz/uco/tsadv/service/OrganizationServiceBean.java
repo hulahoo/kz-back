@@ -13,14 +13,12 @@ import kz.uco.tsadv.global.entity.OrganizationTree;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.dictionary.DicPayroll;
 import kz.uco.tsadv.modules.personal.group.OrganizationGroupExt;
-import kz.uco.tsadv.modules.personal.model.HrUserRole;
-import kz.uco.tsadv.modules.personal.model.OrganizationExt;
-import kz.uco.tsadv.modules.personal.model.OrganizationHrUser;
-import kz.uco.tsadv.modules.personal.model.OrganizationStructure;
+import kz.uco.tsadv.modules.personal.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,16 +35,40 @@ public class OrganizationServiceBean extends kz.uco.base.service.OrganizationSer
     protected Persistence persistence;
     @Inject
     protected UserSessionSource userSessionSource;
+    @Inject
+    protected PositionService positionService;
+    @Inject
+    protected DataManager dataManager;
+
+    @Override
+    public OrganizationGroupExt getOrganizationGroup(@Nullable View view) {
+        return this.getOrganizationGroup(userSessionSource.getUserSession().getUser().getId(), view);
+    }
+
+    @Override
+    public OrganizationGroupExt getOrganizationGroup(UUID userId, @Nullable View view) {
+        PositionExt position = positionService.getPosition(userId, new View(PositionExt.class).addProperty("organizationGroupExt"));
+
+        OrganizationGroupExt organizationGroup = position.getOrganizationGroupExt();
+        if (view != null) organizationGroup = dataManager.reload(organizationGroup, view);
+
+        return organizationGroup;
+    }
 
     /**
      * Возвращает родительское подразделение для заданного подразделения в основной организационной иерархии
      */
     @Override
     public OrganizationGroupExt getParent(OrganizationGroupExt organizationGroup) {
-        // устал бегать выяснять откуда взять (при помощи каких объектов) todo реализовать
-        String query = "" +
-                "select ";
-        return null;
+        if (organizationGroup == null) return null;
+        List<OrganizationGroupExt> organizationGroups = dataManager.load(OrganizationGroupExt.class)
+                .query("select l.organizationGroup from base$HierarchyElementExt e " +
+                        " join e.parentGroup.list l " +
+                        "   where e.organizationGroup.id = :organizationGroupId " +
+                        "   and current_date between l.startDate and l.endDate ")
+                .parameter("organizationGroupId", organizationGroup.getId())
+                .list();
+        return organizationGroups.size() != 1 ? null : organizationGroups.get(0);
     }
 
 

@@ -7,6 +7,12 @@
         <method name="getCompaniesForLoadDictionary">
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
+        <method name="initPortalMenu">
+            <param name="menuList" type="java.util.List"/>
+        </method>
+        <method name="getPortalMenu">
+            <param name="menuType" type="java.lang.String"/>
+        </method>
     </service>
     <service name="tsadv_BprocService">
         <method name="getProcessInstanceData">
@@ -203,6 +209,9 @@
         <method name="personGroupInfo">
             <param name="userId" type="java.util.UUID"/>
         </method>
+        <method name="hasHrRole">
+            <param name="dicHrCode" type="java.lang.String"/>
+        </method>
     </service>
     <service name="tsadv_OrgStructureRequestService">
         <method name="initialCreate"/>
@@ -225,6 +234,16 @@
         <method name="saveRequest">
             <param name="orgRequestSaveModel" type="kz.uco.tsadv.pojo.OrgRequestSaveModel"/>
         </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="changeTypeFilter" type="kz.uco.tsadv.api.OrgStructureRequestChangeType"/>
+        </method>
+        <method name="getMergedOrgStructure">
+            <param name="requestId" type="java.util.UUID"/>
+            <param name="displayFilter" type="kz.uco.tsadv.api.OrgStructureRequestDisplayType"/>
+        </method>
+        <method name="availableSalary"/>
+        <method name="hasPermitToCreate"/>
     </service>
     <service name="tsadv_MyTeamService">
         <method name="getChildren">
@@ -240,6 +259,9 @@
             <param name="userId" type="java.util.UUID"/>
             <param name="employeePersonGroupId" type="java.util.UUID"/>
         </method>
+        <method name="getDicHrRoles">
+            <param name="userId" type="java.util.UUID"/>
+        </method>
     </service>
     <service name="cuba_UserSettingService">
         <method name="saveSetting">
@@ -252,14 +274,34 @@
             <param name="name" type="java.lang.String"/>
         </method>
     </service>
+    <service name="tsadv_CommonReportsService">
+        <method name="downloadReportByCode">
+            <param name="reportCode" type="java.lang.String"/>
+            <param name="params" type="java.util.Map"/>
+        </method>
+        <method name="downloadReportByCode">
+            <param name="reportCode" type="java.lang.String"/>
+            <param name="entityParamName" type="java.lang.String"/>
+            <param name="entityId" type="java.util.UUID"/>
+        </method>
+    </service>
     <service name="tsadv_ExecutiveAssistantService">
         <method name="getManagerList">
-            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="assistantPositionGroupId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_PositionService">
         <method name="getManager">
             <param name="positionGroupId" type="java.util.UUID"/>
+        </method>
+    </service>
+    <service name="tsadv_VacationScheduleRequestService">
+        <method name="ganttChart">
+            <param name="startDate" type="java.util.Date"/>
+            <param name="endDate" type="java.util.Date"/>
+        </method>
+        <method name="getChildVacationSchedule">
+            <param name="paginationPojo" type="kz.uco.tsadv.pojo.pagination.PaginationPojo"/>
         </method>
     </service>
 </services>
