@@ -5079,28 +5079,28 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
                         absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
 
-                        Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double annualDueDays = Double.valueOf(absenceBalanceJson.getAnnualDueDays()); //new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setBalanceDays(annualDueDays);
 
-                        Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double additionalDueDays = Double.valueOf(absenceBalanceJson.getAdditionalDueDays()); //new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setAdditionalBalanceDays(additionalDueDays);
 
-                        Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double ecologicalDueDays = Double.valueOf(absenceBalanceJson.getEcologicalDueDays()); //new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setEcologicalDueDays(ecologicalDueDays);
 
-                        Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double disabilityDueDays = Double.valueOf(absenceBalanceJson.getDisabilityDueDays()); //new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDisabilityDueDays(disabilityDueDays);
 
-                        Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double annualBalanceDays = Double.valueOf(absenceBalanceJson.getAnnualBalanceDays()); //new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDaysLeft(annualBalanceDays);
 
-                        Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double additionalBalanceDays = Double.valueOf(absenceBalanceJson.getAdditionalBalanceDays()); //new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setExtraDaysLeft(additionalBalanceDays);
 
-                        Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double ecologicalBalanceDays = Double.valueOf(absenceBalanceJson.getEcologicalBalanceDays()); //new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
 
-                        Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double disabilityBalanceDays = Double.valueOf(absenceBalanceJson.getDisabilityBalanceDays()); //new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
 
                         absenceBalancesCommitList.add(absenceBalance);
@@ -5128,28 +5128,28 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
                         absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
 
-                        Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double annualDueDays = Double.valueOf(absenceBalanceJson.getAnnualDueDays()); //new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setBalanceDays(annualDueDays);
 
-                        Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double additionalDueDays = Double.valueOf(absenceBalanceJson.getAdditionalDueDays()); //new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setAdditionalBalanceDays(additionalDueDays);
 
-                        Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double ecologicalDueDays = Double.valueOf(absenceBalanceJson.getEcologicalDueDays()); //new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setEcologicalDueDays(ecologicalDueDays);
 
-                        Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                        Double disabilityDueDays = Double.valueOf(absenceBalanceJson.getDisabilityDueDays()); //new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDisabilityDueDays(disabilityDueDays);
 
-                        Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double annualBalanceDays = Double.valueOf(absenceBalanceJson.getAnnualBalanceDays()); //new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDaysLeft(annualBalanceDays);
 
-                        Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double additionalBalanceDays = Double.valueOf(absenceBalanceJson.getAdditionalBalanceDays()); //new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setExtraDaysLeft(additionalBalanceDays);
 
-                        Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double ecologicalBalanceDays = Double.valueOf(absenceBalanceJson.getEcologicalBalanceDays()); //new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
 
-                        Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                        Double disabilityBalanceDays = Double.valueOf(absenceBalanceJson.getDisabilityBalanceDays()); //new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
                         absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
 
 
@@ -5176,28 +5176,28 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     absenceBalance.setDateFrom(formatter.parse(absenceBalanceJson.getDate()));
                     absenceBalance.setDateTo(formatter.parse(absenceBalanceJson.getDate()));
 
-                    Double annualDueDays = new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
+                    Double annualDueDays = Double.valueOf(absenceBalanceJson.getAnnualDueDays()); //new BigDecimal(absenceBalanceJson.getAnnualDueDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setBalanceDays(annualDueDays);
 
-                    Double additionalDueDays = new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
+                    Double additionalDueDays = Double.valueOf(absenceBalanceJson.getAdditionalDueDays()); //new BigDecimal(absenceBalanceJson.getAdditionalDueDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setAdditionalBalanceDays(additionalDueDays);
 
-                    Double ecologicalDueDays = new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
+                    Double ecologicalDueDays = Double.valueOf(absenceBalanceJson.getEcologicalDueDays()); //new BigDecimal(absenceBalanceJson.getEcologicalDueDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setEcologicalDueDays(ecologicalDueDays);
 
-                    Double disabilityDueDays = new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
+                    Double disabilityDueDays = Double.valueOf(absenceBalanceJson.getDisabilityDueDays()); //new BigDecimal(absenceBalanceJson.getDisabilityDueDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setDisabilityDueDays(disabilityDueDays);
 
-                    Double annualBalanceDays = new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    Double annualBalanceDays = Double.valueOf(absenceBalanceJson.getAnnualBalanceDays()); //new BigDecimal(absenceBalanceJson.getAnnualBalanceDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setDaysLeft(annualBalanceDays);
 
-                    Double additionalBalanceDays = new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    Double additionalBalanceDays = Double.valueOf(absenceBalanceJson.getAdditionalBalanceDays()); //new BigDecimal(absenceBalanceJson.getAdditionalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setExtraDaysLeft(additionalBalanceDays);
 
-                    Double ecologicalBalanceDays = new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    Double ecologicalBalanceDays = Double.valueOf(absenceBalanceJson.getEcologicalBalanceDays()); //new BigDecimal(absenceBalanceJson.getEcologicalBalanceDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setEcologicalDaysLeft(ecologicalBalanceDays);
 
-                    Double disabilityBalanceDays = new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
+                    Double disabilityBalanceDays = Double.valueOf(absenceBalanceJson.getDisabilityBalanceDays()); //new BigDecimal(absenceBalanceJson.getDisabilityBalanceDays()).setScale(scale, roundingMode).doubleValue();
                     absenceBalance.setDisabilityDaysLeft(disabilityBalanceDays);
 
                 }
