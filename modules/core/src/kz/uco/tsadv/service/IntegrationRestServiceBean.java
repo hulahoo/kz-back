@@ -4269,9 +4269,6 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             "no companyCode");
                 }
 
-                Date startDate = CommonUtils.getSystemDate();
-                Date endDate = CommonUtils.getMaxDate();
-
                 Address address = personAddressesCommitList.stream().filter(filterAddress ->
                         filterAddress.getLegacyId() != null
                                 && filterAddress.getLegacyId().equals(personAddressJson.getLegacyId())
@@ -4292,8 +4289,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             .view("address.view").list().stream().findFirst().orElse(null);
 
                     if (address != null) {
-                        address.setStartDate(startDate);
-                        address.setEndDate(endDate);
+                        if (personAddressJson.getStartDate() != null && !personAddressJson.getStartDate().isEmpty()) {
+                            address.setStartDate(formatter.parse(personAddressJson.getStartDate()));
+                        }
+                        if (personAddressJson.getEndDate() != null && !personAddressJson.getEndDate().isEmpty()) {
+                            address.setEndDate(formatter.parse(personAddressJson.getEndDate()));
+                        }
 
                         DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
                                 .query("select e from tsadv$DicAddressType e " +
@@ -4378,8 +4379,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     } else {
                         address = metadata.create(Address.class);
                         address.setId(UUID.randomUUID());
-                        address.setStartDate(startDate);
-                        address.setEndDate(endDate);
+                        if (personAddressJson.getStartDate() != null && !personAddressJson.getStartDate().isEmpty()) {
+                            address.setStartDate(formatter.parse(personAddressJson.getStartDate()));
+                        }
+                        if (personAddressJson.getEndDate() != null && !personAddressJson.getEndDate().isEmpty()) {
+                            address.setEndDate(formatter.parse(personAddressJson.getEndDate()));
+                        }
 
                         DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
                                 .query("select e from tsadv$DicAddressType e " +
@@ -4464,8 +4469,12 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     }
                 } else {
 
-                    address.setStartDate(startDate);
-                    address.setEndDate(endDate);
+                    if (personAddressJson.getStartDate() != null && !personAddressJson.getStartDate().isEmpty()) {
+                        address.setStartDate(formatter.parse(personAddressJson.getStartDate()));
+                    }
+                    if (personAddressJson.getEndDate() != null && !personAddressJson.getEndDate().isEmpty()) {
+                        address.setEndDate(formatter.parse(personAddressJson.getEndDate()));
+                    }
 
                     DicAddressType dicAddressType = dataManager.load(DicAddressType.class)
                             .query("select e from tsadv$DicAddressType e " +

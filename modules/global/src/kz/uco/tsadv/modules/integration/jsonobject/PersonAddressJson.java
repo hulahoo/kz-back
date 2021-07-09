@@ -21,6 +21,8 @@ public class PersonAddressJson implements Serializable {
     protected String addressKazakh;
     protected String addressEnglish;
     protected String companyCode;
+    protected String startDate;
+    protected String endDate;
 
     @JsonProperty
     public String getPersonId() {
@@ -180,5 +182,25 @@ public class PersonAddressJson implements Serializable {
     @JsonProperty
     public void setCompanyCode(String companyCode) {
         this.companyCode = companyCode;
+    }
+
+    @JsonProperty
+    public String getStartDate() {
+        return startDate;
+    }
+
+    @JsonProperty
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    @JsonProperty
+    public String getEndDate() {
+        return endDate;
+    }
+
+    @JsonProperty
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }
