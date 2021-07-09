@@ -9,9 +9,9 @@
                     view="person.browse">
             <loader id="personExtDl">
                 <query>
-                    <![CDATA[select distinct e
+                    <![CDATA[select e
                            from base$PersonExt e
-                           join base$AssignmentExt a on a.personGroup.id = e.group.id
+                           left join e.group.assignments a
                           where current_date between e.startDate and e.endDate
                             and current_date between a.startDate and a.endDate
                             and a.assignmentStatus.code = 'ACTIVE'

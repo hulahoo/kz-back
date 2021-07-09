@@ -4,10 +4,14 @@ import com.haulmont.bali.util.ParamsMap;
 import com.haulmont.cuba.core.entity.Entity;
 import com.haulmont.cuba.core.global.Metadata;
 import com.haulmont.cuba.core.global.UserSessionSource;
+import com.haulmont.cuba.gui.ScreenBuilders;
 import com.haulmont.cuba.gui.WindowManager;
 import com.haulmont.cuba.gui.WindowParam;
 import com.haulmont.cuba.gui.components.*;
 import com.haulmont.cuba.gui.data.GroupDatasource;
+import com.haulmont.cuba.gui.screen.MapScreenOptions;
+import com.haulmont.cuba.gui.screen.OpenMode;
+import com.haulmont.cuba.gui.screen.Screen;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import com.haulmont.cuba.security.global.UserSession;
 import kz.uco.base.events.NotificationRefreshEvent;
@@ -15,6 +19,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.components.GroupsComponent;
 import kz.uco.tsadv.entity.dbview.ActivityTask;
 import kz.uco.tsadv.global.common.CommonUtils;
+import kz.uco.tsadv.web.screens.activity.ActivityForHandbellBrowse;
 import kz.uco.uactivity.entity.Activity;
 import kz.uco.uactivity.entity.StatusEnum;
 import org.springframework.context.event.EventListener;
@@ -62,6 +67,10 @@ public class ActivityBrowseNew extends AbstractLookup {
     private GroupDatasource<ActivityTask, UUID> activityTasksDs;
     @Inject
     protected GroupsComponent groupsComponent;
+    @Inject
+    private Button openNotification;
+    @Inject
+    private ScreenBuilders screenBuilders;
 
     @Override
     public void init(Map<String, Object> params) {
@@ -112,6 +121,7 @@ public class ActivityBrowseNew extends AbstractLookup {
                 notifications.forEach(notification -> {
                     if (StatusEnum.active.equals(notification.getStatus())) {
                         markAsReadButton.setEnabled(true);
+                        openNotification.setEnabled(true);
                     } else {
                         markAsUnreadButton.setEnabled(true);
                     }
@@ -126,6 +136,7 @@ public class ActivityBrowseNew extends AbstractLookup {
                 notifications.forEach(notification -> {
                     if (StatusEnum.active.equals(notification.getStatus())) {
                         markAsReadButton.setEnabled(true);
+                        openNotification.setEnabled(true);
                     } else {
                         markAsUnreadButton.setEnabled(true);
                     }
@@ -186,6 +197,7 @@ public class ActivityBrowseNew extends AbstractLookup {
             notifications.clear();
             notificationsTable.repaint();
             markAsReadButton.setEnabled(false);
+            openNotification.setEnabled(false);
             markAsUnreadButton.setEnabled(false);
         }
     }
@@ -205,6 +217,7 @@ public class ActivityBrowseNew extends AbstractLookup {
             notifications.clear();
             notificationsTable.repaint();
             markAsReadButton.setEnabled(false);
+            openNotification.setEnabled(false);
             markAsUnreadButton.setEnabled(false);
         }
     }
@@ -350,5 +363,24 @@ public class ActivityBrowseNew extends AbstractLookup {
 
     protected boolean isSessionUser(UUID userId) {
         return userSession.getUser().getId().equals(userId);
+    }
+
+    public void openNotification() {
+        Map<String, Object> windowParams = new HashMap<>();
+        windowParams.put("activity", notifications.get(0));
+        Screen screen = screenBuilders.screen(this)
+                .withScreenClass(ActivityForHandbellBrowse.class)
+                .withOpenMode(OpenMode.THIS_TAB)
+                .withOptions(new MapScreenOptions(windowParams))
+                .build().show();
+        screen.addAfterCloseListener(afterCloseEvent -> {
+            activityTasksDs.refresh();
+            notificationsDs.refresh();
+            notifications.clear();
+            notificationsTable.repaint();
+            markAsReadButton.setEnabled(false);
+            openNotification.setEnabled(false);
+            markAsUnreadButton.setEnabled(false);
+        });
     }
 }

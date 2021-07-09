@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://browseCaption"
+        messagesPack="kz.uco.tsadv.web.screens.activity">
+    <data readOnly="true">
+        <collection id="activitiesDc"
+                    class="kz.uco.uactivity.entity.Activity"
+                    view="activity.view">
+            <loader id="activitiesDl"/>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout spacing="true" expand="scroll" width="100%" height="100%">
+        <groupBox caption="msg://notificationHeader">
+            <label id="header"/>
+        </groupBox>
+        <scrollBox id="scroll" orientation="vertical">
+            <groupBox id="groupBox" spacing="true" caption="msg://notificationBody">
+                <label id="body" htmlEnabled="true" width="100%" height="100%"/>
+            </groupBox>
+        </scrollBox>
+        <hbox id="lookupActions" spacing="true">
+            <button id="lookUpAction" action="lookupSelectAction" caption="OK"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>

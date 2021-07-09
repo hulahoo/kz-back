@@ -20,18 +20,19 @@
     <layout expand="tabSheet"
             spacing="true">
         <hbox id="hbox" spacing="true">
-        <fieldGroup id="fieldGroup"
-                    datasource="trainerDs">
-            <column width="250px">
-                <field captionProperty="fullName"
-                       property="employee"/>
-                <field property="addPaymentAmount"/>
-                <field property="orderNumber"/>
-                <field property="orderDate"/>
-                <field captionProperty="name"
-                       property="party"/>
-            </column>
-        </fieldGroup>
+            <fieldGroup id="fieldGroup"
+                        datasource="trainerDs">
+                <column width="250px">
+                    <field captionProperty="fullName"
+                           property="employee"/>
+                    <field property="addPaymentAmount"/>
+                    <field property="orderNumber"/>
+                    <field property="orderDate"/>
+                    <field captionProperty="name"
+                           property="party"/>
+                    <field property="company"/>
+                </column>
+            </fieldGroup>
             <fieldGroup id="fieldGroup2" datasource="trainerDs">
                 <column width="250px">
                     <field property="informationTrainer" rows="4"/>

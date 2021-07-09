@@ -39,7 +39,7 @@
                 <column id="addPaymentAmount"/>
                 <column id="orderNumber"/>
                 <column id="orderDate"/>
-                <column id="party.name"/>
+                <column id="company"/>
             </columns>
             <rows datasource="trainersDs"/>
             <rowsCount/>
