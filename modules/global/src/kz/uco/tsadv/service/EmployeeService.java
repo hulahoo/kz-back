@@ -152,9 +152,5 @@ public interface EmployeeService {
 
     List<? extends PersonGroupExt> getPersonGroupByPositionGroupId(UUID positionGroupId, String viewName);
 
-    List<DicHrRole> userHrRoles();
-
-    List<DicHrRole> userHrRoles(UUID personGroupId);
-
     boolean hasHrRole(String dicHrCode);
 }
