@@ -119,7 +119,8 @@
                             expand="organizationIncentiveIndicatorsTable"
                             spacing="true">
                            <table id="organizationIncentiveIndicatorsTable"
-                                  dataContainer="organizationIncentiveIndicatorsDc">
+                                  dataContainer="organizationIncentiveIndicatorsDc"
+                                  width="100%">
                                <actions>
                                    <action id="add" type="add"/>
                                    <action id="remove" type="remove"/>
