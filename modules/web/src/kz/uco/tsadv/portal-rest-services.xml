@@ -7,6 +7,12 @@
         <method name="getCompaniesForLoadDictionary">
             <param name="personGroupId" type="java.util.UUID"/>
         </method>
+        <method name="initPortalMenu">
+            <param name="menuList" type="java.util.List"/>
+        </method>
+        <method name="getPortalMenu">
+            <param name="menuType" type="java.lang.String"/>
+        </method>
     </service>
     <service name="tsadv_BprocService">
         <method name="getProcessInstanceData">
@@ -281,7 +287,7 @@
     </service>
     <service name="tsadv_ExecutiveAssistantService">
         <method name="getManagerList">
-            <param name="positionGroupId" type="java.util.UUID"/>
+            <param name="assistantPositionGroupId" type="java.util.UUID"/>
         </method>
     </service>
     <service name="tsadv_PositionService">

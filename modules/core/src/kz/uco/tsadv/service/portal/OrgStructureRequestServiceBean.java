@@ -600,10 +600,8 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
         Objects.requireNonNull(currentPersonGroup, "Can not find person group by id: " + currentPersonGroup);
 
         final AssignmentExt currentAssignment = dataManager.reload(currentPersonGroup.getCurrentAssignment(), "assignment.gradeGroup");
-        boolean isPermittedRole = this.employeeService.userHrRoles()
-                .stream()
-                .anyMatch(hrRole -> this.hrRoleCodeToAvailableSalary().contains(hrRole.getCode()));
-        return isPermittedRole || (currentAssignment.getGradeGroup() != null
+        return this.employeeService.hasHrRole("C&B_COMPANY")
+                || (currentAssignment.getGradeGroup() != null
                 ? currentAssignment.getGradeGroup().getAvailableSalary()
                 : currentAssignment.getPositionGroup().getGradeGroup() != null
                 ? currentAssignment.getPositionGroup().getGradeGroup().getAvailableSalary()
@@ -612,16 +610,6 @@ public class OrgStructureRequestServiceBean implements OrgStructureRequestServic
 
     @Override
     public boolean hasPermitToCreate() {
-        return this.employeeService.userHrRoles()
-                .stream()
-                .anyMatch(hrRole -> this.hrRolesToCreate().contains(hrRole.getCode()));
-    }
-
-    protected List<String> hrRoleCodeToAvailableSalary() {
-        return Arrays.asList("C&B_COMPANY", "C&B_GROUP");
-    }
-
-    protected List<String> hrRolesToCreate() {
-        return Arrays.asList("ORG_MANGER", "MANAGER_ASSISTANT");
+        return this.employeeService.hasHrRole("ORG_MANGER");
     }
 }
