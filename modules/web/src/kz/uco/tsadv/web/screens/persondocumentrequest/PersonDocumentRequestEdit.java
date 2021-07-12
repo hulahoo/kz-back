@@ -1,10 +1,13 @@
 package kz.uco.tsadv.web.screens.persondocumentrequest;
 
+import com.haulmont.addon.bproc.web.processform.Outcome;
+import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.DataManager;
 import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.gui.components.Component;
 import com.haulmont.cuba.gui.components.FileUploadField;
+import com.haulmont.cuba.gui.components.Form;
 import com.haulmont.cuba.gui.components.LinkButton;
 import com.haulmont.cuba.gui.components.actions.BaseAction;
 import com.haulmont.cuba.gui.export.ExportDisplay;
@@ -16,9 +19,11 @@ import com.haulmont.cuba.gui.screen.*;
 import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
 import kz.uco.base.service.common.CommonService;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicApprovalStatus;
 import kz.uco.tsadv.modules.personal.dictionary.DicDocumentType;
 import kz.uco.tsadv.modules.personal.model.PersonDocumentRequest;
+import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -28,7 +33,15 @@ import java.util.ArrayList;
 @UiDescriptor("person-document-request-edit.xml")
 @EditedEntityContainer("personDocumentRequestDc")
 @LoadDataBeforeShow
-public class PersonDocumentRequestEdit extends StandardEditor<PersonDocumentRequest> {
+@ProcessForm(
+        outcomes = {
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_CANCEL)
+        }
+)
+public class PersonDocumentRequestEdit extends AbstractBprocEditor<PersonDocumentRequest> {
 
     @Inject
     protected CollectionLoader<DicDocumentType> dicDocumentTypesDl;
@@ -50,6 +63,14 @@ public class PersonDocumentRequestEdit extends StandardEditor<PersonDocumentRequ
     private ComponentsFactory componentsFactory;
     @Inject
     private ExportDisplay exportDisplay;
+    @Inject
+    private Form form;
+
+    @Override
+    protected void initEditableFields() {
+        super.initEditableFields();
+        form.setEditable(isDraft());
+    }
 
     @Subscribe
     protected void onInit(InitEvent event) {
@@ -61,10 +82,9 @@ public class PersonDocumentRequestEdit extends StandardEditor<PersonDocumentRequ
         }
     }
 
-
     @Subscribe
     protected void onInitEntity(InitEntityEvent<PersonDocumentRequest> event) {
-        event.getEntity().setStatus(commonService.getEntity(DicApprovalStatus.class, "PROJECT"));
+        event.getEntity().setApprovalStatus(commonService.getEntity(DicApprovalStatus.class, "PROJECT"));
     }
 
     @Subscribe("upload")

@@ -112,6 +112,8 @@
                           dataContainer="courseDc">
                         <column width="250px">
                             <textField id="name" property="name"/>
+                            <textField id="nameLang2" property="nameLang2"/>
+                            <textField id="nameLang3" property="nameLang3"/>
                             <pickerField property="party">
                                 <actions>
                                     <action id="lookup" type="picker_lookup"/>
@@ -141,6 +143,9 @@
                             <textField property="educationPeriod"/>
                             <textArea id="shortDescription" property="shortDescription"
                                       rows="5"/>
+                            <pickerField id="programmCodeField" property="programmCode"/>
+                            <pickerField id="typeOfTrainingField" property="typeOfTraining"/>
+                            <pickerField id="assessmentMethodField" property="assessmentMethod"/>
                         </column>
                     </form>
                 </scrollBox>
@@ -347,6 +352,8 @@
                         <action id="generateCertificate"
                                 trackSelection="true"
                                 caption="msg://generateCertificate"/>
+                        <action id="addAttempt" trackSelection="true"
+                                caption="msg://addAttempt"/>
                     </actions>
                     <columns>
                         <column property="personGroup"/>
@@ -363,6 +370,7 @@
                         <button action="enrollmentsTable.edit"/>
                         <button action="enrollmentsTable.remove"/>
                         <button action="enrollmentsTable.generateCertificate"/>
+                        <button action="enrollmentsTable.addAttempt"/>
                     </buttonsPanel>
                 </dataGrid>
             </tab>

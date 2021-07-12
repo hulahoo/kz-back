@@ -1954,5 +1954,38 @@
         <entity class="kz.uco.tsadv.modules.performance.model.PersonException">
             <include re=".*"/>
         </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicStreetType">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.dictionary.DicKato">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.personal.model.DicShift">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.ResizedImage">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.ImageSize">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.entity.ExecutiveAssistants">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicTypeOfTraining">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicProgrammCode">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.dictionary.DicAssessmentMethod">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.learning.model.PositionCourse">
+            <include re=".*"/>
+        </entity>
+        <entity class="kz.uco.tsadv.modules.administration.PortalMenuCustomization">
+            <include re=".*"/>
+        </entity>
     </entities>
 </fts-config>

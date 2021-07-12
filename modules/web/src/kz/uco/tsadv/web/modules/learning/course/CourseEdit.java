@@ -473,4 +473,33 @@ public class CourseEdit extends StandardEditor<Course> {
                 }).build().show()
                 .addAfterCloseListener(afterCloseEvent -> preRequisitionDl.load());
     }
+
+    @Subscribe("enrollmentsTable.addAttempt")
+    public void onEnrollmentsTableAddAttempt(Action.ActionPerformedEvent event) {
+        CommitContext commitContext = new CommitContext();
+        for (Enrollment enrollment : enrollmentsTable.getSelected()) {
+            for (CourseSection section : courseDc.getItem().getSections()) {
+                if (section.getSectionObject() != null && section.getSectionObject().getObjectType() != null
+                        && "TEST".equals(section.getSectionObject().getObjectType().getCode())) {
+                    Test test = section.getSectionObject().getTest();
+                    CourseSectionAttempt courseSectionAttempt = dataManager.load(CourseSectionAttempt.class)
+                            .query("select e from tsadv$CourseSectionAttempt e " +
+                                    " where e.enrollment = :enrollment " +
+                                    " and e.test = :test " +
+                                    " and e.activeAttempt = true ")
+                            .parameter("enrollment", enrollment)
+                            .parameter("test", test)
+                            .view("courseSectionAttempt.edit")
+                            .list().stream().findFirst().orElse(null);
+                    if (courseSectionAttempt != null) {
+                        courseSectionAttempt.setActiveAttempt(false);
+                        commitContext.addInstanceToCommit(courseSectionAttempt);
+                    }
+                }
+            }
+        }
+        dataManager.commit(commitContext);
+        notifications.create().withPosition(Notifications.Position.BOTTOM_RIGHT)
+                .withCaption(messageBundle.getMessage("attemptAdded")).show();
+    }
 }

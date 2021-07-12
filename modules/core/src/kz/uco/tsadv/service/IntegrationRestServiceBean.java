@@ -7,9 +7,12 @@ import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.TransactionalDataManager;
+import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.Group;
+import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.base.entity.dictionary.*;
@@ -68,6 +71,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
     @Inject
     protected IntegrationConfig integrationConfig;
+    @Inject
+    private FileStorageAPI fileStorageAPI;
 
 
     @Transactional
@@ -1850,10 +1855,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, personDocumentData,
                             "no issueAuthority");
                 }
-                if (personDocumentJson.getStatus() == null || personDocumentJson.getStatus().isEmpty()) {
-                    return prepareError(result, methodName, personDocumentData,
-                            "no status");
-                }
+//                if (personDocumentJson.getStatus() == null || personDocumentJson.getStatus().isEmpty()) {
+//                    return prepareError(result, methodName, personDocumentData,
+//                            "no status");
+//                }
                 PersonDocument personDocument = dataManager.load(PersonDocument.class)
                         .query("select e from tsadv$PersonDocument e " +
                                 " where e.legacyId = :legacyId " +
@@ -1913,20 +1918,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
-                    DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
-                            .query("select e from tsadv$DicApprovalStatus e " +
-                                    " where e.legacyId = :legacyId " +
-                                    " and e.company.legacyId = :companyCode ")
-                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
-                                    "companyCode", personDocumentJson.getCompanyCode()))
-                            .view("dicApprovalStatus.for.integration")
-                            .list().stream().findFirst().orElse(null);
-                    if (status != null) {
-                        personDocument.setStatus(status);
-                    } else {
-                        return prepareError(result, methodName, personDocumentData,
-                                "no tsadv$DicApprovalStatus with legacyId " + personDocumentJson.getStatus()
-                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    if (personDocumentJson.getStatus() != null && !personDocumentJson.getStatus().isEmpty()) {
+                        DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
+                                .query("select e from tsadv$DicApprovalStatus e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode ")
+                                .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
+                                        "companyCode", personDocumentJson.getCompanyCode()))
+                                .view("dicApprovalStatus.for.integration")
+                                .list().stream().findFirst().orElse(null);
+                        if (status != null) {
+                            personDocument.setStatus(status);
+                        }
                     }
                     commitContext.addInstanceToCommit(personDocument);
                 }
@@ -1982,20 +1985,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "no tsadv_DicIssuingAuthority with legacyId " + personDocumentJson.getIssueAuthorityId()
                                         + " and company legacyId " + personDocumentJson.getCompanyCode());
                     }
-                    DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
-                            .query("select e from tsadv$DicApprovalStatus e " +
-                                    " where e.legacyId = :legacyId " +
-                                    " and e.company.legacyId = :companyCode ")
-                            .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
-                                    "companyCode", personDocumentJson.getCompanyCode()))
-                            .view("dicApprovalStatus.for.integration")
-                            .list().stream().findFirst().orElse(null);
-                    if (status != null) {
-                        personDocument.setStatus(status);
-                    } else {
-                        return prepareError(result, methodName, personDocumentData,
-                                "no tsadv$DicApprovalStatus with legacyId " + personDocumentJson.getStatus()
-                                        + " and company legacyId " + personDocumentJson.getCompanyCode());
+                    if (personDocumentJson.getStatus() != null && !personDocumentJson.getStatus().isEmpty()) {
+                        DicApprovalStatus status = dataManager.load(DicApprovalStatus.class)
+                                .query("select e from tsadv$DicApprovalStatus e " +
+                                        " where e.legacyId = :legacyId " +
+                                        " and e.company.legacyId = :companyCode ")
+                                .setParameters(ParamsMap.of("legacyId", personDocumentJson.getStatus(),
+                                        "companyCode", personDocumentJson.getCompanyCode()))
+                                .view("dicApprovalStatus.for.integration")
+                                .list().stream().findFirst().orElse(null);
+                        if (status != null) {
+                            personDocument.setStatus(status);
+                        }
                     }
                     commitContext.addInstanceToCommit(personDocument);
                 }
@@ -2029,25 +2030,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     return prepareError(result, methodName, personDocumentData,
                             "no companyCode");
                 }
-                if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
-                    return prepareError(result, methodName, personDocumentData,
-                            "no personId");
-                }
+//                if (personDocumentJson.getPersonId() == null || personDocumentJson.getPersonId().isEmpty()) {
+//                    return prepareError(result, methodName, personDocumentData,
+//                            "no personId");
+//                }
 
                 PersonDocument personDocument = dataManager.load(PersonDocument.class)
                         .query("select e from tsadv$PersonDocument e " +
                                 " where e.legacyId = :legacyId " +
-                                " and e.personGroup.legacyId = :pgLegacyId " +
                                 " and e.personGroup.company.legacyId = :companyCode")
                         .setParameters(ParamsMap.of("legacyId", personDocumentJson.getLegacyId(),
-                                "pgLegacyId", personDocumentJson.getPersonId(),
                                 "companyCode", personDocumentJson.getCompanyCode()))
                         .view("personDocument.edit").list().stream().findFirst().orElse(null);
 
                 if (personDocument == null) {
                     return prepareError(result, methodName, personDocumentData,
-                            "no personDocument with legacyId and personId : "
-                                    + personDocumentJson.getLegacyId() + " , " + personDocumentJson.getPersonId() +
+                            "no personDocument with legacyId and companyCode: "
+                                    + personDocumentJson.getLegacyId() +
                                     ", " + personDocumentJson.getCompanyCode());
                 }
                 if (!personDocumentArrayList.stream().filter(personDocument1 ->
@@ -2372,14 +2371,24 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             return prepareError(result, methodName, personContactData, "" +
                                     "no tsadv$DicPhoneType with legacyId " + personContactJson.getType());
                         }
+                        if (personContactJson.getStartDate() != null && !personContactJson.getStartDate().isEmpty()) {
+                            personContact.setStartDate(formatter.parse(personContactJson.getStartDate()));
+                        }
+                        if (personContactJson.getEndDate() != null && !personContactJson.getEndDate().isEmpty()) {
+                            personContact.setEndDate(formatter.parse(personContactJson.getEndDate()));
+                        }
                         personContact.setContactValue(personContactJson.getValue());
                         personContactsCommitList.add(personContact);
                     } else {
                         personContact = metadata.create(PersonContact.class);
                         personContact.setId(UUID.randomUUID());
                         personContact.setLegacyId(personContactJson.getLegacyId());
-                        personContact.setStartDate(new Date());
-                        personContact.setEndDate(CommonUtils.getMaxDate());
+                        if (personContactJson.getStartDate() != null && !personContactJson.getStartDate().isEmpty()) {
+                            personContact.setStartDate(formatter.parse(personContactJson.getStartDate()));
+                        }
+                        if (personContactJson.getEndDate() != null && !personContactJson.getEndDate().isEmpty()) {
+                            personContact.setEndDate(formatter.parse(personContactJson.getEndDate()));
+                        }
                         PersonGroupExt personGroupExt = dataManager.load(PersonGroupExt.class)
                                 .query(
                                         " select e from base$PersonGroupExt e " +
@@ -4766,8 +4775,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         BaseResult result = new BaseResult();
         CommitContext commitContext = new CommitContext();
         ArrayList<UserJson> users = new ArrayList<>();
-        UserDataJson completedUserData = new UserDataJson();
-        ArrayList<UserJson> completedUsers = new ArrayList<>();
+//        UserDataJson completedUserData = new UserDataJson();
+//        ArrayList<UserJson> completedUsers = new ArrayList<>();
 
         if (userData.getUsers() != null) {
             users = userData.getUsers();
@@ -4778,16 +4787,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (UserJson userJson : users) {
 
                 if (userJson.getLogin() == null || userJson.getLogin().isEmpty()) {
-                    continue;
+                    return prepareError(result, methodName, userData,
+                            "no login");
                 }
 
                 if (userJson.getEmployeeNumber() == null || userJson.getEmployeeNumber().isEmpty()) {
-                    continue;
+                    return prepareError(result, methodName, userData,
+                            "no employeeNumber");
                 }
 
-                if (userJson.getEmail() == null || userJson.getEmail().isEmpty()) {
-                    continue;
-                }
+//                if (userJson.getEmail() == null || userJson.getEmail().isEmpty()) {
+//                    continue;
+//                }
 
                 TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e " +
@@ -4798,7 +4809,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 if (tsadvUser != null) {
 
-                    if (integrationConfig.getIsIntegrationActiveDirectory() && !tsadvUser.getEmail().equals(userJson.getEmail())) {
+                    if (integrationConfig.getIsIntegrationActiveDirectory()
+                            && userJson.getEmail() != null
+                            && !userJson.getEmail().isEmpty()
+                            && !tsadvUser.getEmail().equals(userJson.getEmail())) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
 
@@ -4832,18 +4846,44 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (personGroupExtList.size() == 1) {
                             tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                            PersonExt personExt = personGroupExtList.get(0).getPerson();
+                            if (personExt != null && userJson.getThumbnailPhoto() != null
+                                    && !userJson.getThumbnailPhoto().isEmpty()
+                                    && userJson.getPhotoExtension() != null
+                                    && !userJson.getPhotoExtension().isEmpty()) {
+                                byte[] decoder = Base64.getDecoder().decode(userJson.getThumbnailPhoto());
+                                FileDescriptor file = metadata.create(FileDescriptor.class);
+                                file.setCreateDate(BaseCommonUtils.getSystemDate());
+                                file.setName("userPhoto" + "." + userJson.getPhotoExtension() != null
+                                        && !userJson.getPhotoExtension().isEmpty()
+                                        ? userJson.getPhotoExtension() : "png");
+                                file.setExtension(userJson.getPhotoExtension() != null
+                                        && !userJson.getPhotoExtension().isEmpty()
+                                        ? userJson.getPhotoExtension() : "png");
+                                file.setSize((long) decoder.length);
+                                fileStorageAPI.saveFile(file, decoder);
+                                personExt.setImage(file);
+                                commitContext.addInstanceToCommit(personExt);
+                            }
+                        } else if (personGroupExtList.size() > 1) {
+                            return prepareError(result, methodName, userData,
+                                    "personsGroup more than 1");
                         } else {
-                            continue;
+                            return prepareError(result, methodName, userData,
+                                    "no personsGroup with employeeNumber " + userJson.getEmployeeNumber());
                         }
 
                         commitContext.addInstanceToCommit(tsadvUser);
-                        completedUsers.add(userJson);
+//                        completedUsers.add(userJson);
                     }
                 } else {
 
                     tsadvUser = dataManager.create(TsadvUser.class);
                     tsadvUser.setLogin(userJson.getLogin());
-                    if (integrationConfig.getIsIntegrationActiveDirectory()) {
+                    if (integrationConfig.getIsIntegrationActiveDirectory()
+                            && userJson.getEmail() != null
+                            && !userJson.getEmail().isEmpty()
+                            && !tsadvUser.getEmail().equals(userJson.getEmail())) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
 
@@ -4887,24 +4927,49 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             if (group != null) {
                                 tsadvUser.setGroup(group);
                             }
+                            PersonExt personExt = personGroupExtList.get(0) != null
+                                    ? personGroupExtList.get(0).getPerson()
+                                    : null;
+                            if (personExt != null && userJson.getThumbnailPhoto() != null
+                                    && !userJson.getThumbnailPhoto().isEmpty()
+                                    && userJson.getPhotoExtension() != null
+                                    && !userJson.getPhotoExtension().isEmpty()) {
+                                byte[] decoder = Base64.getDecoder().decode(userJson.getThumbnailPhoto());
+                                FileDescriptor file = metadata.create(FileDescriptor.class);
+                                file.setCreateDate(BaseCommonUtils.getSystemDate());
+                                file.setName("userPhoto" + "." + userJson.getPhotoExtension() != null
+                                        && !userJson.getPhotoExtension().isEmpty()
+                                        ? userJson.getPhotoExtension() : "png");
+                                file.setExtension(userJson.getPhotoExtension() != null
+                                        && !userJson.getPhotoExtension().isEmpty()
+                                        ? userJson.getPhotoExtension() : "png");
+                                file.setSize((long) decoder.length);
+                                fileStorageAPI.saveFile(file, decoder);
+                                personExt.setImage(file);
+                                commitContext.addInstanceToCommit(personExt);
+                            }
+                        } else if (personGroupExtList.size() > 1) {
+                            return prepareError(result, methodName, userData,
+                                    "personsGroup more than 1");
                         } else {
-                            continue;
+                            return prepareError(result, methodName, userData,
+                                    "no personsGroup with employeeNumber " + userJson.getEmployeeNumber());
                         }
 
                         commitContext.addInstanceToCommit(tsadvUser);
-                        completedUsers.add(userJson);
+//                        completedUsers.add(userJson);
 
                     }
                 }
             }
-            completedUserData.setUsers(completedUsers);
+//            completedUserData.setUsers(completedUsers);
             dataManager.commit(commitContext);
         } catch (Exception e) {
             return prepareError(result, methodName, userData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, completedUserData);
+        return prepareSuccess(result, methodName, userData);
     }
 
     @Override

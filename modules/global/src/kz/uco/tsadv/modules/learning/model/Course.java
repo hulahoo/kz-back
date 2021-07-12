@@ -7,11 +7,10 @@ import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.Lookup;
 import com.haulmont.cuba.core.entity.annotation.LookupType;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
+import com.haulmont.cuba.core.entity.annotation.PublishEntityChangedEvents;
 import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.base.entity.abstraction.AbstractParentEntity;
-import kz.uco.tsadv.modules.learning.dictionary.DicCategory;
-import kz.uco.tsadv.modules.learning.dictionary.DicLearningProof;
-import kz.uco.tsadv.modules.learning.dictionary.DicLearningType;
+import kz.uco.tsadv.modules.learning.dictionary.*;
 import kz.uco.tsadv.modules.learning.model.feedback.CourseFeedbackTemplate;
 import kz.uco.tsadv.modules.performance.model.CourseTrainer;
 
@@ -20,6 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
+@PublishEntityChangedEvents
 @NamePattern("%s|name")
 @Table(name = "TSADV_COURSE")
 @Entity(name = "tsadv$Course")
@@ -28,6 +28,12 @@ public class Course extends AbstractParentEntity {
 
     @Column(name = "NAME", nullable = false)
     protected String name;
+
+    @Column(name = "NAME_LANG2")
+    protected String nameLang2;
+
+    @Column(name = "NAME_LANG3")
+    protected String nameLang3;
 
     @Composition
     @OneToMany(mappedBy = "course")
@@ -134,6 +140,58 @@ public class Course extends AbstractParentEntity {
 
     @Column(name = "RATING")
     protected BigDecimal rating;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TYPE_OF_TRAINING_ID")
+    protected DicTypeOfTraining typeOfTraining;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PROGRAMM_CODE_ID")
+    protected DicProgrammCode programmCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ASSESSMENT_METHOD_ID")
+    protected DicAssessmentMethod assessmentMethod;
+
+    public DicAssessmentMethod getAssessmentMethod() {
+        return assessmentMethod;
+    }
+
+    public void setAssessmentMethod(DicAssessmentMethod assessmentMethod) {
+        this.assessmentMethod = assessmentMethod;
+    }
+
+    public DicProgrammCode getProgrammCode() {
+        return programmCode;
+    }
+
+    public void setProgrammCode(DicProgrammCode programmCode) {
+        this.programmCode = programmCode;
+    }
+
+    public DicTypeOfTraining getTypeOfTraining() {
+        return typeOfTraining;
+    }
+
+    public void setTypeOfTraining(DicTypeOfTraining typeOfTraining) {
+        this.typeOfTraining = typeOfTraining;
+    }
+
+    public String getNameLang3() {
+        return nameLang3;
+    }
+
+    public void setNameLang3(String nameLang3) {
+        this.nameLang3 = nameLang3;
+    }
+
+    public String getNameLang2() {
+        return nameLang2;
+    }
+
+    public void setNameLang2(String nameLang2) {
+        this.nameLang2 = nameLang2;
+    }
 
     public void setLogo(FileDescriptor logo) {
         this.logo = logo;

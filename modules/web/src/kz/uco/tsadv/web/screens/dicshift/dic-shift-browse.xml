@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        xmlns:c="http://schemas.haulmont.com/cuba/screen/jpql_condition.xsd"
+        caption="msg://browseCaption"
+        focusComponent="dicShiftsTable"
+        messagesPack="kz.uco.tsadv.web.screens.dicshift">
+    <data readOnly="true">
+        <collection id="dicShiftsDc"
+                    class="kz.uco.tsadv.modules.personal.model.DicShift"
+                    view="dicShift.edit">
+            <loader id="dicShiftsDl">
+                <query>
+                    <![CDATA[select e from tsadv_DicShift e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="dicShiftsTable"
+            spacing="true">
+        <filter id="filter"
+                applyTo="dicShiftsTable"
+                dataLoader="dicShiftsDl">
+            <properties include=".*"/>
+        </filter>
+        <groupTable id="dicShiftsTable"
+                    width="100%"
+                    dataContainer="dicShiftsDc">
+            <actions>
+                <action id="create" type="create"/>
+                <action id="edit" type="edit"/>
+                <action id="remove" type="remove"/>
+            </actions>
+            <columns>
+                <column id="company"/>
+                <column id="langValue1"/>
+                <column id="description1"/>
+                <column id="langValue2"/>
+                <column id="description2"/>
+                <column id="langValue3"/>
+                <column id="description3"/>
+                <column id="langValue4"/>
+                <column id="description4"/>
+                <column id="langValue5"/>
+                <column id="description5"/>
+                <column id="startDate"/>
+                <column id="endDate"/>
+                <column id="code"/>
+                <column id="isSystemRecord"/>
+                <column id="active"/>
+                <column id="isDefault"/>
+                <column id="order"/>
+            </columns>
+            <rowsCount/>
+            <buttonsPanel id="buttonsPanel"
+                          alwaysVisible="true">
+                <button id="createBtn" action="dicShiftsTable.create"/>
+                <button id="editBtn" action="dicShiftsTable.edit"/>
+                <button id="removeBtn" action="dicShiftsTable.remove"/>
+            </buttonsPanel>
+        </groupTable>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
