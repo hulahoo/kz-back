@@ -25,7 +25,10 @@ import kz.uco.tsadv.modules.performance.dto.BoardUpdateType;
 import kz.uco.tsadv.modules.performance.enums.MatrixType;
 import kz.uco.tsadv.modules.performance.model.CalibrationMember;
 import kz.uco.tsadv.modules.performance.model.CalibrationSession;
-import kz.uco.tsadv.modules.personal.dictionary.*;
+import kz.uco.tsadv.modules.personal.dictionary.DicAddressType;
+import kz.uco.tsadv.modules.personal.dictionary.DicCostCenter;
+import kz.uco.tsadv.modules.personal.dictionary.DicPersonType;
+import kz.uco.tsadv.modules.personal.dictionary.DicPhoneType;
 import kz.uco.tsadv.modules.personal.dto.OrgChartNode;
 import kz.uco.tsadv.modules.personal.dto.PersonProfileDto;
 import kz.uco.tsadv.modules.personal.group.*;
@@ -42,7 +45,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -51,7 +53,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service(EmployeeService.NAME)
 public class EmployeeServiceBean implements EmployeeService {
@@ -2513,25 +2514,7 @@ public class EmployeeServiceBean implements EmployeeService {
     }
 
     @Override
-    public List<DicHrRole> userHrRoles() {
-        return this.userHrRoles(userSessionSource.getUserSession().getAttribute(StaticVariable.USER_PERSON_GROUP_ID));
-    }
-
-    @Override
-    public List<DicHrRole> userHrRoles(UUID personGroupId) {
-        return dataManager.loadList(LoadContext.create(DicHrRole.class).setQuery(LoadContext.createQuery("" +
-                "select r " +
-                "from tsadv$HrUserRole hu " +
-                "   join hu.user u " +
-                "   join hu.role r " +
-                "   join u.personGroup p " +
-                "where p.id = :personGroupId " +
-                "   and current_date between hu.dateFrom and hu.dateTo ")
-                .setParameter("personGroupId", personGroupId)));
-    }
-
-    @Override
     public boolean hasHrRole(String dicHrCode) {
-        return this.userHrRoles().stream().anyMatch(r -> r.getCode().equalsIgnoreCase(dicHrCode));
+        return !AppBeans.get(OrganizationHrUserService.class).getOrganizationList(userSessionSource.getUserSession().getUser().getId(), dicHrCode).isEmpty();
     }
 }
