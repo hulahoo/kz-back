@@ -11,11 +11,11 @@ import java.util.Comparator;
 import java.util.List;
 
 @Component(BprocAssignedPerformancePlanBean.NAME)
-public class BprocAssignedPerformancePlanBean extends AbstractBprocEntityBean<AssignedPerformancePlan> {
+public class BprocAssignedPerformancePlanBean<T extends AssignedPerformancePlan> extends AbstractBprocEntityBean<T> {
     public static final String NAME = "tsadv_BprocAssignedPerformancePlanBean";
 
     @Override
-    public String changeNotificationTemplateCode(String notificationTemplateCode, AssignedPerformancePlan entity) {
+    public String changeNotificationTemplateCode(String notificationTemplateCode, T entity) {
         if (notificationTemplateCode.equals("forChangeTemplateCode")) {
             ProcessInstanceData processInstanceData = bprocService.getProcessInstanceData(entity.getProcessInstanceBusinessKey(), entity.getProcessDefinitionKey());
             List<ExtTaskData> processTasks = bprocService.getProcessTasks(processInstanceData);
@@ -38,10 +38,5 @@ public class BprocAssignedPerformancePlanBean extends AbstractBprocEntityBean<As
             }
         }
         return super.changeNotificationTemplateCode(notificationTemplateCode, entity);
-    }
-
-    @Override
-    public boolean instanceOf(Class<? extends AbstractBprocRequest> tClass) {
-        return AssignedPerformancePlan.class.isAssignableFrom(tClass);
     }
 }

@@ -820,7 +820,7 @@
     </menu>
     <menu id="help" icon="font-icon:QUESTION_CIRCLE">
         <item id="aboutWindow" openType="DIALOG"/>
-        <item id="printDomain"/>
+        <item id="printDomain" class="com.haulmont.cuba.web.app.domain.DomainProvider"/>
         <separator/>
         <item id="settings"/>
         <item id="logWindow"/>

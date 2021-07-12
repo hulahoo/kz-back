@@ -462,6 +462,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         params.put("initiatorRu", initiator.getFullNameWithLogin(Locale.forLanguageTag("ru")));
         params.put("initiatorEn", initiator.getFullNameWithLogin(Locale.forLanguageTag("en")));
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
         List<ExtTaskData> processTasks = getProcessTasks(processInstanceData);
         String lastApprovedUserRu = "";
         String lastApprovedUserEn = "";
@@ -479,6 +481,18 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
         params.put("approversTableRu", getApproversTable("Ru", processInstanceData));
         params.put("approversTableEn", getApproversTable("En", processInstanceData));
         params.put("comment", StringUtils.defaultString(getProcessVariable(processInstanceData.getId(), "comment"), ""));
+
+        //noinspection unchecked
+        entity = transactionalDataManager.load((Class<T>) entity.getClass())
+                .id(entity.getId())
+                .viewProperties("status.langValue1", "status.langValue3", "requestDate")
+                .one();
+
+        params.putIfAbsent("requestStatusRu", entity.getStatus().getLangValue1());
+        params.putIfAbsent("requestStatusEn", entity.getStatus().getLangValue3());
+        params.put("requestDate", entity.getRequestDate() != null
+                ? dateFormat.format(entity.getRequestDate())
+                : "");
 
         return params;
     }

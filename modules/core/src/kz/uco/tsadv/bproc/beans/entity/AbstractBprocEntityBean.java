@@ -6,6 +6,7 @@ import kz.uco.base.service.common.CommonService;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicRequestStatus;
 import kz.uco.tsadv.service.BprocService;
+import org.springframework.core.ResolvableType;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -66,6 +67,8 @@ public abstract class AbstractBprocEntityBean<T extends AbstractBprocRequest> im
         transactionalDataManager.save(entity);
     }
 
-    public abstract boolean instanceOf(Class<? extends AbstractBprocRequest> tClass);
+    public boolean instanceOf(Class<? extends AbstractBprocRequest> tClass) {
+        return ResolvableType.forClass(AbstractBprocEntityBean.class, this.getClass()).getGeneric(0).isAssignableFrom(tClass);
+    }
 
 }

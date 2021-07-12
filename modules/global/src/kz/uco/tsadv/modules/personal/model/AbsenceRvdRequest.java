@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -83,6 +84,7 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @OnDelete(DeletePolicy.CASCADE)
     @ManyToMany
+    @Composition
     private List<FileDescriptor> files;
 
     public YesNoEnum getOverrideAllHoursByDay() {

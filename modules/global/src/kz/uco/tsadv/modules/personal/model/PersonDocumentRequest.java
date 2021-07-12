@@ -34,8 +34,7 @@ public class PersonDocumentRequest extends AbstractBprocRequest {
     @Column(name = "ISSUED_BY", length = 500)
     protected String issuedBy;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ISSUING_AUTHORITY_ID")
     protected DicIssuingAuthority issuingAuthority;
 
