@@ -43,15 +43,21 @@ public class PersonalDataRequestChangedListener {
             BaseResult baseResult = new BaseResult();
             PersonalDataRequestDataJson personalDataRequestDataJson = new PersonalDataRequestDataJson();
             try {
-                DicRequestStatus oldStatus = dataManager.load(DicRequestStatus.class)
-                        .query("select e from tsadv$DicRequestStatus e where e.id = :id")
-                        .parameter("id", ((Id<DicRequestStatus, UUID>) event.getChanges()
-                                .getOldValue("status")).getValue()).view(View.LOCAL).list().stream().findFirst()
-                        .orElse(null);
+                DicRequestStatus oldStatus = null;
+                if (event.getChanges().getOldValue("status") != null
+                        && ((Id<DicRequestStatus, UUID>) event.getChanges()
+                        .getOldValue("status")).getValue() != null) {
+                    oldStatus = dataManager.load(DicRequestStatus.class)
+                            .query("select e from tsadv$DicRequestStatus e where e.id = :id")
+                            .parameter("id", ((Id<DicRequestStatus, UUID>) event.getChanges()
+                                    .getOldValue("status")).getValue())
+                            .view(View.LOCAL).list().stream().findFirst().orElse(null);
+                }
                 PersonalDataRequest personalDataRequest = dataManager.load(event.getEntityId())
                         .view("personalDataRequest-for-integration").one();
                 DicRequestStatus requestStatus = personalDataRequest.getStatus();
-                if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus.getCode())) {
+                if (APPROVED_STATUS.equals(requestStatus.getCode()) && !APPROVED_STATUS.equals(oldStatus != null
+                        ? oldStatus.getCode() : "")) {
                     personalDataRequestDataJson.setPersonId(personalDataRequest.getPersonGroup().getLegacyId());
                     personalDataRequestDataJson.setRequestNumber(personalDataRequest.getRequestNumber().toString());
                     personalDataRequestDataJson.setLastName(personalDataRequest.getLastName());
@@ -59,7 +65,8 @@ public class PersonalDataRequestChangedListener {
                     personalDataRequestDataJson.setMiddleName(personalDataRequest.getMiddleName());
                     personalDataRequestDataJson.setLastNameLatin(personalDataRequest.getLastNameLatin());
                     personalDataRequestDataJson.setFirstNameLatin(personalDataRequest.getFirstNameLatin());
-                    personalDataRequestDataJson.setMaritalStatus(personalDataRequest.getMaritalStatus().getLegacyId());
+                    personalDataRequestDataJson.setMaritalStatus(personalDataRequest.getMaritalStatus() != null
+                            ? personalDataRequest.getMaritalStatus().getLegacyId() : "");
                     personalDataRequestDataJson.setHasLoanFromPrevEmployer(personalDataRequest.getPersonGroup()
                             .getPerson().getCommitmentsLoan() != null ? personalDataRequest.getPersonGroup()
                             .getPerson().getCommitmentsLoan() : false);

@@ -119,22 +119,6 @@ public class PersonalDataRequest extends AbstractBprocRequest {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public void setAttachment(FileDescriptor attachment) {
-        this.attachment = attachment;
-    }
-
-    public FileDescriptor getAttachment() {
-        return attachment;
-    }
-
-    public void setStatus(DicRequestStatus status) {
-        this.status = status;
-    }
-
-    public DicRequestStatus getStatus() {
-        return status;
-    }
-
     public void setMaritalStatus(DicMaritalStatus maritalStatus) {
         this.maritalStatus = maritalStatus;
     }
