@@ -892,7 +892,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                                 "more than one hierarchyElement found to update");
                     }
                     hierarchyElementExt = hierarchyElementList.stream().findFirst().orElse(null);
-                    if (hierarchyElementExt != null) {
+                    if (hierarchyElementExt != null && hierarchyElementExt.getGroup() != null) {
                         organizationHierarchyElementGroup = hierarchyElementExt.getGroup();
                     }
                 }
@@ -957,7 +957,7 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                     parent = parentList.stream().findFirst().orElse(null);
                     if (parent != null) {
                         hierarchyElementExt.setParent(parent);
-                        hierarchyElementExt.setParentGroup(parent != null ? parent.getGroup() : null);
+                        hierarchyElementExt.setParentGroup(parent.getGroup());
                     }
                 } else {
                     hierarchyElementExt.setParent(null);
