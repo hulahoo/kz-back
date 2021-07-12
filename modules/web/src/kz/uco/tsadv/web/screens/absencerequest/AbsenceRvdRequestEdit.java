@@ -3,18 +3,25 @@ package kz.uco.tsadv.web.screens.absencerequest;
 import com.haulmont.addon.bproc.web.processform.Outcome;
 import com.haulmont.addon.bproc.web.processform.ProcessForm;
 import com.haulmont.bali.util.ParamsMap;
-import com.haulmont.cuba.core.global.View;
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.FileStorageException;
 import com.haulmont.cuba.gui.components.CheckBox;
 import com.haulmont.cuba.gui.components.DateField;
+import com.haulmont.cuba.gui.components.FileUploadField;
 import com.haulmont.cuba.gui.components.TextField;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.export.ExportFormat;
+import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
 import com.haulmont.cuba.gui.model.InstanceContainer;
 import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.upload.FileUploadingAPI;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.administration.TsadvUser;
 import kz.uco.tsadv.modules.personal.model.AbsenceRvdRequest;
 import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -28,7 +35,8 @@ import java.util.Date;
         outcomes = {
                 @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
                 @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
-                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT)
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_CANCEL)
         }
 )
 public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest> {
@@ -36,6 +44,8 @@ public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest
     protected DateField<Date> timeOfStartingField;
     @Inject
     protected InstanceContainer<AbsenceRvdRequest> absenceRvdRequestDc;
+    @Inject
+    protected CollectionPropertyContainer<FileDescriptor> filesDc;
     @Inject
     protected DateField<Date> timeOfFinishingField;
     protected boolean isBlocked = false;
@@ -47,6 +57,32 @@ public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest
     protected CheckBox compencationField;
     @Inject
     protected MessageBundle messageBundle;
+    @Inject
+    protected ExportDisplay exportDisplay;
+    @Inject
+    protected FileUploadField addFile;
+    @Inject
+    protected FileUploadingAPI fileUploadingAPI;
+
+    @Subscribe
+    protected void onInitEntity(InitEntityEvent<AbsenceRvdRequest> event) {
+        addFile.addFileUploadSucceedListener(this::fileUploadSucceedListener);
+    }
+
+    protected void fileUploadSucceedListener(FileUploadField.FileUploadSucceedEvent event) {
+        File file = fileUploadingAPI.getFile(addFile.getFileId());
+        if (file != null) {
+            FileDescriptor fd = addFile.getFileDescriptor();
+            try {
+                // save file to FileStorage
+                fileUploadingAPI.putFileIntoStorage(addFile.getFileId(), fd);
+            } catch (FileStorageException e) {
+                throw new RuntimeException("Error saving file to FileStorage", e);
+            }
+            // save file descriptor to database
+            filesDc.getMutableItems().add(dataManager.commit(fd));
+        }
+    }
 
     @Subscribe(id = "absenceRvdRequestDc", target = Target.DATA_CONTAINER)
     protected void onAbsenceRvdRequestDcItemPropertyChange(InstanceContainer.ItemPropertyChangeEvent<AbsenceRvdRequest> event) {
@@ -66,11 +102,7 @@ public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest
                     setTimesNull();
                     if (code.equals("WORK_ON_WEEKEND") || code.equals("SUPERTIME_WORK")) {
                         changeHint(false);
-                    } else if (code.equals("TEMPORARY_TRANSFER")) {
-                        changeHint(true);
-                    } else {
-                        changeHint(false);
-                    }
+                    } else changeHint(code.equals("TEMPORARY_TRANSFER"));
                 }
             }
         } else if (event.getProperty().equals("purpose")) {
@@ -115,15 +147,16 @@ public class AbsenceRvdRequestEdit extends AbstractBprocEditor<AbsenceRvdRequest
         absenceRvdRequestDc.getItem().setTimeOfStarting(null);
     }
 
-
     @Override
     protected TsadvUser getEmployee() {
-        TsadvUser user = dataManager.load(TsadvUser.class)
+        return dataManager.load(TsadvUser.class)
                 .query("select e from tsadv$UserExt e where e.personGroup.id = :personGroupId")
                 .setParameters(ParamsMap.of("personGroupId",
                         absenceRvdRequestDc.getItem().getPersonGroup().getId()))
-                .view(View.MINIMAL).list().stream().findFirst().orElse(null);
+                .view("userExt.edit").list().stream().findFirst().orElse(null);
+    }
 
-        return user;
+    public void exportFile(FileDescriptor fd, String columnId) {
+        exportDisplay.show(fd, ExportFormat.OCTET_STREAM);
     }
 }

@@ -1,54 +1,92 @@
 package kz.uco.tsadv.web.addressrequest;
 
-import com.haulmont.cuba.gui.components.FieldGroup;
-import kz.uco.base.entity.dictionary.DicCountry;
-import kz.uco.tsadv.global.common.CommonUtils;
+import com.haulmont.addon.bproc.web.processform.Outcome;
+import com.haulmont.addon.bproc.web.processform.ProcessForm;
+import com.haulmont.cuba.core.entity.FileDescriptor;
+import com.haulmont.cuba.core.global.FileStorageException;
+import com.haulmont.cuba.gui.components.Component;
+import com.haulmont.cuba.gui.components.FileUploadField;
+import com.haulmont.cuba.gui.components.Form;
+import com.haulmont.cuba.gui.components.LinkButton;
+import com.haulmont.cuba.gui.components.actions.BaseAction;
+import com.haulmont.cuba.gui.export.ExportDisplay;
+import com.haulmont.cuba.gui.export.ExportFormat;
+import com.haulmont.cuba.gui.model.CollectionPropertyContainer;
+import com.haulmont.cuba.gui.model.InstanceContainer;
+import com.haulmont.cuba.gui.screen.*;
+import com.haulmont.cuba.gui.upload.FileUploadingAPI;
+import com.haulmont.cuba.gui.xml.layout.ComponentsFactory;
+import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.model.AddressRequest;
-import kz.uco.tsadv.web.bpm.editor.AbstractBpmEditor;
+import kz.uco.tsadv.web.abstraction.bproc.AbstractBprocEditor;
 
 import javax.inject.Inject;
+import java.io.File;
+import java.util.ArrayList;
 
-public class AddressRequestEdit<T extends AddressRequest> extends AbstractBpmEditor<T> {
-
-    /*public static final String PROCESS_NAME = "addressRequest";
+@UiController("tsadv$AddressRequest.edit")
+@UiDescriptor("address-request-edit.xml")
+@EditedEntityContainer("addressRequestDs")
+@LoadDataBeforeShow
+@ProcessForm(
+        outcomes = {
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REVISION),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_APPROVE),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_REJECT),
+                @Outcome(id = AbstractBprocRequest.OUTCOME_CANCEL)
+        }
+)
+public class AddressRequestEdit extends AbstractBprocEditor<AddressRequest> {
 
     @Inject
-    protected FieldGroup fieldGroup;
-
-    @Override
-    protected void initNewItem(T item) {
-        if (item.getCountry() == null) {
-            item.setCountry(commonService.getEntity(DicCountry.class, "398"));
-        }
-        if (item.getStartDate() == null) {
-            item.setStartDate(CommonUtils.getSystemDate());
-        }
-        if (item.getEndDate() == null) {
-            item.setEndDate(CommonUtils.getEndOfTime());
-        }
-        super.initNewItem(item);
-    }
-
-    @Override
-    protected void postInit() {
-        super.postInit();
-
-        if (getItem().getRequestNumber() == null && !isDraft()) {
-            getItem().setRequestNumber(employeeNumberService.generateNextRequestNumber());
-            commit();
-        }
-    }
+    private ComponentsFactory componentsFactory;
+    @Inject
+    private ExportDisplay exportDisplay;
+    @Inject
+    private Form form;
+    @Inject
+    private InstanceContainer<AddressRequest> addressRequestDs;
+    @Inject
+    private FileUploadingAPI fileUploadingAPI;
+    @Inject
+    private FileUploadField upload;
+    @Inject
+    private CollectionPropertyContainer<FileDescriptor> attachmentsDc;
 
     @Override
     protected void initEditableFields() {
         super.initEditableFields();
-        if (!isDraft()) {
-            fieldGroup.getFields().forEach(f -> f.setEditable(false));
-        }
+        form.setEditable(isDraft());
     }
 
-    @Override
-    protected String getProcessName() {
-        return PROCESS_NAME;
-    }*/
+    @Subscribe("upload")
+    protected void onUploadFileUploadSucceed(FileUploadField.FileUploadSucceedEvent event) {
+        File file = fileUploadingAPI.getFile(upload.getFileId());
+        FileDescriptor fd = upload.getFileDescriptor();
+        try {
+            fileUploadingAPI.putFileIntoStorage(upload.getFileId(), fd);
+        } catch (FileStorageException e) {
+            throw new RuntimeException("Error saving file to FileStorage", e);
+        }
+        dataManager.commit(fd);
+        if (addressRequestDs.getItem().getAttachments() == null) {
+            addressRequestDs.getItem().setAttachments(new ArrayList<FileDescriptor>());
+        }
+        attachmentsDc.getDisconnectedItems().add(fd);
+        addressRequestDs.getItem().getAttachments().add(fd);
+    }
+
+
+    public Component generatorName(FileDescriptor fd) {
+        LinkButton linkButton = componentsFactory.createComponent(LinkButton.class);
+        linkButton.setCaption(fd.getName());
+        linkButton.setAction(new BaseAction("export") {
+            @Override
+            public void actionPerform(Component component) {
+                super.actionPerform(component);
+                exportDisplay.show(fd, ExportFormat.OCTET_STREAM);
+            }
+        });
+        return linkButton;
+    }
 }

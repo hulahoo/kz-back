@@ -1,5 +1,6 @@
 package kz.uco.tsadv.modules.personal.model;
 
+import com.haulmont.chile.core.annotations.Composition;
 import com.haulmont.chile.core.annotations.NamePattern;
 import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.entity.annotation.OnDelete;
@@ -8,6 +9,7 @@ import com.haulmont.cuba.core.global.DeletePolicy;
 import kz.uco.tsadv.entity.bproc.AbstractBprocRequest;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsencePurpose;
 import kz.uco.tsadv.modules.personal.dictionary.DicAbsenceType;
+import kz.uco.tsadv.modules.personal.enums.YesNoEnum;
 import kz.uco.tsadv.modules.personal.group.PersonGroupExt;
 
 import javax.annotation.PostConstruct;
@@ -67,12 +69,47 @@ public class AbsenceRvdRequest extends AbstractBprocRequest {
     @NotNull
     protected Boolean agree = false;
 
+    @Column(name = "SHIFT_CODE")
+    private String shiftCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SHIFT_ID")
+    private DicShift shift;
+
+    @Column(name = "OVERRIDE_ALL_HOURS_BY_DAY")
+    private String overrideAllHoursByDay;
+
     @JoinTable(name = "TSADV_ABSENCE_RVD_REQUEST_FILE_DESCRIPTOR_LINK",
             joinColumns = @JoinColumn(name = "ABSENCE_RVD_REQUEST_ID"),
             inverseJoinColumns = @JoinColumn(name = "FILE_DESCRIPTOR_ID"))
     @OnDelete(DeletePolicy.CASCADE)
     @ManyToMany
+    @Composition
     private List<FileDescriptor> files;
+
+    public YesNoEnum getOverrideAllHoursByDay() {
+        return overrideAllHoursByDay == null ? null : YesNoEnum.fromId(overrideAllHoursByDay);
+    }
+
+    public void setOverrideAllHoursByDay(YesNoEnum overrideAllHoursByDay) {
+        this.overrideAllHoursByDay = overrideAllHoursByDay == null ? null : overrideAllHoursByDay.getId();
+    }
+
+    public DicShift getShift() {
+        return shift;
+    }
+
+    public void setShift(DicShift shift) {
+        this.shift = shift;
+    }
+
+    public String getShiftCode() {
+        return shiftCode;
+    }
+
+    public void setShiftCode(String shiftCode) {
+        this.shiftCode = shiftCode;
+    }
 
     public List<FileDescriptor> getFiles() {
         return files;

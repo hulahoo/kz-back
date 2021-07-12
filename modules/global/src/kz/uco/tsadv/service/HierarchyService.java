@@ -30,6 +30,8 @@ public interface HierarchyService {
 
     List<UUID> getOrganizationGroupIdChild(UUID organizationGroupId);
 
+    List<UUID> getOrganizationGroupIdChild(List<UUID> organizationGroupId);
+
     List<UUID> getPositionGroupIdChild(UUID positionGroupId, Date date);
 
     /**

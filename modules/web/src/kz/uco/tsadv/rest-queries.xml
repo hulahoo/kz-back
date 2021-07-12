@@ -327,19 +327,6 @@
             <param name="personGroupId" type="java.util.UUID"/>
         </params>
     </query>
-    <query name="getAssignmentSchedule" entity="tsadv$AssignmentSchedule" view="assignmentSchedule-for-my-team">
-        <jpql>
-            <![CDATA[
-            select e from tsadv$AssignmentSchedule e
-            join base$AssignmentExt a on a.group.id = e.assignmentGroup.id
-            where current_date between a.startDate and a.endDate
-            and a.personGroup.id = :personGroupId
-            ]]>
-        </jpql>
-        <params>
-            <param name="personGroupId" type="java.util.UUID"/>
-        </params>
-    </query>
     <query name="getScheduleOffsetRequest" entity="tsadv_ScheduleOffsetsRequest"
            view="scheduleOffsetsRequest-for-my-team">
         <jpql>
