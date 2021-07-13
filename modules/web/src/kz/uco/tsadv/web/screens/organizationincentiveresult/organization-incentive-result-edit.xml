@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://schemas.haulmont.com/cuba/screen/window.xsd"
+        caption="msg://editorCaption"
+        focusComponent="form"
+        messagesPack="kz.uco.tsadv.web.screens.organizationincentiveresult">
+    <data>
+        <instance id="organizationIncentiveResultDc"
+                  class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveResult"
+                  view="organizationIncentiveResults-edit-view">
+            <loader/>
+        </instance>
+    </data>
+    <dialogMode height="AUTO"
+                width="AUTO"
+                modal="true"
+                forceDialog="true"/>
+    <layout expand="editActions" spacing="true">
+        <form id="form" dataContainer="organizationIncentiveResultDc">
+            <column width="250px">
+                <dateField id="periodDateField" property="periodDate"/>
+                <lookupPickerField id="indicatorField" property="indicator"/>
+                <textField id="planField" property="plan"/>
+                <textField id="factField" property="fact"/>
+                <textField id="weightField" property="weight"/>
+                <textField id="resultField" property="result"/>
+            </column>
+        </form>
+        <hbox id="editActions" spacing="true">
+            <button action="windowCommitAndClose"/>
+            <button action="windowClose"/>
+        </hbox>
+    </layout>
+</window>
