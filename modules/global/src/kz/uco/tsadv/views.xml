@@ -17478,10 +17478,7 @@
         </property>
         <property name="attachments"
                   view="_minimal"/>
-        <property name="status"
-                  view="_minimal">
-            <property name="code"/>
-        </property>
+        <property name="status" view="_local"/>
         <property name="baseAddress"
                   view="_minimal">
             <property name="personGroup"
@@ -23176,6 +23173,7 @@
             </property>
             <property name="commitmentsLoan"/>
             <property name="commitmentsCredit"/>
+            <property name="image" view="_minimal"/>
         </property>
         <property name="company" view="_minimal">
             <property name="legacyId"/>

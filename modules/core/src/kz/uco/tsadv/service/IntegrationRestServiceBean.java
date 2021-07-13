@@ -7,9 +7,12 @@ import com.haulmont.cuba.core.EntityManager;
 import com.haulmont.cuba.core.Persistence;
 import com.haulmont.cuba.core.Transaction;
 import com.haulmont.cuba.core.TransactionalDataManager;
+import com.haulmont.cuba.core.app.FileStorageAPI;
 import com.haulmont.cuba.core.entity.Entity;
+import com.haulmont.cuba.core.entity.FileDescriptor;
 import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.Group;
+import kz.uco.base.common.BaseCommonUtils;
 import kz.uco.base.entity.dictionary.DicCompany;
 import kz.uco.base.entity.dictionary.DicLanguage;
 import kz.uco.base.entity.dictionary.*;
@@ -68,6 +71,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
     protected Gson gson = new GsonBuilder().setPrettyPrinting().create();
     @Inject
     protected IntegrationConfig integrationConfig;
+    @Inject
+    private FileStorageAPI fileStorageAPI;
 
 
     @Transactional
@@ -1533,23 +1538,23 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         : null);
                 assignmentExt.setPrimaryFlag(Boolean.valueOf(assignmentJson.getPrimaryFlag()));
                 assignmentExt.setGroup(assignmentGroupExt);
-                if (assignmentGroupExt.getGradeGroup() == null || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
-                    assignmentGroupExt.setGradeGroup(gradeGroup);
-                }
-                if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
-                    assignmentGroupExt.setJobGroup(jobGroup);
-                }
-                if (assignmentGroupExt.getOrganizationGroup() == null
-                        || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
-                    assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
-                }
-                if (assignmentGroupExt.getPositionGroup() == null
-                        || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
-                    assignmentGroupExt.setPositionGroup(positionGroupExt);
-                }
-                if (assignmentGroupExt.getPersonGroup() == null || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
-                    assignmentGroupExt.setPersonGroup(personGroupExt);
-                }
+//                if (assignmentGroupExt.getGradeGroup() == null || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
+//                    assignmentGroupExt.setGradeGroup(gradeGroup);
+//                }
+//                if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
+//                    assignmentGroupExt.setJobGroup(jobGroup);
+//                }
+//                if (assignmentGroupExt.getOrganizationGroup() == null
+//                        || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
+//                    assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
+//                }
+//                if (assignmentGroupExt.getPositionGroup() == null
+//                        || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
+//                    assignmentGroupExt.setPositionGroup(positionGroupExt);
+//                }
+//                if (assignmentGroupExt.getPersonGroup() == null || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
+//                    assignmentGroupExt.setPersonGroup(personGroupExt);
+//                }
                 assignmentGroupExt.getList().add(assignmentExt);
             }
             for (AssignmentGroupExt assignmentGroupExt : assignmentGroupExtList) {
@@ -4770,8 +4775,8 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
         BaseResult result = new BaseResult();
         CommitContext commitContext = new CommitContext();
         ArrayList<UserJson> users = new ArrayList<>();
-        UserDataJson completedUserData = new UserDataJson();
-        ArrayList<UserJson> completedUsers = new ArrayList<>();
+//        UserDataJson completedUserData = new UserDataJson();
+//        ArrayList<UserJson> completedUsers = new ArrayList<>();
 
         if (userData.getUsers() != null) {
             users = userData.getUsers();
@@ -4782,16 +4787,18 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
             for (UserJson userJson : users) {
 
                 if (userJson.getLogin() == null || userJson.getLogin().isEmpty()) {
-                    continue;
+                    return prepareError(result, methodName, userData,
+                            "no login");
                 }
 
                 if (userJson.getEmployeeNumber() == null || userJson.getEmployeeNumber().isEmpty()) {
-                    continue;
+                    return prepareError(result, methodName, userData,
+                            "no employeeNumber");
                 }
 
-                if (userJson.getEmail() == null || userJson.getEmail().isEmpty()) {
-                    continue;
-                }
+//                if (userJson.getEmail() == null || userJson.getEmail().isEmpty()) {
+//                    continue;
+//                }
 
                 TsadvUser tsadvUser = dataManager.load(TsadvUser.class)
                         .query("select e from tsadv$UserExt e " +
@@ -4802,7 +4809,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                 if (tsadvUser != null) {
 
-                    if (integrationConfig.getIsIntegrationActiveDirectory() && !tsadvUser.getEmail().equals(userJson.getEmail())) {
+                    if (integrationConfig.getIsIntegrationActiveDirectory()
+                            && userJson.getEmail() != null
+                            && !userJson.getEmail().isEmpty()
+                            && !tsadvUser.getEmail().equals(userJson.getEmail())) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
 
@@ -4836,18 +4846,44 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
 
                         if (personGroupExtList.size() == 1) {
                             tsadvUser.setPersonGroup(personGroupExtList.get(0));
+                            PersonExt personExt = personGroupExtList.get(0).getPerson();
+                            if (personExt != null && userJson.getThumbnailPhoto() != null
+                                    && !userJson.getThumbnailPhoto().isEmpty()
+                                    && userJson.getPhotoExtension() != null
+                                    && !userJson.getPhotoExtension().isEmpty()) {
+                                byte[] decoder = Base64.getDecoder().decode(userJson.getThumbnailPhoto());
+                                FileDescriptor file = metadata.create(FileDescriptor.class);
+                                file.setCreateDate(BaseCommonUtils.getSystemDate());
+                                file.setName("userPhoto" + "." + userJson.getPhotoExtension() != null
+                                        && !userJson.getPhotoExtension().isEmpty()
+                                        ? userJson.getPhotoExtension() : "png");
+                                file.setExtension(userJson.getPhotoExtension() != null
+                                        && !userJson.getPhotoExtension().isEmpty()
+                                        ? userJson.getPhotoExtension() : "png");
+                                file.setSize((long) decoder.length);
+                                fileStorageAPI.saveFile(file, decoder);
+                                personExt.setImage(file);
+                                commitContext.addInstanceToCommit(personExt);
+                            }
+                        } else if (personGroupExtList.size() > 1) {
+                            return prepareError(result, methodName, userData,
+                                    "personsGroup more than 1");
                         } else {
-                            continue;
+                            return prepareError(result, methodName, userData,
+                                    "no personsGroup with employeeNumber " + userJson.getEmployeeNumber());
                         }
 
                         commitContext.addInstanceToCommit(tsadvUser);
-                        completedUsers.add(userJson);
+//                        completedUsers.add(userJson);
                     }
                 } else {
 
                     tsadvUser = dataManager.create(TsadvUser.class);
                     tsadvUser.setLogin(userJson.getLogin());
-                    if (integrationConfig.getIsIntegrationActiveDirectory()) {
+                    if (integrationConfig.getIsIntegrationActiveDirectory()
+                            && userJson.getEmail() != null
+                            && !userJson.getEmail().isEmpty()
+                            && !tsadvUser.getEmail().equals(userJson.getEmail())) {
                         tsadvUser.setEmail(userJson.getEmail());
                     }
 
@@ -4891,24 +4927,49 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                             if (group != null) {
                                 tsadvUser.setGroup(group);
                             }
+                            PersonExt personExt = personGroupExtList.get(0) != null
+                                    ? personGroupExtList.get(0).getPerson()
+                                    : null;
+                            if (personExt != null && userJson.getThumbnailPhoto() != null
+                                    && !userJson.getThumbnailPhoto().isEmpty()
+                                    && userJson.getPhotoExtension() != null
+                                    && !userJson.getPhotoExtension().isEmpty()) {
+                                byte[] decoder = Base64.getDecoder().decode(userJson.getThumbnailPhoto());
+                                FileDescriptor file = metadata.create(FileDescriptor.class);
+                                file.setCreateDate(BaseCommonUtils.getSystemDate());
+                                file.setName("userPhoto" + "." + userJson.getPhotoExtension() != null
+                                        && !userJson.getPhotoExtension().isEmpty()
+                                        ? userJson.getPhotoExtension() : "png");
+                                file.setExtension(userJson.getPhotoExtension() != null
+                                        && !userJson.getPhotoExtension().isEmpty()
+                                        ? userJson.getPhotoExtension() : "png");
+                                file.setSize((long) decoder.length);
+                                fileStorageAPI.saveFile(file, decoder);
+                                personExt.setImage(file);
+                                commitContext.addInstanceToCommit(personExt);
+                            }
+                        } else if (personGroupExtList.size() > 1) {
+                            return prepareError(result, methodName, userData,
+                                    "personsGroup more than 1");
                         } else {
-                            continue;
+                            return prepareError(result, methodName, userData,
+                                    "no personsGroup with employeeNumber " + userJson.getEmployeeNumber());
                         }
 
                         commitContext.addInstanceToCommit(tsadvUser);
-                        completedUsers.add(userJson);
+//                        completedUsers.add(userJson);
 
                     }
                 }
             }
-            completedUserData.setUsers(completedUsers);
+//            completedUserData.setUsers(completedUsers);
             dataManager.commit(commitContext);
         } catch (Exception e) {
             return prepareError(result, methodName, userData, e.getMessage() + "\r" +
                     Arrays.stream(e.getStackTrace()).map(stackTraceElement -> stackTraceElement.toString())
                             .collect(Collectors.joining("\r")));
         }
-        return prepareSuccess(result, methodName, completedUserData);
+        return prepareSuccess(result, methodName, userData);
     }
 
     @Override
