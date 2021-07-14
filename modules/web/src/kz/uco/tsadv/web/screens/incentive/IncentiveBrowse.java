@@ -20,13 +20,11 @@ import kz.uco.tsadv.api.Null;
 import kz.uco.tsadv.global.common.CommonUtils;
 import kz.uco.tsadv.modules.personal.model.*;
 import kz.uco.tsadv.service.HierarchyService;
-import kz.uco.tsadv.web.screens.organizationincentiveindicators.OrganizationIncentiveIndicatorsEdit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @UiController("tsadv_IncentiveBrowse")
@@ -101,6 +99,14 @@ public class IncentiveBrowse extends Screen {
     private UiComponents uiComponents;
     @Inject
     private MessageTools messageTools;
+    @Inject
+    private Table<PositionIncentiveFlag> positionIncentiveFlagsTable;
+    @Inject
+    private CollectionLoader<PositionIncentiveFlag> positionIncentiveFlagsDl;
+    @Inject
+    private Button positionIncentiveFlagsTableAddBtn;
+    @Inject
+    private CollectionContainer<PositionIncentiveFlag> positionIncentiveFlagsDc;
 
 
     @Subscribe
@@ -115,6 +121,7 @@ public class IncentiveBrowse extends Screen {
 
         ELEMENT_TYPE_SCREEN_VALUE = (String) screenOptions.getParams().get(ELEMENT_TYPE_SCREEN_PARAM);
 
+        initUI();
         initTableDoubleClickActions();
 
         tree.setIconProvider(hierarchyElement -> {
@@ -249,6 +256,7 @@ public class IncentiveBrowse extends Screen {
 
 
     protected void enableAddActions(boolean enable){
+        positionIncentiveFlagsTableAddBtn.setEnabled(enable);
         organizationIncentiveFlagsTableAddBtn.setEnabled(enable);
         organizationIncentiveIndicatorsTableAddBtn.setEnabled(enable);
         organizationIncentiveResultsTableAddBtn.setEnabled(enable);
@@ -256,7 +264,20 @@ public class IncentiveBrowse extends Screen {
 
     }
 
+    protected void initUI(){
+        String hierarchyCode = ELEMENT_TYPE_SCREEN_VALUE.equals("ORGANIZATION") ? "1" : "2";
+        if(hierarchyCode.equals("1")){
+            positionIncentiveFlagsTable.setVisible(false);
+        }else if(hierarchyCode.equals("2")){
+            organizationIncentiveFlagsTable.setVisible(false);
+            organizationIncentiveIndicatorsTable.setVisible(false);
+            organizationIncentiveResultsTable.setVisible(false);
+        }
+    }
+
     protected void initTableDoubleClickActions(){
+        positionIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
+                .withHandler(e -> editPositionIncentiveFlag()));
         organizationIncentiveFlagsTable.setItemClickAction(new BaseAction("doubleClickAction")
                 .withHandler(e -> editOrganizationIncentiveFlag()));
         organizationIncentiveIndicatorsTable.setItemClickAction(new BaseAction("doubleClickAction")
@@ -266,15 +287,48 @@ public class IncentiveBrowse extends Screen {
     }
 
     protected void loadIncentives(){
+        loadPositionIncentiveFlags();
         loadOrganizationIncentiveFlags();
         loadOrganizationIncentiveIndicators();
         loadOrganizationIncentiveResults();
     }
 
     protected void loadEmptyIncentives(){
+        loadEmptyPositionIncentiveFlags();
         loadEmptyOrganizationIncentiveFlags();
         loadEmptyOrganizationIncentiveIndicators();
         loadEmptyOrganizationIncentiveResults();
+    }
+
+    public void addPositionIncentiveFlag() {
+        Screen editScreen = screenBuilders.editor(PositionIncentiveFlag.class,this)
+                .withInitializer(i -> {
+                    i.setPositionGroup(hierarchyElementDc.getItem().getPositionGroup());
+                    i.setDateTo(CommonUtils.getMaxDate());
+                })
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadPositionIncentiveFlags());
+        editScreen.show();
+    }
+
+    protected void editPositionIncentiveFlag(){
+        Screen editScreen = screenBuilders.editor(PositionIncentiveFlag.class,this)
+                .editEntity(positionIncentiveFlagsDc.getItem())
+                .build();
+        editScreen.addAfterCloseListener((l) -> loadPositionIncentiveFlags());
+        editScreen.show();
+    }
+
+    protected void loadPositionIncentiveFlags(){
+        positionIncentiveFlagsDl.setQuery("select e from tsadv_PositionIncentiveFlag e where e.positionGroup = :positionGroup");
+        positionIncentiveFlagsDl.setParameter("positionGroup",hierarchyElementDc.getItem().getPositionGroup());
+        positionIncentiveFlagsDl.load();
+    }
+
+    protected void loadEmptyPositionIncentiveFlags(){
+        positionIncentiveFlagsDl.setQuery("select e from tsadv_PositionIncentiveFlag e where 1 <> 1");
+        positionIncentiveFlagsDl.setParameters(new HashMap<>());
+        positionIncentiveFlagsDl.load();
     }
 
     public void addOrganizationIncentiveFlag() {

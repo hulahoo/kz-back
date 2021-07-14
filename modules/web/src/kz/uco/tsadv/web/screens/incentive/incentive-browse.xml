@@ -16,6 +16,11 @@
             </loader>
         </collection>
 
+        <collection id="positionIncentiveFlagsDc"
+                    class="kz.uco.tsadv.modules.personal.model.PositionIncentiveFlag">
+            <loader id="positionIncentiveFlagsDl"/>
+        </collection>
+
         <collection id="organizationIncentiveFlagsDc"
                     class="kz.uco.tsadv.modules.personal.model.OrganizationIncentiveFlag">
             <loader id="organizationIncentiveFlagsDl"/>
@@ -92,6 +97,27 @@
                             expand="organizationIncentiveFlagsTable"
                             caption="msg://main"
                             spacing="true">
+                           <table id="positionIncentiveFlagsTable"
+                                  dataContainer="positionIncentiveFlagsDc"
+                                  width="100%">
+                               <actions>
+                                   <action id="add" type="add" enable="false"/>
+                                   <action id="remove" type="remove"/>
+                               </actions>
+                               <buttonsPanel alwaysVisible="true" margin="true,false,false,false">
+                                   <button id="positionIncentiveFlagsTableAddBtn"
+                                           caption="msg://add"
+                                           enable="false"
+                                           invoke="addPositionIncentiveFlag" />
+                                   <button id="positionIncentiveFlagsTableRemoveBtn"
+                                           action="positionIncentiveFlagsTable.remove"/>
+                               </buttonsPanel>
+                               <columns>
+                                   <column id="isIncentive"/>
+                                   <column id="dateFrom"/>
+                                   <column id="dateTo"/>
+                               </columns>
+                           </table>
                            <table id="organizationIncentiveFlagsTable"
                                   dataContainer="organizationIncentiveFlagsDc"
                                   width="100%">
