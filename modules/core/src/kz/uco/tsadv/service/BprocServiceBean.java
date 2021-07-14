@@ -19,7 +19,7 @@ import com.haulmont.cuba.core.global.*;
 import com.haulmont.cuba.security.entity.User;
 import kz.uco.base.service.NotificationSenderAPIService;
 import kz.uco.base.service.common.CommonService;
-import kz.uco.tsadv.bproc.beans.BprocUserListProvider;
+import kz.uco.tsadv.bproc.beans.BprocUserListProviderWithoutRedirect;
 import kz.uco.tsadv.bproc.beans.entity.BprocEntityBeanAdapter;
 import kz.uco.tsadv.bproc.beans.helper.AbstractBprocHelper;
 import kz.uco.tsadv.config.FrontConfig;
@@ -42,8 +42,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.bpmn.model.UserTask;
 import org.flowable.engine.ProcessEngines;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -74,11 +72,8 @@ public class BprocServiceBean extends AbstractBprocHelper implements BprocServic
     protected Messages messages;
     @Inject
     protected Resources resources;
-
-    @Autowired
-    @Qualifier("tsadv_BprocUserListProvider")
-    protected BprocUserListProvider bprocUserListProvider;
-
+    @Inject
+    protected BprocUserListProviderWithoutRedirect bprocUserListProvider;
     protected String templateFolder = "classpath:kz/uco/tsadv/templates/";
     @Inject
     protected GlobalConfig globalConfig;
