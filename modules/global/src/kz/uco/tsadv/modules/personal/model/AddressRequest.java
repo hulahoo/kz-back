@@ -255,6 +255,7 @@ public class AddressRequest extends AbstractBprocRequest {
 
     @PostConstruct
     public void postConstruct() {
+        super.postConstruct();
         this.startDate = CommonUtils.getSystemDate();
         this.endDate = CommonUtils.getEndOfTime();
     }
