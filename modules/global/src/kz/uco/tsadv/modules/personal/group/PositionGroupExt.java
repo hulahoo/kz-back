@@ -105,6 +105,18 @@ public class PositionGroupExt extends PositionGroup implements IEntityGroup<Posi
     @JoinColumn(name = "ADMIN_APPROVE_ID")
     protected DicHrRole adminApprove;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FUNCTIONAL_MANAGER_POSITION_GROUP_ID")
+    protected PositionGroupExt functionalManagerPositionGroup;
+
+    public PositionGroupExt getFunctionalManagerPositionGroup() {
+        return functionalManagerPositionGroup;
+    }
+
+    public void setFunctionalManagerPositionGroup(PositionGroupExt functionalManagerPositionGroup) {
+        this.functionalManagerPositionGroup = functionalManagerPositionGroup;
+    }
+
     public DicCompany getCompany() {
         return company;
     }
