@@ -1443,11 +1443,13 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                 assignmentExt.setAssignmentStatus(dataManager.load(DicAssignmentStatus.class)
                         .query("select e from tsadv$DicAssignmentStatus e " +
                                 " where e.code = 'ACTIVE'")
+                        .view(View.BASE)
                         .list().stream().findFirst().orElse(null));
                 DicAssignmentStatus dicAssignmentStatus = dataManager.load(DicAssignmentStatus.class)
                         .query("select e from tsadv$DicAssignmentStatus e " +
                                 " where e.legacyId = :legacyId")
                         .parameter("legacyId", assignmentJson.getAssignmentStatus())
+                        .view(View.BASE)
                         .list().stream().findFirst().orElse(null);
                 if (dicAssignmentStatus != null) {
                     assignmentExt.setAssignmentStatus(dicAssignmentStatus);
@@ -1462,6 +1464,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (personGroupExt != null) {
                     assignmentExt.setPersonGroup(personGroupExt);
+                    if (assignmentGroupExt.getPersonGroup() == null
+                            || !assignmentGroupExt.getPersonGroup().equals(personGroupExt)) {
+                        assignmentGroupExt.setPersonGroup(personGroupExt);
+                    }
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no base$PersonGroupExt with legacyId " + assignmentJson.getPersonId()
@@ -1477,6 +1483,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (organizationGroupExt != null) {
                     assignmentExt.setOrganizationGroup(organizationGroupExt);
+                    if (assignmentGroupExt.getOrganizationGroup() == null
+                            || !assignmentGroupExt.getOrganizationGroup().equals(organizationGroupExt)) {
+                        assignmentGroupExt.setOrganizationGroup(organizationGroupExt);
+                    }
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no base$OrganizationGroupExt with legacyId " + assignmentJson.getOrganizationId()
@@ -1492,6 +1502,9 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (jobGroup != null) {
                     assignmentExt.setJobGroup(jobGroup);
+                    if (assignmentGroupExt.getJobGroup() == null || !assignmentGroupExt.getJobGroup().equals(jobGroup)) {
+                        assignmentGroupExt.setJobGroup(jobGroup);
+                    }
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no tsadv$JobGroup with legacyId " + assignmentJson.getJobId()
@@ -1507,6 +1520,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (positionGroupExt != null) {
                     assignmentExt.setPositionGroup(positionGroupExt);
+                    if (assignmentGroupExt.getPositionGroup() == null
+                            || !assignmentGroupExt.getPositionGroup().equals(positionGroupExt)) {
+                        assignmentGroupExt.setPositionGroup(positionGroupExt);
+                    }
                 } else {
                     return prepareError(result, methodName, assignmentDataJson,
                             "no base$PositionGroupExt with legacyId " + assignmentJson.getPositionId()
@@ -1522,6 +1539,10 @@ public class IntegrationRestServiceBean implements IntegrationRestService {
                         .list().stream().findFirst().orElse(null);
                 if (gradeGroup != null) {
                     assignmentExt.setGradeGroup(gradeGroup);
+                    if (assignmentGroupExt.getGradeGroup() == null
+                            || !assignmentGroupExt.getGradeGroup().equals(gradeGroup)) {
+                        assignmentGroupExt.setGradeGroup(gradeGroup);
+                    }
                 } else {
                     assignmentExt.setGradeGroup(null);
                 }
